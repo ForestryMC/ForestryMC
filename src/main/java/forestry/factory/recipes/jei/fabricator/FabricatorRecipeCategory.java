@@ -2,6 +2,7 @@ package forestry.factory.recipes.jei.fabricator;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
@@ -17,14 +18,11 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorRecipeWrapper> {
     private static final int planSlot = 0;
@@ -40,14 +38,16 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
     );
     private final ICraftingGridHelper craftingGridHelper;
     private final IDrawable icon;
+    private final RecipeManager manager;
 
-    public FabricatorRecipeCategory(IGuiHelper guiHelper) {
+    public FabricatorRecipeCategory(IGuiHelper guiHelper, RecipeManager manager) {
         super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "block.forestry.fabricator");
 
         craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
         this.icon = guiHelper.createDrawableIngredient(
                 new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block())
         );
+        this.manager = manager;
     }
 
     @Override
@@ -92,11 +92,14 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
             guiIngredients.set(planSlot, plan);
         }
 
-        List<Ingredient> smeltingInput = new ArrayList<>();
+        List<ItemStack> smeltingInput = new ArrayList<>();
         Fluid recipeFluid = recipe.getLiquid().getFluid();
-//        for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {
-//            smeltingInput.add(s.getResource());
-//        }
+        for (IFabricatorSmeltingRecipe s : getSmeltingInputs(manager).get(recipeFluid)) {
+            Optional<ItemStack> itemStack = Arrays.stream(s.getResource().getMatchingStacks()).findFirst();
+            if (itemStack.isPresent()) {
+                smeltingInput.add(itemStack.get());
+            }
+        }
 
         if (!smeltingInput.isEmpty()) {
             guiIngredients.set(smeltingInputSlot, smeltingInput);
@@ -106,7 +109,12 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
         guiIngredients.set(craftOutputSlot, itemOutputs.get(0));
 
         List<List<ItemStack>> itemStackInputs = ingredients.getInputs(VanillaTypes.ITEM);
-        craftingGridHelper.setInputs(guiIngredients, itemStackInputs, recipe.getWidth(), recipe.getHeight());
+        craftingGridHelper.setInputs(
+                guiIngredients,
+                itemStackInputs,
+                recipe.getCraftingGridRecipe().getWidth(),
+                recipe.getCraftingGridRecipe().getHeight()
+        );
 
         List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
         if (!fluidInputs.isEmpty()) {
@@ -114,16 +122,16 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
         }
     }
 
-    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs(RecipeManager manager) {
         Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-//        for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
-//            Fluid fluid = smelting.getProduct().getFluid();
-//            if (!smeltingInputs.containsKey(fluid)) {
-//                smeltingInputs.put(fluid, new ArrayList<>());
-//            }
-//
-//            smeltingInputs.get(fluid).add(smelting);
-//        }
+        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(manager)) {
+            Fluid fluid = smelting.getProduct().getFluid();
+            if (!smeltingInputs.containsKey(fluid)) {
+                smeltingInputs.put(fluid, new ArrayList<>());
+            }
+
+            smeltingInputs.get(fluid).add(smelting);
+        }
 
         return smeltingInputs;
     }

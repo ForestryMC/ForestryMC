@@ -8,8 +8,7 @@ package forestry.api.recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -27,32 +26,14 @@ public interface IFabricatorRecipe extends IForestryRecipe {
     FluidStack getLiquid();
 
     /**
-     * @return the list of ingredients in the crafting grid to create this recipe.
-     * Each inner list represents one slot's accepted ItemStacks
+     * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
      */
-    NonNullList<Ingredient> getIngredients();
-
-    NonNullList<String> getOreDicts();
-
-    /**
-     * @return the width of ingredients in the crafting grid to create this recipe.
-     */
-    int getWidth();
-
-    /**
-     * @return the height of ingredients in the crafting grid to create this recipe.
-     */
-    int getHeight();
+    ShapedRecipe getCraftingGridRecipe();
 
     /**
      * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
      */
     ItemStack getPlan();
-
-    /**
-     * @return the result of this recipe
-     */
-    ItemStack getRecipeOutput();
 
     @Override
     default IRecipeType<?> getType() {

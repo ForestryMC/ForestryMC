@@ -163,7 +163,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
         if (TileUtil.isUsableByPlayer(playerIn, tile)) {
             if (!playerIn.isSneaking()) {
-                if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, null)) {
+                if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
                     return ActionResultType.SUCCESS;
                 }
             }

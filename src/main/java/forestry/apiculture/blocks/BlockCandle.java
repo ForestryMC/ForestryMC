@@ -197,7 +197,6 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
     private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
         DyeColor color = DyeColor.getColor(held);
-        System.out.println(color);
         if (color != null) {
             if (isLit) {
                 tileCandle.setColour(color.getColorValue());

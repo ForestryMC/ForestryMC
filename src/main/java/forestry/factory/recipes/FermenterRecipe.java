@@ -53,25 +53,6 @@ public class FermenterRecipe implements IFermenterRecipe {
         this.fluidResource = fluidResource;
     }
 
-    public FermenterRecipe(
-            ResourceLocation id,
-            int fermentationValue,
-            float modifier,
-            Fluid output,
-            FluidStack fluidResource
-    ) {
-        Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
-        Preconditions.checkNotNull(output, "Fermenter output cannot be null!");
-        Preconditions.checkNotNull(fluidResource, "Fermenter liquid cannot be null!");
-
-        this.id = id;
-        this.resource = Ingredient.EMPTY;
-        this.fermentationValue = fermentationValue;
-        this.modifier = modifier;
-        this.output = output;
-        this.fluidResource = fluidResource;
-    }
-
 
     @Override
     public Ingredient getResource() {

@@ -15,18 +15,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
-    private final List<Ingredient> ingredients;
-
     public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {
         super(recipe);
-
-        ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
-        NonNullList<Ingredient> inputs = craftingGridRecipe.getIngredients();
-
-        this.ingredients = new ArrayList<>();
-        for (Ingredient ingredient : inputs) {
-            this.ingredients.add(ingredient);
-        }
     }
 
     @Override
@@ -34,10 +24,10 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
         ICarpenterRecipe recipe = getRecipe();
         ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
+        NonNullList<Ingredient> itemIngredients = recipe.getCraftingGridRecipe().getIngredients();
         List<Ingredient> inputStacks = new ArrayList<>();
-        Ingredient box = recipe.getBox();
-        if (!box.hasNoMatchingItems()) {
-            inputStacks.add(box);
+        for (Ingredient ingredient : itemIngredients) {
+            inputStacks.add(ingredient);
         }
 
         ingredients.setInputIngredients(inputStacks);
@@ -49,9 +39,5 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 
         ItemStack recipeOutput = craftingGridRecipe.getRecipeOutput();
         ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
     }
 }

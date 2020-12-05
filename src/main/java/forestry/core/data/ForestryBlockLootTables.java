@@ -50,12 +50,14 @@ public class ForestryBlockLootTables extends BlockLootTables {
                         (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES)
                 );
             }
+
             for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
                 this.registerLootTable(
                         leaves,
                         (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES)
                 );
             }
+
             for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT
                     .getFeatureByType()
                     .entrySet()) {
@@ -69,14 +71,18 @@ public class ForestryBlockLootTables extends BlockLootTables {
                 );
             }
         }
+
         registerLootTable(
                 CoreBlocks.PEAT,
-                (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(
-                        Blocks.DIRT)))
-                                                  .addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(
-                                                          ConstantRange.of(2)))
-                                                                                     .addEntry(ItemLootEntry.builder(
-                                                                                             CoreItems.PEAT.item())))
+                (block) -> new LootTable.Builder()
+                        .addLootPool(
+                                new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))
+                        )
+                        .addLootPool(
+                                new LootPool.Builder().acceptFunction(
+                                        SetCount.builder(ConstantRange.of(2))
+                                ).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))
+                        )
         );
         registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
@@ -142,9 +148,11 @@ public class ForestryBlockLootTables extends BlockLootTables {
     public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
         return droppingWithSilkTouchOrShears(
                 block,
-                withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING)
-                                                          .acceptFunction(OrganismFunction.fromDefinition(definition)))
-                        .acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
+                withSurvivesExplosion(
+                        block,
+                        ItemLootEntry.builder(ArboricultureItems.SAPLING)
+                                     .acceptFunction(OrganismFunction.fromDefinition(definition))
+                ).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
         );
     }
 

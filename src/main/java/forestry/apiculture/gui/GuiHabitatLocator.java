@@ -28,18 +28,18 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
     private static final LinkedListMultimap<String, Biome.Category> habitats = LinkedListMultimap.create();
 
     static {
-        habitats.putAll("Ocean", Arrays.asList(Biome.Category.OCEAN, Biome.Category.BEACH));
-        habitats.put("Plains", Biome.Category.PLAINS);
-        habitats.put("Desert", Biome.Category.DESERT);
-        habitats.putAll("Forest", Arrays.asList(Biome.Category.FOREST, Biome.Category.RIVER));
-        habitats.put("Jungle", Biome.Category.JUNGLE);
-        habitats.put("Taiga", Biome.Category.TAIGA);
-        habitats.put("Hills", Biome.Category.EXTREME_HILLS);
-        habitats.put("Swamp", Biome.Category.SWAMP);
-        habitats.put("Snow", Biome.Category.ICY);
-        habitats.put("Mushroom", Biome.Category.MUSHROOM);
-        habitats.put("Nether", Biome.Category.NETHER);
-        habitats.put("End", Biome.Category.THEEND);
+        habitats.putAll("ocean", Arrays.asList(Biome.Category.OCEAN, Biome.Category.BEACH));
+        habitats.put("plains", Biome.Category.PLAINS);
+        habitats.put("desert", Biome.Category.DESERT);
+        habitats.putAll("forest", Arrays.asList(Biome.Category.FOREST, Biome.Category.RIVER));
+        habitats.put("jungle", Biome.Category.JUNGLE);
+        habitats.put("taiga", Biome.Category.TAIGA);
+        habitats.put("hills", Biome.Category.EXTREME_HILLS);
+        habitats.put("swamp", Biome.Category.SWAMP);
+        habitats.put("snow", Biome.Category.ICY);
+        habitats.put("mushroom", Biome.Category.MUSHROOM);
+        habitats.put("nether", Biome.Category.NETHER);
+        habitats.put("end", Biome.Category.THEEND);
     }
 
     private final ItemInventoryHabitatLocator itemInventory;
@@ -102,6 +102,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
         for (HabitatSlot slot : habitatSlots) {
             slot.draw(transform, startY, startX);
         }
+
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
     }
 

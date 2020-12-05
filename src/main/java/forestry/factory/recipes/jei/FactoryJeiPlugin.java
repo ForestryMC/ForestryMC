@@ -95,7 +95,8 @@ public class FactoryJeiPlugin implements IModPlugin {
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
-            categories.add(new FabricatorRecipeCategory(guiHelper));
+            RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+            categories.add(new FabricatorRecipeCategory(guiHelper, recipeManager));
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FERMENTER)) {
@@ -345,7 +346,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
         if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
             registry.addRecipes(
-                    FabricatorRecipeMaker.getFabricatorRecipes(),
+                    FabricatorRecipeMaker.getFabricatorRecipes(recipeManager),
                     ForestryRecipeCategoryUid.FABRICATOR
             );
         }

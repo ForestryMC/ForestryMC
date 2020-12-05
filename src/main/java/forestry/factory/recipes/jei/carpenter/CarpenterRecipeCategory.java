@@ -23,7 +23,6 @@ import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRecipeWrapper> {
@@ -81,7 +80,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CarpenterRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiIngredientGroup guiIngredients = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
+        IGuiIngredientGroup guiIngredients = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
         guiIngredients.init(boxSlot, true, 73, 3);
@@ -108,8 +107,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
         ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
-        List<List<Ingredient>> craftingInputs = new ArrayList<>();
-        craftingInputs.add(recipeWrapper.getIngredients());
+        List<List<ItemStack>> craftingInputs = ingredients.getInputs(VanillaTypes.ITEM);
 
         craftingGridHelper.setInputs(
                 guiIngredients,

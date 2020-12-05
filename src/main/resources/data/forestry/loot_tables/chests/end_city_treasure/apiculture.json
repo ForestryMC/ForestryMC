@@ -35,7 +35,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_steadfast"
+              "speciesUid": "forestry:species_steadfast"
             },
             {
               "function": "set_count",
@@ -54,7 +54,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_steadfast"
+              "speciesUid": "forestry:species_steadfast"
             }
           ],
           "weight": 1
@@ -66,7 +66,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_ended"
+              "speciesUid": "forestry:species_ended"
             },
             {
               "function": "set_count",

@@ -20,7 +20,7 @@ public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRe
     public void setIngredients(IIngredients ingredients) {
         IFabricatorRecipe recipe = getRecipe();
 
-        NonNullList<Ingredient> itemIngredients = recipe.getIngredients();
+        NonNullList<Ingredient> itemIngredients = recipe.getCraftingGridRecipe().getIngredients();
         List<Ingredient> inputStacks = new ArrayList<>();
         for (Ingredient ingredient : itemIngredients) {
             inputStacks.add(ingredient);
@@ -30,6 +30,6 @@ public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRe
 
         ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(getRecipe().getLiquid()));
 
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getCraftingGridRecipe().getRecipeOutput());
     }
 }

@@ -4,11 +4,14 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.utils.Log;
 import mezz.jei.api.helpers.IStackHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class FermenterRecipeMaker {
     public static List<FermenterRecipeWrapper> getFermenterRecipes(RecipeManager manager, IStackHelper stackHelper) {
@@ -29,12 +32,9 @@ public class FermenterRecipeMaker {
             Ingredient resource,
             List<FermenterRecipeWrapper> recipes
     ) {
-//        if (resource.getItem() instanceof IVariableFermentable) {
-//            for (ItemStack stack : stackHelper.getSubtypes(resource)) {
-//                recipes.add(new FermenterRecipeWrapper(recipe, stack));
-//            }
-//        } else {
-//            recipes.add(new FermenterRecipeWrapper(recipe, resource));
-//        }
+        Optional<ItemStack> itemStack = Arrays.stream(resource.getMatchingStacks()).findFirst();
+        if (itemStack.isPresent()) {
+            recipes.add(new FermenterRecipeWrapper(recipe, itemStack.get()));
+        }
     }
 }

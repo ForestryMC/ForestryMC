@@ -82,7 +82,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 
     @Override
     public void registerCircuit(ICircuit circuit) {
-        System.out.println("okok => " + circuit.getUID());
         circuitMap.put(circuit.getUID(), circuit);
     }
 

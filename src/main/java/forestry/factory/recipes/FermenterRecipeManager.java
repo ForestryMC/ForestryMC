@@ -12,13 +12,10 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
-import forestry.api.recipes.IForestryRecipe;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -70,17 +67,6 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean addRecipe(IFermenterRecipe recipe) {
-        FluidStack liquid = recipe.getFluidResource();
-        recipeFluidInputs.add(liquid.getFluid());
-
-        Fluid output = recipe.getOutput();
-        recipeFluidOutputs.add(output);
-
-        return super.addRecipe(recipe);
     }
 
     @Override

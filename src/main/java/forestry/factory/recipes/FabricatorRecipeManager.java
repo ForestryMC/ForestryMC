@@ -12,17 +12,16 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
@@ -30,47 +29,23 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
         super(IFabricatorRecipe.TYPE);
     }
 
-    @Override
-    public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-        //TODO json
-//        ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
-//        NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
-//
-//        IFabricatorRecipe recipe = new FabricatorRecipe(
-//                plan,
-//                molten,
-//                result,
-//                ingredients,
-//                patternRecipe.getOreDicts(),
-//                patternRecipe.getWidth(),
-//                patternRecipe.getHeight()
-//        );
-//        addRecipe(recipe);
-    }
-
-    public RecipePair<IFabricatorRecipe> findMatchingRecipe(
+    public Optional<IFabricatorRecipe> findMatchingRecipe(
             RecipeManager manager,
             ItemStack plan,
             IInventory resources
     ) {
-        ItemStack[][] gridResources = RecipeUtil.getResources(resources);
-
         for (IFabricatorRecipe recipe : getRecipes(manager)) {
             if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
                 continue;
             }
-            Ingredient[][] oreDicts = RecipeUtil.matches(
-                    recipe.getIngredients(),
-                    recipe.getWidth(),
-                    recipe.getHeight(),
-                    gridResources
-            );
-            if (oreDicts != null) {
-//                return new RecipePair<>(recipe, oreDicts);
+
+            Ingredient[][] result = RecipeUtil.matches(recipe.getCraftingGridRecipe(), resources);
+            if (result != null) {
+                return Optional.of(recipe);
             }
         }
 
-        return RecipePair.EMPTY;
+        return Optional.empty();
     }
 
     public boolean isPlan(RecipeManager manager, ItemStack plan) {
@@ -89,7 +64,7 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
         }
 
         return getRecipes(manager).stream().filter(recipe -> {
-            ItemStack output = recipe.getRecipeOutput();
+            ItemStack output = recipe.getCraftingGridRecipe().getRecipeOutput();
             return ItemStackUtil.isIdenticalItem(itemStack, output);
         }).collect(Collectors.toList());
     }

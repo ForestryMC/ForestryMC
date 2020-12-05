@@ -55,7 +55,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_forest"
+              "speciesUid": "forestry:species_forest"
             }
           ],
           "weight": 6
@@ -67,7 +67,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_common"
+              "speciesUid": "forestry:species_common"
             }
           ],
           "weight": 6
@@ -79,7 +79,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_meadows"
+              "speciesUid": "forestry:species_meadows"
             }
           ],
           "weight": 6

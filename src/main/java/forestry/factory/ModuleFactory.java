@@ -28,10 +28,8 @@ import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
@@ -44,7 +42,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.storage.ModuleCrates;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -53,8 +50,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -254,217 +249,6 @@ public class ModuleFactory extends BlankForestryModule {
 
     @Override
     public void registerRecipes() {
-        // FABRICATOR
-        FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
-        if (!liquidGlass.isEmpty()) {
-            //TODO json
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.COPPER, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "ingotCopper"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.TIN, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "ingotTin"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BRONZE, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "ingotBronze"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.IRON, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "ingotIron"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "ingotGold"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.DIAMOND, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "gemDiamond"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.OBSIDIAN, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', Blocks.OBSIDIAN
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BLAZE, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', Items.BLAZE_POWDER
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.EMERALD, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "gemEmerald"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.APATITE, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', "gemApatite"
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.LAPIS, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', "dustRedstone",
-                            'X', new ItemStack(Items.LAPIS_LAZULI)
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.ENDER, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', new ItemStack(Items.ENDER_EYE),
-                            'X', new ItemStack(Blocks.END_STONE)
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.ORCHID, 4),
-                    new Object[]{
-                            " X ",
-                            "#X#",
-                            "XXX",
-                            '#', new ItemStack(Items.REPEATER),
-                            'X', new ItemStack(Blocks.REDSTONE_ORE)
-                    }
-            );
-            RecipeManagers.fabricatorManager.addRecipe(
-                    ItemStack.EMPTY,
-                    liquidGlass,
-                    CoreItems.FLEXIBLE_CASING.stack(),
-                    new Object[]{
-                            "#E#",
-                            "B B",
-                            "#E#",
-                            '#', OreDictUtil.INGOT_BRONZE,
-                            'B', OreDictUtil.SLIMEBALL,
-                            'E', "gemEmerald"
-                    }
-            );
-        }
-        String[] dyes = {
-                "dyeBlack",
-                "dyeRed",
-                "dyeGreen",
-                "dyeBrown",
-                "dyeBlue",
-                "dyePurple",
-                "dyeCyan",
-                "dyeLightGray",
-                "dyeGray",
-                "dyePink",
-                "dyeLime",
-                "dyeYellow",
-                "dyeLightBlue",
-                "dyeMagenta",
-                "dyeOrange",
-                "dyeWhite"
-        };
-
-        FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
-        FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
-
-        if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-            if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
-                for (int i = 0; i < 16; i++) {
-                    //TODO - needs tag loop or tag match in recipe
-                    //					RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassBucket, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
-                    //						"#", "X",
-                    //						'#', dyes[i],
-                    //						'X', beeItems.propolis.getWildcard()});
-                }
-                //				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
-                //					"X",
-                //					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
-            }
-        }
-
         // CHIPSETS
         ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(
                 EnumCircuitBoardType.BASIC,

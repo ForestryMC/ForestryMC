@@ -11,7 +11,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_steadfast"
+              "speciesUid": "forestry:species_steadfast"
             }
           ],
           "weight": 1
@@ -23,7 +23,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.species_modest"
+              "speciesUid": "forestry:species_modest"
             },
             {
               "function": "set_count",

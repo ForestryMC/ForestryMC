@@ -29,7 +29,7 @@ import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
+import net.minecraft.loot.TableLootEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -146,19 +146,16 @@ public class EventHandlerCore {
                     event.getName().getPath() + "/" + lootTableFile
             );
             URL url = EventHandlerCore.class.getResource(
-                    "/data/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() +
-                    ".json");
+                    "/data/" + resourceLocation.getNamespace()
+                    + "/loot_tables/" + resourceLocation.getPath() + ".json"
+            );
             if (url != null) {
-                LootTable forestryChestAdditions = event.getLootTableManager()
-                                                        .getLootTableFromLocation(resourceLocation);
-                if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
-                    for (String poolName : lootPoolNames) {
-                        LootPool pool = forestryChestAdditions.getPool(poolName);
-                        if (pool != null) {
-                            event.getTable().addPool(pool);
-                        }
-                    }
-                }
+                event.getTable().addPool(
+                        LootPool.builder()
+                                .name(resourceLocation.getPath() + "_" + Constants.MOD_ID)
+                                .addEntry(TableLootEntry.builder(resourceLocation))
+                                .build()
+                );
             }
         }
     }

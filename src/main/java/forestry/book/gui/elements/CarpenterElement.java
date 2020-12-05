@@ -1,10 +1,12 @@
 package forestry.book.gui.elements;
 
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -13,7 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
@@ -32,9 +35,12 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
         this(
                 0,
                 0,
-                Stream.of(stacks)
-//                      .map(CarpenterRecipeManager::getRecipes)
-//                      .flatMap(Collection::stream)
+                Arrays.stream(stacks)
+                      .map(x -> RecipeManagers.carpenterManager.getRecipes(
+                              Minecraft.getInstance().world.getRecipeManager(),
+                              x
+                      ))
+                      .flatMap(Collection::stream)
                       .toArray(ICarpenterRecipe[]::new)
         );
     }

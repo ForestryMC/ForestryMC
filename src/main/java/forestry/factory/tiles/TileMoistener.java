@@ -539,9 +539,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager)
-                               .cast();    //TODO this shouldn't be created every time this method is called...
+            //TODO this shouldn't be created every time this method is called...
+            return LazyOptional.of(() -> tankManager).cast();
         }
+
         return super.getCapability(capability, facing);
     }
 }

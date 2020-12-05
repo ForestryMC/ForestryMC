@@ -387,12 +387,10 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
         return tankManager;
     }
 
-
-    //TODO - is this efficient? or even correct?
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).cast();//.cast(tankManager);
+            return LazyOptional.of(() -> tankManager).cast();
         }
         return super.getCapability(capability, facing);
     }

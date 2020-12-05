@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -53,4 +54,6 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
     public boolean isBox(RecipeManager manager, ItemStack resource);
 
     public Set<Fluid> getRecipeFluids(RecipeManager manager);
+
+    public Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
 }

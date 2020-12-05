@@ -2,23 +2,23 @@ package forestry.book.gui.elements;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
@@ -37,9 +37,12 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
         this(
                 0,
                 0,
-                Stream.of(stacks)
-//                      .map(RecipeManagers.fabricatorManager.getRecipes())
-//                      .flatMap(Collection::stream)
+                Arrays.stream(stacks)
+                      .map(x -> RecipeManagers.fabricatorManager.getRecipes(
+                              Minecraft.getInstance().world.getRecipeManager(),
+                              x
+                      ))
+                      .flatMap(Collection::stream)
                       .toArray(IFabricatorRecipe[]::new)
         );
     }
@@ -73,7 +76,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
             selectedElement.item(91, 1, plan);
         }
 
-        selectedElement.item(91, 39, recipe.getRecipeOutput());
+        selectedElement.item(91, 39, recipe.getCraftingGridRecipe().getRecipeOutput());
         NonNullList<Ingredient> smeltingInput = NonNullList.create();
         Fluid recipeFluid = recipe.getLiquid().getFluid();
         for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {
@@ -87,15 +90,16 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
     }
 
     private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
         Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-//        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes()) {
-//            Fluid fluid = smelting.getProduct().getFluid();
-//            if (!smeltingInputs.containsKey(fluid)) {
-//                smeltingInputs.put(fluid, new ArrayList<>());
-//            }
-//
-//            smeltingInputs.get(fluid).add(smelting);
-//        }
+        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
+            Fluid fluid = smelting.getProduct().getFluid();
+            if (!smeltingInputs.containsKey(fluid)) {
+                smeltingInputs.put(fluid, new ArrayList<>());
+            }
+
+            smeltingInputs.get(fluid).add(smelting);
+        }
 
         return smeltingInputs;
     }

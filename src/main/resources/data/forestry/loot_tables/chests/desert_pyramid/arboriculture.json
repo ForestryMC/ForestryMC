@@ -10,7 +10,7 @@
           "functions": [
             {
               "function": "forestry:set_species_nbt",
-              "speciesUid": "forestry.tree_acacia"
+              "speciesUid": "forestry:tree_acacia"
             }
           ],
           "weight": 1

@@ -11,7 +11,6 @@
 package forestry.factory;
 
 import forestry.api.recipes.*;
-import forestry.core.recipes.RecipePair;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
@@ -70,6 +69,11 @@ public class DummyManagers {
         public Set<Fluid> getRecipeFluids(RecipeManager manager) {
             return null;
         }
+
+        @Override
+        public Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack) {
+            return null;
+        }
     }
 
     public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
@@ -81,12 +85,7 @@ public class DummyManagers {
 
     public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
         @Override
-        public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-
-        }
-
-        @Override
-        public RecipePair<IFabricatorRecipe> findMatchingRecipe(
+        public Optional<IFabricatorRecipe> findMatchingRecipe(
                 RecipeManager manager, ItemStack plan, IInventory resources
         ) {
             return null;

@@ -19,7 +19,7 @@
         "modifier":  1.5,
         "output": "forestry:biomass",
         "fluidResource": {
-          "fluid": "minecraft:honey",
+          "fluid": "forestry:honey",
           "amount": 1
         }
       }

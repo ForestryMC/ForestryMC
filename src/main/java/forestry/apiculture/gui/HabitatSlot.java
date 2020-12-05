@@ -19,6 +19,7 @@ import forestry.core.render.TextureManagerForestry;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,7 +50,7 @@ public class HabitatSlot extends Widget {
     @Override
     public ToolTip getToolTip(int mouseX, int mouseY) {
         ToolTip tooltip = new ToolTip();
-        tooltip.add(new StringTextComponent(name));
+        tooltip.add(new TranslationTextComponent("forestry.habitat." + name));
         return tooltip;
     }
 

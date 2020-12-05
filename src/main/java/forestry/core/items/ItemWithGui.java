@@ -46,7 +46,6 @@ public abstract class ItemWithGui extends ItemForestry {
     }
 
     protected void openGui(ServerPlayerEntity player, ItemStack stack) {
-        System.out.println(player.currentWindowId);
         NetworkHooks.openGui(
                 player,
                 new ContainerProvider(stack),
@@ -90,11 +89,9 @@ public abstract class ItemWithGui extends ItemForestry {
         public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
             Item item = heldItem.getItem();
             if (!(item instanceof ItemWithGui)) {
-                System.out.println("ah! " + windowId);
                 return null;
             }
 
-            System.out.println(windowId);
             ItemWithGui itemWithGui = (ItemWithGui) item;
             return itemWithGui.getContainer(windowId, playerEntity, heldItem);
         }

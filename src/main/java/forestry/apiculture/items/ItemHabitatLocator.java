@@ -82,9 +82,14 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
             EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
             EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-            list.add(new TranslationTextComponent("for.gui.currentBiome")
-                    .append(new StringTextComponent(": "))
-                    .append(new TranslationTextComponent(currentBiome.toString())));
+            list.add(
+                    new TranslationTextComponent("for.gui.currentBiome")
+                            .append(new StringTextComponent(": "))
+                            .append(new TranslationTextComponent(
+                                    "biome." + currentBiome.getRegistryName().getNamespace() + "." +
+                                    currentBiome.getRegistryName().getPath()
+                            ))
+            );
 
             list.add(new TranslationTextComponent("for.gui.temperature")
                     .append(new StringTextComponent(": "))

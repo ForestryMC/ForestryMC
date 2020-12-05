@@ -11,8 +11,11 @@
 package forestry.core.gui.slots;
 
 import com.mojang.datafixers.util.Pair;
+import forestry.core.config.Constants;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.tiles.IFilterSlotDelegate;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;

@@ -213,7 +213,7 @@ public class Forestry {
     }
 
     private void gatherData(GatherDataEvent event) {
-        CapabilityFluidHandler.register();    //TODO test
+        CapabilityFluidHandler.register();
         DataGenerator generator = event.getGenerator();
 
         if (event.includeServer()) {
