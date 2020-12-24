@@ -13,6 +13,7 @@ package forestry.plugins.compat;
 import java.util.ArrayList;
 import java.util.List;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -218,8 +219,8 @@ public class PluginNatura extends ForestryPlugin {
 		}
 
 		Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
-		Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
+		Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seedBarley, cropBlock, 3));
+		Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seedCotton, cropBlock, 8));
 		
 		List<ItemStack> berries = new ArrayList<>();
 		if (berryBlight != null) {

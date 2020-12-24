@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -375,7 +376,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 			if (reedBlock != null && reedStack != null) {
 				RecipeUtil.addFermenterRecipes(reedStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
 				if (PluginManager.Module.FARMING.isEnabled()) {
-					Farmables.farmables.get("farmPoales").add(new FarmableStacked(reedBlock, 14, 4));
+					Farmables.farmables.get(FarmableReference.Poales.get()).add(new FarmableStacked(reedBlock, 14, 4));
 				}
 			}
 		}
@@ -392,8 +393,8 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{seedStack}, Fluids.SEEDOIL.getFluid(seedamount));
 				}
 				if (PluginManager.Module.FARMING.isEnabled()) {
-					Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(seedStack, landCropBlock, 4));
-					Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(landCropBlock, 4));
+					Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seedStack, landCropBlock, 4));
+					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(landCropBlock, 4));
 				}
 			}
 		}
@@ -410,7 +411,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 		for (Map.Entry<String, Integer> wPlant : floatingWaterPlant.entrySet()) {
 			Block waterPlantBlock = GameRegistry.findBlock(PlantMP, wPlant.getKey());
 			if (PluginManager.Module.FARMING.isEnabled() && waterPlantBlock != null) {
-				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(waterPlantBlock, wPlant.getValue()));
+				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(waterPlantBlock, wPlant.getValue()));
 			}
 		}
 
@@ -426,8 +427,8 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{foodStack}, Fluids.JUICE.getFluid(juiceAmount));
 				}
 				if (PluginManager.Module.FARMING.isEnabled()) {
-					Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(berryBushStack, berryBushCropBlock, berryBushCrop.getValue()));
-					Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(berryBushCropBlock, berryBushCrop.getValue()));
+					Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(berryBushStack, berryBushCropBlock, berryBushCrop.getValue()));
+					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(berryBushCropBlock, berryBushCrop.getValue()));
 				}
 			}
 		}
@@ -444,7 +445,7 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				FlowerManager.flowerRegistry.registerAcceptableFlower(plantBlock, special.getValue());
 				FlowerManager.flowerRegistry.registerPlantableFlower(plantBlock, 0, 0.75, special.getValue());
 				if (PluginManager.Module.FARMING.isEnabled()) {
-					Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(specialStack, plantBlock, 4));
+					Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(specialStack, plantBlock, 4));
 				}
 			}
 		}
@@ -466,9 +467,9 @@ public class PluginPlantMegaPack extends ForestryPlugin {
 				FlowerManager.flowerRegistry.registerPlantableFlower(flowerBlock, 0, 0.75, flowertype);
 			}
 			if (PluginManager.Module.FARMING.isEnabled() && flowerStack != null && flowerBlock != null) {
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(flowerStack, flowerBlock, flower.getValue()));
+				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(flowerStack, flowerBlock, flower.getValue()));
 				if (flower.getValue() < 5) {
-					Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(flowerBlock, flower.getValue()));
+					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(flowerBlock, flower.getValue()));
 				}
 			}
 		}

@@ -36,7 +36,7 @@ public class FarmLogicSucculent extends FarmLogic {
 
 	public FarmLogicSucculent(IFarmHousing housing) {
 		super(housing);
-		Collection<IFarmable> farmables = Farmables.farmables.get("farmSucculentes");
+		Collection<IFarmable> farmables = Farmables.farmables.get(FarmableReference.Succulentes.get());
 		germlings = farmables.toArray(new IFarmable[farmables.size()]);
 	}
 

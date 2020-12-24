@@ -44,13 +44,13 @@ import forestry.plugins.PluginManager;
 
 public class FarmLogicOrchard extends FarmLogic {
 
-	private final Collection<IFarmable> farmables;
-	private final HashMap<Vect, Integer> lastExtents = new HashMap<>();
-	private final ImmutableList<Block> traversalBlocks;
+	protected Collection<IFarmable> farmables;
+	protected final HashMap<Vect, Integer> lastExtents = new HashMap<>();
+	protected final ImmutableList<Block> traversalBlocks;
 
 	public FarmLogicOrchard(IFarmHousing housing) {
 		super(housing);
-		this.farmables = Farmables.farmables.get("farmOrchard");
+		this.farmables = Farmables.farmables.get(FarmableReference.Orchard.get());
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		if (PluginManager.Module.AGRICRAFT.isEnabled() || PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {

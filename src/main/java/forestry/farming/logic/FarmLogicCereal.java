@@ -22,7 +22,7 @@ import forestry.api.farming.IFarmHousing;
 public class FarmLogicCereal extends FarmLogicCrops {
 
 	public FarmLogicCereal(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get("farmWheat"));
+		super(housing, Farmables.farmables.get(FarmableReference.Wheat.get()));
 	}
 
 	@Override

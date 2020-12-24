@@ -34,7 +34,7 @@ import forestry.core.utils.vect.VectUtil;
 public class FarmLogicInfernal extends FarmLogicHomogeneous {
 
 	public FarmLogicInfernal(IFarmHousing housing) {
-		super(housing, new ItemStack(Blocks.soul_sand), new ItemStack(Blocks.soul_sand), Farmables.farmables.get("farmInfernal"));
+		super(housing, new ItemStack(Blocks.soul_sand), new ItemStack(Blocks.soul_sand), Farmables.farmables.get(FarmableReference.Infernal.get()));
 	}
 
 	@Override

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -55,8 +56,8 @@ public class PluginRotaryCraft extends ForestryPlugin {
 				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{canolaSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
 			}
 			if(PluginManager.Module.FARMING.isEnabled()) {
-				Farmables.farmables.get("farmWheat").add(new FarmableGenericCrop(canolaSeed, canolaCrop, 9));
-				Farmables.farmables.get("farmOrchard").add(new FarmableBasicFruit(canolaCrop, 9));
+				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(canolaSeed, canolaCrop, 9));
+				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(canolaCrop, 9));
 			}
 		}
 	}

@@ -12,6 +12,7 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
@@ -92,7 +93,7 @@ public class PluginAgriCraft extends ForestryPlugin {
 
 		Block cropBlock = GameRegistry.findBlock(AgriCraft, "crops");
 		if (cropBlock != null && PluginManager.Module.FARMING.isEnabled()) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicAgricraft(cropBlock, 7));
+			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicAgricraft(cropBlock, 7));
 		}
 	}
 

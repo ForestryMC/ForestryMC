@@ -18,7 +18,9 @@ import java.util.EnumSet;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.farming.Farmables;
+import forestry.core.config.Config;
 import forestry.farming.logic.FarmableBasicIC2Crop;
+import forestry.farming.logic.FarmableReference;
 import ic2.api.crops.ICropTile;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -86,6 +88,7 @@ public class PluginIC2 extends ForestryPlugin {
 	private static ItemStack rubberleaves;
 	private static ItemStack emptyCell;
 	private static ItemStack lavaCell;
+	private static ItemStack uran238;
 	private static ItemStack waterCell;
 	private static ItemStack rubber;
 	private static ItemStack scrap;
@@ -159,6 +162,8 @@ public class PluginIC2 extends ForestryPlugin {
 		uuMatter = IC2Items.getItem("matter");
 		silver = IC2Items.getItem("silverIngot");
 		brass = IC2Items.getItem("bronzeIngot");
+
+		uran238 = IC2Items.getItem("Uran238");
 
 		Circuit.farmRubberManual = new CircuitFarmLogic("manualRubber", FarmLogicRubber.class);
 
@@ -243,12 +248,8 @@ public class PluginIC2 extends ForestryPlugin {
 	@Optional.Method(modid = "IC2")
 	protected void registerRecipes() {
 
-		if (rubber != null) {
-			for (Object rubberOreDict : RecipeUtil.getOreDictRecipeEquivalents(rubber)) {
-				RecipeManagers.fabricatorManager.addRecipe(null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 4),
-						new Object[]{" X ", "#X#", "XXX", '#', "dustRedstone", 'X', rubberOreDict});
-			}
-		}
+		EnumElectronTube.RUBBER.registerTubeRecipe(rubber);
+		EnumElectronTube.URANIUM.registerTubeRecipe(uran238);
 
 		if (plantBall != null) {
 			RecipeUtil.addFermenterRecipes(plantBall, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
@@ -310,7 +311,10 @@ public class PluginIC2 extends ForestryPlugin {
 
 		Block ic2Crop = GameRegistry.findBlock("IC2", "blockCrop");
 		if (PluginManager.Module.FARMING.isEnabled() && ic2Crop != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicIC2Crop());
+			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
+			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.URANIUM, 1), Circuit.farmIC2CropsManual);
+			Farmables.farmables.put(FarmableReference.IC2Crops.get(), new ArrayList<>());
+			Farmables.farmables.get(FarmableReference.IC2Crops.get()).add(new FarmableBasicIC2Crop());
 		}
 
 		BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
@@ -341,10 +345,7 @@ public class PluginIC2 extends ForestryPlugin {
 	 */
 	@Optional.Method(modid = "IC2")
 	public boolean isIC2Crop(TileEntity tileEntity) {
-		if (tileEntity != null && tileEntity instanceof ICropTile) {
-			return true;
-		}
-		return false;
+		return tileEntity instanceof ICropTile;
 	}
 
 	/**
@@ -359,9 +360,7 @@ public class PluginIC2 extends ForestryPlugin {
 			if (crop.getCrop() == null) {
 				return false;
 			}
-			if (crop.getSize() == crop.getCrop().getOptimalHavestSize(crop)) {
-				return true;
-			}
+			return crop.getSize() == crop.getCrop().getOptimalHavestSize(crop);
 		}
 		return false;
 	}

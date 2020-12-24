@@ -12,6 +12,7 @@ package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableMap;
 
+import forestry.farming.logic.FarmableReference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -86,11 +87,11 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		}
 		Block hopVine = GameRegistry.findBlock("Growthcraft|Hops", "grc.hopVine");
 		if (hopVine != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(hopVine, 3, false, false)); // need custom fruit to weed out rope
+			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicGrowthCraft(hopVine, 3, false, false)); // need custom fruit to weed out rope
 		}
 		Block riceBlock = GameRegistry.findBlock("Growthcraft|Rice", "grc.riceBlock");
 		if (riceBlock != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(riceBlock, 7, true, false)); //need to set paddyfield to 7
+			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicGrowthCraft(riceBlock, 7, true, false)); //need to set paddyfield to 7
 		}
 
 		if (PluginManager.Module.APICULTURE.isEnabled()) {
@@ -133,7 +134,7 @@ public class PluginGrowthCraft extends ForestryPlugin {
 		}
 		Block grapeBlock = GameRegistry.findBlock("Growthcraft|Grapes", "grc.grapeBlock");
 		if (grapeBlock != null) {
-			Farmables.farmables.get("farmOrchard").add(new FarmableBasicGrowthCraft(grapeBlock, 0, false, true));
+			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicGrowthCraft(grapeBlock, 0, false, true));
 		}
 
 		ItemStack bambooLeaves = GameRegistry.findItemStack("Growthcraft|Bamboo", "grc.bambooLeaves", 1);
