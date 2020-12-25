@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.multiblock;
 
 import forestry.api.multiblock.IMultiblockComponent;
@@ -21,12 +21,12 @@ import javax.annotation.Nullable;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
     private final Class<T> controllerClass;
+    @Nullable
+    protected T controller;
     private boolean visited;
     private boolean saveMultiblockData;
     @Nullable
     private CompoundNBT cachedMultiblockData;
-    @Nullable
-    protected T controller;
 
     protected MultiblockLogic(Class<T> controllerClass) {
         this.controllerClass = controllerClass;
@@ -36,6 +36,13 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
         this.cachedMultiblockData = null;
     }
 
+    public Class<T> getControllerClass() {
+        return controllerClass;
+    }
+
+    @Override
+    public abstract T getController();
+
     public void setController(@Nullable IMultiblockControllerInternal controller) {
         if (controller == null) {
             this.controller = null;
@@ -43,13 +50,6 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
             this.controller = controllerClass.cast(controller);
         }
     }
-
-    public Class<T> getControllerClass() {
-        return controllerClass;
-    }
-
-    @Override
-    public abstract T getController();
 
     public abstract T createNewController(World world);
 

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils;
 
 import com.google.common.collect.AbstractIterator;
@@ -93,8 +93,8 @@ public final class VectUtil {
         private final BlockPos center;
         private final BlockPos maxPos;
         private final BlockPos minPos;
-        private int spiralLayer;
         private final int maxSpiralLayers;
+        private int spiralLayer;
         private int direction;
 
         @Nullable

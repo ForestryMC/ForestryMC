@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.circuits;
 
-import com.google.common.base.Preconditions;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
 import forestry.factory.recipes.AbstractCraftingProvider;

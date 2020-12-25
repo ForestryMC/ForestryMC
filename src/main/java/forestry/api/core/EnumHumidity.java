@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.core;
 
 import net.minecraft.world.biome.Biome;
@@ -30,10 +30,6 @@ public enum EnumHumidity {
         this.color = color;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     /**
      * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall.
      * To check if rainfall is possible in a biome, use {@link Biome#canRain()}.
@@ -49,5 +45,9 @@ public enum EnumHumidity {
         } else {
             return ARID;
         }
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

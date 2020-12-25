@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -13,11 +13,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
     IRecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
-
-    class Companion {
-        @ObjectHolder("forestry:fabricator_smelting")
-        public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
-    }
 
     /**
      * @return item to be melted down
@@ -42,5 +37,10 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:fabricator_smelting")
+        public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
     }
 }

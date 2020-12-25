@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.tiles;
 
 import forestry.api.fuels.FuelManager;
@@ -44,18 +44,40 @@ import java.util.Collection;
 //import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
+    private final int ashForItem;
+    private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
     private ItemStack fuel = ItemStack.EMPTY;
     private int burnTime;
     private int totalBurnTime;
     private int ashProduction;
-    private final int ashForItem;
-    private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
     public TileEnginePeat() {
         super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
         ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
         setInternalInventory(new InventoryEnginePeat(this));
+    }
+
+    /**
+     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
+     */
+    private static int determineFuelValue(ItemStack fuel) {
+        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
+            return FuelManager.copperEngineFuel.get(fuel).getPowerPerCycle();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
+     */
+    private static int determineBurnDuration(ItemStack fuel) {
+        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
+            return FuelManager.copperEngineFuel.get(fuel).getBurnDuration();
+        } else {
+            return 0;
+        }
     }
 
     private int getFuelSlot() {
@@ -195,28 +217,6 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         ashProduction = 0;
         // try to dump stash
         dumpStash();
-    }
-
-    /**
-     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-     */
-    private static int determineFuelValue(ItemStack fuel) {
-        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-            return FuelManager.copperEngineFuel.get(fuel).getPowerPerCycle();
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-     */
-    private static int determineBurnDuration(ItemStack fuel) {
-        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-            return FuelManager.copperEngineFuel.get(fuel).getBurnDuration();
-        } else {
-            return 0;
-        }
     }
 
     /* AUTO-EJECTING */

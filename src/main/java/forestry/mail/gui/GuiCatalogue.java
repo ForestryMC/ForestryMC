@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -36,11 +36,9 @@ import java.util.List;
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
     private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
-
+    private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
     private Button buttonFilter;
     private Button buttonUse;
-
-    private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
     public GuiCatalogue(ContainerCatalogue container, PlayerInventory inv, ITextComponent title) {
         super(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "book.png"), container, inv, title);

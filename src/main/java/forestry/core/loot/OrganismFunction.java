@@ -3,7 +3,6 @@ package forestry.core.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import forestry.core.config.Constants;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.ISpeciesDefinition;

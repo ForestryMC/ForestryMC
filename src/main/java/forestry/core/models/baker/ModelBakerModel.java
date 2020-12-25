@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.models.baker;
 
 import com.google.common.collect.ImmutableMap;
@@ -30,17 +30,15 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerModel implements IBakedModel {
     private final boolean isGui3d;
+    private final Map<Direction, List<BakedQuad>> faceQuads;
+    private final List<BakedQuad> generalQuads;
+    private final List<Pair<BlockState, IBakedModel>> models;
+    private final List<Pair<BlockState, IBakedModel>> modelsPost;
     private boolean isAmbientOcclusion;
     private TextureAtlasSprite particleSprite;
     @Nullable
     private IModelTransform modelState;
     private ImmutableMap<TransformType, TransformationMatrix> transforms = ImmutableMap.of();
-
-    private final Map<Direction, List<BakedQuad>> faceQuads;
-    private final List<BakedQuad> generalQuads;
-    private final List<Pair<BlockState, IBakedModel>> models;
-    private final List<Pair<BlockState, IBakedModel>> modelsPost;
-
     private float[] rotation = getDefaultRotation();
     private float[] translation = getDefaultTranslation();
     private float[] scale = getDefaultScale();
@@ -74,6 +72,18 @@ public class ModelBakerModel implements IBakedModel {
         setModelState(old.modelState);
     }
 
+    private static float[] getDefaultRotation() {
+        return new float[]{-80, -45, 170};
+    }
+
+    private static float[] getDefaultTranslation() {
+        return new float[]{0, 1.5F, -2.75F};
+    }
+
+    private static float[] getDefaultScale() {
+        return new float[]{0.375F, 0.375F, 0.375F};
+    }
+
     @Override
     public boolean isGui3d() {
         return isGui3d;
@@ -84,13 +94,13 @@ public class ModelBakerModel implements IBakedModel {
         return true;
     }
 
-    public void setAmbientOcclusion(boolean ambientOcclusion) {
-        this.isAmbientOcclusion = ambientOcclusion;
-    }
-
     @Override
     public boolean isAmbientOcclusion() {
         return isAmbientOcclusion;
+    }
+
+    public void setAmbientOcclusion(boolean ambientOcclusion) {
+        this.isAmbientOcclusion = ambientOcclusion;
     }
 
     public void setParticleSprite(TextureAtlasSprite particleSprite) {
@@ -117,40 +127,28 @@ public class ModelBakerModel implements IBakedModel {
         return ItemOverrideList.EMPTY;
     }
 
-    private static float[] getDefaultRotation() {
-        return new float[]{-80, -45, 170};
-    }
-
-    private static float[] getDefaultTranslation() {
-        return new float[]{0, 1.5F, -2.75F};
-    }
-
-    private static float[] getDefaultScale() {
-        return new float[]{0.375F, 0.375F, 0.375F};
+    public float[] getRotation() {
+        return rotation;
     }
 
     public void setRotation(float[] rotation) {
         this.rotation = rotation;
     }
 
-    public void setTranslation(float[] translation) {
-        this.translation = translation;
-    }
-
-    public void setScale(float[] scale) {
-        this.scale = scale;
-    }
-
-    public float[] getRotation() {
-        return rotation;
-    }
-
     public float[] getTranslation() {
         return translation;
     }
 
+    public void setTranslation(float[] translation) {
+        this.translation = translation;
+    }
+
     public float[] getScale() {
         return scale;
+    }
+
+    public void setScale(float[] scale) {
+        this.scale = scale;
     }
 
     public void setModelState(IModelTransform modelState) {

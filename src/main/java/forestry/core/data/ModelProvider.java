@@ -35,6 +35,14 @@ public abstract class ModelProvider implements IDataProvider {
         this.folder = folder;
     }
 
+    private static JsonElement serializeVex(Vector3i vector) {
+        JsonArray array = new JsonArray();
+        array.add(vector.getX());
+        array.add(vector.getY());
+        array.add(vector.getZ());
+        return array;
+    }
+
     @Override
     public void act(DirectoryCache cache) throws IOException {
         this.pathToBuilder.clear();
@@ -89,13 +97,13 @@ public abstract class ModelProvider implements IDataProvider {
     }
 
     public static class ModelBuilder {
+        public final Map<String, ResourceLocation> textures = new HashMap<>();
+        public final Map<String, JsonElement> loaderData = new HashMap<>();
+        public final List<Element> elements = new LinkedList<>();
         @Nullable
         public ResourceLocation parent;
         @Nullable
         public ResourceLocation loader;
-        public final Map<String, ResourceLocation> textures = new HashMap<>();
-        public final Map<String, JsonElement> loaderData = new HashMap<>();
-        public final List<Element> elements = new LinkedList<>();
         @Nullable
         private Boolean ambientOcclusion = null;
 
@@ -184,9 +192,9 @@ public abstract class ModelProvider implements IDataProvider {
         private final Vector3i from;
         private final Vector3i to;
         private final Face[] faces = new Face[6];
-        private boolean shade = true;
         @Nullable
         public Rotation rotation;
+        private boolean shade = true;
 
         public Element(Vector3i from, Vector3i to) {
             this.from = from;
@@ -322,13 +330,5 @@ public abstract class ModelProvider implements IDataProvider {
             obj.addProperty("texture", texture);
             return obj;
         }
-    }
-
-    private static JsonElement serializeVex(Vector3i vector) {
-        JsonArray array = new JsonArray();
-        array.add(vector.getX());
-        array.add(vector.getY());
-        array.add(vector.getZ());
-        return array;
     }
 }

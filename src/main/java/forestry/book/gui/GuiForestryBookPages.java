@@ -28,9 +28,9 @@ public class GuiForestryBookPages extends GuiForesterBook {
     private final IBookEntry parent;
     private final List<GuiButtonSubEntry> subButtons = new ArrayList<>();
     private final List<IGuiElement> pages;
-    private int pageIndex = 0;
     private final IElementGroup leftPage;
     private final IElementGroup rightPage;
+    private int pageIndex = 0;
     private int nextPage = -1;
     private int lastPage = -1;
 

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import forestry.api.circuits.ICircuit;
@@ -20,11 +20,6 @@ import net.minecraftforge.registries.ObjectHolder;
 public interface ISolderRecipe extends IForestryRecipe {
 
     IRecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
-
-    class Companion {
-        @ObjectHolder("forestry:solder")
-        public static final IRecipeSerializer<ISolderRecipe> SERIALIZER = null;
-    }
 
     boolean matches(ICircuitLayout layout, ItemStack itemstack);
 
@@ -42,5 +37,10 @@ public interface ISolderRecipe extends IForestryRecipe {
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:solder")
+        public static final IRecipeSerializer<ISolderRecipe> SERIALIZER = null;
     }
 }

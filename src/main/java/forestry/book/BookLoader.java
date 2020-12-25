@@ -72,6 +72,30 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
         registerPageFactory(JsonPageFactory.NAME, JsonPageFactory.INSTANCE);
     }
 
+    @Nullable
+    public static IResource getResource(String path) {
+        IResource resource;
+        if (!path.contains(":")) {
+            Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
+            String lang = currentLanguage.getCode();
+
+            ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
+            resource = ResourceUtil.getResource(location);
+            if (resource != null) {
+                return resource;
+            }
+            location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, DEFAULT_LANG, path));
+            resource = ResourceUtil.getResource(location);
+            if (resource != null) {
+                return resource;
+            }
+            location = new ResourceLocation(BOOK_LOCATION + path);
+            return ResourceUtil.getResource(location);
+        }
+        ResourceLocation location = new ResourceLocation(path);
+        return ResourceUtil.getResource(location);
+    }
+
     @Override
     public void registerContentType(String name, Class<? extends BookContent> contentClass) {
         contentByType.put(name, contentClass);
@@ -113,30 +137,6 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
     @Override
     public void invalidateBook() {
         book = null;
-    }
-
-    @Nullable
-    public static IResource getResource(String path) {
-        IResource resource;
-        if (!path.contains(":")) {
-            Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
-            String lang = currentLanguage.getCode();
-
-            ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
-            resource = ResourceUtil.getResource(location);
-            if (resource != null) {
-                return resource;
-            }
-            location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, DEFAULT_LANG, path));
-            resource = ResourceUtil.getResource(location);
-            if (resource != null) {
-                return resource;
-            }
-            location = new ResourceLocation(BOOK_LOCATION + path);
-            return ResourceUtil.getResource(location);
-        }
-        ResourceLocation location = new ResourceLocation(path);
-        return ResourceUtil.getResource(location);
     }
 
     @Nullable

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerLiquidTanksSocketed;
@@ -22,11 +22,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
-
-    public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
-        return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
-    }
 
     public ContainerSqueezer(int windowId, PlayerInventory player, TileSqueezer tile) {
         super(windowId, FactoryContainers.SQUEEZER.containerType(), player, tile, 8, 84);
@@ -45,5 +40,10 @@ public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer
         this.addSlot(new SlotLiquidIn(this.tile, InventorySqueezer.SLOT_CAN_INPUT, 147, 24));
         // Output slot
         this.addSlot(new SlotOutput(this.tile, InventorySqueezer.SLOT_CAN_OUTPUT, 147, 60));
+    }
+
+    public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
+        return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
     }
 }

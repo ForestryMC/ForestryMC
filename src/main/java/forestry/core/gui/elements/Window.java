@@ -30,12 +30,12 @@ import java.util.*;
 @OnlyIn(Dist.CLIENT)
 public class Window<G extends Screen & IGuiSizable> extends ElementGroup implements IWindowElement {
     protected final G gui;
-    @Nullable
-    private Minecraft mc = null;
     //The last x position of the mouse
     protected int mouseX = -1;
     //The last y position of the mouse
     protected int mouseY = -1;
+    @Nullable
+    private Minecraft mc = null;
     @Nullable
     private IGuiElement mousedOverElement;
     @Nullable

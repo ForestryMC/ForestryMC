@@ -23,6 +23,20 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
 
+    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+        Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
+            Fluid fluid = smelting.getProduct().getFluid();
+            if (!smeltingInputs.containsKey(fluid)) {
+                smeltingInputs.put(fluid, new ArrayList<>());
+            }
+            smeltingInputs.get(fluid).add(smelting);
+        }
+
+        return smeltingInputs;
+    }
+
     @Override
     public Class<? extends CraftingData> getDataClass() {
         return CraftingData.class;
@@ -45,19 +59,5 @@ public class FabricatorContent extends BookContent<CraftingData> {
             page.add(new FabricatorElement(0, 0, data.stacks));
         }
         return true;
-    }
-
-    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
-        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-        Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
-            Fluid fluid = smelting.getProduct().getFluid();
-            if (!smeltingInputs.containsKey(fluid)) {
-                smeltingInputs.put(fluid, new ArrayList<>());
-            }
-            smeltingInputs.get(fluid).add(smelting);
-        }
-
-        return smeltingInputs;
     }
 }

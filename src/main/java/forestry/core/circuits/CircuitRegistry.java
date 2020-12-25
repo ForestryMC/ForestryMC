@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.circuits;
 
 import forestry.api.circuits.*;
@@ -24,13 +24,14 @@ public class CircuitRegistry implements ICircuitRegistry {
 
     public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy", CircuitSocketType.NONE);
     private static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<>();
-    private final Map<String, ICircuit> deprecatedCircuits = new LinkedHashMap<>();
-    private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<>();
-    private final Map<String, ICircuit> circuitMap = new LinkedHashMap<>();
 
     static {
         DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
     }
+
+    private final Map<String, ICircuit> deprecatedCircuits = new LinkedHashMap<>();
+    private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<>();
+    private final Map<String, ICircuit> circuitMap = new LinkedHashMap<>();
 
     //TODO - dimensionsavedddatamanager? check later
     @Override

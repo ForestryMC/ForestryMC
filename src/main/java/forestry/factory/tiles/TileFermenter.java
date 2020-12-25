@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.tiles;
 
 import forestry.api.core.IErrorLogic;
@@ -79,6 +79,14 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
         productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
 
         tankManager = new TankManager(this, resourceTank, productTank);
+    }
+
+    private static float determineResourceMod(ItemStack itemstack) {
+        if (!(itemstack.getItem() instanceof IVariableFermentable)) {
+            return 1.0f;
+        }
+
+        return ((IVariableFermentable) itemstack.getItem()).getFermentationModifier(itemstack);
     }
 
     @Override
@@ -185,7 +193,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
         FluidStack fluid = resourceTank.getFluid();
 
         if (!fluid.isEmpty()) {
-            currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(world.getRecipeManager(), resource, fluid);
+            currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(
+                    world.getRecipeManager(),
+                    resource,
+                    fluid
+            );
         }
 
         fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
@@ -210,15 +222,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
             }
         }
     }
-
-    private static float determineResourceMod(ItemStack itemstack) {
-        if (!(itemstack.getItem() instanceof IVariableFermentable)) {
-            return 1.0f;
-        }
-
-        return ((IVariableFermentable) itemstack.getItem()).getFermentationModifier(itemstack);
-    }
-
 
     @Override
     public boolean hasResourcesMin(float percentage) {

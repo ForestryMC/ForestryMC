@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import forestry.api.core.IErrorLogic;
@@ -40,14 +40,11 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
     private static final int WORK_TICK_INTERVAL = 5; // one Forestry work tick happens every WORK_TICK_INTERVAL game ticks
 
     private final EnergyManager energyManager;
-
+    protected float speedMultiplier = 1.0f;
+    protected float powerMultiplier = 1.0f;
     private int workCounter;
     private int ticksPerWorkCycle;
     private int energyPerWorkCycle;
-
-    protected float speedMultiplier = 1.0f;
-    protected float powerMultiplier = 1.0f;
-
     // the number of work ticks that this tile has had no power
     private int noPowerTime = 0;
 
@@ -67,11 +64,6 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
         return workCounter;
     }
 
-    public void setTicksPerWorkCycle(int ticksPerWorkCycle) {
-        this.ticksPerWorkCycle = ticksPerWorkCycle;
-        this.workCounter = 0;
-    }
-
     public int getTicksPerWorkCycle() {
         if (world.isRemote) {
             return ticksPerWorkCycle;
@@ -79,12 +71,17 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
         return Math.round(ticksPerWorkCycle / speedMultiplier);
     }
 
-    public void setEnergyPerWorkCycle(int energyPerWorkCycle) {
-        this.energyPerWorkCycle = EnergyHelper.scaleForDifficulty(energyPerWorkCycle);
+    public void setTicksPerWorkCycle(int ticksPerWorkCycle) {
+        this.ticksPerWorkCycle = ticksPerWorkCycle;
+        this.workCounter = 0;
     }
 
     public int getEnergyPerWorkCycle() {
         return Math.round(energyPerWorkCycle * powerMultiplier);
+    }
+
+    public void setEnergyPerWorkCycle(int energyPerWorkCycle) {
+        this.energyPerWorkCycle = EnergyHelper.scaleForDifficulty(energyPerWorkCycle);
     }
 
     /* STATE INFORMATION */

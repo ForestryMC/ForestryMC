@@ -25,24 +25,20 @@ public class MultiblockWorldRegistry {
     private final Set<IMultiblockControllerInternal> controllers;        // Active controllers
     private final Set<IMultiblockControllerInternal> dirtyControllers;    // Controllers whose parts lists have changed
     private final Set<IMultiblockControllerInternal> deadControllers;    // Controllers which are empty
-
-    // A list of orphan parts - parts which currently have no master, but should seek one this tick
-    // Indexed by the hashed chunk coordinate
-    // This can be added-to asynchronously via chunk loads!
-    private Set<IMultiblockComponent> orphanedParts;
-
     // A list of parts which have been detached during internal operations
     private final Set<IMultiblockComponent> detachedParts;
-
     // A list of parts whose chunks have not yet finished loading
     // They will be added to the orphan list when they are finished loading.
     // Indexed by the hashed chunk coordinate
     // This can be added-to asynchronously via chunk loads!
     private final HashMap<Long, Set<IMultiblockComponent>> partsAwaitingChunkLoad;
-
     // Mutexes to protect lists which may be changed due to asynchronous events, such as chunk loads
     private final Object partsAwaitingChunkLoadMutex;
     private final Object orphanedPartsMutex;
+    // A list of orphan parts - parts which currently have no master, but should seek one this tick
+    // Indexed by the hashed chunk coordinate
+    // This can be added-to asynchronously via chunk loads!
+    private Set<IMultiblockComponent> orphanedParts;
 
     public MultiblockWorldRegistry(World world) {
         this.world = world;

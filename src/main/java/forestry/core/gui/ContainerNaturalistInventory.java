@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui;
 
 import forestry.core.features.CoreContainers;
@@ -24,6 +24,16 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
+    private final int page;
+    private final int maxPage;
+    public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page) {
+        super(windowId, CoreContainers.NATURALIST_INVENTORY.containerType(), player, tile, 18, 120);
+
+        this.page = page;
+        this.maxPage = 5;
+        addInventory(this, tile, page);
+    }
+
     //TODO more duped code
     public static ContainerNaturalistInventory fromNetwork(
             int windowId,
@@ -36,17 +46,6 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
                 TileNaturalistChest.class
         );    //TODO think this is OK for inheritance
         return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt());
-    }
-
-    private final int page;
-    private final int maxPage;
-
-    public ContainerNaturalistInventory(int windowId, PlayerInventory player, TileNaturalistChest tile, int page) {
-        super(windowId, CoreContainers.NATURALIST_INVENTORY.containerType(), player, tile, 18, 120);
-
-        this.page = page;
-        this.maxPage = 5;
-        addInventory(this, tile, page);
     }
 
     //TODO this is hardcoded to max page. So is the maxPage field needed??

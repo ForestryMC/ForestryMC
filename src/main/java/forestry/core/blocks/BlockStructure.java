@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.blocks;
 
 import com.mojang.authlib.GameProfile;
@@ -39,11 +39,11 @@ import javax.annotation.Nullable;
 
 public abstract class BlockStructure extends BlockForestry {
 
+    protected long previousMessageTick = 0;
+
     protected BlockStructure(Block.Properties properties) {
         super(properties.hardnessAndResistance(1f));
     }
-
-    protected long previousMessageTick = 0;
 
     @Override
     public ActionResultType onBlockActivated(

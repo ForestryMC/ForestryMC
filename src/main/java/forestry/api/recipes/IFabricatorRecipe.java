@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
@@ -14,11 +14,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
     IRecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
-
-    class Companion {
-        @ObjectHolder("forestry:fabricator")
-        public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
-    }
 
     /**
      * @return the molten liquid (and amount) required for this recipe.
@@ -43,5 +38,10 @@ public interface IFabricatorRecipe extends IForestryRecipe {
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:fabricator")
+        public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
     }
 }

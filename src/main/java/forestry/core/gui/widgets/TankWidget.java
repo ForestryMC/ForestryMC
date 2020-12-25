@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -45,15 +45,48 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class TankWidget extends Widget {
 
+    protected boolean drawOverlay = true;
     private int overlayTexX = 176;
     private int overlayTexY = 0;
     private int slot = 0;
-    protected boolean drawOverlay = true;
 
     public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
         super(manager, xPos, yPos);
         this.slot = slot;
         this.height = 58;
+    }
+
+    private static void setGLColorFromInt(int color) {
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        RenderSystem.color4f(red, green, blue, 1.0F);
+    }
+
+    private static void drawFluidTexture(
+            double xCoord,
+            double yCoord,
+            TextureAtlasSprite textureSprite,
+            int maskTop,
+            int maskRight,
+            double zLevel
+    ) {
+        float uMin = textureSprite.getMinU();
+        float uMax = textureSprite.getMaxU();
+        float vMin = textureSprite.getMinV();
+        float vMax = textureSprite.getMaxV();
+        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
+        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
+        buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
+        buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
+        buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
+        tessellator.draw();
     }
 
     public TankWidget setOverlayOrigin(int x, int y) {
@@ -155,39 +188,6 @@ public class TankWidget extends Widget {
         }
         StandardTank standardTank = (StandardTank) tank;
         return standardTank.getToolTip();
-    }
-
-    private static void setGLColorFromInt(int color) {
-        float red = (color >> 16 & 0xFF) / 255.0F;
-        float green = (color >> 8 & 0xFF) / 255.0F;
-        float blue = (color & 0xFF) / 255.0F;
-
-        RenderSystem.color4f(red, green, blue, 1.0F);
-    }
-
-    private static void drawFluidTexture(
-            double xCoord,
-            double yCoord,
-            TextureAtlasSprite textureSprite,
-            int maskTop,
-            int maskRight,
-            double zLevel
-    ) {
-        float uMin = textureSprite.getMinU();
-        float uMax = textureSprite.getMaxU();
-        float vMin = textureSprite.getMinV();
-        float vMax = textureSprite.getMaxV();
-        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
-        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
-        buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
-        buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-        buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
-        tessellator.draw();
     }
 
     @Override

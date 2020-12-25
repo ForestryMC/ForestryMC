@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerSocketed;
@@ -25,10 +25,7 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-    public static ContainerCentrifuge fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileCentrifuge tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCentrifuge.class);
-        return new ContainerCentrifuge(windowId, inv, tile);    //TODO nullability.
-    }
+    private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
     public ContainerCentrifuge(int windowId, PlayerInventory player, TileCentrifuge tile) {
         super(windowId, FactoryContainers.CENTRIFUGE.containerType(), player, tile, 8, 84);
@@ -47,7 +44,10 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
         }
     }
 
-    private ItemStack oldCraftPreview = ItemStack.EMPTY;
+    public static ContainerCentrifuge fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileCentrifuge tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCentrifuge.class);
+        return new ContainerCentrifuge(windowId, inv, tile);    //TODO nullability.
+    }
 
     @Override
     public void detectAndSendChanges() {

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.render;
 
 import forestry.core.config.Constants;
@@ -19,16 +19,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderMill implements IForestryRenderer<TileMill> {
-    private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
-
     private final ResourceLocation[] textures;
-
     private final ModelRenderer pedestal;
     private final ModelRenderer column;
     private final ModelRenderer extension;
     private final ModelRenderer blade1;
     private final ModelRenderer blade2;
-
     public RenderMill(String baseTexture) {
         int textureWidth = 64;
         int textureHeight = 32;
@@ -161,4 +157,6 @@ public class RenderMill implements IForestryRenderer<TileMill> {
         helper.pop();
 
     }
+
+    private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 }

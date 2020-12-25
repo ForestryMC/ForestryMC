@@ -12,12 +12,12 @@ import java.util.UUID;
 public class GameProfileDataSerializer implements IDataSerializer<Optional<GameProfile>> {
     public static final GameProfileDataSerializer INSTANCE = new GameProfileDataSerializer();
 
-    public static void register() {
-        DataSerializers.registerSerializer(INSTANCE);
-    }
-
     private GameProfileDataSerializer() {
 
+    }
+
+    public static void register() {
+        DataSerializers.registerSerializer(INSTANCE);
     }
 
     @Override

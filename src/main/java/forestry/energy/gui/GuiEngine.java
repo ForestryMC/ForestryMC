@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -28,6 +28,13 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
     protected GuiEngine(String texture, C container, PlayerInventory inv, I tile, ITextComponent title) {
         super(texture, container, inv, title);
         this.tile = tile;
+    }
+
+    @Override
+    protected void addLedgers() {
+        addErrorLedger(tile);
+        addHintLedger(tile.getHintKey());
+        ledgerManager.add(new EngineLedger());
     }
 
     protected class EngineLedger extends Ledger {
@@ -76,12 +83,5 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
         public ITextComponent getTooltip() {
             return new StringTextComponent(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()));
         }
-    }
-
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(tile);
-        addHintLedger(tile.getHintKey());
-        ledgerManager.add(new EngineLedger());
     }
 }

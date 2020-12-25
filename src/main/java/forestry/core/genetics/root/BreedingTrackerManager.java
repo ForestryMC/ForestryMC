@@ -21,14 +21,13 @@ import java.util.Map;
 public enum BreedingTrackerManager implements IBreedingTrackerManager {
     INSTANCE;
 
+    private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
+    @Nullable
+    private SidedHandler sidedHandler = null;
+
     BreedingTrackerManager() {
         sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);
     }
-
-    private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
-
-    @Nullable
-    private SidedHandler sidedHandler = null;
 
     @Override
     public void registerTracker(String rootUID, IBreedingTrackerHandler handler) {

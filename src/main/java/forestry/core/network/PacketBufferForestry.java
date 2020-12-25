@@ -136,10 +136,6 @@ public class PacketBufferForestry extends PacketBuffer {
         }
     }
 
-    public interface IStreamableFactory<T extends IStreamable> {
-        T create(PacketBufferForestry data) throws IOException;
-    }
-
     public void writeClimateState(IClimateState climateState) {
         if (climateState.isPresent()) {
             writeBoolean(true);
@@ -157,5 +153,9 @@ public class PacketBufferForestry extends PacketBuffer {
         } else {
             return AbsentClimateState.INSTANCE;
         }
+    }
+
+    public interface IStreamableFactory<T extends IStreamable> {
+        T create(PacketBufferForestry data) throws IOException;
     }
 }

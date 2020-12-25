@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.render;
 
 import forestry.api.core.ForestryAPI;
@@ -36,28 +36,17 @@ public class TextureManagerForestry implements ITextureManager {
             "textures/atlas/gui.png"
     );
     private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
-    private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
-
-    @SuppressWarnings("NullableProblems")
-    private ForestrySpriteUploader spriteUploader;
 
     static {
         ForestryAPI.textureManager = INSTANCE;
     }
 
+    private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
+    @SuppressWarnings("NullableProblems")
+    private ForestrySpriteUploader spriteUploader;
+
     public static TextureManagerForestry getInstance() {
         return INSTANCE;
-    }
-
-    public void init(ForestrySpriteUploader spriteUploader) {
-        ErrorStateRegistry.initSprites(spriteUploader);
-        initDefaultSprites(spriteUploader);
-        this.spriteUploader = spriteUploader;
-    }
-
-    @Nullable
-    public ForestrySpriteUploader getSpriteUploader() {
-        return spriteUploader;
     }
 
     private static void initDefaultSprites(ISpriteRegistry registry) {
@@ -114,6 +103,17 @@ public class TextureManagerForestry implements ITextureManager {
         for (String identifier : defaultIconNames) {
             registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
         }
+    }
+
+    public void init(ForestrySpriteUploader spriteUploader) {
+        ErrorStateRegistry.initSprites(spriteUploader);
+        initDefaultSprites(spriteUploader);
+        this.spriteUploader = spriteUploader;
+    }
+
+    @Nullable
+    public ForestrySpriteUploader getSpriteUploader() {
+        return spriteUploader;
     }
 
     @Override

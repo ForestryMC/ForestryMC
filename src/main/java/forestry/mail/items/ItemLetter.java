@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.items;
 
 import forestry.api.core.IItemSubtype;
@@ -41,24 +41,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class ItemLetter extends ItemWithGui {
-
-    public enum State implements IItemSubtype {
-        FRESH, STAMPED, OPENED, EMPTIED;
-
-        @Override
-        public String getString() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-    }
-
-    public enum Size implements IItemSubtype {
-        EMPTY, SMALL, BIG;
-
-        @Override
-        public String getString() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-    }
 
     private final Size size;
     private final State state;
@@ -128,5 +110,23 @@ public class ItemLetter extends ItemWithGui {
     @Override
     public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
         return new ContainerLetter(windowId, player, new ItemInventoryLetter(player, heldItem));
+    }
+
+    public enum State implements IItemSubtype {
+        FRESH, STAMPED, OPENED, EMPTIED;
+
+        @Override
+        public String getString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
+    }
+
+    public enum Size implements IItemSubtype {
+        EMPTY, SMALL, BIG;
+
+        @Override
+        public String getString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 }

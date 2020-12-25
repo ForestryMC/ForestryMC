@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.items;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -42,6 +42,25 @@ public class ItemElectronTube extends ItemOverlay {
     public ItemElectronTube(EnumElectronTube type) {
         super(ItemGroupForestry.tabForestry, type);
         this.type = type;
+    }
+
+    private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
+        Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
+        Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
+        for (ICircuitLayout circuitLayout : allLayouts) {
+            World world = Minecraft.getInstance().world;
+            if (world != null) {
+                ICircuit circuit = ChipsetManager.solderManager.getCircuit(
+                        world.getRecipeManager(),
+                        circuitLayout,
+                        itemStack
+                );
+                if (circuit != null) {
+                    circuits.put(circuitLayout, circuit);
+                }
+            }
+        }
+        return circuits;
     }
 
     public EnumElectronTube getType() {
@@ -86,24 +105,5 @@ public class ItemElectronTube extends ItemOverlay {
                 }
             }
         }
-    }
-
-    private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
-        Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
-        Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
-        for (ICircuitLayout circuitLayout : allLayouts) {
-            World world = Minecraft.getInstance().world;
-            if (world != null) {
-                ICircuit circuit = ChipsetManager.solderManager.getCircuit(
-                        world.getRecipeManager(),
-                        circuitLayout,
-                        itemStack
-                );
-                if (circuit != null) {
-                    circuits.put(circuitLayout, circuit);
-                }
-            }
-        }
-        return circuits;
     }
 }

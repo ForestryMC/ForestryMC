@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.blocks;
 
 import forestry.core.config.Constants;
@@ -47,6 +47,18 @@ public class BlockBogEarth extends Block {
         setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
     }
 
+    private static boolean isMoistened(World world, BlockPos pos) {
+        for (BlockPos waterPos : BlockPos.getAllInBoxMutable(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+            BlockState blockState = world.getBlockState(waterPos);
+            Block block = blockState.getBlock();
+            if (block == Blocks.WATER) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
@@ -67,18 +79,6 @@ public class BlockBogEarth extends Block {
                 world.setBlockState(pos, state.with(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
             }
         }
-    }
-
-    private static boolean isMoistened(World world, BlockPos pos) {
-        for (BlockPos waterPos : BlockPos.getAllInBoxMutable(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
-            BlockState blockState = world.getBlockState(waterPos);
-            Block block = blockState.getBlock();
-            if (block == Blocks.WATER) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override

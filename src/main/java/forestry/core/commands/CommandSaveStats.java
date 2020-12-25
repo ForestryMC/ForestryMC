@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.commands;
 
 import com.mojang.brigadier.Command;
@@ -64,6 +64,57 @@ public final class CommandSaveStats implements Command<CommandSource> {
                        .then(Commands.argument("player", EntityArgument.player())
                                      .executes(new CommandSaveStats(saveHelper, modeHelper)));
 
+    }
+
+    private static String generateSpeciesListHeader() {
+        String authority = new TranslationTextComponent("for.gui.alyzer.authority").getString();
+        String species = new TranslationTextComponent("for.gui.species").getString();
+        return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
+    }
+
+    private static String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
+        String discovered = "";
+        if (tracker.isDiscovered(species)) {
+            discovered = discoveredSymbol;
+        }
+
+        String blacklisted = "";
+        if (GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(species.getRegistryName())) {
+            blacklisted = blacklistedSymbol;
+        }
+
+        String notCounted = "";
+        if (!species.isDominant()) {
+            notCounted = notCountedSymbol;
+        }
+
+        return speciesListEntry(
+                discovered,
+                blacklisted,
+                notCounted,
+                species.getRegistryName().toString(),
+                species.getDisplayName().getString(),
+                species.getAuthority()
+        );
+    }
+
+    private static String speciesListEntry(
+            String discovered,
+            String blacklisted,
+            String notCounted,
+            String UID,
+            String speciesName,
+            String authority
+    ) {
+        return String.format(
+                "[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s",
+                discovered,
+                blacklisted,
+                notCounted,
+                UID,
+                speciesName,
+                authority
+        );
     }
 
     public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
@@ -172,56 +223,5 @@ public final class CommandSaveStats implements Command<CommandSource> {
         );
 
         return 1;
-    }
-
-    private static String generateSpeciesListHeader() {
-        String authority = new TranslationTextComponent("for.gui.alyzer.authority").getString();
-        String species = new TranslationTextComponent("for.gui.species").getString();
-        return speciesListEntry(discoveredSymbol, blacklistedSymbol, notCountedSymbol, "UID", species, authority);
-    }
-
-    private static String generateSpeciesListEntry(IAlleleSpecies species, IBreedingTracker tracker) {
-        String discovered = "";
-        if (tracker.isDiscovered(species)) {
-            discovered = discoveredSymbol;
-        }
-
-        String blacklisted = "";
-        if (GeneticsAPI.apiInstance.getAlleleRegistry().isBlacklisted(species.getRegistryName())) {
-            blacklisted = blacklistedSymbol;
-        }
-
-        String notCounted = "";
-        if (!species.isDominant()) {
-            notCounted = notCountedSymbol;
-        }
-
-        return speciesListEntry(
-                discovered,
-                blacklisted,
-                notCounted,
-                species.getRegistryName().toString(),
-                species.getDisplayName().getString(),
-                species.getAuthority()
-        );
-    }
-
-    private static String speciesListEntry(
-            String discovered,
-            String blacklisted,
-            String notCounted,
-            String UID,
-            String speciesName,
-            String authority
-    ) {
-        return String.format(
-                "[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s",
-                discovered,
-                blacklisted,
-                notCounted,
-                UID,
-                speciesName,
-                authority
-        );
     }
 }

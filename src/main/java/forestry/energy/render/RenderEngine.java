@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -26,17 +26,6 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
-    private final ModelRenderer boiler;
-    private final ModelRenderer trunk;
-    private final ModelRenderer piston;
-    private final ModelRenderer extension;
-
-    private enum Textures {
-
-        BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
-    }
-
-    private final ResourceLocation[] textures;
     private static final float[] angleMap = new float[6];
 
     static {
@@ -47,6 +36,12 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
         angleMap[Direction.SOUTH.ordinal()] = (float) Math.PI / 2;
         angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
     }
+
+    private final ModelRenderer boiler;
+    private final ModelRenderer trunk;
+    private final ModelRenderer piston;
+    private final ModelRenderer extension;
+    private final ResourceLocation[] textures;
 
     public RenderEngine(String baseTexture) {
         int textureWidth = 64;
@@ -172,5 +167,10 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
             }
         }
         helper.pop();
+    }
+
+    private enum Textures {
+
+        BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
     }
 }

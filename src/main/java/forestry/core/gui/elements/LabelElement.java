@@ -40,15 +40,15 @@ public class LabelElement extends GuiElement implements ILabelElement {
     }
 
     @Override
+    public boolean isFitText() {
+        return fitText;
+    }
+
+    @Override
     public LabelElement setFitText(boolean fitText) {
         this.fitText = fitText;
         calculateWidth();
         return this;
-    }
-
-    @Override
-    public boolean isFitText() {
-        return fitText;
     }
 
     @Override

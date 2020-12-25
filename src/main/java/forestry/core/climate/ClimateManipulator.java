@@ -42,6 +42,11 @@ public class ClimateManipulator implements IClimateManipulator {
         this.type = type;
     }
 
+    private static boolean canRound(float diff) {
+        return BigDecimal.valueOf(MathHelper.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <=
+               ClimateStateHelper.CLIMATE_CHANGE;
+    }
+
     @Override
     public IClimateState getCurrent() {
         return currentState;
@@ -155,11 +160,6 @@ public class ClimateManipulator implements IClimateManipulator {
             currentState.add(changeState);
         }
         return changeState;
-    }
-
-    private static boolean canRound(float diff) {
-        return BigDecimal.valueOf(MathHelper.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <=
-               ClimateStateHelper.CLIMATE_CHANGE;
     }
 
     public static class Builder implements IClimateManipulatorBuilder {

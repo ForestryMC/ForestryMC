@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import forestry.api.core.INbtWritable;
@@ -30,23 +30,12 @@ import java.util.Optional;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
-    private enum State {
-        UNREVEALED,// face down
-        PROBED,    // shown by escritoire probe action
-        SELECTED,  // selected by the user as the first half of a match
-        MATCHED,   // successfully matched
-        FAILED;    // failed to match
-        public static final State[] VALUES = values();
-    }
-
     private static final String[] OVERLAY_NONE = new String[0];
     private static final String[] OVERLAY_FAILED = new String[]{"errors/errored"};
     private static final String[] OVERLAY_SELECTED = new String[]{"errors/unknown"};
-
     @Nullable
     private IIndividual tokenIndividual;
     private ItemStack tokenStack = ItemStack.EMPTY;
-
     private State state = State.UNREVEALED;
 
     public EscritoireGameToken(PacketBufferForestry data) {
@@ -101,6 +90,14 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
         return state == State.PROBED;
     }
 
+    public void setProbed(boolean probed) {
+        if (probed) {
+            state = State.PROBED;
+        } else {
+            state = State.UNREVEALED;
+        }
+    }
+
     public boolean isMatched() {
         return state == State.MATCHED;
     }
@@ -111,14 +108,6 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
     public void setFailed() {
         state = State.FAILED;
-    }
-
-    public void setProbed(boolean probed) {
-        if (probed) {
-            state = State.PROBED;
-        } else {
-            state = State.UNREVEALED;
-        }
     }
 
     public void setSelected() {
@@ -142,7 +131,6 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
             return iconColor;
         }
     }
-
 
     public ITextComponent getTooltip() {
         return !tokenStack.isEmpty() ? tokenStack.getDisplayName() : new TranslationTextComponent("for.gui.unknown");
@@ -195,5 +183,14 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
             String speciesUid = data.readString();
             setTokenSpecies(speciesUid);
         }
+    }
+
+    private enum State {
+        UNREVEALED,// face down
+        PROBED,    // shown by escritoire probe action
+        SELECTED,  // selected by the user as the first half of a match
+        MATCHED,   // successfully matched
+        FAILED;    // failed to match
+        public static final State[] VALUES = values();
     }
 }

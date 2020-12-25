@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core;
 
 import forestry.api.apiculture.BeeManager;
@@ -38,6 +38,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 @FeatureProvider
 public class ItemGroupForestry extends ItemGroup {
 
+    public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
+
     static {
         ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
 
@@ -54,17 +56,15 @@ public class ItemGroupForestry extends ItemGroup {
         }
     }
 
-    public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
-
-    public static void create() {
-        //Needed to load the groups before the feature creation
-    }
-
     private final int icon;
 
     private ItemGroupForestry(int icon, String label) {
         super(label);
         this.icon = icon;
+    }
+
+    public static void create() {
+        //Needed to load the groups before the feature creation
     }
 
     @Override

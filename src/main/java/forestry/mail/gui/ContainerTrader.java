@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import forestry.api.mail.IMailAddress;
@@ -23,11 +23,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 public class ContainerTrader extends ContainerTile<TileTrader> {
-
-    public static ContainerTrader fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
-        return new ContainerTrader(windowId, inv, tile);    //TODO nullability.
-    }
 
     public ContainerTrader(int windowId, PlayerInventory inv, TileTrader tile) {
         super(windowId, MailContainers.TRADER.containerType(), inv, tile, 33, 138);
@@ -94,6 +89,11 @@ public class ContainerTrader extends ContainerTile<TileTrader> {
                 ));
             }
         }
+    }
+
+    public static ContainerTrader fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
+        return new ContainerTrader(windowId, inv, tile);    //TODO nullability.
     }
 
     public IMailAddress getAddress() {

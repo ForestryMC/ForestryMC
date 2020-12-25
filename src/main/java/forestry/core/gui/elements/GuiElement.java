@@ -49,14 +49,12 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
     //The element to that the crop coordinates are relative to.
     @Nullable
     protected IGuiElement cropElement = null;
-    //Element Alignment relative to the parent
-    private GuiElementAlignment align = GuiElementAlignment.TOP_LEFT;
-
     protected boolean visible = true;
-
     //The element container that contains this element
     @Nullable
     protected IGuiElement parent;
+    //Element Alignment relative to the parent
+    private GuiElementAlignment align = GuiElementAlignment.TOP_LEFT;
 
     public GuiElement(int width, int height) {
         this(0, 0, width, height);
@@ -154,17 +152,17 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
     }
 
     @Override
+    public void setWidth(int width) {
+        setSize(width, height);
+    }
+
+    @Override
     public int getHeight() {
         return height;
     }
 
     @Override
     public void setHeight(int height) {
-        setSize(width, height);
-    }
-
-    @Override
-    public void setWidth(int width) {
         setSize(width, height);
     }
 

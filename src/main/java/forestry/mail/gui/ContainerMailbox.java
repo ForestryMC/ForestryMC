@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import forestry.core.gui.ContainerTile;
@@ -37,11 +37,6 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
     private final POBox mailInventory;
 
 
-    public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileMailbox tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMailbox.class);
-        return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
-    }
-
     public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
         super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
         IInventory inventory = tile.getOrCreateMailInventory(
@@ -60,6 +55,11 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
                 addSlot(new SlotOutput(inventory, j + i * 9, 8 + j * 18, 8 + i * 18));
             }
         }
+    }
+
+    public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileMailbox tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMailbox.class);
+        return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
     }
 
     @Override

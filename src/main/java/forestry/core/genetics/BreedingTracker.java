@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.genetics;
 
 import com.mojang.authlib.GameProfile;
@@ -33,6 +33,7 @@ import java.util.*;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
+    public static final String TYPE_KEY = "TYPE";
     private static final String SPECIES_COUNT_KEY = "SpeciesCount";
     private static final String MUTATIONS_COUNT_KEY = "MutationsCount";
     private static final String RESEARCHED_COUNT_KEY = "ResearchedCount";
@@ -42,9 +43,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
     private static final String MODE_NAME_KEY = "BMS";
     private static final String MUTATION_FORMAT = "%s-%s=%s";
     private static final Collection<String> emptyStringCollection = Collections.emptyList();
-
-    public static final String TYPE_KEY = "TYPE";
-
     private final Set<String> discoveredSpecies = new HashSet<>();
     private final Set<String> discoveredMutations = new HashSet<>();
     private final Set<String> researchedMutations = new HashSet<>();
@@ -58,6 +56,44 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
     protected BreedingTracker(String s, String defaultModeName) {
         super(s);
         this.modeName = defaultModeName;
+    }
+
+    private static void readValuesFromNBT(CompoundNBT CompoundNBT, Set<String> values, String countKey, String key) {
+        if (CompoundNBT.contains(countKey)) {
+            final int count = CompoundNBT.getInt(countKey);
+            for (int i = 0; i < count; i++) {
+                if (CompoundNBT.contains(key + i)) {
+                    String value = CompoundNBT.getString(key + i);
+                    if (!value.isEmpty()) {
+                        values.add(value);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void writeValuesToNBT(
+            CompoundNBT CompoundNBT,
+            Collection<String> values,
+            String countKey,
+            String key
+    ) {
+        final int count = values.size();
+        CompoundNBT.putInt(countKey, count);
+        Iterator<String> iterator = values.iterator();
+        for (int i = 0; i < count; i++) {
+            String value = iterator.next();
+            if (value != null && !value.isEmpty()) {
+                CompoundNBT.putString(key + i, value);
+            }
+        }
+    }
+
+    private static String getMutationString(IMutation mutation) {
+        String species0 = mutation.getFirstParent().getRegistryName().toString();
+        String species1 = mutation.getSecondParent().getRegistryName().toString();
+        String resultSpecies = mutation.getResultingSpecies().getRegistryName().toString();
+        return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
     }
 
     public void setUsername(@Nullable GameProfile username) {
@@ -149,7 +185,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         readValuesFromNBT(CompoundNBT, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT CompoundNBT) {
         writeToNBT(CompoundNBT, discoveredSpecies, discoveredMutations, researchedMutations);
@@ -171,44 +206,6 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         writeValuesToNBT(CompoundNBT, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
         writeValuesToNBT(CompoundNBT, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
         writeValuesToNBT(CompoundNBT, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
-    }
-
-    private static void readValuesFromNBT(CompoundNBT CompoundNBT, Set<String> values, String countKey, String key) {
-        if (CompoundNBT.contains(countKey)) {
-            final int count = CompoundNBT.getInt(countKey);
-            for (int i = 0; i < count; i++) {
-                if (CompoundNBT.contains(key + i)) {
-                    String value = CompoundNBT.getString(key + i);
-                    if (!value.isEmpty()) {
-                        values.add(value);
-                    }
-                }
-            }
-        }
-    }
-
-    private static void writeValuesToNBT(
-            CompoundNBT CompoundNBT,
-            Collection<String> values,
-            String countKey,
-            String key
-    ) {
-        final int count = values.size();
-        CompoundNBT.putInt(countKey, count);
-        Iterator<String> iterator = values.iterator();
-        for (int i = 0; i < count; i++) {
-            String value = iterator.next();
-            if (value != null && !value.isEmpty()) {
-                CompoundNBT.putString(key + i, value);
-            }
-        }
-    }
-
-    private static String getMutationString(IMutation mutation) {
-        String species0 = mutation.getFirstParent().getRegistryName().toString();
-        String species1 = mutation.getSecondParent().getRegistryName().toString();
-        String resultSpecies = mutation.getResultingSpecies().getRegistryName().toString();
-        return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
     }
 
     @Override

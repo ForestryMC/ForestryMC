@@ -19,9 +19,6 @@ public abstract class SelectionElement<R> extends PaneLayout {
     private static final Drawable CRAFTING_COUNT = new Drawable(GuiForesterBook.TEXTURE, 104, 181, 34, 14);
     private static final Drawable RIGHT_BUTTON = new Drawable(GuiForesterBook.TEXTURE, 138, 181, 10, 9);
     private static final Drawable LEFT_BUTTON = new Drawable(GuiForesterBook.TEXTURE, 148, 181, 10, 9);
-
-    private int index = -1;
-
     @Nullable
     protected final ButtonElement leftButton;
     @Nullable
@@ -30,6 +27,7 @@ public abstract class SelectionElement<R> extends PaneLayout {
     protected final ElementGroup text;
     protected final ElementGroup selectedElement;
     protected final R[] recipes;
+    private int index = -1;
 
     protected SelectionElement(int xPos, int yPos, int width, int height, R[] recipes) {
         this(xPos, yPos, width, height, recipes, 0);

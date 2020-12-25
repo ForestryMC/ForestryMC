@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.recipes;
 
 import com.google.gson.JsonArray;
@@ -33,6 +33,12 @@ public class FallbackIngredient extends Ingredient {
     private final Ingredient primary;
     private final Ingredient fallback;
 
+    private FallbackIngredient(Ingredient primary, Ingredient fallback) {
+        super(Stream.of());
+        this.primary = primary;
+        this.fallback = fallback;
+    }
+
     public static Ingredient fromItems(IItemProvider primary, IItemProvider fallback) {
         return fromIngredients(Ingredient.fromItems(primary), Ingredient.fromItems(fallback));
     }
@@ -51,12 +57,6 @@ public class FallbackIngredient extends Ingredient {
 
     public static Ingredient fromIngredients(Ingredient primary, Ingredient fallback) {
         return new FallbackIngredient(primary, fallback);
-    }
-
-    private FallbackIngredient(Ingredient primary, Ingredient fallback) {
-        super(Stream.of());
-        this.primary = primary;
-        this.fallback = fallback;
     }
 
     @Override

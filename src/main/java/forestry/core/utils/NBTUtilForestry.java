@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils;
 
 import com.google.common.collect.ForwardingList;
@@ -27,47 +27,9 @@ import java.util.List;
  */
 public abstract class NBTUtilForestry {
 
-    public enum EnumNBTType {
-
-        END(EndNBT.class),
-        BYTE(ByteNBT.class),
-        SHORT(ShortNBT.class),
-        INT(IntNBT.class),
-        LONG(LongNBT.class),
-        FLOAT(FloatNBT.class),
-        DOUBLE(DoubleNBT.class),
-        BYTE_ARRAY(ByteArrayNBT.class),
-        STRING(StringNBT.class),
-        LIST(ListNBT.class),
-        COMPOUND(CompoundNBT.class),
-        INT_ARRAY(IntArrayNBT.class);
-        public static final EnumNBTType[] VALUES = values();
-        public final Class<? extends INBT> classObject;
-
-        EnumNBTType(Class<? extends INBT> c) {
-            this.classObject = c;
-        }
-    }
-
     public static <T extends INBT> NBTList<T> getNBTList(CompoundNBT nbt, String tag, EnumNBTType type) {
         ListNBT nbtList = nbt.getList(tag, type.ordinal());
         return new NBTList<>(nbtList);
-    }
-
-    public static class NBTList<T extends INBT> extends ForwardingList<T> {
-
-        private final ArrayList<T> backingList;
-
-        public NBTList(ListNBT nbtList) {
-            //noinspection unchecked
-            backingList = new ArrayList<>((List<T>) nbtList.tagList);
-        }
-
-        @Override
-        protected List<T> delegate() {
-            return backingList;
-        }
-
     }
 
     public static CompoundNBT writeStreamableToNbt(IStreamable streamable, CompoundNBT nbt) {
@@ -91,6 +53,44 @@ public abstract class NBTUtilForestry {
                 Log.error("Failed to read streamable data", e);
             }
         }
+    }
+
+    public enum EnumNBTType {
+
+        END(EndNBT.class),
+        BYTE(ByteNBT.class),
+        SHORT(ShortNBT.class),
+        INT(IntNBT.class),
+        LONG(LongNBT.class),
+        FLOAT(FloatNBT.class),
+        DOUBLE(DoubleNBT.class),
+        BYTE_ARRAY(ByteArrayNBT.class),
+        STRING(StringNBT.class),
+        LIST(ListNBT.class),
+        COMPOUND(CompoundNBT.class),
+        INT_ARRAY(IntArrayNBT.class);
+        public static final EnumNBTType[] VALUES = values();
+        public final Class<? extends INBT> classObject;
+
+        EnumNBTType(Class<? extends INBT> c) {
+            this.classObject = c;
+        }
+    }
+
+    public static class NBTList<T extends INBT> extends ForwardingList<T> {
+
+        private final ArrayList<T> backingList;
+
+        public NBTList(ListNBT nbtList) {
+            //noinspection unchecked
+            backingList = new ArrayList<>((List<T>) nbtList.tagList);
+        }
+
+        @Override
+        protected List<T> delegate() {
+            return backingList;
+        }
+
     }
 
 }

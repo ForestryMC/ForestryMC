@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail;
 
 import com.google.common.base.Preconditions;
@@ -29,10 +29,9 @@ public class POBox extends WorldSavedData implements IInventory {
 
     public static final String SAVE_NAME = "pobox_";
     public static final short SLOT_SIZE = 84;
-
+    private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters").disableAutomation();
     @Nullable
     private IMailAddress address;
-    private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters").disableAutomation();
 
     public POBox(IMailAddress address) {
         super(SAVE_NAME + address);

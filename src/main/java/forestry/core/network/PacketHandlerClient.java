@@ -21,6 +21,19 @@ public class PacketHandlerClient {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    public static void sendPacket(IForestryPacketServer packet) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientPlayNetHandler netHandler = minecraft.getConnection();
+        if (netHandler != null) {
+            Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
+            ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(
+                    packetData,
+                    PacketHandlerServer.CHANNEL_ID
+            );
+            netHandler.sendPacket(payload.getThis());
+        }
+    }
+
     public void onPacket(NetworkEvent.ServerCustomPayloadEvent event) {
         PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
         byte idOrdinal = data.readByte();
@@ -43,19 +56,6 @@ public class PacketHandlerClient {
             return;
         }
         event.getSource().get().setPacketHandled(true);
-    }
-
-    public static void sendPacket(IForestryPacketServer packet) {
-        Minecraft minecraft = Minecraft.getInstance();
-        ClientPlayNetHandler netHandler = minecraft.getConnection();
-        if (netHandler != null) {
-            Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-            ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(
-                    packetData,
-                    PacketHandlerServer.CHANNEL_ID
-            );
-            netHandler.sendPacket(payload.getThis());
-        }
     }
 
 }

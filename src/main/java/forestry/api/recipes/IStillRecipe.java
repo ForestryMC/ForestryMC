@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -12,11 +12,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface IStillRecipe extends IForestryRecipe {
     IRecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
-
-    class Companion {
-        @ObjectHolder("forestry:still")
-        public static final IRecipeSerializer<IStillRecipe> SERIALIZER = null;
-    }
 
     /**
      * @return Amount of work cycles required to run through the conversion once.
@@ -41,5 +36,10 @@ public interface IStillRecipe extends IForestryRecipe {
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:still")
+        public static final IRecipeSerializer<IStillRecipe> SERIALIZER = null;
     }
 }

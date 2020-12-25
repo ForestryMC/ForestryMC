@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.apiculture.hives;
 
 import forestry.api.core.IBlockSubtype;
@@ -11,6 +11,18 @@ import java.util.List;
 import java.util.Locale;
 
 public interface IHiveRegistry {
+
+    /**
+     * Adds a new hive to be generated in the world.
+     */
+    void registerHive(String hiveName, IHiveDescription hiveDescription);
+
+    /**
+     * Add drops to a registered hive.
+     */
+    void addDrops(String hiveName, IHiveDrop... drops);
+
+    void addDrops(String hiveName, List<IHiveDrop> drop);
 
     /* Forestry Hive Names */
     enum HiveType implements IBlockSubtype {
@@ -52,16 +64,4 @@ public interface IHiveRegistry {
             return ordinal();
         }
     }
-
-    /**
-     * Adds a new hive to be generated in the world.
-     */
-    void registerHive(String hiveName, IHiveDescription hiveDescription);
-
-    /**
-     * Add drops to a registered hive.
-     */
-    void addDrops(String hiveName, IHiveDrop... drops);
-
-    void addDrops(String hiveName, List<IHiveDrop> drop);
 }

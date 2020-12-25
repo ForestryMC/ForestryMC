@@ -55,6 +55,21 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
         setIndex(0);
     }
 
+    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+        Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
+            Fluid fluid = smelting.getProduct().getFluid();
+            if (!smeltingInputs.containsKey(fluid)) {
+                smeltingInputs.put(fluid, new ArrayList<>());
+            }
+
+            smeltingInputs.get(fluid).add(smelting);
+        }
+
+        return smeltingInputs;
+    }
+
     @Override
     protected void onIndexUpdate(int index, IFabricatorRecipe recipe) {
         selectedElement.add(new TankElement(1, 33, null, recipe.getLiquid(), 2000, FABRICATOR_TANK_OVERLAY, 16, 16));
@@ -87,20 +102,5 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
             selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {
             }));
         }
-    }
-
-    private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
-        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-        Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-        for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
-            Fluid fluid = smelting.getProduct().getFluid();
-            if (!smeltingInputs.containsKey(fluid)) {
-                smeltingInputs.put(fluid, new ArrayList<>());
-            }
-
-            smeltingInputs.get(fluid).add(smelting);
-        }
-
-        return smeltingInputs;
     }
 }

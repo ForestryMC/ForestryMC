@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.network.packets;
 
 import forestry.core.network.*;
@@ -28,23 +28,13 @@ import java.io.IOException;
 
 public class PacketFXSignal extends ForestryPacket implements IForestryPacketClient {
 
-    public enum VisualFXType {
-        NONE, BLOCK_BREAK, SAPLING_PLACE
-    }
-
-    public enum SoundFXType {
-        NONE, BLOCK_BREAK, BLOCK_PLACE
-    }
-
     private final BlockPos pos;
     private final VisualFXType visualFX;
     private final SoundFXType soundFX;
     private final BlockState blockState;
-
     public PacketFXSignal(VisualFXType type, BlockPos pos, BlockState blockState) {
         this(type, SoundFXType.NONE, pos, blockState);
     }
-
     public PacketFXSignal(SoundFXType type, BlockPos pos, BlockState blockState) {
         this(VisualFXType.NONE, type, pos, blockState);
     }
@@ -68,6 +58,14 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
     @Override
     public PacketIdClient getPacketId() {
         return PacketIdClient.FX_SIGNAL;
+    }
+
+    public enum VisualFXType {
+        NONE, BLOCK_BREAK, SAPLING_PLACE
+    }
+
+    public enum SoundFXType {
+        NONE, BLOCK_BREAK, BLOCK_PLACE
     }
 
     @OnlyIn(Dist.CLIENT)

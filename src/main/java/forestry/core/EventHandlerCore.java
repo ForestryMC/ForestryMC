@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core;
 
 import forestry.api.core.ISpriteRegistry;
@@ -52,6 +52,25 @@ public class EventHandlerCore {
     public EventHandlerCore() {
     }
 
+    private static void syncBreedingTrackers(PlayerEntity player) {
+        Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
+        for (IRootDefinition definition : speciesRoots) {
+            if (!definition.isPresent()) {
+                continue;
+            }
+            IIndividualRoot root = definition.get();
+            if (!(root instanceof IForestrySpeciesRoot)) {
+                continue;
+            }
+            IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
+            IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(
+                    player.getEntityWorld(),
+                    player.getGameProfile()
+            );
+            breedingTracker.synchToPlayer(player);
+        }
+    }
+
     //TODO - register event handler
     @SubscribeEvent
     public void onPickupItem(EntityItemPickupEvent event) {
@@ -77,25 +96,6 @@ public class EventHandlerCore {
     public void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         PlayerEntity player = event.getPlayer();
         syncBreedingTrackers(player);
-    }
-
-    private static void syncBreedingTrackers(PlayerEntity player) {
-        Collection<IRootDefinition> speciesRoots = GeneticsAPI.apiInstance.getRoots().values();
-        for (IRootDefinition definition : speciesRoots) {
-            if (!definition.isPresent()) {
-                continue;
-            }
-            IIndividualRoot root = definition.get();
-            if (!(root instanceof IForestrySpeciesRoot)) {
-                continue;
-            }
-            IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
-            IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(
-                    player.getEntityWorld(),
-                    player.getGameProfile()
-            );
-            breedingTracker.synchToPlayer(player);
-        }
     }
 
     @SubscribeEvent

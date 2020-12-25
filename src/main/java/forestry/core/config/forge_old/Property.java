@@ -32,37 +32,9 @@ import java.util.regex.Pattern;
 //import net.minecraftforge.fml.client.config.IConfigElement;
 
 public class Property {
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public enum Type {
-        STRING,
-        INTEGER,
-        BOOLEAN,
-        DOUBLE,
-        COLOR,
-        MOD_ID;
-
-        public static Type tryParse(char id) {
-            for (int x = 0; x < values().length; x++) {
-                if (values()[x].getID() == id) {
-                    return values()[x];
-                }
-            }
-
-            return STRING;
-        }
-
-        public char getID() {
-            return name().charAt(0);
-        }
-    }
-
+    private final boolean wasRead;
+    private final boolean isList;
+    private final Type type;
     private String name;
     private String value;
     private String defaultValue;
@@ -81,21 +53,15 @@ public class Property {
     private boolean showInGui = true;
     private boolean requiresMcRestart = false;
     private Pattern validationPattern;
-    private final boolean wasRead;
-    private final boolean isList;
     private boolean isListLengthFixed = false;
     private int maxListLength = -1;
-    private final Type type;
     private boolean changed = false;
-
     public Property(String name, String value, Type type) {
         this(name, value, type, false, new String[0], name);
     }
-
     public Property(String name, String value, Type type, boolean read) {
         this(name, value, type, read, new String[0], name);
     }
-
     public Property(String name, String value, Type type, String[] validValues) {
         this(name, value, type, false, validValues, name);
     }
@@ -166,6 +132,14 @@ public class Property {
         this.maxValue = String.valueOf(Integer.MAX_VALUE);
         this.langKey = langKey;
         this.setComment("");
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     /**
@@ -328,6 +302,13 @@ public class Property {
     }
 
     /**
+     * Gets the maximum length of this list/array Property. Only important if isList() == true.
+     */
+    public int getMaxListLength() {
+        return this.maxListLength;
+    }
+
+    /**
      * Sets the maximum length of this list/array Property. Only important if isList() == true. If the current values array or default
      * values array is longer than the new maximum it will be resized. If calling both this method and setIsListLengthFixed(true), this
      * method should be called afterwards (but is not required).
@@ -351,13 +332,6 @@ public class Property {
     }
 
     /**
-     * Gets the maximum length of this list/array Property. Only important if isList() == true.
-     */
-    public int getMaxListLength() {
-        return this.maxListLength;
-    }
-
-    /**
      * Sets the flag for whether this list/array Property has a fixed length. Only important if isList() == true. If calling both this
      * method and setMaxListLength(), this method should be called first (but is not required).
      */
@@ -371,6 +345,15 @@ public class Property {
      */
     public boolean isListLengthFixed() {
         return this.isListLengthFixed;
+    }
+
+    /**
+     * Gets the Pattern object used to validate user input for this Property.
+     *
+     * @return the user input validation Pattern object, or null if none is set
+     */
+    public Pattern getValidationPattern() {
+        return this.validationPattern;
     }
 
     //	/**
@@ -442,12 +425,12 @@ public class Property {
     }
 
     /**
-     * Gets the Pattern object used to validate user input for this Property.
+     * Gets the language key string for this Property.
      *
-     * @return the user input validation Pattern object, or null if none is set
+     * @return the language key
      */
-    public Pattern getValidationPattern() {
-        return this.validationPattern;
+    public String getLanguageKey() {
+        return this.langKey;
     }
 
     /**
@@ -459,15 +442,6 @@ public class Property {
     public Property setLanguageKey(String langKey) {
         this.langKey = langKey;
         return this;
-    }
-
-    /**
-     * Gets the language key string for this Property.
-     *
-     * @return the language key
-     */
-    public String getLanguageKey() {
-        return this.langKey;
     }
 
     /**
@@ -571,22 +545,21 @@ public class Property {
     }
 
     /**
+     * Gets the minimum value.
+     *
+     * @return the minimum value bound
+     */
+    public String getMinValue() {
+        return minValue;
+    }
+
+    /**
      * Sets the minimum int value of this Property.
      *
      * @param minValue an int value
      */
     public Property setMinValue(int minValue) {
         this.minValue = Integer.toString(minValue);
-        return this;
-    }
-
-    /**
-     * Sets the maximum int value of this Property.
-     *
-     * @param maxValue an int value
-     */
-    public Property setMaxValue(int maxValue) {
-        this.maxValue = Integer.toString(maxValue);
         return this;
     }
 
@@ -601,6 +574,25 @@ public class Property {
     }
 
     /**
+     * Gets the maximum value.
+     *
+     * @return the maximum value bound
+     */
+    public String getMaxValue() {
+        return maxValue;
+    }
+
+    /**
+     * Sets the maximum int value of this Property.
+     *
+     * @param maxValue an int value
+     */
+    public Property setMaxValue(int maxValue) {
+        this.maxValue = Integer.toString(maxValue);
+        return this;
+    }
+
+    /**
      * Sets the maximum double value of this Property.
      *
      * @param maxValue a double value
@@ -608,24 +600,6 @@ public class Property {
     public Property setMaxValue(double maxValue) {
         this.maxValue = Double.toString(maxValue);
         return this;
-    }
-
-    /**
-     * Gets the minimum value.
-     *
-     * @return the minimum value bound
-     */
-    public String getMinValue() {
-        return minValue;
-    }
-
-    /**
-     * Gets the maximum value.
-     *
-     * @return the maximum value bound
-     */
-    public String getMaxValue() {
-        return maxValue;
     }
 
     /**
@@ -638,6 +612,15 @@ public class Property {
     }
 
     /**
+     * Gets the array of valid values that this String Property can be set to, or null if not defined.
+     *
+     * @return a String array of valid values
+     */
+    public String[] getValidValues() {
+        return this.validValues;
+    }
+
+    /**
      * Sets the array of valid values that this String Property can be set to. When an array of valid values is defined for a Property the
      * GUI control for that property will be a value cycle button.
      *
@@ -646,15 +629,6 @@ public class Property {
     public Property setValidValues(String[] validValues) {
         this.validValues = validValues;
         return this;
-    }
-
-    /**
-     * Gets the array of valid values that this String Property can be set to, or null if not defined.
-     *
-     * @return a String array of valid values
-     */
-    public String[] getValidValues() {
-        return this.validValues;
     }
 
     /**
@@ -1121,5 +1095,28 @@ public class Property {
 
     public void set(double value) {
         set(Double.toString(value));
+    }
+
+    public enum Type {
+        STRING,
+        INTEGER,
+        BOOLEAN,
+        DOUBLE,
+        COLOR,
+        MOD_ID;
+
+        public static Type tryParse(char id) {
+            for (int x = 0; x < values().length; x++) {
+                if (values()[x].getID() == id) {
+                    return values()[x];
+                }
+            }
+
+            return STRING;
+        }
+
+        public char getID() {
+            return name().charAt(0);
+        }
     }
 }

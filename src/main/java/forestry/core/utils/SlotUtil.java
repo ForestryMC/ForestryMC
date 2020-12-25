@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils;
 
 import forestry.core.gui.slots.SlotForestry;
@@ -21,6 +21,9 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public abstract class SlotUtil {
+
+    private static final int PLAYER_INVENTORY_SIZE = 9 * 4;
+    private static final int PLAYER_HOTBAR_SIZE = 9;
 
     public static boolean isSlotInRange(int slotIndex, int start, int count) {
         return slotIndex >= start && slotIndex < start + count;
@@ -238,9 +241,6 @@ public abstract class SlotUtil {
         }
         return changed;
     }
-
-    private static final int PLAYER_INVENTORY_SIZE = 9 * 4;
-    private static final int PLAYER_HOTBAR_SIZE = 9;
 
     private static boolean isInPlayerInventory(int slotIndex) {
         return slotIndex < PLAYER_INVENTORY_SIZE;

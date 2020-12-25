@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
@@ -14,11 +14,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISqueezerRecipe extends IForestryRecipe {
     IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
-
-    class Companion {
-        @ObjectHolder("forestry:squeezer")
-        public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
-    }
 
     /**
      * @return item stacks representing the required resources for one process. Stack size will be taken into account.
@@ -53,5 +48,10 @@ public interface ISqueezerRecipe extends IForestryRecipe {
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:squeezer")
+        public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
     }
 }

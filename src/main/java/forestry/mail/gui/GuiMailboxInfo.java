@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -31,27 +31,17 @@ import javax.annotation.Nullable;
 
 public class GuiMailboxInfo extends AbstractGui {
 
-    public enum XPosition {
-        LEFT, RIGHT
-    }
-
-    public enum YPosition {
-        TOP, BOTTOM
-    }
-
     public static final GuiMailboxInfo instance = new GuiMailboxInfo();
     private static final int WIDTH = 98;
     private static final int HEIGHT = 17;
-
     private final FontRenderer fontRenderer;
-    @Nullable
-    private POBoxInfo poInfo;
     // TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
     private final ResourceLocation textureAlert = new ResourceLocation(
             Constants.MOD_ID,
             Constants.TEXTURE_PATH_GUI + "mailalert.png"
     );
-
+    @Nullable
+    private POBoxInfo poInfo;
     private GuiMailboxInfo() {
         fontRenderer = Minecraft.getInstance().fontRenderer;
     }
@@ -122,5 +112,13 @@ public class GuiMailboxInfo extends AbstractGui {
         }
 
         this.poInfo = info;
+    }
+
+    public enum XPosition {
+        LEFT, RIGHT
+    }
+
+    public enum YPosition {
+        TOP, BOTTOM
     }
 }

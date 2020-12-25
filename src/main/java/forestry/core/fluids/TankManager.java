@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import com.google.common.collect.HashBasedTable;
@@ -58,6 +58,24 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
     public TankManager(ILiquidTankTile tile, StandardTank... tanks) {
         this.tile = tile;
         addAll(Arrays.asList(tanks));
+    }
+
+    private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
+        return tank.canFill() &&
+               tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
+    }
+
+    private static boolean tankCanDrain(StandardTank tank) {
+        if (!tank.canDrain()) {
+            return false;
+        }
+        FluidStack drained = tank.drain(1, FluidAction.SIMULATE);
+        return !drained.isEmpty() && drained.getAmount() > 0;
+    }
+
+    private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
+        return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) &&
+               tankCanDrain(tank);
     }
 
     public final boolean addAll(Collection<? extends StandardTank> collection) {
@@ -324,23 +342,5 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
         }
 
         return false;
-    }
-
-    private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
-        return tank.canFill() &&
-               tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
-    }
-
-    private static boolean tankCanDrain(StandardTank tank) {
-        if (!tank.canDrain()) {
-            return false;
-        }
-        FluidStack drained = tank.drain(1, FluidAction.SIMULATE);
-        return !drained.isEmpty() && drained.getAmount() > 0;
-    }
-
-    private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
-        return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) &&
-               tankCanDrain(tank);
     }
 }

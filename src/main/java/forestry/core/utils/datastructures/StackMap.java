@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils.datastructures;
 
 import com.google.common.base.Preconditions;
@@ -25,14 +25,14 @@ import java.util.Map;
  */
 public abstract class StackMap<P, T> extends HashMap<P, T> {
 
+    private static final long serialVersionUID = 5383477742290646466L;
+
     @Override
     public final T put(P key, T value) {
         Preconditions.checkArgument(isValidKey(key), "Key is invalid");
         Preconditions.checkNotNull(value);
         return super.put(key, value);
     }
-
-    private static final long serialVersionUID = 5383477742290646466L;
 
     @Override
     public final boolean containsKey(Object key) {

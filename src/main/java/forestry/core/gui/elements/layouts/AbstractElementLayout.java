@@ -14,14 +14,14 @@ public abstract class AbstractElementLayout extends ElementGroup implements IEle
         super(xPos, yPos, width, height);
     }
 
-    public AbstractElementLayout setDistance(int distance) {
-        this.distance = distance;
-        return this;
-    }
-
     @Override
     public int getDistance() {
         return distance;
+    }
+
+    public AbstractElementLayout setDistance(int distance) {
+        this.distance = distance;
+        return this;
     }
 
     @Override

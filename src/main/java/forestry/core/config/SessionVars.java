@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.config;
 
 import javax.annotation.Nullable;
@@ -21,13 +21,13 @@ public class SessionVars {
     @Nullable
     private static Class<?> openedLedger;
 
-    public static void setOpenedLedger(@Nullable Class<?> ledgerClass) {
-        openedLedger = ledgerClass;
-    }
-
     @Nullable
     public static Class<?> getOpenedLedger() {
         return openedLedger;
+    }
+
+    public static void setOpenedLedger(@Nullable Class<?> ledgerClass) {
+        openedLedger = ledgerClass;
     }
 
     public static void setStringVar(String ident, String val) {

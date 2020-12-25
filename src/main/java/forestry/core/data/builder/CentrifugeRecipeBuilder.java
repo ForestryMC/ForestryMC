@@ -20,9 +20,13 @@ import java.util.function.Consumer;
 public class CentrifugeRecipeBuilder {
 
     private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
+    private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
     private int processingTime;
     private ItemStack input;
-    private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
+
+    private static IllegalStateException error(ResourceLocation id, String message) {
+        return new IllegalStateException(message + " (" + id + ")");
+    }
 
     public CentrifugeRecipeBuilder processingTime(int processingTime) {
         this.processingTime = processingTime;
@@ -80,10 +84,6 @@ public class CentrifugeRecipeBuilder {
         if (outputs.isEmpty()) {
             throw error(id, "Recipe outputs were empty");
         }
-    }
-
-    private static IllegalStateException error(ResourceLocation id, String message) {
-        return new IllegalStateException(message + " (" + id + ")");
     }
 
     public static class Result implements IFinishedRecipe {

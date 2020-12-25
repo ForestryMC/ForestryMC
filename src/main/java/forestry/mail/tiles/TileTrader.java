@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
@@ -263,24 +263,6 @@ public class TileTrader extends TileBase implements IOwnedTile {
         return address;
     }
 
-    public void handleSetAddressRequest(String addressName) {
-        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-        setAddress(address);
-
-        IMailAddress newAddress = getAddress();
-        String newAddressName = newAddress.getName();
-        if (newAddressName.equals(addressName)) {
-            PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
-            NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void handleSetAddressResponse(String addressName) {
-        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-        setAddress(address);
-    }
-
     private void setAddress(IMailAddress address) {
         Preconditions.checkNotNull(address, "address must not be null");
 
@@ -305,6 +287,24 @@ public class TileTrader extends TileBase implements IOwnedTile {
         } else {
             this.address = address;
         }
+    }
+
+    public void handleSetAddressRequest(String addressName) {
+        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+        setAddress(address);
+
+        IMailAddress newAddress = getAddress();
+        String newAddressName = newAddress.getName();
+        if (newAddressName.equals(addressName)) {
+            PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
+            NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void handleSetAddressResponse(String addressName) {
+        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+        setAddress(address);
     }
 
     @Override

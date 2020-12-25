@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.climate;
 
 import forestry.api.core.ILocatable;
@@ -46,14 +46,14 @@ public interface IClimateTransformer extends ILocatable {
     void setRange(int range);
 
     /**
-     * Sets the circular state of the transformer.
-     */
-    void setCircular(boolean circular);
-
-    /**
      * @return True if the current area of the transformer is circular.
      */
     boolean isCircular();
+
+    /**
+     * Sets the circular state of the transformer.
+     */
+    void setCircular(boolean circular);
 
     /**
      * @return The current area of the transformer in blocks.

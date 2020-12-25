@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -20,10 +20,6 @@ import java.util.List;
 import java.util.Random;
 
 public class EscritoireTextSource {
-
-    private enum Notes {
-        level1, level2, level3, level4, success, failure, empty
-    }
 
     private static final ListMultimap<Notes, String> researchNotes;
     private static final Random random = new Random();
@@ -58,16 +54,6 @@ public class EscritoireTextSource {
     @Nullable
     private Notes lastNoteLevel;
 
-    public String getText(EscritoireGame escritoireGame) {
-        Notes noteLevel = getNoteLevel(escritoireGame);
-        if (lastNoteLevel != noteLevel || researchNote == null) {
-            researchNote = getRandomNote(noteLevel);
-            lastNoteLevel = noteLevel;
-        }
-
-        return researchNote;
-    }
-
     private static String getRandomNote(Notes level) {
         List<String> candidates = researchNotes.get(level);
         int index = random.nextInt(candidates.size());
@@ -97,5 +83,19 @@ public class EscritoireTextSource {
                 return Notes.empty;
         }
         return null;
+    }
+
+    public String getText(EscritoireGame escritoireGame) {
+        Notes noteLevel = getNoteLevel(escritoireGame);
+        if (lastNoteLevel != noteLevel || researchNote == null) {
+            researchNote = getRandomNote(noteLevel);
+            lastNoteLevel = noteLevel;
+        }
+
+        return researchNote;
+    }
+
+    private enum Notes {
+        level1, level2, level3, level4, success, failure, empty
     }
 }

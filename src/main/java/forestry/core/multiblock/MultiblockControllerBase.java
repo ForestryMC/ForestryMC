@@ -24,23 +24,14 @@ import java.util.*;
  * Subordinate TileEntities implement the IMultiblockComponent class and, generally, should not have an update() loop.
  */
 public abstract class MultiblockControllerBase implements IMultiblockControllerInternal {
-    // Multiblock stuff - do not mess with
-    protected final World world;
-
     // Ticks
     private static final Random rand = new Random();
+    // Multiblock stuff - do not mess with
+    protected final World world;
+    protected AssemblyState assemblyState;
+    protected HashSet<IMultiblockComponent> connectedParts;
     //TODO: Use TickHelper
     private int tickCount = rand.nextInt(256);
-
-    // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
-    protected enum AssemblyState {
-        Disassembled, Assembled, Paused
-    }
-
-    protected AssemblyState assemblyState;
-
-    protected HashSet<IMultiblockComponent> connectedParts;
-
     /**
      * This is a deterministically-picked coordinate that identifies this
      * multiblock uniquely in its dimension.
@@ -50,26 +41,22 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
      */
     @Nullable
     private BlockPos referenceCoord;
-
     /**
      * Minimum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
      * is not a cube/rectangular prism.
      */
     @Nullable
     private BlockPos minimumCoord;
-
     /**
      * Maximum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
      * is not a cube/rectangular prism.
      */
     @Nullable
     private BlockPos maximumCoord;
-
     /**
      * Set to true whenever a part is removed from this controller.
      */
     private boolean shouldCheckForDisconnections;
-
     /**
      * Set whenever we validate the multiblock
      */
@@ -88,6 +75,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
         this.shouldCheckForDisconnections = true;
         this.lastValidationException = null;
+    }
+
+    private static boolean isInvalid(IMultiblockComponent part) {
+        return part instanceof TileEntity && ((TileEntity) part).isRemoved();
     }
 
     @Override
@@ -912,7 +903,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         return referenceCoord;
     }
 
-    private static boolean isInvalid(IMultiblockComponent part) {
-        return part instanceof TileEntity && ((TileEntity) part).isRemoved();
+    // Disassembled -> Assembled; Assembled -> Disassembled OR Paused; Paused -> Assembled
+    protected enum AssemblyState {
+        Disassembled, Assembled, Paused
     }
 }

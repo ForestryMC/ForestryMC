@@ -45,16 +45,32 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
         this.isFullCube = isFullCube;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void setRenderer(IForestryRenderer<? super T> renderer) {
-        this.renderer = renderer;
-        this.tileRenderer = (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer);
+    public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
+        DistExecutor.runWhenOn(Dist.CLIENT, () ->
+                () -> {
+                    IMachineProperties machineProperties = type.getMachineProperties();
+                    if (!(machineProperties instanceof IMachinePropertiesTesr)) {
+                        return;
+                    }
+                    IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+                    if (machinePropertiesTesr.getRenderer() == null) {
+                        return;
+                    }
+                    properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+                });
+        return properties;
     }
 
     @Override
     @Nullable
     public IForestryRenderer<? super T> getRenderer() {
         return renderer;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void setRenderer(IForestryRenderer<? super T> renderer) {
+        this.renderer = renderer;
+        this.tileRenderer = (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer);
     }
 
     @Override
@@ -73,22 +89,6 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
     @Override
     public boolean isFullCube(BlockState state) {
         return isFullCube;
-    }
-
-    public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
-        DistExecutor.runWhenOn(Dist.CLIENT, () ->
-                () -> {
-                    IMachineProperties machineProperties = type.getMachineProperties();
-                    if (!(machineProperties instanceof IMachinePropertiesTesr)) {
-                        return;
-                    }
-                    IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-                    if (machinePropertiesTesr.getRenderer() == null) {
-                        return;
-                    }
-                    properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
-                });
-        return properties;
     }
 
     public static class Builder<T extends TileForestry> extends MachineProperties.Builder<T, Builder<T>> {

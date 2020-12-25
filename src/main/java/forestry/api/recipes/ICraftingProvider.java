@@ -1,15 +1,13 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
     /**

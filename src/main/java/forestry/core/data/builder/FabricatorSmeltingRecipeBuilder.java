@@ -24,6 +24,10 @@ public class FabricatorSmeltingRecipeBuilder {
     private ItemStack resource;
     private FluidStack product;
 
+    private static IllegalStateException error(ResourceLocation id, String message) {
+        return new IllegalStateException(message + " (" + id + ")");
+    }
+
     public FabricatorSmeltingRecipeBuilder packagingTime(int meltingPoint) {
         this.meltingPoint = meltingPoint;
         return this;
@@ -85,10 +89,6 @@ public class FabricatorSmeltingRecipeBuilder {
         if (resource == null || resource.isEmpty()) {
             throw error(id, "Box was not set");
         }
-    }
-
-    private static IllegalStateException error(ResourceLocation id, String message) {
-        return new IllegalStateException(message + " (" + id + ")");
     }
 
     public static class Result implements IFinishedRecipe {

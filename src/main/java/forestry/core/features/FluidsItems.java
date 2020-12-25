@@ -24,6 +24,9 @@ public class FluidsItems {
             EnumContainerType.values()
     ).create();
 
+    private FluidsItems() {
+    }
+
     public static ItemStack getContainer(EnumContainerType type, ForestryFluids fluid) {
         return getContainer(type, fluid.getFluid());
     }
@@ -35,8 +38,5 @@ public class FluidsItems {
             handler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
             return container;
         }).orElse(ItemStack.EMPTY);
-    }
-
-    private FluidsItems() {
     }
 }

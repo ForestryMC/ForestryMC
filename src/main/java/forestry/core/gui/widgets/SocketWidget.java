@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -30,6 +30,20 @@ public class SocketWidget extends Widget {
 
     private final ISocketable tile;
     private final int slot;
+    private final ToolTip toolTip = new ToolTip(250) {
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public void refresh() {
+            toolTip.clear();
+            ItemStack stack = tile.getSocket(slot);
+            if (!stack.isEmpty()) {
+                toolTip.addAll(ItemTooltipUtil.getInformation(stack));
+                toolTip.add(new TranslationTextComponent("for.gui.socket.remove").mergeStyle(TextFormatting.ITALIC));
+            } else {
+                toolTip.add(new TranslationTextComponent("for.gui.emptysocket"));
+            }
+        }
+    };
 
     public SocketWidget(WidgetManager manager, int xPos, int yPos, ISocketable tile, int slot) {
         super(manager, xPos, yPos);
@@ -50,21 +64,6 @@ public class SocketWidget extends Widget {
     public ToolTip getToolTip(int mouseX, int mouseY) {
         return toolTip;
     }
-
-    private final ToolTip toolTip = new ToolTip(250) {
-        @Override
-        @OnlyIn(Dist.CLIENT)
-        public void refresh() {
-            toolTip.clear();
-            ItemStack stack = tile.getSocket(slot);
-            if (!stack.isEmpty()) {
-                toolTip.addAll(ItemTooltipUtil.getInformation(stack));
-                toolTip.add(new TranslationTextComponent("for.gui.socket.remove").mergeStyle(TextFormatting.ITALIC));
-            } else {
-                toolTip.add(new TranslationTextComponent("for.gui.emptysocket"));
-            }
-        }
-    };
 
     @Override
     public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {

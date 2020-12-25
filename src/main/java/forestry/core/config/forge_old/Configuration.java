@@ -47,29 +47,27 @@ public class Configuration {
     public static final String CATEGORY_SPLITTER = ".";
     public static final String NEW_LINE;
     public static final String COMMENT_SEPARATOR = "##########################################################################################################";
+    public static final CharMatcher allowedProperties = CharMatcher.javaLetterOrDigit().or(CharMatcher.anyOf(
+            ALLOWED_CHARS));
     private static final String CONFIG_VERSION_MARKER = "~CONFIG_VERSION";
     private static final Pattern CONFIG_START = Pattern.compile("START: \"([^\\\"]+)\"");
     private static final Pattern CONFIG_END = Pattern.compile("END: \"([^\\\"]+)\"");
-    public static final CharMatcher allowedProperties = CharMatcher.javaLetterOrDigit().or(CharMatcher.anyOf(
-            ALLOWED_CHARS));
     private static final Configuration PARENT = null;
-
-    File file;
-
-    private Map<String, ConfigCategory> categories = new TreeMap<String, ConfigCategory>();
-    private final Map<String, Configuration> children = new TreeMap<String, Configuration>();
-
-    private boolean caseSensitiveCustomCategories;
-    public String defaultEncoding = DEFAULT_ENCODING;
-    private String fileName = null;
-    public boolean isChild = false;
-    private boolean changed = false;
-    private String definedConfigVersion = null;
-    private String loadedConfigVersion = null;
 
     static {
         NEW_LINE = System.getProperty("line.separator");
     }
+
+    private final Map<String, Configuration> children = new TreeMap<String, Configuration>();
+    public String defaultEncoding = DEFAULT_ENCODING;
+    public boolean isChild = false;
+    File file;
+    private Map<String, ConfigCategory> categories = new TreeMap<String, ConfigCategory>();
+    private boolean caseSensitiveCustomCategories;
+    private String fileName = null;
+    private boolean changed = false;
+    private String definedConfigVersion = null;
+    private String loadedConfigVersion = null;
 
     public Configuration() {
     }
@@ -79,6 +77,21 @@ public class Configuration {
      */
     public Configuration(File file) {
         this(file, null);
+    }
+
+    public Configuration(File file, String configVersion) {
+        runConfiguration(file, configVersion);
+        //TODO
+    }
+
+    public Configuration(File file, String configVersion, boolean caseSensitiveCustomCategories) {
+        this.caseSensitiveCustomCategories = caseSensitiveCustomCategories;
+        runConfiguration(file, configVersion);
+        //TODO
+    }
+
+    public Configuration(File file, boolean caseSensitiveCustomCategories) {
+        this(file, null, caseSensitiveCustomCategories);
     }
 
     /**
@@ -114,21 +127,6 @@ public class Configuration {
         }
     }//TODO
 
-    public Configuration(File file, String configVersion) {
-        runConfiguration(file, configVersion);
-        //TODO
-    }
-
-    public Configuration(File file, String configVersion, boolean caseSensitiveCustomCategories) {
-        this.caseSensitiveCustomCategories = caseSensitiveCustomCategories;
-        runConfiguration(file, configVersion);
-        //TODO
-    }
-
-    public Configuration(File file, boolean caseSensitiveCustomCategories) {
-        this(file, null, caseSensitiveCustomCategories);
-    }
-
     @Override
     public String toString() {
         return file.getAbsolutePath();
@@ -142,7 +140,7 @@ public class Configuration {
         return this.loadedConfigVersion;
     }
 
-    /******************************************************************************************************************
+    /************************************
      *
      * BOOLEAN gets
      *
@@ -1201,64 +1199,6 @@ public class Configuration {
         }
     }
 
-    public static class UnicodeInputStreamReader extends Reader {
-        private final InputStreamReader input;
-        @SuppressWarnings("unused")
-        private final String defaultEnc;
-
-        public UnicodeInputStreamReader(InputStream source, String encoding) throws IOException {
-            defaultEnc = encoding;
-            String enc = encoding;
-            byte[] data = new byte[4];
-
-            PushbackInputStream pbStream = new PushbackInputStream(source, data.length);
-            int read = pbStream.read(data, 0, data.length);
-            int size = 0;
-
-            int bom16 = (data[0] & 0xFF) << 8 | (data[1] & 0xFF);
-            int bom24 = bom16 << 8 | (data[2] & 0xFF);
-            int bom32 = bom24 << 8 | (data[3] & 0xFF);
-
-            if (bom24 == 0xEFBBBF) {
-                enc = "UTF-8";
-                size = 3;
-            } else if (bom16 == 0xFEFF) {
-                enc = "UTF-16BE";
-                size = 2;
-            } else if (bom16 == 0xFFFE) {
-                enc = "UTF-16LE";
-                size = 2;
-            } else if (bom32 == 0x0000FEFF) {
-                enc = "UTF-32BE";
-                size = 4;
-            } else if (bom32 == 0xFFFE0000) //This will never happen as it'll be caught by UTF-16LE,
-            {                             //but if anyone ever runs across a 32LE file, i'd like to dissect it.
-                enc = "UTF-32LE";
-                size = 4;
-            }
-
-            if (size < read) {
-                pbStream.unread(data, size, read - size);
-            }
-
-            this.input = new InputStreamReader(pbStream, enc);
-        }
-
-        public String getEncoding() {
-            return input.getEncoding();
-        }
-
-        @Override
-        public int read(char[] cbuf, int off, int len) throws IOException {
-            return input.read(cbuf, off, len);
-        }
-
-        @Override
-        public void close() throws IOException {
-            input.close();
-        }
-    }
-
     public boolean hasChanged() {
         if (changed) {
             return true;
@@ -1652,5 +1592,63 @@ public class Configuration {
 
     public File getConfigFile() {
         return file;
+    }
+
+    public static class UnicodeInputStreamReader extends Reader {
+        private final InputStreamReader input;
+        @SuppressWarnings("unused")
+        private final String defaultEnc;
+
+        public UnicodeInputStreamReader(InputStream source, String encoding) throws IOException {
+            defaultEnc = encoding;
+            String enc = encoding;
+            byte[] data = new byte[4];
+
+            PushbackInputStream pbStream = new PushbackInputStream(source, data.length);
+            int read = pbStream.read(data, 0, data.length);
+            int size = 0;
+
+            int bom16 = (data[0] & 0xFF) << 8 | (data[1] & 0xFF);
+            int bom24 = bom16 << 8 | (data[2] & 0xFF);
+            int bom32 = bom24 << 8 | (data[3] & 0xFF);
+
+            if (bom24 == 0xEFBBBF) {
+                enc = "UTF-8";
+                size = 3;
+            } else if (bom16 == 0xFEFF) {
+                enc = "UTF-16BE";
+                size = 2;
+            } else if (bom16 == 0xFFFE) {
+                enc = "UTF-16LE";
+                size = 2;
+            } else if (bom32 == 0x0000FEFF) {
+                enc = "UTF-32BE";
+                size = 4;
+            } else if (bom32 == 0xFFFE0000) //This will never happen as it'll be caught by UTF-16LE,
+            {                             //but if anyone ever runs across a 32LE file, i'd like to dissect it.
+                enc = "UTF-32LE";
+                size = 4;
+            }
+
+            if (size < read) {
+                pbStream.unread(data, size, read - size);
+            }
+
+            this.input = new InputStreamReader(pbStream, enc);
+        }
+
+        public String getEncoding() {
+            return input.getEncoding();
+        }
+
+        @Override
+        public int read(char[] cbuf, int off, int len) throws IOException {
+            return input.read(cbuf, off, len);
+        }
+
+        @Override
+        public void close() throws IOException {
+            input.close();
+        }
     }
 }

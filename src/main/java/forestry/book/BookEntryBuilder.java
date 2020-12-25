@@ -14,9 +14,9 @@ import java.util.List;
 public class BookEntryBuilder implements IBookEntryBuilder {
     private final String name;
     private final IBookCategory category;
+    private final List<IBookEntryBuilder> subEntries = new LinkedList<>();
     private ItemStack stack = ItemStack.EMPTY;
     private IBookPageFactory loader = JsonPageFactory.INSTANCE;
-    private final List<IBookEntryBuilder> subEntries = new LinkedList<>();
     private String title = "missing.title";
     private BookContent[][] content = new BookContent[0][0];
 

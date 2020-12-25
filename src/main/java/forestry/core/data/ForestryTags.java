@@ -8,6 +8,9 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 
 public class ForestryTags {
+    private ForestryTags() {
+    }
+
     public static class Blocks {
 
         public static final ITag.INamedTag<Block> CHARCOAL = forgeTag("charcoal");
@@ -21,6 +24,9 @@ public class ForestryTags {
         public static final ITag.INamedTag<Block> ORES_TIN = forgeTag("ores/tin");
         public static final ITag.INamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
 
+        private Blocks() {
+        }
+
         private static ITag.INamedTag<Block> tag(String name) {
             return BlockTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
         }
@@ -31,9 +37,6 @@ public class ForestryTags {
 
         private static ITag.INamedTag<Block> vanillaTag(String name) {
             return BlockTags.makeWrapperTag(name);
-        }
-
-        private Blocks() {
         }
     }
 
@@ -73,6 +76,9 @@ public class ForestryTags {
 
         public static final ITag.INamedTag<Item> FRUITS = tag("forestry_fruits");
 
+        private Items() {
+        }
+
         private static ITag.INamedTag<Item> tag(String name) {
             return ItemTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
         }
@@ -84,11 +90,5 @@ public class ForestryTags {
         private static ITag.INamedTag<Item> vanillaTag(String name) {
             return ItemTags.makeWrapperTag(name);
         }
-
-        private Items() {
-        }
-    }
-
-    private ForestryTags() {
     }
 }

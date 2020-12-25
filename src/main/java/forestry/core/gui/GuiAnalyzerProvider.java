@@ -97,6 +97,15 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
         this.slotAnalyzer = analyzerSlot;
     }
 
+    private static boolean isAnalyzerVisible() {
+        return analyzerVisible;
+    }
+
+    /* Methods - Gui Globals */
+    private static void setAnalyzerVisible(boolean analyzerVisible) {
+        GuiAnalyzerProvider.analyzerVisible = analyzerVisible;
+    }
+
     /* Methods */
     protected boolean hasErrors() {
         return false;
@@ -154,17 +163,6 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
         super.render(transform, mouseX, mouseY, partialTicks);
     }
 
-    class Handler implements Button.IPressable {
-        @Override
-        public void onPress(Button button) {
-            if (button instanceof GuiToggleButton) {
-                setAnalyzerVisible(!isAnalyzerVisible());
-                updateVisibility();
-                dirtyAnalyzer = true;
-            }
-        }
-    }
-
     /* Methods - Implement GuiContainer */
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
@@ -203,12 +201,14 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
         return firstSlot;
     }
 
-    /* Methods - Gui Globals */
-    private static void setAnalyzerVisible(boolean analyzerVisible) {
-        GuiAnalyzerProvider.analyzerVisible = analyzerVisible;
-    }
-
-    private static boolean isAnalyzerVisible() {
-        return analyzerVisible;
+    class Handler implements Button.IPressable {
+        @Override
+        public void onPress(Button button) {
+            if (button instanceof GuiToggleButton) {
+                setAnalyzerVisible(!isAnalyzerVisible());
+                updateVisibility();
+                dirtyAnalyzer = true;
+            }
+        }
     }
 }

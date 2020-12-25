@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.models;
 
 import com.google.common.base.Preconditions;
@@ -39,15 +39,13 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
-    @Nullable
-    private ItemOverrideList overrideList;
-
     protected final Class<B> blockClass;
-
     @Nullable
     protected ModelBakerModel blockModel;
     @Nullable
     protected ModelBakerModel itemModel;
+    @Nullable
+    private ItemOverrideList overrideList;
 
     protected ModelBlockDefault(Class<B> blockClass) {
         this.blockClass = blockClass;

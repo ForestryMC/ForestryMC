@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import forestry.core.ModuleFluids;
@@ -102,6 +102,28 @@ public enum ForestryFluids {
         this.tag = new ResourceLocation(Constants.MOD_ID, feature.getIdentifier());
     }
 
+    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
+        return fluid == fluidStack.getFluid();
+    }
+
+    @Nullable
+    public static ForestryFluids getFluidDefinition(Fluid fluid) {
+        if (fluid instanceof ForestryFluid) {
+            return tagToFluid.get(fluid.getRegistryName());
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static ForestryFluids getFluidDefinition(FluidStack fluidStack) {
+        if (!fluidStack.isEmpty()) {
+            return getFluidDefinition(fluidStack.getFluid());
+        }
+
+        return null;
+    }
+
     public int getTemperature() {
         return 295;
     }
@@ -137,28 +159,6 @@ public enum ForestryFluids {
 
     public final boolean is(FluidStack fluidStack) {
         return getFluid() == fluidStack.getFluid();
-    }
-
-    public static boolean areEqual(Fluid fluid, FluidStack fluidStack) {
-        return fluid == fluidStack.getFluid();
-    }
-
-    @Nullable
-    public static ForestryFluids getFluidDefinition(Fluid fluid) {
-        if (fluid instanceof ForestryFluid) {
-            return tagToFluid.get(fluid.getRegistryName());
-        }
-
-        return null;
-    }
-
-    @Nullable
-    public static ForestryFluids getFluidDefinition(FluidStack fluidStack) {
-        if (!fluidStack.isEmpty()) {
-            return getFluidDefinition(fluidStack.getFluid());
-        }
-
-        return null;
     }
 
     /**

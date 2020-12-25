@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import forestry.core.network.PacketBufferForestry;
@@ -20,10 +20,10 @@ import java.io.IOException;
 //TODO - move to factory?
 public abstract class TileMill extends TileBase {
 
-    protected float speed;
-    protected int stage = 0;
     public int charge = 0;
     public float progress;
+    protected float speed;
+    protected int stage = 0;
 
     protected TileMill(TileEntityType<?> type) {
         super(type);

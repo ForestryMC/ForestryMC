@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.tiles;
 
 import forestry.api.core.IErrorLogic;
@@ -39,7 +39,13 @@ import java.io.IOException;
 
 public abstract class TileEngine extends TileBase implements IActivatable, IStreamableGui {
     private static final int CANT_SEND_ENERGY_TIME = 20;
-
+    protected final int maxHeat;
+    protected final EnergyManager energyManager;
+    private final String hintKey;
+    public float progress;
+    protected int currentOutput = 0;
+    protected int heat;
+    protected boolean forceCooldown = false;
     private boolean active = false; // Used for smp.
     private int cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
     /**
@@ -51,14 +57,6 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
      * Piston speed as supplied by the server
      */
     private float pistonSpeedServer = 0;
-
-    protected int currentOutput = 0;
-    protected int heat;
-    protected final int maxHeat;
-    protected boolean forceCooldown = false;
-    public float progress;
-    protected final EnergyManager energyManager;
-    private final String hintKey;
 
     protected TileEngine(TileEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
         super(type);

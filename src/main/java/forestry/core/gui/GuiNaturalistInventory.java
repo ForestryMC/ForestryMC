@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui;
 
 import com.google.common.collect.ImmutableList;
@@ -71,6 +71,36 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
         }
 
         breedingTracker = speciesRoot.getBreedingTracker(playerInv.player.world, playerInv.player.getGameProfile());
+    }
+
+    private static void flipPage(int page) {
+        NetworkUtil.sendToServer(new PacketGuiSelectRequest(page, 0));
+    }
+
+    private static List<List<? extends IMutation>> splitMutations(
+            List<? extends IMutation> mutations,
+            int maxMutationCount
+    ) {
+        int size = mutations.size();
+        if (size <= maxMutationCount) {
+            return Collections.singletonList(mutations);
+        }
+        ImmutableList.Builder<List<? extends IMutation>> subGroups = new ImmutableList.Builder<>();
+        List<IMutation> subList = new LinkedList<>();
+        subGroups.add(subList);
+        int count = 0;
+        for (IMutation mutation : mutations) {
+            if (mutation.isSecret()) {
+                continue;
+            }
+            if (count % maxMutationCount == 0 && count != 0) {
+                subList = new LinkedList<>();
+                subGroups.add(subList);
+            }
+            subList.add(mutation);
+            count++;
+        }
+        return subGroups.build();
     }
 
     @Override
@@ -137,10 +167,6 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
                 flipPage(pageCurrent + 1);
             }
         }));
-    }
-
-    private static void flipPage(int page) {
-        NetworkUtil.sendToServer(new PacketGuiSelectRequest(page, 0));
     }
 
     @Nullable
@@ -318,32 +344,6 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
         bindTexture(textureFile);
         blit(transform, guiLeft + x, guiTop + textLayout.getLineY(), column, line, 16, 16);
-    }
-
-    private static List<List<? extends IMutation>> splitMutations(
-            List<? extends IMutation> mutations,
-            int maxMutationCount
-    ) {
-        int size = mutations.size();
-        if (size <= maxMutationCount) {
-            return Collections.singletonList(mutations);
-        }
-        ImmutableList.Builder<List<? extends IMutation>> subGroups = new ImmutableList.Builder<>();
-        List<IMutation> subList = new LinkedList<>();
-        subGroups.add(subList);
-        int count = 0;
-        for (IMutation mutation : mutations) {
-            if (mutation.isSecret()) {
-                continue;
-            }
-            if (count % maxMutationCount == 0 && count != 0) {
-                subList = new LinkedList<>();
-                subGroups.add(subList);
-            }
-            subList.add(mutation);
-            count++;
-        }
-        return subGroups.build();
     }
 
     @Override

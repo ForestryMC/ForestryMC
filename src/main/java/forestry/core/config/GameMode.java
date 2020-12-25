@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.config;
 
 import forestry.Forestry;
@@ -20,37 +20,28 @@ import java.util.Map;
 
 public class GameMode implements IGameMode {
     private static final String GAMEMODE_KEY = "gamemode";
-    private String identifier = "EASY";
-
-    private final Map<String, Boolean> booleanSettings = new HashMap<>();
-    private final Map<String, Integer> integerSettings = new HashMap<>();
-    private final Map<String, Float> floatSettings = new HashMap<>();
-
     private static final float ENERGY_DEMAND_MODIFIER = 1.0f;
     private static final float FUEL_MODIFIER = 1.0f;
-
     private static final int FARM_FERTILIZER_MODIFIER = 4;
-
     private static final int recipeFertilizerOutputApatite = 8;
     private static final int recipeFertilizerOutputAsh = 16;
     private static final int recipeCompostOutputWheat = 4;
     private static final int recipeCompostOutputAsh = 1;
-
     private static final int recipeHumusOutputFertilizer = 8;
     private static final int recipeHumusOutputCompost = 8;
-
     private static final int recipeBogEarthOutputBucket = 6;
     private static final int recipeBogEarthOutputCans = 8;
-
     private static final int recipeCanOutput = 12;
     private static final int recipeCapsuleOutput = 4;
     private static final int recipeRefractoryOutput = 4;
-
     private static final int FERMENTATION_DURATION_FERTILIZER = 200;
     private static final int FERMENTATION_DURATION_COMPOST = 250;
-
     private static final int FERMENTED_CYCLE_FERTILIZER = 56;
     private static final int FERMENTED_CYCLE_COMPOST = 48;
+    private final Map<String, Boolean> booleanSettings = new HashMap<>();
+    private final Map<String, Integer> integerSettings = new HashMap<>();
+    private final Map<String, Float> floatSettings = new HashMap<>();
+    private String identifier = "EASY";
 
     public GameMode(String identifier) {
 

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
@@ -34,6 +34,26 @@ public class TickHandlerCoreServer {
     private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
     private final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
 
+    private static Random getRetrogenRandom(World world, ChunkCoords coords) {
+        long worldSeed = WorldUtils.asServer(world).getSeed();
+        Random random = new Random(worldSeed);
+        long xSeed = random.nextLong() >> 2 + 1L;
+        long zSeed = random.nextLong() >> 2 + 1L;
+        random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
+        return random;
+    }
+
+    private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
+        ServerChunkProvider chunkProvider = server.getChunkProvider();
+        for (int x = 0; x <= 1; x++) {
+            for (int z = 0; z <= 1; z++) {
+                if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event) {
@@ -67,27 +87,6 @@ public class TickHandlerCoreServer {
                 checkForRetrogen.remove(dimName);
             }
         }
-    }
-
-    private static Random getRetrogenRandom(World world, ChunkCoords coords) {
-        long worldSeed = WorldUtils.asServer(world).getSeed();
-        Random random = new Random(worldSeed);
-        long xSeed = random.nextLong() >> 2 + 1L;
-        long zSeed = random.nextLong() >> 2 + 1L;
-        random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
-        return random;
-    }
-
-    private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
-        ServerChunkProvider chunkProvider = server.getChunkProvider();
-        for (int x = 0; x <= 1; x++) {
-            for (int z = 0; z <= 1; z++) {
-                if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     @SubscribeEvent

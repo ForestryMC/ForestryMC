@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -26,10 +26,7 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 
-    public static ContainerCarpenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileCarpenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCarpenter.class);
-        return new ContainerCarpenter(windowId, inv, tile);    //TODO nullability.
-    }
+    private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
     public ContainerCarpenter(int windowId, PlayerInventory inventoryplayer, TileCarpenter tile) {
         super(windowId, FactoryContainers.CARPENTER.containerType(), inventoryplayer, tile, 8, 136);
@@ -59,12 +56,15 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
         }
     }
 
+    public static ContainerCarpenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileCarpenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCarpenter.class);
+        return new ContainerCarpenter(windowId, inv, tile);    //TODO nullability.
+    }
+
     @Override
     public void onCraftMatrixChanged(IInventory iinventory, int slot) {
         tile.checkRecipe();
     }
-
-    private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
     @Override
     public void detectAndSendChanges() {

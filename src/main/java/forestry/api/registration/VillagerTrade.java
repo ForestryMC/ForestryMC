@@ -15,11 +15,11 @@ import java.util.Random;
 
 public class VillagerTrade {
     public static class GiveItemForEmeralds implements VillagerTrades.ITrade {
+        final int maxUses;
+        final int xp;
         public Item sellingItem;
         public PriceInterval sellingAmounts;
         public PriceInterval emeraldAmounts;
-        final int maxUses;
-        final int xp;
 
         public GiveItemForEmeralds(
                 @Nonnull Item sellingItem,
@@ -49,11 +49,11 @@ public class VillagerTrade {
     }
 
     public static class GiveEmeraldForItem implements VillagerTrades.ITrade {
+        final int maxUses;
+        final int xp;
         public Item buyingItem;
         public PriceInterval buyingAmounts;
         public PriceInterval emeraldAmounts;
-        final int maxUses;
-        final int xp;
 
         public GiveEmeraldForItem(
                 @Nonnull Item buyingItem,
@@ -83,13 +83,13 @@ public class VillagerTrade {
     }
 
     public static class GiveItemForItemAndEmerald implements VillagerTrades.ITrade {
+        final int maxUses;
+        final int xp;
         public Item buyingItem;
         public PriceInterval buyAmounts;
         public PriceInterval emeralsAmounts;
         public Item sellingItem;
         public PriceInterval sellingAmounts;
-        final int maxUses;
-        final int xp;
 
         public GiveItemForItemAndEmerald(
                 @Nonnull Item buyingItem,
@@ -124,12 +124,12 @@ public class VillagerTrade {
     }
 
     public static class GiveItemForLogAndEmerald implements VillagerTrades.ITrade {
+        final int maxUses;
+        final int xp;
         public PriceInterval buyAmounts;
         public PriceInterval emeraldAmounts;
         public Item sellingItem;
         public PriceInterval sellingAmounts;
-        final int maxUses;
-        final int xp;
 
         public GiveItemForLogAndEmerald(
                 @Nonnull PriceInterval buyAmounts,
@@ -175,14 +175,14 @@ public class VillagerTrade {
     }
 
     public static class GiveItemForTwoItems implements VillagerTrades.ITrade {
+        final int maxUses;
+        final int xp;
         public Item buyingItem;
         public PriceInterval buyAmounts;
         public Item buyingItem2;
         public PriceInterval buyAmounts2;
         public Item sellingItem;
         public PriceInterval sellingAmounts;
-        final int maxUses;
-        final int xp;
 
         public GiveItemForTwoItems(
                 @Nonnull Item buyingItem,

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -26,11 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
-
-    public static ContainerMoistener fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileMoistener tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMoistener.class);
-        return new ContainerMoistener(windowId, inv, tile);    //TODO nullability.
-    }
 
     public ContainerMoistener(int windowId, PlayerInventory player, TileMoistener tile) {
         super(windowId, FactoryContainers.MOISTENER.containerType(), player, tile, 8, 84);
@@ -53,6 +48,11 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
         this.addSlot(new SlotFiltered(this.tile, 10, 143, 55));
         // Boxes
         this.addSlot(new SlotWatched(this.tile, 11, 143, 19).setChangeWatcher(this));
+    }
+
+    public static ContainerMoistener fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileMoistener tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMoistener.class);
+        return new ContainerMoistener(windowId, inv, tile);    //TODO nullability.
     }
 
     @Override

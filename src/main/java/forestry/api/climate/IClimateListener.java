@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.climate;
 
 import forestry.api.core.ILocatable;
@@ -25,16 +25,22 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
     IClimateState getClimateState();
 
     /**
+     * Sets the cached state to the given state.
+     */
+    @OnlyIn(Dist.CLIENT)
+    void setClimateState(IClimateState climateState);
+
+    /**
      * @return Returns the temperature value of this listener.
      */
     float getExactTemperature();
+
+    /* CLIENT */
 
     /**
      * @return Returns the temperature value of this listener.
      */
     float getExactHumidity();
-
-    /* CLIENT */
 
     /**
      * Updates the listener on the client side.
@@ -43,12 +49,6 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
      */
     @OnlyIn(Dist.CLIENT)
     void updateClientSide(boolean spawnParticles);
-
-    /**
-     * Sets the cached state to the given state.
-     */
-    @OnlyIn(Dist.CLIENT)
-    void setClimateState(IClimateState climateState);
 
     /**
      * Sends a packet if needed to all players that are currently "watching" the chunk that the listener is located in.

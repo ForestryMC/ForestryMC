@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.inventory;
 
 import com.google.common.base.Preconditions;
@@ -34,12 +34,10 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
     private static final String KEY_SLOTS = "Slots";
     private static final String KEY_UID = "UID";
     private static final Random rand = new Random();
-
-    private final IItemHandler itemHandler = new InvWrapper(this);
-
     protected final PlayerEntity player;
-    private ItemStack parent;    //TODO not final any more. Is this a problem
+    private final IItemHandler itemHandler = new InvWrapper(this);
     private final NonNullList<ItemStack> inventoryStacks;
+    private ItemStack parent;    //TODO not final any more. Is this a problem
 
     public ItemInventory(PlayerEntity player, int size, ItemStack parent) {
         Preconditions.checkArgument(!parent.isEmpty(), "Parent cannot be empty.");
@@ -78,6 +76,34 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
         return slotNbt.size();
     }
 
+    private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {
+        if (base.isEmpty() || comparison.isEmpty()) {
+            return false;
+        }
+
+        if (base.getItem() != comparison.getItem()) {
+            return false;
+        }
+
+        CompoundNBT baseTagCompound = base.getTag();
+        CompoundNBT comparisonTagCompound = comparison.getTag();
+        if (baseTagCompound == null || comparisonTagCompound == null) {
+            return false;
+        }
+
+        if (!baseTagCompound.contains(KEY_UID) || !comparisonTagCompound.contains(KEY_UID)) {
+            return false;
+        }
+
+        int baseUID = baseTagCompound.getInt(KEY_UID);
+        int comparisonUID = comparisonTagCompound.getInt(KEY_UID);
+        return baseUID == comparisonUID;
+    }
+
+    private static String getSlotNBTKey(int i) {
+        return Integer.toString(i, Character.MAX_RADIX);
+    }
+
     private void setUID(CompoundNBT nbt) {
         if (!nbt.contains(KEY_UID)) {
             nbt.putInt(KEY_UID, rand.nextInt());
@@ -114,30 +140,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
         return null;
     }
 
-    private static boolean isSameItemInventory(ItemStack base, ItemStack comparison) {
-        if (base.isEmpty() || comparison.isEmpty()) {
-            return false;
-        }
-
-        if (base.getItem() != comparison.getItem()) {
-            return false;
-        }
-
-        CompoundNBT baseTagCompound = base.getTag();
-        CompoundNBT comparisonTagCompound = comparison.getTag();
-        if (baseTagCompound == null || comparisonTagCompound == null) {
-            return false;
-        }
-
-        if (!baseTagCompound.contains(KEY_UID) || !comparisonTagCompound.contains(KEY_UID)) {
-            return false;
-        }
-
-        int baseUID = baseTagCompound.getInt(KEY_UID);
-        int comparisonUID = comparisonTagCompound.getInt(KEY_UID);
-        return baseUID == comparisonUID;
-    }
-
     private void writeToParentNBT() {
         ItemStack parent = getParent();
 
@@ -160,10 +162,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
         nbt.put(KEY_SLOTS, slotsNbt);
         onWriteNBT(nbt);
-    }
-
-    private static String getSlotNBTKey(int i) {
-        return Integer.toString(i, Character.MAX_RADIX);
     }
 
     protected void onWriteNBT(CompoundNBT nbt) {

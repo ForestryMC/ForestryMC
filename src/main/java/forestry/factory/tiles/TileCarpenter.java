@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.tiles;
 
 import forestry.api.core.IErrorLogic;
@@ -68,10 +68,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
     @Nullable
     private ICarpenterRecipe currentRecipe;
 
-    private ItemStack getBoxStack() {
-        return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
-    }
-
     public TileCarpenter() {
         super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
         setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
@@ -82,6 +78,10 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
         setInternalInventory(new InventoryCarpenter(this));
 
         tankManager = new TankManager(this, resourceTank);
+    }
+
+    private ItemStack getBoxStack() {
+        return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
     }
 
     @Override

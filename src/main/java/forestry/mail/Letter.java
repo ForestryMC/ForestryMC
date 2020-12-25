@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail;
 
 import forestry.api.mail.ILetter;
@@ -29,21 +29,18 @@ import java.util.List;
 import java.util.Random;
 
 public class Letter implements ILetter {
-    private static final Random rand = new Random();
     public static final short SLOT_ATTACHMENT_1 = 0;
     public static final short SLOT_ATTACHMENT_COUNT = 18;
     public static final short SLOT_POSTAGE_1 = 18;
     public static final short SLOT_POSTAGE_COUNT = 4;
-
+    private static final Random rand = new Random();
+    private final InventoryAdapter inventory = new InventoryAdapter(22, "INV");
+    private final String uid;
     private boolean isProcessed = false;
-
     private IMailAddress sender;
     @Nullable
     private IMailAddress recipient;
-
     private String text = "";
-    private final InventoryAdapter inventory = new InventoryAdapter(22, "INV");
-    private final String uid;
 
     public Letter(IMailAddress sender, IMailAddress recipient) {
         this.sender = sender;
@@ -124,13 +121,13 @@ public class Letter implements ILetter {
     }
 
     @Override
-    public void setProcessed(boolean flag) {
-        this.isProcessed = flag;
+    public boolean isProcessed() {
+        return this.isProcessed;
     }
 
     @Override
-    public boolean isProcessed() {
-        return this.isProcessed;
+    public void setProcessed(boolean flag) {
+        this.isProcessed = flag;
     }
 
     @Override
@@ -183,24 +180,24 @@ public class Letter implements ILetter {
     }
 
     @Override
-    public void setSender(IMailAddress address) {
-        this.sender = address;
-    }
-
-    @Override
     public IMailAddress getSender() {
         return sender;
     }
 
     @Override
-    public void setRecipient(@Nullable IMailAddress address) {
-        this.recipient = address;
+    public void setSender(IMailAddress address) {
+        this.sender = address;
     }
 
     @Override
     @Nullable
     public IMailAddress getRecipient() {
         return recipient;
+    }
+
+    @Override
+    public void setRecipient(@Nullable IMailAddress address) {
+        this.recipient = address;
     }
 
     @Override
@@ -212,13 +209,13 @@ public class Letter implements ILetter {
     }
 
     @Override
-    public void setText(String text) {
-        this.text = text;
+    public String getText() {
+        return text;
     }
 
     @Override
-    public String getText() {
-        return text;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override

@@ -31,14 +31,14 @@ import java.util.*;
 import static forestry.core.config.forge_old.Configuration.*;
 
 public class ConfigCategory implements Map<String, Property> {
+    public final ConfigCategory parent;
     private final String name;
-    private String comment;
-    private String languagekey;
     private final ArrayList<ConfigCategory> children = new ArrayList<ConfigCategory>();
     private final Map<String, Property> properties = new TreeMap<String, Property>();
     @SuppressWarnings("unused")
     private final int propNumber = 0;
-    public final ConfigCategory parent;
+    private String comment;
+    private String languagekey;
     private boolean changed = false;
     private boolean requiresWorldRestart = false;
     private boolean showInGui = true;
@@ -57,6 +57,10 @@ public class ConfigCategory implements Map<String, Property> {
         }
     }
 
+    public static String getQualifiedName(String name, ConfigCategory parent) {
+        return (parent == null ? name : parent.getQualifiedName() + Configuration.CATEGORY_SPLITTER + name);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ConfigCategory) {
@@ -73,10 +77,6 @@ public class ConfigCategory implements Map<String, Property> {
 
     public String getQualifiedName() {
         return getQualifiedName(name, parent);
-    }
-
-    public static String getQualifiedName(String name, ConfigCategory parent) {
-        return (parent == null ? name : parent.getQualifiedName() + Configuration.CATEGORY_SPLITTER + name);
     }
 
     public ConfigCategory getFirstParent() {
@@ -120,12 +120,12 @@ public class ConfigCategory implements Map<String, Property> {
         }
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public String getComment() {
         return this.comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     /**

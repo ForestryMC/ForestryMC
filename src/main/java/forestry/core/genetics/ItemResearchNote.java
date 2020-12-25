@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.genetics;
 
 import com.mojang.authlib.GameProfile;
@@ -59,6 +59,52 @@ public class ItemResearchNote extends ItemForestry {
     private static final String NBT_TYPE = "TYP";
     private static final String NBT_INNER = "INN";
 
+    public ItemResearchNote() {
+        super((new Item.Properties()).group(null));
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack itemstack) {
+        ResearchNote note = new ResearchNote(itemstack.getTag());
+        String researcherName;
+        if (note.researcher == null) {
+            researcherName = "Sengir";
+        } else {
+            researcherName = note.researcher.getName();
+        }
+        return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(
+            ItemStack itemstack,
+            @Nullable World world,
+            List<ITextComponent> list,
+            ITooltipFlag flag
+    ) {
+        super.addInformation(itemstack, world, list, flag);
+        ResearchNote note = new ResearchNote(itemstack.getTag());
+        note.addTooltip(list);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack heldItem = playerIn.getHeldItem(handIn);
+        if (worldIn.isRemote) {
+            return ActionResult.resultPass(heldItem);
+        }
+
+        ResearchNote note = new ResearchNote(heldItem.getTag());
+        if (note.registerResults(worldIn, playerIn)) {
+            playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
+            // Notify player that his inventory has changed.
+            NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
+        }
+
+        return ActionResult.resultSuccess(heldItem);
+    }
+
     public enum EnumNoteType {
         NONE, MUTATION, SPECIES;
 
@@ -90,6 +136,44 @@ public class ItemResearchNote extends ItemForestry {
             }
 
             return encoded;
+        }
+
+        public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
+            CompoundNBT compound = new CompoundNBT();
+            compound.putString(NBT_ROOT, mutation.getRoot().getUID());
+            compound.putString(NBT_ALLELE_FIRST, mutation.getFirstParent().getRegistryName().toString());
+            compound.putString(NBT_ALLELE_SECOND, mutation.getSecondParent().getRegistryName().toString());
+            compound.putString(NBT_ALLELE_RESULT, mutation.getResultingSpecies().getRegistryName().toString());
+            return new ResearchNote(researcher, MUTATION, compound);
+        }
+
+        public static ItemStack createMutationNoteStack(Item item, GameProfile researcher, IMutation mutation) {
+            ResearchNote note = createMutationNote(researcher, mutation);
+            CompoundNBT compound = new CompoundNBT();
+            note.writeToNBT(compound);
+            ItemStack created = new ItemStack(item);
+            created.setTag(compound);
+            return created;
+        }
+
+        public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleForestrySpecies species) {
+            CompoundNBT compound = new CompoundNBT();
+            compound.putString(NBT_ROOT, species.getRoot().getUID());
+            compound.putString(NBT_ALLELE_FIRST, species.getRegistryName().toString());
+            return new ResearchNote(researcher, SPECIES, compound);
+        }
+
+        public static ItemStack createSpeciesNoteStack(
+                Item item,
+                GameProfile researcher,
+                IAlleleForestrySpecies species
+        ) {
+            ResearchNote note = createSpeciesNote(researcher, species);
+            CompoundNBT compound = new CompoundNBT();
+            note.writeToNBT(compound);
+            ItemStack created = new ItemStack(item);
+            created.setTag(compound);
+            return created;
         }
 
         public List<ITextComponent> getTooltip(CompoundNBT compound) {
@@ -213,44 +297,6 @@ public class ItemResearchNote extends ItemForestry {
 
         }
 
-        public static ResearchNote createMutationNote(GameProfile researcher, IMutation mutation) {
-            CompoundNBT compound = new CompoundNBT();
-            compound.putString(NBT_ROOT, mutation.getRoot().getUID());
-            compound.putString(NBT_ALLELE_FIRST, mutation.getFirstParent().getRegistryName().toString());
-            compound.putString(NBT_ALLELE_SECOND, mutation.getSecondParent().getRegistryName().toString());
-            compound.putString(NBT_ALLELE_RESULT, mutation.getResultingSpecies().getRegistryName().toString());
-            return new ResearchNote(researcher, MUTATION, compound);
-        }
-
-        public static ItemStack createMutationNoteStack(Item item, GameProfile researcher, IMutation mutation) {
-            ResearchNote note = createMutationNote(researcher, mutation);
-            CompoundNBT compound = new CompoundNBT();
-            note.writeToNBT(compound);
-            ItemStack created = new ItemStack(item);
-            created.setTag(compound);
-            return created;
-        }
-
-        public static ResearchNote createSpeciesNote(GameProfile researcher, IAlleleForestrySpecies species) {
-            CompoundNBT compound = new CompoundNBT();
-            compound.putString(NBT_ROOT, species.getRoot().getUID());
-            compound.putString(NBT_ALLELE_FIRST, species.getRegistryName().toString());
-            return new ResearchNote(researcher, SPECIES, compound);
-        }
-
-        public static ItemStack createSpeciesNoteStack(
-                Item item,
-                GameProfile researcher,
-                IAlleleForestrySpecies species
-        ) {
-            ResearchNote note = createSpeciesNote(researcher, species);
-            CompoundNBT compound = new CompoundNBT();
-            note.writeToNBT(compound);
-            ItemStack created = new ItemStack(item);
-            created.setTag(compound);
-            return created;
-        }
-
     }
 
     public static class ResearchNote {
@@ -309,51 +355,5 @@ public class ItemResearchNote extends ItemForestry {
         public boolean registerResults(World world, PlayerEntity player) {
             return type.registerResults(world, player, inner);
         }
-    }
-
-    public ItemResearchNote() {
-        super((new Item.Properties()).group(null));
-    }
-
-    @Override
-    public ITextComponent getDisplayName(ItemStack itemstack) {
-        ResearchNote note = new ResearchNote(itemstack.getTag());
-        String researcherName;
-        if (note.researcher == null) {
-            researcherName = "Sengir";
-        } else {
-            researcherName = note.researcher.getName();
-        }
-        return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(
-            ItemStack itemstack,
-            @Nullable World world,
-            List<ITextComponent> list,
-            ITooltipFlag flag
-    ) {
-        super.addInformation(itemstack, world, list, flag);
-        ResearchNote note = new ResearchNote(itemstack.getTag());
-        note.addTooltip(list);
-    }
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack heldItem = playerIn.getHeldItem(handIn);
-        if (worldIn.isRemote) {
-            return ActionResult.resultPass(heldItem);
-        }
-
-        ResearchNote note = new ResearchNote(heldItem.getTag());
-        if (note.registerResults(worldIn, playerIn)) {
-            playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
-            // Notify player that his inventory has changed.
-            NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
-        }
-
-        return ActionResult.resultSuccess(heldItem);
     }
 }

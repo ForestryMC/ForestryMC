@@ -22,13 +22,6 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
     private final Cache<K, IBakedModel> inventoryCache;
     private final Cache<K, IBakedModel> worldCache;
 
-    public static void clear() {
-        for (ModelBlockCached modelBlockCached : CACHE_PROVIDERS) {
-            modelBlockCached.worldCache.invalidateAll();
-            modelBlockCached.inventoryCache.invalidateAll();
-        }
-    }
-
     protected ModelBlockCached(Class<B> blockClass) {
         super(blockClass);
 
@@ -36,6 +29,13 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
         inventoryCache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 
         CACHE_PROVIDERS.add(this);
+    }
+
+    public static void clear() {
+        for (ModelBlockCached modelBlockCached : CACHE_PROVIDERS) {
+            modelBlockCached.worldCache.invalidateAll();
+            modelBlockCached.inventoryCache.invalidateAll();
+        }
     }
 
     @Override

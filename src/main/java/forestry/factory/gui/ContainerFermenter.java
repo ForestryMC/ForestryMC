@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -27,11 +27,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-    public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
-        return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
-    }
-
     public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
         super(windowId, FactoryContainers.FERMENTER.containerType(), player, tile, 8, 84);
 
@@ -40,6 +35,11 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
         this.addSlot(new SlotOutput(tile, InventoryFermenter.SLOT_CAN_OUTPUT, 150, 58));
         this.addSlot(new SlotEmptyLiquidContainerIn(tile, InventoryFermenter.SLOT_CAN_INPUT, 150, 22));
         this.addSlot(new SlotLiquidIn(tile, InventoryFermenter.SLOT_INPUT, 10, 40));
+    }
+
+    public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
+        return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
     }
 
     @Override

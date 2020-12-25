@@ -268,12 +268,6 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
         return provider.getSlotCount();
     }
 
-    public void setSelectedSlot(int selectedSlot) {
-        int oldSelected = this.selectedSlot;
-        this.selectedSlot = selectedSlot;
-        onSelection(selectedSlot, oldSelected != selectedSlot);
-    }
-
     private void onSelection(int selectedSlot, boolean changed) {
         leftButton.setEnabled(canSubtract());
         rightButton.setEnabled(canAdd());
@@ -285,6 +279,12 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 
     public int getSelectedSlot() {
         return selectedSlot;
+    }
+
+    public void setSelectedSlot(int selectedSlot) {
+        int oldSelected = this.selectedSlot;
+        this.selectedSlot = selectedSlot;
+        onSelection(selectedSlot, oldSelected != selectedSlot);
     }
 
     public void updateSelected() {

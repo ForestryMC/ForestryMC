@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class WorldClimateHolder extends WorldSavedData implements IWorldClimateHolder {
+    static final String NAME = "forestry_climate";
     private static final TransformerData DEFAULT_DATA = new TransformerData(
             0L,
             ClimateStateHelper.INSTANCE.absent(),
@@ -33,9 +34,6 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
             false,
             new long[0]
     );
-
-    static final String NAME = "forestry_climate";
-
     private static final String TRANSFORMERS_KEY = "Transformers";
     private static final String CHUNK_KEY = "Chunk";
     private static final String TRANSFORMERS_DATA_KEY = "Data";
@@ -281,10 +279,10 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
     }
 
     private static class TransformerData implements INbtWritable {
+        private final long position;
         private IClimateState climateState = ClimateStateHelper.INSTANCE.absent();
         private int range;
         private boolean circular;
-        private final long position;
         private long[] chunks = new long[0];
 
         private TransformerData(long position, IClimateState climateState, int range, boolean circular, long[] chunks) {

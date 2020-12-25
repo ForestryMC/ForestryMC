@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.config;
 
 import com.google.common.base.Preconditions;
@@ -31,106 +31,84 @@ public class Config {
     public static final String CATEGORY_COMMON = "common";
     public static final String CATEGORY_FLUIDS = "fluids";
     public static final String CATEGORY_FARM = "farm";
-
+    public static final ArrayList<String> collectorStamps = new ArrayList<>();
+    public static final LinkedListMultimap<String, String> hints = LinkedListMultimap.create();
+    private static final Set<String> disabledStructures = new HashSet<>();
+    private static final Set<ResourceLocation> disabledFluids = new HashSet<>();
+    private static final Set<ResourceLocation> disabledBlocks = new HashSet<>();
     @Nullable
     public static LocalizedConfiguration configCommon;
     @Nullable
     public static LocalizedConfiguration configFluid;
     @Nullable
     public static String gameMode;
-
-    private static final Set<String> disabledStructures = new HashSet<>();
-    private static final Set<ResourceLocation> disabledFluids = new HashSet<>();
-    private static final Set<ResourceLocation> disabledBlocks = new HashSet<>();
-
     public static boolean isDebug = false;
-
     // Graphics
     public static boolean enableParticleFX = true;
-
     // Humus
     public static int humusDegradeDelimiter = 3;
-
     // Climatology
     public static int habitatformerRange = 10;
     public static float habitatformerAreaCostModifier = 0.5F;
     public static float habitatformerAreaSpeedModifier = 0.5F;
-
     // Genetics
     public static boolean pollinateVanillaTrees = true;
     public static int analyzerEnergyPerWork = 20320;
     public static float researchMutationBoostMultiplier = 1.5f;
     public static float maxResearchMutationBoostPercent = 5.0f;
-
     // World generation
     public static boolean generateApatiteOre = true;
     public static boolean generateCopperOre = true;
     public static boolean generateTinOre = true;
     public static Set<ResourceLocation> blacklistedOreDims = new HashSet<>();
     public static Set<ResourceLocation> whitelistedOreDims = new HashSet<>();
-    private static float generateBeehivesAmount = 1.0f;
     public static boolean generateBeehivesDebug = false;
     public static boolean logHivePlacement = false;
     public static boolean logCocoonPlacement = false;
     public static boolean logTreePlacement = true;
     public static boolean enableVillagers = true;
-
     // Retrogen
     public static boolean doRetrogen = false;
     public static boolean forceRetrogen = false;
-
     // Performance
     public static boolean enableBackpackResupply = true;
-
-    // Customization
-    private static boolean craftingBronzeEnabled = true;
-
     // Farm
     public static int farmSize = 2;
     public static float fertilizerModifier = 1.0F;
     public static boolean squareFarms = false;
-    private static boolean enableExUtilEnderLily = true;
-    private static boolean enableExUtilRedOrchid = true;
-    private static boolean enableMagicalCropsSupport = true;
-
     // Cultivation
     public static int planterExtend = 4;
     public static boolean ringFarms = true;
     public static int ringSize = 4;
-
     // Book
     public static boolean spawnWithBook = true;
-
     // Mail
     public static boolean mailAlertEnabled = true;
     public static GuiMailboxInfo.XPosition mailAlertXPosition = GuiMailboxInfo.XPosition.LEFT;
     public static GuiMailboxInfo.YPosition mailAlertYPosition = GuiMailboxInfo.YPosition.TOP;
-
     public static boolean craftingStampsEnabled = true;
-    public static final ArrayList<String> collectorStamps = new ArrayList<>();
-
     // Fluids
     public static boolean CapsuleFluidPickup = false;
     public static boolean nonConsumableCapsules = false;
-
     // Gui tabs (Ledger)
     public static int guiTabSpeed = 8;
-
     // Hints
     public static boolean enableHints = true;
-    public static final LinkedListMultimap<String, String> hints = LinkedListMultimap.create();
     public static boolean enableEnergyStat = true;
-
     // Energy
     public static boolean enableRF = true;
     public static boolean enableMJ = true;
     public static boolean enableTesla = true;
     public static EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
-
     // Charcoal
     public static int charcoalAmountBase = 8;
     public static int charcoalWallCheckRange = 16;
-
+    private static float generateBeehivesAmount = 1.0f;
+    // Customization
+    private static boolean craftingBronzeEnabled = true;
+    private static boolean enableExUtilEnderLily = true;
+    private static boolean enableExUtilRedOrchid = true;
+    private static boolean enableMagicalCropsSupport = true;
 
     public static boolean isStructureEnabled(String uid) {
         return !Config.disabledStructures.contains(uid);

@@ -75,6 +75,39 @@ public class TankElement extends GuiElement {
                 }));
     }
 
+    private static void setGLColorFromInt(int color) {
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        RenderSystem.color4f(red, green, blue, 1.0F);
+    }
+
+    private static void drawFluidTexture(
+            double xCoord,
+            double yCoord,
+            TextureAtlasSprite textureSprite,
+            int maskTop,
+            int maskRight,
+            double zLevel
+    ) {
+        float uMin = textureSprite.getMinU();
+        float uMax = textureSprite.getMaxU();
+        float vMin = textureSprite.getMinV();
+        float vMax = textureSprite.getMaxV();
+        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
+        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
+        buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
+        buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
+        buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
+        tessellator.draw();
+    }
+
     @Override
     public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
         RenderSystem.disableBlend();
@@ -147,38 +180,5 @@ public class TankElement extends GuiElement {
 
         RenderSystem.color4f(1, 1, 1, 1);
         RenderSystem.disableAlphaTest();
-    }
-
-    private static void setGLColorFromInt(int color) {
-        float red = (color >> 16 & 0xFF) / 255.0F;
-        float green = (color >> 8 & 0xFF) / 255.0F;
-        float blue = (color & 0xFF) / 255.0F;
-
-        RenderSystem.color4f(red, green, blue, 1.0F);
-    }
-
-    private static void drawFluidTexture(
-            double xCoord,
-            double yCoord,
-            TextureAtlasSprite textureSprite,
-            int maskTop,
-            int maskRight,
-            double zLevel
-    ) {
-        float uMin = textureSprite.getMinU();
-        float uMax = textureSprite.getMaxU();
-        float vMin = textureSprite.getMinV();
-        float vMax = textureSprite.getMaxV();
-        uMax = uMax - maskRight / 16.0F * (uMax - uMin);
-        vMax = vMax - maskTop / 16.0F * (vMax - vMin);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
-        buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
-        buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-        buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
-        tessellator.draw();
     }
 }

@@ -32,12 +32,12 @@ public class ClimateListener implements IClimateListener {
     protected World world;
     @Nullable
     protected BlockPos pos;
+    @OnlyIn(Dist.CLIENT)
+    protected boolean needsClimateUpdate;
     private IClimateState cachedState = AbsentClimateState.INSTANCE;
     private IClimateState cachedClientState = AbsentClimateState.INSTANCE;
     @OnlyIn(Dist.CLIENT)
     private TickHelper tickHelper;
-    @OnlyIn(Dist.CLIENT)
-    protected boolean needsClimateUpdate;
     //The total world time at the moment the cached state has been updated
     private long cacheTime = 0;
     private long lastUpdate = 0;

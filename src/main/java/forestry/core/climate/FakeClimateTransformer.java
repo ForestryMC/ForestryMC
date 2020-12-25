@@ -11,12 +11,12 @@ public class FakeClimateTransformer implements IClimateTransformer {
     }
 
     @Override
-    public void setCircular(boolean circular) {
+    public boolean isCircular() {
+        return false;
     }
 
     @Override
-    public boolean isCircular() {
-        return false;
+    public void setCircular(boolean circular) {
     }
 
     @Override
@@ -26,16 +26,6 @@ public class FakeClimateTransformer implements IClimateTransformer {
 
     @Override
     public void setRange(int range) {
-    }
-
-    @Override
-    public void setTarget(IClimateState target) {
-
-    }
-
-    @Override
-    public void setCurrent(IClimateState state) {
-
     }
 
     @Override
@@ -64,8 +54,18 @@ public class FakeClimateTransformer implements IClimateTransformer {
     }
 
     @Override
+    public void setTarget(IClimateState target) {
+
+    }
+
+    @Override
     public IClimateState getCurrent() {
         return ClimateStateHelper.INSTANCE.absent();
+    }
+
+    @Override
+    public void setCurrent(IClimateState state) {
+
     }
 
     @Override

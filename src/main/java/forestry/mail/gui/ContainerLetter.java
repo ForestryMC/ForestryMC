@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import com.mojang.authlib.GameProfile;
@@ -39,13 +39,6 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
     private EnumAddressee carrierType = EnumAddressee.PLAYER;
     @Nullable
     private ITradeStationInfo tradeInfo = null;
-
-    public static ContainerLetter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-        PlayerEntity player = playerInv.player;
-        ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getHeldItem(hand));
-        return new ContainerLetter(windowId, player, inv);
-    }
 
     public ContainerLetter(int windowId, PlayerEntity player, ItemInventoryLetter inventory) {
         super(windowId, inventory, player.inventory, 17, 145, MailContainers.LETTER.containerType());
@@ -79,6 +72,36 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
         }
     }
 
+    public static ContainerLetter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        PlayerEntity player = playerInv.player;
+        ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getHeldItem(hand));
+        return new ContainerLetter(windowId, player, inv);
+    }
+
+    @Nullable
+    private static IMailAddress getRecipient(
+            MinecraftServer minecraftServer,
+            String recipientName,
+            EnumAddressee type
+    ) {
+        switch (type) {
+            case PLAYER: {
+                GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(
+                        recipientName);
+                if (gameProfile == null) {
+                    return null;
+                }
+                return PostManager.postRegistry.getMailAddress(gameProfile);
+            }
+            case TRADER: {
+                return PostManager.postRegistry.getMailAddress(recipientName);
+            }
+            default:
+                return null;
+        }
+    }
+
     @Override
     public void onContainerClosed(PlayerEntity PlayerEntity) {
 
@@ -99,12 +122,12 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
         return inventory.getLetter();
     }
 
-    public void setCarrierType(EnumAddressee type) {
-        this.carrierType = type;
-    }
-
     public EnumAddressee getCarrierType() {
         return this.carrierType;
+    }
+
+    public void setCarrierType(EnumAddressee type) {
+        this.carrierType = type;
     }
 
     public void advanceCarrierType() {
@@ -142,29 +165,6 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
         // Update info on client
         NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(type, tradeInfo, recipient), player);
-    }
-
-    @Nullable
-    private static IMailAddress getRecipient(
-            MinecraftServer minecraftServer,
-            String recipientName,
-            EnumAddressee type
-    ) {
-        switch (type) {
-            case PLAYER: {
-                GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(
-                        recipientName);
-                if (gameProfile == null) {
-                    return null;
-                }
-                return PostManager.postRegistry.getMailAddress(gameProfile);
-            }
-            case TRADER: {
-                return PostManager.postRegistry.getMailAddress(recipientName);
-            }
-            default:
-                return null;
-        }
     }
 
     @Nullable

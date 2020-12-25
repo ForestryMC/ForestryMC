@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.blocks;
 
 import forestry.api.core.ForestryAPI;
@@ -96,19 +96,21 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
         super(blockType, Properties.create(Material.IRON).harvestTool(ToolType.PICKAXE).harvestLevel(0));
     }
 
-    @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
-        if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null &&
-            !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
-            return;
-        }
-        super.fillItemGroup(group, stacks);
+    private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
+        BlockPos offsetPos = pos.offset(orientation);
+        TileEntity tile = TileUtil.getTile(world, offsetPos);
+        return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
     }
 
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        Direction orientation = state.get(FACING);
-        return SHAPE_FOR_DIRECTIONS.get(orientation);
+    private static BlockState rotate(BlockState state, IWorld world, BlockPos pos) {
+        Direction blockFacing = state.get(FACING);
+        for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
+            Direction orientation = Direction.values()[i % 6];
+            if (isOrientedAtEnergyReciever(world, pos, orientation)) {
+                return state.with(FACING, orientation);
+            }
+        }
+        return state;
     }
 
     //TODO raytracing
@@ -161,25 +163,23 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
     //	}
 
     @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
+        if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null &&
+            !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+            return;
+        }
+        super.fillItemGroup(group, stacks);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+        Direction orientation = state.get(FACING);
+        return SHAPE_FOR_DIRECTIONS.get(orientation);
+    }
+
+    @Override
     public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rot) {
         return rotate(state, world, pos);    //TODO check
-    }
-
-    private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
-        BlockPos offsetPos = pos.offset(orientation);
-        TileEntity tile = TileUtil.getTile(world, offsetPos);
-        return EnergyHelper.isEnergyReceiverOrEngine(orientation.getOpposite(), tile);
-    }
-
-    private static BlockState rotate(BlockState state, IWorld world, BlockPos pos) {
-        Direction blockFacing = state.get(FACING);
-        for (int i = blockFacing.ordinal() + 1; i <= blockFacing.ordinal() + 6; ++i) {
-            Direction orientation = Direction.values()[i % 6];
-            if (isOrientedAtEnergyReciever(world, pos, orientation)) {
-                return state.with(FACING, orientation);
-            }
-        }
-        return state;
     }
 
     @Nullable

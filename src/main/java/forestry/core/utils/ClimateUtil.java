@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils;
 
 import forestry.api.core.EnumHumidity;
@@ -25,6 +25,50 @@ import java.util.Locale;
 import java.util.Set;
 
 public class ClimateUtil implements IClimateHelper {
+
+    public static void addClimateErrorStates(
+            EnumTemperature temperature, EnumHumidity humidity,
+            EnumTemperature baseTemp, EnumTolerance tolTemp,
+            EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates
+    ) {
+
+        if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
+            if (baseTemp.ordinal() > temperature.ordinal()) {
+                errorStates.add(EnumErrorCode.TOO_COLD);
+            } else {
+                errorStates.add(EnumErrorCode.TOO_HOT);
+            }
+        }
+
+        if (!AlleleManager.climateHelper.isWithinLimits(humidity, baseHumid, tolHumid)) {
+            if (baseHumid.ordinal() > humidity.ordinal()) {
+                errorStates.add(EnumErrorCode.TOO_ARID);
+            } else {
+                errorStates.add(EnumErrorCode.TOO_HUMID);
+            }
+        }
+    }
+
+    public static int getColor(EnumTemperature temperature) {
+        switch (temperature) {
+            case ICY:
+                return 0xe6e6fa;
+            case COLD:
+                return 0x31698a;
+            case NORMAL:
+                return 0xf0e9cc;
+            case WARM:
+                return 0xcd9b1d;
+            case HOT:
+                return 0xdf512e;
+            case HELLISH:
+                return 0x9c433e;
+            case NONE:
+                return 0x011f4b;
+            default:
+                return 0xFFFFFF;
+        }
+    }
 
     @Override
     public boolean isWithinLimits(
@@ -206,49 +250,5 @@ public class ClimateUtil implements IClimateHelper {
     @Override
     public ITextComponent toDisplay(EnumHumidity humidity) {
         return new TranslationTextComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
-    }
-
-    public static void addClimateErrorStates(
-            EnumTemperature temperature, EnumHumidity humidity,
-            EnumTemperature baseTemp, EnumTolerance tolTemp,
-            EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates
-    ) {
-
-        if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
-            if (baseTemp.ordinal() > temperature.ordinal()) {
-                errorStates.add(EnumErrorCode.TOO_COLD);
-            } else {
-                errorStates.add(EnumErrorCode.TOO_HOT);
-            }
-        }
-
-        if (!AlleleManager.climateHelper.isWithinLimits(humidity, baseHumid, tolHumid)) {
-            if (baseHumid.ordinal() > humidity.ordinal()) {
-                errorStates.add(EnumErrorCode.TOO_ARID);
-            } else {
-                errorStates.add(EnumErrorCode.TOO_HUMID);
-            }
-        }
-    }
-
-    public static int getColor(EnumTemperature temperature) {
-        switch (temperature) {
-            case ICY:
-                return 0xe6e6fa;
-            case COLD:
-                return 0x31698a;
-            case NORMAL:
-                return 0xf0e9cc;
-            case WARM:
-                return 0xcd9b1d;
-            case HOT:
-                return 0xdf512e;
-            case HELLISH:
-                return 0x9c433e;
-            case NONE:
-                return 0x011f4b;
-            default:
-                return 0xFFFFFF;
-        }
     }
 }

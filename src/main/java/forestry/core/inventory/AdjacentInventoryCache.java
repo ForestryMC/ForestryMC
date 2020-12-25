@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.inventory;
 
 import forestry.core.tiles.AdjacentTileCache;
@@ -24,19 +24,14 @@ import java.util.*;
  */
 public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheListener {
 
-    public interface ITileFilter {
-        boolean matches(TileEntity tile);
-    }
-
     private final AdjacentTileCache cache;
-    private boolean changed = true;
     private final List<IItemHandler> invs = new LinkedList<>();
     private final IItemHandler[] sides = new IItemHandler[6];
     @Nullable
     private final Comparator<IItemHandler> sorter;
     @Nullable
     private final ITileFilter filter;
-
+    private boolean changed = true;
     public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
         this(tile, cache, null, null);
     }
@@ -105,6 +100,10 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
                 invs.sort(sorter);
             }
         }
+    }
+
+    public interface ITileFilter {
+        boolean matches(TileEntity tile);
     }
 
 }

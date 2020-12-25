@@ -28,14 +28,13 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
             Constants.MOD_ID,
             Constants.TEXTURE_PATH_GUI + "almanac/almanac.png"
     );
+    public static final int PAGE_WIDTH = 108;
+    public static final int PAGE_HEIGHT = 155;
     static final int LEFT_PAGE_START_X = 16;
     static final int RIGHT_PAGE_START_X = 132;
     static final int PAGE_START_Y = 12;
     static final int LEFT_PAGE_START_Y = 25;
     static final int RIGHT_PAGE_START_Y = PAGE_START_Y;
-    public static final int PAGE_WIDTH = 108;
-    public static final int PAGE_HEIGHT = 155;
-
     private static final int X_SIZE = 256;
     private static final int Y_SIZE = 181;
     @Nullable
@@ -46,6 +45,15 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
         super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));
         this.book = book;
         setGuiScreen(this);
+    }
+
+    @Nullable
+    public static GuiForesterBook getGuiScreen() {
+        return guiScreen;
+    }
+
+    public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {
+        GuiForesterBook.guiScreen = guiScreen;
     }
 
     public IForesterBook getBook() {
@@ -138,15 +146,6 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
     protected List<ITextComponent> getTooltip(int mouseX, int mouseY) {
         return Collections.emptyList();
-    }
-
-    @Nullable
-    public static GuiForesterBook getGuiScreen() {
-        return guiScreen;
-    }
-
-    public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {
-        GuiForesterBook.guiScreen = guiScreen;
     }
 
     protected abstract void actionPerformed(Button button);

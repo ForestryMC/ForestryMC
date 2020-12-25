@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui;
 
 import forestry.core.features.CoreContainers;
@@ -22,11 +22,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
-
-    public static ContainerAnalyzer fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        TileAnalyzer analyzer = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileAnalyzer.class);
-        return new ContainerAnalyzer(windowId, playerInv, analyzer);    //TODO what to do if analyzer null
-    }
 
     public ContainerAnalyzer(int windowId, PlayerInventory player, TileAnalyzer tile) {
         super(windowId, CoreContainers.ANALYZER.containerType(), player, tile, 8, 94);
@@ -60,5 +55,10 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
                 ));
             }
         }
+    }
+
+    public static ContainerAnalyzer fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+        TileAnalyzer analyzer = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileAnalyzer.class);
+        return new ContainerAnalyzer(windowId, playerInv, analyzer);    //TODO what to do if analyzer null
     }
 }

@@ -14,13 +14,12 @@ import javax.annotation.Nullable;
 public class ScrollBarElement extends ElementGroup {
     /* Attributes - Final */
     private final GuiElement slider;
-
+    private final ElementGroup interactionField;
     /* Attributes - State */
     private boolean isScrolling;
     private boolean wasClicked;
     private boolean vertical = false;
     private int currentValue;
-    private final ElementGroup interactionField;
     private int initialMouseClick;
 
     /* Attributes - Parameters */

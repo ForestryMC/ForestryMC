@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.items;
 
 import forestry.api.core.IItemSubtype;
@@ -17,6 +17,22 @@ import net.minecraft.item.Item;
 import java.util.Locale;
 
 public class ItemFruit extends ItemForestryFood {
+
+    private final EnumFruit type;
+
+    public ItemFruit(EnumFruit type) {
+        super(1, 0.2f, (new Item.Properties()));
+        this.type = type;
+    }
+
+    public EnumFruit getType() {
+        return type;
+    }
+
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
 
     public enum EnumFruit implements IItemSubtype {
         CHERRY(OreDictUtil.CROP_CHERRY),
@@ -46,22 +62,6 @@ public class ItemFruit extends ItemForestryFood {
         //		public String getOreDict() {
         //			return oreDict;
         //		}
-    }
-
-    private final EnumFruit type;
-
-    public ItemFruit(EnumFruit type) {
-        super(1, 0.2f, (new Item.Properties()));
-        this.type = type;
-    }
-
-    public EnumFruit getType() {
-        return type;
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.blocks;
 
 import com.mojang.authlib.GameProfile;
@@ -68,11 +68,9 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
             Direction.DOWN,
             Direction.UP
     );
-
+    public final P blockType;
     private final boolean hasTESR;
     private final boolean hasCustom;
-    public final P blockType;
-
     private final ParticleHelper.Callback particleCallback;
 
     public BlockBase(P blockType, Block.Properties properties) {
@@ -90,6 +88,14 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
     }
 
+    public BlockBase(P blockType, Material material) {
+        this(blockType, Block.Properties.create(material));
+    }
+
+    public BlockBase(P blockType) {
+        this(blockType, Material.IRON);
+    }
+
     @Override
     public int getOpacity(BlockState state, IBlockReader world, BlockPos pos) {
         return (!hasTESR && !hasCustom) ? super.getOpacity(state, world, pos) : 0;
@@ -99,14 +105,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         super.fillStateContainer(builder);
         builder.add(FACING);
-    }
-
-    public BlockBase(P blockType, Material material) {
-        this(blockType, Block.Properties.create(material));
-    }
-
-    public BlockBase(P blockType) {
-        this(blockType, Material.IRON);
     }
 
 

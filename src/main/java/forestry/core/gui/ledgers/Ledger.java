@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui.ledgers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -35,12 +35,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public abstract class Ledger {
 
-    protected static final int minWidth = 24;
     public static final int minHeight = 24;
-    protected final int maxWidth;
-    protected final int maxTextWidth;
-    protected int maxHeight = 24;
-
+    protected static final int minWidth = 24;
     private static final ResourceLocation ledgerTextureRight = new ResourceLocation(
             Constants.MOD_ID,
             Constants.TEXTURE_PATH_GUI + "ledger.png"
@@ -49,25 +45,26 @@ public abstract class Ledger {
             Constants.MOD_ID,
             Constants.TEXTURE_PATH_GUI + "ledger_left.png"
     );
-
+    // adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
+    private static final float msPerUpdate = 16.667f;
+    protected final int maxWidth;
+    protected final int maxTextWidth;
     protected final LedgerManager manager;
 
     private final int fontColorHeader;
     private final int fontColorText;
     private final int fontColorSubheader;
     private final int overlayColor;
-
-    private boolean open;
-
+    private final ResourceLocation texture;
     public int currentShiftX = 0;
     public int currentShiftY = 0;
-
+    protected int maxHeight = 24;
     protected float currentWidth = minWidth;
     protected float currentHeight = minHeight;
+    private boolean open;
     private int x;
     private int y;
-
-    private final ResourceLocation texture;
+    private long lastUpdateTime = 0;
 
     protected Ledger(LedgerManager manager, String name) {
         this(manager, name, true);
@@ -94,10 +91,6 @@ public abstract class Ledger {
         GuiForestry gui = manager.gui;
         return new Rectangle2d(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
     }
-
-    // adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
-    private static final float msPerUpdate = 16.667f;
-    private long lastUpdateTime = 0;
 
     public void update() {
 

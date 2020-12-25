@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -31,17 +31,15 @@ import javax.annotation.Nullable;
  */
 public class StandardTank extends FluidTank implements IStreamable {
     private static final int DEFAULT_COLOR = 0xFFFFFF;
-
-    private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
-    private int tankIndex;
     private final boolean canFill;
     private final boolean canDrain;
-    //Used to bypass a second validator test
-    private boolean internalTest;
-
     @OnlyIn(Dist.CLIENT)
     @Nullable
     protected ToolTip toolTip;
+    private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
+    private int tankIndex;
+    //Used to bypass a second validator test
+    private boolean internalTest;
 
     public StandardTank(int capacity, boolean canFill, boolean canDrain) {
         super(capacity);
@@ -55,16 +53,16 @@ public class StandardTank extends FluidTank implements IStreamable {
         this.canDrain = true;
     }
 
-    public void setTankIndex(int index) {
-        this.tankIndex = index;
-    }
-
     public void setTankUpdateHandler(TankManager tankUpdateHandler) {
         this.tankUpdateHandler = tankUpdateHandler;
     }
 
     public int getTankIndex() {
         return tankIndex;
+    }
+
+    public void setTankIndex(int index) {
+        this.tankIndex = index;
     }
 
     public int getColor() {

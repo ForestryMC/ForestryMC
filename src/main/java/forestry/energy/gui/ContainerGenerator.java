@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.gui;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -22,16 +22,16 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 
-    //TODO dedupe
-    public static ContainerGenerator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-        TileEuGenerator tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEuGenerator.class);
-        return new ContainerGenerator(windowId, inv, tile);
-    }
-
     public ContainerGenerator(int windowId, PlayerInventory player, TileEuGenerator tile) {
         super(windowId, EnergyContainers.GENERATOR.containerType(), player, tile, 8, 84);
 
         this.addSlot(new SlotLiquidIn(tile, InventoryGenerator.SLOT_CAN, 22, 38));
+    }
+
+    //TODO dedupe
+    public static ContainerGenerator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+        TileEuGenerator tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEuGenerator.class);
+        return new ContainerGenerator(windowId, inv, tile);
     }
 
     @Override

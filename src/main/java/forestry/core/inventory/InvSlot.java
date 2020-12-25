@@ -5,8 +5,8 @@ import net.minecraftforge.items.IItemHandler;
 
 public class InvSlot implements IInvSlot {
 
-    private final IItemHandler inv;
     protected final int slot;
+    private final IItemHandler inv;
 
     public InvSlot(IItemHandler inv, int slot) {
         this.inv = inv;

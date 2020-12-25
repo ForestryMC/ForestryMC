@@ -32,11 +32,18 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
+    /* Instance */
+    public static final GuiElementFactory INSTANCE = new GuiElementFactory();
     private static final ResourceLocation TEXTURE = new ResourceLocation(
             Constants.MOD_ID,
             Constants.TEXTURE_PATH_GUI + "database_mutation_screen.png"
     );
-
+    /* Drawables */
+    private static final Drawable QUESTION_MARK = new Drawable(TEXTURE, 78, 240, 16, 16);
+    private static final Drawable DOWN_SYMBOL = new Drawable(TEXTURE, 0, 247, 15, 9);
+    private static final Drawable UP_SYMBOL = new Drawable(TEXTURE, 15, 247, 15, 9);
+    private static final Drawable BOOTH_SYMBOL = new Drawable(TEXTURE, 30, 247, 15, 9);
+    private static final Drawable NONE_SYMBOL = new Drawable(TEXTURE, 45, 247, 15, 9);
     public Style dominantStyle = Style.EMPTY;
     public Style recessiveStyle = Style.EMPTY;
     public Style guiStyle = Style.EMPTY;
@@ -44,17 +51,126 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
     public Style databaseTitle = Style.EMPTY;
     public Style binomial = Style.EMPTY;
 
-    /* Drawables */
-    private static final Drawable QUESTION_MARK = new Drawable(TEXTURE, 78, 240, 16, 16);
-    private static final Drawable DOWN_SYMBOL = new Drawable(TEXTURE, 0, 247, 15, 9);
-    private static final Drawable UP_SYMBOL = new Drawable(TEXTURE, 15, 247, 15, 9);
-    private static final Drawable BOOTH_SYMBOL = new Drawable(TEXTURE, 30, 247, 15, 9);
-    private static final Drawable NONE_SYMBOL = new Drawable(TEXTURE, 45, 247, 15, 9);
-
-    /* Instance */
-    public static final GuiElementFactory INSTANCE = new GuiElementFactory();
-
     private GuiElementFactory() {
+    }
+
+    private static IElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
+        PaneLayout element = new PaneLayout(x, y, width, height);
+
+        element.add(createQuestionMark(0, 0), createProbabilityAdd(mutation, 21, 4), createQuestionMark(32, 0));
+        return element;
+    }
+
+    private static IElementGroup createUnknownMutationGroup(
+            int x,
+            int y,
+            int width,
+            int height,
+            IMutation mutation,
+            IBreedingTracker breedingTracker
+    ) {
+        PaneLayout element = new PaneLayout(x, y, width, height);
+
+        element.add(createQuestionMark(0, 0), createQuestionMark(32, 0));
+        createProbabilityArrow(element, mutation, 18, 4, breedingTracker);
+        return element;
+    }
+
+    private static void createProbabilityArrow(
+            PaneLayout element,
+            IMutation combination,
+            int x,
+            int y,
+            IBreedingTracker breedingTracker
+    ) {
+        float chance = combination.getBaseChance();
+        int line = 247;
+        int column = 100;
+        switch (EnumMutateChance.rateChance(chance)) {
+            case HIGHEST:
+                column = 100;
+                break;
+            case HIGHER:
+                column = 100 + 15;
+                break;
+            case HIGH:
+                column = 100 + 15 * 2;
+                break;
+            case NORMAL:
+                column = 100 + 15 * 3;
+                break;
+            case LOW:
+                column = 100 + 15 * 4;
+                break;
+            case LOWEST:
+                column = 100 + 15 * 5;
+                break;
+            default:
+                break;
+        }
+
+        // Probability arrow
+        element.drawable(x, y, new Drawable(TEXTURE, column, line, 15, 9));
+
+        boolean researched = breedingTracker.isResearched(combination);
+        if (researched) {
+            element.label(new StringTextComponent("+"))
+                   .setStyle(GuiConstants.DEFAULT_STYLE)
+                   .setAlign(GuiElementAlignment.TOP_LEFT)
+                   .setSize(10, 10)
+                   .setLocation(x + 9, y + 1);
+        }
+    }
+
+    private static DrawableElement createProbabilityAdd(IMutation mutation, int x, int y) {
+        float chance = mutation.getBaseChance();
+        int line = 247;
+        int column = 190;
+        switch (EnumMutateChance.rateChance(chance)) {
+            case HIGHEST:
+                column = 190;
+                break;
+            case HIGHER:
+                column = 190 + 9;
+                break;
+            case HIGH:
+                column = 190 + 9 * 2;
+                break;
+            case NORMAL:
+                column = 190 + 9 * 3;
+                break;
+            case LOW:
+                column = 190 + 9 * 4;
+                break;
+            case LOWEST:
+                column = 190 + 9 * 5;
+                break;
+            default:
+                break;
+        }
+
+        // Probability add
+        return new DrawableElement(x, y, new Drawable(TEXTURE, column, line, 9, 9));
+    }
+
+    private static DrawableElement createQuestionMark(int x, int y) {
+        return new DrawableElement(x, y, QUESTION_MARK);
+    }
+
+    private static DrawableElement createDownSymbol(int x, int y) {
+        return new DrawableElement(x, y, DOWN_SYMBOL);
+    }
+
+    private static DrawableElement createUpSymbol(int x, int y) {
+        return new DrawableElement(x, y, UP_SYMBOL);
+    }
+
+    private static DrawableElement createBothSymbol(int x, int y) {
+        return new DrawableElement(x, y, BOOTH_SYMBOL);
+    }
+
+    private static DrawableElement createNoneSymbol(int x, int y) {
+        return new DrawableElement(x, y, NONE_SYMBOL);
     }
 
     @Override
@@ -232,124 +348,5 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
         }
 
         return createUnknownMutationGroup(x, y, width, height, mutation, breedingTracker);
-    }
-
-    private static IElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
-        PaneLayout element = new PaneLayout(x, y, width, height);
-
-        element.add(createQuestionMark(0, 0), createProbabilityAdd(mutation, 21, 4), createQuestionMark(32, 0));
-        return element;
-    }
-
-    private static IElementGroup createUnknownMutationGroup(
-            int x,
-            int y,
-            int width,
-            int height,
-            IMutation mutation,
-            IBreedingTracker breedingTracker
-    ) {
-        PaneLayout element = new PaneLayout(x, y, width, height);
-
-        element.add(createQuestionMark(0, 0), createQuestionMark(32, 0));
-        createProbabilityArrow(element, mutation, 18, 4, breedingTracker);
-        return element;
-    }
-
-    private static void createProbabilityArrow(
-            PaneLayout element,
-            IMutation combination,
-            int x,
-            int y,
-            IBreedingTracker breedingTracker
-    ) {
-        float chance = combination.getBaseChance();
-        int line = 247;
-        int column = 100;
-        switch (EnumMutateChance.rateChance(chance)) {
-            case HIGHEST:
-                column = 100;
-                break;
-            case HIGHER:
-                column = 100 + 15;
-                break;
-            case HIGH:
-                column = 100 + 15 * 2;
-                break;
-            case NORMAL:
-                column = 100 + 15 * 3;
-                break;
-            case LOW:
-                column = 100 + 15 * 4;
-                break;
-            case LOWEST:
-                column = 100 + 15 * 5;
-                break;
-            default:
-                break;
-        }
-
-        // Probability arrow
-        element.drawable(x, y, new Drawable(TEXTURE, column, line, 15, 9));
-
-        boolean researched = breedingTracker.isResearched(combination);
-        if (researched) {
-            element.label(new StringTextComponent("+"))
-                   .setStyle(GuiConstants.DEFAULT_STYLE)
-                   .setAlign(GuiElementAlignment.TOP_LEFT)
-                   .setSize(10, 10)
-                   .setLocation(x + 9, y + 1);
-        }
-    }
-
-    private static DrawableElement createProbabilityAdd(IMutation mutation, int x, int y) {
-        float chance = mutation.getBaseChance();
-        int line = 247;
-        int column = 190;
-        switch (EnumMutateChance.rateChance(chance)) {
-            case HIGHEST:
-                column = 190;
-                break;
-            case HIGHER:
-                column = 190 + 9;
-                break;
-            case HIGH:
-                column = 190 + 9 * 2;
-                break;
-            case NORMAL:
-                column = 190 + 9 * 3;
-                break;
-            case LOW:
-                column = 190 + 9 * 4;
-                break;
-            case LOWEST:
-                column = 190 + 9 * 5;
-                break;
-            default:
-                break;
-        }
-
-        // Probability add
-        return new DrawableElement(x, y, new Drawable(TEXTURE, column, line, 9, 9));
-    }
-
-    private static DrawableElement createQuestionMark(int x, int y) {
-        return new DrawableElement(x, y, QUESTION_MARK);
-    }
-
-    private static DrawableElement createDownSymbol(int x, int y) {
-        return new DrawableElement(x, y, DOWN_SYMBOL);
-    }
-
-    private static DrawableElement createUpSymbol(int x, int y) {
-        return new DrawableElement(x, y, UP_SYMBOL);
-    }
-
-    private static DrawableElement createBothSymbol(int x, int y) {
-        return new DrawableElement(x, y, BOOTH_SYMBOL);
-    }
-
-    private static DrawableElement createNoneSymbol(int x, int y) {
-        return new DrawableElement(x, y, NONE_SYMBOL);
     }
 }

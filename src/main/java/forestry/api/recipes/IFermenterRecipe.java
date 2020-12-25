@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.recipes;
 
 import net.minecraft.fluid.Fluid;
@@ -14,11 +14,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
     IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
-
-    class Companion {
-        @ObjectHolder("forestry:fermenter")
-        public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
-    }
 
     /**
      * @return Ingredient representing the input resource.
@@ -54,5 +49,10 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
     @Override
     default IRecipeSerializer<?> getSerializer() {
         return Companion.SERIALIZER;
+    }
+
+    class Companion {
+        @ObjectHolder("forestry:fermenter")
+        public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
     }
 }

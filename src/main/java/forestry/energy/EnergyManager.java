@@ -36,12 +36,12 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
         );
     }
 
-    public void setExternalMode(EnergyTransferMode externalMode) {
-        this.externalMode = externalMode;
-    }
-
     public EnergyTransferMode getExternalMode() {
         return externalMode;
+    }
+
+    public void setExternalMode(EnergyTransferMode externalMode) {
+        this.externalMode = externalMode;
     }
 
     @Override

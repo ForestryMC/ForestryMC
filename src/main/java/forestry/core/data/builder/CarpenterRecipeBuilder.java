@@ -26,6 +26,10 @@ public class CarpenterRecipeBuilder {
     private ItemStack box;
     private ShapedRecipeBuilder.Result recipe;
 
+    private static IllegalStateException error(ResourceLocation id, String message) {
+        return new IllegalStateException(message + " (" + id + ")");
+    }
+
     public CarpenterRecipeBuilder packagingTime(int packagingTime) {
         this.packagingTime = packagingTime;
         return this;
@@ -108,10 +112,6 @@ public class CarpenterRecipeBuilder {
         if (recipe == null) {
             throw error(id, "Recipe was not set");
         }
-    }
-
-    private static IllegalStateException error(ResourceLocation id, String message) {
-        return new IllegalStateException(message + " (" + id + ")");
     }
 
     public static class Result implements IFinishedRecipe {

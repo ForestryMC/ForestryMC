@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.climate;
 
 import forestry.api.core.EnumHumidity;
@@ -31,6 +31,14 @@ public interface IClimateState {
     float getTemperature();
 
     /**
+     * Sets the temperature value of this state.
+     *
+     * @return The absent state if any of the two climate values would be Float.NAN otherwise if this state is
+     * {@link #isMutable()} this state or if it isn't a immutable copy of the state with the new values.
+     */
+    IClimateState setTemperature(float temperature);
+
+    /**
      * @return Returns the enum temperature value of this climate state.
      */
     default EnumTemperature getTemperatureEnum() {
@@ -41,6 +49,14 @@ public interface IClimateState {
      * @return Returns the exact humidity value of this climate state.
      */
     float getHumidity();
+
+    /**
+     * Sets the humidity value of this state.
+     *
+     * @return The absent state if any of the two climate values would be Float.NAN otherwise if this state is
+     * {@link #isMutable()} this state or if it isn't a immutable copy of the state with the new values.
+     */
+    IClimateState setHumidity(float humidity);
 
     /**
      * @return Returns the enum humidity value of this climate state.
@@ -89,22 +105,6 @@ public interface IClimateState {
     default IClimateState add(ClimateType type, float value) {
         return type == ClimateType.HUMIDITY ? addHumidity(value) : addTemperature(value);
     }
-
-    /**
-     * Sets the temperature value of this state.
-     *
-     * @return The absent state if any of the two climate values would be Float.NAN otherwise if this state is
-     * {@link #isMutable()} this state or if it isn't a immutable copy of the state with the new values.
-     */
-    IClimateState setTemperature(float temperature);
-
-    /**
-     * Sets the humidity value of this state.
-     *
-     * @return The absent state if any of the two climate values would be Float.NAN otherwise if this state is
-     * {@link #isMutable()} this state or if it isn't a immutable copy of the state with the new values.
-     */
-    IClimateState setHumidity(float humidity);
 
     /**
      * Sets the humidity and temperature value to the given values.

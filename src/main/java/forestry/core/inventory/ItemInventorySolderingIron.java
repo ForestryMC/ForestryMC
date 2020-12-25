@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
@@ -29,14 +29,13 @@ import net.minecraft.item.ItemStack;
 
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
-    private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(
-            ChipsetManager.circuitRegistry.getRegisteredLayouts().values()
-    );
-
     private static final short inputCircuitBoardSlot = 0;
     private static final short finishedCircuitBoardSlot = 1;
     private static final short ingredientSlot1 = 2;
     private static final short ingredientSlotCount = 4;
+    private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(
+            ChipsetManager.circuitRegistry.getRegisteredLayouts().values()
+    );
 
     public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
         super(player, 6, itemStack);

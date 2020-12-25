@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui.ledgers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -29,21 +29,15 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class LedgerManager {
+    public final GuiForestry gui;
     private final List<Ledger> ledgers = new ArrayList<>();
     private final List<ErrorLedger> errorLedgers = new ArrayList<>();
-
     private IErrorSource errorSource;
     private int maxWidth;
-
-    public final GuiForestry gui;
 
     public LedgerManager(GuiForestry gui) {
         this.gui = gui;
         this.errorSource = FakeErrorSource.instance;
-    }
-
-    public void setMaxWidth(int maxWidth) {
-        this.maxWidth = maxWidth;
     }
 
     public void add(IErrorSource errorSource) {
@@ -217,5 +211,9 @@ public class LedgerManager {
 
     public int getMaxWidth() {
         return maxWidth;
+    }
+
+    public void setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
     }
 }

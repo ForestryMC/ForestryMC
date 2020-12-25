@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.commands;
 
 import com.mojang.brigadier.StringReader;
@@ -80,55 +80,6 @@ public class CommandModules {
                                          .executes(CommandPluginsInfo::listModuleInfoForSender));
         }
 
-        public static class ModuleArgument implements ArgumentType<IForestryModule> {
-            @Override
-            public IForestryModule parse(StringReader reader) throws CommandSyntaxException {
-                String pluginUid = reader.readUnquotedString();
-
-                IForestryModule found = null;
-                for (IForestryModule module : ModuleManager.getLoadedModules()) {
-                    ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-                    if (info == null) {
-                        continue;
-                    }
-
-                    String id = info.moduleID();
-                    String name = info.name();
-                    if (id.equalsIgnoreCase(pluginUid) || name.equalsIgnoreCase(pluginUid)) {
-                        found = module;
-                        break;
-                    }
-                }
-
-                if (found != null) {
-                    return found;
-                } else {
-                    throw new SimpleCommandExceptionType(new TranslationTextComponent(
-                            "for.chat.modules.error",
-                            pluginUid
-                    )).createWithContext(reader);
-                }
-
-            }
-
-            public static ModuleArgument modules() {
-                return new ModuleArgument();
-            }
-
-            @Override
-            public <S> CompletableFuture<Suggestions> listSuggestions(
-                    CommandContext<S> context,
-                    SuggestionsBuilder builder
-            ) {
-                ModuleManager.getLoadedModules().stream()
-                             .map(module -> module.getClass().getAnnotation(ForestryModule.class))
-                             .filter(Objects::nonNull)
-                             .forEach(info -> builder.suggest(info.moduleID()));
-
-                return builder.buildFuture();
-            }
-        }
-
         private static int listModuleInfoForSender(CommandContext<CommandSource> context) throws CommandException {
             IForestryModule found = context.getArgument("module", IForestryModule.class);
 
@@ -162,6 +113,55 @@ public class CommandModules {
             }
 
             return 0;
+        }
+
+        public static class ModuleArgument implements ArgumentType<IForestryModule> {
+            public static ModuleArgument modules() {
+                return new ModuleArgument();
+            }
+
+            @Override
+            public IForestryModule parse(StringReader reader) throws CommandSyntaxException {
+                String pluginUid = reader.readUnquotedString();
+
+                IForestryModule found = null;
+                for (IForestryModule module : ModuleManager.getLoadedModules()) {
+                    ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+                    if (info == null) {
+                        continue;
+                    }
+
+                    String id = info.moduleID();
+                    String name = info.name();
+                    if (id.equalsIgnoreCase(pluginUid) || name.equalsIgnoreCase(pluginUid)) {
+                        found = module;
+                        break;
+                    }
+                }
+
+                if (found != null) {
+                    return found;
+                } else {
+                    throw new SimpleCommandExceptionType(new TranslationTextComponent(
+                            "for.chat.modules.error",
+                            pluginUid
+                    )).createWithContext(reader);
+                }
+
+            }
+
+            @Override
+            public <S> CompletableFuture<Suggestions> listSuggestions(
+                    CommandContext<S> context,
+                    SuggestionsBuilder builder
+            ) {
+                ModuleManager.getLoadedModules().stream()
+                             .map(module -> module.getClass().getAnnotation(ForestryModule.class))
+                             .filter(Objects::nonNull)
+                             .forEach(info -> builder.suggest(info.moduleID()));
+
+                return builder.buildFuture();
+            }
         }
     }
 }

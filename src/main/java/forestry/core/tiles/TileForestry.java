@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
@@ -61,10 +61,8 @@ import java.io.IOException;
 public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {//, ITriggerProvider {
     private final ErrorLogic errorHandler = new ErrorLogic();
     private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
-
-    private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
-
     private final TickHelper tickHelper = new TickHelper();
+    private IInventoryAdapter inventory = FakeInventoryAdapter.instance();
     private boolean needsNetworkUpdate = false;
 
     public TileForestry(TileEntityType<?> tileEntityTypeIn) {

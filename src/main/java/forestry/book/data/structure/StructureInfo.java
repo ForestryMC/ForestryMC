@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * The MIT License (MIT)
  * Copyright (c) 2013-2014 Slime Knights (mDiyo, fuj1n, Sunstrike, progwml6, pillbox, alexbegt)
  *
@@ -9,7 +9,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Any alternate licenses are noted where appropriate.
- ******************************************************************************/
+ */
 package forestry.book.data.structure;
 
 import net.minecraft.block.BlockState;
@@ -20,6 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class StructureInfo {
+    private final int maxBlockIndex;
     public BlockState[][][] data;
     public int blockCount = 0;
     public int[] countPerLevel;
@@ -27,9 +28,7 @@ public class StructureInfo {
     public int structureLength = 0;
     public int structureWidth = 0;
     public int showLayer = -1;
-
     private int blockIndex = 0;
-    private final int maxBlockIndex;
 
     public StructureInfo(int length, int height, int width, BlockData[] blockData) {
         this.structureWidth = width;

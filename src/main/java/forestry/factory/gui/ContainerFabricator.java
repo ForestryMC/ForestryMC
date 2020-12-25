@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.gui;
 
 import forestry.core.gui.ContainerLiquidTanks;
@@ -29,11 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
-
-    public static ContainerFabricator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileFabricator tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFabricator.class);
-        return new ContainerFabricator(windowId, inv, tile);    //TODO nullability.
-    }
 
     public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
         super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
@@ -71,6 +66,11 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
                 ));
             }
         }
+    }
+
+    public static ContainerFabricator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        TileFabricator tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFabricator.class);
+        return new ContainerFabricator(windowId, inv, tile);    //TODO nullability.
     }
 
     @Override

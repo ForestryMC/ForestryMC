@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import forestry.core.utils.ItemStackUtil;
@@ -68,10 +68,6 @@ public final class FluidHelper {
 
     public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid) {
         return canAcceptFluid(world, pos, facing, fluid, false);
-    }
-
-    public enum FillStatus {
-        SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE, NO_SPACE_FLUID
     }
 
     public static FillStatus fillContainers(
@@ -489,6 +485,10 @@ public final class FluidHelper {
             }
             return true;
         }).isPresent();
+    }
+
+    public enum FillStatus {
+        SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE, NO_SPACE_FLUID
     }
 
 }

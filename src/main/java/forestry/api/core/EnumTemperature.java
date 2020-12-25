@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -38,15 +38,6 @@ public enum EnumTemperature {
         this.name = name;
         this.iconIndex = iconIndex;
         this.color = color;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public TextureAtlasSprite getSprite() {
-        return ForestryAPI.textureManager.getDefault(iconIndex);
     }
 
     /**
@@ -86,5 +77,14 @@ public enum EnumTemperature {
 
         float temperature = biome.getTemperature(pos);
         return getFromValue(temperature);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public TextureAtlasSprite getSprite() {
+        return ForestryAPI.textureManager.getDefault(iconIndex);
     }
 }

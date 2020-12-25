@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import net.minecraft.block.BlockState;
@@ -69,11 +69,6 @@ public abstract class TileUtil {
         }
     }
 
-    public interface ITileGetResult<T, R> {
-        @Nullable
-        R getResult(T tile);
-    }
-
     /**
      * Performs an {@link ITileGetResult} on a tile if the tile exists.
      */
@@ -89,11 +84,6 @@ public abstract class TileUtil {
             return tileGetResult.getResult(tile);
         }
         return null;
-    }
-
-    @FunctionalInterface
-    public interface ITileAction<T> {
-        void actOnTile(T tile);
     }
 
     /**
@@ -141,5 +131,15 @@ public abstract class TileUtil {
             return LazyOptional.empty();
         }
         return tileEntity.getCapability(capability, facing);
+    }
+
+    public interface ITileGetResult<T, R> {
+        @Nullable
+        R getResult(T tile);
+    }
+
+    @FunctionalInterface
+    public interface ITileAction<T> {
+        void actOnTile(T tile);
     }
 }

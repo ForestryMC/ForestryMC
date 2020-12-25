@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -39,15 +39,12 @@ import java.util.ArrayList;
 public class GuiLetter extends GuiForestry<ContainerLetter> {
     private final ItemInventoryLetter itemInventory;
     private final boolean isProcessedLetter;
+    private final ArrayList<Widget> tradeInfoWidgets;
     private boolean checkedSessionVars;
-
     private TextFieldWidget address;
     private GuiTextBox text;
-
     private boolean addressFocus;
     private boolean textFocus;
-
-    private final ArrayList<Widget> tradeInfoWidgets;
 
     public GuiLetter(ContainerLetter container, PlayerInventory inv, ITextComponent title) {
         super(Constants.TEXTURE_PATH_GUI + "letter.png", container, inv, title);

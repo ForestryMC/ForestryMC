@@ -1,6 +1,5 @@
 package forestry.core.features;
 
-import forestry.api.core.ItemGroups;
 import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.EnumCircuitBoardType;

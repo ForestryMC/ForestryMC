@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail;
 
 import com.mojang.authlib.GameProfile;
@@ -29,22 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PostRegistry implements IPostRegistry {
-    @Nullable
-    public static PostOffice cachedPostOffice;
     public static final Map<IMailAddress, POBox> cachedPOBoxes = new HashMap<>();
     public static final Map<IMailAddress, ITradeStation> cachedTradeStations = new HashMap<>();
-
+    @Nullable
+    public static PostOffice cachedPostOffice;
     private final Map<EnumAddressee, IPostalCarrier> carriers = new EnumMap<>(EnumAddressee.class);
-
-    /**
-     * @param world   the Minecraft world the PO box will be in
-     * @param address the potential address of the PO box
-     * @return true if the passed address is valid for PO Boxes.
-     */
-    @Override
-    public boolean isValidPOBox(World world, IMailAddress address) {
-        return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
-    }
 
     @Nullable
     public static POBox getPOBox(ServerWorld world, IMailAddress address) {
@@ -76,6 +65,16 @@ public class PostRegistry implements IPostRegistry {
         }
 
         return pobox;
+    }
+
+    /**
+     * @param world   the Minecraft world the PO box will be in
+     * @param address the potential address of the PO box
+     * @return true if the passed address is valid for PO Boxes.
+     */
+    @Override
+    public boolean isValidPOBox(World world, IMailAddress address) {
+        return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
     }
 
     /**

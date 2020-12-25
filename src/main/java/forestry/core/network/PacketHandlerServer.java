@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.network;
 
 import forestry.core.config.Constants;
@@ -34,10 +34,9 @@ import java.io.IOException;
 
 public class PacketHandlerServer {
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public static final ResourceLocation CHANNEL_ID = new ResourceLocation(Constants.MOD_ID, "channel");
     public static final String VERSION = "1.0.0";
+    private static final Logger LOGGER = LogManager.getLogger();
 
     //	public static final String channelId = "FOR";	//TODO - change to 1 or similar...
     //	public static final EventNetworkChannel channel = NetworkRegistry.ChannelBuilder
@@ -53,6 +52,15 @@ public class PacketHandlerServer {
     public PacketHandlerServer() {
         //		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
         //		channel.register(this);
+    }
+
+    public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
+        Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
+        ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(
+                packetData,
+                PacketHandlerServer.CHANNEL_ID
+        );
+        player.connection.sendPacket(payload.getThis());
     }
 
     public void onPacket(NetworkEvent.ClientCustomPayloadEvent event) {
@@ -75,15 +83,6 @@ public class PacketHandlerServer {
             return;
         }
         event.getSource().get().setPacketHandled(true);
-    }
-
-    public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
-        Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-        ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(
-                packetData,
-                PacketHandlerServer.CHANNEL_ID
-        );
-        player.connection.sendPacket(payload.getThis());
     }
 
     //	@OnlyIn(Dist.CLIENT)

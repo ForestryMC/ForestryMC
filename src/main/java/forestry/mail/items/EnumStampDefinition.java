@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.items;
 
 import forestry.api.mail.EnumPostage;
@@ -78,6 +78,10 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
         this.postage = postage;
     }
 
+    public static EnumStampDefinition getFromPostage(EnumPostage postage) {
+        return postageMap.get(postage);
+    }
+
     public EnumPostage getPostage() {
         return this.postage;
     }
@@ -104,9 +108,5 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
     @Override
     public boolean isSecret() {
         return false;
-    }
-
-    public static EnumStampDefinition getFromPostage(EnumPostage postage) {
-        return postageMap.get(postage);
     }
 }

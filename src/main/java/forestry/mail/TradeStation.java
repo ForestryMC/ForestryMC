@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail;
 
 import com.mojang.authlib.GameProfile;
@@ -47,12 +47,11 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
     public static final int SLOT_SIZE =
             SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT +
             SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
-
+    private final InventoryAdapter inventory = new InventoryTradeStation();
     private GameProfile owner;
     private IMailAddress address;
     private boolean isVirtual = false;
     private boolean isInvalid = false;
-    private final InventoryAdapter inventory = new InventoryTradeStation();
 
     public TradeStation(GameProfile owner, IMailAddress address) {
         super(SAVE_NAME + address);
@@ -120,16 +119,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
         this.isInvalid = true;
     }
 
+    @Override
+    public boolean isVirtual() {
+        return isVirtual;
+    }
+
     /* INFORMATION */
     @Override
     public void setVirtual(boolean isVirtual) {
         this.isVirtual = isVirtual;
         markDirty();
-    }
-
-    @Override
-    public boolean isVirtual() {
-        return isVirtual;
     }
 
     @Override

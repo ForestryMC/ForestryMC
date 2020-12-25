@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import forestry.core.particles.ColoredDripParticle;
@@ -59,6 +59,30 @@ public class BlockForestryFluid extends FlowingFluidBlock {
         this.flammable = properties.flammable;
 
         this.color = properties.particleColor;
+    }
+
+    private static boolean isFlammable(IBlockReader world, BlockPos pos) {
+        BlockState blockState = world.getBlockState(pos);
+        Block block = blockState.getBlock();
+        return blockState.isFlammable(world, pos, Direction.UP);
+    }
+
+    private static boolean isNeighborFlammable(World world, int x, int y, int z) {
+        return isFlammable(world, new BlockPos(x - 1, y, z)) ||
+               isFlammable(world, new BlockPos(x + 1, y, z)) ||
+               isFlammable(world, new BlockPos(x, y, z - 1)) ||
+               isFlammable(world, new BlockPos(x, y, z + 1)) ||
+               isFlammable(world, new BlockPos(x, y - 1, z)) ||
+               isFlammable(world, new BlockPos(x, y + 1, z));
+    }
+
+    private static boolean isNearFire(World world, int x, int y, int z) {
+        AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
+        // Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
+        return BlockPos.getAllInBox(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
+            BlockState state = world.getBlockState(pos);
+            return state.isIn(BlockTags.FIRE) || state.isIn(Blocks.LAVA) || state.isBurning(world, pos);
+        });
     }
 
     @Override
@@ -168,12 +192,6 @@ public class BlockForestryFluid extends FlowingFluidBlock {
         return flammable;
     }
 
-    private static boolean isFlammable(IBlockReader world, BlockPos pos) {
-        BlockState blockState = world.getBlockState(pos);
-        Block block = blockState.getBlock();
-        return blockState.isFlammable(world, pos, Direction.UP);
-    }
-
     @Override
     public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
         return flammable && flammability == 0;
@@ -244,23 +262,5 @@ public class BlockForestryFluid extends FlowingFluidBlock {
                 );
             }
         }
-    }
-
-    private static boolean isNeighborFlammable(World world, int x, int y, int z) {
-        return isFlammable(world, new BlockPos(x - 1, y, z)) ||
-               isFlammable(world, new BlockPos(x + 1, y, z)) ||
-               isFlammable(world, new BlockPos(x, y, z - 1)) ||
-               isFlammable(world, new BlockPos(x, y, z + 1)) ||
-               isFlammable(world, new BlockPos(x, y - 1, z)) ||
-               isFlammable(world, new BlockPos(x, y + 1, z));
-    }
-
-    private static boolean isNearFire(World world, int x, int y, int z) {
-        AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
-        // Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
-        return BlockPos.getAllInBox(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
-            BlockState state = world.getBlockState(pos);
-            return state.isIn(BlockTags.FIRE) || state.isIn(Blocks.LAVA) || state.isBurning(world, pos);
-        });
     }
 }

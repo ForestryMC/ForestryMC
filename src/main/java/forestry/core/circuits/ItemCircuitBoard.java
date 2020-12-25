@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.circuits;
 
 import forestry.api.circuits.ChipsetManager;
@@ -36,6 +36,18 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
     public ItemCircuitBoard(EnumCircuitBoardType type) {
         this.type = type;
+    }
+
+    public static ItemStack createCircuitboard(
+            EnumCircuitBoardType type,
+            @Nullable ICircuitLayout layout,
+            ICircuit[] circuits
+    ) {
+        CompoundNBT compoundNBT = new CompoundNBT();
+        new CircuitBoard(type, layout, circuits).write(compoundNBT);
+        ItemStack stack = CoreItems.CIRCUITBOARDS.stack(type, 1);
+        stack.setTag(compoundNBT);
+        return stack;
     }
 
     public EnumCircuitBoardType getType() {
@@ -72,18 +84,6 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
         if (circuitboard != null) {
             circuitboard.addTooltip(list);
         }
-    }
-
-    public static ItemStack createCircuitboard(
-            EnumCircuitBoardType type,
-            @Nullable ICircuitLayout layout,
-            ICircuit[] circuits
-    ) {
-        CompoundNBT compoundNBT = new CompoundNBT();
-        new CircuitBoard(type, layout, circuits).write(compoundNBT);
-        ItemStack stack = CoreItems.CIRCUITBOARDS.stack(type, 1);
-        stack.setTag(compoundNBT);
-        return stack;
     }
 
     public ItemStack get(EnumCircuitBoardType type) {

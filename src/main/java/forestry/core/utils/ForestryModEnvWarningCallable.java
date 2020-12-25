@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.utils;
 
 import com.google.common.base.Joiner;
@@ -28,6 +28,10 @@ import java.util.Set;
 public class ForestryModEnvWarningCallable implements ICrashCallable {
     private final String disabledModulesMessage;
 
+    private ForestryModEnvWarningCallable(String disabledModulesMessage) {
+        this.disabledModulesMessage = disabledModulesMessage;
+    }
+
     public static void register() {
         Set<IForestryModule> configDisabledModules = ModuleManager.configDisabledModules;
         if (!configDisabledModules.isEmpty()) {
@@ -42,10 +46,6 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
             ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
             CrashReportExtender.registerCrashCallable(callable);
         }
-    }
-
-    private ForestryModEnvWarningCallable(String disabledModulesMessage) {
-        this.disabledModulesMessage = disabledModulesMessage;
     }
 
     @Override

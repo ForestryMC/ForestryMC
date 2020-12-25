@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.errors;
 
 import com.google.common.collect.BiMap;
@@ -33,6 +33,25 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
     private static final Map<String, IErrorState> stateNames = new HashMap<>();
     private static final Set<IErrorState> stateView = Collections.unmodifiableSet(states.inverse().keySet());
 
+    private static void addStateName(IErrorState state, String name) {
+        if (!name.contains(":")) {
+            throw new RuntimeException("Forestry Error State name must be in the format <modid>:<name>.");
+        }
+
+        if (stateNames.containsKey(name)) {
+            throw new RuntimeException("Forestry Error State does not possess a unique name.");
+        }
+
+        stateNames.put(name, state);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void initSprites(ISpriteRegistry event) {
+        for (IErrorState code : states.values()) {
+            code.registerSprites(event);
+        }
+    }
+
     @Override
     public void registerErrorState(IErrorState state) {
         if (states.containsKey(state.getID())) {
@@ -50,18 +69,6 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
         }
 
         addStateName(state, name);
-    }
-
-    private static void addStateName(IErrorState state, String name) {
-        if (!name.contains(":")) {
-            throw new RuntimeException("Forestry Error State name must be in the format <modid>:<name>.");
-        }
-
-        if (stateNames.containsKey(name)) {
-            throw new RuntimeException("Forestry Error State does not possess a unique name.");
-        }
-
-        stateNames.put(name, state);
     }
 
     @Override
@@ -82,12 +89,5 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
     @Override
     public IErrorLogic createErrorLogic() {
         return new ErrorLogic();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void initSprites(ISpriteRegistry event) {
-        for (IErrorState code : states.values()) {
-            code.registerSprites(event);
-        }
     }
 }

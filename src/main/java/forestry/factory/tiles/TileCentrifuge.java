@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.factory.tiles;
 
 import forestry.api.circuits.ChipsetManager;
@@ -156,7 +156,10 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
     private void checkRecipe() {
         ItemStack resource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE);
-        ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(world.getRecipeManager(), resource);
+        ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(
+                world.getRecipeManager(),
+                resource
+        );
 
         if (currentRecipe != matchingRecipe) {
             currentRecipe = matchingRecipe;

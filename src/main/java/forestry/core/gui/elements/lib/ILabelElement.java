@@ -11,9 +11,9 @@ import java.util.function.UnaryOperator;
  */
 public interface ILabelElement extends ITextElement, IProviderElement<ITextComponent> {
 
-    ILabelElement setFitText(boolean fitText);
-
     boolean isFitText();
+
+    ILabelElement setFitText(boolean fitText);
 
     ILabelElement setShadow(boolean value);
 

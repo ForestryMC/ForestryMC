@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.energy.tiles;
 
 import forestry.api.circuits.ChipsetManager;
@@ -39,25 +39,8 @@ import java.io.IOException;
 //import ic2.api.energy.prefab.BasicSink;
 
 public class TileEngineElectric extends TileEngine implements ISocketable, IInventory, IStreamableGui {
-    protected static class EuConfig {
-
-        public int euForCycle;
-        public int rfPerCycle;
-        public int euStorage;
-
-        public EuConfig() {
-            this.euForCycle = Constants.ENGINE_TIN_EU_FOR_CYCLE;
-            this.rfPerCycle = Constants.ENGINE_TIN_ENERGY_PER_CYCLE;
-            this.euStorage = Constants.ENGINE_TIN_MAX_EU_STORED;
-        }
-    }
-
     private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
     private final EuConfig euConfig = new EuConfig();
-
-    //	@Nullable
-    //	private BasicSink ic2EnergySink;
-
     public TileEngineElectric() {
         //TODO tileentitytypes
         super(TileEntityType.BLAST_FURNACE, "engine.tin", Constants.ENGINE_ELECTRIC_HEAT_MAX, 100000);
@@ -68,6 +51,9 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
         //			ic2EnergySink = new BasicSink(this, euConfig.euStorage, 4);
         //		}
     }
+
+    //	@Nullable
+    //	private BasicSink ic2EnergySink;
 
     // SAVING / LOADING
     @Override
@@ -100,24 +86,6 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
         return compoundNBT;
     }
 
-    //	@Override
-    //	public void onChunkUnload() {
-    //		if (ic2EnergySink != null) {
-    //			ic2EnergySink.onChunkUnload();
-    //		}
-    //
-    //		super.onChunkUnload();
-    //	}
-    //
-    //	@Override
-    //	public void invalidate() {
-    //		if (ic2EnergySink != null) {
-    //			ic2EnergySink.invalidate();
-    //		}
-    //
-    //		super.invalidate();
-    //	}
-
     // HEAT MANAGEMENT
     @Override
     public int dissipateHeat() {
@@ -139,6 +107,24 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
         heat -= loss;
         return loss;
     }
+
+    //	@Override
+    //	public void onChunkUnload() {
+    //		if (ic2EnergySink != null) {
+    //			ic2EnergySink.onChunkUnload();
+    //		}
+    //
+    //		super.onChunkUnload();
+    //	}
+    //
+    //	@Override
+    //	public void invalidate() {
+    //		if (ic2EnergySink != null) {
+    //			ic2EnergySink.invalidate();
+    //		}
+    //
+    //		super.invalidate();
+    //	}
 
     @Override
     public int generateHeat() {
@@ -307,5 +293,18 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
     @Override
     public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
         return new ContainerEngineElectric(windowId, player.inventory, this);
+    }
+
+    protected static class EuConfig {
+
+        public int euForCycle;
+        public int rfPerCycle;
+        public int euStorage;
+
+        public EuConfig() {
+            this.euForCycle = Constants.ENGINE_TIN_EU_FOR_CYCLE;
+            this.rfPerCycle = Constants.ENGINE_TIN_ENERGY_PER_CYCLE;
+            this.euStorage = Constants.ENGINE_TIN_MAX_EU_STORED;
+        }
     }
 }

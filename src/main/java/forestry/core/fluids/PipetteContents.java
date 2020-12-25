@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.fluids;
 
 import net.minecraft.item.ItemStack;
@@ -25,6 +25,10 @@ public class PipetteContents {
 
     private final FluidStack contents;
 
+    public PipetteContents(FluidStack contents) {
+        this.contents = contents;
+    }
+
     @Nullable
     public static PipetteContents create(ItemStack itemStack) {
         FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(FluidStack.EMPTY);
@@ -32,10 +36,6 @@ public class PipetteContents {
             return null;
         }
         return new PipetteContents(contents);
-    }
-
-    public PipetteContents(FluidStack contents) {
-        this.contents = contents;
     }
 
     public FluidStack getContents() {

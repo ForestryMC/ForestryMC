@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.particles;
 
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -42,10 +42,10 @@ public class SnowParticle extends SpriteTexturedParticle {
         float scale = 0.1F * this.particleScale;
 
         //		if (this.particleTexture != null) {
-        			minU = this.sprite.getMinU();
-        			maxU = this.sprite.getMaxU();
-        			minV = this.sprite.getMinV();
-        			maxV = this.sprite.getMaxV();
+        minU = this.sprite.getMinU();
+        maxU = this.sprite.getMaxU();
+        minV = this.sprite.getMinV();
+        maxV = this.sprite.getMaxV();
         //		}
 
         for (int i = 0; i < 5; i++) {

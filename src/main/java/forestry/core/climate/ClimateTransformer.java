@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.climate;
 
 import forestry.api.climate.*;
@@ -55,6 +55,19 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
         setRange(Config.habitatformerRange);
         this.circular = true;
         this.addedToWorld = false;
+    }
+
+    private static int computeArea(int range, boolean circular) {
+        return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI)
+                        : (range * 2 + 1) * (range * 2 + 1);
+    }
+
+    private static float calculateSpeedModifier(float area) {
+        return 1.0F + (calculateAreaModifier(area) * Config.habitatformerAreaSpeedModifier);
+    }
+
+    private static float calculateAreaModifier(float area) {
+        return area / 36.0F;
     }
 
     @Override
@@ -169,29 +182,15 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
         return defaultState;
     }
 
-    public void setCircular(boolean value) {
-        if (this.circular != value) {
-            this.circular = value;
-            onAreaChange(range, !value);
-            housing.markNetworkUpdate();
-            if (addedToWorld) {
-                IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
-                worldClimate.updateTransformer(this);
-            }
-        }
-    }
-
     @Override
     public boolean isCircular() {
         return circular;
     }
 
-    @Override
-    public void setRange(int value) {
-        if (value != range) {
-            int oldRange = range;
-            this.range = MathHelper.clamp(value, 1, 16);
-            onAreaChange(oldRange, circular);
+    public void setCircular(boolean value) {
+        if (this.circular != value) {
+            this.circular = value;
+            onAreaChange(range, !value);
             housing.markNetworkUpdate();
             if (addedToWorld) {
                 IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
@@ -212,11 +211,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
         }
     }
 
-    private static int computeArea(int range, boolean circular) {
-        return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI)
-                        : (range * 2 + 1) * (range * 2 + 1);
-    }
-
     @Override
     public float getAreaModifier() {
         return calculateAreaModifier(area);
@@ -232,14 +226,6 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
         return calculateSpeedModifier(area);
     }
 
-    private static float calculateSpeedModifier(float area) {
-        return 1.0F + (calculateAreaModifier(area) * Config.habitatformerAreaSpeedModifier);
-    }
-
-    private static float calculateAreaModifier(float area) {
-        return area / 36.0F;
-    }
-
     @Override
     public int getArea() {
         return area;
@@ -248,6 +234,20 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
     @Override
     public int getRange() {
         return range;
+    }
+
+    @Override
+    public void setRange(int value) {
+        if (value != range) {
+            int oldRange = range;
+            this.range = MathHelper.clamp(value, 1, 16);
+            onAreaChange(oldRange, circular);
+            housing.markNetworkUpdate();
+            if (addedToWorld) {
+                IWorldClimateHolder worldClimate = ClimateManager.climateRoot.getWorldClimate(getWorldObj());
+                worldClimate.updateTransformer(this);
+            }
+        }
     }
 
     @Override

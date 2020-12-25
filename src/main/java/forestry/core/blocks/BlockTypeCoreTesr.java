@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.blocks;
 
 import forestry.core.features.CoreTiles;
@@ -28,6 +28,10 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
     public static final BlockTypeCoreTesr[] VALUES = values();
 
     private final IMachinePropertiesTesr machineProperties;
+
+    BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
+        this.machineProperties = machineProperties;
+    }
 
     private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(
             Supplier<FeatureTileType<? extends TileAnalyzer>> teClass,
@@ -64,10 +68,6 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
                 .create();
         Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
         return machineProperties;
-    }
-
-    BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
-        this.machineProperties = machineProperties;
     }
 
     @Override

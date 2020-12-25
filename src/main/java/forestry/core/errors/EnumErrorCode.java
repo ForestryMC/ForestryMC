@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.core.errors;
 
 import forestry.api.core.ForestryAPI;
@@ -108,6 +108,12 @@ public enum EnumErrorCode implements IErrorState {
         this.location = new ResourceLocation(Constants.MOD_ID, "errors/" + iconName);
     }
 
+    public static void init() {
+        for (IErrorState code : values()) {
+            ForestryAPI.errorStateRegistry.registerErrorState(code);
+        }
+    }
+
     @Override
     public String getUnlocalizedDescription() {
         return "for.errors." + name + ".desc";
@@ -138,11 +144,5 @@ public enum EnumErrorCode implements IErrorState {
     @Override
     public String getUniqueName() {
         return Constants.MOD_ID + ":" + name;
-    }
-
-    public static void init() {
-        for (IErrorState code : values()) {
-            ForestryAPI.errorStateRegistry.registerErrorState(code);
-        }
     }
 }

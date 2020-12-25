@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.farming;
 
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ public interface IFarmRegistry {
     /**
      * Registers farming logic in registry under given identifier
      *
-     * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
+     * @param identifier Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
      */
     IFarmPropertiesBuilder getPropertiesBuilder(String identifier);
 

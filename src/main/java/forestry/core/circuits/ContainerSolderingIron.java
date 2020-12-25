@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.circuits;
 
 import forestry.api.circuits.ICircuitLayout;
@@ -32,13 +32,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
-    public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-        PlayerEntity player = playerInv.player;
-        ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
-        return new ContainerSolderingIron(windowId, player, inv);
-    }
-
     public ContainerSolderingIron(int windowId, PlayerEntity player, ItemInventorySolderingIron inventory) {
         super(windowId, inventory, player.inventory, 8, 123, CoreContainers.SOLDERING_IRON.containerType());
 
@@ -55,8 +48,11 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
         this.addSlot(new SlotFiltered(inventory, 5, 12, 92));
     }
 
-    public ICircuitLayout getLayout() {
-        return inventory.getLayout();
+    public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        PlayerEntity player = playerInv.player;
+        ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
+        return new ContainerSolderingIron(windowId, player, inv);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -75,6 +71,14 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
         NetworkUtil.sendToServer(packet);
     }
 
+    public ICircuitLayout getLayout() {
+        return inventory.getLayout();
+    }
+
+    public void setLayout(ICircuitLayout layout) {
+        inventory.setLayout(layout);
+    }
+
     @Override
     public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
 
@@ -88,9 +92,5 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 
         IForestryPacketClient packetResponse = new PacketGuiLayoutSelect(inventory.getLayout().getUID());
         NetworkUtil.sendToPlayer(packetResponse, player);
-    }
-
-    public void setLayout(ICircuitLayout layout) {
-        inventory.setLayout(layout);
     }
 }

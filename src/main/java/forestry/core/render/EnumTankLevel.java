@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.render;
 
 import net.minecraftforge.fluids.IFluidTank;
@@ -23,10 +23,6 @@ public enum EnumTankLevel {
 
     EnumTankLevel(int level) {
         this.level = level;
-    }
-
-    public int getLevelScaled(int scale) {
-        return level * scale / 100;
     }
 
     public static EnumTankLevel rateTankLevel(IFluidTank tank) {
@@ -46,5 +42,9 @@ public enum EnumTankLevel {
         } else {
             return MAXIMUM;
         }
+    }
+
+    public int getLevelScaled(int scale) {
+        return level * scale / 100;
     }
 }

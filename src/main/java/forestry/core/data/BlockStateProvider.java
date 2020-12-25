@@ -80,6 +80,16 @@ public abstract class BlockStateProvider implements IDataProvider {
         return "Block State Provider";
     }
 
+    public interface ICondition {
+        JsonElement serialize();
+
+        String getName();
+    }
+
+    public interface IBuilder {
+        JsonObject serialize(Block block);
+    }
+
     public static class Builder implements IBuilder {
         private final List<Consumer<Variant>> always = new LinkedList<>();
         private final Map<Predicate<BlockState>, Consumer<Variant>> variants = new HashMap<>();
@@ -335,12 +345,6 @@ public abstract class BlockStateProvider implements IDataProvider {
         }
     }
 
-    public interface ICondition {
-        JsonElement serialize();
-
-        String getName();
-    }
-
     public static class AndCondition implements ICondition {
         private final Iterable<ICondition> conditions;
         private final boolean nested;
@@ -422,9 +426,5 @@ public abstract class BlockStateProvider implements IDataProvider {
         public String getName() {
             return property.getName();
         }
-    }
-
-    public interface IBuilder {
-        JsonObject serialize(Block block);
     }
 }

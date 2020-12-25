@@ -20,9 +20,9 @@ import javax.annotation.Nullable;
 public class GeneticAnalyzerTabs extends VerticalLayout {
     private static final Drawable SELECTED_BACKGROUND = new Drawable(GeneticAnalyzer.TEXTURE, 0, 166, 35, 26);
     private static final Drawable UNSELECTED_BACKGROUND = new Drawable(GeneticAnalyzer.TEXTURE, 0, 192, 35, 26);
+    public final GeneticAnalyzer analyzer;
     @Nullable
     public IDatabasePlugin databasePlugin;
-    public final GeneticAnalyzer analyzer;
     private int selected = 0;
 
     public GeneticAnalyzerTabs(int xPos, int yPos, GeneticAnalyzer analyzer) {

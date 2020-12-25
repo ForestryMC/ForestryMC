@@ -38,23 +38,6 @@ public class BlockHumus extends Block {
         setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
     }
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(DEGRADE);
-    }
-
-    @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-        if (world.isRemote || world.rand.nextInt(140) != 0) {
-            return;
-        }
-
-        if (isEnrooted(world, pos)) {
-            degradeSoil(world, pos);
-        }
-    }
-
     private static boolean isEnrooted(World world, BlockPos pos) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -89,6 +72,23 @@ public class BlockHumus extends Block {
         }
         //TODO: Is this still needed ? Should now be marked with setBlockState
         RenderUtil.markForUpdate(pos);
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
+        builder.add(DEGRADE);
+    }
+
+    @Override
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+        if (world.isRemote || world.rand.nextInt(140) != 0) {
+            return;
+        }
+
+        if (isEnrooted(world, pos)) {
+            degradeSoil(world, pos);
+        }
     }
 
     @Override

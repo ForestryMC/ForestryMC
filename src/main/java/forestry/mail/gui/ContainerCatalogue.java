@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.mail.gui;
 
 import forestry.api.mail.*;
@@ -28,20 +28,6 @@ import java.util.*;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
-    private final PlayerEntity player;
-    private final List<ITradeStation> stations = new ArrayList<>();
-
-    @Nullable
-    private ITradeStationInfo currentTrade = null;
-
-    private int stationIndex = 0;
-
-    // for display on client
-    private int stationCount;
-
-    private boolean needsSync = true;
-    private int currentFilter = 1;
-
     private static final String[] FILTER_NAMES = new String[]{"all", "online", "offline"};
     private static final List<Set<IPostalState>> FILTERS = new ArrayList<>();
 
@@ -56,9 +42,15 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
         FILTERS.add(Collections.unmodifiableSet(offline));
     }
 
-    public static ContainerCatalogue fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        return new ContainerCatalogue(windowId, inv);
-    }
+    private final PlayerEntity player;
+    private final List<ITradeStation> stations = new ArrayList<>();
+    @Nullable
+    private ITradeStationInfo currentTrade = null;
+    private int stationIndex = 0;
+    // for display on client
+    private int stationCount;
+    private boolean needsSync = true;
+    private int currentFilter = 1;
 
     public ContainerCatalogue(int windowId, PlayerInventory inv) {
         super(MailContainers.CATALOGUE.containerType(), windowId);
@@ -67,6 +59,10 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
         if (!player.world.isRemote) {
             rebuildStationsList();
         }
+    }
+
+    public static ContainerCatalogue fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+        return new ContainerCatalogue(windowId, inv);
     }
 
     public int getPageCount() {

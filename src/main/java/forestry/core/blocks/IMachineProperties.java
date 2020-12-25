@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.blocks;
 
 import forestry.core.tiles.TileForestry;
@@ -28,10 +28,10 @@ public interface IMachineProperties<T extends TileForestry> extends IStringSeria
     @Nullable
     TileEntity createTileEntity();
 
-    void setBlock(Block block);
-
     @Nullable
     Block getBlock();
+
+    void setBlock(Block block);
 
     boolean isFullCube(BlockState state);
 }

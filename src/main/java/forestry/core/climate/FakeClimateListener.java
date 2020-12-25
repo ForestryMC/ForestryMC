@@ -27,13 +27,13 @@ public class FakeClimateListener implements IClimateListener {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void updateClientSide(boolean spawnParticles) {
-
+    public void setClimateState(IClimateState climateState) {
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void setClimateState(IClimateState climateState) {
+    public void updateClientSide(boolean spawnParticles) {
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import forestry.api.core.INbtWritable;
@@ -55,6 +55,24 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
             Collections.addAll(gameTokens, tokens);
         }
+    }
+
+    private static int getTokenCount(IGenome genome) {
+        IAlleleForestrySpecies species1 = genome.getPrimary(IAlleleForestrySpecies.class);
+        IAlleleForestrySpecies species2 = genome.getSecondary(IAlleleForestrySpecies.class);
+
+        int tokenCount = species1.getComplexity() + species2.getComplexity();
+        if (tokenCount % 2 != 0) {
+            tokenCount = Math.round((float) tokenCount / 2) * 2;
+        }
+
+        if (tokenCount > TOKEN_COUNT_MAX) {
+            tokenCount = TOKEN_COUNT_MAX;
+        } else if (tokenCount < TOKEN_COUNT_MIN) {
+            tokenCount = TOKEN_COUNT_MIN;
+        }
+
+        return tokenCount;
     }
 
     public boolean initialize(ItemStack specimen) {
@@ -173,24 +191,6 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
     public void reset() {
         gameTokens.clear();
         tokenCount = 0;
-    }
-
-    private static int getTokenCount(IGenome genome) {
-        IAlleleForestrySpecies species1 = genome.getPrimary(IAlleleForestrySpecies.class);
-        IAlleleForestrySpecies species2 = genome.getSecondary(IAlleleForestrySpecies.class);
-
-        int tokenCount = species1.getComplexity() + species2.getComplexity();
-        if (tokenCount % 2 != 0) {
-            tokenCount = Math.round((float) tokenCount / 2) * 2;
-        }
-
-        if (tokenCount > TOKEN_COUNT_MAX) {
-            tokenCount = TOKEN_COUNT_MAX;
-        } else if (tokenCount < TOKEN_COUNT_MIN) {
-            tokenCount = TOKEN_COUNT_MIN;
-        }
-
-        return tokenCount;
     }
 
     @Override

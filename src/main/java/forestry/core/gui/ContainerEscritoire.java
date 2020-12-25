@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.gui;
 
 import forestry.core.features.CoreContainers;
@@ -25,12 +25,6 @@ import net.minecraft.network.PacketBuffer;
 
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
     private long lastUpdate;
-
-    //TODO duplicated code with every other ContainerTile, refactor at some point
-    public static ContainerEscritoire fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        TileEscritoire tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileEscritoire.class);
-        return new ContainerEscritoire(windowId, playerInv.player, tile);
-    }
 
     public ContainerEscritoire(int id, PlayerEntity player, TileEscritoire tile) {
         super(id, CoreContainers.ESCRITOIRE.containerType(), player.inventory, tile, 34, 153);
@@ -61,6 +55,12 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
                 ));
             }
         }
+    }
+
+    //TODO duplicated code with every other ContainerTile, refactor at some point
+    public static ContainerEscritoire fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+        TileEscritoire tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileEscritoire.class);
+        return new ContainerEscritoire(windowId, playerInv.player, tile);
     }
 
     @Override

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.tiles;
 
 import forestry.api.core.INbtReadable;
@@ -29,19 +29,12 @@ import java.util.Optional;
 import java.util.Random;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
-    private static final Random rand = new Random();
     public static final int BOUNTY_MAX = 16;
-
-    public enum Status {
-        EMPTY, PLAYING, FAILURE, SUCCESS;
-        public static final Status[] VALUES = values();
-    }
-
+    private static final Random rand = new Random();
     private EscritoireGameBoard gameBoard;
     private long lastUpdate;
     private int bountyLevel;
     private Status status = Status.EMPTY;
-
     public EscritoireGame() {
         gameBoard = new EscritoireGameBoard();
     }
@@ -173,5 +166,10 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
         int samples = gameBoard.getTokenCount() / 4;
         samples = Math.max(samples, 2);
         return Math.min(samples, slotCount);
+    }
+
+    public enum Status {
+        EMPTY, PLAYING, FAILURE, SUCCESS;
+        public static final Status[] VALUES = values();
     }
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- ******************************************************************************/
+ */
 package forestry.core.climate;
 
 import forestry.api.climate.ClimateType;
@@ -18,14 +18,13 @@ import net.minecraft.util.math.MathHelper;
 
 public final class ClimateStateHelper implements IClimateStateHelper {
 
+    public static final ClimateStateHelper INSTANCE = new ClimateStateHelper();
+    public static final IClimateState ZERO_STATE = ImmutableClimateState.MIN;
+    public static final float CLIMATE_CHANGE = 0.01F;
     private static final String TEMPERATURE_NBT_KEY = "TEMP";
     private static final String HUMIDITY_NBT_KEY = "HUMID";
     private static final String ABSENT_NBT_KEY = "ABSENT";
     private static final String MUTABLE_NBT_KEY = "MUTABLE";
-
-    public static final ClimateStateHelper INSTANCE = new ClimateStateHelper();
-    public static final IClimateState ZERO_STATE = ImmutableClimateState.MIN;
-    public static final float CLIMATE_CHANGE = 0.01F;
 
     private ClimateStateHelper() {
     }

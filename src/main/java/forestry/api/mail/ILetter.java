@@ -1,8 +1,8 @@
-/*******************************************************************************
+/*
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- ******************************************************************************/
+ */
 package forestry.api.mail;
 
 import forestry.api.core.INbtWritable;
@@ -18,28 +18,28 @@ public interface ILetter extends IInventory, INbtWritable {
 
     NonNullList<ItemStack> getPostage();
 
-    void setProcessed(boolean flag);
-
     boolean isProcessed();
+
+    void setProcessed(boolean flag);
 
     boolean isMailable();
 
-    void setSender(IMailAddress address);
-
     IMailAddress getSender();
 
-    boolean hasRecipient();
+    void setSender(IMailAddress address);
 
-    void setRecipient(@Nullable IMailAddress address);
+    boolean hasRecipient();
 
     @Nullable
     IMailAddress getRecipient();
 
+    void setRecipient(@Nullable IMailAddress address);
+
     String getRecipientString();
 
-    void setText(String text);
-
     String getText();
+
+    void setText(String text);
 
     void addTooltip(List<ITextComponent> list);
 

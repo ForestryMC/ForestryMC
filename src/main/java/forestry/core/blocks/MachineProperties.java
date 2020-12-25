@@ -31,15 +31,15 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
         this.shape = shape;
     }
 
-    @Override
-    public void setBlock(Block block) {
-        this.block = block;
-    }
-
     @Nullable
     @Override
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public void setBlock(Block block) {
+        this.block = block;
     }
 
     @Override

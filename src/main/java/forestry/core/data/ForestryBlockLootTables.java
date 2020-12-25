@@ -41,6 +41,17 @@ import java.util.function.Function;
 public class ForestryBlockLootTables extends BlockLootTables {
     private final Set<Block> knownBlocks = new HashSet<>();
 
+    public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
+        return droppingWithSilkTouchOrShears(
+                block,
+                withSurvivesExplosion(
+                        block,
+                        ItemLootEntry.builder(ArboricultureItems.SAPLING)
+                                     .acceptFunction(OrganismFunction.fromDefinition(definition))
+                ).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
+        );
+    }
+
     @Override
     public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
         if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
@@ -143,17 +154,6 @@ public class ForestryBlockLootTables extends BlockLootTables {
     public void registerLootTable(Block blockIn, LootTable.Builder builder) {
         this.knownBlocks.add(blockIn);
         super.registerLootTable(blockIn, builder);
-    }
-
-    public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
-        return droppingWithSilkTouchOrShears(
-                block,
-                withSurvivesExplosion(
-                        block,
-                        ItemLootEntry.builder(ArboricultureItems.SAPLING)
-                                     .acceptFunction(OrganismFunction.fromDefinition(definition))
-                ).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
-        );
     }
 
     public void registerSilkTouch(FeatureBlock featureBlock, Block drop) {

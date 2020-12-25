@@ -35,6 +35,10 @@ public class ForestryLootTableProvider implements IDataProvider {
         this.dataGenerator = dataGeneratorIn;
     }
 
+    private static Path getPath(Path path, ResourceLocation id) {
+        return path.resolve("data/" + id.getNamespace() + "/loot_tables/" + id.getPath() + ".json");
+    }
+
     /**
      * Performs this provider's action.
      */
@@ -80,10 +84,6 @@ public class ForestryLootTableProvider implements IDataProvider {
 		}*/
 
         map.forEach((location, loot) -> LootTableManager.validateLootTable(tracker, location, loot));
-    }
-
-    private static Path getPath(Path path, ResourceLocation id) {
-        return path.resolve("data/" + id.getNamespace() + "/loot_tables/" + id.getPath() + ".json");
     }
 
     /**
