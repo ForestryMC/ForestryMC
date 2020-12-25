@@ -69,13 +69,11 @@ public class ApicultureItems {
             () -> new ItemForestry(ItemGroups.tabApiculture),
             "honeydew"
     );
-    //		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
 
     public static final FeatureItem<ItemForestry> ROYAL_JELLY = REGISTRY.item(
             () -> new ItemForestry(ItemGroups.tabApiculture),
             "royal_jelly"
     );
-    //		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
 
     public static final FeatureItem<ItemWaxCast> WAX_CAST = REGISTRY.item(ItemWaxCast::new, "wax_cast");
     public static final FeatureItemGroup<ItemPollenCluster, EnumPollenCluster> POLLEN_CLUSTER = REGISTRY.itemGroup(

@@ -135,19 +135,33 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableLighting();
         if (searchField != null) {
-            this.searchField.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
+            this.searchField.render(transform, mouseX, mouseY, partialTicks);
         }
     }
 
     @Override
     public boolean keyPressed(int key, int scanCode, int modifiers) {
-        if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
+        if (searchField.isFocused()) {
+            searchField.keyPressed(key, scanCode, modifiers);
+            scrollBar.setValue(0);
+            selection.filterEntries(searchField.getText());
+
+            return true;
+        }
+
+        return super.keyPressed(key, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (searchField.isFocused()) {
+            searchField.charTyped(codePoint, modifiers);
             scrollBar.setValue(0);
             selection.filterEntries(searchField.getText());
             return true;
-        } else {
-            return super.keyPressed(key, scanCode, modifiers);
         }
+
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Nullable

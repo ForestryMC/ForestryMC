@@ -27,7 +27,6 @@ public class RainmakerRecipeWrapper implements IRecipeCategoryExtension {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
         FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
         fontRenderer.func_243248_b(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());

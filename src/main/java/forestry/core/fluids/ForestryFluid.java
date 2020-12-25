@@ -1,5 +1,6 @@
 package forestry.core.fluids;
 
+import forestry.core.config.Constants;
 import forestry.modules.features.FeatureFluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,6 +9,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -17,6 +19,10 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
 
 public abstract class ForestryFluid extends FlowingFluid {
     public final boolean flowing;
@@ -75,8 +81,11 @@ public abstract class ForestryFluid extends FlowingFluid {
     }
 
     @Override
+    @Nullable
     public Item getFilledBucket() {
-        return null;    //TODO fluids
+        return ForgeRegistries.ITEMS.getValue(
+                new ResourceLocation(Constants.MOD_ID, this.definition.getIdentifier() + "_bucket")
+        );
     }
 
     @Override

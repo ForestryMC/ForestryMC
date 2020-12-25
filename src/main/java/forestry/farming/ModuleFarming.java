@@ -82,7 +82,15 @@ public class ModuleFarming extends BlankForestryModule {
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(this);
         IFarmRegistry registry = ForestryAPI.farmRegistry;
-        registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
+        registry.registerFarmables(
+                ForestryFarmIdentifier.ARBOREAL,
+                new FarmableVanillaSapling(Blocks.OAK_SAPLING),
+                new FarmableVanillaSapling(Blocks.SPRUCE_SAPLING),
+                new FarmableVanillaSapling(Blocks.ACACIA_SAPLING),
+                new FarmableVanillaSapling(Blocks.BIRCH_SAPLING),
+                new FarmableVanillaSapling(Blocks.JUNGLE_SAPLING),
+                new FarmableVanillaSapling(Blocks.DARK_OAK_SAPLING)
+        );
         if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
             registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
         }
@@ -123,19 +131,24 @@ public class ModuleFarming extends BlankForestryModule {
                 )
         );
 
-		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
-		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));
-
-		BlockState plantedRedMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.RED);
-		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), plantedRedMushroom, Blocks.RED_MUSHROOM_BLOCK));*/
-
         registry.registerFarmables(
-                ForestryFarmIdentifier.GOURD,
-                new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN)
+                ForestryFarmIdentifier.SHROOM,
+                new FarmableVanillaMushroom(
+                        new ItemStack(Blocks.RED_MUSHROOM),
+                        Blocks.RED_MUSHROOM_BLOCK.getDefaultState(),
+                        Blocks.RED_MUSHROOM_BLOCK
+                ),
+                new FarmableVanillaMushroom(
+                        new ItemStack(Blocks.BROWN_MUSHROOM),
+                        Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState(),
+                        Blocks.BROWN_MUSHROOM_BLOCK
+                )
         );
+
         registry.registerFarmables(
                 ForestryFarmIdentifier.GOURD,
-                new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON)
+                new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON),
+                new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN)
         );
 
         registry.registerFarmables(
@@ -173,7 +186,6 @@ public class ModuleFarming extends BlankForestryModule {
 
     @Override
     public void doInit() {
-
         //Load config
         File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
         LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");

@@ -1,6 +1,9 @@
 package forestry.factory.recipes.jei;
 
 import forestry.core.config.Constants;
+import forestry.core.gui.ContainerAnalyzer;
+import forestry.core.gui.ContainerForestry;
+import forestry.core.gui.ContainerTile;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
@@ -11,6 +14,7 @@ import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import forestry.factory.gui.*;
 import forestry.factory.recipes.jei.bottler.BottlerRecipeCategory;
+import forestry.factory.recipes.jei.bottler.BottlerRecipeMaker;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeCategory;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeMaker;
 import forestry.factory.recipes.jei.carpenter.CarpenterRecipeTransferHandler;
@@ -40,6 +44,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
@@ -58,10 +63,10 @@ public class FactoryJeiPlugin implements IModPlugin {
         return new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.FACTORY);
     }
 
-    private static class ForestryAdvancedGuiHandler implements IGuiContainerHandler<GuiForestry<?>> {
+    static class ForestryAdvancedGuiHandler<T extends Container> implements IGuiContainerHandler<GuiForestry<?>> {
         @Override
         public List<Rectangle2d> getGuiExtraAreas(GuiForestry guiContainer) {
-            return ((GuiForestry<?>) guiContainer).getExtraGuiAreas();
+            return guiContainer.getExtraGuiAreas();
         }
 
         @Nullable
@@ -208,7 +213,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registry) {
-//        registry.addGuiContainerHandler(GuiForestry.class, new ForestryAdvancedGuiHandler());
+        registry.addGenericGuiContainerHandler(GuiForestry.class, new ForestryAdvancedGuiHandler<ContainerForestry>());
 
         if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
             registry.addRecipeClickArea(
@@ -323,12 +328,12 @@ public class FactoryJeiPlugin implements IModPlugin {
 
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
 
-//        if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
-//            registry.addRecipes(
-//                    BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientManager()),
-//                    ForestryRecipeCategoryUid.BOTTLER
-//            );
-//        }
+        if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
+            registry.addRecipes(
+                    BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientManager()),
+                    ForestryRecipeCategoryUid.BOTTLER
+            );
+        }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.CARPENTER)) {
             registry.addRecipes(

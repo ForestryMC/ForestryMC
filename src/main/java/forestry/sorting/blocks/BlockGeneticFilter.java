@@ -5,6 +5,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.TileGeneticFilter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -42,10 +43,10 @@ public class BlockGeneticFilter extends BlockForestry {
     public BlockGeneticFilter() {    //TODO super resets hardness and resistance
         super(Block.Properties.create(Material.WOOD)
                               .hardnessAndResistance(0.25f, 3.0f)
-                              .variableOpacity()    //TODO maybe?
+                              .notSolid()
+                              .setOpaque((state, reader, pos) -> true)
                 //				setLightOpacity(0);
         );
-        //		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item
         this.setDefaultState(this.getStateContainer().getBaseState()
                                  .with(NORTH, false)
                                  .with(EAST, false)
@@ -156,20 +157,4 @@ public class BlockGeneticFilter extends BlockForestry {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileGeneticFilter();
     }
-
-    //ToDO bounding boxes
-    //	@Override
-    //	public boolean isFullCube(BlockState state) {
-    //		return false;
-    //	}
-    //
-    //	@Override
-    //	public boolean isFullBlock(BlockState state) {
-    //		return false;
-    //	}
-    //
-    //	@Override
-    //	public boolean isOpaqueCube(BlockState state) {
-    //		return false;
-    //	}
 }

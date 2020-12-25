@@ -78,5 +78,4 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
         }
         return storedData;
     }
-
 }

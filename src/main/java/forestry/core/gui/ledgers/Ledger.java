@@ -278,7 +278,8 @@ public abstract class Ledger {
         int originalY = y;
         Minecraft minecraft = Minecraft.getInstance();
         for (ITextProperties textProperties : minecraft.fontRenderer.getCharacterManager()
-                                                                    .func_238362_b_(component, width, Style.EMPTY)) {
+                                                                    .func_238362_b_(component, width, Style.EMPTY)
+        ) {
             if (shadow) {
                 minecraft.fontRenderer.func_243246_a(
                         transform,

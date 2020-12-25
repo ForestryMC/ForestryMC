@@ -665,7 +665,6 @@ public class Bee extends IndividualLiving implements IBee {
     @Override
     @Nullable
     public Optional<IIndividual> retrievePollen(IBeeHousing housing) {
-
         IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
         int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(
@@ -783,6 +782,7 @@ public class Bee extends IndividualLiving implements IBee {
         if (random.nextInt(100) >= chance) {
             return Optional.empty();
         }
+
         // Gather required info
         IFlowerProvider provider = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
         Vector3i area = getArea(genome, beeModifier);
@@ -803,6 +803,7 @@ public class Bee extends IndividualLiving implements IBee {
                 return Optional.of(posBlock);
             }
         }
+
         return Optional.empty();
     }
 

@@ -27,7 +27,7 @@
     "name": "arboriculture",
     "icon": {
       "item": "forestry:sapling",
-      "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_cherry\",UID0:\"forestry..tree_cherry\",Slot:0b}]}}"
+      "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_cherry\",UID0:\"forestry.tree_cherry\",Slot:0b}]}}"
     },
     "modules": [
       "arboriculture"

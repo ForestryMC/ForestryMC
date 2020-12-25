@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.core.particles.ColoredDripParticle;
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FluidProperties;
 import net.minecraft.block.Block;
@@ -17,6 +18,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
@@ -93,9 +96,10 @@ public class BlockForestryFluid extends FlowingFluidBlock {
             }
         }
 
-        if (this.material == Material.LAVA && world.getBlockState(pos.up())
-                                                   .getMaterial() == Material.AIR &&
-            !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
+        if (this.material == Material.LAVA
+            && world.getBlockState(pos.up()).getMaterial() == Material.AIR
+            && !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())
+        ) {
             if (rand.nextInt(100) == 0) {
                 double d8 = d0 + rand.nextFloat();
                 double d4 = d1 + 1;
@@ -135,8 +139,16 @@ public class BlockForestryFluid extends FlowingFluidBlock {
                 double py = d1 - 1.05D;
                 double pz = d2 + rand.nextFloat();
 
-				/*Particle fx = new ParticleColoredDripParticle(world, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-				Minecraft.getInstance().particles.addEffect(fx);*/
+                Particle fx = new ColoredDripParticle(
+                        (World) world,
+                        px,
+                        py,
+                        pz,
+                        color.getRed() / 255f,
+                        color.getGreen() / 255f,
+                        color.getBlue() / 255f
+                );
+                Minecraft.getInstance().particles.addEffect(fx);
             }
         }
     }

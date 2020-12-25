@@ -21,8 +21,9 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
     public RainmakerRecipeCategory(IGuiHelper guiHelper) {
         super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker");
         this.slot = guiHelper.getSlotDrawable();
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER)
-                                                                                       .block()));
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block())
+        );
     }
 
     @Override
@@ -43,6 +44,9 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
     @Override
     public void draw(RainmakerRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         super.draw(recipe, matrixStack, mouseX, mouseY);
+        int recipeWidth = this.getBackground().getWidth();
+        int recipeHeight = this.getBackground().getHeight();
+        recipe.drawInfo(recipeWidth, recipeHeight, matrixStack, mouseX, mouseY);
         slot.draw(matrixStack);
     }
 

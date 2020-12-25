@@ -17,7 +17,4 @@ public class CreateItems {
             () -> new ItemCrated(ItemStack.EMPTY, null),
             "crate"
     );
-
-    private CreateItems() {
-    }
 }

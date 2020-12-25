@@ -18,10 +18,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.Region;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -45,7 +42,7 @@ public abstract class TileUtil {
     /**
      * Returns the tile at the specified position, returns null if it is the wrong type or does not exist.
      * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-     * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
+     * see {@link FlowerPotBlock#updatePostPlacement(BlockState, Direction, BlockState, IWorld, BlockPos, BlockPos)}
      */
     @Nullable
     public static TileEntity getTile(IBlockReader world, BlockPos pos) {
@@ -60,7 +57,7 @@ public abstract class TileUtil {
     /**
      * Returns the tile of the specified class, returns null if it is the wrong type or does not exist.
      * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-     * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
+     * see {@link FlowerPotBlock#updatePostPlacement(BlockState, Direction, BlockState, IWorld, BlockPos, BlockPos)}
      */
     @Nullable
     public static <T> T getTile(IBlockReader world, BlockPos pos, Class<T> tileClass) {

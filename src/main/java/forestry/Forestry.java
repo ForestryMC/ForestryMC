@@ -125,8 +125,6 @@ public class Forestry {
         configFolder = new File("./config/forestry");
         Config.load(Dist.DEDICATED_SERVER);
 
-        //TODO not sure where this is enabled any more
-        //		FluidRegistry.enableUniversalBucket();
         ModuleManager moduleManager = ModuleManager.getInstance();
         ForestryAPI.moduleManager = moduleManager;
         moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());

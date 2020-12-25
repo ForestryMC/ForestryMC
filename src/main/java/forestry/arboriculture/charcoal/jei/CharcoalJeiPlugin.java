@@ -3,16 +3,14 @@ package forestry.arboriculture.charcoal.jei;
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
+import forestry.arboriculture.charcoal.CharcoalPileWall;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IRecipeTransferRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,11 +19,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @JeiPlugin
 @OnlyIn(Dist.CLIENT)
 public class CharcoalJeiPlugin implements IModPlugin {
-    public static final ResourceLocation RECIPE_UID = new ResourceLocation(Constants.MOD_ID, "forestry.charcoal.pile");
-
     @Override
     public ResourceLocation getPluginUid() {
-        return RECIPE_UID;
+        return new ResourceLocation(Constants.MOD_ID);
     }
 
     @Override
@@ -44,8 +40,8 @@ public class CharcoalJeiPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-//        registration.addRecipeTransferHandler(CharcoalPileWall.class, CharcoalPileWallWrapper::new, RECIPE_UID);
+    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+//        registration.getCraftingCategory().addCategoryExtension(CharcoalPileWall.class, CharcoalPileWallWrapper::new);
     }
 
     @Override

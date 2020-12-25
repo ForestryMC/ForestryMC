@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.particles;
 
-//import net.minecraft.block.BlockLiquid;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.IParticleRenderType;
@@ -19,17 +17,18 @@ import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 //TODO - sort out setParticleTextureIndex
-public class ParticleColoredDripParticle extends SpriteTexturedParticle {
+public class ColoredDripParticle extends SpriteTexturedParticle {
 
     /**
      * The height of the current bob
      */
     private int bobTimer;
 
-    public ParticleColoredDripParticle(
-            ClientWorld world,
+    public ColoredDripParticle(
+            World world,
             double x,
             double y,
             double z,
@@ -37,7 +36,7 @@ public class ParticleColoredDripParticle extends SpriteTexturedParticle {
             float green,
             float blue
     ) {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+        super((ClientWorld) world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
 
         this.particleRed = red;

@@ -29,12 +29,14 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -111,14 +113,22 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
         builder.add(STATE);
     }
 
-    //	@Override
-    //	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-    //		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
-    //		if (tileCandle != null && tileCandle.isLit()) {
-    //			state = state.with(STATE, State.ON);
-    //		}
-    //		return super.getActualState(state, world, pos);
-    //	}
+    @Override
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            IWorld world,
+            BlockPos pos,
+            BlockPos facingPos
+    ) {
+        TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+        if (tileCandle != null && tileCandle.isLit()) {
+            state = state.with(STATE, State.ON);
+        }
+
+        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+    }
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
@@ -140,6 +150,8 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     ) {
         TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
         if (tileCandle == null) {
+            System.out.println("candle " + pos.getCoordinatesAsString());
+            System.out.println("ah!!!");
             return ActionResultType.FAIL;
         }
 
@@ -158,6 +170,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
             }
         }
 
+        System.out.println("okokok");
         if (!heldItem.isEmpty()) {
             if (ItemStackUtil.equals(this, heldItem)) {
                 if (!isLit(heldItem)) {
@@ -196,6 +209,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
+        System.out.println("try dye");
         DyeColor color = DyeColor.getColor(held);
         if (color != null) {
             if (isLit) {
@@ -324,19 +338,11 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
     }
 
     public static boolean isLit(ItemStack itemStack) {
-        return false;//TODO properties or something itemStack.getItemDamage() > 0;
+        return itemStack.getDamage() > 0;
     }
 
     public static void addItemToLightingList(Item item) {
         lightingItems.add(item);
-    }
-
-    public ItemStack getUnlitCandle(int amount) {
-        return new ItemStack(this, amount);//TODO flatten , 0);
-    }
-
-    public ItemStack getLitCandle(int amount) {
-        return new ItemStack(this, amount);// TODO flatten , 1);
     }
 
     @OnlyIn(Dist.CLIENT)

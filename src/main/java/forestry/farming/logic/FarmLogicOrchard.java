@@ -17,6 +17,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.farming.logic.crops.CropFruit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -76,8 +77,10 @@ public class FarmLogicOrchard extends FarmLogic {
         // Determine what type we want to harvest.
         BlockState blockState = world.getBlockState(position);
         Block block = blockState.getBlock();
-        //TODO tags
-        if (false) {//!block.isWood(world, position) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
+        if (!block.isIn(BlockTags.LOGS) &&
+            !isBlockTraversable(blockState, traversalBlocks) &&
+            !isFruitBearer(world, position, blockState)
+        ) {
             return crops;
         }
 
@@ -126,7 +129,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
                     BlockState blockState = world.getBlockState(candidate);
                     Block block = blockState.getBlock();
-                    if (false) {//block.isWood(world, candidate) || isBlockTraversable(blockState, traversalBlocks)) {
+                    if (block.isIn(BlockTags.LOGS) || isBlockTraversable(blockState, traversalBlocks)) {
                         candidates.add(candidate);
                         seen.add(candidate);
                     }

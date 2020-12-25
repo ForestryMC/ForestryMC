@@ -45,6 +45,7 @@ public enum FarmDefinition implements IStringSerializable {
         @Override
         protected void initProperties(IFarmPropertiesBuilder properties) {
             properties.setIcon(() -> new ItemStack(Items.MELON))
+                      .addSoil(Blocks.DIRT)
                       .setFertilizer(10)
                       .setWater(hydrationModifier -> (int) (40 * hydrationModifier));
         }
@@ -192,7 +193,7 @@ public enum FarmDefinition implements IStringSerializable {
             String module
     ) {
         String camelCase = WordUtils.capitalize(identifier);
-        IFarmPropertiesBuilder builder = FarmRegistry.getInstance().getPropertiesBuilder(identifier)
+        IFarmPropertiesBuilder builder = FarmRegistry.getInstance().getPropertiesBuilder("farm" + camelCase)
                                                      .setFactory(factory)
                                                      .setTranslationKey("for.farm." + identifier)
                                                      .addFarmables("farm" + camelCase);

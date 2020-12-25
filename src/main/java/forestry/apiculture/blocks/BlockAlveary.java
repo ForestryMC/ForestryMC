@@ -32,6 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
@@ -130,6 +131,13 @@ public class BlockAlveary extends BlockStructure {
     @Override
     public boolean hasTileEntity(BlockState state) {
         return true;
+    }
+
+    @Override
+    public BlockState getStateAtViewpoint(
+            BlockState state, IBlockReader world, BlockPos pos, Vector3d viewpoint
+    ) {
+        return null;
     }
 
     @Override

@@ -24,10 +24,10 @@
             "XXX"
           ],
           "key": {
-            "X": {
+            "#": {
               "item": "minecraft:repeater"
             },
-            "#": {
+            "X": {
               "item": "minecraft:redstone_ore"
             }
           },

@@ -26,22 +26,8 @@ public class DatabaseHelper {
                                                  .compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
     };
 
-    //TODO simplify this?
     public static ITextComponent getItemName(ItemStack itemStack) {
-        try {
-            ITextComponent name = itemStack.getDisplayName();
-            if (name.getUnformattedComponentText().isEmpty()) {
-                name = new TranslationTextComponent(itemStack.getItem().getTranslationKey(itemStack));
-            }
-            return name;
-        } catch (final Exception errA) {
-            try {
-                String name = itemStack.getTranslationKey();
-                return new TranslationTextComponent(name);
-            } catch (final Exception errB) {
-                return new StringTextComponent("Exception");
-            }
-        }
+        return itemStack.getDisplayName();
     }
 
     public static void update(String searchText, List<DatabaseItem> items, ArrayList<DatabaseItem> sorted) {

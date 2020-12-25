@@ -27,11 +27,6 @@ public class DummyFarmRegistry implements IFarmRegistry {
     }
 
     @Override
-    public IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance) {
-        return null;
-    }
-
-    @Override
     public IFarmPropertiesBuilder getPropertiesBuilder(String identifier) {
         //Dummy-Implementation
         return null;

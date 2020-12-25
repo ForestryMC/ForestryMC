@@ -102,7 +102,6 @@ public class GuiTextBox extends TextFieldWidget {
 
             count++;
         }
-
     }
 
     //TODO gui, rendering, I have no idea where these methods have gone

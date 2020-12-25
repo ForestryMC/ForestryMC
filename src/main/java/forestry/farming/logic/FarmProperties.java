@@ -248,7 +248,7 @@ public final class FarmProperties implements IFarmProperties {
         @Override
         public IFarmProperties create() {
             return FarmRegistry.getInstance().registerProperties(
-                    "farm" + WordUtils.capitalize(identifier),
+                    identifier,
                     new FarmProperties(this)
             );
         }

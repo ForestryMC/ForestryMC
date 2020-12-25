@@ -71,12 +71,14 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
         minecraft.keyboardListener.enableRepeatEvents(true);
 
         address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
+        address.setEnabled(true);
         IMailAddress recipient = container.getRecipient();
         if (recipient != null) {
             address.setText(recipient.getName());
         }
 
         text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
+        text.setEnabled(true);
         text.setMaxStringLength(128);
         if (!container.getText().isEmpty()) {
             text.setText(container.getText());
@@ -84,52 +86,67 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
     }
 
     @Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         // Set focus or enter text into address
         if (this.address.isFocused()) {
-            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
                 this.address.setFocused2(false);
             } else {
-                this.address.keyPressed(key, scanCode, modifiers);
+                this.address.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
         }
 
         if (this.text.isFocused()) {
-            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
                 if (hasShiftDown()) {
                     text.setText(text.getText() + "\n");
                 } else {
                     this.text.setFocused2(false);
                 }
-            } else if (scanCode == GLFW.GLFW_KEY_DOWN) {
+            } else if (keyCode == GLFW.GLFW_KEY_DOWN) {
                 text.advanceLine();
-            } else if (scanCode == GLFW.GLFW_KEY_UP) {
+            } else if (keyCode == GLFW.GLFW_KEY_UP) {
                 text.regressLine();
-            } else if (text.moreLinesAllowed() || scanCode == GLFW.GLFW_KEY_DELETE ||
-                       scanCode == GLFW.GLFW_KEY_BACKSLASH) {
-                this.text.keyPressed(key, scanCode, modifiers);
+            } else if (
+                    text.moreLinesAllowed() ||
+                    keyCode == GLFW.GLFW_KEY_DELETE ||
+                    keyCode == GLFW.GLFW_KEY_BACKSLASH
+            ) {
+                this.text.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
         }
 
-        return super.keyPressed(key, scanCode, modifiers);
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        // Set focus or enter text into address
+        if (this.address.isFocused()) {
+            this.address.charTyped(codePoint, modifiers);
+            return true;
+        }
+
+        if (this.text.isFocused()) {
+            this.text.charTyped(codePoint, modifiers);
+            return true;
+        }
+
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
-            return true;
-        }
         this.address.mouseClicked(mouseX, mouseY, mouseButton);
         this.text.mouseClicked(mouseX, mouseY, mouseButton);
-        return true;
+
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-
         if (!isProcessedLetter && !checkedSessionVars) {
             checkedSessionVars = true;
             setFromSessionVars();
@@ -171,7 +188,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
             );
         } else {
             clearTradeInfoWidgets();
-            address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
+            address.render(transform, mouseX, mouseY, partialTicks);
             if (container.getCarrierType() == EnumAddressee.TRADER) {
                 drawTradePreview(transform, 18, 32);
             } else {
@@ -181,7 +198,6 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
     }
 
     private void drawTradePreview(MatrixStack transform, int x, int y) {
-
         ITextComponent infoString = null;
         if (container.getTradeInfo() == null) {
             infoString = new TranslationTextComponent("for.gui.mail.no.trader");

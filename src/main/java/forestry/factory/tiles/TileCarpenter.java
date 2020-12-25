@@ -67,8 +67,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
     @Nullable
     private ICarpenterRecipe currentRecipe;
-    @Nullable
-    private NonNullList<String> oreDicts;
 
     private ItemStack getBoxStack() {
         return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);

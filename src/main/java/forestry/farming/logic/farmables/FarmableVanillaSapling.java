@@ -10,15 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
 public class FarmableVanillaSapling extends FarmableSapling {
 
-    public FarmableVanillaSapling() {
+    public FarmableVanillaSapling(Block sapling) {
         super(
-                new ItemStack(Blocks.OAK_SAPLING),
+                new ItemStack(sapling),
                 new ItemStack[]{new ItemStack(Items.APPLE), new ItemStack(Items.COCOA_BEANS)}
         );
     }

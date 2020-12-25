@@ -51,10 +51,12 @@ public class BlockCocoon extends Block {
     public BlockCocoon() {
         super(Block.Properties.create(MaterialCocoon.INSTANCE)
                               .tickRandomly()
+                              .notSolid()
                               .sound(SoundType.GROUND));
-        //		setCreativeTab(null);
+
         setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-                            .with(AlleleButterflyCocoon.AGE, 0));
+                            .with(AlleleButterflyCocoon.AGE, 0)
+        );
     }
 
     @Override
@@ -72,17 +74,6 @@ public class BlockCocoon extends Block {
     //				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
     //		}
     //		return super.getActualState(state, world, pos);
-    //	}
-
-
-    //	@Override
-    //	public boolean isFullBlock(BlockState state) {
-    //		return false;
-    //	}
-    //
-    //	@Override
-    //	public boolean isOpaqueCube(BlockState state) {
-    //		return false;
     //	}
 
     @Override
@@ -147,16 +138,9 @@ public class BlockCocoon extends Block {
         return stack;
     }
 
-    //TODO automatically determined from shape?
-    //	@Override
-    //	public boolean isFullCube(BlockState state) {
-    //		return false;
-    //	}
-
     //other shapes (collision etc) defer to this in block I believe
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return BOUNDING_BOX;
     }
-
 }

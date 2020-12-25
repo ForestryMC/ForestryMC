@@ -14,10 +14,14 @@ import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
+import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.core.gui.GuiNaturalistInventory;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
@@ -25,6 +29,9 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -39,19 +46,24 @@ public class ItemBackpackNaturalist extends ItemBackpack {
         super(definition, EnumBackpackType.NATURALIST, tab);
         this.rootUid = rootUid;
     }
-    //TODO gui
-    //	@Override
-    //	protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
-    //		NetworkHooks.openGui(playerEntity, ContainerNaturalistInventory,
-    //		});
-    //	}
-    //	@Override
-    //	@OnlyIn(Dist.CLIENT)
-    //	public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int page) {
-    //		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
-    //		ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
-    //		return new GuiNaturalistInventory(speciesRoot, player, container, page, 5);
-    //	}
+
+    @Override
+    protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
+        NetworkHooks.openGui(playerEntity, new ContainerProvider(stack));
+    }
+
+//    @Override
+//    @OnlyIn(Dist.CLIENT)
+//    public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int page) {
+//        ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
+//                player,
+//                Constants.SLOTS_BACKPACK_APIARIST,
+//                heldItem,
+//                this
+//        );
+//        ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
+//        return new GuiNaturalistInventory(container, player.inventory, this.rootUid);
+//    }
 
     @Override
     public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {

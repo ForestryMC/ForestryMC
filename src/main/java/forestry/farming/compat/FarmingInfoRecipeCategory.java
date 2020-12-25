@@ -1,11 +1,10 @@
 package forestry.farming.compat;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.blocks.EnumFarmMaterial;
-import forestry.farming.features.FarmingBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -33,10 +32,9 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
         );
         addition = guiHelper.createDrawable(resourceLocation, 44, 0, 15, 15);
         arrow = guiHelper.createDrawable(resourceLocation, 59, 0, 15, 15);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(FarmingBlocks.FARM.get(
-                EnumFarmBlockType.PLAIN,
-                EnumFarmMaterial.BRICK
-        ).block()));
+        this.icon = guiHelper.createDrawableIngredient(
+                new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE))
+        );
     }
 
     @Override
@@ -78,6 +76,10 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
                 slotDrawable.draw(matrixStack, 108 + x * 18, 54 + y * 18);
             }
         }
+
+        int recipeWidth = this.getBackground().getWidth();
+        int recipeHeight = this.getBackground().getHeight();
+        recipe.drawInfo(recipeWidth, recipeHeight, matrixStack, mouseX, mouseY);
     }
 
     @Override

@@ -242,7 +242,8 @@ public class MultiblockWorldRegistry {
                 // Validate that they are empty/dead, then unregister them.
                 if (!controller.isEmpty()) {
                     Log.error(
-                            "Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!");
+                            "Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!"
+                    );
                     detachedParts.addAll(controller.detachAllBlocks());
                 }
 

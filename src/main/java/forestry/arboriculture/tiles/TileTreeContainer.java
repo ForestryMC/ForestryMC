@@ -47,8 +47,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
     private ITree containedTree;
     private final OwnerHandler ownerHandler = new OwnerHandler();
 
-    public TileTreeContainer(TileEntityType<?> p_i48289_1_) {
-        super(p_i48289_1_);
+    public TileTreeContainer(TileEntityType<?> tileEntityTypeIn) {
+        super(tileEntityTypeIn);
     }
 
     /* SAVING & LOADING */

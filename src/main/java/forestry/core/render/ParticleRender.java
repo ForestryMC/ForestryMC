@@ -8,9 +8,10 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.apiculture.particles.BeeParticleData;
 import forestry.core.config.Config;
-import forestry.core.particles.ParticleIgnition;
-import forestry.core.particles.ParticleSmoke;
-import forestry.core.particles.ParticleSnow;
+import forestry.core.particles.IgnitionParticle;
+import forestry.core.particles.SmokeParticle;
+import forestry.core.particles.SnowParticleData;
+import forestry.core.utils.ColourUtil;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.WorldUtils;
 import genetics.api.individual.IGenome;
@@ -31,8 +32,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.Random;
-
-//import forestry.core.entities.ParticleClimate;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleRender {
@@ -200,9 +199,19 @@ public class ParticleRender {
             return;
         }
 
-        ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        //		effectRenderer.addEffect(new ParticleClimate(world, x, y, z, color));
-        //TODO particles
+        float particleRed = ColourUtil.getRedAsFloat(color);
+        float particleGreen = ColourUtil.getGreenAsFloat(color);
+        float particleBlue = ColourUtil.getBlueAsFloat(color);
+
+        world.addParticle(
+                new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F),
+                x,
+                y,
+                z,
+                0,
+                0,
+                0
+        );
     }
 
     public static void addTransformParticles(World worldIn, BlockPos pos, Random rand) {
@@ -229,9 +238,20 @@ public class ParticleRender {
             return;
         }
 
-        ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        //		effectRenderer.addEffect(new ParticleClimate(world, x, y, z));
-        //TODO particles
+        int color = 0x37485a;
+        float particleRed = ColourUtil.getRedAsFloat(color);
+        float particleGreen = ColourUtil.getGreenAsFloat(color);
+        float particleBlue = ColourUtil.getBlueAsFloat(color);
+
+        world.addParticle(
+                new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F),
+                x,
+                y,
+                z,
+                0,
+                0,
+                0
+        );
     }
 
     public static void addEntityExplodeFX(World world, double x, double y, double z) {
@@ -247,13 +267,19 @@ public class ParticleRender {
             return;
         }
 
-        ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        effectRenderer.addEffect(new ParticleSnow(
-                WorldUtils.asClient(world),
+        world.addParticle(
+                new SnowParticleData(
+                        x + world.rand.nextGaussian(),
+                        y,
+                        z + world.rand.nextGaussian()
+                ),
                 x + world.rand.nextGaussian(),
                 y,
-                z + world.rand.nextGaussian()
-        ));
+                z + world.rand.nextGaussian(),
+                0.0f,
+                0.0f,
+                0.0f
+        );
     }
 
     public static void addEntityIgnitionFX(ClientWorld world, double x, double y, double z) {
@@ -262,7 +288,7 @@ public class ParticleRender {
         }
 
         ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        effectRenderer.addEffect(new ParticleIgnition(world, x, y, z));
+        effectRenderer.addEffect(new IgnitionParticle(world, x, y, z));
     }
 
     public static void addEntitySmokeFX(World world, double x, double y, double z) {
@@ -271,7 +297,7 @@ public class ParticleRender {
         }
 
         ParticleManager effectRenderer = Minecraft.getInstance().particles;
-        effectRenderer.addEffect(new ParticleSmoke(WorldUtils.asClient(world), x, y, z));
+        effectRenderer.addEffect(new SmokeParticle(WorldUtils.asClient(world), x, y, z));
     }
 
     public static void addEntityPotionFX(World world, double x, double y, double z, int color) {
@@ -317,13 +343,5 @@ public class ParticleRender {
                 ySpeed,
                 zSpeed
         );
-    }
-
-    public static void addEntityBiodustFX(World world, double x, double y, double z) {
-        if (!shouldSpawnParticle(world)) {
-            return;
-        }
-
-        world.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0, 0, 0);
     }
 }

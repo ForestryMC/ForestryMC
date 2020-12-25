@@ -198,7 +198,6 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
     private static boolean isJungleTreeTrunk(BlockState blockState) {
         Block block = blockState.getBlock();
-        //TODO - hopefully this is OK
         return block == Blocks.JUNGLE_LOG;
     }
 

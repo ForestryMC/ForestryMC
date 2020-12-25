@@ -32,9 +32,7 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     private final IFilterSlotDelegate filterSlotDelegate;
     @Nullable
     private ResourceLocation backgroundTexture = null;
-    private ResourceLocation blockedTexture = TextureManagerForestry.getInstance()
-                                                                    .getDefault("slots/blocked")
-                                                                    .getName();
+    private ResourceLocation blockedTexture = new ResourceLocation(Constants.MOD_ID, "slots/blocked");
 
     public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
         super(inventory, slotIndex, xPos, yPos);
@@ -49,12 +47,12 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
     }
 
     public SlotFiltered setBlockedTexture(String ident) {
-        blockedTexture = TextureManagerForestry.getInstance().getDefault(ident).getName();
+        blockedTexture = new ResourceLocation(Constants.MOD_ID, ident);
         return this;
     }
 
     public SlotFiltered setBackgroundTexture(String ident) {
-        backgroundTexture = TextureManagerForestry.getInstance().getDefault(ident).getName();
+        backgroundTexture = new ResourceLocation(Constants.MOD_ID, ident);
         return this;
     }
 

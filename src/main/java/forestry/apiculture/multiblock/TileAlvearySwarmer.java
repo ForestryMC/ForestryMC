@@ -97,6 +97,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
         if (!optionalPrincess.isPresent()) {
             return;
         }
+
         IBee princess = optionalPrincess.get();
         princess.setIsNatural(false);
         pendingSpawns.push(BeeManager.beeRoot.getTypes().createStack(princess, EnumBeeType.PRINCESS));
@@ -133,7 +134,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
     }
 
     private void trySpawnSwarm() {
-
         ItemStack toSpawn = pendingSpawns.peek();
         HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
         Hive hive = new Hive(hiveDescription);

@@ -30,17 +30,17 @@ public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
      * Adds an ore dictionary name as valid for this backpack.
      * The backpack will pick up any item that has this oreDictName.
      *
-     * @see OreDictionary
+     * @see net.minecraft.tags.ItemTags
      */
-    void acceptTagName(String oreDictName);
+    void acceptTagName(String tag);
 
     /**
      * Removes an ore dictionary name as valid for this backpack.
      * The backpack will not pick up any item that has this oreDictName.
      *
-     * @see OreDictionary
+     * @see net.minecraft.tags.ItemTags
      */
-    void rejectOreDictName(String oreDictName);
+    void rejectTagName(String tag);
 
     /**
      * Clear all the rules from this filter.

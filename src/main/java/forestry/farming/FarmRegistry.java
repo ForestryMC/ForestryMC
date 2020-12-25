@@ -65,12 +65,6 @@ public final class FarmRegistry implements IFarmRegistry {
     }
 
     @Override
-    public IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance) {
-        farmInstances.put(identifier, farmInstance);
-        return farmInstance;
-    }
-
-    @Override
     public IFarmPropertiesBuilder getPropertiesBuilder(String identifier) {
         return propertiesBuilders.computeIfAbsent(identifier, FarmProperties.Builder::new);
     }

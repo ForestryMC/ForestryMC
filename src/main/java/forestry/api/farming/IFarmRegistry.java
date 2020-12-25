@@ -11,20 +11,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 public interface IFarmRegistry {
-
-    /**
-     * Registers farming logic in registry
-     *
-     * @since Forestry 5.8
-     */
-    IFarmProperties registerLogic(String identifier, IFarmProperties farmInstance);
-
     /**
      * Registers farming logic in registry under given identifier
      *
      * @param identifier           Valid identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
-     * @param logicFactory         factory that creates the corresponding instance of logic
-     * @param farmablesIdentifiers Identifiers: farmArboreal farmCrops farmGourd farmInfernal farmPoales farmSucculentes farmShroom
      */
     IFarmPropertiesBuilder getPropertiesBuilder(String identifier);
 

@@ -112,7 +112,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
                 shutdown(false);
             } else if (shutdown) {
                 if (heatingTank.getFluidAmount() > 0 &&
-                    heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
+                    heatingTank.getFluidType() == null
+                ) {// TODO fluids FluidRegistry.LAVA) {
                     addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
                     heatingTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
                 }

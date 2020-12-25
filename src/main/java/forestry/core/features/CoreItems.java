@@ -1,13 +1,17 @@
 package forestry.core.features;
 
+import forestry.api.core.ItemGroups;
 import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.ItemResearchNote;
 import forestry.core.items.*;
 import forestry.modules.features.*;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.ToolType;
 
 @FeatureProvider
@@ -138,6 +142,60 @@ public class CoreItems {
             ItemFruit.EnumFruit.VALUES
     );
 
-    private CoreItems() {
-    }
+    public static final FeatureItem<BucketItem> BIO_ETHANOL_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.BIO_ETHANOL.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "bio_ethanol_bucket"
+    );
+    public static final FeatureItem<BucketItem> BIOMASS_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.BIOMASS.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "biomass_bucket"
+    );
+    public static final FeatureItem<BucketItem> GLASS_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.GLASS.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "glass_bucket"
+    );
+    public static final FeatureItem<BucketItem> HONEY_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.HONEY.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "honey_bucket"
+    );
+    public static final FeatureItem<BucketItem> ICE_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.ICE.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "ice_bucket"
+    );
+    public static final FeatureItem<BucketItem> JUICE_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.JUICE.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "juice_bucket"
+    );
+    public static final FeatureItem<BucketItem> SEED_OIL_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.SEED_OIL.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "seed_oil_bucket"
+    );
+    public static final FeatureItem<BucketItem> SHORT_MEAD_BUCKET = REGISTRY.item(
+            () -> new BucketItem(
+                    () -> ForestryFluids.SHORT_MEAD.getFluid(),
+                    new Item.Properties().group(ItemGroup.MISC).maxStackSize(1)
+            ),
+            "short_mead_bucket"
+    );
 }

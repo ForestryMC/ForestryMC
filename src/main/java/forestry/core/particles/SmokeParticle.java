@@ -10,41 +10,44 @@
  ******************************************************************************/
 package forestry.core.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-//TODO particles
 @OnlyIn(Dist.CLIENT)
-public class ParticleIgnition extends SpriteTexturedParticle {
-    private final float ignitionParticleScale;
+public class SmokeParticle extends Particle {
+    private final float ignitionParticleScale = 1.0f;
 
-    public ParticleIgnition(ClientWorld world, double x, double y, double z) {
+    public SmokeParticle(ClientWorld world, double x, double y, double z) {
         super(world, x, y, z, 0, 0, 0);
         this.motionX *= 0.8;
         this.motionY *= 0.8;
         this.motionZ *= 0.8;
-        this.motionY = this.rand.nextFloat() * 0.4F + 0.05F;
+        this.motionY = this.rand.nextFloat() * 0.2F + 0.05F;
         this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-        this.particleScale *= this.rand.nextFloat() / 2 + 0.3F;
-        this.ignitionParticleScale = 1.0f;
         this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
     }
 
     @Override
-    public int getBrightnessForRender(float p_70070_1_) {
-        int i = super.getBrightnessForRender(p_70070_1_);
-        short short1 = 240;
+    public int getBrightnessForRender(float partialTick) {
+        int i = super.getBrightnessForRender(partialTick);
         int j = i >> 16 & 255;
-        return short1 | j << 16;
+        return 240 | j << 16;
+    }
+
+    @Override
+    public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+
     }
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     /**
@@ -64,7 +67,7 @@ public class ParticleIgnition extends SpriteTexturedParticle {
 
         if (this.rand.nextFloat() > f * 2) {
             this.world.addParticle(
-                    ParticleTypes.SMOKE,
+                    ParticleTypes.LARGE_SMOKE,
                     this.posX,
                     this.posY,
                     this.posZ,

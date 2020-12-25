@@ -287,9 +287,9 @@ public abstract class BlockUtil {
         Block block = world.getBlockState(downPos).getBlock();
         return !(
                 world.getBlockState(pos).getMaterial().isReplaceable() &&
-                blockState.getMaterial().isLiquid()) && true;
-        //			!block.isLeaves(blockState, world, downPos) &&
-        //			!block.isWood(world, downPos);
+                blockState.getMaterial().isLiquid()) &&
+               !block.isIn(BlockTags.LOGS) &&
+               !block.isIn(BlockTags.LEAVES);
     }
 
     public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {

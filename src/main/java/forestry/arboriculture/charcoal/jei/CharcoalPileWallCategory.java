@@ -52,7 +52,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 
     @Override
     public ResourceLocation getUid() {
-        return CharcoalJeiPlugin.RECIPE_UID;
+        return new ResourceLocation(Constants.MOD_ID);
     }
 
     @Override

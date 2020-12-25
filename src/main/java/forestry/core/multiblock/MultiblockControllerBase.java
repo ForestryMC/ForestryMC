@@ -361,7 +361,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         if (otherReferenceCoord != null && referenceCoord != null &&
             referenceCoord.compareTo(otherReferenceCoord) >= 0) {
             throw new IllegalArgumentException(
-                    "The controller with the lowest minimum-coord value must consume the one with the higher coords");
+                    "The controller with the lowest minimum-coord value must consume the one with the higher coords"
+            );
         }
 
         Set<IMultiblockComponent> partsToAcquire = new HashSet<>(other.getComponents());
@@ -633,7 +634,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     public boolean shouldConsume(IMultiblockControllerInternal otherController) {
         if (!otherController.getClass().equals(getClass())) {
             throw new IllegalArgumentException(
-                    "Attempting to merge two multiblocks with different master classes - this should never happen!");
+                    "Attempting to merge two multiblocks with different master classes - this should never happen!"
+            );
         }
 
         if (otherController == this) {
@@ -672,8 +674,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
                         otherController.getComponents().size(),
                         otherController.getPartsListString()
                 );
-                throw new IllegalArgumentException("[" + (world.isRemote ? "CLIENT" : "SERVER") + "] " +
-                                                   "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
+                throw new IllegalArgumentException(
+                        "[" + (world.isRemote ? "CLIENT" : "SERVER") + "] " +
+                        "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!"
+                );
             }
 
         }

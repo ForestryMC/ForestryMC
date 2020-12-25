@@ -27,6 +27,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Random;
 
 public class BlockStump extends TorchBlock {
 
@@ -58,10 +62,18 @@ public class BlockStump extends TorchBlock {
             TileCandle tc = new TileCandle();
             tc.setColour(DyeColor.WHITE.getColorValue());
             tc.setLit(true);
-            worldIn.setTileEntity(pos, tc);
+            tc.setWorldAndPos(worldIn, pos);
+            System.out.println("activated tile candle " + pos.getCoordinatesAsString());
+            worldIn.addTileEntity(tc);
             return ActionResultType.SUCCESS;
         }
 
         return ActionResultType.PASS;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+
     }
 }

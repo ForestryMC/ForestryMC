@@ -33,8 +33,6 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
         this.tile = container.getTile();
         this.xSize = 176;
         this.ySize = 90;
-
-        addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
     }
 
     @Override
@@ -43,37 +41,46 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 
         addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
         addressNameField.setText(container.getAddress().getName());
+        addressNameField.setVisible(true);
         addressNameField.setFocused2(true);
     }
 
     @Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         // Set focus or enter text into address
         if (addressNameField.isFocused()) {
-            if (scanCode == GLFW.GLFW_KEY_ENTER) {
+            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
                 setAddress();
             } else {
-                addressNameField.keyPressed(key, scanCode, modifiers);
+                addressNameField.keyPressed(keyCode, scanCode, modifiers);
             }
             return true;
         }
 
-        return super.keyPressed(key, scanCode, modifiers);
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        // Set focus or enter text into address
+        if (addressNameField.isFocused()) {
+            addressNameField.charTyped(codePoint, modifiers);
+            return true;
+        }
+
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
-            return false;    //TODO this return value
-        }
+        super.mouseClicked(mouseX, mouseY, mouseButton);
         addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
         return true;
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int var3, int var2) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, var3, var2);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         textLayout.startPage();
         textLayout.newLine();
@@ -84,7 +91,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
                 ColourProperties.INSTANCE.get("gui.mail.text")
         );
         textLayout.endPage();
-        addressNameField.render(transform, var2, var3, partialTicks);    //TODO correct?
+        addressNameField.render(transform, mouseX, mouseY, partialTicks);
     }
 
     @Override

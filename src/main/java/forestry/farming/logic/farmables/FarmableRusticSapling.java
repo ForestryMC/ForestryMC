@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -45,7 +46,7 @@ public class FarmableRusticSapling implements IFarmable {
     @Override
     public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
         Block block = blockState.getBlock();
-        if (false) {//TODO tags !block.isWood(world, pos)) {
+        if (!block.isIn(BlockTags.LOGS)) {
             return null;
         }
 

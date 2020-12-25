@@ -2,7 +2,7 @@
   "title": "Pollination",
   "icon": {
     "item": "forestry:pollen_fertile",
-    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_ebony\",UID0:\"forestry..tree_ebony\",Slot:0b}]}}"
+    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_ebony\",UID0:\"forestry.tree_ebony\",Slot:0b}]}}"
   },
   "content": [
     [

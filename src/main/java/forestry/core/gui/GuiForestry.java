@@ -41,6 +41,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -172,8 +173,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
         widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
         IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
         window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+
         return true;
-        //TODO - what to return
     }
 
     @Override
@@ -181,31 +182,38 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
         if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
             return true;
         }
+
         IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
         window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
         super.mouseReleased(mouseX, mouseY, mouseButton);
-        return true;
-        //TODO - what to return
-    }
 
-    @Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-        InputMappings.Input mouseKey = InputMappings.getInputByCode(key, scanCode);
-        if (key == 256 || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
-            this.minecraft.player.closeScreen();
-            return true;
-        }
-        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-        window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
         return true;
     }
 
-    @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
-        return true;
-    }
+//    @Override
+//    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+//        InputMappings.Input mouseKey = InputMappings.getInputByCode(keyCode, scanCode);
+//        if (scanCode == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
+//            this.minecraft.player.closeScreen();
+//            return true;
+//        }
+//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+//        window.postEvent(new GuiEvent.KeyEvent(origin, keyCode, scanCode, modifiers), GuiEventDestination.ALL);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean charTyped(char codePoint, int modifiers) {
+//        InputMappings.Input mouseKey = InputMappings.getInputByCode(codePoint, modifiers);
+//        if (modifiers == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
+//            this.minecraft.player.closeScreen();
+//            return true;
+//        }
+//
+//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+//        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
+//        return true;
+//    }
 
     @Nullable
     public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {

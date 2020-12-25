@@ -2,7 +2,7 @@
   "title": "Tree Mutations",
   "icon": {
     "item": "forestry:sapling",
-    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_teak\",UID0:\"forestry..tree_teak\",Slot:0b}]}}"
+    "nbt": "{Genome:{Chromosomes:[{UID1:\"forestry.tree_teak\",UID0:\"forestry.tree_teak\",Slot:0b}]}}"
   },
   "content": [
     [

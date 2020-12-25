@@ -85,7 +85,8 @@ public class ItemForestryTool extends ItemForestry {
                 Block block = BlockState.getBlock();
 
                 if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR &&
-                    block == Blocks.GRASS) {
+                    block == Blocks.GRASS
+                ) {
                     BlockState BlockState1 = Blocks.GRASS_PATH.getDefaultState();
                     world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 

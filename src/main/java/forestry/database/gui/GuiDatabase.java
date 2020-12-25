@@ -130,6 +130,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
                     items.add(new DatabaseItem(stack, invIndex));
                 }
             }
+
             DatabaseHelper.update(searchText, items, sorted);
             analyzer.updateSelected();
             updateViewedItems();
@@ -213,6 +214,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
         this.searchField.setMaxStringLength(50);
         this.searchField.setEnableBackgroundDrawing(false);
         this.searchField.setTextColor(16777215);
+        this.searchField.setEnabled(true);
 
         addButton(new GuiDatabaseButton<>(
                 guiLeft - 18,
@@ -234,14 +236,29 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
     }
 
     @Override
-    public boolean keyPressed(int key, int scanCode, int modifiers) {
-        if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (searchField.isFocused()) {
+            searchField.keyPressed(keyCode, scanCode, modifiers);
             scrollBar.setValue(0);
             markForSorting();
+
             return true;
-        } else {
-            return super.keyPressed(key, scanCode, modifiers);
         }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (searchField.isFocused()) {
+            searchField.charTyped(codePoint, modifiers);
+            scrollBar.setValue(0);
+            markForSorting();
+
+            return true;
+        }
+
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Override
@@ -250,13 +267,14 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
         if (slot != null && slot.getSlotIndex() == -1) {
             return false;
         }
+
         boolean acted = super.mouseClicked(mouseX, mouseY, mouseButton);
         if (searchField != null) {
             searchField.mouseClicked(mouseX, mouseY, mouseButton);
             return true;
-        } else {
-            return acted;
         }
+
+        return acted;
     }
 
     /* Methods - Implement GuiContainer */

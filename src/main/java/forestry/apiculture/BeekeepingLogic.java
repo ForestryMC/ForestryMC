@@ -288,6 +288,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
             if (flowers.size() < ModuleApiculture.maxFlowersSpawnedPerHive) {
                 queen.plantFlowerRandom(housing, flowers).ifPresent(hasFlowersCache::addFlowerPos);
             }
+
             pollenHandler.doPollination(queen, housing, beeListener);
 
             // Age the queen

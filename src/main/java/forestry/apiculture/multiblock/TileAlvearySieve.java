@@ -71,12 +71,13 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
                 return false;
             }
 
-            IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper()
-                                                                                                   .getSpeciesRoot(
-                                                                                                           pollen);
+            IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance
+                    .getRootHelper()
+                    .getSpeciesRoot(pollen);
             if (!definition.isPresent()) {
                 return false;
             }
+
             IForestrySpeciesRoot<IIndividual> root = definition.get();
 
             ItemStack pollenStack = root.getTypes().createStack(pollen, EnumGermlingType.POLLEN);
@@ -84,6 +85,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
                 inventory.storePollenStack(pollenStack);
                 return true;
             }
+
             return false;
         }
     }

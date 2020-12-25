@@ -1,6 +1,8 @@
 package forestry.farming.compat;
 
+import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import mezz.jei.api.IModPlugin;
@@ -10,6 +12,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -28,18 +33,20 @@ public class FarmingJeiPlugin implements IModPlugin {
             return;
         }
 
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+
         registration.addRecipes(
-                FarmingInfoRecipeMaker.getRecipes(),
+                FarmingInfoRecipeMaker.getRecipes(recipeManager),
                 FarmingInfoRecipeCategory.UID
         );
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-//        registration.addRecipeCatalyst(
-//                CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE),
-//                FarmingInfoRecipeCategory.UID
-//        );
+        registration.addRecipeCatalyst(
+                new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)),
+                FarmingInfoRecipeCategory.UID
+        );
     }
 
     @Override
