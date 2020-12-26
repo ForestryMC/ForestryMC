@@ -136,11 +136,11 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
         if (k == 0) {
             advanceSelection(slot);
-            return true;
         } else {
             regressSelection(slot);
-            return true;
         }
+
+        return true;
     }
 
     @Override

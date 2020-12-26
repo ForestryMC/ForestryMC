@@ -11,7 +11,6 @@
 package forestry.farming.logic.farmables;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 

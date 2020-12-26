@@ -12,7 +12,7 @@ public class IndexEntry {
     /**
      * The localized name of the entry.
      */
-    public String title;
+    public String title = null;
     /**
      * The page that a mouse click on this entry opens.
      */

@@ -20,7 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
@@ -35,9 +34,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
     @Override
     public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-
         World world = housing.getWorldObj();
-
         EnumTemperature temp = housing.getTemperature();
 
         switch (temp) {
@@ -64,7 +61,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
                 BlockState state = world.getBlockState(posBlock);
                 Block block = state.getBlock();
                 if (block == Blocks.SNOW) {
-                    Integer layers = state.get(SnowBlock.LAYERS);
+                    int layers = state.get(SnowBlock.LAYERS);
                     if (layers < 7) {
                         BlockState moreSnow = state.with(SnowBlock.LAYERS, layers + 1);
                         world.setBlockState(posBlock, moreSnow);

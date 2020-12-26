@@ -23,8 +23,8 @@ public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         if (tile.isBurning()) {
             int progress = tile.getBurnTimeRemainingScaled(12);

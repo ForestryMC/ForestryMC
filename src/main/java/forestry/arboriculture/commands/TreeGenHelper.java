@@ -91,7 +91,7 @@ public final class TreeGenHelper {
                 return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
             } else {
                 return gen.generate(
-                        (ISeedReader) world,
+                        world,
                         ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
                         world.getRandom(),
                         pos,

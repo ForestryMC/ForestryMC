@@ -24,7 +24,7 @@ public class LabelElement extends GuiElement implements ILabelElement {
 
     /* Attributes - State */
     protected ITextComponent component;
-    protected int originalWidth;
+    protected final int originalWidth;
     protected boolean fitText;
     protected boolean shadow = false;
 

@@ -24,12 +24,12 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.function.Supplier;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
     public static final FakeAlvearyController instance = new FakeAlvearyController();
@@ -91,7 +91,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
     @Override
     public Biome getBiome() {
-        return ((Supplier<Biome>) Biomes.PLAINS).get();
+        return WorldGenRegistries.BIOME.getOrThrow(Biomes.PLAINS);
     }
 
     @Override

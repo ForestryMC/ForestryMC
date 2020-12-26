@@ -4,8 +4,6 @@ import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.BlockTags;
-import net.minecraftforge.common.Tags;
 
 import java.util.HashSet;
 import java.util.Set;

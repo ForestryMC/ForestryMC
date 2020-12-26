@@ -375,7 +375,8 @@ public class Bee extends IndividualLiving implements IBee {
 
         TranslationTextComponent customSpeed = new TranslationTextComponent(
                 "for.tooltip.worker." + speedAllele.getLocalisationKey()
-                                                   .replaceAll("(.*)\\.", ""));
+                                                   .replaceAll("(.*)\\.", "")
+        );
         if (ResourceUtil.canTranslate(customSpeed)) {
             toolTip.singleLine()
                    .add(customSpeed)

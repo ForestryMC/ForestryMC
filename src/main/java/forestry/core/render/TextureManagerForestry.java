@@ -42,7 +42,8 @@ public class TextureManagerForestry implements ITextureManager {
     }
 
     private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
-    @SuppressWarnings("NullableProblems")
+
+    @Nullable
     private ForestrySpriteUploader spriteUploader;
 
     public static TextureManagerForestry getInstance() {

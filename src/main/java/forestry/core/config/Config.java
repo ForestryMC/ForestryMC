@@ -60,8 +60,8 @@ public class Config {
     public static boolean generateApatiteOre = true;
     public static boolean generateCopperOre = true;
     public static boolean generateTinOre = true;
-    public static Set<ResourceLocation> blacklistedOreDims = new HashSet<>();
-    public static Set<ResourceLocation> whitelistedOreDims = new HashSet<>();
+    public final static Set<ResourceLocation> blacklistedOreDims = new HashSet<>();
+    public final static Set<ResourceLocation> whitelistedOreDims = new HashSet<>();
     public static boolean generateBeehivesDebug = false;
     public static boolean logHivePlacement = false;
     public static boolean logCocoonPlacement = false;

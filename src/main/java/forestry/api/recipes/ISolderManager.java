@@ -14,8 +14,8 @@ import javax.annotation.Nullable;
 
 public interface ISolderManager extends ICraftingProvider<ISolderRecipe> {
     @Nullable
-    public ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource);
+    ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource);
 
     @Nullable
-    public ISolderRecipe getMatchingRecipe(RecipeManager manager, @Nullable ICircuitLayout layout, ItemStack resource);
+    ISolderRecipe getMatchingRecipe(RecipeManager manager, @Nullable ICircuitLayout layout, ItemStack resource);
 }

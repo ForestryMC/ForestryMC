@@ -30,6 +30,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
+import javax.annotation.Nullable;
+
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
     public static final String SAVE_NAME = "trade_po_";
     public static final short SLOT_TRADEGOOD = 0;
@@ -48,7 +50,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
             SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT +
             SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
     private final InventoryAdapter inventory = new InventoryTradeStation();
+    @Nullable
     private GameProfile owner;
+    @Nullable
     private IMailAddress address;
     private boolean isVirtual = false;
     private boolean isInvalid = false;

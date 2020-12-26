@@ -17,9 +17,9 @@ public class VillagerTrade {
     public static class GiveItemForEmeralds implements VillagerTrades.ITrade {
         final int maxUses;
         final int xp;
-        public Item sellingItem;
-        public PriceInterval sellingAmounts;
-        public PriceInterval emeraldAmounts;
+        final Item sellingItem;
+        final PriceInterval sellingAmounts;
+        final PriceInterval emeraldAmounts;
 
         public GiveItemForEmeralds(
                 @Nonnull Item sellingItem,
@@ -51,9 +51,9 @@ public class VillagerTrade {
     public static class GiveEmeraldForItem implements VillagerTrades.ITrade {
         final int maxUses;
         final int xp;
-        public Item buyingItem;
-        public PriceInterval buyingAmounts;
-        public PriceInterval emeraldAmounts;
+        final Item buyingItem;
+        final PriceInterval buyingAmounts;
+        final PriceInterval emeraldAmounts;
 
         public GiveEmeraldForItem(
                 @Nonnull Item buyingItem,
@@ -85,11 +85,11 @@ public class VillagerTrade {
     public static class GiveItemForItemAndEmerald implements VillagerTrades.ITrade {
         final int maxUses;
         final int xp;
-        public Item buyingItem;
-        public PriceInterval buyAmounts;
-        public PriceInterval emeralsAmounts;
-        public Item sellingItem;
-        public PriceInterval sellingAmounts;
+        final Item buyingItem;
+        final PriceInterval buyAmounts;
+        final PriceInterval emeralsAmounts;
+        final Item sellingItem;
+        final PriceInterval sellingAmounts;
 
         public GiveItemForItemAndEmerald(
                 @Nonnull Item buyingItem,
@@ -126,10 +126,10 @@ public class VillagerTrade {
     public static class GiveItemForLogAndEmerald implements VillagerTrades.ITrade {
         final int maxUses;
         final int xp;
-        public PriceInterval buyAmounts;
-        public PriceInterval emeraldAmounts;
-        public Item sellingItem;
-        public PriceInterval sellingAmounts;
+        final PriceInterval buyAmounts;
+        final PriceInterval emeraldAmounts;
+        final Item sellingItem;
+        final PriceInterval sellingAmounts;
 
         public GiveItemForLogAndEmerald(
                 @Nonnull PriceInterval buyAmounts,
@@ -150,7 +150,7 @@ public class VillagerTrade {
         @Nullable
         @Override
         public MerchantOffer getOffer(Entity trader, Random rand) {
-            Collection<Item> logsBlock = new HashSet<Item>();
+            Collection<Item> logsBlock = new HashSet<>();
             logsBlock.add(Items.ACACIA_LOG);
             logsBlock.add(Items.BIRCH_LOG);
             logsBlock.add(Items.DARK_OAK_LOG);
@@ -177,12 +177,12 @@ public class VillagerTrade {
     public static class GiveItemForTwoItems implements VillagerTrades.ITrade {
         final int maxUses;
         final int xp;
-        public Item buyingItem;
-        public PriceInterval buyAmounts;
-        public Item buyingItem2;
-        public PriceInterval buyAmounts2;
-        public Item sellingItem;
-        public PriceInterval sellingAmounts;
+        final Item buyingItem;
+        final PriceInterval buyAmounts;
+        final Item buyingItem2;
+        final PriceInterval buyAmounts2;
+        final Item sellingItem;
+        final PriceInterval sellingAmounts;
 
         public GiveItemForTwoItems(
                 @Nonnull Item buyingItem,

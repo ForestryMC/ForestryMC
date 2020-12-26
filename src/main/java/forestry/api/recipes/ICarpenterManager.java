@@ -51,9 +51,9 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
             IInventory craftingInventory
     );
 
-    public boolean isBox(RecipeManager manager, ItemStack resource);
+    boolean isBox(RecipeManager manager, ItemStack resource);
 
-    public Set<Fluid> getRecipeFluids(RecipeManager manager);
+    Set<Fluid> getRecipeFluids(RecipeManager manager);
 
-    public Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
+    Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
 }

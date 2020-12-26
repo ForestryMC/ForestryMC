@@ -15,6 +15,7 @@ import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
     protected void registerTags() {
         super.registerTags();
         tagToBuilder.remove(ItemTags.SAPLINGS.getName());
-        filter = this.tagToBuilder.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
+        filter = new HashSet<>(this.tagToBuilder.keySet());
         addToTag(
                 ForestryTags.Items.GEARS,
                 ForestryTags.Items.GEARS_BRONZE,

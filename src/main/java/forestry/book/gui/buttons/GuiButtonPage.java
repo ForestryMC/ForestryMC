@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonPage extends Button implements IToolTipProvider {
-    public boolean left;
+    public final boolean left;
 
     public GuiButtonPage(int x, int y, boolean left, IPressable action) {
         super(x, y, 18, 10, null, action);

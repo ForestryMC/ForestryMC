@@ -17,9 +17,9 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
      * Copy of {@link net.minecraft.item.TallBlockItem#placeBlock(BlockItemUseContext, BlockState)}
      */
     @Override
-    protected boolean placeBlock(BlockItemUseContext p_195941_1_, BlockState p_195941_2_) {
-        p_195941_1_.getWorld().setBlockState(p_195941_1_.getPos().up(), Blocks.AIR.getDefaultState(), 27);
-        return super.placeBlock(p_195941_1_, p_195941_2_);
+    protected boolean placeBlock(BlockItemUseContext context, BlockState state) {
+        context.getWorld().setBlockState(context.getPos().up(), Blocks.AIR.getDefaultState(), 27);
+        return super.placeBlock(context, state);
     }
 
     @Override

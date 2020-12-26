@@ -63,8 +63,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
     protected ITree getTree(IBlockReader world, BlockPos pos) {
         TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
         if (leaves != null) {
-            ITree tree = leaves.getTree();
-            return tree;
+            return leaves.getTree();
         }
 
         return null;

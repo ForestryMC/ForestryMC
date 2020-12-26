@@ -39,8 +39,7 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
         IMachineProperties<?> machineProperties = blockType.getMachineProperties();
         if (machineProperties instanceof IMachinePropertiesTesr) {
             IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-            TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
-            fx.sprite = particleTexture;
+            fx.sprite = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
         }
     }
 

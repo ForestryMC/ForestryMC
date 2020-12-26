@@ -17,7 +17,7 @@ import forestry.core.triggers.Trigger;
 
 public class TriggerLowResource extends Trigger {
 
-    private float threshold = 0.25F;
+    private float threshold;
 
     public TriggerLowResource(String tag, float threshold) {
         super(tag, "lowResources", "low_resources");

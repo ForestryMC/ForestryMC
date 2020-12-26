@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ToolType;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
-    public static ToolType SCOOP = ToolType.get("scoop");
+    public final static ToolType SCOOP = ToolType.get("scoop");
 
     public ItemScoop() {
         super(ItemStack.EMPTY, (new Item.Properties())

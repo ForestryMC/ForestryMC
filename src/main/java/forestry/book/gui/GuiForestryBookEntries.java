@@ -40,12 +40,8 @@ public class GuiForestryBookEntries extends GuiForesterBook {
         if (indexStart >= entries.size()) {
             return;
         }
-        final int maxIndex;
-        if (entries.size() > indexStart + 12) {
-            maxIndex = indexStart + 12;
-        } else {
-            maxIndex = entries.size();
-        }
+
+        final int maxIndex = Math.min(entries.size(), indexStart + 12);
         int yOffset = 0;
         for (int i = indexStart; i < maxIndex; i++) {
             IBookEntry entry = entries.get(i);

@@ -64,12 +64,8 @@ public class ScrollBarElement extends ElementGroup {
     }
 
     protected void addListeners() {
-        addEventHandler(GuiEvent.DownEvent.class, event -> {
-            mouseDown = true;
-        });
-        addEventHandler(GuiEvent.UpEvent.class, event -> {
-            mouseDown = false;
-        });
+        addEventHandler(GuiEvent.DownEvent.class, event -> mouseDown = true);
+        addEventHandler(GuiEvent.UpEvent.class, event -> mouseDown = false);
         addEventHandler(GuiEvent.WheelEvent.class, event -> {
             if (listener == null || listener.isFocused((int) event.getX(), (int) event.getY()) || isMouseOver()) {
                 double wheel = event.getDWheel();

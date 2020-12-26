@@ -147,7 +147,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
         private final ProductListWrapper butterflyLoot = ProductListWrapper.create();
         private final ProductListWrapper caterpillarLoot = ProductListWrapper.create();
 
-        private String texture;
+        private String texture = "";
         private Color serumColour = Color.WHITE;
         private float rarity = 0.1f;
         private float flightDistance = 5.0f;

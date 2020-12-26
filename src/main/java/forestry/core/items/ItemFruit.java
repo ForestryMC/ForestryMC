@@ -45,12 +45,10 @@ public class ItemFruit extends ItemForestryFood {
         //, COCONUT("cropCoconut");
         public static final EnumFruit[] VALUES = values();
 
-        private final String oreDict;
         private final String name;
 
         //TODO tags
         EnumFruit(String oreDict) {
-            this.oreDict = oreDict;
             this.name = this.toString().toLowerCase(Locale.ENGLISH);
         }
 

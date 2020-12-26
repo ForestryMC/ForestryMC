@@ -34,7 +34,7 @@ import java.util.List;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
     @OnlyIn(Dist.CLIENT)
-    public ModelResourceLocation[] models;
+    public ModelResourceLocation[] models = new ModelResourceLocation[0];
 
     public ItemPipette() {
         super((new Item.Properties())

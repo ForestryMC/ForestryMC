@@ -91,7 +91,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
         // Set active according to valid biomes.
         Set<Biome.Category> activeBiomeTypes = new HashSet<>();
         for (Biome biome : itemInventory.getBiomesToSearch()) {
-            Set<Biome.Category> biomeCategories = new HashSet<Biome.Category>(Arrays.asList(Biome.Category.values()));
+            Set<Biome.Category> biomeCategories = new HashSet<>(Arrays.asList(Biome.Category.values()));
             activeBiomeTypes.addAll(biomeCategories);
         }
 

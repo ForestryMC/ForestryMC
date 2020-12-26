@@ -47,10 +47,8 @@ public class ModuleManager implements IModuleManager {
     private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
     private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
     public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
+    @Nullable
     public static CommonModuleHandler moduleHandler;
-
-    private ModuleManager() {
-    }
 
     public static ModuleManager getInstance() {
         return ourInstance;

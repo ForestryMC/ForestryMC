@@ -124,11 +124,11 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleFor
         private final String modId;
         private final String uid;
         private final String speciesIdentifier;
-        private String translationKey;
-        private String binomial;
+        private String translationKey = "";
+        private String binomial = "";
         private String authority = "Sengir";
         private String description = "";
-        private IClassification branch;
+        private IClassification branch = null;
 
         private boolean hasEffect = false;
         private boolean isSecret = false;

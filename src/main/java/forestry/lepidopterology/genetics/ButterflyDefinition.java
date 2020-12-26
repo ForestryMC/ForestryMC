@@ -426,11 +426,13 @@ public enum ButterflyDefinition implements IButterflyDefinition {
         return getTemplate().toIndividual(ButterflyHelper.getRoot());
     }
 
+    @Nullable
     @Override
     public final IAlleleTemplate getTemplate() {
         return template;
     }
 
+    @Nullable
     @Override
     public final IGenome getGenome() {
         return genome;

@@ -13,9 +13,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe> {
-    public Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, ItemStack plan, IInventory resources);
+    Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, ItemStack plan, IInventory resources);
 
-    public boolean isPlan(RecipeManager manager, ItemStack plan);
+    boolean isPlan(RecipeManager manager, ItemStack plan);
 
-    public Collection<IFabricatorRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
+    Collection<IFabricatorRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
 }

@@ -118,8 +118,8 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         Minecraft.getInstance().fontRenderer.drawString(
                 transform,

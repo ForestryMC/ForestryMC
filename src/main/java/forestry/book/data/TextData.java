@@ -8,14 +8,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TextData {
     public String text = "";
 
-    public String color = "black";
-    public boolean bold = false;
-    public boolean italic = false;
-    public boolean underlined = false;
-    public boolean strikethrough = false;
-    public boolean obfuscated = false;
-    public boolean paragraph = false;
-    public boolean shadow = false;
+    public final String color = "black";
+    public final boolean bold = false;
+    public final boolean italic = false;
+    public final boolean underlined = false;
+    public final boolean strikethrough = false;
+    public final boolean obfuscated = false;
+    public final boolean paragraph = false;
+    public final boolean shadow = false;
 
     public TextData() {
     }

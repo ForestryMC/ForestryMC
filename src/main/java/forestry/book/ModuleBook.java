@@ -13,7 +13,7 @@ import net.minecraftforge.fml.DistExecutor;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.BOOK, name = "Book", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.book.description")
 public class ModuleBook extends BlankForestryModule {
     @SuppressWarnings("NullableProblems")
-    public static ProxyBook proxy;
+    public static ProxyBook proxy = null;
 
     public ModuleBook() {
         proxy = DistExecutor.safeRunForDist(() -> ProxyBookClient::new, () -> ProxyBook::new);

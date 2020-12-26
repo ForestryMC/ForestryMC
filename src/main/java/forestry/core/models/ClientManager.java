@@ -198,9 +198,7 @@ public class ClientManager {
     }
 
     private static class BlockModelEntry {
-
         private final IBakedModel model;
-        private final Block block;
         private final Collection<BlockState> states;
         @Nullable
         private final BlockItem item;
@@ -212,7 +210,6 @@ public class ClientManager {
                 Collection<BlockState> states
         ) {
             this.model = model;
-            this.block = block;
             this.item = item;
             this.states = states;
         }

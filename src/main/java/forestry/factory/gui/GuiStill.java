@@ -29,8 +29,8 @@ public class GuiStill extends GuiForestryTitled<ContainerStill> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         blit(transform, guiLeft + 81, guiTop + 57, 176, 60, 14, 14);
 

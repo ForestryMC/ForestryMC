@@ -68,7 +68,7 @@ public class RecipeDataHelper {
     }
 
     private static class Holder<T> {
-
+        @Nullable
         private T obj;
 
         private Holder() {

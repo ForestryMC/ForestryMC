@@ -25,10 +25,11 @@ import forestry.modules.ForestryModuleUids;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.fml.DistExecutor;
 
+import javax.annotation.Nullable;
+
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.energy.description")
 public class ModuleEnergy extends BlankForestryModule {
-
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     public static ProxyEnergy proxy;
 
     public ModuleEnergy() {

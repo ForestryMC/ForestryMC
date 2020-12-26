@@ -187,7 +187,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
                 craftingInventory
         );
 
-        if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.get().getLiquid())) {
+        if (!liquid.isEmpty() && recipe.isPresent() && !liquid.containsFluid(recipe.get().getLiquid())) {
             return Optional.empty();
         }
 

@@ -34,7 +34,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
     protected IButtonTextureSet texture;
     @Nullable
     private ToolTip toolTip;
-    private boolean useTexWidth = false;
+    private boolean useTexWidth;
 
     public GuiBetterButton(int x, int y, IButtonTextureSet texture) {
         this(x, y, texture, b -> {

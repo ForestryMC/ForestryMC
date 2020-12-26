@@ -17,6 +17,7 @@ import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
     @Override
     protected void registerTags() {
         //super.registerTags();
-        filter = this.tagToBuilder.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
+        filter = new HashSet<>(this.tagToBuilder.keySet());
         if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
             getOrCreateBuilder(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
         }

@@ -12,13 +12,15 @@ package forestry.core.proxy;
 
 //import net.minecraftforge.fml.common.SidedProxy;
 
+import javax.annotation.Nullable;
+
 //TODO - DistExecutor
 public class Proxies {
-    @SuppressWarnings("NullableProblems")
     //	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
+    @Nullable
     public static ProxyCommon common;
 
-    @SuppressWarnings("NullableProblems")
     //	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
+    @Nullable
     public static ProxyRender render;
 }

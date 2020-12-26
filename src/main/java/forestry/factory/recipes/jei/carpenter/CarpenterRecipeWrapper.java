@@ -26,9 +26,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 
         NonNullList<Ingredient> itemIngredients = recipe.getCraftingGridRecipe().getIngredients();
         List<Ingredient> inputStacks = new ArrayList<>();
-        for (Ingredient ingredient : itemIngredients) {
-            inputStacks.add(ingredient);
-        }
+        inputStacks.addAll(itemIngredients);
 
         ingredients.setInputIngredients(inputStacks);
 

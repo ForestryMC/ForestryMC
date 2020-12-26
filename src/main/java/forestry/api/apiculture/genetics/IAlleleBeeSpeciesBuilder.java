@@ -23,7 +23,7 @@ public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleB
     /**
      * @param primaryColor   The outline color of this species
      * @param secondaryColor The body color of this species
-     * @return
+     * @return IAlleleBeeSpeciesBuilder
      */
     IAlleleBeeSpeciesBuilder setColour(int primaryColor, int secondaryColor);
 

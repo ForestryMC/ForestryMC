@@ -22,8 +22,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
     INSTANCE;
 
     private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
-    @Nullable
-    private SidedHandler sidedHandler = null;
+    private SidedHandler sidedHandler;
 
     BreedingTrackerManager() {
         sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);

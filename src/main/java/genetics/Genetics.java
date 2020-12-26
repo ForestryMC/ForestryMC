@@ -2,13 +2,13 @@ package genetics;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import genetics.commands.CommandListAlleles;
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneTemplate;
 import genetics.api.organism.IOrganism;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
+import genetics.commands.CommandListAlleles;
 import genetics.individual.GeneticSaveHandler;
 import genetics.individual.SaveFormat;
 import genetics.items.GeneTemplate;
@@ -42,8 +42,10 @@ public class Genetics {
      * Capability for {@link IOrganism}.
      */
     @CapabilityInject(IOrganism.class)
+    @Nullable
     public static Capability<IOrganism> ORGANISM;
     @CapabilityInject(IGeneTemplate.class)
+    @Nullable
     public static Capability<IGeneTemplate> GENE_TEMPLATE;
 
     public Genetics() {

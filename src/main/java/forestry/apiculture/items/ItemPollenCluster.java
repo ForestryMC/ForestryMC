@@ -14,11 +14,7 @@ import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemOverlay;
 
 public class ItemPollenCluster extends ItemOverlay {
-
-    private final EnumPollenCluster type;
-
     public ItemPollenCluster(EnumPollenCluster type) {
         super(ItemGroups.tabApiculture, type);
-        this.type = type;
     }
 }

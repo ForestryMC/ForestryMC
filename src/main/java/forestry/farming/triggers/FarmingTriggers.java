@@ -12,17 +12,28 @@ package forestry.farming.triggers;
 
 import forestry.core.triggers.Trigger;
 
+import javax.annotation.Nullable;
+
 //import buildcraft.api.statements.ITriggerExternal;
 
 public class FarmingTriggers {
+    @Nullable
     public static Trigger lowResourceLiquid50;
+    @Nullable
     public static Trigger lowResourceLiquid25;
+    @Nullable
     public static Trigger lowSoil128;
+    @Nullable
     public static Trigger lowSoil64;
+    @Nullable
     public static Trigger lowSoil32;
+    @Nullable
     public static Trigger lowFertilizer50;
+    @Nullable
     public static Trigger lowFertilizer25;
+    @Nullable
     public static Trigger lowGermlings25;
+    @Nullable
     public static Trigger lowGermlings10;
     //	public static List<ITriggerExternal> allExternalTriggers;
 

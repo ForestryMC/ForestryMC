@@ -16,13 +16,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CULTIVATION, name = "Cultivation", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.cultivation.description")
 public class ModuleCultivation extends BlankForestryModule {
 
-    @SuppressWarnings("NullableProblems")
-    public static ProxyCultivation proxy;
+    @Nullable
+    public static ProxyCultivation proxy = null;
 
     public ModuleCultivation() {
         proxy = DistExecutor.runForDist(() -> ProxyCultivationClient::new, () -> ProxyCultivation::new);

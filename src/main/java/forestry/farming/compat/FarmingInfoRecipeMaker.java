@@ -6,7 +6,6 @@ import forestry.api.farming.IFarmCircuit;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.recipes.ISolderRecipe;
-import forestry.core.circuits.CircuitRecipe;
 import net.minecraft.item.crafting.RecipeManager;
 
 import java.util.ArrayList;

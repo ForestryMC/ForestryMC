@@ -143,7 +143,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
         if (!isProcessedLetter && !checkedSessionVars) {
             checkedSessionVars = true;
             setFromSessionVars();
@@ -166,7 +166,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
         }
         textFocus = text.isFocused();
 
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         if (this.isProcessedLetter) {
             minecraft.fontRenderer.drawString(

@@ -37,8 +37,6 @@ import java.awt.*;
 import java.util.Random;
 
 public class BlockForestryFluid extends FlowingFluidBlock {
-
-    private final FeatureFluid feature;
     private final boolean flammable;
     private final int flammability;
     private final Color color;
@@ -52,7 +50,6 @@ public class BlockForestryFluid extends FlowingFluidBlock {
                                 .doesNotBlockMovement()
                                 .hardnessAndResistance(100.0F).noDrops()
         );
-        this.feature = feature;
 
         FluidProperties properties = feature.getProperties();
         this.flammability = properties.flammability;
@@ -164,7 +161,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
                 double pz = d2 + rand.nextFloat();
 
                 Particle fx = new ColoredDripParticle(
-                        (World) world,
+                        world,
                         px,
                         py,
                         pz,

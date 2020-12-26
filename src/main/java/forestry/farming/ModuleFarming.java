@@ -46,6 +46,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.List;
 
@@ -54,7 +55,7 @@ import java.util.List;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
 
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     public static ProxyFarming proxy;
 
     public ModuleFarming() {

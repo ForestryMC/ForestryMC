@@ -32,7 +32,7 @@ public interface IGeneticAnalyzer extends IGuiElement {
     void drawTooltip(Screen gui, int mouseX, int mouseY);
 
     /**
-     * @return
+     * @return IGuiElement item element
      */
     IGuiElement getItemElement();
 

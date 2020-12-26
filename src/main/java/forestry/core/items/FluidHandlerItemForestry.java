@@ -21,12 +21,11 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
             return false;
         }
 
-        switch (containerType) {
-            case CAPSULE:
-                return fluid.getAttributes().getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
-            default:
-                return true;
+        if (containerType == EnumContainerType.CAPSULE) {
+            return fluid.getAttributes().getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
         }
+
+        return true;
     }
 
     @Override

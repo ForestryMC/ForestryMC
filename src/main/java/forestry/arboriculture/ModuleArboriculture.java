@@ -70,8 +70,8 @@ public class ModuleArboriculture extends BlankForestryModule {
 
     @SuppressWarnings("NullableProblems")
     //@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
-    public static ProxyArboriculture proxy;
-    public static String treekeepingMode = "NORMAL";
+    public static ProxyArboriculture proxy = null;
+    public final static String treekeepingMode = "NORMAL";
 
     public static final List<Block> validFences = new ArrayList<>();
 

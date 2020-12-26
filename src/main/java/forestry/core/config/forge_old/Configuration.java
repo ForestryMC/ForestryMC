@@ -140,11 +140,11 @@ public class Configuration {
         return this.loadedConfigVersion;
     }
 
-    /************************************
+    /*
      *
      * BOOLEAN gets
      *
-     *****************************************************************************************************************/
+     */
 
     /**
      * Gets a boolean Property object without a comment using the default settings.
@@ -963,7 +963,7 @@ public class Configuration {
                                     if (isFirstNonWhitespaceCharOnLine) {
                                         currentCat.put(
                                                 name,
-                                                new Property(name, tmpList.toArray(new String[tmpList.size()]), type)
+                                                new Property(name, tmpList.toArray(new String[0]), type)
                                         );
                                         name = null;
                                         tmpList = null;
@@ -1281,7 +1281,7 @@ public class Configuration {
      */
     public void copyCategoryProps(Configuration fromConfig, String[] ctgys) {
         if (ctgys == null) {
-            ctgys = this.getCategoryNames().toArray(new String[this.getCategoryNames().size()]);
+            ctgys = this.getCategoryNames().toArray(new String[0]);
         }
 
         for (String ctgy : ctgys) {
@@ -1530,7 +1530,7 @@ public class Configuration {
         prop.setMinValue(minValue);
         prop.setMaxValue(maxValue);
         return prop.getInt(defaultValue) < minValue ? minValue : (
-                prop.getInt(defaultValue) > maxValue ? maxValue : prop.getInt(defaultValue));
+                Math.min(prop.getInt(defaultValue), maxValue));
     }
 
     /**
@@ -1596,11 +1596,8 @@ public class Configuration {
 
     public static class UnicodeInputStreamReader extends Reader {
         private final InputStreamReader input;
-        @SuppressWarnings("unused")
-        private final String defaultEnc;
 
         public UnicodeInputStreamReader(InputStream source, String encoding) throws IOException {
-            defaultEnc = encoding;
             String enc = encoding;
             byte[] data = new byte[4];
 

@@ -38,7 +38,7 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
     ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items);
 
     @Nullable
-    public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer);
+    ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer);
 
-    public boolean canUse(RecipeManager manager, ItemStack itemStack);
+    boolean canUse(RecipeManager manager, ItemStack itemStack);
 }

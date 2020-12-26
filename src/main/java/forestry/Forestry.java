@@ -104,7 +104,7 @@ import java.io.File;
 //the big TODO - things have to be properly sided now, can't keep just using OnlyIn I think
 @Mod("forestry")
 public class Forestry {
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     public static Forestry instance;
 
     private static final Logger LOGGER = LogManager.getLogger();

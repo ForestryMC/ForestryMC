@@ -24,7 +24,8 @@ public class GuiTextBox extends TextFieldWidget {
     private static final int disabledColor = 7368816;
 
     private final FontRenderer fontRenderer;
-    private final int startX, startY, width, height;
+    private final int width;
+    private final int height;
 
     private int lineScroll = 0;
     private int maxLines = 0;
@@ -32,8 +33,6 @@ public class GuiTextBox extends TextFieldWidget {
     public GuiTextBox(FontRenderer fontRenderer, int startX, int startY, int width, int height) {
         super(fontRenderer, startX, startY, width, height, null);
         this.fontRenderer = fontRenderer;
-        this.startX = startX;
-        this.startY = startY;
         this.width = width;
         this.height = height;
     }

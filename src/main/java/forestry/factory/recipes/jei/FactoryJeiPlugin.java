@@ -1,9 +1,7 @@
 package forestry.factory.recipes.jei;
 
 import forestry.core.config.Constants;
-import forestry.core.gui.ContainerAnalyzer;
 import forestry.core.gui.ContainerForestry;
-import forestry.core.gui.ContainerTile;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.core.utils.JeiUtil;
@@ -124,7 +122,7 @@ public class FactoryJeiPlugin implements IModPlugin {
             categories.add(new StillRecipeCategory(guiHelper));
         }
 
-        registry.addRecipeCategories(categories.toArray(new IRecipeCategory[categories.size()]));
+        registry.addRecipeCategories(categories.toArray(new IRecipeCategory[0]));
     }
 
     @Override

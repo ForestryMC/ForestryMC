@@ -58,7 +58,7 @@ public interface IWorldClimateHolder {
     IClimateState getState(BlockPos pos);
 
     /**
-     * @return the {@link World#getTotalWorldTime()} at the moment the last transformer changed its
+     * @return the {@link World#getGameTime()} at the moment the last transformer changed its
      * {@link IClimateTransformer#getCurrent()} state or a {@link IClimateTransformer} has been removed or added to the
      * holder.
      */

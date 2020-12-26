@@ -28,9 +28,9 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
     @Nullable
     IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack);
 
-    public boolean isResource(RecipeManager manager, ItemStack resource);
+    boolean isResource(RecipeManager manager, ItemStack resource);
 
-    public Set<Fluid> getRecipeFluidInputs(RecipeManager manager);
+    Set<Fluid> getRecipeFluidInputs(RecipeManager manager);
 
-    public Set<Fluid> getRecipeFluidOutputs(RecipeManager manager);
+    Set<Fluid> getRecipeFluidOutputs(RecipeManager manager);
 }

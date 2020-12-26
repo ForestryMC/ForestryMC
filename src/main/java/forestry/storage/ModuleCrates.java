@@ -21,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,11 @@ public class ModuleCrates extends BlankForestryModule {
     private static final String CONFIG_CATEGORY = "crates";
 
     public static final List<String> cratesRejectedOreDict = new ArrayList<>();
-    public static Multimap<Item, ItemStack> cratesRejectedItem = HashMultimap.create();
+    public static final Multimap<Item, ItemStack> cratesRejectedItem = HashMultimap.create();
 
     public static final List<FeatureItem<ItemCrated>> crates = new ArrayList<>();
 
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     public static ProxyCrates proxy;
 
     public ModuleCrates() {
@@ -123,29 +124,33 @@ public class ModuleCrates extends BlankForestryModule {
     //TODO new imc
     @Override
     public boolean processIMCMessage(InterModComms.IMCMessage message) {
-        if (message.getMethod().equals("add-crate-items")) {
-            ItemStack value = (ItemStack) message.getMessageSupplier().get();
-            if (value != null) {
+        switch (message.getMethod()) {
+            case "add-crate-items": {
+                ItemStack value = (ItemStack) message.getMessageSupplier().get();
+                if (value != null) {
+                    StorageManager.crateRegistry.registerCrate(value);
+                } else {
+                    IMCUtil.logInvalidIMCMessage(message);
+                }
+                return true;
+            }
+            case "add-crate-oredict": {
+                String value = (String) message.getMessageSupplier().get();
                 StorageManager.crateRegistry.registerCrate(value);
-            } else {
-                IMCUtil.logInvalidIMCMessage(message);
+                return true;
             }
-            return true;
-        } else if (message.getMethod().equals("add-crate-oredict")) {
-            String value = (String) message.getMessageSupplier().get();
-            StorageManager.crateRegistry.registerCrate(value);
-            return true;
-        } else if (message.getMethod().equals("blacklist-crate-item")) {
-            ItemStack value = (ItemStack) message.getMessageSupplier().get();
-            if (value != null) {
-                cratesRejectedItem.put(value.getItem(), value);
-            } else {
-                IMCUtil.logInvalidIMCMessage(message);
+            case "blacklist-crate-item": {
+                ItemStack value = (ItemStack) message.getMessageSupplier().get();
+                if (value != null) {
+                    cratesRejectedItem.put(value.getItem(), value);
+                } else {
+                    IMCUtil.logInvalidIMCMessage(message);
+                }
+                return true;
             }
-            return true;
-        } else if (message.getMethod().equals("blacklist-crate-oredict")) {
-            cratesRejectedOreDict.add((String) message.getMessageSupplier().get());
-            return true;
+            case "blacklist-crate-oredict":
+                cratesRejectedOreDict.add((String) message.getMessageSupplier().get());
+                return true;
         }
         return false;
     }

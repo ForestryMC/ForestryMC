@@ -26,7 +26,7 @@ import java.util.function.Predicate;
  * <p>
  * After you've registered your backpack definition, create the item with
  * {@link #createBackpack(String, EnumBackpackType)}
- * or {@link #createNaturalistBackpack(String, IForestrySpeciesRoot, ItemGroup)}
+ * or {@link #createNaturalistBackpack(String, String, ItemGroup)}
  * and then register the returned item with {@link GameRegistry#register(IForgeRegistryEntry)} like any other item.
  */
 public interface IBackpackInterface {
@@ -35,7 +35,6 @@ public interface IBackpackInterface {
      *
      * @param backpackUid The unique ID of the Forestry backpack. See {@link BackpackManager} for valid UIDs.
      * @param itemStack   The itemStack that the backpack should accept.
-     *                    {@link OreDictionary#WILDCARD_VALUE} can be used for meta value.
      */
     void addItemToForestryBackpack(String backpackUid, ItemStack itemStack);
 
@@ -66,7 +65,7 @@ public interface IBackpackInterface {
      *
      * @param backpackUid The unique ID of the backpack.
      * @param rootUid     The species root.
-     * @param tab
+     * @param tab The tab
      * @return Created backpack item.
      */
     Item createNaturalistBackpack(String backpackUid, String rootUid, ItemGroup tab);
@@ -82,7 +81,7 @@ public interface IBackpackInterface {
      *
      * @param speciesRootUid The species root's unique ID. See {@link IForestrySpeciesRoot#getUID()}.
      * @return a new backpack filter for the specified species root
-     * @see #createNaturalistBackpack(String, IForestrySpeciesRoot, ItemGroup)
+     * @see #createNaturalistBackpack(String, String, ItemGroup)
      */
     Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid);
 }

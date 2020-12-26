@@ -18,10 +18,12 @@ import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class OrganismFunction extends LootFunction {
-    public static LootFunctionType type;
+    @Nullable
+    public static LootFunctionType type = null;
 
     private final ResourceLocation speciesUid;
 

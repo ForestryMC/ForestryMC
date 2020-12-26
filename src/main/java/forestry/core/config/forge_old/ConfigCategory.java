@@ -106,7 +106,6 @@ public class ConfigCategory implements Map<String, Property> {
         }
     }
 
-
     public ConfigCategory setLanguageKey(String languagekey) {
         this.languagekey = languagekey;
         return this;

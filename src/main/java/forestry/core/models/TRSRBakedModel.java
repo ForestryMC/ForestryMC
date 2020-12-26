@@ -171,8 +171,8 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
     private static class Transformer extends VertexTransformer {
 
-        protected Matrix4f transformation;
-        protected Matrix3f normalTransformation;
+        protected final Matrix4f transformation;
+        protected final Matrix3f normalTransformation;
 
         public Transformer(TransformationMatrix transformation, TextureAtlasSprite textureAtlasSprite) {
             super(new BakedQuadBuilder(textureAtlasSprite));

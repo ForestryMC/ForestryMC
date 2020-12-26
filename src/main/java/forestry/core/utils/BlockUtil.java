@@ -12,10 +12,7 @@ package forestry.core.utils;
 
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
@@ -101,7 +98,7 @@ public abstract class BlockUtil {
 
     public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
         Block block = blockState.getBlock();
-        return world.getBlockState(pos).getMaterial().isReplaceable() && true;//!(block instanceof BlockStaticLiquid);
+        return world.getBlockState(pos).getMaterial().isReplaceable() && !(block instanceof FlowingFluidBlock);
     }
 
     @Nullable
@@ -141,7 +138,7 @@ public abstract class BlockUtil {
             double maxZ
     ) {
         startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
-        endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
+        endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
         Vector3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
         Vector3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
         Vector3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);

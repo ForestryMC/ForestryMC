@@ -41,7 +41,7 @@ public class GameMode implements IGameMode {
     private final Map<String, Boolean> booleanSettings = new HashMap<>();
     private final Map<String, Integer> integerSettings = new HashMap<>();
     private final Map<String, Float> floatSettings = new HashMap<>();
-    private String identifier = "EASY";
+    private String identifier;
 
     public GameMode(String identifier) {
 

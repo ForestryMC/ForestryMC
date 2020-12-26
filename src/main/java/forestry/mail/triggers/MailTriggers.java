@@ -12,15 +12,26 @@ package forestry.mail.triggers;
 
 import forestry.core.triggers.Trigger;
 
+import javax.annotation.Nullable;
+
 public class MailTriggers {
+    @Nullable
     public static Trigger triggerHasMail;
+    @Nullable
     public static Trigger lowPaper64;
+    @Nullable
     public static Trigger lowPaper32;
+    @Nullable
     public static Trigger lowPostage40;
+    @Nullable
     public static Trigger lowPostage20;
+    @Nullable
     public static Trigger lowInput25;
+    @Nullable
     public static Trigger lowInput10;
+    @Nullable
     public static Trigger highBuffer75;
+    @Nullable
     public static Trigger highBuffer90;
 
     public static void initialize() {

@@ -96,9 +96,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
         Fluid recipeFluid = recipe.getLiquid().getFluid();
         for (IFabricatorSmeltingRecipe s : getSmeltingInputs(manager).get(recipeFluid)) {
             Optional<ItemStack> itemStack = Arrays.stream(s.getResource().getMatchingStacks()).findFirst();
-            if (itemStack.isPresent()) {
-                smeltingInput.add(itemStack.get());
-            }
+            itemStack.ifPresent(smeltingInput::add);
         }
 
         if (!smeltingInput.isEmpty()) {

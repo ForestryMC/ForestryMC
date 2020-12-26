@@ -9,5 +9,5 @@ public class IndexData {
     /**
      * All entries of this index.
      */
-    public IndexEntry[] entries = new IndexEntry[0];
+    public final IndexEntry[] entries = new IndexEntry[0];
 }

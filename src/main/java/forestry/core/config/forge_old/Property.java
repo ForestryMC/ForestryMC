@@ -53,8 +53,8 @@ public class Property {
     private boolean showInGui = true;
     private boolean requiresMcRestart = false;
     private Pattern validationPattern;
-    private boolean isListLengthFixed = false;
-    private int maxListLength = -1;
+    private boolean isListLengthFixed;
+    private int maxListLength;
     private boolean changed = false;
     public Property(String name, String value, Type type) {
         this(name, value, type, false, new String[0], name);
@@ -746,7 +746,7 @@ public class Property {
      * @return True if it is a boolean value
      */
     public boolean isBooleanValue() {
-        return ("true".equals(value.toLowerCase()) || "false".equals(value.toLowerCase()));
+        return ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value));
     }
 
     /**

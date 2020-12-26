@@ -33,8 +33,6 @@ public class FermenterRecipeMaker {
             List<FermenterRecipeWrapper> recipes
     ) {
         Optional<ItemStack> itemStack = Arrays.stream(resource.getMatchingStacks()).findFirst();
-        if (itemStack.isPresent()) {
-            recipes.add(new FermenterRecipeWrapper(recipe, itemStack.get()));
-        }
+        itemStack.ifPresent(stack -> recipes.add(new FermenterRecipeWrapper(recipe, stack)));
     }
 }

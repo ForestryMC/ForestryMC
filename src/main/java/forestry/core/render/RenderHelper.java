@@ -22,7 +22,9 @@ public class RenderHelper {
     // The current partial ticks
     public float partialTicks;
     // The current transformation
+    @Nullable
     public MatrixStack transformation;
+    @Nullable
     public IRenderTypeBuffer buffer;
     public int combinedLight;
     public int packetLight;

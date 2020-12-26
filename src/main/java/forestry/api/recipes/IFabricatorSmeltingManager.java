@@ -14,7 +14,7 @@ import java.util.Set;
 
 public interface IFabricatorSmeltingManager extends ICraftingProvider<IFabricatorSmeltingRecipe> {
     @Nullable
-    public IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource);
+    IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource);
 
-    public Set<Fluid> getRecipeFluids(RecipeManager manager);
+    Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

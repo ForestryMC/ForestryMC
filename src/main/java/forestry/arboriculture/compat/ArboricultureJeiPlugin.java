@@ -34,8 +34,8 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 
         ISubtypeInterpreter arboSubtypeInterpreter = itemStack -> {
             Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
-            return individual.isPresent() ? individual.get().getGenome().getPrimary().getBinomial()
-                                          : ISubtypeInterpreter.NONE;
+            return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(
+                    ISubtypeInterpreter.NONE);
         };
 
         subtypeRegistry.registerSubtypeInterpreter(ArboricultureItems.SAPLING.getItem(), arboSubtypeInterpreter);

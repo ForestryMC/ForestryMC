@@ -12,10 +12,16 @@ package forestry.factory.triggers;
 
 import forestry.core.triggers.Trigger;
 
+import javax.annotation.Nullable;
+
 public class FactoryTriggers {
+    @Nullable
     public static Trigger lowResource25;
+    @Nullable
     public static Trigger lowResource10;
+    @Nullable
     public static Trigger lowFuel25;
+    @Nullable
     public static Trigger lowFuel10;
 
     public static void initialize() {

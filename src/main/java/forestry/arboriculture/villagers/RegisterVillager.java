@@ -176,8 +176,8 @@ public class RegisterVillager {
     }
 
     private static class GivePlanksForEmeralds implements VillagerTrades.ITrade {
-        public VillagerTrade.PriceInterval emeraldsPriceInfo;
-        public VillagerTrade.PriceInterval sellingPriceInfo;
+        final VillagerTrade.PriceInterval emeraldsPriceInfo;
+        final VillagerTrade.PriceInterval sellingPriceInfo;
         final int maxUses;
         final int xp;
         final float priceMult;
@@ -214,8 +214,8 @@ public class RegisterVillager {
     }
 
     private static class GiveLogsForEmeralds implements VillagerTrades.ITrade {
-        public VillagerTrade.PriceInterval emeraldsPriceInfo;
-        public VillagerTrade.PriceInterval sellingPriceInfo;
+        final VillagerTrade.PriceInterval emeraldsPriceInfo;
+        final VillagerTrade.PriceInterval sellingPriceInfo;
         final int maxUses;
         final int xp;
         final float priceMult;
@@ -252,10 +252,10 @@ public class RegisterVillager {
     }
 
     private static class GivePollenForEmeralds implements VillagerTrades.ITrade {
-        public VillagerTrade.PriceInterval buyingPriceInfo;
-        public VillagerTrade.PriceInterval sellingPriceInfo;
-        public IOrganismType type;
-        public int maxComplexity;
+        final VillagerTrade.PriceInterval buyingPriceInfo;
+        final VillagerTrade.PriceInterval sellingPriceInfo;
+        final IOrganismType type;
+        final int maxComplexity;
         final int maxUses;
         final int xp;
         final float priceMult;

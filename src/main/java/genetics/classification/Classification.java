@@ -65,7 +65,7 @@ public class Classification implements IClassification {
 
     @Override
     public IClassification[] getMemberGroups() {
-        return groups.toArray(new IClassification[groups.size()]);
+        return groups.toArray(new IClassification[0]);
     }
 
     @Override

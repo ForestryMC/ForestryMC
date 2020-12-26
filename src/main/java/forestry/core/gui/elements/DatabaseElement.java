@@ -25,7 +25,7 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
     private DatabaseMode mode = DatabaseMode.ACTIVE;
     @Nullable
     private IIndividual individual;
-    private int secondColumn = 0;
+    private int secondColumn;
     private int thirdColumn = 0;
 
     public DatabaseElement(int width) {

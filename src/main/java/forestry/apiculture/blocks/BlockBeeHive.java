@@ -48,9 +48,7 @@ public class BlockBeeHive extends ContainerBlock {
 
     public BlockBeeHive(HiveType type) {
         super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
-                        .setLightLevel((state) -> {
-                            return (int) (0.4f * 15);
-                        })
+                        .setLightLevel((state) -> (int) (0.4f * 15))
                         .hardnessAndResistance(2.5f)
                         .harvestLevel(0)
                         .harvestTool(ItemScoop.SCOOP));

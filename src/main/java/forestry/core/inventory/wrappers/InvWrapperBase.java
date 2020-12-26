@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 public abstract class InvWrapperBase implements IInventory {
 
     private final IInventory inv;
-    private boolean checkItems = true;
+    private boolean checkItems;
 
     public InvWrapperBase(IInventory inv) {
         this(inv, true);

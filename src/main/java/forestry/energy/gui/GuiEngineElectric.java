@@ -26,8 +26,8 @@ public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEn
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
         TileEngineElectric engine = tile;
         int storageHeight = engine.getStorageScaled(46);

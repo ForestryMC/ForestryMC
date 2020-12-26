@@ -31,7 +31,7 @@ public enum GuiEventOrigin {
     DIRECT_CHILD {
         @Override
         public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-            if (element == null || !(element instanceof IElementGroup)) {
+            if (!(element instanceof IElementGroup)) {
                 return false;
             }
             Collection<IGuiElement> elements = ((IElementGroup) element).getElements();

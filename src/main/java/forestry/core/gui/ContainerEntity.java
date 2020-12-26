@@ -62,7 +62,7 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
             IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
             ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
-            if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {
+            if (!errorStates.equals(previousErrorStates)) {
                 PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
                 sendPacketToListeners(packet);
             }

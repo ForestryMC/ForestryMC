@@ -39,7 +39,7 @@ import java.nio.charset.StandardCharsets;
 public class StructureContent extends BookContent {
     @Nullable
     private final String structureFile = null;
-    private transient StructureData structureData;
+    private transient StructureData structureData = null;
 
     @Nullable
     @Override

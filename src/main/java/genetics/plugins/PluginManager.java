@@ -16,6 +16,7 @@ import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -29,6 +30,7 @@ public class PluginManager {
         }
         return first.ordinal() > second.ordinal() ? 1 : -1;
     };
+    @Nullable
     private static ImmutableSortedMap<IGeneticPlugin, ModContainer> plugins;
 
     private PluginManager() {

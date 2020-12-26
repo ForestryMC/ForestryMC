@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public class WrappedRegistryObject<T extends IForgeRegistryEntry<? super T>> implements Supplier<T>, INamedEntry {
 
-    protected RegistryObject<T> registryObject;
+    protected final RegistryObject<T> registryObject;
 
     protected WrappedRegistryObject(RegistryObject<T> registryObject) {
         this.registryObject = registryObject;

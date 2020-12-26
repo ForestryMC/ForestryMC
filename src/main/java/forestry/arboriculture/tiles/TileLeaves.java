@@ -329,7 +329,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
         if (individual instanceof ITree) {
             ITree tree = getTree();
             return tree != null &&
-                   tree.getMate() == null &&
+                   !tree.getMate().isPresent() &&
                    (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
         }
         return false;

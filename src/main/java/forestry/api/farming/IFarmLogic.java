@@ -57,7 +57,7 @@ public interface IFarmLogic {
      * Tries to harvest one or more blocks at the given position and with the given extent.
      *
      * @param world     The world of the farm.
-     * @param housing
+     * @param housing   The housing
      * @param direction The direction of the extension.
      * @param extent    How many blocks this logic tries to harvest after it has tried to harvested the block at the given position.
      *                  The positions of the next blocks are having a offset in the given direction.

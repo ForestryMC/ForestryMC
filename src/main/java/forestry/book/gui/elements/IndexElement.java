@@ -23,8 +23,7 @@ public class IndexElement extends VerticalLayout {
         }
     }
 
-    private class IndexEntryElement extends LabelElement {
-
+    private static class IndexEntryElement extends LabelElement {
         public IndexEntryElement(IndexEntry data) {
             super(0, 0, -1, 9, new StringTextComponent(data.title).mergeStyle(INDEX_STYLE), true);
             setWidth(width + LabelElement.FONT_RENDERER.getStringWidth(" > "));

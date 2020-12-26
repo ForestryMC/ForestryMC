@@ -146,8 +146,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
         drawCenteredString(
                 transform,
                 new TranslationTextComponent("for.gui.habitat_former.climate.temperature"),

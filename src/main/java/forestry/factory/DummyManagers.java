@@ -88,7 +88,7 @@ public class DummyManagers {
         public Optional<IFabricatorRecipe> findMatchingRecipe(
                 RecipeManager manager, ItemStack plan, IInventory resources
         ) {
-            return null;
+            return Optional.empty();
         }
 
         @Override

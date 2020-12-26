@@ -165,10 +165,8 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
     /* SMP GUI */
     public void getGUINetworkData(int i, int j) {
-        switch (i) {
-            case 0:
-                fillingProgress = j;
-                break;
+        if (i == 0) {
+            fillingProgress = j;
         }
     }
 

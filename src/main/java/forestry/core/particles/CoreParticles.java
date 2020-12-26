@@ -19,7 +19,6 @@ public class CoreParticles {
             SnowParticleType::new
     );
 
-    @SuppressWarnings("resource")
     @SubscribeEvent
     public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
         Minecraft.getInstance().particles.registerFactory(

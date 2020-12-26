@@ -62,7 +62,7 @@ public interface IFruitProvider extends ISetupListener {
      * The chance that this leaves contains fruits or the chance that a pod block spawns.
      *
      * @param genome The genome of the tree of the pod / leaves block.
-     * @param world
+     * @param world World
      * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
      */
     default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
@@ -149,7 +149,7 @@ public interface IFruitProvider extends ISetupListener {
      * Can be used to register the sprite/s that can be returned with
      * {@link #getSprite(IGenome, IBlockReader, BlockPos, int)}.
      *
-     * @param event
+     * @param event TextureStitchEvent
      */
     @OnlyIn(Dist.CLIENT)
     void registerSprites(TextureStitchEvent.Pre event);

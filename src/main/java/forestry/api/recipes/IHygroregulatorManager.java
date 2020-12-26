@@ -25,7 +25,7 @@ import java.util.Set;
  */
 public interface IHygroregulatorManager extends ICraftingProvider<IHygroregulatorRecipe> {
     @Nullable
-    public IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid);
+    IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid);
 
-    public Set<Fluid> getRecipeFluids(RecipeManager manager);
+    Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

@@ -24,8 +24,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
+
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
     private final TileTrader tile;
+    @Nullable
     private TextFieldWidget addressNameField;
 
     public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {

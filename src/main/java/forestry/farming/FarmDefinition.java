@@ -6,9 +6,7 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.FarmPropertiesEvent;
 import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmProperties;
@@ -176,9 +174,7 @@ public enum FarmDefinition implements IStringSerializable {
 	}*/;
 
     private final String name;
-    private final EnumElectronTube tube;
     protected final IFarmProperties properties;
-    private final String module;
     private final ICircuit managed;
     private final ICircuit manual;
 
@@ -203,8 +199,6 @@ public enum FarmDefinition implements IStringSerializable {
         this.managed = new CircuitFarmLogic("managed" + camelCase, properties, false);
         this.manual = new CircuitFarmLogic("manual" + camelCase, properties, true);
         this.name = identifier;
-        this.tube = tube;
-        this.module = module;
     }
 
     protected IFarmPropertiesBuilder wateredProperties(IFarmPropertiesBuilder builder) {

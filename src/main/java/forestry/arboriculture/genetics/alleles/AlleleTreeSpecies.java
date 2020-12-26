@@ -125,10 +125,10 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 
         private final ImmutableList.Builder<IFruitFamily> fruits = new ImmutableList.Builder<>();
 
-        private ITreeGenerator generator;
-        private IGermlingModelProvider germlingModelProvider;
+        private ITreeGenerator generator = null;
+        private IGermlingModelProvider germlingModelProvider = null;
         private ILeafProvider leafProvider = new LeafProvider();
-        private ILeafSpriteProvider leafSpriteProvider;
+        private ILeafSpriteProvider leafSpriteProvider = null;
         private PlantType nativeType = PlantType.PLAINS;
         private IGrowthProvider growthProvider = new ClimateGrowthProvider();
         private float rarity = 0.0F;

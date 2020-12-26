@@ -27,10 +27,6 @@ public enum EnumVanillaWoodType implements IWoodType {
         return VALUES[random.nextInt(VALUES.length)];
     }
 
-    //	public BlockPlanks.EnumType getVanillaType() {
-    //		return vanillaType;
-    //	}
-
     @Override
     public String toString() {
         return super.toString().toLowerCase(Locale.ENGLISH);

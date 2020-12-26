@@ -36,7 +36,7 @@ import net.minecraftforge.fml.DistExecutor;
 public class ModuleClimatology extends BlankForestryModule {
 
     @SuppressWarnings("NullableProblems")
-    public static ProxyClimatology proxy;
+    public static ProxyClimatology proxy = null;
 
     public ModuleClimatology() {
         proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);

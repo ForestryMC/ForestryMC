@@ -57,6 +57,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
@@ -64,7 +65,7 @@ import java.util.Map.Entry;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
 
-    @SuppressWarnings("NullableProblems")
+    @Nullable
     public static ProxyLepidopterology proxy;
     private static final String CONFIG_CATEGORY = "lepidopterology";
     public static int spawnConstraint = 100;

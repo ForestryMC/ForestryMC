@@ -112,6 +112,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
     private float size = DEFAULT_BUTTERFLY_SIZE;
     private EnumButterflyState state = DEFAULT_STATE;
     @OnlyIn(Dist.CLIENT)
+    @Nullable
     private ResourceLocation textureResource;
 
     /* CONSTRUCTOR */
