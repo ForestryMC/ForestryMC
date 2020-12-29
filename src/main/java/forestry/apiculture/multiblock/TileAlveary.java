@@ -10,9 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import forestry.apiculture.blocks.BlockAlveary;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -66,28 +68,30 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO check third bool, false);
+		Block block = getBlockState().getBlock();
+		if(block instanceof BlockAlveary) {
+			world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+		}
+		world.notifyNeighborsOfStateChange(getPos(), block);
 		// Re-render this block on the client
 		if (world.isRemote) {
 			RenderUtil.markForUpdate(getPos());
 		}
 	}
 
-	//TODO refreshing
-	//	@Override
-	//	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-	//		return oldState.getBlock() != newState.getBlock();
-	//	}
-
 	@Override
 	public void onMachineBroken() {
+		Block block = getBlockState().getBlock();
+		if(block instanceof BlockAlveary) {
+			world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+		}
+		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
 		// Re-render this block on the client
 		if (world.isRemote) {
 			//TODO
 			BlockPos pos = getPos();
 			RenderUtil.markForUpdate(pos);
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());//TODO 3rd bool, false);
 		markDirty();
 	}
 
