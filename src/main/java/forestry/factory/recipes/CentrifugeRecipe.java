@@ -86,13 +86,15 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
             Ingredient input = Ingredient.deserialize(json.get("input"));
             NonNullList<Product> outputs = NonNullList.create();
 
-            for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
-                float chance = JSONUtils.getFloat(element.getAsJsonObject(), "chance");
-                ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(
-                        element.getAsJsonObject(),
-                        "item"
-                ), true);
-                outputs.add(new Product(chance, stack));
+            if (json.get("products") != null) {
+                for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
+                    float chance = JSONUtils.getFloat(element.getAsJsonObject(), "chance");
+                    ItemStack stack = CraftingHelper.getItemStack(
+                            JSONUtils.getJsonObject(element.getAsJsonObject(), "item"),
+                            true
+                    );
+                    outputs.add(new Product(chance, stack));
+                }
             }
 
             return new CentrifugeRecipe(recipeId, processingTime, input, outputs);

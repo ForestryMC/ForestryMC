@@ -19,7 +19,6 @@ import org.apache.maven.artifact.versioning.VersionRange;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-
 public abstract class ModUtil {
     public static boolean isModLoaded(String modname) {
         return ModList.get().isLoaded(modname);

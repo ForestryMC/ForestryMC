@@ -192,7 +192,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
         beeLogic.read(compoundNBT);
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);
@@ -274,7 +273,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
         return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
     }
 
-
     @Override
     public CompoundNBT getUpdateTag() {
         CompoundNBT nbt = super.getUpdateTag();
@@ -307,7 +305,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
     public Iterable<IBeeListener> getBeeListeners() {
         return Collections.emptyList();
     }
-
 
     @Override
     public IBeeHousingInventory getBeeInventory() {

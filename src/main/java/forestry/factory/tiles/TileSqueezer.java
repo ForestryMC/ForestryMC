@@ -222,7 +222,6 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
         return new TankRenderInfo(productTank);
     }
 
-
     @Override
     public TankManager getTankManager() {
         return tankManager;

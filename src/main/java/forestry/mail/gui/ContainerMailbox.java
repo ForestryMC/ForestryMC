@@ -36,7 +36,6 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
     @Nullable
     private final POBox mailInventory;
 
-
     public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
         super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
         IInventory inventory = tile.getOrCreateMailInventory(

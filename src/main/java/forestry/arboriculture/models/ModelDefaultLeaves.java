@@ -114,7 +114,6 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
         baker.setParticleSprite(leafSprite);
     }
 
-
     @Override
     protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
         ModelBaker baker = new ModelBaker();

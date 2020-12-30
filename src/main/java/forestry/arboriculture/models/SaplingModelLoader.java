@@ -9,7 +9,6 @@ import net.minecraftforge.client.model.geometry.IModelGeometry;
 public enum SaplingModelLoader implements IModelLoader {
     INSTANCE;
 
-
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
         // NOOP, handled in loader

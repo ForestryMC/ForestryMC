@@ -10,7 +10,6 @@
  */
 package forestry.energy.proxy;
 
-
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.energy.render.RenderEngine;
 import forestry.energy.tiles.TileEngine;

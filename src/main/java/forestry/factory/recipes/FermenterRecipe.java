@@ -53,7 +53,6 @@ public class FermenterRecipe implements IFermenterRecipe {
         this.fluidResource = fluidResource;
     }
 
-
     @Override
     public Ingredient getResource() {
         return resource;

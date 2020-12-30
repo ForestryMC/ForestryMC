@@ -79,20 +79,20 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CharcoalPileWallWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
-        itemStackGroup.init(0, true, 0, 16);
-        itemStackGroup.init(1, true, 20, 16);
-        itemStackGroup.init(2, false, 84, 16);
-        itemStackGroup.init(3, false, 104, 16);
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        guiItemStacks.init(0, true, 0, 16);
+        guiItemStacks.init(1, true, 20, 16);
+        guiItemStacks.init(2, false, 84, 16);
+        guiItemStacks.init(3, false, 104, 16);
 
-        itemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-        itemStackGroup.set(1, new ItemStack(CharcoalBlocks.WOOD_PILE.getBlock()));
-        itemStackGroup.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-        itemStackGroup.set(3, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
+        guiItemStacks.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        guiItemStacks.set(1, new ItemStack(CharcoalBlocks.WOOD_PILE.getBlock()));
+        guiItemStacks.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        guiItemStacks.set(3, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
 
         ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
         tooltip.addFortuneTooltip(2);
         tooltip.addFortuneTooltip(3);
-        itemStackGroup.addTooltipCallback(tooltip);
+        guiItemStacks.addTooltipCallback(tooltip);
     }
 }

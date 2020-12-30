@@ -78,14 +78,14 @@ public final class ModuleHelper {
         crateRegistry.registerCrate(block);
     }
 
-    public static void registerCrate(@Nullable String oreDict) {
-        if (oreDict == null || oreDict.isEmpty()) {
+    public static void registerCrate(@Nullable String tagName) {
+        if (tagName == null || tagName.isEmpty()) {
             return;
         }
         ICrateRegistry crateRegistry = StorageManager.crateRegistry;
         if (crateRegistry == null) {
             return;
         }
-        crateRegistry.registerCrate(oreDict);
+        crateRegistry.registerCrate(tagName);
     }
 }

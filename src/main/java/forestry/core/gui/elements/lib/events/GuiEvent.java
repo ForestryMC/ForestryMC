@@ -1,6 +1,5 @@
 package forestry.core.gui.elements.lib.events;
 
-
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IWindowElement;
 import net.minecraftforge.api.distmarker.Dist;

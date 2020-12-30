@@ -14,7 +14,7 @@ import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.item.ItemStack;
@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRecipeWrapper> {
@@ -57,7 +58,6 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
         );
     }
 
-
     @Override
     public ResourceLocation getUid() {
         return ForestryRecipeCategoryUid.CARPENTER;
@@ -80,17 +80,17 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CarpenterRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiIngredientGroup guiIngredients = recipeLayout.getItemStacks();
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
-        guiIngredients.init(boxSlot, true, 73, 3);
+        guiItemStacks.init(boxSlot, true, 73, 3);
 
-        guiIngredients.init(craftOutputSlot, false, 70, 34);
+        guiItemStacks.init(craftOutputSlot, false, 70, 34);
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = craftInputSlot + x + y * 3;
-                guiIngredients.init(index, true, x * 18, 3 + y * 18);
+                guiItemStacks.init(index, true, x * 18, 3 + y * 18);
             }
         }
 
@@ -99,18 +99,18 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
         ICarpenterRecipe recipe = recipeWrapper.getRecipe();
         Ingredient box = recipe.getBox();
         if (!box.hasNoMatchingItems()) {
-            guiIngredients.set(boxSlot, box);
+            guiItemStacks.set(boxSlot, Arrays.asList(box.getMatchingStacks()));
         }
 
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        guiIngredients.set(craftOutputSlot, outputs.get(0));
+        guiItemStacks.set(craftOutputSlot, outputs.get(0));
 
         ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 
         List<List<ItemStack>> craftingInputs = ingredients.getInputs(VanillaTypes.ITEM);
 
         craftingGridHelper.setInputs(
-                guiIngredients,
+                guiItemStacks,
                 craftingInputs,
                 craftingGridRecipe.getWidth(),
                 craftingGridRecipe.getHeight()

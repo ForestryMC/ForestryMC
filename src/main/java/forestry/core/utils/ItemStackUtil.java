@@ -55,7 +55,6 @@ public abstract class ItemStackUtil {
         return ItemStack.areItemStackTagsEqual(lhs, rhs);
     }
 
-
     //TODO - move towards resourcelocations anyway as they are safer in some ways
 
     /**
@@ -304,7 +303,6 @@ public abstract class ItemStackUtil {
         world.addEntity(entityitem);
     }
 
-
     public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
         int size = max <= 0 ? 1 : rand.nextInt(max);
         return createCopyWithCount(template, Math.min(size, template.getMaxStackSize()));
@@ -334,12 +332,10 @@ public abstract class ItemStackUtil {
         return block == getBlock(stack);// && meta == stack.getItemDamage();
     }
 
-
     public static List<ItemStack> parseItemStackStrings(String[] itemStackStrings, int missingMetaValue) {
         List<Stack> stacks = Stack.parseStackStrings(itemStackStrings, missingMetaValue);
         return getItemStacks(stacks);
     }
-
 
     public static List<ItemStack> parseItemStackStrings(String itemStackStrings, int missingMetaValue) {
         List<Stack> stacks = Stack.parseStackStrings(itemStackStrings, missingMetaValue);

@@ -1,6 +1,5 @@
 package forestry.api.registration;
 
-
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;

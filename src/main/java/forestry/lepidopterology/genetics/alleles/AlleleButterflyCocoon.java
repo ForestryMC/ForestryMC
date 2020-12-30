@@ -74,7 +74,6 @@ public class AlleleButterflyCocoon extends AlleleCategorized implements IAlleleB
         this.loot.addProduct(loot, chance);
     }
 
-
     @Override
     public IDynamicProductList getCocoonLoot() {
         return loot;

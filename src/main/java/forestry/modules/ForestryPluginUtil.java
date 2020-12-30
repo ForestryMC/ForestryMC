@@ -49,7 +49,6 @@ public class ForestryPluginUtil {
         }
     }
 
-
     public static String getComment(IForestryModule module) {
         ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 

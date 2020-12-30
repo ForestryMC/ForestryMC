@@ -74,7 +74,6 @@ public class GeneticHelper {
     private enum EmptyOrganism implements IOrganism<IIndividual> {
         INSTANCE;
 
-
         @Override
         public Optional<IIndividual> getIndividual() {
             return Optional.empty();
@@ -116,7 +115,6 @@ public class GeneticHelper {
         public <V> IAlleleValue<V> getAllele(IChromosomeValue<V> type, boolean active) {
             return (IAlleleValue<V>) Allele.EMPTY;
         }
-
 
         @Override
         public Optional<IAllele> getAlleleDirectly(IChromosomeType type, boolean active) {

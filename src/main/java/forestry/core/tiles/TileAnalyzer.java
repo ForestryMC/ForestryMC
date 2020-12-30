@@ -266,7 +266,6 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
         return tankManager;
     }
 
-
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {

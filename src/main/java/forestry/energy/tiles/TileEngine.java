@@ -250,7 +250,6 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
         forceCooldown = nbt.getBoolean("ForceCooldown");
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         nbt = super.write(nbt);

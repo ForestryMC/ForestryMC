@@ -181,7 +181,6 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
         return true;
     }
 
-
     @Override
     public ItemStack decrStackSize(int index, int count) {
         ItemStack itemstack = ItemStackHelper.getAndSplit(this.inventoryStacks, index, count);

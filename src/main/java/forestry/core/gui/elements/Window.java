@@ -23,7 +23,6 @@ import net.minecraftforge.fml.client.gui.GuiUtils;
 import javax.annotation.Nullable;
 import java.util.*;
 
-
 /**
  * This element is the top parent.
  */

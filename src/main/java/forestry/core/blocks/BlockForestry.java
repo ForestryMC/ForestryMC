@@ -30,8 +30,7 @@ import javax.annotation.Nullable;
 public abstract class BlockForestry extends Block {
 
     protected BlockForestry(Block.Properties properties) {
-        super(properties
-                .hardnessAndResistance(1.5f));
+        super(properties);
     }
 
     @Override

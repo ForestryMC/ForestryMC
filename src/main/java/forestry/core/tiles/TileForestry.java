@@ -124,7 +124,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
         inventory.read(data);
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT data) {
         data = super.write(data);
@@ -137,7 +136,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
     public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
     }
-
 
     @Override
     public CompoundNBT getUpdateTag() {

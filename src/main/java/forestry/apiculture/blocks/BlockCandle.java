@@ -152,6 +152,10 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
         if (tileCandle == null) {
             System.out.println("candle " + pos.getCoordinatesAsString());
             System.out.println("ah!!!");
+            TileEntity test = worldIn.getTileEntity(pos);
+            if (test != null) {
+                System.out.println(test.getTileData().toString());
+            }
             return ActionResultType.FAIL;
         }
 

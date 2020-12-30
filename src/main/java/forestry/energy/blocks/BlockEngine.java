@@ -93,7 +93,13 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
     }
 
     public BlockEngine(BlockTypeEngine blockType) {
-        super(blockType, Properties.create(Material.IRON).harvestTool(ToolType.PICKAXE).harvestLevel(0));
+        super(
+                blockType,
+                Properties.create(Material.IRON)
+                          .harvestTool(ToolType.PICKAXE)
+                          .harvestLevel(0)
+                          .hardnessAndResistance(1.5f)
+        );
     }
 
     private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {

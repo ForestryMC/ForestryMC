@@ -59,7 +59,6 @@ public abstract class TileBase extends TileForestry {
         return (T) blockBase.blockType;
     }
 
-
     //TODO
     //	@Override
     //	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {

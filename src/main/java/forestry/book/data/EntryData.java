@@ -10,23 +10,23 @@ public class EntryData {
     /**
      * The localized title of the entry.
      */
-    public final String title = "";
+    public String title = "";
     /**
      * The content that gets displayed on the pages of the entry.
      */
-    public final BookContent[][] content = new BookContent[0][0];
+    public BookContent[][] content = new BookContent[0][0];
     /**
      * All sub entries of this entry.
      */
-    public final String[] subEntries = new String[0];
+    public String[] subEntries = new String[0];
     /**
      * The name of the page factory.
      */
-    public final String loader = "json";
+    public String loader = "json";
     /**
      * The item that will be displayed next to the title.
      */
-    public final ItemStack icon = ItemStack.EMPTY;
+    public ItemStack icon = ItemStack.EMPTY;
 
     public EntryData() {
     }

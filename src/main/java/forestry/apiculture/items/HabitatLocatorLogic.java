@@ -198,7 +198,6 @@ public class HabitatLocatorLogic {
     }
 
     private static void removeInvalidBiomes(Biome currentBiome, Set<Biome> biomesToSearch) {
-
         biomesToSearch.removeAll(waterBiomes);
 
         if (Biome.Category.NETHER == currentBiome.getCategory()) {

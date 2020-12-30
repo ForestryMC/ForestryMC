@@ -20,8 +20,6 @@ import forestry.arboriculture.models.SpriteProviderLeaves;
 import java.awt.*;
 
 public class TreeFactory implements ITreeFactory {
-
-
     @Override
     public IAlleleTreeSpeciesBuilder createSpecies(String modID, String uid, String speciesIdentifier) {
         return new AlleleTreeSpecies.Builder(modID, uid, speciesIdentifier);

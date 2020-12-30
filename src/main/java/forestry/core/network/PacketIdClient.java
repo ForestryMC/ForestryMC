@@ -10,7 +10,6 @@
  */
 package forestry.core.network;
 
-
 import forestry.core.network.packets.PacketHandlerDummyClient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

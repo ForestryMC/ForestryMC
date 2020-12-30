@@ -14,9 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 
 public class MaterialCocoon {
-
     public static final Material INSTANCE = new Material.Builder(MaterialColor.WOOL).flammable().build();
-
 
     private MaterialCocoon() {
     }

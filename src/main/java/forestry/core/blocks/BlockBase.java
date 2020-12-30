@@ -89,7 +89,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
     }
 
     public BlockBase(P blockType, Material material) {
-        this(blockType, Block.Properties.create(material));
+        this(blockType, Block.Properties.create(material).hardnessAndResistance(1.5f));
     }
 
     public BlockBase(P blockType) {
@@ -106,7 +106,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
         super.fillStateContainer(builder);
         builder.add(FACING);
     }
-
 
     //TODO: Still needed? Should be replaced with voxel shapes vor every tesr or custom block
 	/*@Override
@@ -132,7 +131,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return getDefinition().createTileEntity();
     }
-
 
     private IMachineProperties getDefinition() {
         return blockType.getMachineProperties();

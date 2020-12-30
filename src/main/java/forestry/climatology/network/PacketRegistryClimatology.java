@@ -10,7 +10,6 @@
  */
 package forestry.climatology.network;
 
-
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdServer;

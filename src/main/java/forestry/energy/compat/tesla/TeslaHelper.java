@@ -6,7 +6,6 @@ import net.minecraftforge.common.capabilities.Capability;
 
 //import net.minecraftforge.fml.common.Optional;
 
-
 //import net.darkhax.tesla.api.ITeslaConsumer;
 //import net.darkhax.tesla.api.ITeslaHolder;
 //import net.darkhax.tesla.api.ITeslaProducer;

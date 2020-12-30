@@ -4,7 +4,6 @@ import genetics.api.alleles.IAllele;
 
 import javax.annotation.Nullable;
 
-
 public class AlleleFilter {
     @Nullable
     public IAllele activeAllele;

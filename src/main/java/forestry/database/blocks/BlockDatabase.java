@@ -8,9 +8,13 @@ import net.minecraftforge.common.ToolType;
 public class BlockDatabase extends BlockBase<BlockTypeDatabase> {
 
     public BlockDatabase(BlockTypeDatabase blockType) {
-        super(blockType, Block.Properties.create(Material.IRON)
-                                         .harvestTool(ToolType.PICKAXE)
-                                         .harvestLevel(0));
+        super(
+                blockType,
+                Block.Properties.create(Material.IRON)
+                                .harvestTool(ToolType.PICKAXE)
+                                .harvestLevel(0)
+                                .hardnessAndResistance(1.5f)
+        );
     }
 
 }

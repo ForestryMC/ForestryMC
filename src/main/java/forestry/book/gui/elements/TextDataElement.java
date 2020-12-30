@@ -115,7 +115,10 @@ public class TextDataElement extends GuiElement {
     private String getFormattedString(TextData data) {
         StringBuilder modifiers = new StringBuilder();
 
-        modifiers.append(TextFormatting.getValueByName(data.color));
+        TextFormatting color = TextFormatting.getValueByName(data.color);
+        if (color != null) {
+            modifiers.append(color);
+        }
 
         if (data.bold) {
             modifiers.append(TextFormatting.BOLD);
@@ -132,6 +135,7 @@ public class TextDataElement extends GuiElement {
         if (data.obfuscated) {
             modifiers.append(TextFormatting.OBFUSCATED);
         }
+
         modifiers.append(data.text);
         return modifiers.toString();
     }

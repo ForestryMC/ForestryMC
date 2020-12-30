@@ -29,7 +29,6 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
         this.validBlocks = validBlocks;
     }
 
-
     @Override
     public boolean hasTileType() {
         return tileType != null;

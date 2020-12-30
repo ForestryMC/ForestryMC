@@ -31,10 +31,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.List;
 
-
 public abstract class BlockUtil {
-
-
     public static boolean alwaysTrue(BlockState state, IBlockReader reader, BlockPos pos) {
         return true;
     }
@@ -319,7 +316,6 @@ public abstract class BlockUtil {
         }
         return newPos.up();
     }
-
 
     public static boolean setBlockWithPlaceSound(World world, BlockPos pos, BlockState blockState) {
         if (world.setBlockState(pos, blockState)) {

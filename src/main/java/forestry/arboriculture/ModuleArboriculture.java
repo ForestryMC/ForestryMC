@@ -14,6 +14,8 @@ import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.features.ArboricultureBlocks;
@@ -30,6 +32,8 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.features.CoreItems;
+import forestry.core.items.ItemFruit;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
@@ -71,7 +75,7 @@ public class ModuleArboriculture extends BlankForestryModule {
     @SuppressWarnings("NullableProblems")
     //@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
     public static ProxyArboriculture proxy = null;
-    public final static String treekeepingMode = "NORMAL";
+    public static String treekeepingMode = "NORMAL";
 
     public static final List<Block> validFences = new ArrayList<>();
 
@@ -154,15 +158,14 @@ public class ModuleArboriculture extends BlankForestryModule {
 
     @Override
     public void registerCrates() {
-        //TODO: Tags
-        //		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-        //		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.LEMON.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.PLUM.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack());
-        //		crateRegistry.registerCrate(EnumFruit.DATES.getStack());
+        ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.WALNUT));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHESTNUT));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.LEMON));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PLUM));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PAPAYA));
+        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.DATES));
     }
 
     @Override

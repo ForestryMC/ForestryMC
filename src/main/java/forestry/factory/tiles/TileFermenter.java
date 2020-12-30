@@ -326,7 +326,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
         iCrafting.sendWindowProperty(container, 3, fermentationTotalTime);
     }
 
-
     @Override
     public TankManager getTankManager() {
         return tankManager;

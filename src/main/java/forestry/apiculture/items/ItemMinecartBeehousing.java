@@ -58,7 +58,6 @@ public class ItemMinecartBeehousing extends MinecartItem {
         BlockPos pos = context.getPos();
         PlayerEntity player = context.getPlayer();
 
-
         if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
             return ActionResultType.PASS;
         }

@@ -405,7 +405,6 @@ public class Bee extends IndividualLiving implements IBee {
                .add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(new StringTextComponent(" / "))
                .add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
 
-
         toolTip.add(
                 genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription(),
                 TextFormatting.GRAY

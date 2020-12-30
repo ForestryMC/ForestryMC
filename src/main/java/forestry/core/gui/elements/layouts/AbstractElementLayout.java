@@ -1,6 +1,5 @@
 package forestry.core.gui.elements.layouts;
 
-
 import forestry.core.gui.elements.lib.IElementLayout;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

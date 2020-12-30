@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-
 public class ItemAlyzer extends ItemWithGui {
     public ItemAlyzer() {
         super((new Item.Properties())

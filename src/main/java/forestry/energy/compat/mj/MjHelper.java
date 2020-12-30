@@ -13,7 +13,6 @@ import net.minecraftforge.common.capabilities.Capability;
 //import buildcraft.api.mj.IMjRedstoneReceiver;
 //import buildcraft.api.mj.MjAPI;
 
-
 public class MjHelper {
     //	@Nullable
     //	@CapabilityInject(IMjConnector.class)

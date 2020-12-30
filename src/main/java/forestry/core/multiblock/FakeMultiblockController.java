@@ -107,12 +107,10 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 
     }
 
-
     @Override
     public Set<IMultiblockComponent> checkForDisconnections() {
         return Collections.emptySet();
     }
-
 
     @Override
     public Set<IMultiblockComponent> detachAllBlocks() {

@@ -10,13 +10,13 @@ public class CraftingData {
     /**
      * The {@link ResourceLocation}s of the recipes of this crafting data.
      */
-    public final ResourceLocation[] locations = new ResourceLocation[0];
+    public ResourceLocation[] locations = new ResourceLocation[0];
     /**
      * The result stack of the recipes of this crafting data.
      */
-    public final ItemStack stack = ItemStack.EMPTY;
+    public ItemStack stack = ItemStack.EMPTY;
     /**
      * The result stacks of the recipes of this crafting data.
      */
-    public final ItemStack[] stacks = new ItemStack[0];
+    public ItemStack[] stacks = new ItemStack[0];
 }

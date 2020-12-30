@@ -12,6 +12,4 @@ public interface ITileTypeProvider<T extends TileEntity> {
     TileEntityType<T> getTileType();
 
     TileEntityType<T> tileType();
-
-
 }

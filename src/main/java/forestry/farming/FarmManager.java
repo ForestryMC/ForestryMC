@@ -179,7 +179,6 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
         return farmWorkStatus.didWork;
     }
 
-
     private void cultivateTargets(
             FarmWorkStatus farmWorkStatus,
             List<FarmTarget> farmTargets,

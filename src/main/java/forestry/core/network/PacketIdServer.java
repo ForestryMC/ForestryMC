@@ -10,7 +10,6 @@
  */
 package forestry.core.network;
 
-
 import forestry.core.network.packets.PacketHandlerDummyServer;
 
 /**

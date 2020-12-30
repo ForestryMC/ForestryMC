@@ -102,12 +102,10 @@ public abstract class TileUtil {
             return null;
         }
 
-
         LazyOptional<IItemHandler> itemCap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
         if (itemCap.isPresent()) {
             return itemCap.orElse(null);
         }
-
 
         if (tile instanceof ISidedInventory) {
             return new SidedInvWrapper((ISidedInventory) tile, side);

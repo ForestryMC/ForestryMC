@@ -24,7 +24,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A model baker to make custom block models with more than one texture layer.
  */

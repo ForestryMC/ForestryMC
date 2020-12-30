@@ -99,7 +99,6 @@ public class BeeTargetEntityParticle extends SpriteTexturedParticle {
         this.resetPositionToBB();
     }
 
-
     @Override
     public IParticleRenderType getRenderType() {
         return IParticleRenderType.PARTICLE_SHEET_OPAQUE;

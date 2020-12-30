@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-
 public class FarmLogicCocoa extends FarmLogicSoil {
     private static final int[] LAYOUT_POSITIONS = new int[]{4, 1, 3, 0, 2};
     private final IFarmable cocoa = new FarmableCocoa();

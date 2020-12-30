@@ -500,7 +500,6 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
         return TankRenderInfo.EMPTY;
     }
 
-
     @Override
     public TankManager getTankManager() {
         return tankManager;

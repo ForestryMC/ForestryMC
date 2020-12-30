@@ -142,7 +142,6 @@ public class FactoryJeiPlugin implements IModPlugin {
         }
     }
 
-
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
         if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {

@@ -20,6 +20,7 @@ import forestry.storage.items.ItemCrated;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ItemTags;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -50,18 +51,19 @@ public class CrateRegistry implements ICrateRegistry {
     }
 
     @Override
-    public void registerCrate(String oreDictName) {
-        if (ModuleCrates.cratesRejectedOreDict.contains(oreDictName)) {
+    public void registerCrate(String tagName) {
+        if (ModuleCrates.cratesRejectedOreDict.contains(tagName)) {
             return;
         }
-        //		if (OreDictionary.doesOreNameExist(oreDictName)) {
-        //			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
-        //				if (stack != null) {
-        //					registerCrate(stack, oreDictName);
-        //					break;
-        //				}
-        //			}
-        //		}	//TODO tags
+
+        if (ItemTags.getAllTags().contains(tagName)) {
+//            for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+//                if (stack != null) {
+//                    registerCrate(stack, oreDictName);
+//                    break;
+//                }
+//            }
+        }
     }
 
     @Override

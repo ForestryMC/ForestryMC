@@ -112,9 +112,6 @@ public class Constants implements IForestryConstants {
     public static final int RAINTANK_TANK_CAPACITY = 30 * FluidAttributes.BUCKET_VOLUME;
     public static final int RAINTANK_AMOUNT_PER_UPDATE = 10;
     public static final int RAINTANK_FILLING_TIME = 12;
-    public static final int CARPENTER_CRATING_CYCLES = 5;
-    public static final int CARPENTER_UNCRATING_CYCLES = 5;
-    public static final int CARPENTER_CRATING_LIQUID_QUANTITY = 100;
 
     @Override
     public ResourceLocation getVillagerChestLootKey() {

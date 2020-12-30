@@ -62,7 +62,6 @@ public class TileMillRainmaker extends TileMill {
         reverse = compoundNBT.getBoolean("Reverse");
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

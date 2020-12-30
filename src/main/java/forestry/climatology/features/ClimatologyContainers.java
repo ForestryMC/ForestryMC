@@ -1,6 +1,5 @@
 package forestry.climatology.features;
 
-
 import forestry.climatology.ModuleClimatology;
 import forestry.climatology.gui.ContainerHabitatFormer;
 import forestry.modules.features.FeatureContainerType;

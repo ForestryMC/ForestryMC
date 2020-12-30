@@ -58,7 +58,6 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
         game.read(compoundNBT);
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

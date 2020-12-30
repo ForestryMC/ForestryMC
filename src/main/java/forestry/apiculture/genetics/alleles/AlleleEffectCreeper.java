@@ -20,6 +20,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -111,16 +112,17 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
             return;
         }
 
-        //TODO - check explosion mode right
-        world.createExplosion(
-                null,
-                pos.getX(),
-                pos.getY(),
-                pos.getZ(),
-                storedData.getInteger(indexExplosionForce),
-                false,
-                Explosion.Mode.NONE
-        );
+        if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+            world.createExplosion(
+                    null,
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    storedData.getInteger(indexExplosionForce),
+                    false,
+                    Explosion.Mode.NONE
+            );
+        }
     }
 
 }

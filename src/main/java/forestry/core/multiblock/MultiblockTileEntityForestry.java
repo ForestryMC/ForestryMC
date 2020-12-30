@@ -186,7 +186,6 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
         this.owner = owner;
     }
 
-
     @Override
     public void clear() {
         getInternalInventory().clear();

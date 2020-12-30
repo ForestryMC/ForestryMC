@@ -504,7 +504,6 @@ public class Configuration {
             values[i] = Double.toString(defaultValues[i]);
         }
 
-
         Property prop = get(category, key, values, comment, DOUBLE);
         prop.setDefaultValues(values);
         prop.setMinValue(minValue);

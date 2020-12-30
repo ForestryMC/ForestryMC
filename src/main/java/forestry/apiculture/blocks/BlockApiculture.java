@@ -17,6 +17,12 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockApiculture extends BlockBase<BlockTypeApiculture> {
     public BlockApiculture(BlockTypeApiculture type) {
-        super(type, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
+        super(
+                type,
+                Block.Properties.create(Material.WOOD)
+                                .harvestTool(ToolType.AXE)
+                                .harvestLevel(0)
+                                .hardnessAndResistance(1.5f)
+        );
     }
 }

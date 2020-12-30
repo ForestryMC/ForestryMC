@@ -1,6 +1,5 @@
 package forestry.book.data;
 
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -8,17 +7,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class TextData {
     public String text = "";
 
-    public final String color = "black";
-    public final boolean bold = false;
-    public final boolean italic = false;
-    public final boolean underlined = false;
-    public final boolean strikethrough = false;
-    public final boolean obfuscated = false;
-    public final boolean paragraph = false;
-    public final boolean shadow = false;
-
-    public TextData() {
-    }
+    public String color = "BLACK";
+    public boolean bold = false;
+    public boolean italic = false;
+    public boolean underlined = false;
+    public boolean strikethrough = false;
+    public boolean obfuscated = false;
+    public boolean paragraph = false;
+    public boolean shadow = false;
 
     public TextData(String text) {
         this.text = text;

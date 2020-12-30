@@ -32,6 +32,7 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.storage.features.BackpackContainers;
 import forestry.storage.gui.GuiBackpack;
+import forestry.storage.gui.GuiNaturalistBackpack;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemStack;
@@ -108,6 +109,7 @@ public class ModuleBackpacks extends BlankForestryModule {
     @OnlyIn(Dist.CLIENT)
     public void registerGuiFactories() {
         ScreenManager.registerFactory(BackpackContainers.BACKPACK.containerType(), GuiBackpack::new);
+        ScreenManager.registerFactory(BackpackContainers.NATURALIST_BACKPACK.containerType(), GuiNaturalistBackpack::new);
     }
 
     @Override

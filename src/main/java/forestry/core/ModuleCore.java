@@ -55,12 +55,14 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootFunctionType;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -119,7 +121,6 @@ public class ModuleCore extends BlankForestryModule {
         ScreenManager.registerFactory(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
     }
 
-
     @Override
     public void preInit() {
         GameProfileDataSerializer.register();
@@ -160,29 +161,29 @@ public class ModuleCore extends BlankForestryModule {
         crateRegistry.registerCrate(CoreItems.MULCH);
         crateRegistry.registerCrate(CoreItems.PHOSPHOR);
         crateRegistry.registerCrate(CoreItems.ASH);
-        crateRegistry.registerCrate(OreDictUtil.INGOT_TIN);
-        crateRegistry.registerCrate(OreDictUtil.INGOT_COPPER);
-        crateRegistry.registerCrate(OreDictUtil.INGOT_BRONZE);
+        crateRegistry.registerCrate(CoreItems.INGOT_TIN);
+        crateRegistry.registerCrate(CoreItems.INGOT_COPPER);
+        crateRegistry.registerCrate(CoreItems.INGOT_BRONZE);
 
         // forestry blocks
         crateRegistry.registerCrate(CoreBlocks.HUMUS);
         crateRegistry.registerCrate(CoreBlocks.BOG_EARTH);
 
         // vanilla items
-        crateRegistry.registerCrate(OreDictUtil.CROP_WHEAT);
+//        crateRegistry.registerCrate(Tags.Items.CROPS_WHEAT);
         crateRegistry.registerCrate(Items.COOKIE);
-        crateRegistry.registerCrate(OreDictUtil.DUST_REDSTONE);
-        crateRegistry.registerCrate(new ItemStack(Items.LAPIS_LAZULI, 1));    //TODO - I think...
-        crateRegistry.registerCrate("sugarcane");
+//        crateRegistry.registerCrate(Tags.Items.DUSTS_REDSTONE);
+        crateRegistry.registerCrate(Items.LAPIS_LAZULI);
+        crateRegistry.registerCrate(Items.SUGAR_CANE);
         crateRegistry.registerCrate(Items.CLAY_BALL);
-        crateRegistry.registerCrate("dustGlowstone");
+//        crateRegistry.registerCrate(Tags.Items.DUSTS_PRISMARINE);
         crateRegistry.registerCrate(Items.APPLE);
-        crateRegistry.registerCrate(new ItemStack(Items.NETHER_WART));
-        crateRegistry.registerCrate(new ItemStack(Items.COAL, 1));
-        crateRegistry.registerCrate(new ItemStack(Items.CHARCOAL, 1));
+        crateRegistry.registerCrate(Items.NETHER_WART);
+        crateRegistry.registerCrate(Items.COAL);
+        crateRegistry.registerCrate(Items.CHARCOAL);
         crateRegistry.registerCrate(Items.WHEAT_SEEDS);
-        crateRegistry.registerCrate("cropPotato");
-        crateRegistry.registerCrate("cropCarrot");
+//        crateRegistry.registerCrate(Tags.Items.CROPS_POTATO);
+//        crateRegistry.registerCrate(Tags.Items.CROPS_CARROT);
 
         // vanilla blocks
         crateRegistry.registerCrate(new ItemStack(Blocks.OAK_LOG, 1));    //TODO - use tags?
@@ -191,10 +192,10 @@ public class ModuleCore extends BlankForestryModule {
         crateRegistry.registerCrate(new ItemStack(Blocks.SPRUCE_LOG, 1));
         crateRegistry.registerCrate(new ItemStack(Blocks.ACACIA_LOG, 1));
         crateRegistry.registerCrate(new ItemStack(Blocks.DARK_OAK_LOG, 1));
-        crateRegistry.registerCrate("cobblestone");
-        crateRegistry.registerCrate("dirt");
+//        crateRegistry.registerCrate(Tags.Items.COBBLESTONE);
+//        crateRegistry.registerCrate(Tags.Blocks.DIRT);
         crateRegistry.registerCrate(new ItemStack(Blocks.GRASS_BLOCK, 1));
-        crateRegistry.registerCrate("stone");
+//        crateRegistry.registerCrate(Tags.Items.STONE);
         crateRegistry.registerCrate("stoneGranite");
         crateRegistry.registerCrate("stoneDiorite");
         crateRegistry.registerCrate("stoneAndesite");
@@ -202,16 +203,16 @@ public class ModuleCore extends BlankForestryModule {
         crateRegistry.registerCrate("blockPrismarineBrick");
         crateRegistry.registerCrate("blockPrismarineDark");
         crateRegistry.registerCrate(Blocks.BRICKS);
-        crateRegistry.registerCrate("blockCactus");
-        crateRegistry.registerCrate(new ItemStack(Blocks.SAND, 1));
-        crateRegistry.registerCrate(new ItemStack(Blocks.RED_SAND, 1));
-        crateRegistry.registerCrate("obsidian");
-        crateRegistry.registerCrate("netherrack");
+        crateRegistry.registerCrate(Blocks.CACTUS);
+        crateRegistry.registerCrate(Blocks.SAND);
+        crateRegistry.registerCrate(Blocks.RED_SAND);
+//        crateRegistry.registerCrate(Tags.Items.OBSIDIAN);
+//        crateRegistry.registerCrate(Tags.Items.NETHERRACK);
         crateRegistry.registerCrate(Blocks.SOUL_SAND);
         crateRegistry.registerCrate(Blocks.SANDSTONE);
         crateRegistry.registerCrate(Blocks.NETHER_BRICKS);
         crateRegistry.registerCrate(Blocks.MYCELIUM);
-        crateRegistry.registerCrate("gravel");
+//        crateRegistry.registerCrate(Tags.Items.GRAVEL);
         crateRegistry.registerCrate(new ItemStack(Blocks.OAK_SAPLING, 1));
         crateRegistry.registerCrate(new ItemStack(Blocks.BIRCH_SAPLING, 1));
         crateRegistry.registerCrate(new ItemStack(Blocks.JUNGLE_SAPLING, 1));

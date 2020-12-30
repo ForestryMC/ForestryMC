@@ -168,7 +168,6 @@ public class PostRegistry implements IPostRegistry {
         return office;
     }
 
-
     @Override
     public IMailAddress getMailAddress(GameProfile gameProfile) {
         return new MailAddress(gameProfile);

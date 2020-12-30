@@ -78,7 +78,6 @@ public interface IIndividualRootBuilder<I extends IIndividual> {
      */
     IIndividualRootBuilder<I> addComponent(ComponentKey key);
 
-
     /**
      * Adds the given component factory to this root.
      * <p>

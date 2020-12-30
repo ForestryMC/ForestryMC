@@ -16,10 +16,10 @@ import net.minecraft.item.Items;
 
 public class FarmableVanillaSapling extends FarmableSapling {
 
-    public FarmableVanillaSapling(Block sapling) {
+    public FarmableVanillaSapling(Block sapling, ItemStack[] windfall) {
         super(
                 new ItemStack(sapling),
-                new ItemStack[]{new ItemStack(Items.APPLE), new ItemStack(Items.COCOA_BEANS)}
+                windfall
         );
     }
 }

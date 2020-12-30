@@ -22,8 +22,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Collection;
 
 public class GrowthRuleDirtGrass implements IFlowerGrowthRule {
-
-
     @Override
     public boolean growFlower(
             IFlowerGrowthHelper helper,

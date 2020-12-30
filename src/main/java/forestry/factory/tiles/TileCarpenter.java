@@ -291,12 +291,10 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
         craftPreviewInventory.setInventorySlotContents(0, itemStack);
     }
 
-
     @Override
     public TankManager getTankManager() {
         return tankManager;
     }
-
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

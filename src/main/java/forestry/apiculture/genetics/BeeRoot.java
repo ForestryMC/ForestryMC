@@ -73,7 +73,6 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
         return beeSpeciesCount;
     }
 
-
     @Override
     public EnumBeeType getIconType() {
         return EnumBeeType.DRONE;

@@ -2,10 +2,14 @@ package forestry.core.gui.slots;
 
 import forestry.core.gui.GuiAnalyzerProvider;
 import forestry.core.inventory.ItemInventoryAlyzer;
+import net.minecraft.inventory.container.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 public class SlotAnalyzer extends SlotFiltered {
     @Nullable
@@ -17,8 +21,17 @@ public class SlotAnalyzer extends SlotFiltered {
     }
 
     public void setPosition(int xPos, int yPos) {
-        //this.xPos = xPos;
-        //this.yPos = yPos;//TODO: Fix analyzer slots
+        try {
+            Field fieldXPos = this.getClass().getField("xPos");
+            fieldXPos.setAccessible(true);
+            fieldXPos.set(this, xPos);
+
+            Field fieldYPos = this.getClass().getField("yPos");
+            fieldYPos.setAccessible(true);
+            fieldYPos.set(this, yPos);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setGui(@Nullable GuiAnalyzerProvider gui) {

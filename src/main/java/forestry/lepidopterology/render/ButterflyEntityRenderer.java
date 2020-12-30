@@ -18,11 +18,9 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
-
     public ButterflyEntityRenderer(EntityRendererManager manager) {
         super(manager, new ButterflyModel(), 0.25f);
     }
-
 
     @Override
     public void render(

@@ -1,6 +1,5 @@
 package forestry.modules.features;
 
-
 import net.minecraftforge.eventbus.api.Event;
 
 public class RegisterFeatureEvent extends Event {

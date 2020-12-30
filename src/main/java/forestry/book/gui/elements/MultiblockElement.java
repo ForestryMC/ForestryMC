@@ -67,7 +67,6 @@ public class MultiblockElement extends GuiElement {
         structureData = new StructureInfo(size[0], size[1], size[2], structure);
         blockAccess = new StructureBlockAccess(structureData);
 
-
         rotX = 25;
         rotY = -45;
 

@@ -45,7 +45,6 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
      */
     void clearCachedValues();
 
-
     /* CLIENT */
 
     /**

@@ -6,7 +6,6 @@ import forestry.energy.EnergyManager;
 
 //import buildcraft.api.mj.IMjRedstoneReceiver;
 
-
 //@Optional.Interface(iface = "buildcraft.api.mj.IMjRedstoneReceiver", modid = Constants.BCLIB_MOD_ID)
 public class MjRedstoneReceiverWrapper extends MjConnectorWrapper {//implements IMjRedstoneReceiver {
 

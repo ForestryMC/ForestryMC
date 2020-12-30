@@ -9,10 +9,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 public class ColorElement extends GuiElement {
-
     private final int startColor;
     private final int endColor;
-
 
     public ColorElement(int width, int height, int startColor, int endColor) {
         super(width, height);

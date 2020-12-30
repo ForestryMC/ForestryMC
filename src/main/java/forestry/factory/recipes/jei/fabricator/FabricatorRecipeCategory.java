@@ -13,7 +13,7 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiIngredientGroup;
+import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.fluid.Fluid;
@@ -67,19 +67,19 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, FabricatorRecipeWrapper recipeWrapper, IIngredients ingredients) {
-        IGuiIngredientGroup guiIngredients = recipeLayout.getItemStacks();
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 
-        guiIngredients.init(planSlot, true, 118, 0);
+        guiItemStacks.init(planSlot, true, 118, 0);
 
-        guiIngredients.init(smeltingInputSlot, true, 5, 4);
+        guiItemStacks.init(smeltingInputSlot, true, 5, 4);
 
-        guiIngredients.init(craftOutputSlot, false, 118, 36);
+        guiItemStacks.init(craftOutputSlot, false, 118, 36);
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
                 int index = craftInputSlot + x + y * 3;
-                guiIngredients.init(index, true, 46 + x * 18, y * 18);
+                guiItemStacks.init(index, true, 46 + x * 18, y * 18);
             }
         }
 
@@ -89,7 +89,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
         ItemStack plan = recipe.getPlan();
         if (!plan.isEmpty()) {
-            guiIngredients.set(planSlot, plan);
+            guiItemStacks.set(planSlot, plan);
         }
 
         List<ItemStack> smeltingInput = new ArrayList<>();
@@ -100,15 +100,15 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
         }
 
         if (!smeltingInput.isEmpty()) {
-            guiIngredients.set(smeltingInputSlot, smeltingInput);
+            guiItemStacks.set(smeltingInputSlot, smeltingInput);
         }
 
         List<List<ItemStack>> itemOutputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        guiIngredients.set(craftOutputSlot, itemOutputs.get(0));
+        guiItemStacks.set(craftOutputSlot, itemOutputs.get(0));
 
         List<List<ItemStack>> itemStackInputs = ingredients.getInputs(VanillaTypes.ITEM);
         craftingGridHelper.setInputs(
-                guiIngredients,
+                guiItemStacks,
                 itemStackInputs,
                 recipe.getCraftingGridRecipe().getWidth(),
                 recipe.getCraftingGridRecipe().getHeight()

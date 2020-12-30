@@ -67,7 +67,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
         super(FactoryTiles.RAIN_TANK.tileType());
         setInternalInventory(new InventoryRaintank(this));
 
-        //TODO fluids
         resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);
 
         tankManager = new TankManager(this, resourceTank);

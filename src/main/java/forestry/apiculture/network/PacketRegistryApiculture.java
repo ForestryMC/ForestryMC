@@ -10,7 +10,6 @@
  */
 package forestry.apiculture.network;
 
-
 import forestry.apiculture.network.packets.*;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;

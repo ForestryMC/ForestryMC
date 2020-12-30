@@ -121,7 +121,6 @@ public enum BeeBranchDefinition implements IBranchDefinition {
     protected void setBranchProperties(IAlleleTemplateBuilder template) {
     }
 
-
     @Override
     public final IAlleleTemplate getTemplate() {
         return getTemplateBuilder().build();

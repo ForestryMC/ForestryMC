@@ -32,6 +32,4 @@ public interface IModuleContainer {
             Collection<IForestryModule> unloadedModules
     ) {
     }
-
-
 }

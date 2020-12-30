@@ -71,7 +71,6 @@ public class ForestryTags {
         public static final ITag.INamedTag<Item> ORES_TIN = forgeTag("ores/tin");
         public static final ITag.INamedTag<Item> ORES_APATITE = forgeTag("ores/apatite");
 
-
         public static final ITag.INamedTag<Item> STAMPS = tag("stamps");
 
         public static final ITag.INamedTag<Item> FRUITS = tag("forestry_fruits");

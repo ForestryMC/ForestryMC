@@ -30,7 +30,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
     static {
         habitats.putAll("ocean", Arrays.asList(Biome.Category.OCEAN, Biome.Category.BEACH));
         habitats.put("plains", Biome.Category.PLAINS);
-        habitats.put("desert", Biome.Category.DESERT);
+        habitats.putAll("desert", Arrays.asList(Biome.Category.DESERT, Biome.Category.SAVANNA, Biome.Category.MESA));
         habitats.putAll("forest", Arrays.asList(Biome.Category.FOREST, Biome.Category.RIVER));
         habitats.put("jungle", Biome.Category.JUNGLE);
         habitats.put("taiga", Biome.Category.TAIGA);
@@ -91,7 +91,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
         // Set active according to valid biomes.
         Set<Biome.Category> activeBiomeTypes = new HashSet<>();
         for (Biome biome : itemInventory.getBiomesToSearch()) {
-            Set<Biome.Category> biomeCategories = new HashSet<>(Arrays.asList(Biome.Category.values()));
+            Set<Biome.Category> biomeCategories = new HashSet<>(Arrays.asList(biome.getCategory()));
             activeBiomeTypes.addAll(biomeCategories);
         }
 

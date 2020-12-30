@@ -45,11 +45,9 @@ public interface IHiveRegistry {
             this.speciesUid = speciesUid;
         }
 
-
         public String getHiveUid() {
             return hiveUid;
         }
-
 
         public String getSpeciesUid() {
             return speciesUid;

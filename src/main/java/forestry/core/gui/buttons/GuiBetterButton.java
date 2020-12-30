@@ -47,7 +47,6 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
         useTexWidth = true;
     }
 
-
     public GuiBetterButton setTexture(IButtonTextureSet texture) {
         this.texture = texture;
         width = texture.getWidth();

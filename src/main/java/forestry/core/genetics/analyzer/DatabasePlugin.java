@@ -1,12 +1,10 @@
 package forestry.core.genetics.analyzer;
 
-
 import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import genetics.api.individual.IIndividual;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
 
 @OnlyIn(Dist.CLIENT)
 public abstract class DatabasePlugin<I extends IIndividual> implements IDatabasePlugin<I> {

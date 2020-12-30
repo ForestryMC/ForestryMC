@@ -163,7 +163,6 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
         }
     };
 
-
     final IChromosomeType type;
     @Nullable
     final String alyzerCaption;

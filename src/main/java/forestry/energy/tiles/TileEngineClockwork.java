@@ -75,7 +75,6 @@ public class TileEngineClockwork extends TileEngine {
         tension = compoundNBT.getFloat("Wound");
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

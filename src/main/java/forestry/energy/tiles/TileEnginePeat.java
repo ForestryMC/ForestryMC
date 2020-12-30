@@ -280,7 +280,6 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         }
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

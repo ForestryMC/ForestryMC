@@ -32,7 +32,6 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
     private final IGuiBeeHousingDelegate delegate;
     private final GuiBeeHousing.Icon icon;
 
-
     //TODO writing things to packets here
     public static ContainerMinecartBeehouse fromNetwork(
             int windowId,

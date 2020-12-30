@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
  */
 @OnlyIn(Dist.CLIENT)
 public class MutationContent extends BookContent {
-    public final String species = "";
+    public String species = "";
 
     @Nullable
     @Override

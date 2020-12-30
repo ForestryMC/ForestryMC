@@ -1,6 +1,5 @@
 package forestry.book.data;
 
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -9,5 +8,5 @@ public class IndexData {
     /**
      * All entries of this index.
      */
-    public final IndexEntry[] entries = new IndexEntry[0];
+    public IndexEntry[] entries = new IndexEntry[0];
 }

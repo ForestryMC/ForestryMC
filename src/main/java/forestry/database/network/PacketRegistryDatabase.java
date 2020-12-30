@@ -10,7 +10,6 @@
  */
 package forestry.database.network;
 
-
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdServer;
 import forestry.database.network.packets.PacketExtractItem;

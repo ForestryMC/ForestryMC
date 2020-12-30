@@ -43,7 +43,6 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock {
         return 25;
     }
 
-
     protected ItemStack getSilkTouchDrop(BlockState state) {
         return new ItemStack(Item.getItemFromBlock(this));
     }

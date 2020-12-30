@@ -39,7 +39,6 @@ public class ModuleCondition implements ICondition {
         return ForestryAPI.enabledModules.contains(module);
     }
 
-
     public static class Serializer implements IConditionSerializer<ModuleCondition> {
 
         public static final Serializer INSTANCE = new Serializer();

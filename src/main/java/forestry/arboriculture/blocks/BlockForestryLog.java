@@ -23,7 +23,6 @@ public class BlockForestryLog extends RotatedPillarBlock implements IWoodTyped {
         this.woodType = woodType;
     }
 
-
     @Override
     public final WoodBlockKind getBlockKind() {
         return WoodBlockKind.LOG;

@@ -159,34 +159,6 @@ public class ModuleCrates extends BlankForestryModule {
         crates.add(crate);
     }
 
-    public static void createCrateRecipes() {
-		/*for (ItemCrated crate : crates) {
-			ItemStack crateStack = new ItemStack(crate);
-			ItemStack uncrated = crate.getContained();
-			if (!uncrated.isEmpty()) {
-				if (crate.getOreDictName() != null) {
-					addCrating(crateStack, crate.getOreDictName());
-				} else {
-					addCrating(crateStack, uncrated);
-				}
-				addUncrating(crateStack, uncrated);
-			}
-		}*/
-    }
-
-
-    //TODO fluids
-    private static void addCrating(ItemStack crateStack, Object uncrated) {
-        //		FluidStack water = new FluidStack(FluidRegistry.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
-        //		ItemStack box = getItems().crate.getItemStack();
-        //		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
-    }
-
-    private static void addUncrating(ItemStack crateStack, ItemStack uncrated) {
-        //		ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getDamage());
-        //		RecipeManagers.carpenterManager.addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, ItemStack.EMPTY, product, "#", '#', crateStack);
-    }    //TODO meta
-
     @Override
     public ISidedModuleHandler getModuleHandler() {
         return proxy;

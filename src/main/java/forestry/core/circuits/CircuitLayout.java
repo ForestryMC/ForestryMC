@@ -10,7 +10,6 @@
  */
 package forestry.core.circuits;
 
-
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
 import net.minecraft.util.text.TranslationTextComponent;

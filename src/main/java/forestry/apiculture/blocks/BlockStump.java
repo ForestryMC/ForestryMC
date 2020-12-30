@@ -62,9 +62,9 @@ public class BlockStump extends TorchBlock {
             TileCandle tc = new TileCandle();
             tc.setColour(DyeColor.WHITE.getColorValue());
             tc.setLit(true);
-            tc.setWorldAndPos(worldIn, pos);
-            System.out.println("activated tile candle " + pos.getCoordinatesAsString());
-            worldIn.addTileEntity(tc);
+            tc.setPos(pos);
+
+            worldIn.setTileEntity(pos, tc);
             return ActionResultType.SUCCESS;
         }
 

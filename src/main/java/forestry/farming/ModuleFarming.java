@@ -10,7 +10,6 @@
  */
 package forestry.farming;
 
-
 import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -62,7 +61,6 @@ public class ModuleFarming extends BlankForestryModule {
         proxy = DistExecutor.runForDist(() -> ProxyFarmingClient::new, () -> ProxyFarming::new);
     }
 
-
     @Override
     public void setupAPI() {
         ForestryAPI.farmRegistry = FarmRegistry.getInstance();
@@ -85,12 +83,12 @@ public class ModuleFarming extends BlankForestryModule {
         IFarmRegistry registry = ForestryAPI.farmRegistry;
         registry.registerFarmables(
                 ForestryFarmIdentifier.ARBOREAL,
-                new FarmableVanillaSapling(Blocks.OAK_SAPLING),
-                new FarmableVanillaSapling(Blocks.SPRUCE_SAPLING),
-                new FarmableVanillaSapling(Blocks.ACACIA_SAPLING),
-                new FarmableVanillaSapling(Blocks.BIRCH_SAPLING),
-                new FarmableVanillaSapling(Blocks.JUNGLE_SAPLING),
-                new FarmableVanillaSapling(Blocks.DARK_OAK_SAPLING)
+                new FarmableVanillaSapling(Blocks.OAK_SAPLING, new ItemStack[]{new ItemStack(Items.APPLE)}),
+                new FarmableVanillaSapling(Blocks.SPRUCE_SAPLING, new ItemStack[0]),
+                new FarmableVanillaSapling(Blocks.ACACIA_SAPLING, new ItemStack[0]),
+                new FarmableVanillaSapling(Blocks.BIRCH_SAPLING, new ItemStack[0]),
+                new FarmableVanillaSapling(Blocks.JUNGLE_SAPLING, new ItemStack[]{new ItemStack(Items.COCOA_BEANS)}),
+                new FarmableVanillaSapling(Blocks.DARK_OAK_SAPLING, new ItemStack[0])
         );
         if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
             registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());

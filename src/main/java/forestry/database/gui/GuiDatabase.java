@@ -85,7 +85,6 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
         analyzer.setSelectedSlot(-1);
     }
 
-
     /* Methods */
     @Nullable
     public DatabaseItem getSelectedItem() {

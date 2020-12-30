@@ -7,6 +7,7 @@ import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
+import forestry.database.inventory.InventoryDatabaseAnalyzer;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import genetics.api.GeneticHelper;
@@ -43,7 +44,7 @@ public class ContainerAnalyzerProviderHelper {
             }
             analyzerIndex = i;
             alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
-            Slot slot = container.getSlot(i);    //TODO - probably not right
+            Slot slot = container.getSlot(i);
             if (slot instanceof SlotLockable) {
                 SlotLockable lockable = (SlotLockable) slot;
                 lockable.lock();
@@ -60,10 +61,7 @@ public class ContainerAnalyzerProviderHelper {
 
     @Nullable
     public Slot getAnalyzerSlot() {
-        if (alyzerInventory == null) {
-            return null;
-        }
-        return container.getSlot(0);    //TODO - not sure about this
+        return container.inventorySlots.stream().filter(slot -> slot instanceof SlotAnalyzer).findFirst().orElse(null);
     }
 
     public void analyzeSpecimen(int selectedSlot) {
@@ -91,13 +89,12 @@ public class ContainerAnalyzerProviderHelper {
 
         Optional<IIndividual> optionalIndividual = speciesRoot.create(specimen);
 
-
         // Analyze if necessary
         if (optionalIndividual.isPresent()) {
             IIndividual individual = optionalIndividual.get();
             if (!individual.isAnalyzed()) {
                 final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-                ItemStack energyStack = ItemStack.EMPTY;//alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
+                ItemStack energyStack = alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
                 if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
                     return;
                 }
@@ -115,8 +112,7 @@ public class ContainerAnalyzerProviderHelper {
 
                     if (requiresEnergy) {
                         // Decrease energy
-                        //TODO energy
-                        //					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
+                        alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
                     }
                 }
                 specimenSlot.putStack(specimen);

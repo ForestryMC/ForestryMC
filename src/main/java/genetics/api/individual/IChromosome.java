@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 
 import java.util.Random;
 
-
 /**
  * Contains two alleles. One is active and the other is inactive.
  * <p>

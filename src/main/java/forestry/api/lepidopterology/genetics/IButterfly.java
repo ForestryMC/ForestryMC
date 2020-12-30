@@ -66,7 +66,6 @@ public interface IButterfly extends IIndividualLiving {
      */
     Set<IErrorState> getCanSpawn(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon);
 
-
     /**
      * @param playerKill Whether or not the butterfly was killed by a player.
      * @param lootLevel  Loot level according to the weapon used to kill the butterfly.

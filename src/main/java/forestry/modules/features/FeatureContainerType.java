@@ -20,7 +20,6 @@ public class FeatureContainerType<C extends Container> implements IContainerType
         this.containerFactory = containerFactory;
     }
 
-
     @Override
     public void setContainerType(ContainerType<C> containerType) {
         this.containerType = containerType;

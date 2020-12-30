@@ -2,7 +2,6 @@ package genetics.api.alleles;
 
 import net.minecraft.util.ResourceLocation;
 
-
 /**
  * Alleles that have a category with several values inherit from this class.
  * For example, temperature tolerances or speeds are categories with several values.

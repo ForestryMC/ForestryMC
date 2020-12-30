@@ -90,10 +90,11 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
             IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
             Slot slot = containerAnalyzer.getAnalyzerSlot();
             if (slot instanceof SlotAnalyzer) {
-                ((SlotAnalyzer) slot).setGui(this);
                 analyzerSlot = (SlotAnalyzer) slot;
+                analyzerSlot.setGui(this);
             }
         }
+
         this.slotAnalyzer = analyzerSlot;
     }
 

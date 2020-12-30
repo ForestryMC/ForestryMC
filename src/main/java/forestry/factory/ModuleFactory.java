@@ -270,11 +270,6 @@ public class ModuleFactory extends BlankForestryModule {
                 null,
                 new ICircuit[]{}
         );
-
-        // Crating and uncrating
-        if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {
-            ModuleCrates.createCrateRecipes();
-        }
     }
 
     public static void loadMachineConfig(LocalizedConfiguration config) {

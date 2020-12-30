@@ -206,12 +206,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
         return new TankRenderInfo(productTank);
     }
 
-
     @Override
     public TankManager getTankManager() {
         return tankManager;
     }
-
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

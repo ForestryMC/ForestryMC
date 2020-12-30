@@ -173,7 +173,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
         }
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

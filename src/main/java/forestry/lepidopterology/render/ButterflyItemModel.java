@@ -72,7 +72,6 @@ public class ButterflyItemModel extends AbstractBakedModel {
         return new OverrideList();
     }
 
-
     private class OverrideList extends ItemOverrideList {
         public OverrideList() {
             super();

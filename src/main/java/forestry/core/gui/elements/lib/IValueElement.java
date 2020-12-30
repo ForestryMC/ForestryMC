@@ -1,6 +1,5 @@
 package forestry.core.gui.elements.lib;
 
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

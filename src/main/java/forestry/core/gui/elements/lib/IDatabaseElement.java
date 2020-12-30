@@ -70,7 +70,6 @@ public interface IDatabaseElement extends IElementLayout {
 
     //void addRow(String firstText, String secondText, String thirdText, ITextStyle firstStyle, ITextStyle secondStyle, ITextStyle thirdStyle);
 
-
     //void addRow(String firstText, String secondText, String thirdText, boolean secondDominant, boolean thirdDominant);
 
     //void addRow(String firstText, String secondText, String thirdText, IIndividual individual, IChromosomeType chromosome);

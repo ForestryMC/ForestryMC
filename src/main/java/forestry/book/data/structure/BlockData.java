@@ -22,6 +22,6 @@ public class BlockData {
     public int[] pos = new int[0];
     public int[] endPos = new int[0];
     public CompoundNBT state = null;
-    public String block = null;
+    public String block = "";
     public JsonObject nbt = null;
 }

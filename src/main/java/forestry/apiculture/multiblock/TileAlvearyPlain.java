@@ -23,8 +23,6 @@ import forestry.apiculture.blocks.BlockAlvearyType;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileAlvearyPlain extends TileAlveary {//implements ITriggerProvider {
-
-
     public TileAlvearyPlain() {
         super(BlockAlvearyType.PLAIN);
     }

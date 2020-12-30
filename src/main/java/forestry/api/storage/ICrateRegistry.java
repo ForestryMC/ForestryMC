@@ -26,7 +26,7 @@ public interface ICrateRegistry {
 
     void registerCrate(ItemStack stack);
 
-    void registerCrate(String oreDictName);
+    void registerCrate(String tagName);
 
     void registerCrate(IItemProvider provider);
 

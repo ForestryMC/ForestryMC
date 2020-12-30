@@ -5,7 +5,6 @@
  */
 package forestry.api.apiculture.genetics;
 
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.alleles.IAlleleEffect;

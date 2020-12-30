@@ -61,7 +61,7 @@ public class FarmableSapling implements IFarmable {
                 Direction.UP,
                 pos.down(),
                 true
-        );    //TODO isInside
+        );
         ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
         player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
         if (actionResult == ActionResultType.SUCCESS) {

@@ -126,7 +126,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
             "silverBirch",
             "pendula",
             false,
-            EnumLeafType.DECIDUOUS,
+            EnumLeafType.BIRCH,
             new Color(8431445),
             new Color(0xb0c648),
             EnumVanillaWoodType.BIRCH
@@ -833,7 +833,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
             "acacia",
             "aneura",
             true,
-            EnumLeafType.DECIDUOUS,
+            EnumLeafType.ACACIA,
             new Color(0x616101),
             new Color(0xb3b302),
             EnumVanillaWoodType.ACACIA

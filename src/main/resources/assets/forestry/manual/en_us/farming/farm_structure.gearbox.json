@@ -14,7 +14,7 @@
       },
       {
         "text": "Redstone Flux Energy",
-        "color": "red",
+        "color": "RED",
         "paragraph": true
       },
       {
@@ -22,20 +22,20 @@
       },
       {
         "text": "Each Farm Gearbox requires Redstone Flux Energy (RF) in order to work. You can supply them, by connecting any RF power source.",
-        "color": "red"
+        "color": "RED"
       }
     ],
     [
       {
         "text": "Speeding farm",
-        "color": "dark_purple"
+        "color": "DARK_PURPLE"
       },
       {
         "text": "\n"
       },
       {
         "text": "Each gearbox basically tells the farm to run 1 work unit, so multiple gearboxes tells the farm to do work more often.",
-        "color": "dark_purple"
+        "color": "DARK_PURPLE"
       },
       {
         "type": "crafting",

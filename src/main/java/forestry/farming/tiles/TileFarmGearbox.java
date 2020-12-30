@@ -49,7 +49,6 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
         previousDelays = compoundNBT.getInt("PrevDelays");
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);
@@ -101,7 +100,6 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
     public EnergyManager getEnergyManager() {
         return energyManager;
     }
-
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

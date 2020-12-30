@@ -70,7 +70,6 @@ public class MultiblockRegistry {
 
     }
 
-
     /**
      * Called whenever a world is unloaded. Unload the relevant registry, if we have one.
      *

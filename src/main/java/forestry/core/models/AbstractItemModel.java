@@ -33,7 +33,6 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
         return getOverride(model, stack);
     }
 
-
     private class OverrideList extends ItemOverrideList {
         public OverrideList() {
             super();

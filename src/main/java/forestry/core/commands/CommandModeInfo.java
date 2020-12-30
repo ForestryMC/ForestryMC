@@ -40,9 +40,7 @@ public class CommandModeInfo implements Command<CommandSource> {
 
     @Override
     public int run(CommandContext<CommandSource> ctxContext) {
-
         String modeName = ctxContext.getArgument("mode", String.class);
-
 
         Style green = Style.EMPTY;
         green.setFormatting(TextFormatting.GREEN);

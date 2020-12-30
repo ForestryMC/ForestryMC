@@ -46,7 +46,6 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
             this.risenTransformer = risenTransformer;
         }
 
-
         private boolean spawnAndTransform(ItemEntity entity) {
             T spawnedEntity = EntityUtil.spawnEntity(
                     entity.world,

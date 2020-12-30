@@ -10,7 +10,6 @@
  */
 package forestry.core.network;
 
-
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.packets.*;
 import net.minecraftforge.api.distmarker.Dist;

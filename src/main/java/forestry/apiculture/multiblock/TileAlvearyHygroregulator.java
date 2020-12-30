@@ -133,7 +133,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
         }
     }
 
-
     @Override
     public CompoundNBT write(CompoundNBT compoundNBT) {
         compoundNBT = super.write(compoundNBT);

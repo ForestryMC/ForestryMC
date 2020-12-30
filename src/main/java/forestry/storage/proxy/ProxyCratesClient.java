@@ -27,7 +27,6 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
         ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
         ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
 
-
         for (EnumBackpackType backpackType : EnumBackpackType.values()) {
             for (BackpackMode mode : BackpackMode.values()) {
                 ModelLoader.addSpecialModel(backpackType.getLocation(mode));

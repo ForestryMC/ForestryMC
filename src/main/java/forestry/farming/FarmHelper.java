@@ -134,7 +134,6 @@ public class FarmHelper {
             BlockPos maxFarmCoord
     ) {
         for (FarmDirection farmSide : FarmDirection.values()) {
-
             final int farmWidth;
             if (farmSide == FarmDirection.NORTH || farmSide == FarmDirection.SOUTH) {
                 farmWidth = farmSizeEastWest;
