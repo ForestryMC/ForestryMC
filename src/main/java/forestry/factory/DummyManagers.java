@@ -11,7 +11,6 @@
 package forestry.factory;
 
 import forestry.api.recipes.*;
-import forestry.factory.recipes.ISqueezerContainerRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -152,23 +151,7 @@ public class DummyManagers {
 
     public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
         @Override
-        public void addContainerRecipe(
-                int timePerItem,
-                ItemStack emptyContainer,
-                @Nullable ItemStack remnants,
-                float chance
-        ) {
-
-        }
-
-        @Override
         public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
             return null;
         }
 

@@ -17,19 +17,33 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 public class BlockFarm extends BlockStructure {
-
     private final EnumFarmBlockType type;
     private final EnumFarmMaterial farmMaterial;
+
+    public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
+
+    public enum State implements IStringSerializable {
+        PLAIN, BAND;
+
+        @Override
+        public String getString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
+    }
 
     public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
         super(Block.Properties.create(Material.ROCK)
@@ -38,13 +52,17 @@ public class BlockFarm extends BlockStructure {
                               .harvestLevel(0));
         this.type = type;
         this.farmMaterial = farmMaterial;
+        setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
+        builder.add(STATE);
     }
 
     @Override
     public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-        if (type == EnumFarmBlockType.BAND) {
-            return;
-        }
         super.fillItemGroup(tab, list);
     }
 

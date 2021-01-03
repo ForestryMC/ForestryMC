@@ -51,14 +51,7 @@ public enum ForestryFluids {
             return new DrinkProperties(2, 0.2f, 32);
         }
     },
-    MILK(new Color(255, 255, 255), 1030, 3000) {
-        @Override
-        public List<ItemStack> getOtherContainers() {
-            return Collections.singletonList(
-                    new ItemStack(Items.MILK_BUCKET)
-            );
-        }
-    },
+    MILK(new Color(255, 255, 255), 1030, 3000),
     SEED_OIL(new Color(255, 255, 168), 885, 5000, 2),
     SHORT_MEAD(new Color(239, 154, 56), 1000, 1200, 4) {
         @Override
@@ -136,7 +129,6 @@ public enum ForestryFluids {
         return feature;
     }
 
-    //@Nullable
     public final Fluid getFluid() {
         return feature.fluid();
     }
@@ -159,13 +151,6 @@ public enum ForestryFluids {
 
     public final boolean is(FluidStack fluidStack) {
         return getFluid() == fluidStack.getFluid();
-    }
-
-    /**
-     * Add non-forestry containers for this fluid.
-     */
-    public List<ItemStack> getOtherContainers() {
-        return Collections.emptyList();
     }
 
     /**

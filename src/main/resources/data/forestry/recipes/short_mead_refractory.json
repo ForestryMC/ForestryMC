@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 10,
+        "resources": [
+          {
+            "item": "forestry:refractory",
+            "count": 1,
+            "nbt": "{Fluid:{FluidName:\"forestry:short_mead\",Amount:1000},Damage:1}"
+          }
+        ],
+        "output": {
+          "fluid": "forestry:short_mead",
+          "amount": 1000
+        },
+        "remnant": {
+          "item": "forestry:beeswax",
+          "count": 1
+        },
+        "chance": 0.10
+      }
+    }
+  ]
+}

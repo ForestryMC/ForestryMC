@@ -13,9 +13,12 @@ package forestry.core.items;
 import forestry.core.ItemGroupForestry;
 import forestry.core.utils.ItemTooltipUtil;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,7 +28,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemForestry extends Item {
-
     private final int burnTime;
 
     //TODO may be worth removing this
@@ -67,5 +69,4 @@ public class ItemForestry extends Item {
         super.addInformation(stack, world, tooltip, advanced);
         ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
     }
-
 }

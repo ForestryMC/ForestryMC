@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "arboriculture",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:smelting",
+        "ingredient": {
+          "tag": "forestry:logs_that_burn"
+        },
+        "result": "minecraft:charcoal",
+        "experience": 0.15,
+        "cookingtime": 200
+      }
+    }
+  ]
+}

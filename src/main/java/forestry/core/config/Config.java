@@ -65,7 +65,7 @@ public class Config {
     public static boolean generateBeehivesDebug = false;
     public static boolean logHivePlacement = false;
     public static boolean logCocoonPlacement = false;
-    public static boolean logTreePlacement = true;
+    public static boolean logTreePlacement = false;
     public static boolean enableVillagers = true;
     // Retrogen
     public static boolean doRetrogen = false;

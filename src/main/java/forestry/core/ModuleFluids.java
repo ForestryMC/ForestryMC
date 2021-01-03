@@ -23,6 +23,7 @@ import forestry.core.items.EnumContainerType;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,27 +48,6 @@ public class ModuleFluids extends BlankForestryModule {
 
     @Override
     public void doInit() {
-        if (RecipeManagers.squeezerManager != null) {
-            RecipeManagers.squeezerManager.addContainerRecipe(
-                    10,
-                    FluidsItems.CONTAINERS.stack(EnumContainerType.CAN),
-                    CoreItems.INGOT_TIN.stack(),
-                    0.05f
-            );
-            RecipeManagers.squeezerManager.addContainerRecipe(
-                    10,
-                    FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE),
-                    CoreItems.BEESWAX.stack(),
-                    0.10f
-            );
-            RecipeManagers.squeezerManager.addContainerRecipe(
-                    10,
-                    FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY),
-                    CoreItems.REFRACTORY_WAX.stack(),
-                    0.10f
-            );
-        }
-
         FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
         if (!ethanol.isEmpty()) {
             GeneratorFuel ethanolFuel = new GeneratorFuel(

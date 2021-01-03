@@ -31,6 +31,7 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
         } else {
             textLayout.drawLine(transform, title, 8, ColourProperties.INSTANCE.get("gui.title"));
         }
+
         bindTexture(textureFile);
     }
 

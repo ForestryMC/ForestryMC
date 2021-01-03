@@ -31,7 +31,8 @@ import java.util.List;
 public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implements IScrollable {
     /* Attributes - Constants */
     private static final ResourceLocation CREATIVE_TABS = new ResourceLocation(
-            Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png");
+            Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"
+    );
     private static final Drawable SCROLLBAR_SLIDER = new Drawable(CREATIVE_TABS, 232, 0, 12, 15);
     /*  Attributes - Final */
     public final TileDatabase tile;
@@ -267,13 +268,12 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
             return false;
         }
 
-        boolean acted = super.mouseClicked(mouseX, mouseY, mouseButton);
         if (searchField != null) {
             searchField.mouseClicked(mouseX, mouseY, mouseButton);
             return true;
         }
 
-        return acted;
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     /* Methods - Implement GuiContainer */
@@ -337,7 +337,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
         if (index < 0) {
             selectedItem = null;
         } else {
-            this.selectedItem = sorted != null && index >= sorted.size() ? null : sorted.get(index);
+            this.selectedItem = index >= sorted.size() ? null : sorted.get(index);
         }
     }
 

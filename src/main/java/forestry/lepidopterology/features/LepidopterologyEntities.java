@@ -13,11 +13,11 @@ import net.minecraft.entity.MobEntity;
 public class LepidopterologyEntities {
     private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleLepidopterology.class);
 
-    public static final FeatureEntityType<EntityButterfly> BUTTERFLY = REGISTRY.entity(EntityButterfly::new,
-            EntityClassification.CREATURE, "butterfly", (builder) -> builder.size(1.0f, 0.4f),
+    public static final FeatureEntityType<EntityButterfly> BUTTERFLY = REGISTRY.entity(
+            EntityButterfly::new,
+            EntityClassification.CREATURE,
+            "butterfly",
+            (builder) -> builder.size(1.0f, 0.4f),
             MobEntity::func_233666_p_
     );
-
-    private LepidopterologyEntities() {
-    }
 }

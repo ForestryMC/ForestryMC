@@ -12,6 +12,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
+import javax.annotation.Nullable;
+
 public interface ISqueezerRecipe extends IForestryRecipe {
     IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
 
@@ -39,6 +41,9 @@ public interface ISqueezerRecipe extends IForestryRecipe {
      * @return {@link FluidStack} representing the output of this recipe.
      */
     FluidStack getFluidOutput();
+
+    @Nullable
+    boolean isFilledContainer(ItemStack filledContainer);
 
     @Override
     default IRecipeType<?> getType() {

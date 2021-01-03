@@ -130,8 +130,8 @@ public class CoreItems {
     ).create();
     public static final FeatureItem<ItemForestry> STICK_IMPREGNATED = REGISTRY.item(
             ItemForestry::new,
-            "oak_stick"
-    );//TODO: Rename
+            "stick_impregnated"
+    );
     public static final FeatureItem<ItemForestry> WOOD_PULP = REGISTRY.item(ItemForestry::new, "wood_pulp");
     public static final FeatureItem<ItemForestry> BEESWAX = REGISTRY.item(ItemForestry::new, "beeswax");
     public static final FeatureItem<ItemForestry> REFRACTORY_WAX = REGISTRY.item(ItemForestry::new, "refractory_wax");

@@ -137,6 +137,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
         if (pos == BlockPos.ZERO) {
             return pos;
         }
+
         BlockState state = LepidopterologyBlocks.COCOON.defaultState();
         boolean placed = world.setBlockState(pos, state, 18);
         if (!placed) {

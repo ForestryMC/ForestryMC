@@ -45,7 +45,6 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInve
             PlayerInventory playerInventory,
             PacketBuffer extraData
     ) {
-        System.out.println(extraData.toString());
         ItemStack parent = extraData.readItemStack();
         ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItemStack()
                                                                             .getItem();    //TODO this is b it ugly

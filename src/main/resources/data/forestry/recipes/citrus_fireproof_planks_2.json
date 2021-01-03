@@ -1,0 +1,57 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "module": "apiculture",
+              "container": "forestry",
+              "type": "forestry:module"
+            },
+            {
+              "module": "arboriculture",
+              "container": "forestry",
+              "type": "forestry:module"
+            },
+            {
+              "module": "factory",
+              "container": "forestry",
+              "type": "forestry:module"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:fabricator",
+        "molten": {
+          "fluid": "forestry:glass",
+          "amount": 500
+        },
+        "ingredients": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "X#X",
+            "#X#",
+            "X#X"
+          ],
+          "key": {
+            "#": {
+              "item": "forestry:refractory_wax"
+            },
+            "X": {
+              "item": "forestry:citrus_planks"
+            }
+          },
+          "result": {
+            "item": "forestry:citrus_fireproof_planks",
+            "count": 5
+          }
+        }
+      }
+    }
+  ]
+}

@@ -22,7 +22,7 @@
           "fluid": "forestry:honey",
           "amount": 100
         },
-        "remnants": {
+        "remnant": {
           "item": "forestry:propolis_normal",
           "count": 1
         },

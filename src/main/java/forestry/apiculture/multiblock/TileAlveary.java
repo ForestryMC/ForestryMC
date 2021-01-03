@@ -18,6 +18,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.gui.ContainerAlveary;
@@ -30,6 +31,7 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.RenderUtil;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -60,28 +62,34 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
     @Override
     public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
+        Block block = getBlockState().getBlock();
+        if (block instanceof BlockAlveary) {
+            world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+        }
+
+        world.notifyNeighborsOfStateChange(getPos(), block);
         // Re-render this block on the client
         if (world.isRemote) {
             RenderUtil.markForUpdate(getPos());
         }
     }
 
-    //TODO refreshing
-    //	@Override
-    //	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-    //		return oldState.getBlock() != newState.getBlock();
-    //	}
-
     @Override
     public void onMachineBroken() {
+        Block block = getBlockState().getBlock();
+        if (block instanceof BlockAlveary) {
+            world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+        }
+
+        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
+
         // Re-render this block on the client
         if (world.isRemote) {
             //TODO
             BlockPos pos = getPos();
             RenderUtil.markForUpdate(pos);
         }
-        world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
+
         markDirty();
     }
 

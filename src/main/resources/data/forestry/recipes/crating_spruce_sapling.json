@@ -1,0 +1,53 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "values": [
+            {
+              "module": "crates",
+              "container": "forestry",
+              "type": "forestry:module"
+            },
+            {
+              "module": "factory",
+              "container": "forestry",
+              "type": "forestry:module"
+            }
+          ],
+          "type": "forge:and"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:carpenter",
+        "time": 5,
+        "liquid": {
+          "fluid": "minecraft:water",
+          "amount": 100
+        },
+        "box": {
+          "item": "forestry:crate"
+        },
+        "recipe": {
+          "type": "minecraft:crafting_shaped",
+          "group": "",
+          "pattern": [
+            "###",
+            "###",
+            "###"
+          ],
+          "key": {
+            "#": {
+              "item": "minecraft:spruce_sapling"
+            }
+          },
+          "result": {
+            "item": "forestry:crated.minecraft.spruce_sapling",
+            "count": 1
+          }
+        }
+      }
+    }
+  ]
+}

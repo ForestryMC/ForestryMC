@@ -30,22 +30,14 @@ import javax.annotation.Nullable;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
     private final ItemStack contained;
-    @Nullable
-    private final String oreDictName;
 
-    public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
+    public ItemCrated(ItemStack contained) {
         super(ItemGroups.tabStorage);
         this.contained = contained;
-        this.oreDictName = oreDictName;
     }
 
     public ItemStack getContained() {
         return contained;
-    }
-
-    @Nullable
-    public String getOreDictName() {
-        return oreDictName;
     }
 
     @Override

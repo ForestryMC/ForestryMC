@@ -1,0 +1,34 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "factory",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "forestry:squeezer",
+        "time": 10,
+        "resources": [
+          {
+            "item": "forestry:can",
+            "count": 1,
+            "nbt": "{Fluid:{FluidName:\"forestry:ice\",Amount:1000},Damage:1}"
+          }
+        ],
+        "output": {
+          "fluid": "forestry:ice",
+          "amount": 1000
+        },
+        "remnant": {
+          "item": "forestry:ingot_tin",
+          "count": 1
+        },
+        "chance": 0.05
+      }
+    }
+  ]
+}

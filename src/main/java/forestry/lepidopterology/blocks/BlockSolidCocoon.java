@@ -10,6 +10,7 @@
  */
 package forestry.lepidopterology.blocks;
 
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.items.ItemScoop;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -53,18 +54,28 @@ public class BlockSolidCocoon extends Block {
         builder.add(COCOON, AlleleButterflyCocoon.AGE);
     }
 
-    //TODO
-    //	@OnlyIn(Dist.CLIENT)
-    //	@Override
-    //	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-    //		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    //		if (cocoon != null) {
-    //			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-    //				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
-    //		}
-    //		return super.getActualState(state, world, pos);
-    //	}
-    //
+    @Override
+    public BlockState updatePostPlacement(
+            BlockState state,
+            Direction facing,
+            BlockState facingState,
+            IWorld world,
+            BlockPos pos,
+            BlockPos facingPos
+    ) {
+        if (facing != Direction.UP || !facingState.isAir(world, facingPos)) {
+            return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+        }
+
+        TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+        if (cocoon != null) {
+            state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON))
+                         .with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+        }
+
+        return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+    }
+
     //	@OnlyIn(Dist.CLIENT)
     //	@Override
     //	public void registerStateMapper() {
@@ -119,20 +130,20 @@ public class BlockSolidCocoon extends Block {
         return new TileCocoon(true);
     }
 
-    @Override
-    public BlockState updatePostPlacement(
-            BlockState state,
-            Direction facing,
-            BlockState facingState,
-            IWorld worldIn,
-            BlockPos currentPos,
-            BlockPos facingPos
-    ) {
-        if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
-            return state;
-        }
-        return Blocks.AIR.getDefaultState();
-    }
+//    @Override
+//    public BlockState updatePostPlacement(
+//            BlockState state,
+//            Direction facing,
+//            BlockState facingState,
+//            IWorld worldIn,
+//            BlockPos currentPos,
+//            BlockPos facingPos
+//    ) {
+//        if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
+//            return state;
+//        }
+//        return Blocks.AIR.getDefaultState();
+//    }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {

@@ -25,7 +25,7 @@
           ],
           "key": {
             "X": {
-              "item": "minecraft:lapis_lazuli"
+              "tag": "forge:gems/lapis"
             },
             "#": {
               "tag": "forge:dusts/redstone"

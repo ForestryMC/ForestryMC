@@ -13,7 +13,9 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.core.utils.ItemStackUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -22,7 +24,11 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SqueezerRecipe implements ISqueezerRecipe {
     private final ResourceLocation id;
@@ -82,6 +88,23 @@ public class SqueezerRecipe implements ISqueezerRecipe {
     @Override
     public ResourceLocation getId() {
         return id;
+    }
+
+    @Override
+    @Nullable
+    public boolean isFilledContainer(ItemStack filledContainer) {
+        if (filledContainer.isEmpty()) {
+            return false;
+        }
+
+        Optional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
+
+        return fluidOutput.map(f -> {
+            ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
+            NonNullList<ItemStack> input = NonNullList.create();
+            input.add(filledContainerCopy);
+            return true;
+        }).orElse(false);
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerRecipe> {

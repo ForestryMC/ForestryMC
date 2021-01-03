@@ -8,6 +8,7 @@ import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
@@ -78,14 +79,16 @@ public final class ModuleHelper {
         crateRegistry.registerCrate(block);
     }
 
-    public static void registerCrate(@Nullable String tagName) {
-        if (tagName == null || tagName.isEmpty()) {
+    public static void registerCrate(@Nullable ITag tag) {
+        if (tag == null) {
             return;
         }
+
         ICrateRegistry crateRegistry = StorageManager.crateRegistry;
         if (crateRegistry == null) {
             return;
         }
-        crateRegistry.registerCrate(tagName);
+
+        crateRegistry.registerCrate(tag);
     }
 }

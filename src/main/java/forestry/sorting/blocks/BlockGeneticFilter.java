@@ -163,6 +163,11 @@ public class BlockGeneticFilter extends BlockForestry {
     }
 
     @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Override
     @Nullable
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileGeneticFilter();

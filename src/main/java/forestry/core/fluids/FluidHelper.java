@@ -406,69 +406,29 @@ public final class FluidHelper {
 
     public static boolean isFillableEmptyContainer(ItemStack empty) {
         LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(empty);
-        return fluidHandlerCap.isPresent();
-		/*if (!fluidHandlerCap.isPresent()) {
-			return false;
-		}
+        if (fluidHandlerCap.isPresent()) {
+            return fluidHandlerCap.orElse(null).getFluidInTank(0).isEmpty();
+        }
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		for (IFluidTankProperties properties : tankProperties) {
-			if (!properties.canFill()) {
-				return false;
-			}
-
-			FluidStack contents = properties.getContents();
-			if (contents != null && contents.amount > 0) {
-				return false;
-			}
-		}
-
-		return true;*/
+        return false;
     }
 
     public static boolean isDrainableFilledContainer(ItemStack container) {
         LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-        return fluidHandlerCap.isPresent();
-		/*if (!fluidHandlerCap.isPresent()) {
-			return false;
-		}
+        if (fluidHandlerCap.isPresent()) {
+            return !fluidHandlerCap.orElse(null).getFluidInTank(0).isEmpty();
+        }
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		for (IFluidTankProperties properties : tankProperties) {
-			if (!properties.canDrain()) {
-				return false;
-			}
-
-			FluidStack contents = properties.getContents();
-			if (contents == null || contents.amount < properties.getCapacity()) {
-				return false;
-			}
-		}
-
-		return true;*/
+        return false;
     }
 
     public static boolean isDrainableContainer(ItemStack container) {
         LazyOptional<IFluidHandlerItem> fluidHandlerCap = FluidUtil.getFluidHandler(container);
-        return fluidHandlerCap.isPresent();
-		/*if (!fluidHandlerCap.isPresent()) {
-			return false;
-		}
+        if (fluidHandlerCap.isPresent()) {
+            return !fluidHandlerCap.orElse(null).getFluidInTank(0).isEmpty();
+        }
 
-		IFluidHandlerItem fluidHandler = fluidHandlerCap.orElse(null);
-
-		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
-		for (IFluidTankProperties properties : tankProperties) {
-			if (properties.canDrain()) {
-				return true;
-			}
-		}
-
-		return false;*/
+        return false;
     }
 
     public static boolean isEmpty(ItemStack container) {

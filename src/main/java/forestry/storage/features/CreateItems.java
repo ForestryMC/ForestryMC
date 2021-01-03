@@ -14,7 +14,7 @@ public class CreateItems {
 
     //TODO map of item to crate or similar?
     public static final FeatureItem<ItemCrated> CRATE = REGISTRY.item(
-            () -> new ItemCrated(ItemStack.EMPTY, null),
+            () -> new ItemCrated(ItemStack.EMPTY),
             "crate"
     );
 }

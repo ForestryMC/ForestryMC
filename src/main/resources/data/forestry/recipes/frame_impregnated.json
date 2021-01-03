@@ -18,7 +18,7 @@
         ],
         "key": {
           "#": {
-            "item": "forestry:oak_stick"
+            "item": "forestry:stick_impregnated"
           },
           "S": {
             "tag": "forge:string"

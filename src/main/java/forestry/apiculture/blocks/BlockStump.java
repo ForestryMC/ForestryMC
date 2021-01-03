@@ -33,7 +33,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 
 public class BlockStump extends TorchBlock {
-
     public BlockStump() {
         super(
                 Block.Properties.create(Material.MISCELLANEOUS)
@@ -62,9 +61,9 @@ public class BlockStump extends TorchBlock {
             TileCandle tc = new TileCandle();
             tc.setColour(DyeColor.WHITE.getColorValue());
             tc.setLit(true);
-            tc.setPos(pos);
 
             worldIn.setTileEntity(pos, tc);
+            worldIn.notifyBlockUpdate(pos, activatedState, activatedState, 18);
             return ActionResultType.SUCCESS;
         }
 
@@ -74,6 +73,6 @@ public class BlockStump extends TorchBlock {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-
+        // Empty for remove flame particles
     }
 }

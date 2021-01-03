@@ -62,6 +62,7 @@ public enum FarmDefinition implements IStringSerializable {
         @Override
         protected void initProperties(IFarmPropertiesBuilder properties) {
             properties.addSoil(Blocks.SOUL_SAND)
+                      .addProducts(new ItemStack(Items.NETHER_WART))
                       .setWater(0)
                       .setFertilizer(20)
                       .setIcon(() -> new ItemStack(Items.NETHER_WART));

@@ -62,8 +62,13 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
                 150,
                 12,
                 64,
-                new Drawable(new ResourceLocation(
-                        Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"), 232, 0, 12, 15)
+                new Drawable(
+                        new ResourceLocation(Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"),
+                        232,
+                        0,
+                        12,
+                        15
+                )
         );
         widgetManager.add(this.selection = new SelectionWidget(widgetManager, 0, 134, scrollBar, this));
         widgetManager.add(scrollBar);
@@ -84,6 +89,8 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
             searchField.setEnabled(true);
             searchField.setVisible(true);
         }
+
+        scrollBar.setVisible(true);
         selection.filterEntries(searchField != null ? searchField.getText() : "");
         for (Slot slot : this.container.inventorySlots) {
             if (slot instanceof SlotGeneticFilter) {
@@ -99,6 +106,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
             searchField.setEnabled(false);
             searchField.setVisible(false);
         }
+
         scrollBar.setVisible(false);
         for (Slot slot : this.container.inventorySlots) {
             if (slot instanceof SlotGeneticFilter) {
@@ -176,18 +184,16 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (super.mouseClicked(mouseX, mouseY, mouseButton)) {
-            return true;
-        }
-
         if (searchField != null) {
             searchField.mouseClicked(mouseX, mouseY, mouseButton);
         }
+
         Widget widget = widgetManager.getAtPosition(mouseX - guiLeft, mouseY - guiTop);
         if (widget == null) {
             deselectFilter();
         }
-        return true;
+
+        return super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

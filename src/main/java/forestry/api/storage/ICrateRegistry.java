@@ -9,6 +9,7 @@ import forestry.api.core.IItemProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 
 /**
  * Makes a new crate, registers it with the game registry,
@@ -26,7 +27,7 @@ public interface ICrateRegistry {
 
     void registerCrate(ItemStack stack);
 
-    void registerCrate(String tagName);
+    void registerCrate(ITag tag);
 
     void registerCrate(IItemProvider provider);
 

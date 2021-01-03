@@ -169,56 +169,6 @@ public class ModuleArboriculture extends BlankForestryModule {
     }
 
     @Override
-    public void registerRecipes() {
-        //TODO: Recipes
-        //		ItemRegistryCore coreItems = ModuleCore.getItems();
-        //		BlockRegistryArboriculture blocks = getBlocks();
-        //		ItemRegistryArboriculture items = getItems();
-        //
-        //		for (BlockForestryLog log : blocks.logs.values()) {
-        //			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
-        //			ItemStack coalOutput = new ItemStack(Items.COAL, 1, 1);
-        //			RecipeUtil.addSmelting(logInput, coalOutput, 0.15F);
-        //		}
-        //
-        //		List<IWoodType> allWoodTypes = new ArrayList<>();
-        //		Collections.addAll(allWoodTypes, EnumForestryWoodType.VALUES);
-        //		Collections.addAll(allWoodTypes, EnumVanillaWoodType.VALUES);
-        //
-        //		for (IWoodType woodType : allWoodTypes) {
-        //			ItemStack planks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
-        //			ItemStack logs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
-        //
-        //			ItemStack fireproofPlanks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, true);
-        //			ItemStack fireproofLogs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, true);
-        //
-        //			// Fabricator recipes
-        //			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
-        //				logs.setCount(1);
-        //				fireproofLogs.setCount(1);
-        //				FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
-        //				if (liquidGlass != null) {
-        //					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofLogs.copy(), new Object[]{
-        //						" # ",
-        //						"#X#",
-        //						" # ",
-        //						'#', coreItems.refractoryWax,
-        //						'X', logs.copy()});
-        //
-        //					planks.setCount(1);
-        //					fireproofPlanks.setCount(5);
-        //					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofPlanks.copy(), new Object[]{
-        //						"X#X",
-        //						"#X#",
-        //						"X#X",
-        //						'#', coreItems.refractoryWax,
-        //						'X', planks.copy()});
-        //				}
-        //			}
-        //		}y
-    }
-
-    @Override
     public IPacketRegistry getPacketRegistry() {
         return new PacketRegistryArboriculture();
     }

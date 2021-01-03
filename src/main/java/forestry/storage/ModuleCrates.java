@@ -124,34 +124,34 @@ public class ModuleCrates extends BlankForestryModule {
     //TODO new imc
     @Override
     public boolean processIMCMessage(InterModComms.IMCMessage message) {
-        switch (message.getMethod()) {
-            case "add-crate-items": {
-                ItemStack value = (ItemStack) message.getMessageSupplier().get();
-                if (value != null) {
-                    StorageManager.crateRegistry.registerCrate(value);
-                } else {
-                    IMCUtil.logInvalidIMCMessage(message);
-                }
-                return true;
-            }
-            case "add-crate-oredict": {
-                String value = (String) message.getMessageSupplier().get();
-                StorageManager.crateRegistry.registerCrate(value);
-                return true;
-            }
-            case "blacklist-crate-item": {
-                ItemStack value = (ItemStack) message.getMessageSupplier().get();
-                if (value != null) {
-                    cratesRejectedItem.put(value.getItem(), value);
-                } else {
-                    IMCUtil.logInvalidIMCMessage(message);
-                }
-                return true;
-            }
-            case "blacklist-crate-oredict":
-                cratesRejectedOreDict.add((String) message.getMessageSupplier().get());
-                return true;
-        }
+//        switch (message.getMethod()) {
+//            case "add-crate-items": {
+//                ItemStack value = (ItemStack) message.getMessageSupplier().get();
+//                if (value != null) {
+//                    StorageManager.crateRegistry.registerCrate(value);
+//                } else {
+//                    IMCUtil.logInvalidIMCMessage(message);
+//                }
+//                return true;
+//            }
+//            case "add-crate-oredict": {
+//                String value = (String) message.getMessageSupplier().get();
+//                StorageManager.crateRegistry.registerCrate(value);
+//                return true;
+//            }
+//            case "blacklist-crate-item": {
+//                ItemStack value = (ItemStack) message.getMessageSupplier().get();
+//                if (value != null) {
+//                    cratesRejectedItem.put(value.getItem(), value);
+//                } else {
+//                    IMCUtil.logInvalidIMCMessage(message);
+//                }
+//                return true;
+//            }
+//            case "blacklist-crate-oredict":
+//                cratesRejectedOreDict.add((String) message.getMessageSupplier().get());
+//                return true;
+//        }
         return false;
     }
 

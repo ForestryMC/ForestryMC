@@ -12,11 +12,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Locale;
 
 public enum EnumFarmBlockType implements IBlockSubtype {
     PLAIN,
-    BAND,
     GEARBOX,
     HATCH,
     VALVE,
@@ -81,8 +81,6 @@ public enum EnumFarmBlockType implements IBlockSubtype {
                 }
                 return sprites.get(TYPE_PLAIN);
             }
-            case BAND:
-                return sprites.get(TYPE_BAND);
             case GEARBOX:
                 return sprites.get(TYPE_GEARS);
             case HATCH:
@@ -105,9 +103,16 @@ public enum EnumFarmBlockType implements IBlockSubtype {
         return textures;
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static TextureAtlasSprite[] getBandSprites() {
+        TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
+        TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+        Arrays.fill(textures, band);
+        return textures;
+    }
+
     @Override
     public String getString() {
         return name().toLowerCase(Locale.ENGLISH);
     }
-
 }

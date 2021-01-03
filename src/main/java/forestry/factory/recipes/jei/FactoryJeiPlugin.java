@@ -379,10 +379,6 @@ public class FactoryJeiPlugin implements IModPlugin {
                     SqueezerRecipeMaker.getSqueezerRecipes(recipeManager),
                     ForestryRecipeCategoryUid.SQUEEZER
             );
-            registry.addRecipes(
-                    SqueezerRecipeMaker.getSqueezerContainerRecipes(registry.getIngredientManager()),
-                    ForestryRecipeCategoryUid.SQUEEZER
-            );
         }
 
         if (ModuleFactory.machineEnabled(MachineUIDs.STILL)) {
