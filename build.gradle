@@ -208,3 +208,25 @@ idea {
         }
     }
 }
+
+task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+    filePath = "changelog.html"
+    untaggedName = "Current release ${project.version}"
+    fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
+    toRef = "HEAD"
+    templateContent = file('changelog.mustache').getText('UTF-8')
+}
+
+curseforge {
+    apiKey = project.hasProperty('curseforge_apikey') ? project.curseforge_apikey : '0'
+    project {
+        id = curse_project_id
+        changelog = file('changelog.html')
+        changelogType = 'html'
+        releaseType = 'beta'
+    }
+}
+
+afterEvaluate {
+    tasks.curseforge59751.dependsOn.add(makeChangelog)
+}
