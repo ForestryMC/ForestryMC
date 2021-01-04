@@ -6,13 +6,14 @@
 package forestry.api.genetics;
 
 import forestry.api.genetics.filter.IFilterLogic;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class GeneticCapabilities {
-    /**
-     * Capability for {@link IFilterLogic}.
-     */
-    @CapabilityInject(IFilterLogic.class)
-    public static Capability<IFilterLogic> FILTER_LOGIC;
+	/**
+	 * Capability for {@link IFilterLogic}.
+	 */
+	@CapabilityInject(IFilterLogic.class)
+	public static Capability<IFilterLogic> FILTER_LOGIC;
 }

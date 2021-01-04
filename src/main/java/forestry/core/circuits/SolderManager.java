@@ -15,39 +15,40 @@ import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
 import forestry.factory.recipes.AbstractCraftingProvider;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;
 
 public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> implements ISolderManager {
-    public SolderManager() {
-        super(ISolderRecipe.TYPE);
-    }
+	public SolderManager() {
+		super(ISolderRecipe.TYPE);
+	}
 
-    @Nullable
-    public ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource) {
-        ISolderRecipe circuitRecipe = getMatchingRecipe(manager, layout, resource);
-        if (circuitRecipe == null) {
-            return null;
-        }
+	@Nullable
+	public ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource) {
+		ISolderRecipe circuitRecipe = getMatchingRecipe(manager, layout, resource);
+		if (circuitRecipe == null) {
+			return null;
+		}
 
-        return circuitRecipe.getCircuit();
-    }
+		return circuitRecipe.getCircuit();
+	}
 
-    @Nullable
-    public ISolderRecipe getMatchingRecipe(
-            RecipeManager manager,
-            @Nullable ICircuitLayout layout,
-            ItemStack resource
-    ) {
-        if (layout != null) {
-            for (ISolderRecipe recipe : getRecipes(manager)) {
-                if (recipe.matches(layout, resource)) {
-                    return recipe;
-                }
-            }
-        }
-        return null;
-    }
+	@Nullable
+	public ISolderRecipe getMatchingRecipe(
+			RecipeManager manager,
+			@Nullable ICircuitLayout layout,
+			ItemStack resource
+	) {
+		if (layout != null) {
+			for (ISolderRecipe recipe : getRecipes(manager)) {
+				if (recipe.matches(layout, resource)) {
+					return recipe;
+				}
+			}
+		}
+		return null;
+	}
 }

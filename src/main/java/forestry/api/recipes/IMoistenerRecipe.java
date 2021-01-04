@@ -9,40 +9,41 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IMoistenerRecipe extends IForestryRecipe {
-    IRecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
+	IRecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
 
-    /**
-     * Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
-     *
-     * @return moistener ticks to process one item.
-     */
-    int getTimePerItem();
+	/**
+	 * Moistener runs at 1 - 4 time ticks per ingame tick depending on light level. For mycelium this value is currently 5000.
+	 *
+	 * @return moistener ticks to process one item.
+	 */
+	int getTimePerItem();
 
-    /**
-     * @return Item required in resource stack. Will be reduced by one per produced item.
-     */
-    Ingredient getResource();
+	/**
+	 * @return Item required in resource stack. Will be reduced by one per produced item.
+	 */
+	Ingredient getResource();
 
-    /**
-     * @return Item to produce per resource processed.
-     */
-    ItemStack getProduct();
+	/**
+	 * @return Item to produce per resource processed.
+	 */
+	ItemStack getProduct();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:moistener")
-        public static final IRecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:moistener")
+		public static final IRecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
+	}
 }

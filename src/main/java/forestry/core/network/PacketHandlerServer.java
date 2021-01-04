@@ -11,13 +11,16 @@
 package forestry.core.network;
 
 import forestry.core.config.Constants;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.network.ICustomPacket;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,85 +37,85 @@ import java.io.IOException;
 
 public class PacketHandlerServer {
 
-    public static final ResourceLocation CHANNEL_ID = new ResourceLocation(Constants.MOD_ID, "channel");
-    public static final String VERSION = "1.0.0";
-    private static final Logger LOGGER = LogManager.getLogger();
+	public static final ResourceLocation CHANNEL_ID = new ResourceLocation(Constants.MOD_ID, "channel");
+	public static final String VERSION = "1.0.0";
+	private static final Logger LOGGER = LogManager.getLogger();
 
-    //	public static final String channelId = "FOR";	//TODO - change to 1 or similar...
-    //	public static final EventNetworkChannel channel = NetworkRegistry.ChannelBuilder
-    //			.named(new ResourceLocation(Constants.MOD_ID, "channel"))
-    //			.clientAcceptedVersions(s -> s.equals("1"))
-    //			.serverAcceptedVersions(s -> s.equals("1"))
-    //			.networkProtocolVersion(() -> "1")
-    //			.eventNetworkChannel();
-    //	static {
-    //		channel.addListener();
-    //	}
+	//	public static final String channelId = "FOR";	//TODO - change to 1 or similar...
+	//	public static final EventNetworkChannel channel = NetworkRegistry.ChannelBuilder
+	//			.named(new ResourceLocation(Constants.MOD_ID, "channel"))
+	//			.clientAcceptedVersions(s -> s.equals("1"))
+	//			.serverAcceptedVersions(s -> s.equals("1"))
+	//			.networkProtocolVersion(() -> "1")
+	//			.eventNetworkChannel();
+	//	static {
+	//		channel.addListener();
+	//	}
 
-    public PacketHandlerServer() {
-        //		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
-        //		channel.register(this);
-    }
+	public PacketHandlerServer() {
+		//		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
+		//		channel.register(this);
+	}
 
-    public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
-        Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-        ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(
-                packetData,
-                PacketHandlerServer.CHANNEL_ID
-        );
-        player.connection.sendPacket(payload.getThis());
-    }
+	public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
+		Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
+		ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(
+				packetData,
+				PacketHandlerServer.CHANNEL_ID
+		);
+		player.connection.sendPacket(payload.getThis());
+	}
 
-    public void onPacket(NetworkEvent.ClientCustomPayloadEvent event) {
-        PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
-        NetworkEvent.Context ctx = event.getSource().get();
-        ServerPlayerEntity player = ctx.getSender();
+	public void onPacket(NetworkEvent.ClientCustomPayloadEvent event) {
+		PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
+		NetworkEvent.Context ctx = event.getSource().get();
+		ServerPlayerEntity player = ctx.getSender();
 
-        if (player == null) {
-            LOGGER.warn("the player was null, event: {}", event);
-            return;
-        }
+		if (player == null) {
+			LOGGER.warn("the player was null, event: {}", event);
+			return;
+		}
 
-        try {
-            byte packetIdOrdinal = data.readByte();
-            PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
-            IForestryPacketHandlerServer packetHandler = packetId.getPacketHandler();
-            packetHandler.onPacketData(data, player);
-        } catch (IOException e) {    //TODO - is this actually thrown?
-            LOGGER.error("exception handling packet", e);
-            return;
-        }
-        event.getSource().get().setPacketHandled(true);
-    }
+		try {
+			byte packetIdOrdinal = data.readByte();
+			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
+			IForestryPacketHandlerServer packetHandler = packetId.getPacketHandler();
+			packetHandler.onPacketData(data, player);
+		} catch (IOException e) {    //TODO - is this actually thrown?
+			LOGGER.error("exception handling packet", e);
+			return;
+		}
+		event.getSource().get().setPacketHandled(true);
+	}
 
-    //	@OnlyIn(Dist.CLIENT)
-    //	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
-    //		if (!threadListener.isCallingFromMinecraftThread()) {
-    //			data.retain();
-    //			threadListener.addScheduledTask(() -> {
-    //				try {
-    //					PlayerEntity player = Minecraft.getInstance().player;
-    //					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
-    //					packet.onPacketData(data, player);
-    //					data.release();
-    //				} catch (IOException e) {
-    //					Log.error("Network Error", e);
-    //				}
-    //			});
-    //		}
-    //	}
-    //
-    //	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final ServerPlayerEntity player, IThreadListener threadListener) {
-    //		if (!threadListener.isCallingFromMinecraftThread()) {
-    //			data.retain();
-    //			threadListener.addScheduledTask(() -> {
-    //				try {
-    //					packet.onPacketData(data, player);
-    //					data.release();
-    //				} catch (IOException e) {
-    //					Log.error("Network Error", e);
-    //				}
-    //			});
-    //		}
-    //	}
+	//	@OnlyIn(Dist.CLIENT)
+	//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerClient packet, final PacketBufferForestry data, IThreadListener threadListener) {
+	//		if (!threadListener.isCallingFromMinecraftThread()) {
+	//			data.retain();
+	//			threadListener.addScheduledTask(() -> {
+	//				try {
+	//					PlayerEntity player = Minecraft.getInstance().player;
+	//					Preconditions.checkNotNull(player, "Tried to send data to client before the player exists.");
+	//					packet.onPacketData(data, player);
+	//					data.release();
+	//				} catch (IOException e) {
+	//					Log.error("Network Error", e);
+	//				}
+	//			});
+	//		}
+	//	}
+	//
+	//	private static void checkThreadAndEnqueue(final IForestryPacketHandlerServer packet, final PacketBufferForestry data, final ServerPlayerEntity player, IThreadListener threadListener) {
+	//		if (!threadListener.isCallingFromMinecraftThread()) {
+	//			data.retain();
+	//			threadListener.addScheduledTask(() -> {
+	//				try {
+	//					packet.onPacketData(data, player);
+	//					data.release();
+	//				} catch (IOException e) {
+	//					Log.error("Network Error", e);
+	//				}
+	//			});
+	//		}
+	//	}
 }

@@ -10,11 +10,11 @@ import genetics.api.organism.IOrganismType;
 import java.util.Locale;
 
 public enum EnumFlutterType implements IOrganismType {
-    BUTTERFLY, SERUM, CATERPILLAR, COCOON;
+	BUTTERFLY, SERUM, CATERPILLAR, COCOON;
 
-    public static final EnumFlutterType[] VALUES = values();
+	public static final EnumFlutterType[] VALUES = values();
 
-    public String getName() {
-        return toString().toLowerCase(Locale.ENGLISH);
-    }
+	public String getName() {
+		return toString().toLowerCase(Locale.ENGLISH);
+	}
 }

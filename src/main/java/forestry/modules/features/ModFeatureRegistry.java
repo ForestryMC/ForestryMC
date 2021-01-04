@@ -2,6 +2,7 @@ package forestry.modules.features;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
@@ -10,6 +11,7 @@ import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -21,11 +23,14 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+
 import net.minecraftforge.fml.network.IContainerFactory;
+
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nullable;
@@ -38,317 +43,316 @@ import java.util.stream.Stream;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
-    private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
+	private static final HashMap<String, ModFeatureRegistry> registries = new LinkedHashMap<>();
+	private final HashMap<String, ModuleFeatures> modules = new LinkedHashMap<>();
+	private final String modId;
 
-    public static ModFeatureRegistry get(String modId) {
-        return registries.computeIfAbsent(modId, ModFeatureRegistry::new);
-    }
+	private ModFeatureRegistry(String modId) {
+		this.modId = modId;
+	}
 
-    public static IFeatureRegistry get(Class<?> clazz) {
-        ForestryModule module = clazz.getAnnotation(ForestryModule.class);
-        if (module != null) {
-            return get(module.containerID()).getRegistry(module.moduleID());
-        }
-        return get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CORE);
-    }
+	public static ModFeatureRegistry get(String modId) {
+		return registries.computeIfAbsent(modId, ModFeatureRegistry::new);
+	}
 
-    public IFeatureRegistry getRegistry(String moduleID) {
-        return modules.computeIfAbsent(moduleID, ModuleFeatures::new);
-    }
+	public static IFeatureRegistry get(Class<?> clazz) {
+		ForestryModule module = clazz.getAnnotation(ForestryModule.class);
+		if (module != null) {
+			return get(module.containerID()).getRegistry(module.moduleID());
+		}
+		return get(Constants.MOD_ID).getRegistry(ForestryModuleUids.CORE);
+	}
 
-    private final HashMap<String, ModuleFeatures> modules = new LinkedHashMap<>();
-    private final String modId;
+	public static void fireEvent() {
+		RegisterFeatureEvent event = new RegisterFeatureEvent();
+		MinecraftForge.EVENT_BUS.post(event);
+	}
 
-    private ModFeatureRegistry(String modId) {
-        this.modId = modId;
-    }
+	public IFeatureRegistry getRegistry(String moduleID) {
+		return modules.computeIfAbsent(moduleID, ModuleFeatures::new);
+	}
 
-    public static void fireEvent() {
-        RegisterFeatureEvent event = new RegisterFeatureEvent();
-        MinecraftForge.EVENT_BUS.post(event);
-    }
+	public void register(IModFeature feature) {
+		modules.computeIfAbsent(feature.getModuleId(), ModuleFeatures::new).register(feature);
+	}
 
-    public void register(IModFeature feature) {
-        modules.computeIfAbsent(feature.getModuleId(), ModuleFeatures::new).register(feature);
-    }
+	public boolean isEnabled(IModFeature feature) {
+		return ForestryAPI.moduleManager.isModuleEnabled(modId, feature.getModuleId());
+	}
 
-    public boolean isEnabled(IModFeature feature) {
-        return ForestryAPI.moduleManager.isModuleEnabled(modId, feature.getModuleId());
-    }
+	public void createObjects(BiPredicate<FeatureType, String> filter) {
+		for (FeatureType type : FeatureType.values()) {
+			modules.values().forEach(features -> {
+				if (filter.test(type, features.moduleID)) {
+					features.createObjects(type);
+					MinecraftForge.EVENT_BUS.post(new FeatureCreationEvent(modId, features.moduleID, type));
+				}
+			});
+		}
+	}
 
-    public void createObjects(BiPredicate<FeatureType, String> filter) {
-        for (FeatureType type : FeatureType.values()) {
-            modules.values().forEach(features -> {
-                if (filter.test(type, features.moduleID)) {
-                    features.createObjects(type);
-                    MinecraftForge.EVENT_BUS.post(new FeatureCreationEvent(modId, features.moduleID, type));
-                }
-            });
-        }
-    }
+	public Collection<IModFeature> getFeatures(FeatureType type) {
+		return modules.values().stream()
+				.flatMap((module) -> module.getFeatures(type).stream())
+				.collect(Collectors.toSet());
+	}
 
-    public Collection<IModFeature> getFeatures(FeatureType type) {
-        return modules.values().stream()
-                      .flatMap((module) -> module.getFeatures(type).stream())
-                      .collect(Collectors.toSet());
-    }
+	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
+		return Stream.of(FeatureType.values())
+				.filter(filter)
+				.flatMap((type) -> modules.values().stream()
+						.flatMap((module) -> module.getFeatures(type).stream()))
+				.collect(Collectors.toSet());
+	}
 
-    public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
-        return Stream.of(FeatureType.values())
-                     .filter(filter)
-                     .flatMap((type) -> modules.values().stream()
-                                               .flatMap((module) -> module.getFeatures(type).stream()))
-                     .collect(Collectors.toSet());
-    }
+	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+		for (ModuleFeatures features : modules.values()) {
+			features.onRegister(event);
+		}
+	}
 
-    public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
-        for (ModuleFeatures features : modules.values()) {
-            features.onRegister(event);
-        }
-    }
+	@OnlyIn(Dist.CLIENT)
+	public void clientSetup() {
+		for (ModuleFeatures features : modules.values()) {
+			features.clientSetup();
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void clientSetup() {
-        for (ModuleFeatures features : modules.values()) {
-            features.clientSetup();
-        }
-    }
+	private static class ModuleFeatures implements IFeatureRegistry {
+		private final HashMap<String, IModFeature> featureById = new LinkedHashMap<>();
+		private final Multimap<FeatureType, IModFeature> featureByType = LinkedListMultimap.create();
+		private final Multimap<FeatureType, Consumer<RegistryEvent>> registryListeners = LinkedListMultimap.create();
+		private final String moduleID;
 
-    private static class ModuleFeatures implements IFeatureRegistry {
-        private final HashMap<String, IModFeature> featureById = new LinkedHashMap<>();
-        private final Multimap<FeatureType, IModFeature> featureByType = LinkedListMultimap.create();
-        private final Multimap<FeatureType, Consumer<RegistryEvent>> registryListeners = LinkedListMultimap.create();
-        private final String moduleID;
+		public ModuleFeatures(String moduleID) {
+			this.moduleID = moduleID;
+		}
 
-        public ModuleFeatures(String moduleID) {
-            this.moduleID = moduleID;
-        }
+		@Override
+		public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
+				Supplier<B> constructor,
+				String identifier
+		) {
+			return block(constructor, null, identifier);
+		}
 
-        @Override
-        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
-                Supplier<B> constructor,
-                String identifier
-        ) {
-            return block(constructor, null, identifier);
-        }
+		@Override
+		public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
+				Supplier<B> constructor,
+				@Nullable Function<B, I> itemConstructor,
+				String identifier
+		) {
+			return register(new FeatureBlock<>(moduleID, identifier, constructor, itemConstructor));
+		}
 
-        @Override
-        public <B extends Block, I extends BlockItem> FeatureBlock<B, I> block(
-                Supplier<B> constructor,
-                @Nullable Function<B, I> itemConstructor,
-                String identifier
-        ) {
-            return register(new FeatureBlock<>(moduleID, identifier, constructor, itemConstructor));
-        }
+		@Override
+		public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+				Function<S, B> constructor,
+				Class<? extends S> typeClass
+		) {
+			return new FeatureBlockGroup.Builder<>(this, constructor);
+		}
 
-        @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
-                Function<S, B> constructor,
-                Class<? extends S> typeClass
-        ) {
-            return new FeatureBlockGroup.Builder<>(this, constructor);
-        }
+		@Override
+		public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+				Function<S, B> constructor,
+				Collection<S> types
+		) {
+			return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
+		}
 
-        @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
-                Function<S, B> constructor,
-                Collection<S> types
-        ) {
-            return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
-        }
+		@Override
+		public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
+				Function<S, B> constructor,
+				S[] types
+		) {
+			return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
+		}
 
-        @Override
-        public <B extends Block, S extends IBlockSubtype> FeatureBlockGroup.Builder<B, S> blockGroup(
-                Function<S, B> constructor,
-                S[] types
-        ) {
-            return (FeatureBlockGroup.Builder<B, S>) new FeatureBlockGroup.Builder<>(this, constructor).types(types);
-        }
+		@Override
+		public <I extends Item> FeatureItem<I> item(Supplier<I> constructor, String identifier) {
+			return register(new FeatureItem<>(moduleID, identifier, constructor));
+		}
 
-        @Override
-        public <I extends Item> FeatureItem<I> item(Supplier<I> constructor, String identifier) {
-            return register(new FeatureItem<>(moduleID, identifier, constructor));
-        }
+		@Override
+		public FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier) {
+			return item(() -> BackpackManager.backpackInterface.createBackpack(backpackUid, type), identifier);
+		}
 
-        @Override
-        public FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier) {
-            return item(() -> BackpackManager.backpackInterface.createBackpack(backpackUid, type), identifier);
-        }
+		@Override
+		public FeatureItem<Item> naturalistBackpack(
+				String backpackUid,
+				String rootUid,
+				ItemGroup tab,
+				String identifier
+		) {
+			return item(
+					() -> BackpackManager.backpackInterface.createNaturalistBackpack(backpackUid, rootUid, tab),
+					identifier
+			);
+		}
 
-        @Override
-        public FeatureItem<Item> naturalistBackpack(
-                String backpackUid,
-                String rootUid,
-                ItemGroup tab,
-                String identifier
-        ) {
-            return item(
-                    () -> BackpackManager.backpackInterface.createNaturalistBackpack(backpackUid, rootUid, tab),
-                    identifier
-            );
-        }
+		@Override
+		public <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(
+				Function<S, I> constructor,
+				String identifier,
+				S[] subTypes
+		) {
+			return itemGroup(constructor, subTypes).identifier(identifier).create();
+		}
 
-        @Override
-        public <I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(
-                Function<S, I> constructor,
-                String identifier,
-                S[] subTypes
-        ) {
-            return itemGroup(constructor, subTypes).identifier(identifier).create();
-        }
+		@Override
+		public <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(
+				Function<S, I> constructor,
+				S[] subTypes
+		) {
+			return (FeatureItemGroup.Builder<I, S>) new FeatureItemGroup.Builder<>(this, constructor).types(subTypes);
+		}
 
-        @Override
-        public <I extends Item, S extends IItemSubtype> FeatureItemGroup.Builder<I, S> itemGroup(
-                Function<S, I> constructor,
-                S[] subTypes
-        ) {
-            return (FeatureItemGroup.Builder<I, S>) new FeatureItemGroup.Builder<>(this, constructor).types(subTypes);
-        }
+		@Override
+		public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(
+				BiFunction<R, C, I> constructor,
+				R[] rowTypes,
+				C[] columnTypes,
+				String identifier
+		) {
+			return itemTable(constructor, rowTypes, columnTypes).identifier(identifier).create();
+		}
 
-        @Override
-        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable<I, R, C> itemTable(
-                BiFunction<R, C, I> constructor,
-                R[] rowTypes,
-                C[] columnTypes,
-                String identifier
-        ) {
-            return itemTable(constructor, rowTypes, columnTypes).identifier(identifier).create();
-        }
+		@Override
+		public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(
+				BiFunction<R, C, I> constructor,
+				R[] rowTypes,
+				C[] columnTypes
+		) {
+			return (FeatureItemTable.Builder<I, R, C>) new FeatureItemTable.Builder<>(this, constructor).rowTypes(
+					rowTypes).columnTypes(columnTypes);
+		}
 
-        @Override
-        public <I extends Item, R extends IItemSubtype, C extends IItemSubtype> FeatureItemTable.Builder<I, R, C> itemTable(
-                BiFunction<R, C, I> constructor,
-                R[] rowTypes,
-                C[] columnTypes
-        ) {
-            return (FeatureItemTable.Builder<I, R, C>) new FeatureItemTable.Builder<>(this, constructor).rowTypes(
-                    rowTypes).columnTypes(columnTypes);
-        }
+		@Override
+		public <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(
+				BiFunction<R, C, B> constructor,
+				R[] rowTypes,
+				C[] columnTypes
+		) {
+			return (FeatureBlockTable.Builder<B, R, C>) new FeatureBlockTable.Builder<>(this, constructor).rowTypes(
+					rowTypes).columnTypes(columnTypes);
+		}
 
-        @Override
-        public <B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(
-                BiFunction<R, C, B> constructor,
-                R[] rowTypes,
-                C[] columnTypes
-        ) {
-            return (FeatureBlockTable.Builder<B, R, C>) new FeatureBlockTable.Builder<>(this, constructor).rowTypes(
-                    rowTypes).columnTypes(columnTypes);
-        }
+		@Override
+		public <T extends TileEntity> FeatureTileType<T> tile(
+				Supplier<T> constructor,
+				String identifier,
+				Supplier<Collection<? extends Block>> validBlocks
+		) {
+			return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
+		}
 
-        @Override
-        public FeatureFluid.Builder fluid(String identifier) {
-            return new FeatureFluid.Builder(this, moduleID, identifier);
-        }
+		@Override
+		public <C extends Container> FeatureContainerType<C> container(
+				IContainerFactory<C> factory,
+				String identifier
+		) {
+			return register(new FeatureContainerType<>(moduleID, identifier, factory));
+		}
 
-        @Override
-        public void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener) {
-            registryListeners.put(type, listener);
-        }
+		@Override
+		public <E extends Entity> FeatureEntityType<E> entity(
+				EntityType.IFactory<E> factory,
+				EntityClassification classification,
+				String identifier
+		) {
+			return entity(factory, classification, identifier, (builder) -> builder);
+		}
 
-        public <F extends IModFeature> F register(F feature) {
-            featureById.put(feature.getIdentifier(), feature);
-            featureByType.put(feature.getType(), feature);
-            return feature;
-        }
+		@Override
+		public <E extends Entity> FeatureEntityType<E> entity(
+				EntityType.IFactory<E> factory,
+				EntityClassification classification,
+				String identifier,
+				UnaryOperator<EntityType.Builder<E>> consumer
+		) {
+			return entity(factory, classification, identifier, consumer, LivingEntity::registerAttributes);
+		}
 
-        @Override
-        public <T extends TileEntity> FeatureTileType<T> tile(
-                Supplier<T> constructor,
-                String identifier,
-                Supplier<Collection<? extends Block>> validBlocks
-        ) {
-            return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
-        }
+		@Override
+		public <E extends Entity> FeatureEntityType<E> entity(
+				EntityType.IFactory<E> factory,
+				EntityClassification classification,
+				String identifier,
+				UnaryOperator<EntityType.Builder<E>> consumer,
+				Supplier<AttributeModifierMap.MutableAttribute> attributes
+		) {
+			return register(new FeatureEntityType<>(
+					moduleID,
+					identifier,
+					consumer,
+					factory,
+					classification,
+					attributes
+			));
+		}
 
-        @Override
-        public <C extends Container> FeatureContainerType<C> container(
-                IContainerFactory<C> factory,
-                String identifier
-        ) {
-            return register(new FeatureContainerType<>(moduleID, identifier, factory));
-        }
+		@Override
+		public FeatureFluid.Builder fluid(String identifier) {
+			return new FeatureFluid.Builder(this, moduleID, identifier);
+		}
 
-        @Override
-        public <E extends Entity> FeatureEntityType<E> entity(
-                EntityType.IFactory<E> factory,
-                EntityClassification classification,
-                String identifier
-        ) {
-            return entity(factory, classification, identifier, (builder) -> builder);
-        }
+		@Override
+		public void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener) {
+			registryListeners.put(type, listener);
+		}
 
-        @Override
-        public <E extends Entity> FeatureEntityType<E> entity(
-                EntityType.IFactory<E> factory,
-                EntityClassification classification,
-                String identifier,
-                UnaryOperator<EntityType.Builder<E>> consumer
-        ) {
-            return entity(factory, classification, identifier, consumer, LivingEntity::registerAttributes);
-        }
+		public <F extends IModFeature> F register(F feature) {
+			featureById.put(feature.getIdentifier(), feature);
+			featureByType.put(feature.getType(), feature);
+			return feature;
+		}
 
-        @Override
-        public <E extends Entity> FeatureEntityType<E> entity(
-                EntityType.IFactory<E> factory,
-                EntityClassification classification,
-                String identifier,
-                UnaryOperator<EntityType.Builder<E>> consumer,
-                Supplier<AttributeModifierMap.MutableAttribute> attributes
-        ) {
-            return register(new FeatureEntityType<>(
-                    moduleID,
-                    identifier,
-                    consumer,
-                    factory,
-                    classification,
-                    attributes
-            ));
-        }
+		@Override
+		public Collection<IModFeature> getFeatures() {
+			return featureById.values();
+		}
 
-        public IModFeature getFeature(String identifier) {
-            return featureById.get(identifier);
-        }
+		@Override
+		public Collection<IModFeature> getFeatures(FeatureType type) {
+			return featureByType.get(type);
+		}
 
-        @Override
-        public Collection<IModFeature> getFeatures() {
-            return featureById.values();
-        }
+		public IModFeature getFeature(String identifier) {
+			return featureById.get(identifier);
+		}
 
-        @Override
-        public Collection<IModFeature> getFeatures(FeatureType type) {
-            return featureByType.get(type);
-        }
+		public void createObjects(FeatureType type) {
+			for (IModFeature feature : featureByType.get(type)) {
+				createObject(feature);
+			}
+		}
 
-        public void createObjects(FeatureType type) {
-            for (IModFeature feature : featureByType.get(type)) {
-                createObject(feature);
-            }
-        }
+		private void createObject(IModFeature feature) {
+			if (!feature.isEnabled()) {
+				return;
+			}
+			feature.create();
+		}
 
-        private void createObject(IModFeature feature) {
-            if (!feature.isEnabled()) {
-                return;
-            }
-            feature.create();
-        }
+		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+			for (FeatureType type : FeatureType.values()) {
+				for (IModFeature feature : featureByType.get(type)) {
+					feature.register(event);
+				}
+				if (type.superType.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
+					registryListeners.get(type).forEach(listener -> listener.accept(event));
+				}
+			}
+		}
 
-        public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
-            for (FeatureType type : FeatureType.values()) {
-                for (IModFeature feature : featureByType.get(type)) {
-                    feature.register(event);
-                }
-                if (type.superType.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
-                    registryListeners.get(type).forEach(listener -> listener.accept(event));
-                }
-            }
-        }
+		@OnlyIn(Dist.CLIENT)
+		public void clientSetup() {
+			for (IModFeature feature : featureByType.values()) {
+				feature.clientSetup();
+			}
+		}
 
-        @OnlyIn(Dist.CLIENT)
-        public void clientSetup() {
-            for (IModFeature feature : featureByType.values()) {
-                feature.clientSetup();
-            }
-        }
-
-    }
+	}
 }

@@ -21,6 +21,7 @@ import forestry.core.utils.Log;
 import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.tiles.TileCocoon;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -38,134 +39,134 @@ import java.util.Random;
 import java.util.Set;
 
 public class CocoonDecorator extends Feature<NoFeatureConfig> {
-    public CocoonDecorator() {
-        super(NoFeatureConfig.field_236558_a_);
-    }
+	public CocoonDecorator() {
+		super(NoFeatureConfig.field_236558_a_);
+	}
 
-    @Override
-    public boolean generate(
-            ISeedReader seedReader,
-            ChunkGenerator generator,
-            Random rand,
-            BlockPos pos,
-            NoFeatureConfig config
-    ) {
-        ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot.getIndividualTemplates());
+	public static boolean genCocoon(ISeedReader world, Random rand, BlockPos pos, IButterfly butterfly) {
+		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity()
+				* ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f
+		) {
+			return false;
+		}
 
-        Collections.shuffle(butterflys, rand);
-        for (IButterfly butterfly : butterflys) {
-            if (genCocoon(seedReader, rand, pos, butterfly)) {
-                return true;
-            }
-        }
+		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ()));
 
-        return false;
-    }
+		Set<Biome.Category> speciesCategories = butterfly.getGenome()
+				.getActiveAllele(ButterflyChromosomes.SPECIES)
+				.getSpawnBiomes();
 
-    public static boolean genCocoon(ISeedReader world, Random rand, BlockPos pos, IButterfly butterfly) {
-        if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity()
-            * ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f
-        ) {
-            return false;
-        }
+		boolean biomeTypesGood = false;
+		for (Biome.Category category : speciesCategories) {
+			if (category == biome.getCategory()) {
+				biomeTypesGood = true;
+			}
+		}
 
-        Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ()));
+		if (!biomeTypesGood) {
+			return false;
+		}
 
-        Set<Biome.Category> speciesCategories = butterfly.getGenome()
-                                                         .getActiveAllele(ButterflyChromosomes.SPECIES)
-                                                         .getSpawnBiomes();
+		for (int tries = 0; tries < 4; tries++) {
+			int x = pos.getX() + rand.nextInt(16);
+			int z = pos.getZ() + rand.nextInt(16);
 
-        boolean biomeTypesGood = false;
-        for (Biome.Category category : speciesCategories) {
-            if (category == biome.getCategory()) {
-                biomeTypesGood = true;
-            }
-        }
+			if (tryGenCocoon(world, x, z, butterfly)) {
+				return true;
+			}
+		}
 
-        if (!biomeTypesGood) {
-            return false;
-        }
+		return false;
+	}
 
-        for (int tries = 0; tries < 4; tries++) {
-            int x = pos.getX() + rand.nextInt(16);
-            int z = pos.getZ() + rand.nextInt(16);
+	private static boolean tryGenCocoon(ISeedReader world, int x, int z, IButterfly butterfly) {
+		int y = getYForCocoon(world, x, z);
+		if (y < 0) {
+			return false;
+		}
 
-            if (tryGenCocoon(world, x, z, butterfly)) {
-                return true;
-            }
-        }
+		if (!isValidLocation(world, new BlockPos(x, y, z))) {
+			return false;
+		}
 
-        return false;
-    }
+		return setCocoon(world, new BlockPos(x, y, z), butterfly);
+	}
 
-    private static boolean tryGenCocoon(ISeedReader world, int x, int z, IButterfly butterfly) {
-        int y = getYForCocoon(world, x, z);
-        if (y < 0) {
-            return false;
-        }
+	private static boolean setCocoon(ISeedReader world, BlockPos pos, IButterfly butterfly) {
+		Block cocoonBlock = LepidopterologyBlocks.COCOON_SOLID.getBlock();
+		boolean placed = world.setBlockState(pos, cocoonBlock.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+		if (!placed) {
+			return false;
+		}
 
-        if (!isValidLocation(world, new BlockPos(x, y, z))) {
-            return false;
-        }
+		BlockState state = world.getBlockState(pos);
+		if (cocoonBlock != state.getBlock()) {
+			return false;
+		}
 
-        return setCocoon(world, new BlockPos(x, y, z), butterfly);
-    }
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (cocoon != null) {
+			cocoon.setCaterpillar(butterfly);
+		} else {
+			return false;
+		}
 
-    private static boolean setCocoon(ISeedReader world, BlockPos pos, IButterfly butterfly) {
-        Block cocoonBlock = LepidopterologyBlocks.COCOON_SOLID.getBlock();
-        boolean placed = world.setBlockState(pos, cocoonBlock.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
-        if (!placed) {
-            return false;
-        }
+		cocoonBlock.onBlockAdded(state, world.getWorld(), pos, cocoonBlock.getDefaultState(), false);
+		world.getWorld().markBlockRangeForRenderUpdate(pos, state, cocoonBlock.getDefaultState());
 
-        BlockState state = world.getBlockState(pos);
-        if (cocoonBlock != state.getBlock()) {
-            return false;
-        }
+		if (Config.logCocoonPlacement) {
+			Log.info("Placed {} at {}", cocoonBlock.toString(), pos.getCoordinatesAsString());
+		}
 
-        TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-        if (cocoon != null) {
-            cocoon.setCaterpillar(butterfly);
-        } else {
-            return false;
-        }
+		return true;
+	}
 
-        cocoonBlock.onBlockAdded(state, world.getWorld(), pos, cocoonBlock.getDefaultState(), false);
-        world.getWorld().markBlockRangeForRenderUpdate(pos, state, cocoonBlock.getDefaultState());
+	private static int getYForCocoon(ISeedReader world, int x, int z) {
+		int y = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY() - 1;
+		BlockPos pos = new BlockPos(x, y, z);
+		BlockState blockState = world.getBlockState(pos);
+		if (blockState.getMaterial() != Material.LEAVES) {
+			return -1;
+		}
 
-        if (Config.logCocoonPlacement) {
-            Log.info("Placed {} at {}", cocoonBlock.toString(), pos.getCoordinatesAsString());
-        }
+		do {
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+		} while (blockState.getMaterial() == Material.LEAVES);
 
-        return true;
-    }
+		return y;
+	}
 
-    private static int getYForCocoon(ISeedReader world, int x, int z) {
-        int y = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY() - 1;
-        BlockPos pos = new BlockPos(x, y, z);
-        BlockState blockState = world.getBlockState(pos);
-        if (blockState.getMaterial() != Material.LEAVES) {
-            return -1;
-        }
+	public static boolean isValidLocation(ISeedReader world, BlockPos pos) {
+		BlockPos posAbove = pos.up();
+		BlockState blockStateAbove = world.getBlockState(posAbove);
+		Block blockAbove = blockStateAbove.getBlock();
+		if (blockStateAbove.getMaterial() != Material.LEAVES) {
+			return false;
+		}
 
-        do {
-            pos = pos.down();
-            blockState = world.getBlockState(pos);
-        } while (blockState.getMaterial() == Material.LEAVES);
+		BlockPos posBelow = pos.down();
+		BlockState blockStateBelow = world.getBlockState(posBelow);
+		return BlockUtil.canReplace(blockStateBelow, world, posBelow);
+	}
 
-        return y;
-    }
+	@Override
+	public boolean generate(
+			ISeedReader seedReader,
+			ChunkGenerator generator,
+			Random rand,
+			BlockPos pos,
+			NoFeatureConfig config
+	) {
+		ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot.getIndividualTemplates());
 
-    public static boolean isValidLocation(ISeedReader world, BlockPos pos) {
-        BlockPos posAbove = pos.up();
-        BlockState blockStateAbove = world.getBlockState(posAbove);
-        Block blockAbove = blockStateAbove.getBlock();
-        if (blockStateAbove.getMaterial() != Material.LEAVES) {
-            return false;
-        }
+		Collections.shuffle(butterflys, rand);
+		for (IButterfly butterfly : butterflys) {
+			if (genCocoon(seedReader, rand, pos, butterfly)) {
+				return true;
+			}
+		}
 
-        BlockPos posBelow = pos.down();
-        BlockState blockStateBelow = world.getBlockState(posBelow);
-        return BlockUtil.canReplace(blockStateBelow, world, posBelow);
-    }
+		return false;
+	}
 }

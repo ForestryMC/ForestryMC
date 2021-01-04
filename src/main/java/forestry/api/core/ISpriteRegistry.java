@@ -6,6 +6,7 @@
 package forestry.api.core;
 
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 /**
@@ -13,21 +14,21 @@ import net.minecraftforge.client.event.TextureStitchEvent;
  */
 @FunctionalInterface
 public interface ISpriteRegistry {
-    /**
-     * Creates a registry from the texture stitch event.
-     *
-     * @param event Event that is used by forge to register textures to a atlas.
-     * @return The created registry.
-     */
-    static ISpriteRegistry fromEvent(TextureStitchEvent.Pre event) {
-        return event::addSprite;
-    }
+	/**
+	 * Creates a registry from the texture stitch event.
+	 *
+	 * @param event Event that is used by forge to register textures to a atlas.
+	 * @return The created registry.
+	 */
+	static ISpriteRegistry fromEvent(TextureStitchEvent.Pre event) {
+		return event::addSprite;
+	}
 
-    /**
-     * Registers a sprite to the registry
-     *
-     * @param sprite The path to the location of the sprite in the asset/modid/textures/ directory.
-     * @return False if the sprite already was registered, true otherwise.
-     */
-    boolean addSprite(ResourceLocation sprite);
+	/**
+	 * Registers a sprite to the registry
+	 *
+	 * @param sprite The path to the location of the sprite in the asset/modid/textures/ directory.
+	 * @return False if the sprite already was registered, true otherwise.
+	 */
+	boolean addSprite(ResourceLocation sprite);
 }

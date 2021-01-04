@@ -11,17 +11,19 @@
 package forestry.worktable.blocks;
 
 import forestry.core.blocks.BlockBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.common.ToolType;
 
 public class BlockWorktable extends BlockBase<BlockTypeWorktable> {
-    public BlockWorktable(BlockTypeWorktable worktable) {
-        super(worktable,
-                Block.Properties.create(Material.IRON)
-                                .harvestLevel(0)
-                                .harvestTool(ToolType.PICKAXE)
-                                .hardnessAndResistance(1.5f)
-        );
-    }
+	public BlockWorktable(BlockTypeWorktable worktable) {
+		super(worktable,
+				Block.Properties.create(Material.IRON)
+						.harvestLevel(0)
+						.harvestTool(ToolType.PICKAXE)
+						.hardnessAndResistance(1.5f)
+		);
+	}
 }

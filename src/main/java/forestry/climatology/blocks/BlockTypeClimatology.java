@@ -20,21 +20,21 @@ import forestry.modules.features.FeatureTileType;
 import java.util.function.Supplier;
 
 public enum BlockTypeClimatology implements IBlockTypeCustom {
-    HABITAT_FORMER(() -> ClimatologyTiles.HABITAT_FORMER, "habitat_former");
+	HABITAT_FORMER(() -> ClimatologyTiles.HABITAT_FORMER, "habitat_former");
 
-    private final IMachineProperties machineProperties;
+	private final IMachineProperties machineProperties;
 
-    <T extends TileForestry> BlockTypeClimatology(Supplier<FeatureTileType<? extends T>> feature, String name) {
-        this.machineProperties = new MachineProperties.Builder<>(feature, name).create();
-    }
+	<T extends TileForestry> BlockTypeClimatology(Supplier<FeatureTileType<? extends T>> feature, String name) {
+		this.machineProperties = new MachineProperties.Builder<>(feature, name).create();
+	}
 
-    @Override
-    public IMachineProperties<?> getMachineProperties() {
-        return machineProperties;
-    }
+	@Override
+	public IMachineProperties<?> getMachineProperties() {
+		return machineProperties;
+	}
 
-    @Override
-    public String getString() {
-        return getMachineProperties().getString();
-    }
+	@Override
+	public String getString() {
+		return getMachineProperties().getString();
+	}
 }

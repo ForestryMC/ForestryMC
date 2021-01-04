@@ -8,6 +8,7 @@ package forestry.api.lepidopterology;
 import forestry.api.lepidopterology.genetics.IButterflyFactory;
 import forestry.api.lepidopterology.genetics.IButterflyMutationFactory;
 import forestry.api.lepidopterology.genetics.IButterflyRoot;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.root.IRootDefinition;
 
@@ -15,30 +16,30 @@ import javax.annotation.Nullable;
 
 public class ButterflyManager {
 
-    public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot(
-            "rootButterflies");
+	public static final IRootDefinition<IButterflyRoot> butterflyRootDefinition = GeneticsAPI.apiInstance.getRoot(
+			"rootButterflies");
 
-    /**
-     * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
-     *
-     * @implNote Only null if the "lepidopterology" module is not enabled.
-     */
-    //TODO: Move most calls to definition (more save)
-    public static IButterflyRoot butterflyRoot;
+	/**
+	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootButterflies")
+	 *
+	 * @implNote Only null if the "lepidopterology" module is not enabled.
+	 */
+	//TODO: Move most calls to definition (more save)
+	public static IButterflyRoot butterflyRoot;
 
-    /**
-     * Used to create new butterflies.
-     *
-     * @implNote Only null if the "lepidopterology" module is not enabled.
-     */
-    @Nullable
-    public static IButterflyFactory butterflyFactory;
+	/**
+	 * Used to create new butterflies.
+	 *
+	 * @implNote Only null if the "lepidopterology" module is not enabled.
+	 */
+	@Nullable
+	public static IButterflyFactory butterflyFactory;
 
-    /**
-     * Used to create new butterfly mutations.
-     *
-     * @implNote Only null if the "lepidopterology" module is not enabled.
-     */
-    @Nullable
-    public static IButterflyMutationFactory butterflyMutationFactory;
+	/**
+	 * Used to create new butterfly mutations.
+	 *
+	 * @implNote Only null if the "lepidopterology" module is not enabled.
+	 */
+	@Nullable
+	public static IButterflyMutationFactory butterflyMutationFactory;
 }

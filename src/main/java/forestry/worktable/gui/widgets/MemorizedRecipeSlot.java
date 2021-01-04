@@ -12,51 +12,53 @@ package forestry.worktable.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.core.gui.widgets.ItemStackWidgetBase;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.recipes.RecipeMemory;
+
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 
 public class MemorizedRecipeSlot extends ItemStackWidgetBase {
-    private static final TextureAtlasSprite lockIcon = TextureManagerForestry.getInstance().getDefault("slots/locked");
-    private final RecipeMemory recipeMemory;
-    private final int slotNumber;
+	private static final TextureAtlasSprite lockIcon = TextureManagerForestry.getInstance().getDefault("slots/locked");
+	private final RecipeMemory recipeMemory;
+	private final int slotNumber;
 
-    public MemorizedRecipeSlot(WidgetManager manager, int xPos, int yPos, RecipeMemory recipeMemory, int slot) {
-        super(manager, xPos, yPos);
-        this.recipeMemory = recipeMemory;
-        this.slotNumber = slot;
-    }
+	public MemorizedRecipeSlot(WidgetManager manager, int xPos, int yPos, RecipeMemory recipeMemory, int slot) {
+		super(manager, xPos, yPos);
+		this.recipeMemory = recipeMemory;
+		this.slotNumber = slot;
+	}
 
-    @Override
-    public ItemStack getItemStack() {
-        return recipeMemory.getRecipeDisplayOutput(slotNumber);
-    }
+	@Override
+	public ItemStack getItemStack() {
+		return recipeMemory.getRecipeDisplayOutput(slotNumber);
+	}
 
-    @Override
-    public void draw(MatrixStack transform, int startY, int startX) {
-        super.draw(transform, startY, startX);
+	@Override
+	public void draw(MatrixStack transform, int startY, int startX) {
+		super.draw(transform, startY, startX);
 
-        RenderSystem.disableDepthTest();
+		RenderSystem.disableDepthTest();
 
-        if (recipeMemory.isLocked(slotNumber)) {
-            TextureManagerForestry.getInstance().bindGuiTextureMap();
-            AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
-        }
+		if (recipeMemory.isLocked(slotNumber)) {
+			TextureManagerForestry.getInstance().bindGuiTextureMap();
+			AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, lockIcon);
+		}
 
-        RenderSystem.enableDepthTest();
-    }
+		RenderSystem.enableDepthTest();
+	}
 
-    @Override
-    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-        if (!getItemStack().isEmpty()) {
-            ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
-            SoundUtil.playButtonClick();
-        }
-    }
+	@Override
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		if (!getItemStack().isEmpty()) {
+			ContainerWorktable.sendRecipeClick(mouseButton, slotNumber);
+			SoundUtil.playButtonClick();
+		}
+	}
 }

@@ -16,10 +16,12 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.FeatureBase;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 import genetics.commands.SpeciesNotFoundException;
 import genetics.utils.AlleleUtils;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -36,108 +38,108 @@ import java.util.Optional;
 
 public final class TreeGenHelper {
 
-    public static Feature<NoFeatureConfig> getWorldGen(
-            ResourceLocation treeName,
-            PlayerEntity player,
-            BlockPos pos
-    ) throws SpeciesNotFoundException {
-        IGenome treeGenome = getTreeGenome(treeName);
-        ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
-        return tree.getTreeGenerator((ISeedReader) player.world, pos, true);
-    }
+	public static Feature<NoFeatureConfig> getWorldGen(
+			ResourceLocation treeName,
+			PlayerEntity player,
+			BlockPos pos
+	) throws SpeciesNotFoundException {
+		IGenome treeGenome = getTreeGenome(treeName);
+		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
+		return tree.getTreeGenerator((ISeedReader) player.world, pos, true);
+	}
 
-    public static <FC extends IFeatureConfig> boolean generateTree(
-            Feature<FC> feature,
-            ChunkGenerator generator,
-            World world,
-            BlockPos pos,
-            FC config
-    ) {
-        if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
-            pos = BlockUtil.getNextSolidDownPos(world, pos);
-        } else {
-            pos = BlockUtil.getNextReplaceableUpPos(world, pos);
-        }
+	public static <FC extends IFeatureConfig> boolean generateTree(
+			Feature<FC> feature,
+			ChunkGenerator generator,
+			World world,
+			BlockPos pos,
+			FC config
+	) {
+		if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
+			pos = BlockUtil.getNextSolidDownPos(world, pos);
+		} else {
+			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
+		}
 
-        if (pos == null) {
-            return false;
-        }
+		if (pos == null) {
+			return false;
+		}
 
-        BlockState blockState = world.getBlockState(pos);
-        if (BlockUtil.canPlaceTree(blockState, world, pos)) {
-            if (feature instanceof FeatureBase) {
-                return ((FeatureBase) feature).place(world, world.rand, pos, true);
-            } else {
-                return feature.generate(
-                        (ISeedReader) world,
-                        generator,
-                        world.rand,
-                        pos,
-                        config
-                );
-            }
-        }
+		BlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
+			if (feature instanceof FeatureBase) {
+				return ((FeatureBase) feature).place(world, world.rand, pos, true);
+			} else {
+				return feature.generate(
+						(ISeedReader) world,
+						generator,
+						world.rand,
+						pos,
+						config
+				);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public static boolean generateTree(ITree tree, ISeedReader world, BlockPos pos) {
-        Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
-        ChunkGenerator generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
+	public static boolean generateTree(ITree tree, ISeedReader world, BlockPos pos) {
+		Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
+		ChunkGenerator generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
 
-        BlockState blockState = world.getBlockState(pos);
-        if (BlockUtil.canPlaceTree(blockState, world, pos)) {
-            if (gen instanceof FeatureBase) {
-                return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
-            } else {
-                return gen.generate(
-                        world,
-                        ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
-                        world.getRandom(),
-                        pos,
-                        IFeatureConfig.NO_FEATURE_CONFIG
-                );
-            }
-        }
+		BlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
+			if (gen instanceof FeatureBase) {
+				return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
+			} else {
+				return gen.generate(
+						world,
+						((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
+						world.getRandom(),
+						pos,
+						IFeatureConfig.NO_FEATURE_CONFIG
+				);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private static IGenome getTreeGenome(ResourceLocation speciesName) throws SpeciesNotFoundException {
-        IAlleleTreeSpecies species = null;
+	private static IGenome getTreeGenome(ResourceLocation speciesName) throws SpeciesNotFoundException {
+		IAlleleTreeSpecies species = null;
 
-        for (ResourceLocation uid : AlleleUtils.getRegisteredNames()) {
-            if (!uid.equals(speciesName)) {
-                continue;
-            }
+		for (ResourceLocation uid : AlleleUtils.getRegisteredNames()) {
+			if (!uid.equals(speciesName)) {
+				continue;
+			}
 
-            Optional<IAllele> optionalAllele = AlleleUtils.getAllele(uid);
-            if (!optionalAllele.isPresent()) {
-                continue;
-            }
-            IAllele allele = optionalAllele.get();
-            if (allele instanceof IAlleleTreeSpecies) {
-                species = (IAlleleTreeSpecies) allele;
-                break;
-            }
-        }
+			Optional<IAllele> optionalAllele = AlleleUtils.getAllele(uid);
+			if (!optionalAllele.isPresent()) {
+				continue;
+			}
+			IAllele allele = optionalAllele.get();
+			if (allele instanceof IAlleleTreeSpecies) {
+				species = (IAlleleTreeSpecies) allele;
+				break;
+			}
+		}
 
-        if (species == null) {
-            species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-                                 .filter(allele -> {
-                                     String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
-                                     return displayName.equals(speciesName.toString());
-                                 })
-                                 .findFirst()
-                                 .orElse(null);
-        }
+		if (species == null) {
+			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+					.filter(allele -> {
+						String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
+						return displayName.equals(speciesName.toString());
+					})
+					.findFirst()
+					.orElse(null);
+		}
 
-        if (species == null) {
-            throw new SpeciesNotFoundException(speciesName);
-        }
+		if (species == null) {
+			throw new SpeciesNotFoundException(speciesName);
+		}
 
-        IAllele[] template = TreeManager.treeRoot.getTemplates().getTemplate(species.getRegistryName().toString());
+		IAllele[] template = TreeManager.treeRoot.getTemplates().getTemplate(species.getRegistryName().toString());
 
-        return TreeManager.treeRoot.getKaryotype().templateAsGenome(template);
-    }
+		return TreeManager.treeRoot.getKaryotype().templateAsGenome(template);
+	}
 }

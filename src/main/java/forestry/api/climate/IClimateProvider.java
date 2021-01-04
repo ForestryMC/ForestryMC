@@ -7,15 +7,16 @@ package forestry.api.climate;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+
 import net.minecraft.world.biome.Biome;
 
 /**
  * Provides information about the climate on a specific position or of a tile entity.
  */
 public interface IClimateProvider {
-    Biome getBiome();
+	Biome getBiome();
 
-    EnumTemperature getTemperature();
+	EnumTemperature getTemperature();
 
-    EnumHumidity getHumidity();
+	EnumHumidity getHumidity();
 }

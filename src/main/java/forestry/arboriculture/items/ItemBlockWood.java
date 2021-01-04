@@ -15,30 +15,31 @@ import forestry.api.core.ItemGroups;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
-    public ItemBlockWood(B block) {
-        super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
-    }
+	public ItemBlockWood(B block) {
+		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
+	}
 
-    @Override
-    public ITextComponent getDisplayName(ItemStack itemstack) {
-        IWoodTyped wood = getBlock();
-        IWoodType woodType = wood.getWoodType();
-        return WoodHelper.getDisplayName(wood, woodType);
-    }
+	@Override
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		IWoodTyped wood = getBlock();
+		IWoodType woodType = wood.getWoodType();
+		return WoodHelper.getDisplayName(wood, woodType);
+	}
 
-    @Override
-    public int getBurnTime(ItemStack itemStack) {
-        B block = getBlock();
-        if (block.isFireproof()) {
-            return 0;
-        } else {
-            return 300;
-        }
-    }
+	@Override
+	public int getBurnTime(ItemStack itemStack) {
+		B block = getBlock();
+		if (block.isFireproof()) {
+			return 0;
+		} else {
+			return 300;
+		}
+	}
 }

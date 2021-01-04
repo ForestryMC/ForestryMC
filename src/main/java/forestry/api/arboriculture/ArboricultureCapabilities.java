@@ -6,14 +6,15 @@
 package forestry.api.arboriculture;
 
 import forestry.api.core.IArmorNaturalist;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 public class ArboricultureCapabilities {
-    /**
-     * Capability for {@link IArmorNaturalist}.
-     * The {@link Capability#getDefaultInstance()} will always show pollination with no side effects.
-     */
-    @CapabilityInject(IArmorNaturalist.class)
-    public static Capability<IArmorNaturalist> ARMOR_NATURALIST;
+	/**
+	 * Capability for {@link IArmorNaturalist}.
+	 * The {@link Capability#getDefaultInstance()} will always show pollination with no side effects.
+	 */
+	@CapabilityInject(IArmorNaturalist.class)
+	public static Capability<IArmorNaturalist> ARMOR_NATURALIST;
 }

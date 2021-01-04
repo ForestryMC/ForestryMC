@@ -13,57 +13,57 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ChromosomeList implements IChromosomeList {
-    private final String rootUID;
-    private final IRootDefinition definition;
-    private final List<IChromosomeType> types = new LinkedList<>();
+	private final String rootUID;
+	private final IRootDefinition definition;
+	private final List<IChromosomeType> types = new LinkedList<>();
 
-    public ChromosomeList(String rootUID) {
-        this.rootUID = rootUID;
-        this.definition = GeneticsAPI.apiInstance.getRoot(rootUID);
-    }
+	public ChromosomeList(String rootUID) {
+		this.rootUID = rootUID;
+		this.definition = GeneticsAPI.apiInstance.getRoot(rootUID);
+	}
 
-    @Override
-    public IChromosomeTypeBuilder builder() {
-        return new ChromosomeTypeBuilder(this);
-    }
+	@Override
+	public IChromosomeTypeBuilder builder() {
+		return new ChromosomeTypeBuilder(this);
+	}
 
-    @Override
-    public Collection<IChromosomeType> types() {
-        return types;
-    }
+	@Override
+	public Collection<IChromosomeType> types() {
+		return types;
+	}
 
-    @Override
-    public IChromosomeType[] typesArray() {
-        return types.toArray(new IChromosomeType[0]);
-    }
+	@Override
+	public int size() {
+		return types.size();
+	}
 
-    @Override
-    public int size() {
-        return types.size();
-    }
+	@Override
+	public String getUID() {
+		return rootUID;
+	}
 
-    @Override
-    public String getUID() {
-        return rootUID;
-    }
+	@Override
+	public IIndividualRoot getRoot() {
+		return definition.get();
+	}
 
-    public <T extends IChromosomeType> T add(T type) {
-        types.add(type);
-        return type;
-    }
+	@Override
+	public IRootDefinition getDefinition() {
+		return definition;
+	}
 
-    @Override
-    public Iterator<IChromosomeType> iterator() {
-        return types.iterator();
-    }
+	@Override
+	public IChromosomeType[] typesArray() {
+		return types.toArray(new IChromosomeType[0]);
+	}
 
-    @Override
-    public IIndividualRoot getRoot() {
-        return definition.get();
-    }
+	public <T extends IChromosomeType> T add(T type) {
+		types.add(type);
+		return type;
+	}
 
-    @Override
-    public IRootDefinition getDefinition() {
-        return definition;
-    }
+	@Override
+	public Iterator<IChromosomeType> iterator() {
+		return types.iterator();
+	}
 }

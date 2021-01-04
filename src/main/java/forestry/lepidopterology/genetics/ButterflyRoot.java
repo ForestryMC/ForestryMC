@@ -11,6 +11,7 @@
 package forestry.lepidopterology.genetics;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
@@ -27,12 +28,14 @@ import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.tiles.TileCocoon;
+
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
 import genetics.utils.AlleleUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -41,6 +44,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -50,209 +54,209 @@ import java.util.List;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
 
-    private int butterflySpeciesCount = -1;
-    public static final String UID = "rootButterflies";
-    private static final List<IButterfly> butterflyTemplates = new ArrayList<>();
+	public static final String UID = "rootButterflies";
+	private static final List<IButterfly> butterflyTemplates = new ArrayList<>();
+	private int butterflySpeciesCount = -1;
 
-    public ButterflyRoot(IRootContext<IButterfly> context) {
-        super(context);
-        BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
-    }
+	public ButterflyRoot(IRootContext<IButterfly> context) {
+		super(context);
+		BreedingTrackerManager.INSTANCE.registerTracker(UID, this);
+	}
 
-    @Override
-    public IButterfly create(CompoundNBT compound) {
-        return new Butterfly(compound);
-    }
+	@Override
+	public IButterfly create(CompoundNBT compound) {
+		return new Butterfly(compound);
+	}
 
-    @Override
-    public IButterfly create(IGenome genome) {
-        return new Butterfly(genome);
-    }
+	@Override
+	public IButterfly create(IGenome genome) {
+		return new Butterfly(genome);
+	}
 
-    @Override
-    public IButterfly create(IGenome genome, IGenome mate) {
-        return new Butterfly(genome, mate);
-    }
+	@Override
+	public IButterfly create(IGenome genome, IGenome mate) {
+		return new Butterfly(genome, mate);
+	}
 
-    @Override
-    public IGenomeWrapper createWrapper(IGenome genome) {
-        return () -> genome;
-    }
+	@Override
+	public Class<? extends IButterfly> getMemberClass() {
+		return IButterfly.class;
+	}
 
-    @Override
-    public Class<? extends IButterfly> getMemberClass() {
-        return IButterfly.class;
-    }
+	@Override
+	public IGenomeWrapper createWrapper(IGenome genome) {
+		return () -> genome;
+	}
 
-    @Override
-    public int getSpeciesCount() {
-        if (butterflySpeciesCount < 0) {
-            butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
-                                                     .filter(IAlleleButterflySpecies::isCounted).count();
-        }
+	@Override
+	public int getSpeciesCount() {
+		if (butterflySpeciesCount < 0) {
+			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
+					.filter(IAlleleButterflySpecies::isCounted).count();
+		}
 
-        return butterflySpeciesCount;
-    }
+		return butterflySpeciesCount;
+	}
 
-    @Override
-    public EnumFlutterType getIconType() {
-        return EnumFlutterType.BUTTERFLY;
-    }
+	@Override
+	public boolean isMember(IIndividual individual) {
+		return individual instanceof IButterfly;
+	}
 
-    @Override
-    public boolean isMember(IIndividual individual) {
-        return individual instanceof IButterfly;
-    }
+	@Override
+	public EnumFlutterType getIconType() {
+		return EnumFlutterType.BUTTERFLY;
+	}
 
-    @Override
-    public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-        return EntityUtil.spawnEntity(
-                world,
-                EntityButterfly.create(
-                        LepidopterologyEntities.BUTTERFLY.entityType(),
-                        world,
-                        butterfly,
-                        new BlockPos(x, y, z)
-                ),
-                x,
-                y,
-                z
-        );
-    }
+	@Override
+	public IAlyzerPlugin getAlyzerPlugin() {
+		return FlutterlyzerPlugin.INSTANCE;
+	}
 
-    @Override
-    public BlockPos plantCocoon(
-            IWorld world,
-            BlockPos coordinates,
-            @Nullable IButterfly caterpillar,
-            GameProfile owner,
-            int age,
-            boolean createNursery
-    ) {
-        if (caterpillar == null) {
-            return BlockPos.ZERO;
-        }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public IDatabasePlugin getSpeciesPlugin() {
+		return ButterflyPlugin.INSTANCE;
+	}
 
-        BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
-        if (pos == BlockPos.ZERO) {
-            return pos;
-        }
+	private BlockPos getValidCocoonPos(
+			IWorld world,
+			BlockPos pos,
+			IButterfly caterpillar,
+			GameProfile gameProfile,
+			boolean createNursery
+	) {
+		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
+			return pos.down();
+		}
+		for (int tries = 0; tries < 3; tries++) {
+			for (int y = 1; y < world.getRandom().nextInt(5); y++) {
+				BlockPos coordinate = pos.add(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
+				if (isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)) {
+					return coordinate;
+				}
+			}
+		}
 
-        BlockState state = LepidopterologyBlocks.COCOON.defaultState();
-        boolean placed = world.setBlockState(pos, state, 18);
-        if (!placed) {
-            return BlockPos.ZERO;
-        }
+		return BlockPos.ZERO;
+	}
 
-        Block block = world.getBlockState(pos).getBlock();
-        if (!LepidopterologyBlocks.COCOON.blockEqual(block)) {
-            return BlockPos.ZERO;
-        }
+	public boolean isPositionValid(
+			IWorld world,
+			BlockPos pos,
+			IButterfly caterpillar,
+			GameProfile gameProfile,
+			boolean createNursery
+	) {
+		BlockState blockState = world.getBlockState(pos);
+		if (BlockUtil.canReplace(blockState, world, pos)) {
+			BlockPos nurseryPos = pos.up();
+			IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
+			if (isNurseryValid(nursery, caterpillar, gameProfile)) {
+				return true;
+			} else if (createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)) {
+				nursery = GeneticsUtil.getOrCreateNursery(gameProfile, world, nurseryPos, false);
+				return isNurseryValid(nursery, caterpillar, gameProfile);
+			}
+		}
+		return false;
+	}
 
-        TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-        if (cocoon == null) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
-            return BlockPos.ZERO;
-        }
+	private boolean isNurseryValid(
+			@Nullable IButterflyNursery nursery,
+			IButterfly caterpillar,
+			GameProfile gameProfile
+	) {
+		return nursery != null && nursery.canNurse(caterpillar);
+	}
 
-        cocoon.setCaterpillar(caterpillar);
-        cocoon.getOwnerHandler().setOwner(owner);
-        cocoon.setAge(age);
+	/* BREEDING TRACKER */
+	@Override
+	public ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
+	}
 
-        return pos;
-    }
+	@Override
+	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
+		return EntityUtil.spawnEntity(
+				world,
+				EntityButterfly.create(
+						LepidopterologyEntities.BUTTERFLY.entityType(),
+						world,
+						butterfly,
+						new BlockPos(x, y, z)
+				),
+				x,
+				y,
+				z
+		);
+	}
 
-    private BlockPos getValidCocoonPos(
-            IWorld world,
-            BlockPos pos,
-            IButterfly caterpillar,
-            GameProfile gameProfile,
-            boolean createNursery
-    ) {
-        if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
-            return pos.down();
-        }
-        for (int tries = 0; tries < 3; tries++) {
-            for (int y = 1; y < world.getRandom().nextInt(5); y++) {
-                BlockPos coordinate = pos.add(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
-                if (isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)) {
-                    return coordinate;
-                }
-            }
-        }
+	@Override
+	public BlockPos plantCocoon(
+			IWorld world,
+			BlockPos coordinates,
+			@Nullable IButterfly caterpillar,
+			GameProfile owner,
+			int age,
+			boolean createNursery
+	) {
+		if (caterpillar == null) {
+			return BlockPos.ZERO;
+		}
 
-        return BlockPos.ZERO;
-    }
+		BlockPos pos = getValidCocoonPos(world, coordinates, caterpillar, owner, createNursery);
+		if (pos == BlockPos.ZERO) {
+			return pos;
+		}
 
-    public boolean isPositionValid(
-            IWorld world,
-            BlockPos pos,
-            IButterfly caterpillar,
-            GameProfile gameProfile,
-            boolean createNursery
-    ) {
-        BlockState blockState = world.getBlockState(pos);
-        if (BlockUtil.canReplace(blockState, world, pos)) {
-            BlockPos nurseryPos = pos.up();
-            IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
-            if (isNurseryValid(nursery, caterpillar, gameProfile)) {
-                return true;
-            } else if (createNursery && GeneticsUtil.canCreateNursery(world, nurseryPos)) {
-                nursery = GeneticsUtil.getOrCreateNursery(gameProfile, world, nurseryPos, false);
-                return isNurseryValid(nursery, caterpillar, gameProfile);
-            }
-        }
-        return false;
-    }
+		BlockState state = LepidopterologyBlocks.COCOON.defaultState();
+		boolean placed = world.setBlockState(pos, state, 18);
+		if (!placed) {
+			return BlockPos.ZERO;
+		}
 
-    private boolean isNurseryValid(
-            @Nullable IButterflyNursery nursery,
-            IButterfly caterpillar,
-            GameProfile gameProfile
-    ) {
-        return nursery != null && nursery.canNurse(caterpillar);
-    }
+		Block block = world.getBlockState(pos).getBlock();
+		if (!LepidopterologyBlocks.COCOON.blockEqual(block)) {
+			return BlockPos.ZERO;
+		}
 
-    @Override
-    public boolean isMated(ItemStack stack) {
-        IButterfly butterfly = getTypes().createIndividual(stack).orElse(null);
-        return butterfly != null && !butterfly.getMate().isPresent();
-    }
+		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (cocoon == null) {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
+			return BlockPos.ZERO;
+		}
 
-    /* BREEDING TRACKER */
-    @Override
-    public ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
-        return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
-    }
+		cocoon.setCaterpillar(caterpillar);
+		cocoon.getOwnerHandler().setOwner(owner);
+		cocoon.setAge(age);
 
-    @Override
-    public String getFileName(@Nullable GameProfile profile) {
-        return "LepidopteristTracker." + (profile == null ? "common" : profile.getId());
-    }
+		return pos;
+	}
 
-    @Override
-    public IBreedingTracker createTracker(String fileName) {
-        return new LepidopteristTracker(fileName);
-    }
+	@Override
+	public boolean isMated(ItemStack stack) {
+		IButterfly butterfly = getTypes().createIndividual(stack).orElse(null);
+		return butterfly != null && !butterfly.getMate().isPresent();
+	}
 
-    @Override
-    public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
-        if (!(tracker instanceof LepidopteristTracker)) {
-            return;
-        }
-        LepidopteristTracker arboristTracker = (LepidopteristTracker) tracker;
-        arboristTracker.setWorld(world);
-        arboristTracker.setUsername(profile);
-    }
+	@Override
+	public String getFileName(@Nullable GameProfile profile) {
+		return "LepidopteristTracker." + (profile == null ? "common" : profile.getId());
+	}
 
-    @Override
-    public IAlyzerPlugin getAlyzerPlugin() {
-        return FlutterlyzerPlugin.INSTANCE;
-    }
+	@Override
+	public IBreedingTracker createTracker(String fileName) {
+		return new LepidopteristTracker(fileName);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public IDatabasePlugin getSpeciesPlugin() {
-        return ButterflyPlugin.INSTANCE;
-    }
+	@Override
+	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+		if (!(tracker instanceof LepidopteristTracker)) {
+			return;
+		}
+		LepidopteristTracker arboristTracker = (LepidopteristTracker) tracker;
+		arboristTracker.setWorld(world);
+		arboristTracker.setUsername(profile);
+	}
 }

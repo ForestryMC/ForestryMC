@@ -13,15 +13,17 @@
 package forestry.book.data.structure;
 
 import com.google.gson.JsonObject;
+
 import net.minecraft.nbt.CompoundNBT;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class BlockData {
-    public int[] pos = new int[0];
-    public int[] endPos = new int[0];
-    public CompoundNBT state = null;
-    public String block = "";
-    public JsonObject nbt = null;
+	public int[] pos = new int[0];
+	public int[] endPos = new int[0];
+	public CompoundNBT state = null;
+	public String block = "";
+	public JsonObject nbt = null;
 }

@@ -18,6 +18,7 @@ import forestry.core.errors.FakeErrorLogic;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.FakeOwnerHandler;
 import forestry.core.owner.IOwnerHandler;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,169 +28,169 @@ import java.util.Collections;
 import java.util.Set;
 
 public abstract class FakeMultiblockController implements IMultiblockControllerInternal {
-    @Override
-    public void attachBlock(IMultiblockComponent part) {
+	@Override
+	public void attachBlock(IMultiblockComponent part) {
 
-    }
+	}
 
-    @Override
-    public void detachBlock(IMultiblockComponent part, boolean chunkUnloading) {
+	@Override
+	public void detachBlock(IMultiblockComponent part, boolean chunkUnloading) {
 
-    }
+	}
 
-    @Override
-    public void checkIfMachineIsWhole() {
+	@Override
+	public void checkIfMachineIsWhole() {
 
-    }
+	}
 
-    @Override
-    public void assimilate(IMultiblockControllerInternal other) {
+	@Override
+	public void assimilate(IMultiblockControllerInternal other) {
 
-    }
+	}
 
-    @Override
-    public void _onAssimilated(IMultiblockControllerInternal otherController) {
+	@Override
+	public void _onAssimilated(IMultiblockControllerInternal otherController) {
 
-    }
+	}
 
-    @Override
-    public void onAssimilated(IMultiblockControllerInternal assimilator) {
+	@Override
+	public void onAssimilated(IMultiblockControllerInternal assimilator) {
 
-    }
+	}
 
-    @Override
-    public void updateMultiblockEntity() {
+	@Override
+	public void updateMultiblockEntity() {
 
-    }
+	}
 
-    @Override
-    public BlockPos getReferenceCoord() {
-        return BlockPos.ZERO;
-    }
+	@Override
+	public BlockPos getReferenceCoord() {
+		return BlockPos.ZERO;
+	}
 
-    @Override
-    public void recalculateMinMaxCoords() {
+	@Override
+	public void recalculateMinMaxCoords() {
 
-    }
+	}
 
-    @Override
-    public void formatDescriptionPacket(CompoundNBT data) {
+	@Override
+	public void formatDescriptionPacket(CompoundNBT data) {
 
-    }
+	}
 
-    @Override
-    public void decodeDescriptionPacket(CompoundNBT data) {
+	@Override
+	public void decodeDescriptionPacket(CompoundNBT data) {
 
-    }
+	}
 
-    @Override
-    public World getWorldObj() {
-        return null;
-    }
+	@Override
+	public World getWorldObj() {
+		return null;
+	}
 
-    @Override
-    public boolean isEmpty() {
-        return true;
-    }
+	@Override
+	public boolean isEmpty() {
+		return true;
+	}
 
-    @Override
-    public boolean shouldConsume(IMultiblockControllerInternal otherController) {
-        return false;
-    }
+	@Override
+	public boolean shouldConsume(IMultiblockControllerInternal otherController) {
+		return false;
+	}
 
-    @Override
-    public String getPartsListString() {
-        return "";
-    }
+	@Override
+	public String getPartsListString() {
+		return "";
+	}
 
-    @Override
-    public void auditParts() {
+	@Override
+	public void auditParts() {
 
-    }
+	}
 
-    @Override
-    public Set<IMultiblockComponent> checkForDisconnections() {
-        return Collections.emptySet();
-    }
+	@Override
+	public Set<IMultiblockComponent> checkForDisconnections() {
+		return Collections.emptySet();
+	}
 
-    @Override
-    public Set<IMultiblockComponent> detachAllBlocks() {
-        return Collections.emptySet();
-    }
+	@Override
+	public Set<IMultiblockComponent> detachAllBlocks() {
+		return Collections.emptySet();
+	}
 
-    @Override
-    public boolean isAssembled() {
-        return false;
-    }
+	@Override
+	public boolean isAssembled() {
+		return false;
+	}
 
-    @Override
-    public void reassemble() {
+	@Override
+	public void reassemble() {
 
-    }
+	}
 
-    @Override
-    public String getLastValidationError() {
-        return null;
-    }
+	@Override
+	public String getLastValidationError() {
+		return null;
+	}
 
-    @Override
-    public BlockPos getLastValidationErrorPosition() {
-        return null;
-    }
+	@Override
+	public BlockPos getLastValidationErrorPosition() {
+		return null;
+	}
 
-    @Override
+	@Override
 
-    public Collection<IMultiblockComponent> getComponents() {
-        return Collections.emptyList();
-    }
+	public Collection<IMultiblockComponent> getComponents() {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public void read(CompoundNBT CompoundNBT) {
+	@Override
+	public void read(CompoundNBT CompoundNBT) {
 
-    }
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT CompoundNBT) {
-        return CompoundNBT;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		return CompoundNBT;
+	}
 
-    @Override
-    public IOwnerHandler getOwnerHandler() {
-        return FakeOwnerHandler.getInstance();
-    }
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return FakeOwnerHandler.getInstance();
+	}
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.NORMAL;
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.NORMAL;
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        return EnumHumidity.NORMAL;
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.NORMAL;
+	}
 
-    @Override
-    public float getExactTemperature() {
-        return 0.5f;
-    }
+	@Override
+	public float getExactTemperature() {
+		return 0.5f;
+	}
 
-    @Override
-    public float getExactHumidity() {
-        return 0.5f;
-    }
+	@Override
+	public float getExactHumidity() {
+		return 0.5f;
+	}
 
-    @Override
-    public IErrorLogic getErrorLogic() {
-        return FakeErrorLogic.instance;
-    }
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return FakeErrorLogic.instance;
+	}
 
-    @Override
-    public void writeGuiData(PacketBufferForestry data) {
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
 
-    }
+	}
 
-    @Override
-    public void readGuiData(PacketBufferForestry data) {
+	@Override
+	public void readGuiData(PacketBufferForestry data) {
 
-    }
+	}
 }

@@ -7,74 +7,76 @@ import forestry.api.genetics.filter.IFilterData;
 import forestry.api.genetics.filter.IFilterRule;
 import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.render.TextureManagerForestry;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
 public enum ArboricultureFilterRuleType implements IFilterRuleType {
-    TREE {
-        @Override
-        public boolean isValid(ItemStack itemStack, IFilterData data) {
-            return data.isPresent();
-        }
-    },
-    SAPLING {
-        @Override
-        public boolean isValid(ItemStack itemStack, IFilterData data) {
-            return data.isPresent() && data.getType() == EnumGermlingType.SAPLING;
-        }
-    },
-    POLLEN {
-        @Override
-        public boolean isValid(ItemStack itemStack, IFilterData data) {
-            return data.isPresent() && data.getType() == EnumGermlingType.POLLEN;
-        }
-    };
+	TREE {
+		@Override
+		public boolean isValid(ItemStack itemStack, IFilterData data) {
+			return data.isPresent();
+		}
+	},
+	SAPLING {
+		@Override
+		public boolean isValid(ItemStack itemStack, IFilterData data) {
+			return data.isPresent() && data.getType() == EnumGermlingType.SAPLING;
+		}
+	},
+	POLLEN {
+		@Override
+		public boolean isValid(ItemStack itemStack, IFilterData data) {
+			return data.isPresent() && data.getType() == EnumGermlingType.POLLEN;
+		}
+	};
 
-    private final String uid;
+	private final String uid;
 
-    ArboricultureFilterRuleType() {
-        this.uid = "forestry.arboriculture." + name().toLowerCase(Locale.ENGLISH);
-    }
+	ArboricultureFilterRuleType() {
+		this.uid = "forestry.arboriculture." + name().toLowerCase(Locale.ENGLISH);
+	}
 
-    public static void init() {
-        for (ArboricultureFilterRuleType rule : values()) {
-            AlleleManager.filterRegistry.registerFilter(rule);
-        }
-    }
+	public static void init() {
+		for (ArboricultureFilterRuleType rule : values()) {
+			AlleleManager.filterRegistry.registerFilter(rule);
+		}
+	}
 
-    @Override
-    public void addLogic(IFilterRule logic) {
-    }
+	@Override
+	public void addLogic(IFilterRule logic) {
+	}
 
-    @Override
-    public boolean isContainer() {
-        return false;
-    }
+	@Override
+	public boolean isContainer() {
+		return false;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public TextureAtlasSprite getSprite() {
-        return TextureManagerForestry.getInstance().getDefault("analyzer/" + name().toLowerCase(Locale.ENGLISH));
-    }
+	@Override
+	public String getUID() {
+		return uid;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public ResourceLocation getTextureMap() {
-        return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public TextureAtlasSprite getSprite() {
+		return TextureManagerForestry.getInstance().getDefault("analyzer/" + name().toLowerCase(Locale.ENGLISH));
+	}
 
-    @Override
-    public String getRootUID() {
-        return TreeManager.treeRoot.getUID();
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public ResourceLocation getTextureMap() {
+		return TextureManagerForestry.LOCATION_FORESTRY_TEXTURE;
+	}
 
-    @Override
-    public String getUID() {
-        return uid;
-    }
+	@Override
+	public String getRootUID() {
+		return TreeManager.treeRoot.getUID();
+	}
 }

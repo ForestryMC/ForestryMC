@@ -12,36 +12,37 @@ package forestry.storage.gui;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiBackpack extends GuiForestry<ContainerBackpack> {
 
-    public GuiBackpack(ContainerBackpack container, PlayerInventory inv, ITextComponent title) {
-        super(getTextureString(container), container, inv, title);
-        ContainerBackpack.Size size = container.getSize();
+	public GuiBackpack(ContainerBackpack container, PlayerInventory inv, ITextComponent title) {
+		super(getTextureString(container), container, inv, title);
+		ContainerBackpack.Size size = container.getSize();
 
-        if (size == ContainerBackpack.Size.T2) {
-            xSize = 176;
-            ySize = 192;
-        }
-    }
+		if (size == ContainerBackpack.Size.T2) {
+			xSize = 176;
+			ySize = 192;
+		}
+	}
 
-    private static String getTextureString(ContainerBackpack container) {
-        ContainerBackpack.Size size = container.getSize();
-        switch (size) {
-            case T2: {
-                return Constants.TEXTURE_PATH_GUI + "backpack_t2.png";
-            }
-            case DEFAULT:
-            default: {
-                return Constants.TEXTURE_PATH_GUI + "backpack.png";
-            }
-        }
-    }
+	private static String getTextureString(ContainerBackpack container) {
+		ContainerBackpack.Size size = container.getSize();
+		switch (size) {
+			case T2: {
+				return Constants.TEXTURE_PATH_GUI + "backpack_t2.png";
+			}
+			case DEFAULT:
+			default: {
+				return Constants.TEXTURE_PATH_GUI + "backpack.png";
+			}
+		}
+	}
 
-    @Override
-    protected void addLedgers() {
+	@Override
+	protected void addLedgers() {
 
-    }
+	}
 }

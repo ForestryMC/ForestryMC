@@ -13,47 +13,47 @@ import java.io.File;
 import java.util.Collection;
 
 public class ForestryModules implements IModuleContainer {
-    private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
-    private static final String CONFIG_CATEGORY = "modules";
-    @Nullable
-    private static Configuration config;
+	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
+	private static final String CONFIG_CATEGORY = "modules";
+	@Nullable
+	private static Configuration config;
 
-    @Override
-    public String getID() {
-        return Constants.MOD_ID;
-    }
+	public static Configuration getModulesConfiguration() {
+		if (config == null) {
+			config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
+		}
+		return config;
+	}
 
-    @Override
-    public boolean isAvailable() {
-        return true;
-    }
+	@Override
+	public String getID() {
+		return Constants.MOD_ID;
+	}
 
-    @Override
-    public Configuration getModulesConfig() {
-        return getModulesConfiguration();
-    }
+	@Override
+	public boolean isAvailable() {
+		return true;
+	}
 
-    public static Configuration getModulesConfiguration() {
-        if (config == null) {
-            config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
-        }
-        return config;
-    }
+	@Override
+	public Configuration getModulesConfig() {
+		return getModulesConfiguration();
+	}
 
-    @Override
-    public boolean isModuleEnabled(IForestryModule module) {
-        ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+	@Override
+	public boolean isModuleEnabled(IForestryModule module) {
+		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
-        String comment = ForestryPluginUtil.getComment(module);
-        Property prop = getModulesConfig().get(CONFIG_CATEGORY, info.moduleID(), true, comment);
-        return prop.getBoolean();
-    }
+		String comment = ForestryPluginUtil.getComment(module);
+		Property prop = getModulesConfig().get(CONFIG_CATEGORY, info.moduleID(), true, comment);
+		return prop.getBoolean();
+	}
 
-    @Override
-    public void onConfiguredModules(
-            Collection<IForestryModule> activeModules,
-            Collection<IForestryModule> unloadedModules
-    ) {
-        ModuleManager.getModuleHandler().addModules(activeModules, unloadedModules);
-    }
+	@Override
+	public void onConfiguredModules(
+			Collection<IForestryModule> activeModules,
+			Collection<IForestryModule> unloadedModules
+	) {
+		ModuleManager.getModuleHandler().addModules(activeModules, unloadedModules);
+	}
 }

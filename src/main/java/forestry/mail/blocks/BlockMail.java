@@ -11,18 +11,20 @@
 package forestry.mail.blocks;
 
 import forestry.core.blocks.BlockBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.common.ToolType;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
-    public BlockMail(BlockTypeMail blockType) {
-        super(
-                blockType,
-                Block.Properties.create(Material.IRON)
-                                .harvestTool(ToolType.PICKAXE)
-                                .harvestLevel(0)
-                                .hardnessAndResistance(1.5f)
-        );
-    }
+	public BlockMail(BlockTypeMail blockType) {
+		super(
+				blockType,
+				Block.Properties.create(Material.IRON)
+						.harvestTool(ToolType.PICKAXE)
+						.harvestLevel(0)
+						.hardnessAndResistance(1.5f)
+		);
+	}
 }

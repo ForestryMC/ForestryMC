@@ -6,36 +6,37 @@ import forestry.arboriculture.TreePlugin;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.arboriculture.genetics.alleles.AlleleLeafEffects;
 import forestry.core.genetics.alleles.EnumAllele;
+
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.alleles.IAlleleTemplateBuilder;
 import genetics.api.individual.IKaryotype;
 
 public class TreeHelper {
-    private TreeHelper() {
-    }
+	private TreeHelper() {
+	}
 
-    public static ITreeRoot getRoot() {
-        return TreePlugin.ROOT.get();
-    }
+	public static ITreeRoot getRoot() {
+		return TreePlugin.ROOT.get();
+	}
 
-    public static IKaryotype getKaryotype() {
-        return getRoot().getKaryotype();
-    }
+	public static IKaryotype getKaryotype() {
+		return getRoot().getKaryotype();
+	}
 
-    public static IAlleleTemplateBuilder createTemplate() {
-        return getKaryotype().createTemplate();
-    }
+	public static IAlleleTemplateBuilder createTemplate() {
+		return getKaryotype().createTemplate();
+	}
 
-    public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
-        return templateBuilder.set(TreeChromosomes.FRUITS, AlleleFruits.fruitNone)
-                              .set(TreeChromosomes.SPECIES, TreeDefinition.Oak.getSpecies())
-                              .set(TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL)
-                              .set(TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER)
-                              .set(TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST)
-                              .set(TreeChromosomes.SAPPINESS, EnumAllele.Sappiness.LOWEST)
-                              .set(TreeChromosomes.EFFECT, AlleleLeafEffects.leavesNone)
-                              .set(TreeChromosomes.MATURATION, EnumAllele.Maturation.AVERAGE)
-                              .set(TreeChromosomes.GIRTH, 1)
-                              .set(TreeChromosomes.FIREPROOF, EnumAllele.Fireproof.FALSE).build();
-    }
+	public static IAlleleTemplate createDefaultTemplate(IAlleleTemplateBuilder templateBuilder) {
+		return templateBuilder.set(TreeChromosomes.FRUITS, AlleleFruits.fruitNone)
+				.set(TreeChromosomes.SPECIES, TreeDefinition.Oak.getSpecies())
+				.set(TreeChromosomes.HEIGHT, EnumAllele.Height.SMALL)
+				.set(TreeChromosomes.FERTILITY, EnumAllele.Saplings.LOWER)
+				.set(TreeChromosomes.YIELD, EnumAllele.Yield.LOWEST)
+				.set(TreeChromosomes.SAPPINESS, EnumAllele.Sappiness.LOWEST)
+				.set(TreeChromosomes.EFFECT, AlleleLeafEffects.leavesNone)
+				.set(TreeChromosomes.MATURATION, EnumAllele.Maturation.AVERAGE)
+				.set(TreeChromosomes.GIRTH, 1)
+				.set(TreeChromosomes.FIREPROOF, EnumAllele.Fireproof.FALSE).build();
+	}
 }

@@ -11,11 +11,12 @@
 package forestry.apiculture;
 
 import forestry.api.apiculture.DefaultBeeModifier;
+
 import genetics.api.individual.IGenome;
 
 public class AlvearyBeeModifier extends DefaultBeeModifier {
-    @Override
-    public float getTerritoryModifier(IGenome genome, float currentModifier) {
-        return 2.0f;
-    }
+	@Override
+	public float getTerritoryModifier(IGenome genome, float currentModifier) {
+		return 2.0f;
+	}
 }

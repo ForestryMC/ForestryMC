@@ -15,7 +15,7 @@ import forestry.core.genetics.Branch;
 import java.util.Locale;
 
 public class BranchButterflies extends Branch {
-    public BranchButterflies(String scientific) {
-        super("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
-    }
+	public BranchButterflies(String scientific) {
+		super("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
+	}
 }

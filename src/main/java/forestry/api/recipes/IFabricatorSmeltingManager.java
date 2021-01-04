@@ -13,8 +13,8 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 public interface IFabricatorSmeltingManager extends ICraftingProvider<IFabricatorSmeltingRecipe> {
-    @Nullable
-    IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource);
+	@Nullable
+	IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource);
 
-    Set<Fluid> getRecipeFluids(RecipeManager manager);
+	Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

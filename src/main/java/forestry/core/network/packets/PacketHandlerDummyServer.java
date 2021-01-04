@@ -12,17 +12,18 @@ package forestry.core.network.packets;
 
 import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.PacketBufferForestry;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class PacketHandlerDummyServer extends PacketHandlerDummy implements IForestryPacketHandlerServer {
-    public static final PacketHandlerDummyServer instance = new PacketHandlerDummyServer();
+	public static final PacketHandlerDummyServer instance = new PacketHandlerDummyServer();
 
-    private PacketHandlerDummyServer() {
+	private PacketHandlerDummyServer() {
 
-    }
+	}
 
-    @Override
-    public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+	@Override
+	public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 
-    }
+	}
 }

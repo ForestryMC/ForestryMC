@@ -9,54 +9,55 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.NonNullList;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 import javax.annotation.Nullable;
 
 public interface ISqueezerRecipe extends IForestryRecipe {
-    IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
+	IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
 
-    /**
-     * @return item stacks representing the required resources for one process. Stack size will be taken into account.
-     */
-    NonNullList<ItemStack> getResources();
+	/**
+	 * @return item stacks representing the required resources for one process. Stack size will be taken into account.
+	 */
+	NonNullList<ItemStack> getResources();
 
-    /**
-     * @return Number of work cycles required to squeeze one set of resources.
-     */
-    int getProcessingTime();
+	/**
+	 * @return Number of work cycles required to squeeze one set of resources.
+	 */
+	int getProcessingTime();
 
-    /**
-     * @return Item stack representing the possible remnants from this recipe. (i.e. tin left over from tin cans)
-     */
-    ItemStack getRemnants();
+	/**
+	 * @return Item stack representing the possible remnants from this recipe. (i.e. tin left over from tin cans)
+	 */
+	ItemStack getRemnants();
 
-    /**
-     * @return Chance remnants will be produced by a single recipe cycle, from 0 to 1.
-     */
-    float getRemnantsChance();
+	/**
+	 * @return Chance remnants will be produced by a single recipe cycle, from 0 to 1.
+	 */
+	float getRemnantsChance();
 
-    /**
-     * @return {@link FluidStack} representing the output of this recipe.
-     */
-    FluidStack getFluidOutput();
+	/**
+	 * @return {@link FluidStack} representing the output of this recipe.
+	 */
+	FluidStack getFluidOutput();
 
-    @Nullable
-    boolean isFilledContainer(ItemStack filledContainer);
+	@Nullable
+	boolean isFilledContainer(ItemStack filledContainer);
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:squeezer")
-        public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:squeezer")
+		public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
+	}
 }

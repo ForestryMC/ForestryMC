@@ -6,7 +6,9 @@
 package forestry.api.arboriculture;
 
 import forestry.api.arboriculture.genetics.EnumGermlingType;
+
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -16,18 +18,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingModelProvider {
-    @OnlyIn(Dist.CLIENT)
-    ResourceLocation getItemModel();
+	@OnlyIn(Dist.CLIENT)
+	ResourceLocation getItemModel();
 
-    @OnlyIn(Dist.CLIENT)
-    ResourceLocation getBlockModel();
+	@OnlyIn(Dist.CLIENT)
+	ResourceLocation getBlockModel();
 
-    /**
-     * Provides color for sapling. See {@link ILeafSpriteProvider} for pollen color.
-     *
-     * @param type       the germling type to render
-     * @param renderPass renderPass of rendering
-     * @return sapling color for renderPass
-     */
-    int getSpriteColor(EnumGermlingType type, int renderPass);
+	/**
+	 * Provides color for sapling. See {@link ILeafSpriteProvider} for pollen color.
+	 *
+	 * @param type       the germling type to render
+	 * @param renderPass renderPass of rendering
+	 * @return sapling color for renderPass
+	 */
+	int getSpriteColor(EnumGermlingType type, int renderPass);
 }

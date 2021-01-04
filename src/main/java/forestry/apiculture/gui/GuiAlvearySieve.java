@@ -13,19 +13,20 @@ package forestry.apiculture.gui;
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiAlvearySieve extends GuiForestryTitled<ContainerAlvearySieve> {
-    private final TileAlvearySieve tile;
+	private final TileAlvearySieve tile;
 
-    public GuiAlvearySieve(ContainerAlvearySieve container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "sieve.png", container, inventory, title);
-        this.tile = container.getTile();
-    }
+	public GuiAlvearySieve(ContainerAlvearySieve container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "sieve.png", container, inventory, title);
+		this.tile = container.getTile();
+	}
 
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(tile);
-    }
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+	}
 }

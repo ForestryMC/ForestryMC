@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -25,12 +26,12 @@ import java.util.Set;
  * @author SirSengir
  */
 public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
-    @Nullable
-    IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack);
+	@Nullable
+	IFermenterRecipe findMatchingRecipe(RecipeManager manager, ItemStack res, FluidStack fluidStack);
 
-    boolean isResource(RecipeManager manager, ItemStack resource);
+	boolean isResource(RecipeManager manager, ItemStack resource);
 
-    Set<Fluid> getRecipeFluidInputs(RecipeManager manager);
+	Set<Fluid> getRecipeFluidInputs(RecipeManager manager);
 
-    Set<Fluid> getRecipeFluidOutputs(RecipeManager manager);
+	Set<Fluid> getRecipeFluidOutputs(RecipeManager manager);
 }

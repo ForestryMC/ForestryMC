@@ -6,13 +6,14 @@
 package forestry.api.genetics.alleles;
 
 import forestry.api.genetics.flowers.IFlowerProvider;
+
 import genetics.api.alleles.IAllele;
 
 public interface IAlleleFlowers extends IAllele {
 
-    /**
-     * @return FlowerProvider
-     */
-    IFlowerProvider getProvider();
+	/**
+	 * @return FlowerProvider
+	 */
+	IFlowerProvider getProvider();
 
 }

@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RainmakerRecipeMaker {
-    public static List<RainmakerRecipeWrapper> getRecipes() {
-        List<RainmakerRecipeWrapper> recipes = new ArrayList<>();
-        for (RainSubstrate substrate : FuelManager.rainSubstrate.values()) {
-            recipes.add(new RainmakerRecipeWrapper(substrate));
-        }
+	public static List<RainmakerRecipeWrapper> getRecipes() {
+		List<RainmakerRecipeWrapper> recipes = new ArrayList<>();
+		for (RainSubstrate substrate : FuelManager.rainSubstrate.values()) {
+			recipes.add(new RainmakerRecipeWrapper(substrate));
+		}
 
-        return recipes;
-    }
+		return recipes;
+	}
 }

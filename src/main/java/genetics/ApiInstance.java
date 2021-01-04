@@ -1,6 +1,7 @@
 package genetics;
 
 import com.google.common.base.Preconditions;
+
 import genetics.alleles.AlleleHelper;
 import genetics.alleles.AlleleRegistry;
 import genetics.api.IGeneticApiInstance;
@@ -28,88 +29,86 @@ import java.util.Map;
 import java.util.Optional;
 
 public enum ApiInstance implements IGeneticApiInstance {
-    INSTANCE;
+	INSTANCE;
 
-    private static final String ERROR_MESSAGE = "A method of the genetic api was called before the api reached the state at that the value of the method is present.";
+	private static final String ERROR_MESSAGE = "A method of the genetic api was called before the api reached the state at that the value of the method is present.";
+	private final Map<String, RootDefinition> rootDefinitionByUID = new HashMap<>();
+	private final Map<String, IChromosomeList> chromosomeListByUID = new HashMap<>();
+	@Nullable
+	public ClassificationRegistry classificationRegistry;
+	@Nullable
+	public AlleleRegistry alleleRegistry;
 
-    @Nullable
-    public ClassificationRegistry classificationRegistry;
-    @Nullable
-    public AlleleRegistry alleleRegistry;
+	@Override
+	public ClassificationRegistry getClassificationRegistry() {
+		Preconditions.checkState(classificationRegistry != null, ERROR_MESSAGE);
+		return classificationRegistry;
+	}
 
-    private final Map<String, RootDefinition> rootDefinitionByUID = new HashMap<>();
-    private final Map<String, IChromosomeList> chromosomeListByUID = new HashMap<>();
+	public void setClassificationRegistry(@Nullable ClassificationRegistry classificationRegistry) {
+		this.classificationRegistry = classificationRegistry;
+	}
 
-    @Override
-    public ClassificationRegistry getClassificationRegistry() {
-        Preconditions.checkState(classificationRegistry != null, ERROR_MESSAGE);
-        return classificationRegistry;
-    }
+	@Override
+	public IAlleleRegistry getAlleleRegistry() {
+		Preconditions.checkState(alleleRegistry != null, ERROR_MESSAGE);
+		return alleleRegistry;
+	}
 
-    public void setClassificationRegistry(@Nullable ClassificationRegistry classificationRegistry) {
-        this.classificationRegistry = classificationRegistry;
-    }
+	public void setAlleleRegistry(@Nullable AlleleRegistry alleleRegistry) {
+		this.alleleRegistry = alleleRegistry;
+	}
 
-    @Override
-    public IAlleleRegistry getAlleleRegistry() {
-        Preconditions.checkState(alleleRegistry != null, ERROR_MESSAGE);
-        return alleleRegistry;
-    }
+	@Override
+	public IAlleleHelper getAlleleHelper() {
+		return AlleleHelper.INSTANCE;
+	}
 
-    public void setAlleleRegistry(@Nullable AlleleRegistry alleleRegistry) {
-        this.alleleRegistry = alleleRegistry;
-    }
+	@Override
+	public IGeneticFactory getGeneticFactory() {
+		return GeneticFactory.INSTANCE;
+	}
 
-    @Override
-    public IAlleleHelper getAlleleHelper() {
-        return AlleleHelper.INSTANCE;
-    }
+	@Override
+	public IGeneticSaveHandler getSaveHandler() {
+		return GeneticSaveHandler.INSTANCE;
+	}
 
-    @Override
-    public IGeneticFactory getGeneticFactory() {
-        return GeneticFactory.INSTANCE;
-    }
+	@Override
+	public IIndividualRootHelper getRootHelper() {
+		return IndividualRootHelper.INSTANCE;
+	}
 
-    @Override
-    public IGeneticSaveHandler getSaveHandler() {
-        return GeneticSaveHandler.INSTANCE;
-    }
+	@Override
+	public IRootComponentRegistry getComponentRegistry() {
+		return RootComponentRegistry.INSTANCE;
+	}
 
-    @Override
-    public IRootComponentRegistry getComponentRegistry() {
-        return RootComponentRegistry.INSTANCE;
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public <R extends IIndividualRoot> RootDefinition<R> getRoot(String rootUID) {
+		Preconditions.checkNotNull(rootUID, "The uid of a root definition can't be null.");
+		return rootDefinitionByUID.computeIfAbsent(rootUID, uid -> new RootDefinition<>());
+	}
 
-    @Override
-    public IIndividualRootHelper getRootHelper() {
-        return IndividualRootHelper.INSTANCE;
-    }
+	@Override
+	public IChromosomeList getChromosomeList(String rootUID) {
+		Preconditions.checkNotNull(rootUID, "The uid of a root definition can't be null.");
+		return chromosomeListByUID.computeIfAbsent(rootUID, uid -> new ChromosomeList(rootUID));
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <R extends IIndividualRoot> RootDefinition<R> getRoot(String rootUID) {
-        Preconditions.checkNotNull(rootUID, "The uid of a root definition can't be null.");
-        return rootDefinitionByUID.computeIfAbsent(rootUID, uid -> new RootDefinition<>());
-    }
+	@Override
+	public Optional<IKaryotype> getKaryotype(String rootUID) {
+		return Optional.empty();
+	}
 
-    @Override
-    public IChromosomeList getChromosomeList(String rootUID) {
-        Preconditions.checkNotNull(rootUID, "The uid of a root definition can't be null.");
-        return chromosomeListByUID.computeIfAbsent(rootUID, uid -> new ChromosomeList(rootUID));
-    }
+	@Override
+	public Map<String, IRootDefinition> getRoots() {
+		return Collections.unmodifiableMap(rootDefinitionByUID);
+	}
 
-    @Override
-    public Optional<IKaryotype> getKaryotype(String rootUID) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Map<String, IRootDefinition> getRoots() {
-        return Collections.unmodifiableMap(rootDefinitionByUID);
-    }
-
-    @Override
-    public boolean isModPresent() {
-        return true;
-    }
+	@Override
+	public boolean isModPresent() {
+		return true;
+	}
 }

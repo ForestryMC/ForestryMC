@@ -1,6 +1,7 @@
 package genetics.api.root;
 
 import com.google.common.collect.Multimap;
+
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.components.ComponentKey;
@@ -12,13 +13,13 @@ import java.util.function.Consumer;
 
 public interface IRootContext<I extends IIndividual> {
 
-    IKaryotype getKaryotype();
+	IKaryotype getKaryotype();
 
-    IRootDefinition getDefinition();
+	IRootDefinition getDefinition();
 
-    Collection<IGeneticListener<I>> getListeners();
+	Collection<IGeneticListener<I>> getListeners();
 
-    Multimap<ComponentKey, Consumer> getComponentListeners();
+	Multimap<ComponentKey, Consumer> getComponentListeners();
 
-    Map<ComponentKey, IRootComponent<I>> createComponents(IIndividualRoot<I> root);
+	Map<ComponentKey, IRootComponent<I>> createComponents(IIndividualRoot<I> root);
 }

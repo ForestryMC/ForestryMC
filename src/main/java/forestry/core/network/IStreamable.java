@@ -16,8 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.io.IOException;
 
 public interface IStreamable {
-    void writeData(PacketBufferForestry data);
+	void writeData(PacketBufferForestry data);
 
-    @OnlyIn(Dist.CLIENT)
-    void readData(PacketBufferForestry data) throws IOException;
+	@OnlyIn(Dist.CLIENT)
+	void readData(PacketBufferForestry data) throws IOException;
 }

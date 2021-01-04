@@ -12,6 +12,7 @@ package forestry.core.gui.slots;
 
 import forestry.api.core.tooltips.IToolTipProvider;
 import forestry.api.core.tooltips.ToolTip;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
@@ -20,87 +21,87 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nullable;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
-    private boolean isPhantom;
-    private boolean canAdjustPhantom = true;
-    private boolean canShift = true;
-    private int stackLimit;
-    @Nullable
-    private ToolTip toolTips;
+	private boolean isPhantom;
+	private boolean canAdjustPhantom = true;
+	private boolean canShift = true;
+	private int stackLimit;
+	@Nullable
+	private ToolTip toolTips;
 
-    public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
-        super(inventory, slotIndex, xPos, yPos);
-        this.stackLimit = -1;
-    }
+	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
+		super(inventory, slotIndex, xPos, yPos);
+		this.stackLimit = -1;
+	}
 
-    public SlotForestry setPhantom() {
-        isPhantom = true;
-        return this;
-    }
+	public SlotForestry setPhantom() {
+		isPhantom = true;
+		return this;
+	}
 
-    public SlotForestry blockShift() {
-        canShift = false;
-        return this;
-    }
+	public SlotForestry blockShift() {
+		canShift = false;
+		return this;
+	}
 
-    @Override
-    public void putStack(ItemStack itemStack) {
-        if (!isPhantom() || canAdjustPhantom()) {
-            super.putStack(itemStack);
-        }
-    }
+	@Override
+	public void putStack(ItemStack itemStack) {
+		if (!isPhantom() || canAdjustPhantom()) {
+			super.putStack(itemStack);
+		}
+	}
 
-    public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
-        this.canAdjustPhantom = canAdjust;
-        return this;
-    }
+	@Override
+	public int getSlotStackLimit() {
+		if (stackLimit < 0) {
+			return super.getSlotStackLimit();
+		} else {
+			return stackLimit;
+		}
+	}
 
-    public SlotForestry setStackLimit(int limit) {
-        this.stackLimit = limit;
-        return this;
-    }
+	@Override
+	public boolean canTakeStack(PlayerEntity stack) {
+		return !isPhantom();
+	}
 
-    public boolean isPhantom() {
-        return this.isPhantom;
-    }
+	public SlotForestry setCanAdjustPhantom(boolean canAdjust) {
+		this.canAdjustPhantom = canAdjust;
+		return this;
+	}
 
-    public boolean canAdjustPhantom() {
-        return canAdjustPhantom;
-    }
+	public SlotForestry setStackLimit(int limit) {
+		this.stackLimit = limit;
+		return this;
+	}
 
-    @Override
-    public boolean canTakeStack(PlayerEntity stack) {
-        return !isPhantom();
-    }
+	public boolean isPhantom() {
+		return this.isPhantom;
+	}
 
-    public boolean canShift() {
-        return canShift;
-    }
+	public boolean canAdjustPhantom() {
+		return canAdjustPhantom;
+	}
 
-    @Override
-    public int getSlotStackLimit() {
-        if (stackLimit < 0) {
-            return super.getSlotStackLimit();
-        } else {
-            return stackLimit;
-        }
-    }
+	public boolean canShift() {
+		return canShift;
+	}
 
-    public void setToolTips(ToolTip toolTips) {
-        this.toolTips = toolTips;
-    }
+	public void setToolTips(ToolTip toolTips) {
+		this.toolTips = toolTips;
+	}
 
-    @Override
-    public ToolTip getToolTip(int mouseX, int mouseY) {
-        return toolTips;
-    }
+	@Override
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		return toolTips;
+	}
 
-    @Override
-    public boolean isToolTipVisible() {
-        return getStack().isEmpty();
-    }
+	@Override
+	public boolean isToolTipVisible() {
+		return getStack().isEmpty();
+	}
 
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
-    }
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY) {
+		return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
+	}
 }

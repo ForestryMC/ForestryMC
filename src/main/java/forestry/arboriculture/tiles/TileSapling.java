@@ -19,6 +19,7 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.arboriculture.worldgen.FeatureArboriculture;
 import forestry.core.worldgen.FeatureBase;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
+
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
@@ -36,112 +38,112 @@ import javax.annotation.Nonnull;
 import java.util.Random;
 
 public class TileSapling extends TileTreeContainer {
-    public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
+	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
 
-    private int timesTicked = 0;
+	private int timesTicked = 0;
 
-    public TileSapling() {
-        super(ArboricultureTiles.SAPLING.tileType());
-    }
+	public TileSapling() {
+		super(ArboricultureTiles.SAPLING.tileType());
+	}
 
-    /* SAVING & LOADING */
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
+	private static int getRequiredMaturity(World world, ITree tree) {
+		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
+		return Math.round(tree.getRequiredMaturity() * maturationModifier);
+	}
 
-        timesTicked = compoundNBT.getInt("TT");
-    }
+	/* SAVING & LOADING */
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
+		timesTicked = compoundNBT.getInt("TT");
+	}
 
-        compoundNBT.putInt("TT", timesTicked);
-        return compoundNBT;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-    @Override
-    public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
-        timesTicked++;
-        tryGrow(rand, false);
-    }
+		compoundNBT.putInt("TT", timesTicked);
+		return compoundNBT;
+	}
 
-    private static int getRequiredMaturity(World world, ITree tree) {
-        ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
-        float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
-        return Math.round(tree.getRequiredMaturity() * maturationModifier);
-    }
+	@Override
+	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+		timesTicked++;
+		tryGrow(rand, false);
+	}
 
-    public boolean canAcceptBoneMeal(Random rand) {
-        ITree tree = getTree();
+	public boolean canAcceptBoneMeal(Random rand) {
+		ITree tree = getTree();
 
-        if (tree == null) {
-            return false;
-        }
+		if (tree == null) {
+			return false;
+		}
 
-        int maturity = getRequiredMaturity(world, tree);
-        if (timesTicked < maturity) {
-            return true;
-        }
+		int maturity = getRequiredMaturity(world, tree);
+		if (timesTicked < maturity) {
+			return true;
+		}
 
-        Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), true);
-        if (generator instanceof FeatureArboriculture) {
-            FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
-            arboricultureGenerator.preGenerate(world, rand, getPos());
-            return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
-        } else {
-            return true;
-        }
-    }
+		Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), true);
+		if (generator instanceof FeatureArboriculture) {
+			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
+			arboricultureGenerator.preGenerate(world, rand, getPos());
+			return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
+		} else {
+			return true;
+		}
+	}
 
-    public void tryGrow(Random random, boolean bonemealed) {
-        ITree tree = getTree();
+	public void tryGrow(Random random, boolean bonemealed) {
+		ITree tree = getTree();
 
-        if (tree == null) {
-            return;
-        }
+		if (tree == null) {
+			return;
+		}
 
-        int maturity = getRequiredMaturity(world, tree);
-        if (timesTicked < maturity) {
-            if (bonemealed) {
-                timesTicked = maturity;
-            }
-            return;
-        }
+		int maturity = getRequiredMaturity(world, tree);
+		if (timesTicked < maturity) {
+			if (bonemealed) {
+				timesTicked = maturity;
+			}
+			return;
+		}
 
-        Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), bonemealed);
-        final boolean generated;
-        if (generator instanceof FeatureBase) {
-            generated = ((FeatureBase) generator).place(world, random, getPos(), false);
-        } else {
-            generated = generator.generate(
-                    (ISeedReader) world,
-                    ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
-                    random,
-                    getPos(),
-                    IFeatureConfig.NO_FEATURE_CONFIG
-            );
-        }
+		Feature generator = tree.getTreeGenerator((ISeedReader) world, getPos(), bonemealed);
+		final boolean generated;
+		if (generator instanceof FeatureBase) {
+			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
+		} else {
+			generated = generator.generate(
+					(ISeedReader) world,
+					((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
+					random,
+					getPos(),
+					IFeatureConfig.NO_FEATURE_CONFIG
+			);
+		}
 
-        if (generated) {
-            IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(
-                    world,
-                    getOwnerHandler().getOwner()
-            );
-            breedingTracker.registerBirth(tree);
-        }
-    }
+		if (generated) {
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(
+					world,
+					getOwnerHandler().getOwner()
+			);
+			breedingTracker.registerBirth(tree);
+		}
+	}
 
-    @Nonnull
-    @Override
-    public IModelData getModelData() {
-        ITree tree = getTree();
-        if (tree == null) {
-            return EmptyModelData.INSTANCE;
-        }
-        return new ModelDataMap.Builder().withInitial(
-                TREE_SPECIES,
-                tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)
-        ).build();
-    }
+	@Nonnull
+	@Override
+	public IModelData getModelData() {
+		ITree tree = getTree();
+		if (tree == null) {
+			return EmptyModelData.INSTANCE;
+		}
+		return new ModelDataMap.Builder().withInitial(
+				TREE_SPECIES,
+				tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)
+		).build();
+	}
 }

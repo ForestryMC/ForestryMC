@@ -18,6 +18,7 @@ import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -38,109 +39,109 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Random;
 
 public class BlockCocoon extends Block {
-    public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(
-            0.3125F,
-            0.3125F,
-            0.3125F,
-            0.6875F,
-            1F,
-            0.6875F
-    );
-    private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
+	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(
+			0.3125F,
+			0.3125F,
+			0.3125F,
+			0.6875F,
+			1F,
+			0.6875F
+	);
+	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
-    public BlockCocoon() {
-        super(Block.Properties.create(MaterialCocoon.INSTANCE)
-                              .tickRandomly()
-                              .notSolid()
-                              .sound(SoundType.GROUND));
+	public BlockCocoon() {
+		super(Block.Properties.create(MaterialCocoon.INSTANCE)
+				.tickRandomly()
+				.notSolid()
+				.sound(SoundType.GROUND));
 
-        setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-                            .with(AlleleButterflyCocoon.AGE, 0)
-        );
-    }
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+				.with(AlleleButterflyCocoon.AGE, 0)
+		);
+	}
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(COCOON, AlleleButterflyCocoon.AGE);
-    }
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(COCOON, AlleleButterflyCocoon.AGE);
+	}
 
-    //TODO
-    //	@OnlyIn(Dist.CLIENT)
-    //	@Override
-    //	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-    //		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-    //		if (cocoon != null) {
-    //			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-    //				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
-    //		}
-    //		return super.getActualState(state, world, pos);
-    //	}
+	//TODO
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
+	//		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+	//		if (cocoon != null) {
+	//			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
+	//				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+	//		}
+	//		return super.getActualState(state, world, pos);
+	//	}
 
-    @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-        TileCocoon tileCocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-        if (tileCocoon == null) {
-            return;
-        }
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
 
-        if (tileCocoon.isRemoved()) {
-            return;
-        }
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new TileCocoon(false);
+	}
 
-        tileCocoon.onBlockTick();
-    }
+	@Override
+	public ItemStack getPickBlock(
+			BlockState state,
+			RayTraceResult target,
+			IBlockReader world,
+			BlockPos pos,
+			PlayerEntity player
+	) {
+		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (tile == null) {
+			return ItemStack.EMPTY;
+		}
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
+		IButterfly caterpillar = tile.getCaterpillar();
+		int age = tile.getAge();
 
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileCocoon(false);
-    }
+		ItemStack stack = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.COCOON);
+		if (!stack.isEmpty() && stack.getTag() != null) {
+			stack.getTag().putInt(ItemButterflyGE.NBT_AGE, age);
+		}
+		return stack;
+	}
 
-    @Override
-    public BlockState updatePostPlacement(
-            BlockState state,
-            Direction facing,
-            BlockState facingState,
-            IWorld worldIn,
-            BlockPos currentPos,
-            BlockPos facingPos
-    ) {
-        if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
-            return state;
-        }
-        return Blocks.AIR.getDefaultState();
-    }
+	@Override
+	public BlockState updatePostPlacement(
+			BlockState state,
+			Direction facing,
+			BlockState facingState,
+			IWorld worldIn,
+			BlockPos currentPos,
+			BlockPos facingPos
+	) {
+		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
+			return state;
+		}
+		return Blocks.AIR.getDefaultState();
+	}
 
-    @Override
-    public ItemStack getPickBlock(
-            BlockState state,
-            RayTraceResult target,
-            IBlockReader world,
-            BlockPos pos,
-            PlayerEntity player
-    ) {
-        TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
-        if (tile == null) {
-            return ItemStack.EMPTY;
-        }
+	//other shapes (collision etc) defer to this in block I believe
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+		return BOUNDING_BOX;
+	}
 
-        IButterfly caterpillar = tile.getCaterpillar();
-        int age = tile.getAge();
+	@Override
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+		TileCocoon tileCocoon = TileUtil.getTile(world, pos, TileCocoon.class);
+		if (tileCocoon == null) {
+			return;
+		}
 
-        ItemStack stack = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.COCOON);
-        if (!stack.isEmpty() && stack.getTag() != null) {
-            stack.getTag().putInt(ItemButterflyGE.NBT_AGE, age);
-        }
-        return stack;
-    }
+		if (tileCocoon.isRemoved()) {
+			return;
+		}
 
-    //other shapes (collision etc) defer to this in block I believe
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        return BOUNDING_BOX;
-    }
+		tileCocoon.onBlockTick();
+	}
 }

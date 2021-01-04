@@ -13,43 +13,45 @@ package forestry.apiculture.network.packets;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.network.*;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketCandleUpdate extends ForestryPacket implements IForestryPacketClient {
-    private final BlockPos pos;
-    private final int colour;
-    private final boolean lit;
+	private final BlockPos pos;
+	private final int colour;
+	private final boolean lit;
 
-    public PacketCandleUpdate(TileCandle tileCandle) {
-        pos = tileCandle.getPos();
-        colour = tileCandle.getColour();
-        lit = tileCandle.isLit();
-    }
+	public PacketCandleUpdate(TileCandle tileCandle) {
+		pos = tileCandle.getPos();
+		colour = tileCandle.getColour();
+		lit = tileCandle.isLit();
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.CANDLE_UPDATE;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.CANDLE_UPDATE;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeBlockPos(pos);
-        data.writeInt(colour);
-        data.writeBoolean(lit);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeBlockPos(pos);
+		data.writeInt(colour);
+		data.writeBoolean(lit);
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-            BlockPos pos = data.readBlockPos();
-            int colour = data.readInt();
-            boolean lit = data.readBoolean();
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+			BlockPos pos = data.readBlockPos();
+			int colour = data.readInt();
+			boolean lit = data.readBoolean();
 
-            TileUtil.actOnTile(player.world, pos, TileCandle.class, tile -> tile.onPacketUpdate(colour, lit));
-        }
-    }
+			TileUtil.actOnTile(player.world, pos, TileCandle.class, tile -> tile.onPacketUpdate(colour, lit));
+		}
+	}
 }

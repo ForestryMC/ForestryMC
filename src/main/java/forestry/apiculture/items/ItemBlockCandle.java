@@ -15,43 +15,45 @@ import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockCandleWall;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockWallForestry;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCandleWall> implements IColoredItem {
 
-    public ItemBlockCandle(BlockCandle block, BlockCandleWall wall) {
-        super(block, wall, new Item.Properties().group(ItemGroups.tabApiculture));
-    }
+	public ItemBlockCandle(BlockCandle block, BlockCandleWall wall) {
+		super(block, wall, new Item.Properties().group(ItemGroups.tabApiculture));
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass) {
-        int value = 0xffffff;
-        if (pass == 1 && stack.getTag() != null) {
-            CompoundNBT tag = stack.getTag();
-            if (tag.contains(BlockCandle.COLOUR_TAG_NAME)) {
-                value = tag.getInt(BlockCandle.COLOUR_TAG_NAME);
-            }
-        }
-        return value;
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int pass) {
+		int value = 0xffffff;
+		if (pass == 1 && stack.getTag() != null) {
+			CompoundNBT tag = stack.getTag();
+			if (tag.contains(BlockCandle.COLOUR_TAG_NAME)) {
+				value = tag.getInt(BlockCandle.COLOUR_TAG_NAME);
+			}
+		}
+		return value;
+	}
 
-    @Override
-    public String getTranslationKey(ItemStack itemStack) {
-        String value = getBlock().getTranslationKey();
-        if (itemStack.getTag() != null && itemStack.getTag().contains(BlockCandle.COLOUR_TAG_NAME)) {
-            value = value + ".dyed";
-        }
+	@Override
+	public String getTranslationKey(ItemStack itemStack) {
+		String value = getBlock().getTranslationKey();
+		if (itemStack.getTag() != null && itemStack.getTag().contains(BlockCandle.COLOUR_TAG_NAME)) {
+			value = value + ".dyed";
+		}
 
-        if (BlockCandle.isLit(itemStack)) {
-            value = value + ".lit";
-        } else {
-            value = value + ".stump";
-        }
-        return value;
-    }
+		if (BlockCandle.isLit(itemStack)) {
+			value = value + ".lit";
+		} else {
+			value = value + ".stump";
+		}
+		return value;
+	}
 }

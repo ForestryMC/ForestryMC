@@ -12,6 +12,7 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 
@@ -20,34 +21,34 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
-    private final Set<IMoistenerRecipe> recipes = new HashSet<>();
+	private final Set<IMoistenerRecipe> recipes = new HashSet<>();
 
-    public MoistenerRecipeManager() {
-        super(IMoistenerRecipe.TYPE);
-    }
+	public MoistenerRecipeManager() {
+		super(IMoistenerRecipe.TYPE);
+	}
 
-    public boolean isResource(RecipeManager manager, ItemStack resource) {
-        if (resource.isEmpty()) {
-            return false;
-        }
+	public boolean isResource(RecipeManager manager, ItemStack resource) {
+		if (resource.isEmpty()) {
+			return false;
+		}
 
-        for (IMoistenerRecipe rec : getRecipes(manager)) {
-            if (rec.getResource().test(resource)) {
-                return true;
-            }
-        }
+		for (IMoistenerRecipe rec : getRecipes(manager)) {
+			if (rec.getResource().test(resource)) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Nullable
-    public IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item) {
-        for (IMoistenerRecipe recipe : getRecipes(manager)) {
-            if (recipe.getResource().test(item)) {
-                return recipe;
-            }
-        }
+	@Nullable
+	public IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item) {
+		for (IMoistenerRecipe recipe : getRecipes(manager)) {
+			if (recipe.getResource().test(item)) {
+				return recipe;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 }

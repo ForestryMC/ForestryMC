@@ -1,0 +1,2044 @@
+# Author : PixelVoxel, SupremeHo, ZoniIC645, Seria, Tsurumaki Maki
+# Foundation : Phanthalassa, Nark31, TeamMMKP(puyo061, SniperElisia, alvin1317)
+
+
+####################
+# CORE
+####################
+
+death.engine.clockwork.player=%1$s은(는) 시계태엽에 찔려 사망했습니다. 이딴 걸 만든 %2$s은(는) 비난 받아 마땅합니다.
+death.engine.clockwork=%1$s은(는) 시계태엽에 찔려 사망했습니다.
+
+for.chat.cannotmemorizeagain=이 정보를 이미 달달 외웠습니다.
+for.chat.memorizednote=당신은 이 정보를 박박 외우고 구겨서 버렸습니다.
+for.chat.memorizednote2=당신은 %1$s와(과) %2$s을(를) 교배해 %3$s을(를) 만들 수 있다는 자신이 넘쳤습니다!
+
+for.chat.command.aliases=명령어: %s
+for.chat.command.list=가능한 하위 명령어:
+for.chat.command.permlevel=권한 단계: %s
+for.chat.command.noperms=이 명령어를 실행할 권한이 없습니다.
+
+for.chat.command.forestry.help=포레스트리를 위한 다양한 명령어들
+for.chat.command.forestry.format=형식: /%s <하위 명령어>
+
+for.chat.command.forestry.version.desc=- %s : 버전 정보
+for.chat.command.forestry.version.help=현재 버전
+for.chat.command.forestry.version.format=형식: /%s
+
+for.chat.command.forestry.modules.desc=- %s : 포레스트리 모듈 목록
+for.chat.command.forestry.modules.help=포레스트리 모듈의 목록입니다. 초록은 활성화, 빨강은 비활성화를 의미합니다.
+for.chat.command.forestry.modules.format=형식: /%s
+
+for.chat.command.forestry.modules.info.desc=- %s : 특정 모듈에 대한 정보
+for.chat.command.forestry.modules.info.help=특정 모듈에 대한 정보를 출력합니다.
+for.chat.command.forestry.modules.info.format=형식: /%s <module-name>
+
+for.chat.help='%s'를 입력해 정보를 얻으십시오.
+for.chat.modules.error=%s 모듈에 관한 정보가 없습니다.
+for.chat.version=마인크래프트 %2$s 버전 용 포레스트리 %1$s (최신 버전: %3$s).
+
+for.circuit.dampener.1=화염 감쇠기
+for.circuit.dampener.1.description.1=최대 출력을 10 RF/t로 제한합니다.
+for.circuit.dampener.1.description.2=연료 출력 보존
+for.circuit.electric.boost.1=전기 증폭 I
+for.circuit.electric.boost.1.description.1=출력을 10 RF/t만큼 증가시킵니다.
+for.circuit.electric.boost.1.description.2=입력이 4 EU/t만큼 증가합니다.
+for.circuit.electric.boost.2=전기 증폭 II
+for.circuit.electric.boost.2.description.1=출력을 20 RF/t만큼 증가시킵니다.
+for.circuit.electric.boost.2.description.2=입력이 7 EU/t만큼 증가합니다.
+for.circuit.electric.choke.1=전기 감쇠
+for.circuit.electric.choke.1.description.1=출력을 5 RF/t만큼 감소시킵니다.
+for.circuit.electric.choke.1.description.2=입력을 1 EU/t만큼 감소시킵니다.
+for.circuit.electric.efficiency.1=전기 효율
+for.circuit.electric.efficiency.1.description.1=Reduces intake by 1 EU/t
+for.circuit.machine.speed.boost.1=속도 증폭 I
+for.circuit.machine.speed.boost.1.description.1=속도를 12.5% 증가시킵니다.
+for.circuit.machine.speed.boost.1.description.2=전력 사용량을 10% 증가시킵니다.
+for.circuit.machine.speed.boost.2=속도 증폭 II
+for.circuit.machine.speed.boost.2.description.1=속도를 25% 증가시킵니다.
+for.circuit.machine.speed.boost.2.description.2=전력 사용량을 10% 증가시킵니다.
+for.circuit.machine.efficiency.1=기계 효율
+for.circuit.machine.efficiency.1.description.1=전력 사용량을 10% 감소시킵니다.
+
+for.circuit.layout.dummy.name=활성화되지 않음
+for.circuit.layout.dummy.usage=없음
+
+for.circuit.layout.engine.tin.name=전기 엔진
+for.circuit.layout.engine.tin.usage=전기 엔진에서 사용
+
+for.circuit.layout.farms.managed.name=자동 농장
+for.circuit.layout.farms.managed.usage=자동 농장에서 사용
+
+for.circuit.layout.farms.manual.name=수동 농장
+for.circuit.layout.farms.manual.usage=수동 농장에서 사용
+
+for.circuit.layout.machine.upgrade.name=기계 업그레이드
+for.circuit.layout.machine.upgrade.usage=기계에 사용
+
+for.flowers.cacti=선인장
+for.flowers.end=엔드
+for.flowers.gourd=박류
+for.flowers.jungle=정글
+for.flowers.mushrooms=버섯
+for.flowers.nether=네더
+for.flowers.vanilla=꽃
+for.flowers.wheat=밀
+for.flowers.snow=눈
+
+fluid.bio.ethanol=에탄올
+fluid.biomass=바이오매스
+fluid.glass=액체 유리
+fluid.for.honey=꿀
+fluid.ice=파쇄된 얼음
+fluid.juice=과일 주스
+fluid.short.mead=벌꿀 술
+fluid.milk=우유
+fluid.seed.oil=씨앗 기름
+
+tile.forestry.fluid.bio.ethanol.name=에탄올
+tile.forestry.fluid.biomass.name=바이오매스
+tile.forestry.fluid.glass.name=액체 유리
+tile.forestry.fluid.for.honey.name=꿀
+tile.forestry.fluid.ice.name=파쇄된 얼음
+tile.forestry.fluid.juice.name=과일 주스
+tile.forestry.fluid.short.mead.name=벌꿀 술
+tile.forestry.fluid.milk.name=우유
+tile.forestry.fluid.seed.oil.name=씨앗 기름
+
+for.gui.access=접근
+for.gui.active=활성화
+for.gui.addressee.player=플레이어
+for.gui.addressee.trader=거래소
+
+for.gui.alyzer.authority=저자
+for.gui.alyzer.classification=분류
+for.gui.alyzer.extinct=도태
+for.gui.alyzer.nodescription=마인크래프티아 백과사전은 해당 견본에 대한 접근을 제공하지 않습니다.
+for.gui.alyzer.overview=분석 가능
+
+for.gui.area=영역
+for.gui.arid=건조
+for.gui.beach=해변
+
+for.gui.portablealyzer=휴대용 유전분석기
+for.gui.portablealyzer.help=벌, 묘목, 나비 등등을 놓고 억제제로 꿀이나 감로를 넣으세요.
+
+for.gui.beealyzer.artificial=인공 교배로 탄생함
+for.gui.beealyzer.behaviour=행동 특성
+for.gui.beealyzer.generations=포획 후 %s 세대 지남
+for.gui.beealyzer.mutations=가능한 변이
+for.gui.beealyzer.natural=자연에서 탄생함
+for.gui.beealyzer.produce=나올 수 있는 부산물
+for.gui.beealyzer.specialty=나올 수 있는 특별한 부산물
+
+for.gui.database.tab.active_species.name=우성
+for.gui.database.tab.inactive_species.name=열성
+for.gui.database.tab.products.name=부산물
+for.gui.database.tab.mutations.name=변이
+for.gui.database.mutations.further=Further Mutations
+for.gui.database.mutations.resultant=Resultant Mutations
+for.gui.database.support=This individual has currently no integration for the database.
+
+for.gui.blank=비어있음
+for.gui.cave=동굴 거주력
+for.gui.climate=기후
+for.gui.cold=추움
+for.gui.crop=작물
+for.gui.currentBiome=현재 생물군계 
+for.gui.currentOutput=현재 출력
+for.gui.damp=습함
+for.gui.derelict=Derelict
+for.gui.desert=사막
+for.gui.didyouknow=알고 계십니까
+for.gui.diurnal=주행성
+for.gui.drones=일벌
+for.gui.effect=효과
+for.gui.empty=비어 있음
+for.gui.emptysocket=빈 소켓
+for.gui.empty.slot.camouflage.multiblock=멀티블록 위장 칸
+for.gui.empty.slot.camouflage=위장 칸
+for.gui.socket.remove=인두기로 제거 가능
+for.gui.energy=에너지
+for.gui.environment=환경
+for.gui.evolution=진화
+for.gui.fecundated=짝짓기 함
+for.gui.fertility=번식력
+for.gui.fireresist=불연성
+for.gui.flowers=꽃 종류
+for.gui.flyer=우천 활동력
+for.gui.flyer.tooltip=우천 활동력
+for.gui.general=일반
+for.gui.heat=열
+for.gui.hellish=지옥같음
+for.gui.hot=더움
+for.gui.humidity=습도 
+for.gui.humidtol=습도 인내력
+for.gui.hybrid=혼종
+for.gui.icy=얼음장
+for.gui.imprinter.cheater=(더러운 해커!)
+for.gui.imprinter.name=유전자 각인기
+for.gui.inactive=비활성화
+for.gui.life=- 수명
+for.gui.lifespan=수명
+for.gui.normal=보통
+
+for.gui.escritoire.probe=Examine Specimens
+for.gui.escritoire.instructions=중앙에 유전 샘플을 두어 시작합니다. 왼쪽에 더 배치하는 것으로 더 많은 도움을 받을 수 있습니다.
+for.gui.escritoire.attempt.number= %s번째 시도
+
+for.gui.escritoire.notes.level1.1=여행길에 좀 특별한 종을 찾았다.
+for.gui.escritoire.notes.level1.2=이 이상한 친구는 조금 연구할 가치가 있을 것 같다.
+for.gui.escritoire.notes.level1.3=좋아. 지금 당장이라도 연구를 시작하고 싶어.
+
+for.gui.escritoire.notes.level2.1=자연은 참 대단하군.
+for.gui.escritoire.notes.level2.2=가까이 보려 하자, 이 종은 꿈틀대었다.
+for.gui.escritoire.notes.level2.3=아래쪽의 이상한 자국들이 날 궁금하게 한다.
+for.gui.escritoire.notes.level2.4=내가 이 연구를 끝낸다면, 이건 세기의 대발견이 될거야.
+
+for.gui.escritoire.notes.level3.1=몇 가지 가설 끝에 새로운 단서를 발견했다.
+for.gui.escritoire.notes.level3.2=나는 이 발견에 머리를 갸우뚱했고 다른 모든 것들에 질문하기 시작했다.
+for.gui.escritoire.notes.level3.3=나는 잘못 본 거라고 생각했지만, 틀림없는 사실이었다.
+for.gui.escritoire.notes.level3.4=보지 못했던 반점이 나를 이 종의 분류에 대한 궁금증으로 이끌었다.
+
+for.gui.escritoire.notes.level4.1=내 비명에 가정부가 내 서재에 걱정스러운 모습으로 들어왔다.
+for.gui.escritoire.notes.level4.2=절망과 광란 속에서, 나는 내 노트를 전부 찢었다!
+for.gui.escritoire.notes.level4.3=이건... 정말이지 말도 안 돼!
+for.gui.escritoire.notes.level4.4=그럴 리 없어. 전례가 없다고!
+for.gui.escritoire.notes.level4.5=오함마로도 흠집을 내지 못해서, 전기톱을 가져와야만 했다.
+for.gui.escritoire.notes.level4.6=그 작고, 징그럽고, 귀여운 눈이 날 보았다고 맹세할게.
+for.gui.escritoire.notes.level4.7=지금 이거 비웃은거지? 웃음소리가 들려? 누가 웃고 있는거지?
+
+for.gui.escritoire.notes.success.1=유-레카!
+for.gui.escritoire.notes.success.2=됐다! 내 이름은 역사에 길이 남을 거야!
+for.gui.escritoire.notes.success.3=동료들이 감동할 거야!
+for.gui.escritoire.notes.success.4=모두가 날 부러워할 거야!
+for.gui.escritoire.notes.success.5=됐어!
+
+for.gui.escritoire.notes.failure.1=모든 것이 날아갔다.
+for.gui.escritoire.notes.failure.2=나는 내 노트를 전부 구겨서 불구덩이에 태웠다.
+for.gui.escritoire.notes.failure.3=왜? 처음엔 그렇게 잘 됐는데...
+for.gui.escritoire.notes.failure.4=실패다. 다시 한 번.
+for.gui.escritoire.notes.failure.5=오...
+
+for.gui.mail.foreveryattached=for every attached
+for.gui.mail.from=From
+for.gui.mail.nametrader=거래소의 이름을 지어주세요
+for.gui.mail.nothing.to.trade=거래소에 거래할 품목이 없습니다
+for.gui.mail.no.trader=해당 이름을 가진 거래소가 없습니다.
+for.gui.mail.pleasesend=다음 물품을 보내주세요 : 
+for.gui.mail.order.attached=Please find your order attached.
+for.gui.mail.order.filled.one=%SENDER로부터의 주문이 처리되었습니다.
+for.gui.mail.order.filled.multiple=%SENDER로부터의 주문이 %COUNT개 처리되었습니다.
+for.gui.mail.to=To
+for.gui.mail.receive=받는 물품
+for.gui.mail.send=보내는 물품
+
+for.gui.maxenergy=최대 에너지
+for.gui.maxenergyreceive=최대 입력
+for.gui.maxspeed=최대
+for.gui.metabolism=신진대사
+for.gui.nether=지옥
+for.gui.nocturnal=야행성
+for.gui.noeffect=효과 없음
+for.gui.owner=소유자
+for.gui.page=페이지
+
+for.gui.plains=평원
+for.gui.princesses=공주벌
+for.gui.produce=생산
+for.gui.queens=여왕
+
+for.gui.solder.north=북
+for.gui.solder.south=남
+for.gui.solder.east=동
+for.gui.solder.west=서
+
+forestry.allele.true=예
+forestry.allele.false=아니오
+
+forestry.allele.average=평균
+forestry.allele.gigantic=거대함
+forestry.allele.normal=보통
+
+forestry.allele.slowest=가장 느림
+forestry.allele.slower=더 느림
+forestry.allele.slow=느림
+forestry.allele.fast=빠름
+forestry.allele.faster=더 빠름
+forestry.allele.fastest=가장 빠름
+forestry.allele.maximum=최고
+
+forestry.allele.smallest=가장 작음
+forestry.allele.smaller=더 작음
+forestry.allele.small=작음
+forestry.allele.large=큼
+forestry.allele.larger=더 큼
+forestry.allele.largest=가장 큼
+
+forestry.allele.lowest=가장 낮음
+forestry.allele.lower=더 낮음
+forestry.allele.low=낮음
+forestry.allele.high=높음
+forestry.allele.higher=더 높음
+forestry.allele.highest=가장 높음
+
+forestry.allele.tolerance.both1=상하 1
+forestry.allele.tolerance.both2=상하 2
+forestry.allele.tolerance.both3=상하 3
+forestry.allele.tolerance.both4=상하 4
+forestry.allele.tolerance.both5=상하 5
+forestry.allele.tolerance.down1=하향 1
+forestry.allele.tolerance.down2=하향 2
+forestry.allele.tolerance.down3=하향 3
+forestry.allele.tolerance.down4=하향 4
+forestry.allele.tolerance.down5=하향 5
+forestry.allele.tolerance.none=허용범위 없음
+forestry.allele.tolerance.up1=상향 1
+forestry.allele.tolerance.up2=상향 2
+forestry.allele.tolerance.up3=상향 3
+forestry.allele.tolerance.up4=상향 4
+forestry.allele.tolerance.up5=상향 5
+
+forestry.allele.lifespan.shortest=매우 짧음
+forestry.allele.lifespan.shorter=더 짧음
+forestry.allele.lifespan.short=짧음
+forestry.allele.lifespan.shortened=짧아짐
+forestry.allele.lifespan.normal=보통
+forestry.allele.lifespan.elongated=길어짐
+forestry.allele.lifespan.long=김
+forestry.allele.lifespan.longer=더 김
+forestry.allele.lifespan.longest=매우 김
+
+for.gui.size=크기
+for.gui.slots=%USED/%SIZE 슬롯
+for.gui.species=종
+for.gui.speciescount=종류
+for.gui.speed=생산
+for.gui.pollination=수분력
+for.gui.stored=저장됨
+for.gui.temperature=온도 
+for.gui.tolerance=허용 범위
+for.gui.temptol=온도 허용 
+for.gui.tooltip.tmi=Shift를 눌러 자세히
+for.gui.tooltip.liquid.amount=%,d / %,d mB
+for.gui.triple=트리플
+for.gui.unknown=확인되지 않은 유전자
+for.gui.warm=온난함
+for.gui.water=물
+for.gui.worker=- 생산
+
+for.gui.camouflage_spray_can=위장용 스프레이 캔
+
+for.hints.apiaristsuit.desc=방충복을 차려입으면, 당신을 벌의 해로운 효과들로부터 보호해 줄 것입니다.
+for.hints.apiaristsuit.tag=벌 옷!
+for.hints.beebiomes.desc=벌은 그들의 종에 맞는 생물군계에서만 일합니다. 휴대용 분석기와 서식지 추적기로 찾아보세요.
+for.hints.beebiomes.tag=찾아라 벌들의 왕국!
+for.hints.beebreeding.desc=다른 종류의 일벌과 공주벌을 교배하는 것은 또 다른 종을 만들어낼 확률이 있습니다.
+for.hints.beebreeding.tag=벌을 교배하라!
+for.hints.beeflowers.desc=어떤 벌은 그 종에 맞는 꽃이 필요합니다. 어떤 건 일상적이지만, 그렇지 않은 것들도 있습니다.
+for.hints.beeflowers.tag=이 벌은 꽃이 필요해요.
+for.hints.beejubilance.desc=행복한 벌들만 그들의 특별한 부산물을 생산해냅니다. 그들이 가장 선호하는 기후에서 일하도록 해 주세요.
+for.hints.beejubilance.tag=야 꿀벌, 왜 우는 거야?
+for.hints.cooldownloss.desc=엔진이 휴식기에 들어간다는 것은 일정량의 에너지를 잃어버린다는 뜻입니다.
+for.hints.cooldownloss.tag=휴식은 손실이다!
+for.hints.crating.desc=카펜터의 주 업무는 남는 자원을 압축시키는 것입니다. 대부분의 블록과 아이템들이 나무 상자로 포장죌 수 있습니다.
+for.hints.crating.tag=여분을 뭉쳐라!
+for.hints.energybuffer.desc=엔진은 에너지가 목표에 닿지 못할 때 해당 에너지를 일시적으로 저장할 수 있습니다.
+for.hints.energybuffer.tag=에너지 버퍼링!
+for.hints.energyunit.desc=엔진의 출력은 RF/t(Redstone Flux per tick)이라는 단위로 측정됩니다. 1초는 20틱입니다.
+for.hints.energyunit.tag="레드스톤 플럭스"라고 말해!
+for.hints.enginebronzefuels.desc=바이오가스 엔진에는 다양한 연료를 넣어 사용할 수 있습니다: 바이오매스, 씨앗 기름, 꿀, 우유 그리고 심지어 물도요!
+for.hints.enginebronzefuels.tag=닥치는 대로 넣어!
+for.hints.enginebronzeheatloss.desc=바이오가스 엔진에 물을 쓸 수 있다고 해도, 효율이 매우 낮고 지속적으로 용암을 소모합니다.
+for.hints.enginebronzeheatloss.tag=물은 답을 모른다고!
+for.hints.enginebronzeoutput.desc=바이오가스 엔진의 여러 연료는 각자 다른 발전량을 가집니다. 기본 출력 범위는 10 RF/t에서 50 RF/t정도입니다.
+for.hints.enginebronzeoutput.tag=골라 골라!
+for.hints.enginebronzewaste.desc=토탄 엔진과 다르게, 비활성화된 바이오가스 엔진은 현재 시스템 내의 연료를 소모하지 않습니다.
+for.hints.enginebronzewaste.tag=연료는 보존된다
+for.hints.enginecopperfuels.desc=토탄 엔진은 처리되지 않은 토탄도 사용 가능하지만, 역청 토탄을 사용하면 출력량이 두 배가 됩니다.
+for.hints.enginecopperfuels.tag=모든 연료를 써먹어라!
+for.hints.enginecopperwaste.desc=비활성화된 토탄 엔진은 어떠한 에너지를 생산하지 않음에도 지속적으로 토탄을 소모합니다.
+for.hints.enginecopperwaste.tag=에너지 줄줄 샌다!
+for.hints.enginetinbatteries.desc=굳이 전선을 연결하지 않아도 배터리로 전기 엔진을 돌릴 수 있습니다.
+for.hints.enginetinbatteries.tag=밧데리 가져와!
+for.hints.enginetinchoke.desc=전기 엔진은 회로판을 장착함으로 출력과 입력 에너지를 제한할 수 있습니다.
+for.hints.enginetinchoke.tag=출력은 통제다!
+for.hints.flowerjungle.desc=정글 꽃은 고사리와 덩굴을 의미합니다.
+for.hints.flowerjungle.tag="정글" 꽃은 뭐지?
+for.hints.flowernether.desc=네더 꽃은 네더 사마귀를 의미합니다.
+for.hints.flowernether.tag="네더" 꽃은 뭐지?
+for.hints.forcedcooldown.desc=엔진은 생산된 에너지가 소모되지 않을 경우 과열됩니다. 융해점에 도달하면 자동으로 휴식에 들어갑니다.
+for.hints.forcedcooldown.tag=과열 조심해!
+for.hints.generatorfuels.desc=바이오 발전기에는 바이오매스와 바이오 연료를 넣을 수 있습니다. 바이오 연료를 사용할 때 최고 효율이 나옵니다.
+for.hints.generatorfuels.tag=골라 골라!
+for.hints.habitatlocatoruse.desc=약간의 시간 후에, 서식지 추적기는 가장 가까운 적합한 생물군계를 가리킵니다. 해당 생물군계를 찾을 시, 바늘이 회전합니다.
+for.hints.habitatlocatoruse.tag=서식지 추적기 808!
+for.hints.honeyfood.desc=꿀과 벌의 다양한 부산물들로 다양한 종류의 음식을 만들 수 있습니다.
+for.hints.honeyfood.tag=음식을 만들자!
+for.hints.manualpeat.desc=토탄은 토탄 습지에서 자동으로 생산되긴 하지만, 아마도 손으로 직접 캐고 싶을 겁니다.
+for.hints.manualpeat.tag=습지 필요없다!
+for.hints.moistenerproducts.desc=맞는 재료를 주면, 당신의 가습기는 이끼 낀 조약돌과 이끼 낀 석재벽돌을 만들어냅니다.
+for.hints.moistenerproducts.tag=이끼 있기?
+for.hints.nopowerrequired.desc=이 기계는 전력이 필요하지 않습니다.
+for.hints.nopowerrequired.tag=전력 불필요
+for.hints.peatharvest.desc=물 근처에 둔 습지 땅은 숙성되면 토탄이 됩니다. 삽으로 수확하세요.
+for.hints.peatharvest.tag=토탄 폭탄!
+for.hints.pipette.desc=기계의 액체 저장공간 안에 남은 액체로 인해 고민이라면, 빈 피펫으로 기계를 우클릭하는 것으로 액체를 비울 수 있습니다.
+for.hints.pipette.tag=탱크싹싹
+for.hints.postage.desc=편지를 보내는 것은 우표를 소비합니다. 기본 요금은 1n이고, 첨부 시마다 1n이 추가로 부과됩니다.
+for.hints.postage.tag=열정페이 말고 우표페이
+for.hints.powerraintank.desc=전력을 받지 않는 빗물 저장기도 물을 받을 수 있습니다. 그러나 물을 병에 담을 때는, 엔진으로부터의 에너지가 요구됩니다.
+for.hints.powerraintank.tag=물을 담을 땐 에너지가 필요합니다!
+for.hints.shortmead.desc=발효기는 바이오매스를 만들 뿐만 아니라, 감로와 꿀을 사용해 벌꿀 술을 만들 수 있습니다.
+for.hints.shortmead.tag=술이 술술!
+for.hints.usesofash.desc=재로는 비료를 만들 수 있고, 역청 토탄을 만들기 위해서 필수적입니다.
+for.hints.usesofash.tag=재 재사용!
+
+for.item.crated.grammar=포장된 %s
+for.item.crated.unknown=포장된 알 수 없는 것
+
+for.no=아니오
+
+for.researchNote.chance.highest=매우 높음
+for.researchNote.chance.higher=꽤 높음
+for.researchNote.chance.high=높음
+for.researchNote.chance.normal=보통
+for.researchNote.chance.low=낮음
+for.researchNote.chance.lowest=매우 낮음
+for.researchNote.error.0=노트가 지워져 해독할 수 없게 되었다.
+for.researchNote.error.1=노트는 읽을 수 없게 되었고 가치가 없어졌다.
+for.researchNote.discovered.0=§a종 연구됨!
+for.researchNote.discovered.1=§e'%1$s'§7 (%2$s)
+for.researchNote.discovery.0=§a변이 발견됨!
+for.researchNote.discovery.1=§e'%SPEC1'§7 과 §e'%S	PEC2'§7.
+for.researchNote.discovery.2=성공 확률은 §9%s§7.
+for.researchNote.discovery.3=§d'%s'§7 종이 등장함.
+
+for.mutation.condition.biome.single=%s 생물군계에서 발생함.
+for.mutation.condition.biome.multiple=%s과 비슷한 생물군계들에서 발생함.
+for.mutation.condition.daytime.day=낮에 발생함.
+for.mutation.condition.daytime.night=밤에 발생함.
+for.mutation.condition.humidity.range= %LOW와 %HIGH 사이 습도에서 발생함.
+for.mutation.condition.humidity.single=%s의 습도에서 발생함.
+for.mutation.condition.temperature.range=%LOW와 %HIGH 사이 온도에서 발생함.
+for.mutation.condition.temperature.single=%s의 온도에서 발생함.
+for.mutation.condition.resource=%s를 기반으로 해야 발생함.
+for.mutation.condition.date=%START에서 %END 사이 기간에서만 발생함.
+
+for.storage.backpack.mode.locked=(잠금 모드)
+for.storage.backpack.mode.receiving=(받기 모드)
+for.storage.backpack.mode.resupply=(공급 모드)
+
+for.trigger.hasMail=새 편지가 도착했습니다.
+for.trigger.hasWork=작업이 존재합니다.
+for.trigger.lowFuel=연료 부족
+for.trigger.lowGermlings=발아체 부족
+for.trigger.lowInput=입력 부족
+for.trigger.lowPaper=종이 부족
+for.trigger.lowResources=자원 부족
+for.trigger.lowStamps=우표 부족
+for.trigger.mailBuffer=버퍼
+for.trigger.missingDrone=일벌이 없음
+for.trigger.missingQueen=공주벌이나 여왕벌이 없음
+for.trigger.noFrames=프레임 없음
+
+for.yes=네
+
+item.for.ambrosia.name=암브로시아
+item.for.apatite.name=인회석
+
+item.for.apiarist_bag.name=양봉업자의 가방
+item.for.apiarist_boots.name=양봉업자의 신발
+item.for.apiarist_chest.name=양봉업자의 셔츠
+item.for.apiarist_helmet.name=양봉업자의 모자
+item.for.apiarist_legs.name=양봉업자의 바지
+
+item.for.ash.name=재
+tile.for.ash_block_0.name=재 블록
+tile.for.ash_block_1.name=재 블록
+tile.for.ash_block_2.name=재 블록
+tile.for.ash_block_3.name=재 블록
+
+item.for.habitat_locator.name=서식지 추적기
+
+item.for.cart.beehouse.name=벌통 광산 수레
+item.for.cart.apiary.name=양봉기 광산 수레
+
+item.for.bee_combs.cocoa.name=코코아 벌집
+item.for.bee_combs.darkened.name=어둠의 벌집
+item.for.bee_combs.dripping.name=고급스러운 벌집
+item.for.bee_combs.frozen.name=얼어붙은 벌집
+item.for.bee_combs.honey.name=벌집
+item.for.bee_combs.irradiated.name=피폭된 벌집
+item.for.bee_combs.mellow.name=말랑한 벌집
+item.for.bee_combs.mossy.name=눅눅한 벌집
+item.for.bee_combs.mysterious.name=정체불명의 벌집
+item.for.bee_combs.omega.name=오메가 벌집
+item.for.bee_combs.parched.name=말라붙은 벌집
+item.for.bee_combs.powdery.name=화약이 묻은 벌집
+item.for.bee_combs.reddened.name=새빨간 벌집
+item.for.bee_combs.silky.name=부드러운 벌집
+item.for.bee_combs.simmering.name=끓어오르는 벌집
+item.for.bee_combs.stringy.name=끈끈한 벌집
+item.for.bee_combs.wheaten.name=밀가루가 묻은 벌집
+
+item.for.beeswax.name=밀랍
+
+item.for.biome_finder.name=서식지 추적기
+item.for.bituminous_peat.name=역청 토탄
+item.for.broken_bronze_pickaxe.name=부서진 곡괭이
+item.for.broken_bronze_shovel.name=부서진 삽
+item.for.bronze_pickaxe.name=생존자의 곡괭이
+item.for.bronze_shovel.name=생존자의 삽
+
+item.for.can.empty.name=빈 캔
+item.for.can.grammar=%s 캔
+
+item.for.carton.name=종이 상자
+
+item.for.circuitboard.basic.name=기초 회로판
+item.for.circuitboard.enhanced.name=개선된 회로판
+item.for.circuitboard.intricate.name=정교한 회로판
+item.for.circuitboard.refined.name=발전된 회로판
+item.for.circuitboard.tooltip.singular=%s개의 진공관 장착 가능.
+item.for.circuitboard.tooltip.plural=%s개의 진공관 장착 가능.
+
+item.for.crafting_material.dissipation_charge.name=비구름 소멸 용액
+item.for.crafting_material.dissipation_charge.tooltip=비 생성기에서 비를 멈추기 위해 사용합니다.
+item.for.crafting_material.ice_shard.name=얼음 조각
+item.for.crafting_material.pulsating_dust.name=맥동하는 가루
+item.for.crafting_material.pulsating_mesh.name=맥동하는 천
+item.for.crafting_material.scented_paneling.name=향목판
+item.for.crafting_material.camouflaged_paneling.name=위장판
+item.for.crafting_material.silk_wisp.name=비단 줄기
+item.for.crafting_material.woven_silk.name=비단
+
+item.for.crate.name=상자
+item.for.decaying_wheat.name=썩어가는 밀
+
+item.for.fertilizer_bio.name=퇴비
+item.for.fertilizer_compound.name=비료
+
+item.for.frame_impregnated.name=침윤된 프레임
+item.for.frame_proven.name=검증된 프레임
+item.for.frame_untreated.name=미처리 프레임
+
+item.for.durability=지속 시간 : %,d
+item.for.uses=사용 가: %,d
+
+item.for.bee.modifier.production=생산력 배율 : %.2fx
+item.for.bee.modifier.genetic.decay=유전적 도태율 : %.2fx
+
+item.for.fruits.cherry.name=체리
+item.for.fruits.chestnut.name=밤
+item.for.fruits.dates.name=대추야자
+item.for.fruits.lemon.name=레몬
+item.for.fruits.papaya.name=파파야
+item.for.fruits.plum.name=자두
+item.for.fruits.walnut.name=호두
+
+item.for.gear_bronze.name=청동 기어
+item.for.gear_copper.name=구리 기어
+item.for.gear_tin.name=주석 기어
+
+item.for.hardened_machine.name=경화 케이싱
+
+item.for.honeydew.name=감로
+
+item.for.portable_alyzer.name=휴대용 유전분석기
+item.for.portable_alyzer.tooltip=벌, 묘목, 그리고 나비를 위한 손에 꼭 맞는 유전자 분석장치입니다.
+item.for.portable_alyzer.charges=%s회 충전됨.
+
+item.for.honey_drop.charged.name=번쩍이는 벌꿀
+item.for.honey_drop.honey.name=벌꿀
+item.for.honey_drop.omega.name=오메가 벌꿀
+item.for.honeyed_slice.name=꿀빵
+
+item.for.honey_pot.name=꿀 캡슐
+
+item.for.impregnated_casing.name=강화 케이싱
+item.for.imprinter.name=유전자 각인기
+item.for.infuser.name=주입기
+
+item.for.ingot_bronze.name=청동괴
+item.for.ingot_copper.name=구리괴
+item.for.ingot_tin.name=주석괴
+
+item.for.iodine_capsule.name=비구름 생성 용액
+item.for.iodine_capsule.tooltip=비 생성기에서 비를 부르기 위해 사용합니다.
+item.for.kit_pickaxe.name=곡괭이 키트
+item.for.kit_shovel.name=삽 키트
+item.for.letters.name=편지
+
+item.for.mouldy_wheat.name=눅눅한 밀
+item.for.mulch.name=멀치
+item.for.naturalist_helmet.name=관찰경
+item.for.naturalist_helmet.tooltip=수분된 나뭇잎이나 멀티블록의 오류를 보여줍니다.
+item.for.oak_stick.name=침윤된 막대기
+item.for.peat.name=토탄
+item.for.phosphor.name=인
+item.for.pipette.name=피펫
+
+item.for.pollen.crystalline.name=수정 꽃가루 뭉치
+item.for.pollen.normal.name=꽃가루 뭉치
+
+item.for.propolis.normal.name=프로폴리스
+item.for.propolis.pulsating.name=맥동하는 프로폴리스
+item.for.propolis.silky.name=부드러운 프로폴리스
+item.for.propolis.sticky.name=끈끈한 프로폴리스
+
+item.for.refractory.empty.name=내화캡슐
+item.for.refractory.tooptip=뜨거워도 버텨요.
+item.for.refractory.grammar=%s 내화캡슐
+
+item.for.refractory_wax.name=내화밀랍
+item.for.refractory_wax.tooltip=녹는점이 매우 높은 왁스입니다.
+
+item.for.research_note.name=%s의 노트
+item.for.research_note.tooltip=지식을 습득하기 위해 노트를 들고 우클릭하세요.
+item.for.royal_jelly.name=로열 젤리
+item.for.scoop.name=포충망
+item.for.scoop.tooltip=벌집을 부숴 벌을 얻는 데 사용합니다.
+item.for.soldering_iron.name=인두기
+item.for.soldering_iron.tooltip=회로판에 진공관을 납땜합니다.
+item.for.smoker.name=훈연기
+item.for.smoker.tooltip=자연상의 벌을 진정시킵니다.
+
+item.for.stamps.1n.name=우표 (1n)
+item.for.stamps.2n.name=우표 (2n)
+item.for.stamps.5n.name=우표 (5n)
+item.for.stamps.10n.name=우표 (10n)
+item.for.stamps.20n.name=우표 (20n)
+item.for.stamps.50n.name=우표 (50n)
+item.for.stamps.100n.name=우표 (100n)
+item.for.stamps.name=우표
+
+item.for.sturdy_machine.name=튼튼한 케이싱
+
+item.for.thermionic_tubes.copper.name=구리 진공관
+item.for.thermionic_tubes.tin.name=주석 진공관
+item.for.thermionic_tubes.bronze.name=청동 진공관
+item.for.thermionic_tubes.iron.name=철 진공관
+item.for.thermionic_tubes.gold.name=금 진공관
+item.for.thermionic_tubes.diamond.name=다이아만타인 진공관
+item.for.thermionic_tubes.obsidian.name=흑요석 진공관
+item.for.thermionic_tubes.blaze.name=블레이즈 진공관
+item.for.thermionic_tubes.rubber.name=고무화 진공관
+item.for.thermionic_tubes.emerald.name=에메랄드 진공관
+item.for.thermionic_tubes.apatite.name=인회석 진공관
+item.for.thermionic_tubes.lapis.name=청금석 진공관
+item.for.thermionic_tubes.ender.name=엔드 진공관
+item.for.thermionic_tubes.orchid.name=난초 진공관
+item.for.thermionic_tubes.tooltip=회로판에 기능을 추가하기 위해 사용합니다.
+
+item.for.capsule.empty.name=밀랍 캡슐
+item.for.capsule.tooltip=뜨거운 건 안돼요.
+item.for.capsule.grammar=%s 캡슐
+
+item.for.wax_cast.name=밀랍 주형
+
+item.for.wood_pulp.name=목재 펄프
+item.for.wrench.name=렌치
+item.for.wrench.tooltip=블록을 회전시킵니다.
+
+item.for.camouflage_spray_can.name=위장 스프레이 캔
+
+itemGroup.apiculture=포레스트리 양봉업
+itemGroup.arboriculture=포레스트리 수목업
+itemGroup.forestry=포레스트리
+itemGroup.lepidopterology=포레스트리 인시학
+itemGroup.agriculture=포레스트리 농업
+
+tile.for.analyzer.name=분석기
+tile.for.escritoire.name=연구 책상
+
+tile.for.database.name=데이터베이스
+
+tile.for.engine_electrical.name=전기 엔진
+tile.for.engine_electrical.tooltip=EU를 RF로 변환합니다.
+tile.for.engine_peat.name=토탄-연소 엔진
+tile.for.engine_peat.tooltip=토탄을 연료로 RF를 발전합니다.
+tile.for.engine_biogas.name=바이오가스 엔진
+tile.for.engine_biogas.tooltip=유기적 액체와 용암을 연료로 RF를 발전합니다.
+tile.for.engine_generator.name=바이오 발전기
+tile.for.engine_generator.tooltip=바이오매스와 에탄올을 연료로 EU를 발전합니다.
+tile.for.engine_clockwork.name=시계태엽 엔진
+tile.for.engine_clockwork.tooltip=소량의 RF를 발전합니다. 우클릭으로 태엽을 감습니다.
+
+tile.for.bottler.name=병입기
+tile.for.carpenter.name=목공기
+tile.for.centrifuge.name=원심분리기
+tile.for.fermenter.name=발효기
+tile.for.moistener.name=가습기
+tile.for.squeezer.name=압착기
+tile.for.still.name=증류기
+tile.for.rainmaker.name=강우기
+tile.for.fabricator.name=진공관 제작기
+tile.for.raintank.name=빗물 탱크
+tile.for.worktable.name=제조기
+
+tile.for.mailbox.name=우체통
+tile.for.trade_station.name=거래소
+tile.for.stamp_collector.name=우표 콜렉션
+
+tile.for.resources.apatite.name=인회 광석
+tile.for.resources.copper.name=구리 광석
+tile.for.resources.tin.name=주석 광석
+
+tile.for.resource_storage.apatite.name=인회석 블록
+tile.for.resource_storage.copper.name=구리 블록
+tile.for.resource_storage.tin.name=주석 블록
+tile.for.resource_storage.bronze.name=청동 블록
+
+tile.for.ash_brick.name=재 벽돌
+tile.for.ash_stairs.name=재 벽돌 계단
+
+tile.for.humus.name=부엽토
+tile.for.bog_earth.bog_earth.name=축축한 흙
+tile.for.bog_earth.peat.name=토탄
+
+tile.for.bee_combs.cocoa.name=코코아 벌집 블록
+tile.for.bee_combs.darkened.name=어둠의 벌집 블록
+tile.for.bee_combs.dripping.name=고급스러운 벌집 블록
+tile.for.bee_combs.frozen.name=얼어붙은 벌집 블록
+tile.for.bee_combs.honey.name=벌집 블록
+tile.for.bee_combs.irradiated.name=피폭된 벌집 블록
+tile.for.bee_combs.mellow.name=말랑한 벌집 블록
+tile.for.bee_combs.mossy.name=눅눅한 벌집 블록
+tile.for.bee_combs.mysterious.name=정체불명의 벌집 블록
+tile.for.bee_combs.omega.name=오메가 벌집 블록
+tile.for.bee_combs.parched.name=말라붙은 벌집 블록
+tile.for.bee_combs.powdery.name=화약이 묻은 벌집 블록
+tile.for.bee_combs.reddened.name=새빨간 벌집 블록
+tile.for.bee_combs.silky.name=부드러운 벌집 블록
+tile.for.bee_combs.simmering.name=끓어오르는 벌집 블록
+tile.for.bee_combs.stringy.name=끈끈한 벌집 블록
+tile.for.bee_combs.wheaten.name=밀가루가 묻은 벌집 블록
+
+item.for.adventurer_bag.name=모험가의 가방
+item.for.adventurer_bag_t2.name=모험가의 직물 가방
+
+item.for.builder_bag.name=건축가의 가방
+item.for.builder_bag_t2.name=건축가의 직물 가방
+
+item.for.digger_bag.name=갱부의 가방
+item.for.digger_bag_t2.name=갱부의 직물 가방
+
+item.for.forester_bag.name=숲지기의 가방
+item.for.forester_bag_t2.name=숲지기의 직물 가방
+
+item.for.hunter_bag.name=사냥꾼의 가방
+item.for.hunter_bag_t2.name=사냥꾼의 직물 가방
+
+item.for.miner_bag.name=광부의 가방
+item.for.miner_bag_t2.name=광부의 직물 가방
+
+################
+# ERRORS
+################
+
+# BEES
+for.errors.is_raining.desc=비가 옵니다
+for.errors.is_raining.help=우천 활동력이 있는 벌들만 비가 올 때 일할 수 있습니다.
+for.errors.no_drone.desc=일벌이 없습니다
+for.errors.no_drone.help=짝짓기를 하려면 일벌이 있어야 합니다.
+for.errors.no_flower.desc=꽃이 없습니다
+for.errors.no_flower.help=벌들이 맞는 꽃을 찾지 못했습니다. 휴대용 유전분석기로 벌들의 꽃 선호를 알아보세요.
+for.errors.no_queen.desc=여왕벌이 없습니다
+for.errors.no_queen.help=벌통에 여왕벌을 넣거나 공주벌과 일벌을 넣어보세요.
+for.errors.no_sky.desc=위가 막혔습니다
+for.errors.no_sky.help=벌통은 바로 위에서 직사광선을 받아야 합니다.
+for.errors.not_day.desc=낮이 아닙니다
+for.errors.not_day.help=이 벌들은 오직 낮에만 일할 수 있습니다.
+for.errors.not_gloomy.desc=충분히 어둡지 않습니다
+for.errors.not_gloomy.help=이 벌들은 주변이 더 어두워야 일할 수 있습니다.
+for.errors.not_lucid.desc=충분히 밝지 않습니다
+for.errors.not_lucid.help=이 벌들은 주변이 더 밝아야 일할 수 있습니다.
+for.errors.not_night.desc=밤이 아닙니다
+for.errors.not_night.help=이 벌들은 오직 밤에만 일할 수 있습니다.
+for.errors.too_hot.desc=너무 덥습니다
+for.errors.too_hot.help=이 벌들은 열기에 지쳐 일을 하지 못합니다. 서식지 추적기로 더 추운 기후를 찾아보세요.
+for.errors.too_cold.desc=너무 춥습니다
+for.errors.too_cold.help=이 벌들은 너무 추워서 딱 달라붙어 있습니다. 서식지 추적기로 더 따뜻한 기후를 찾아보세요.
+for.errors.too_humid.desc=너무 습합니다
+for.errors.too_humid.help=이 벌들은 너무 습해서 날지 못합니다. 서식지 추적기로 더 건조한 기후를 찾아보세요.
+for.errors.too_arid.desc=너무 건조합니다
+for.errors.too_arid.help=이 벌들은 너무 건조해서 말라붙어 버렸습니다. 서식지 추적기로 더 건조한 기후를 찾아보세요.
+
+# MACHINES
+for.errors.no_power.desc=전력 부족
+for.errors.no_power.help=이 기계가 작동하려면 전력이 필요합니다.
+for.errors.no_redstone.desc=레드스톤 신호 부족
+for.errors.no_redstone.help=이 기계가 작동하려면 레드스톤 신호가 필요합니다.
+for.errors.disabled_redstone.desc=레드스톤에 의해 비활성화됨
+for.errors.disabled_redstone.help=이 기계는 레드스톤 신호에 의해 비활성화되었습니다.
+for.errors.no_recipe.desc=맞는 조합법 없음
+for.errors.no_recipe.help=제공된 자원에 맞는 조합법이 존재하지 않습니다.
+for.errors.no_resource.desc=자원 부족
+for.errors.no_resource.help=더 많은 자원이 있어야 작동합니다.
+for.errors.no_resource_inventory.desc=내부 저장공간 비어있음
+for.errors.no_resource_inventory.help=기계 내부 저장공간에 자원을 공급해야 이 조합법을 사용할 수 있습니다.
+for.errors.no_resource_liquid.desc=액체 자원 부족
+for.errors.no_resource_liquid.help=더 많은 액체 자원이 있어야 작동합니다.
+for.errors.no_space.desc=내부 저장공간 가득 참
+for.errors.no_space.help=기계 내부 저장공간을 비워주세요.
+for.errors.no_space_tank.desc=내부 액체 저장공간 가득 참
+for.errors.no_space_tank.help=기계 내부 액체 저장공간을 비워주세요.
+for.errors.not_dark.desc=충분히 어둡지 않습니다
+for.errors.not_dark.help=이 기계는 더 어두워야 작동할 수 있습니다.
+
+# RAIN TANK
+for.errors.not_raining.desc=비가 오지 않습니다
+for.errors.not_raining.help=비가 올 때만 동작합니다.
+for.errors.no_rain_biome.desc=비가 내리지 않는 지역입니다
+for.errors.no_rain_biome.help=이 지역은 비가 내리지 않습니다.
+for.errors.no_sky_rain_tank.desc=위가 막혔습니다
+for.errors.no_sky_rain_tank.help=이 기계는 위가 막혀있으면 빗물을 받을 수 없습니다.
+
+# ALYZERS
+for.errors.no_honey.desc=꿀이 필요합니다
+for.errors.no_honey.help=이 가젯은 작동에 꿀이나 감로를 필요로 합니다.
+for.errors.no_specimen.desc=분석할 것이 없습니다
+for.errors.no_specimen.help=분석할 대상을 제공해주세요.
+
+# ENGINES
+for.errors.forced_cooldown.desc=강제 휴식
+for.errors.forced_cooldown.help=이 엔진은 과열되었으므로, 강제 휴식에 들어갔습니다.
+for.errors.no_energy_net.desc=해당 전기 존재하지 않음
+for.errors.no_energy_net.help=이 세계에는 전기가 존재하지 않습니다. (IndustrialCraft\u00b2(산업모드)를 설치해주세요.)
+for.errors.no_fuel.desc=연료 부족
+for.errors.no_fuel.help=이 엔진은 작동에 연료를 요구합니다. 연료를 채워주세요.
+for.errors.no_heat.desc=열원 부족
+for.errors.no_heat.help=이 기계는 작동에 열원을 요구합니다. 열원 저장공간을 채워주세요.
+
+# TRADE STATION
+for.errors.no_stamps.desc=우표가 필요합니다
+for.errors.no_stamps.help=소포를 보내기 위해서는 더 많은 우표가 필요합니다.
+for.errors.no_paper.desc=종이가 필요합니다
+for.errors.no_paper.help=편지를 보내기 위해서는 더 많은 종이가 필요합니다.
+for.errors.no_supplies.desc=물품이 필요합니다
+for.errors.no_supplies.help=물품을 보내기 위해서는 더 많은 물품이 필요합니다.
+for.errors.no_trade.desc=거래소 설정 안됨
+for.errors.no_trade.help=거래소는 보내고 받을 아이템이 필요합니다.
+
+# TRADE STATION NAMING
+for.errors.not_alpha_numeric.desc=불가능한 거래소 이름
+for.errors.not_alpha_numeric.help=거래소는 영문자와 숫자로만 이름을 지을 수 있습니다.
+for.errors.not_unique.desc=중복검사 필요
+for.errors.not_unique.help=거래소 이름은 중복되어서는 안 되며 해당 이름을 가진 거래소가 이미 존재합니다.
+
+# LETTERS
+for.errors.no_recipient.desc=수신인 없음
+for.errors.no_recipient.help=편지를 받을 수신인이 있어야 합니다.
+for.errors.not_postpaid.desc=우표 부족
+for.errors.not_postpaid.help=편지를 보내기 위해서 더 많은 우표를 붙여주세요.
+
+# CIRCUIT BOARDS
+for.errors.circuit_mismatch.desc=크기 불일치
+for.errors.circuit_mismatch.help=진공관의 수가 회로의 크기와 맞지 않습니다.
+for.errors.no_circuit_board.desc=회로판 없음
+for.errors.no_circuit_board.help=진공관을 납땜할 회로판을 넣어주세요.
+for.errors.no_circuit_layout.desc=규격 없음
+for.errors.no_circuit_layout.help=현재 게임 설정으로 인해 사용 가능한 규격이 없습니다.
+
+# FARMS
+for.errors.no_farmland.desc=경작지 지정 없음
+for.errors.no_farmland.help=부드러운 사암, 벽돌 또는 석재 벽돌로 농장이 지어질 발판을 만들어주세요.
+for.errors.no_fertilizer.desc=비료 없음
+for.errors.no_fertilizer.help=농장 가동에는 비료가 필요합니다. 퇴비는 불필요합니다.
+for.errors.no_liquid.desc=물 없음
+for.errors.no_liquid.help=농장은 강우량, 온도와 습도에 따라 많은 양의 물을 공급할 필요가 있습니다.
+
+####################
+# APICULTURE
+####################
+
+entity.Villager.apiarist=양봉업자
+
+death.bee.aggressive.player=%1$s은(는) 한 떼의 벌을 마주쳤습니다. %2$s이(가) 그의 방충복을 훔쳐서, 죽을 수밖에 없었습니다.
+death.bee.aggressive=%1$s은(는) 한 떼의 벌을 마주쳤습니다. 유감스럽게도 독침이 있었습니다.
+death.bee.hive.player=%1$s은(는) 야생의 벌에게 죽었습니다. %2$s이(가) 그의 방충복을 훔쳤기 때문입니다.
+death.bee.hive=%1$s은(는) 야생의 벌에게 죽었습니다. 훈연기를 사용했어야 합니다.
+death.bee.end.player=%1$s은(는) %2$s와(과) 싸우다 어떤 눈치없는 독침에 찔려 생을 마감했습니다.
+death.bee.end=%1$s은(는) 어떤 불친절한 독침에 찔려 생을 마감했습니다.
+death.bee.radioactive.player=%1$s은(는) 보호장비 없이 체르노빌에 발을 들였습니다. %2$s은(는) 그걸 보고 한참을 웃었습니다.
+death.bee.radioactive=%1$s은(는) 보호장비 없이 체르노빌에 발을 들였습니다.
+death.bee.heroic.player=%1$s은(는) 히로익 벌에게 죽었습니다! %2$s은(는) 그들에게 큰 빚을 지게 되었습니다.
+death.bee.heroic=%1$s은(는) 히로익 벌에게 죽었습니다!
+
+forestry.allele.effect.aggressive=공격적
+forestry.allele.effect.beatific=축복받음
+forestry.allele.effect.creeper=크리퍼
+forestry.allele.effect.drunkard=주정뱅이
+forestry.allele.effect.exploration=탐험가
+forestry.allele.effect.glacial=냉동
+forestry.allele.effect.fertile=비옥
+forestry.allele.effect.heroic=영웅적
+forestry.allele.effect.ignition=조연성
+forestry.allele.effect.misanthrope=엔드
+forestry.allele.effect.miasmic=독성
+forestry.allele.effect.mycophilic=호균성
+forestry.allele.effect.none=없음
+forestry.allele.effect.radioactive=방사성
+forestry.allele.effect.reanimation=소생
+forestry.allele.effect.repulsion=제세동
+forestry.allele.effect.resurrection=부활
+forestry.allele.effect.snowing=눈
+
+for.beemode.easy.desc=변이 확률을 극단적으로 올리고 도태 확률을 없애서 벌 기르기를 간략화합니다.
+for.beemode.hard.desc=변이 확률을 살짝 줄이고 각 여왕벌의 수명을 50%%만큼 증가시킵니다.
+for.beemode.hardcore.desc=변이 확률 절반, 여왕벌의 수명 500%%만큼 증가, 번식력을 20%%만큼 감소시킵니다.
+for.beemode.insane.desc=변이 확률 20%%, 여왕벌의 수명 10배, 번식력을 40%%만큼 감소시킵니다.
+for.beemode.normal.desc=평범한 플레이어에게 권장되는 난이도입니다.
+
+for.bees.grammar.drone.type=일벌
+for.bees.grammar.drone=%SPECIES %TYPE
+for.bees.grammar.larvae.type=애벌레
+for.bees.grammar.larvae=%SPECIES %TYPE
+for.bees.grammar.princess.type=공주벌
+for.bees.grammar.princess=%SPECIES %TYPE
+for.bees.grammar.queen.type=여왕벌
+for.bees.grammar.queen=%SPECIES %TYPE
+
+for.bees.hybrid=%PRIMARY-%SECONDARY 혼종
+
+for.bees.species.austere=오스티어
+for.bees.species.avenging=어벤징
+for.bees.species.boggy=보기
+for.bees.species.common=커먼
+for.bees.species.cultivated=컬티베이티드
+for.bees.species.darkened=다큰드
+for.bees.species.demonic=데모닉
+for.bees.species.diligent=딜리전트
+for.bees.species.edenic=이드닉
+for.bees.species.ended=엔더
+for.bees.species.exotic=엑조틱
+for.bees.species.fiendish=피인디시
+for.bees.species.forest=포레스트
+for.bees.species.frugal=프루갈
+for.bees.species.glacial=글래시얼
+for.bees.species.hermitic=허미틱
+for.bees.species.heroic=히로익
+for.bees.species.icy=아이시
+for.bees.species.imperial=임페리얼
+for.bees.species.industrious=인더스트리우스
+for.bees.species.leporine=레포라인
+for.bees.species.majestic=마제스틱
+for.bees.species.marshy=마쉬
+for.bees.species.meadows=메도우
+for.bees.species.merry=메리
+for.bees.species.miry=마이어리
+for.bees.species.modest=모데스트
+for.bees.species.monastic=모나스틱
+for.bees.species.noble=노블
+for.bees.species.omega=오메가
+for.bees.species.phantasmal=판타즈말
+for.bees.species.reddened=레든드
+for.bees.species.rural=루랄
+for.bees.species.farmerly=파멀리
+for.bees.species.agrarian=아그라리안
+for.bees.species.secluded=세클루디드
+for.bees.species.sinister=시니스터
+for.bees.species.spectral=스펙트럴
+for.bees.species.steadfast=스테드패스트
+for.bees.species.tipsy=팁시
+for.bees.species.tricky=트리키
+for.bees.species.tropical=트로피컬
+for.bees.species.unweary=언웨어리
+for.bees.species.valiant=밸리언트
+for.bees.species.vengeful=벤지풀
+for.bees.species.vindictive=빈딕티브
+for.bees.species.wintry=윈트리
+
+for.bees.stock.ignoble=결함 혈통
+for.bees.stock.pristine=불변 혈통
+
+for.chat.command.forestry.bee.desc=- %s : 양봉 명령어
+for.chat.command.forestry.bee.help=양봉에 관련된 명령어들입니다.
+for.chat.command.forestry.bee.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.bee.give.desc=- %s : 벌 제공
+for.chat.command.forestry.bee.give.help=플레이어에게 일벌, 공주벌, 여왕벌, 또는 애벌레를 제공합니다.
+for.chat.command.forestry.bee.give.format=형식 : /%s <종 이름> <벌 종류> [<플레이어 이름>]
+for.chat.command.forestry.bee.give.available=가능한 벌 종류 : %s
+for.chat.command.forestry.bee.give.given=%1$s에게 %2$s %3$s가 제공되었습니다.
+
+for.chat.command.forestry.bee.mode.desc=- %s : 양봉 난이도 명령어
+for.chat.command.forestry.bee.mode.help=양봄 난이도에 관련된 명령어들입니다.
+for.chat.command.forestry.bee.mode.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.bee.mode.info.desc=- %s : 양봉 난이도 정보
+for.chat.command.forestry.bee.mode.info.help=현재 양봉 난이도와 가능한 양봉 난이도들에 대한 정보를 보여줍니다.
+for.chat.command.forestry.bee.mode.info.format=형식 : /%s <난이도>
+
+for.chat.command.forestry.bee.mode.set.desc=- %s : 양봉 난이도 설정
+for.chat.command.forestry.bee.mode.set.help=해당 차원의 양봉 난이도를 설정합니다.
+for.chat.command.forestry.bee.mode.set.format=형식 : /%s [<차원 번호>] <난이도>
+
+for.chat.command.forestry.bee.save.desc=- %s : 양봉 상태 저장
+for.chat.command.forestry.bee.save.help=양봉 상태를 파일로 저장합니다
+for.chat.command.forestry.bee.save.format=형식 : /%s [<플레이어 이름>]
+for.chat.command.forestry.bee.save.stats=Beekeeping statistics for %s on %s:
+
+for.chat.command.forestry.mode.info.error='%s' 난이도에 관한 정보가 없습니다.
+for.chat.command.forestry.mode.info.current=현재 난이도 : %1$s (#%2$s)
+for.chat.command.forestry.mode.info.available=가능한 난이도 : %s
+
+for.chat.command.forestry.mode.set.success=난이도가 %s로 설정되었습니다.
+for.chat.command.forestry.mode.set.error='%s' 난이도가 존재하지 않습니다.
+
+for.chat.command.forestry.stats.save.error1=로그 파일이 생성될 수 없습니다. 상태 저장에 실패했습니다.
+for.chat.command.forestry.stats.save.error2=로그 파일을 쓸 수 없습니다. 상태 저장에 실패했습니다.
+for.chat.command.forestry.stats.save.error3=쓰기 작업에서 예외가 발생했습니다. 상태 저장에 실패했습니다.
+for.chat.command.forestry.stats.save.error4=상태를 찾을 수 없습니다.
+for.chat.command.forestry.stats.save.saved=플레이어 %s 의 상태가 저장되었습니다
+for.chat.command.forestry.stats.save.key.discovered=발견함
+for.chat.command.forestry.stats.save.key.discovered.symbol=X
+for.chat.command.forestry.stats.save.key.blacklisted=출현하지 않음
+for.chat.command.forestry.stats.save.key.blacklisted.symbol=BL
+for.chat.command.forestry.stats.save.key.notCounted=총 발견 수에 포함되지 않음
+for.chat.command.forestry.stats.save.key.notCounted.symbol=NC
+for.chat.command.forestry.stats.save.mode=난이도 : %s
+
+for.description.speciesAgrarian="비료보다는 냄새가 덜 하군요. 좋요, 안 그래요?"|Cannie Myrathi, 양봉업자
+for.description.speciesAustere=위험하고 폭급합니다. 양봉업자들은 이들 주위에선 꼭 특수한 천으로 만든 옷으로 무장하는 것이 좋을 것입니다.|양봉학 입문서
+for.description.speciesAvenging="우리 집 벽이 무너지기 시작했고 지붕이 무너지는 소리를 들었지만, 아무래도 상관 없다! 내가 새로운 여왕벌을 잡자 수많은 벌들의 침이 손에 박힌다."|익명의 양봉업자
+for.description.speciesBoggy="언젠가 소가 이 벌들 중 하나에 쏘이는 걸 봤어. 몇 초 후에, 그 소의 온몸에서 버섯이 돋아나기 시작했어! ... 사진? 음, 안 찍었는데."|셍기르 "경", 미치광이
+for.description.speciesCommon=초보 양봉업자들에게 주는 참가상 정도의 취급을 받고 있는 불쌍한 벌.|양봉학 입문서
+for.description.speciesCultivated=상당히 빠른 작업 속도를 자랑하는 벌입니다. 이름대로 세련되고 문화를 즐기는 성격을 가졌다고 합니다.|양봉학 입문서
+for.description.speciesDarkened=어둠의 힘에 이끌린 이 벌들은 훌륭한 전력의 보고라 할 만하다.|양봉업자 대백과
+for.description.speciesDemonic=지옥의 불 속에서 태어났으며, 선대 지옥벌들의 원한이 혈관을 타고 흐릅니다. 세월은 그들을 악마로 만들었습니다.|양봉학 입문서
+for.description.speciesDiligent=인더스트리우스 계열의 벌을 얻기 위한 디딤돌 정도의 취급을 받고 있는 벌입니다.|양봉학 입문서
+for.description.speciesEdenic="그 벌들이 기묘하고 작은 춤을 추는 동안 나는 뇌리에 스며들듯이 느껴지는 이미지를 미친 듯이 노트에 적고 스케치했다."|양봉학 입문서
+for.description.speciesEnded="외로워 보이는 이 벌들을 마을의 벌통에서 끄집어내었다. 힘없이 웅웅대는 그 몸짓에서 그들이 원래 있던 세계를 그리워한다는 것을 읽을 수 있었다."|양봉학 입문서
+for.description.speciesExotic="온 몸에 열이 차올랐고 머리는 무거워졌으며 제 옷은 땀으로 차갑게 젖었습니다. 하지만 정신을 잃지 않은 끝에 저는 떨리는 손으로 이 벌을 벌통에서 꺼낼 수 있었습니다."|양봉학 입문서
+for.description.speciesFarmerly=일반적으로 넓은 대초원과 국가의 식량 저장고에서 볼 수 있습니다.|양봉학 입문서
+for.description.speciesFiendish=몇몇 경험있는 지옥 양봉업자들에 의하면, 이 벌들은 주인도 못 알아보고 공격한다고 합니다. 배은망덕한 벌들같으니라고.|양봉학 입문서
+for.description.speciesForest=숲에서 가장 자주 볼 수 있는 벌레들 중 하나입니다. 다행히 대부분 온순합니다.|양봉학 입문서
+for.description.speciesFrugal=아, 이 종을 탄생시키기 위해 대체 얼마나 많은 벌들이 뜨거운 모래에 몸을 뉘였을까요?|양봉학 입문서
+for.description.speciesGlacial="겨울이 다가온다!"|E. Stark, 양봉업자
+for.description.speciesHermitic="오, 친애하는 동료여. 자네가 보낸 그 벌이 며칠째 씻는 걸 거부하더니 이젠 수염을 기르기 시작했네. 설명할 것이 좀 있을 텐데?"|비니, 양봉업자
+for.description.speciesHeroic=전설에 따르면, 이 벌들은 자신들의 벌집을 보호하기 위해 끝까지 용맹하게 싸운다고 한다.|양봉업자 대사전
+for.description.speciesIcy=이 종의 벌집 온도는 얼음 조각이 형성될 때까지 떨어집니다.|양봉학 입문서
+for.description.speciesImperial=많은 양봉업자들이 손에 쥐길 갈망하는 벌입니다. 귀하디 귀한 로얄젤리를 생산하는 유일한 벌이기도 합니다.|양봉학 입문서
+for.description.speciesIndustrious=이 벌 역시 많은 양봉업자들이 손에 쥐길 갈망하는 벌입니다. 귀하디 귀한 화분을 생산하는 유일한 벌이기도 합니다.|양봉학 입문서
+for.description.speciesLeporine="맹세코! 그것은 작았고, 날개를 가지고 있었어. 솜털 같은 토끼 귀를 분명 보았다고! ... 아니, 나 안 취했어!"|셍기르 "경", 미치광이
+for.description.speciesMajestic="이 놈의 목을 쳐라!"|하트 여왕
+for.description.speciesMarshy="정말로? 버섯이라고? 여기서 나가!"|양봉학 입문서
+for.description.speciesMeadows=따뜻한 날씨를 가진 평원에서 자주 볼 수 있습니다. 다행히 대부분 온순합니다.|양봉학 입문서
+for.description.speciesMerry="호-호-호!"|메리 벌
+for.description.speciesMiry="어떻게 벌이 균류를 기를 수 있는 거지?"|Mezz, 새내기 양봉업자
+for.description.speciesModest=뜨겁고 건조한 환경 속에서 이 벌들은 살아남기 위한 진화를 반복해 나갔습니다. 그리하여 그들은 사막에서 살아남았지만, 아이러니하게도 온화한 환경에선 살아갈 수 없게 되었습니다.|양봉학 입문서
+for.description.speciesMonastic="멀어지려는 정신줄을 붙잡고 나는 그 빌어먹을 양봉업자를 한 대 후려쳤다. '공주벌에 에메랄드 잔뜩이라고? 이 빌어먹을 사기꾼아!'"|양봉학 입문서
+for.description.speciesNoble="세상에서 벌을 기르는 것보다 더 고귀한 직업은 없다."|비니, 양봉업자
+for.description.speciesOmega="나는 알파이자 오메가요, 처음이자 나중이고, 시작과 끝이니라."|Pahimar, 양봉업자
+for.description.speciesPhantasmal="무슨 짓을 하던, 크.. 어떤 일을 하던.. 맹세하게... 쿨럭.. 절대로... 절대로.. 드래곤 알을.. 놓치지...커헉!"|셍기르 "경"의 유언
+for.description.speciesReddened=굉장히 많은 양의 연금술적 재료가 필요하지만, 이들 한 줌만으로 이  세계가 사용하는 전력을 전부 생산할 수 있다는 게 경이롭다.|양봉업자 대백과
+for.description.speciesRural="5월의 비는 많은 곡식을 약속합니다."|M. Ages, 시골 양봉업자
+for.description.speciesSecluded="사막의 벌과 교배하는 건 큰 실수였다. 내 벌은 이제 벌통에 틀어박혀 날 보려 하지도 않는다."| 양봉학 입문서
+for.description.speciesSinister=대부분의 벌은 지옥의 가혹한 환경에서 살아남을 수 없습니다. 그러나, 간혹 살아남는 몇몇은 환경에 맞춰 험악하게 변한다고 합니다.|양봉학 입문서
+for.description.speciesSpectral="살아 있는지도 알 수 없었으나, 내 손바닥 위의 그 벌은 분명히 빛나고 있었다. 힘찬 박동이 느껴졌으나, 기쁨 대신 오히려 나는 식은땀을 흘렸다. 세계가 어두워졌고, 주변이 갑자기 차가워졌다. 그리고 내 뒤에 있던 뼈 무더기가 들썩이기 시작했다.."|양봉학 입문서
+for.description.speciesSteadfast=몇몇 모험가들이 지하 깊숙한 던전에서 발견하기 전 까진 멸종됐다고 여겨지던 벌이였다.|양봉업자 대사전
+for.description.speciesTipsy="춤춰라, 내 귀요미들아! 춤춰!"|동쪽의 취한 마녀
+for.description.speciesTricky="장난일까, 아니면 깜짝 장난일까!"|트리키 벌
+for.description.speciesTropical="뜨겁고 습한 정글을 수도 없이 헤멘 끝에 저는 이 맹독을 가진 벌을 손에 넣을 수 있었습니다. 슬프게도 이걸 찾느라 유일한 오스티어 여왕벌을 잃고 말았지만."| 양봉학 입문서
+for.description.speciesUnweary=지치진 않지만, 그러다 죽고 맙니다.|양봉학 입문서
+for.description.speciesValiant=희귀한 종으로, 다른 벌들의 벌집에 눌러 앉아 생활한다는 보고가 몇번 있었다. 진위는 확실하지 않다.|양봉업자 대사전
+for.description.speciesVengeful="왔노라, 보았노라, 이겼노라!"|아피누스 율리우스 카이사르
+for.description.speciesVindictive="그게 내 얼굴을 먹었어! 그게 내 얼굴을 먹었다고!"|K.M.
+for.description.speciesWintry=평범하지만 추위에 강화된 이 벌은 온화한 기후에서 기르는 것이 어렵습니다.|양봉학 입문서
+
+for.genus.bees.barren=바카피스
+for.genus.bees.honey=아피스
+for.genus.bees.honey.desc=정말 기초적인 벌입니다. 자연 상태에서 발견할 수 있습니다.
+for.genus.bees.agrarian=아그라리안
+for.genus.bees.austere=오스티어
+for.genus.bees.boggy=보기
+for.genus.bees.common=커먼
+for.genus.bees.end=엔드
+for.genus.bees.festive=페스티브
+for.genus.bees.frozen=프로즌
+for.genus.bees.heroic=히로익
+for.genus.bees.industrious=인더스트리우스
+for.genus.bees.infernal=인퍼널
+for.genus.bees.monastic=모나스틱
+for.genus.bees.noble=노블
+for.genus.bees.reddened=레든드
+for.genus.bees.tropical=트로피컬
+for.genus.bees.vengeful=벤지풀
+
+item.for.bee_princess_ge.name=공주벌
+item.for.bee_drone_ge.name=일벌
+item.for.bee_queen_ge.name=여왕벌
+
+tile.for.alveary.tooltip=멀티-블록: 3x3x3으로 쌓고, 3x1x3으로 나무 반블록을 위에 올리세요.
+tile.for.alveary.plain.name=겹양봉기
+tile.for.alveary.swarmer.name=겹양봉기 번식기
+tile.for.alveary.fan.name=겹양봉기 냉각기
+tile.for.alveary.heater.name=겹양봉기 난로
+tile.for.alveary.hygro.name=겹양봉기 습도조절기
+tile.for.alveary.stabiliser.name=겹양봉기 안정기
+tile.for.alveary.sieve.name=겹양봉기 꽃가루 수집기
+
+tile.for.apiary.name=양봉기
+tile.for.bee_chest.name=양봉업자의 상자
+tile.for.bee_house.name=벌통
+
+tile.for.beehives.forest.name=숲 벌집
+tile.for.beehives.meadows.name=초원 벌집
+tile.for.beehives.desert.name=사막 벌집
+tile.for.beehives.jungle.name=열대 벌집
+tile.for.beehives.end.name=엔드 벌집
+tile.for.beehives.snow.name=설원 벌집
+tile.for.beehives.swamp.name=습지 벌집
+tile.for.beehives.swarm.name=번식기 벌집
+
+tile.for.candle.dyed.lit.name=염색된 초
+tile.for.candle.dyed.stump.name=염색된 꺼진 초
+tile.for.candle.lit.name=초
+tile.for.candle.stump.name=꺼진 초
+
+tile.for.stump.name=초 꼭지
+
+####################
+# BOOK
+####################
+item.for.book_forester.name=산림학자의 설명서
+
+for.gui.book.element.crafting=조합
+for.gui.book.about.title=이 책에 대해
+for.gui.book.about=§o이 지식의 조각들은 비니에 의해 모아지고 정리되었으며, 셍기르 "경"이라는 사람이 쓴 양봉업 입문서와 산림학자의 연감이라는 두 가지 책으로 대표된다.§r
+for.gui.book.about.author=| 비니, 편집자 / 픽셀복셀, 한국어 번역자
+for.gui.book.categories=목차
+
+for.gui.book.category.core.title=메인
+for.gui.book.category.lepidopterology.title=인시학
+for.gui.book.category.mail.title=편지
+for.gui.book.category.habitat_former.title=서식지 조성기
+for.gui.book.category.beekeeping.title=양봉
+for.gui.book.category.arboriculture.title=수목
+for.gui.book.category.farming.title=농사
+for.gui.book.category.genetics.title=유전학
+
+####################
+# MULTIBLOCK
+####################
+
+for.multiblock.error.notConnected=이 멀티블록은 제어기에 연결되지 않았습니다. 이는 렉 때문이거나, 버그일 수 있습니다. 이 문제가 지속되면, 블록을 부수고 다시 놓아 보십시오.
+for.multiblock.error.invalid.interior=(%s) - 기계의 내부에 사용될 수 없는 블록입니다.
+for.multiblock.error.invalid.part=멀티블록 부분이 (%s) 타입과 호환되지 않습니다 .
+for.multiblock.error.small=이 멀티블록은 너무 작습니다. 최소 %dx%dx%d 크기여야 합니다.
+for.multiblock.error.large.x=이 멀티블록은 너무 큽니다, 최대 %d 블록 폭이어야 합니다.
+for.multiblock.error.large.y=이 멀티블록은 너무 큽니다, 최대 %d 블록 길이여야 합니다.
+for.multiblock.error.large.z=이 멀티블록은 너무 큽니다, 최대 %d 블록 높이여야 합니다.
+for.multiblock.error.small.x=이 멀티블록은 너무 작습니다, 최소 %d 블록 폭이어야 합니다.
+for.multiblock.error.small.y=이 멀티블록은 너무 작습니다, 최소 %d 블록 길이여야 합니다.
+for.multiblock.error.small.z=이 멀티블록은 너무 작습니다, 최소 %d 블록 높이여야 합니다.
+
+for.multiblock.alveary.error.needSlabs=겹양봉기 위에 나무 반 블록이 있어야 합니다.
+for.multiblock.alveary.error.needSpace=겹양봉기는 가장 위층 주변에 벌이 드나들 통로가 있어야 합니다.
+for.multiblock.alveary.error.needPlainOnTop=겹양봉기 가장 위 층에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
+for.multiblock.alveary.error.needPlainInterior=겹양봉기 내부에는 반드시 평범한 겹양봉기 블록이 있어야 합니다.
+
+for.multiblock.farm.error.needPlainBand=농장의 세 번째 층에는 반드시 평범한 농장 블록이 있어야 합니다.
+for.multiblock.farm.error.needPlainInterior=농장 내부에는 반드시 평범한 농장 블록이 있어야 합니다.
+for.multiblock.farm.error.needGearbox=농장은 일을 하기 위해서 반드시 전기를 입력받는 동력 전달기가 있어야 합니다.
+
+for.multiblock.alveary.type=겹양봉기
+for.multiblock.farm.type=농장
+
+####################
+# ARBORICULTURE
+####################
+
+entity.Villager.arborist=수목업자
+
+for.arboriculture.effect.none=없음
+
+for.chat.command.forestry.tree.desc=- %s : 수목 명령어
+for.chat.command.forestry.tree.help=나무에 관련된 명령어들입니다.
+for.chat.command.forestry.tree.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.tree.spawnTree.desc=- %s : 나무 생성
+for.chat.command.forestry.tree.spawnTree.help=플레이어 주변에 나무를 생성합니다.
+for.chat.command.forestry.tree.spawnTree.format=형식 : /%s <종 이름> [<플레이어 이름>]
+
+for.chat.command.forestry.tree.spawnForest.desc=- %s : 숲 생성
+for.chat.command.forestry.tree.spawnForest.help=플레이어 주변에 작은 숲을 생성합니다.
+for.chat.command.forestry.tree.spawnForest.format=형식 : /%s <종 이름> [<플레이어 이름>]
+
+for.chat.command.forestry.tree.mode.desc=- %s : 수목 난이도 명령어
+for.chat.command.forestry.tree.mode.help=수목 난이도에 관련된 명령어들입니다.
+for.chat.command.forestry.tree.mode.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.tree.mode.info.desc=- %s : 수목 난이도 정보
+for.chat.command.forestry.tree.mode.info.help=현재 수목 난이도와 가능한 수목 난이도들에 대한 정보를 보여줍니다.
+for.chat.command.forestry.tree.mode.info.format=형식 : /%s <난이도>
+
+for.chat.command.forestry.tree.mode.set.desc=- %s : 수목 난이도 설정
+for.chat.command.forestry.tree.mode.set.help=해당 차원의 수목 난이도를 설정합니다.
+for.chat.command.forestry.tree.mode.set.format=형식 : /%s [<차원 번호>] <난이도>
+
+for.chat.command.forestry.tree.save.desc=- %s : 수목 상태 저장
+for.chat.command.forestry.tree.save.help=수목 상태를 파일로 저장합니다.
+for.chat.command.forestry.tree.save.format=형식 : /%s [<플레이어 이름>]
+
+for.chat.command.forestry.tree.save.stats=Treekeeping statistics for %s on %s:
+
+for.description.treeBirch=널리 퍼져있는, 평균적으로 작은 높이의 자작나무.|목재 고문서
+for.description.treeCherry=작은 나무다. 자연 상태에서는 익는 시간이 필요한 체리를 맺는다.|목재 고문서
+for.description.treeChestnut=줄기가 두껍고 크게 자라는 낙엽수. 자연적으로 발생한 밤나무는 익는 데 조금 오랜 시간이 걸리는 열매를 맺는다.|목재 고문서
+for.description.treeLime=큰 낙엽수. 최근에 아욱과에 속하는 것으로 재분류되었다.|목재 고문서
+for.description.treeOak=사과를 맺는 나무들은 예로부터 많은 노래와 춤의 주제가 되었다.|목재 고문서
+for.description.treeSipiri=목재가 귀한 큰 상록수. 나무와 나무껍질은 기분 좋은 향기가 난다. 열대 지방에서만 자란다.|목재 고문서
+for.description.treeWalnut=줄기가 두껍고 크게 자라는 낙엽수. 자연적으로 발생한 호두나무는 익는 데 조금 오랜 시간이 걸리는 열매를 맺는다.|목재 고문서
+for.description.treeWillow=큰 낙엽수. 흰버드나무는 빨리 자란다. 습한 기후에서만 발생하는 것으로 관찰되었다.|목재 고문서
+
+for.family.jungle=정글
+for.family.nuts=견과류
+for.family.pomes=사과류
+for.family.prunes=자두류
+
+for.fruits.apple=사과
+for.fruits.cherry=체리
+for.fruits.chestnut=밤
+for.fruits.cocoa=코코아
+for.fruits.dates=대추야자
+for.fruits.lemon=레몬
+for.fruits.none=없음
+for.fruits.papaya=파파야
+for.fruits.plum=자두
+for.fruits.walnut=호두
+
+for.gui.family=열매 과
+for.gui.fireproof=내연성
+for.gui.fruits=열매
+for.gui.girth=나무 둘레
+for.gui.height=높이
+for.gui.maturity=성장 속도
+for.gui.native=지대
+for.gui.saplings=묘목 확률
+for.gui.sappiness=수액량
+for.gui.supports=생성 가능 열매
+for.gui.yield=열매 확률
+for.gui.combustibility=연소성
+for.gui.carbonization=탄화 가능성
+
+for.trees.grammar.blossom.type=꽃
+for.trees.grammar.blossom=%SPECIES %TYPE
+for.trees.grammar.germling.type=발아체
+for.trees.grammar.germling=%SPECIES %TYPE
+for.trees.grammar.pollen.type=꽃가루
+for.trees.grammar.pollen=%SPECIES %TYPE
+for.trees.grammar.sapling.type=묘목
+for.trees.grammar.sapling=%SPECIES %TYPE
+for.trees.grammar.leaves.type=나무 잎
+for.trees.grammar.leaves=%SPECIES %TYPE
+for.trees.grammar.pile.type=나무 더미
+for.trees.grammar.pile=%SPECIES %TYPE
+
+tile.for.wood_pile.name=나무 더미
+tile.for.wood_pile_decorative.name=장식용 나무 더미
+tile.for.loam.name=비옥토
+tile.for.ash_block.name=재 블록
+tile.for.charcoal.name=목탄 블록
+
+for.trees.hybrid=%PRIMARY-%SECONDARY 혼종
+
+for.trees.species.acacia=아카시아
+for.trees.species.appleOak=사과 참나무
+for.trees.species.balsa=발사
+for.trees.species.blueMahoe=블루 마호
+for.trees.species.bullPine=불 파인
+for.trees.species.coastSequoia=코스트 세콰이어
+for.trees.species.commonWalnut=커먼 호두
+for.trees.species.darkOak=짙은 참나무
+for.trees.species.datePalm=데이트 팜
+for.trees.species.desertAcacia=사막 아카시아
+for.trees.species.giantSequoia=자이언트 세콰이어
+for.trees.species.grandidierBaobab=그란디디어 바오밥
+for.trees.species.hillCherry=언덕 체리
+for.trees.species.jungle=정글
+for.trees.species.kapok=카폭
+for.trees.species.lemon=레몬
+for.trees.species.mundaneLarch=먼데인 라치
+for.trees.species.myrtleEbony=머틀 에보니
+for.trees.species.papaya=파파야
+for.trees.species.plum=플럼
+for.trees.species.redSpruce=레드 스프루스
+for.trees.species.silverBirch=실버 버치
+for.trees.species.silverLime=실버 라임
+for.trees.species.sipiri=시피리
+for.trees.species.sugarMaple=설탕단풍
+for.trees.species.sweetChestnut=꿀밤
+for.trees.species.teak=티크
+for.trees.species.wenge=웬지
+for.trees.species.whitePoplar=화이트 포플러
+for.trees.species.whiteWillow=화이트 윌로우
+for.trees.species.yellowMeranti=옐로 머랜티
+for.trees.species.ipe=아이프
+for.trees.species.padauk=파둑
+for.trees.species.cocobolo=코코볼로
+for.trees.species.zebrawood=지브라우드
+
+for.treemode.easy.desc=나무 교배를 간략화합니다.
+for.treemode.hard.desc=나무 교배를 어렵게 합니다.
+for.treemode.hardcore.desc=나무 교배가 크게 어려워집니다.
+for.treemode.insane.desc=나무 교배가 극단적으로 어려워집니다.
+for.treemode.normal.desc=평범한 플레이어에게 권장되는 난이도입니다.
+
+for.fence.grammar=%TYPE 울타리
+for.fence_gate.grammar=%TYPE 울타리 문
+for.log.grammar=%TYPE 나무
+for.planks.grammar=%TYPE 나무 판자
+for.slab.grammar=%TYPE 나무 반 블록
+for.slab.double.grammar=%TYPE 나무 반 블록
+for.stairs.grammar=%TYPE 계단
+for.door.grammar=%TYPE 문
+
+for.trees.woodType.larch=라치
+for.trees.woodType.teak=티크
+for.trees.woodType.acacia=사막 아카시아
+for.trees.woodType.lime=라임
+for.trees.woodType.chestnut=꿀밤
+for.trees.woodType.wenge=웬지
+for.trees.woodType.baobab=바오밥
+for.trees.woodType.sequoia=세콰이어
+for.trees.woodType.kapok=카폭
+for.trees.woodType.ebony=에보니
+for.trees.woodType.mahogany=마호거니
+for.trees.woodType.balsa=발사
+for.trees.woodType.willow=윌로우
+for.trees.woodType.walnut=호두
+for.trees.woodType.greenheart=그린하트
+for.trees.woodType.cherry=체리
+for.trees.woodType.mahoe=마호
+for.trees.woodType.poplar=포플러
+for.trees.woodType.palm=팜
+for.trees.woodType.papaya=파파야
+for.trees.woodType.pine=파인
+for.trees.woodType.plum=플럼
+for.trees.woodType.maple=단풍
+for.trees.woodType.citrus=시트러스
+for.trees.woodType.giganteum=자이언트 세콰이어
+for.trees.woodType.ipe=아이프
+for.trees.woodType.padauk=파둑
+for.trees.woodType.cocobolo=코코볼로
+for.trees.woodType.zebrawood=지브라우드
+
+tile.for.fireproof=%s (내화 처리됨)
+
+item.for.grafter.name=접목기
+item.for.grafter_proven.name=검증된 접목기
+
+tile.for.tree_chest.name=수목업자의 상자
+
+tile.for.saplingGE.0.name=묘목
+tile.for.leaves.0.name=잎
+tile.for.pods.0.name=꼬투리
+
+####################
+# FARMING
+####################
+for.farm.grammar.manual=수동 %s
+for.farm.grammar.managed=자동 %s
+
+for.farm.arboretum=수목원
+for.farm.crops=작물 농장
+for.farm.shroom=버섯 농장
+for.farm.succulent=선인장 농장
+for.farm.peat=토탄 농장
+for.farm.infernal=지옥 농장
+for.farm.reed=수수 농장
+for.farm.orchard=과수원
+for.farm.gourd=박류 농장
+for.farm.cocoa=코코아 농장
+for.farm.ender=엔더 농장
+for.farm.orchid=난초 농장
+for.farm.rubber=고무 농장
+
+for.gui.farm.title=농장
+for.gui.hydr.heat=열에 의한 수분 효율
+for.gui.hydr.humid=습기에 의한 수분 효율
+for.gui.hydr.overall=최종 수분 효율
+for.gui.hydr.rainfall=비에 의한 수분 효율
+for.gui.hydration=수분 요구됨
+
+for.hints.circuitboard.desc=인두기를 사용해 나무 농장을 원하는 종류의 농장으로 바꿀 수 있습니다.
+for.hints.circuitboard.tag=농장을 설계하세요!
+for.hints.farmgui.desc=흙은 왼쪽 공간에, 씨앗과 묘목은 오른쪽 위의 부산물 오른쪽 공간에 넣어주세요.
+for.hints.farmgui.tag=흙은 왼쪽에, 씨앗은 오른쪽에!
+for.hints.farmland.desc=부드러운 사암, 벽돌 또는 석재 벽돌로 농장이 만들어질 발판을 만들어주세요.
+for.hints.farmland.tag=경작지를 깔아주세요!
+for.hints.fertilizer.desc=모든 농장은 작동에 비료를 요구합니다. 퇴비나 멀치는 안 됩니다.
+for.hints.fertilizer.tag=비료 필요!
+for.hints.gearbox.desc=농장에 전력을 공급하기 위해서는 동력 전달기를 사용해야 합니다.
+for.hints.gearbox.tag=전력 제공!
+for.hints.hatch.desc=해치는 파이프와 튜브의 절친입니다. 해치를 통해야 자동 배출이 되거든요.
+for.hints.hatch.tag=해치를 열어라!
+for.hints.manualfarms.desc=자동 농장에서 분리된 수동 농장도 있습니다만, 이것들은 경작지를 만들지는 않습니다.
+for.hints.manualfarms.tag=수동 농장!
+for.hints.valve.desc=대부분의 농장은 물을 요구합니다. 수도꼭지를 사용해 자동화하세요.
+for.hints.valve.tag=물 공급!
+
+for.trigger.lowFertilizer=비료 부족
+for.trigger.lowLiquid=물 부족
+for.trigger.lowSoil=흙 부족
+
+tile.for.ffarm.tooltip=멀티-블록 : 3x4x3 - 5x4x5
+tile.for.ffarm.material.tooltip=재료 :
+tile.for.ffarm.0.name=농장 블록
+tile.for.ffarm.2.name=농장 동력 전달기
+tile.for.ffarm.3.name=농장 해치
+tile.for.ffarm.4.name=농장 수도꼭지
+tile.for.ffarm.5.name=농장 제어기
+
+tile.for.mushroom.0.name=버섯
+tile.for.mushroom.1.name=버섯
+
+####################
+# CULTIVATION
+####################
+tile.for.arboretum.name=수목원
+tile.for.arboretum.tooltip=나무를 기릅니다
+tile.for.farm_crops.name=농장
+tile.for.farm_crops.tooltip=작물을 기릅니다
+tile.for.farm_mushroom.name=버섯 농장
+tile.for.farm_mushroom.tooltip=버섯을 기릅니다
+tile.for.farm_nether.name=지옥 농장
+tile.for.farm_nether.tooltip=네더와트를 기릅니다
+tile.for.farm_gourd.name=박류 농장
+tile.for.farm_gourd.tooltip=수박과 호박을 기릅니다
+tile.for.farm_ender.name=엔더 농장
+tile.for.farm_ender.tooltip=후렴화와 엔더 릴리를 기릅니다
+tile.for.peat_bog.name=토탄 농장
+tile.for.peat_bog.tooltip=토탄을 기릅니다
+tile.for.plantation.name=고무 농장
+tile.for.plantation.tooltip=고무를 기릅니다
+
+item.for.flexible_casing.name=유연한 케이싱
+
+tile.for.planter.manual=%s (수동)
+tile.for.planter.managed=%s (자동)
+
+for.gui.planter.north=북
+for.gui.planter.south=남
+for.gui.planter.east=동
+for.gui.planter.west=서
+
+####################
+# GREENHOUSE
+####################
+tile.for.greenhouse.deprecated1=이 아이템은 deprecated 되었습니다.
+tile.for.greenhouse.deprecated2=조합대에 올려 자원을 일부 돌려받으십시오.
+tile.for.greenhouse.plain.name=온실 블록
+tile.for.greenhouse.gearbox.name=온실 동력 전달기
+tile.for.greenhouse.control.name=온실 제어기
+tile.for.greenhouse.screen.name=온실 스크린
+tile.for.greenhouse.window_up.name=온실 채광창
+tile.for.greenhouse.window.name=온실 창문
+tile.for.climatiser.fan.name=온실 선풍기
+tile.for.climatiser.heater.name=온실 온풍기
+tile.for.climatiser.dehumidifier.name=온실 제습기
+tile.for.climatiser.humidifier.name=온실 가습기
+tile.for.climatiser.hygro.name=온실 습도조절기
+
+####################
+# CLIMATOLAGY
+####################
+tile.for.habitat_former.name=서식지 조성기
+
+item.for.habitat_screen.name=서식지 스크린
+
+for.gui.habitat_former.climate.target=목표 : %s
+for.gui.habitat_former.climate.value=현재값 : %s
+for.gui.habitat_former.climate.default=초기값 : %s
+for.gui.habitat_former.climate.temperature=온도
+for.gui.habitat_former.climate.humidity=습도
+for.gui.habitat_former.climate.habitats=서식지
+for.gui.habitat_former.climate.selection=Selection
+for.gui.habitat_former.climate.range=범위
+for.gui.habitat_former.climate.range.blocks=%s 블록
+for.gui.habitat_former.climate.circle.enabled=원형 모드 활성화됨
+for.gui.habitat_former.climate.circle.disabled=원형 모드 비활성화됨
+for.gui.habitat_former.climate.preview.enabled=미리보기 모드 활성화됨
+for.gui.habitat_former.climate.preview.disabled=미리보기 모드 비활성화됨
+for.gui.habitat_former=서식지 조성기
+for.gui.habitat_former.range=범위
+for.gui.habitat_former.resources=자원
+for.gui.habitat_former.speed=속도
+
+for.habitat_screen.mode.active=미리보기 모드 : 활성화
+for.habitat_screen.mode.inactive=미리보기 모드 : 비활성화
+for.habitat_screen.state.linked='%s, %s, %s' 위치, '%s'번 차원
+for.habitat_screen.state.fail=연결되지 않음
+for.habitat_screen.temperature=온도 : %s
+for.habitat_screen.humidity=습도 : %s
+for.habitat_screen.status.state=온도 : %s, 습도 : %s
+for.habitat_screen.status.nostate=정보를 찾을 수 없음
+
+for.hints.formergui.tag=누르면 끝!
+for.hints.formergui.desc=상단 중앙의 두 개의 바 또는 텍스트 필드를 사용해 목표 기후를 지정하고 서식지 변경 버튼을 누르세요.
+for.hints.formerresources.tag=대체 뭐가 필요한거야?
+for.hints.formerresources.desc=서식지 조성기는 온도를 바꾸기 위해 에너지를 사용합니다. 그리고 용암, 물 또는 파쇄된 얼음과 같은 액체는 습도와 약간의 온도를 변화시킵니다.
+for.hints.formersettings.tag=원하는 대로
+for.hints.formersettings.desc=서식지 버튼 옆에 있는 공간을 사용해 목표 기후를 벌의 선호 기후로 변경할 수 있습니다. 간단히 벌로 클릭만 하면 됩니다.
+
+for.errors.wrong_resource.desc=잘못된 자원
+for.errors.wrong_resource.help=투입된 자원으로는 해당 습도에 도달할 수 없습니다.
+####################
+# LEPIDOPTEROLOGY
+####################
+
+for.chat.command.forestry.butterfly.desc=- %s : 나비 명령어들
+for.chat.command.forestry.butterfly.help=나비에 관련된 명령어들입니다.
+for.chat.command.forestry.butterfly.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.butterfly.kill.desc=- %s : 모든 나비 제거
+for.chat.command.forestry.butterfly.kill.help=로딩된 청크 내의 모든 나비를 제거합니다.
+for.chat.command.forestry.butterfly.kill.format=형식 : /%s [<차원 번호 #>]
+for.chat.command.forestry.butterfly.kill.response=%d마리의 나비를 제거하였습니다
+
+for.butterflies.hybrid=혼종 : %PRIMARY-%SECONDARY
+
+for.butterflies.grammar.butterfly.type=나비
+for.butterflies.grammar.butterfly=%SPECIES %TYPE
+for.butterflies.grammar.serum.type=세럼
+for.butterflies.grammar.serum=%SPECIES %TYPE
+for.butterflies.grammar.caterpillar.type=애벌레
+for.butterflies.grammar.caterpillar=%SPECIES %TYPE
+for.butterflies.grammar.cocoon.type=고치
+for.butterflies.grammar.cocoon=%SPECIES %TYPE
+
+for.butterflies.species.geometridae.brimstone=브림스톤 모스
+for.butterflies.species.geometridae.latticedHeath=래티스드 히스
+for.butterflies.species.nymphalidae.blueDuke=블루 듀크
+for.butterflies.species.nymphalidae.blueMorphoM=메넬라우스 블루 모르포
+for.butterflies.species.nymphalidae.blueMorphoP=펠레아디즈 블루 모르포
+for.butterflies.species.nymphalidae.blueMorphoR=리테너 블루 모르포
+for.butterflies.species.nymphalidae.blueWing=블루 윙
+for.butterflies.species.nymphalidae.comma=콤마
+for.butterflies.species.nymphalidae.dianaFritillary=다이애나 프리틸러리
+for.butterflies.species.nymphalidae.glasswing=글래스윙
+for.butterflies.species.nymphalidae.glassyTiger=글래시 타이거
+for.butterflies.species.nymphalidae.leopardLacewing=레오파드 레이스윙
+for.butterflies.species.nymphalidae.malachite=맬러카이트
+for.butterflies.species.nymphalidae.monarch=모나치
+for.butterflies.species.nymphalidae.paintedBeauty=페인티드 뷰티
+for.butterflies.species.nymphalidae.postman=포스트맨
+for.butterflies.species.nymphalidae.speckledWood=스페클드 우드
+for.butterflies.species.nymphalidae.speckledWoodC=카나리아 스페클드 우드
+for.butterflies.species.nymphalidae.speckledWoodM=머디런 스페클드 우드
+for.butterflies.species.papilionidae.emeraldPeacock=에메랄드 피콕
+for.butterflies.species.papilionidae.swallowtailB=블랙 스왈로테일
+for.butterflies.species.papilionidae.swallowtailC=시트러스 스왈로테일
+for.butterflies.species.papilionidae.swallowtailS=스파이스부쉬 스왈로테일
+for.butterflies.species.papilionidae.swallowtailT=소어즈 스왈로테일
+for.butterflies.species.papilionidae.swallowtailZ=지브라 스왈로테일
+for.butterflies.species.pieridae.brimstone=브림스톤
+for.butterflies.species.pieridae.cabbageWhite=캐비지 화이트
+for.butterflies.species.pieridae.gozoraAzure=고조라 아주르
+for.butterflies.species.pieridae.orangeTip=오렌지 팁
+for.butterflies.species.pieridae.palaenoSulphur=팔라에노 설퍼
+for.butterflies.species.pieridae.postillion=커먼 클라우디드 옐로
+for.butterflies.species.pieridae.reseda=이스턴 배스 화이트
+for.butterflies.species.pieridae.springAzure=호올리 블루
+for.butterflies.species.saturniidae.atlas=아틀라스 모스
+for.butterflies.species.bombycidae.bombyxMori=봄빅스 모리 모스
+
+for.gui.loot.butterfly=Possible Butterfly Loot
+for.gui.loot.caterpillar=Possible Caterpillar Loot
+for.gui.loot.cocoon=Possible Cocoon Loot
+
+for.lepidopterology.effect.none=없음
+
+item.for.butterfly.name=나비
+item.for.lepidopterist_bag.name=인시학자의 가방
+item.for.moth.name=나방
+tile.for.butterfly_chest.name=인시학자의 상자
+
+####################
+# MAIL
+####################
+
+for.chat.mail.already_mailed=편지를 재전송할 수 없습니다.
+
+for.chat.command.forestry.mail.desc=- %s : 메일 시스템 명령어
+for.chat.command.forestry.mail.help=메일 시스템에 관련된 명령어입니다.
+for.chat.command.forestry.mail.format=형식 : /%s <하위 명령어>
+
+for.chat.command.forestry.mail.trades.desc=- %s : 모든 거래소 목록.
+for.chat.command.forestry.mail.trades.help=모든 거래소와 가능한 거래의 목록을 보여줍니다.
+for.chat.command.forestry.mail.trades.format=형식 : /%s
+
+for.chat.command.forestry.mail.virtualize.desc=- %s : 특정 거래소의 상태를 변경.
+for.chat.command.forestry.mail.virtualize.help=특정 거래소의 상태를 변경합니다. 이 상태는 아이템을 소모하지 않습니다.
+for.chat.command.forestry.mail.virtualize.format=형식 : /%s <거래소 이름>
+for.chat.command.forestry.mail.virtualize.no_tradestation=이름이 '%s'인 거래소가 없습니다.
+for.chat.command.forestry.mail.virtualize.set='%s' 거래소의 상태를 %s로 변경했습니다.
+
+for.chat.mail.insufficient.buffer=거래소가 가득 찼습니다.
+for.chat.mail.insufficient.offer=거래할 물건이 부족합니다.
+for.chat.mail.insufficient.paper=거래소에 종이가 부족합니다.
+for.chat.mail.insufficient.stamps=거래소에 우표가 부족합니다.
+for.chat.mail.insufficient.trade.good=거래소의 물품이 다 떨어졌습니다.
+for.chat.mail.mailbox.full=수신인의 우체통이 꽉 찼습니다.
+for.chat.mail.not.mailable=편지를 전송할 수 없습니다.
+for.chat.mail.not.postpaid=우표가 충분하지 않습니다.
+for.chat.mail.no.mailbox=수신인의 우체통이 존재하지 않습니다.
+for.chat.mail.ok=거래가 가능합니다.
+for.chat.mail.response.not.mailable.format=거래소가 답신을 보내지 못했습니다. %s
+for.chat.mail.wrongstacksize=편지는 한 번에 한 통만 쓸 수 있습니다.
+
+for.gui.mail.address.copy=등록
+for.gui.mail.catalogue.close=닫기
+for.gui.mail.catalogue.trade=거래
+for.gui.mail.filter.all=전부
+for.gui.mail.filter.offline=비활성화
+for.gui.mail.filter.online=활성화
+for.gui.mail.notrades=활성화된 거래소가 없습니다.
+for.gui.mail.tradefor=다음 물품을 요청합니다 : 
+for.gui.mail.willtrade=%s의 제공 품목 : 
+
+item.for.catalogue.name=카탈로그
+item.for.catalogue.tooltip=모든 이용 가능한 거래소를 보여줍니다.
+
+####################
+# PIPES
+####################
+
+item.PipeItemsPropolis.name=양봉업자의 파이프
+
+tile.for.genetic_filter.name=유전자 필터
+tile.for.genetic_filter.0.name=유전자 필터
+
+for.gui.filter.seletion=필터 선택
+
+for.gui.filter.forestry.default.anything=아무거나
+for.gui.filter.forestry.default.closed=닫힘
+for.gui.filter.forestry.default.item=아이템
+for.gui.filter.forestry.default.cave=동굴 거주력
+for.gui.filter.forestry.default.flyer=우천 활동력
+for.gui.filter.forestry.default.nocturnal=야행성
+for.gui.filter.forestry.default.pure_breed=순종
+for.gui.filter.forestry.default.pure_cave=순수 동굴 거주력
+for.gui.filter.forestry.default.pure_flyer=순수 우천 활동력
+for.gui.filter.forestry.default.pure_nocturnal=순수 야행성
+
+for.gui.filter.forestry.apiculture.bee=아무 벌
+for.gui.filter.forestry.apiculture.queen=여왕벌
+for.gui.filter.forestry.apiculture.drone=일벌
+for.gui.filter.forestry.apiculture.princess=공주벌
+
+for.gui.filter.forestry.arboriculture.tree=아무 나무
+for.gui.filter.forestry.arboriculture.sapling=묘목
+for.gui.filter.forestry.arboriculture.pollen=꽃가루
+
+for.gui.filter.forestry.lepidopterology.flutter=아무 나비
+for.gui.filter.forestry.lepidopterology.butterfly=나비
+for.gui.filter.forestry.lepidopterology.caterpillar=애벌레
+for.gui.filter.forestry.lepidopterology.serum=세럼
+for.gui.filter.forestry.lepidopterology.cocoon=고치
+
+####################
+# MODULES
+####################
+for.module.apiculture.description=벌, 양봉 그리고 벌 부산물을 추가합니다. 월드 생성에 영향을 미칩니다.
+for.module.arboriculture.description=추가적인 나무 품종과 나무 부산물을 추가합니다.
+for.module.backpacks.description=가방을 추가합니다.
+for.module.book.description=다른 모든 모듈의 정보가 담긴 책을 추가합니다.
+for.module.charcoal.description=나무 더미, 비옥토 그리고 목탄 생산을 추가합니다.
+for.module.core.description=포레스트리를 위한 핵심 기능입니다. 다른 모든 모듈에 필요합니다.
+for.module.crates.description=나무 상자를 추가합니다.
+for.module.cultivation.description=다양한 종류의 농작물을 기를 수 있는 자동 농장을 추가합니다.
+for.module.database.description=벌, 나무 그리고 나비를 위한 다양한 저장소를 추가합니다.
+for.module.energy.description=다양한 RF엔진을 추가합니다.
+for.module.factory.description=물건을 제작하고, 생산하고, 작업하는 다양한 종류의 기계들을 추가합니다.
+for.module.farming.description=다양한 종류의 농작물을 기를 수 있는 자동 멀티블록 농장을 추가합니다.
+for.module.fluids.description=액체, 액체 블록, 그리고 액체 용기를 추가합니다.
+for.module.food.description=음식을 추가합니다.
+for.module.greenhouse.description=온실 멀티블록을 추가합니다.
+for.module.lepidopterology.description=나비들입니다. 반짝.
+for.module.mail.description=포레스트리의 메일과 거래 시스템을 추가합니다.
+for.module.sorting.description=유전 정보를 가진 아이템을 분류하는 필터를 추가합니다.
+for.module.worktable.description=8개의 조합법을 저장 가능한 조합대를 추가합니다.
+
+for.module.actuallyadditions.description=액츄얼리 애디션즈(Actually Additions)를 위한 호환 모듈입니다.
+for.module.betterwithmods.description=베터 위드 모드즈(Better With Mods)를 위한 호환 모듈입니다. 대마 경작을 활성화합니다.
+for.module.buildcraft6.description=빌드크래프트(BuildCraft)를 위한 호환 모듈입니다. 현재 버전은 7.99입니다.
+for.module.biomesoplenty.description=바이옴즈 오 플렌티(Biomes O Plenty)를 위한 호환 모듈입니다. BoP 묘목들의 재배를 활성화합니다.
+for.module.enderIO.description=엔더IO(EnderIO)를 위한 호환 모듈입니다.
+for.module.extrautilities.description=엑스트라 유틸리티(Extra Utilities)를 위한 호환 모듈입니다. 엔더 릴리와 붉은 난초의 재배를 활성화합니다.
+for.module.harvestcraft.description=하베스트크래프트(HarvestCraft)를 위한 호환 모듈입니다. 하베스트크래프트의 작물과 나무 재배를 활성화합니다.
+for.module.ic2.description=인더스트리얼크래프트2(IC2)를 위한 호환 모듈입니다. 전력 변환을 위한 전기 엔진과 바이오 발전기를 추가합니다.
+for.module.immersiveengineering.description=이머시브 엔지니어링(Immersive Engineering)을 위한 호환 모듈입니다.
+for.module.mysticalagriculture.description=미스티컬 아그리컬쳐(Mystical Agriculture)를 위한 호환 모듈입니다. 미스티컬 아그리컬쳐의 작물 재배를 활성화합니다.
+for.module.natura.description=나츄라(Natura)를 위한 호환 모듈입니다. 나츄라의 묘목 재배를 활성화합니다.
+for.module.roots.description=루츠(Roots)를 위한 호환 모듈입니다.
+for.module.rustic.description=러스틱(Rustic)을 위한 호환 모듈입니다.
+for.module.techreborn.description=테크 리본(Tech reborn)을 위한 호환 모듈입니다. 고무나무에서의 고무 채취를 활성화합니다.
+
+####################
+# CONFIG FILES
+####################
+
+for.config.performance=Performance
+for.config.performance.particleFX=Particle Effects
+for.config.performance.particleFX.comment=Enables particle effects. Note that Forestry respects Minecraft's reduced particle video settings.
+for.config.performance.hiveLightLevels=Beehive Light Level
+for.config.performance.hiveLightLevels.comment=Sets the amount of light emitted by beehives.
+for.config.performance.backpacks.resupply=Backpack Resupply
+for.config.performance.backpacks.resupply.comment=Enable backpack resupply. You may want to set this to false on busy servers.
+
+for.config.world.generate=세계 유형
+
+for.config.world.generate.retrogen.normal=Retrogen
+for.config.world.generate.retrogen.normal.comment=Creates Forestry world generation in chunks that were created before the mod was added.
+for.config.world.generate.retrogen.forced=Forced Retrogen
+for.config.world.generate.retrogen.forced.comment=Creates Forestry world generation in all chunks, even if they were generated there before.
+
+for.config.world.generate.ore.apatite=Generate Apatite
+for.config.world.generate.ore.apatite.comment=Generates apatite ore blocks in the world.
+for.config.world.generate.ore.copper=Generate Copper
+for.config.world.generate.ore.copper.comment=Generates copper ore blocks in the world.
+for.config.world.generate.ore.tin=Generate Tin
+for.config.world.generate.ore.tin.comment=Generates tin ore blocks in the world.
+for.config.world.generate.ore.dimBlacklist=Ore generation Dimension Blacklist
+for.config.world.generate.ore.dimBlacklist.comment=Disables the generation of all ore in the specified dimensions. Enter one dimension id per line.
+
+for.config.world.generate.beehives.amount=Beehives Generation Amount
+for.config.world.generate.beehives.amount.comment=Sets how many beehives spawn in the world.
+for.config.world.generate.beehives.debug=Debug Beehive Generation
+for.config.world.generate.beehives.debug.comment=Force Forestry to generate a beehive at every possible location. (This will break your world. Only useful to developers)
+for.config.world.generate.beehives.dimBlacklist=Beehive Generation Dimension Blacklist
+for.config.world.generate.beehives.dimBlacklist.comment=Disables the generation of all hives in the specified dimensions. Enter one dimension id per line.
+for.config.world.generate.beehives.blacklist.category_comment=Disables the generation of a specific hive in a specific biome or in a biome with a specific biome type. Just add the registry name of the biome or the name of the biome type to the property of the hive. Every biome type / registry name has to be in a seperate line. The global type can be used to blacklist a biome from all hive generation.
+
+for.config.world.generate.villagers=Generate Villagers
+for.config.world.generate.villagers.comment=Generates Forestry villagers and their houses.
+
+for.config.crafting=Crafting
+for.config.crafting.bronze=Craft Bronze
+for.config.crafting.bronze.comment=Enables the crafting recipe for bronze.
+for.config.crafting.stamps.enabled=Craft Stamps
+for.config.crafting.stamps.enabled.comment=Enables the crafting recipe for stamps. Disable to use stamps as a currency.
+for.config.crafting.stamps.disabled=Disabled Stamps
+for.config.crafting.stamps.disabled.comment=Disables the crafting recipe for certain stamps.
+
+for.config.tweaks=Tweaks
+
+for.config.tweaks.gui.mail.alert.enabled=Mail Alert
+for.config.tweaks.gui.mail.alert.enabled.comment=Enables the new mail alert box.
+for.config.tweaks.gui.mail.alert.xPosition=Horizontal Position
+for.config.tweaks.gui.mail.alert.xPosition.comment=Horizontal Position of the mail alert box on the screen.
+for.config.tweaks.gui.mail.alert.yPosition=Vertical Position
+for.config.tweaks.gui.mail.alert.yPosition.comment=Vertical Position of the mail alert box on the screen.
+
+for.config.tweaks.gui.tabs.hints=Hints
+for.config.tweaks.gui.tabs.hints.comment=Enables the hints tab on machine and engine guis.
+for.config.tweaks.gui.tabs.speed=Tab Speed
+for.config.tweaks.gui.tabs.speed.comment=Set the speed at which the gui side tabs open and close.
+for.config.tweaks.gui.tabs.energy=Energy Tab
+for.config.tweaks.gui.tabs.energy.comment=Display the energy statistics tab on energy consumers.
+
+for.config.tweaks.gui.tooltip.liquidamount=Liquid Tooltip
+for.config.tweaks.gui.tooltip.liquidamount.comment=Display liquid amounts in tank tooltips.
+
+for.config.tweaks.permissions=Permissions
+for.config.tweaks.permissions.comment=Enables access restrictions on Forestry machines.
+for.config.tweaks.version.check=Version Check
+for.config.tweaks.version.check.comment=Enables update and version check notice.
+
+for.config.tweaks.humus.degradeDelimiter=Humus Degrade Delimiter
+for.config.tweaks.humus.degradeDelimiter.comment=Set how many stages humus has before it turns into sand.
+
+for.config.tweaks.farms.size=Farm Size
+for.config.tweaks.farms.size.comment=Sets the size multiplier of the farmland.
+for.config.tweaks.farms.fertilizer=Farm Fertilizer
+for.config.tweaks.farms.fertilizer.comment=Sets the multiplier of the multifarm and the cultivation farms. All cultivation farms alway use the double amount of fertilizer.
+for.config.tweaks.farms.square=Square Farms
+for.config.tweaks.farms.square.comment=Makes farms use a square layout instead of a diamond one.
+for.config.tweaks.farms.enderlily=EnderLily Farm Support
+for.config.tweaks.farms.enderlily.comment=Enables farm support for Extra Utilities Ender-lily seeds.
+for.config.tweaks.farms.redorchid=Red Orchid Farm Support
+for.config.tweaks.farms.redorchid.comment=Enables farm support for Extra Utilities Red Orchid.
+for.config.tweaks.farms.magicalcrops=Magical Crops Farm Support
+for.config.tweaks.farms.magicalcrops.comment=Enables farm support for Magical Crops.
+
+for.config.tweaks.cultivation.extend=Cultivation Farm Size
+for.config.tweaks.cultivation.extend.comment=Sets the size of the farmland that is used by all cultivation farms.
+for.config.tweaks.cultivation.ring=Ring Cultivation Farms
+for.config.tweaks.cultivation.ring.comment=Makes cultivation farms use a ring layout like the layout of the old farms. The farmland size of the ring layout is always one block smaller.
+for.config.tweaks.cultivation.ring_size=Inner Ring Size
+for.config.tweaks.cultivation.ring_size.comment=Sets the size of the inner ring of the ring layout.
+
+for.config.tweaks.capsule.capsulePickup=Capsule Pickup
+for.config.tweaks.capsule.capsulePickup.comment=Enables the function that cans and capsules can pick up fluids from the world.
+for.config.tweaks.capsule.capsuleReuseable=Reuseable Capsules
+for.config.tweaks.capsule.capsuleReuseable.comment=Capsules are no longer consumed after being emptied.
+
+for.config.tweaks.charcoal.amount.base=Amount Base
+for.config.tweaks.charcoal.amount.base.comment=The base amount that the wood pile will drop if the wall blocks are no registered pile waal blocks.
+for.config.tweaks.charcoal.check.range=Wall Check Range
+for.config.tweaks.charcoal.check.range.comment=Sets the amount of blocks that the wood pile will check if it is a valid charcoal pile wall block.
+
+for.config.tweaks.book.spawn=산림학자의 설명서
+for.config.tweaks.book.spawn.comment=Players who enter the world for the first time get a Forester's Manual.
+
+for.config.genetics=Genetics
+for.config.genetics.pollinate.vanilla.trees=Pollinate Vanilla Trees
+for.config.genetics.pollinate.vanilla.trees.comment=Allow bees to pollinate vanilla tree leaves. When disabled, vanilla trees must be analyzed before they can be pollinated.
+for.config.genetics.analyzerblock.energy.use=Analyzer Block Energy Usage
+for.config.genetics.analyzerblock.energy.use.comment=Energy use of Analyzer Block per work cycle.
+for.config.genetics.research.boost.multiplier=Research Mutation Multiplier
+for.config.genetics.research.boost.multiplier.comment=Multiplies the chance of a mutation when it has been discovered in the Escritoire.
+for.config.genetics.research.boost.max.percent=Research Mutation Max
+for.config.genetics.research.boost.max.percent.comment=The maximum percentage boost that can be applied by researching a mutation in the Escritoire.
+
+for.config.difficulty=Difficulty
+for.config.difficulty.game.mode=Game Mode
+for.config.difficulty.game.mode.comment=Set to your preferred game mode. Mismatch with the server may cause visual glitches with recipes.
+for.config.difficulty.recreate.definitions=Recreate Definitions
+for.config.difficulty.recreate.definitions.comment=Forces recreation of the game mode definitions in config/forestry/gamemodes.
+
+for.config.structures=Structures
+for.config.structures.disabled=Disabled Structures
+for.config.structures.disabled.comment=List specific structures to disable them.
+
+for.config.farm.fertilizers.items=Add fertilizers to Forestry. An entry has to look like this: modID:itemName:MetaData;fertilizerValue. You need to separate every entry in a separate line. You can't remove auto generated entries you only can deactivate them if you set their value to 0.
+
+for.config.fluids=Fluids
+for.config.fluids.enable.format=Enables %s fluid.
+for.config.fluid.blocks=Fluid Blocks
+for.config.fluid.blocks.enable.format=Enables %s in-world fluid block.
+
+for.config.debug.enabled=Debug Mode
+for.config.debug.enabled.comment=Enable Debug mode (only useful to developers).
+
+for.config.beekeeping.mode=Beekeeping Mode
+for.config.beekeeping.mode.comment=Change the beekeeping mode.
+for.config.beekeeping.second.princess=Second Princess Chance
+for.config.beekeeping.second.princess.comment=Percent chance of a second princess drop, for limited/skyblock maps.
+for.config.beekeeping.flowers.accepted=Accepted Flowers
+for.config.beekeeping.flowers.accepted.comment=Accepted flowers allow bees to work. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
+for.config.beekeeping.flowers.plantable=Plantable Flowers
+for.config.beekeeping.flowers.plantable.comment=Plantable flowers are placed by bees. All plantable flowers are automatically accepted flowers. Format is 'modid:name:meta', one per line. The format for wildcard  metadata is 'modid:name'.
+for.config.beekeeping.flowers.spawn=Max Flowers Spawned
+for.config.beekeeping.flowers.spawn.comment=The maximum number of flowers for hives to spawn nearby over time.
+for.config.beekeeping.ticks.work=Ticks per Cycle
+for.config.beekeeping.ticks.work.comment=The number of ticks per bee work cycle.
+for.config.beekeeping.hivedamage.peaceful=Peaceful Hive Damage
+for.config.beekeeping.hivedamage.peaceful.comment=Whether bees can damage a player playing on peaceful mode.
+for.config.beekeeping.hivedamage.underwater=Underwater Hive Damage
+for.config.beekeeping.hivedamage.underwater.comment=Whether bees can damage a player while they are underwater.
+for.config.beekeeping.hivedamage.onlyAfterAttack=Defend Hive Damage
+for.config.beekeeping.hivedamage.onlyAfterAttack.comment=The bees only attack the player if he starts to destroy the hive.
+for.config.beekeeping.hivedamage.onlyPlayers=Player Hive Damage
+for.config.beekeeping.hivedamage.onlyPlayers.comment=Whether bees can damage other entities than the player.
+for.config.beekeeping.self.pollination=Leaf Self Pollination
+for.config.beekeeping.self.pollination.comment=If true bees will pollinate leaves with themselves to speed up getting a homozgous genome.
+for.config.beekeeping.ignoble.decay=Ignoble Decay
+for.config.beekeeping.ignoble.decay.comment=Whether ignoble bees will eventually die out.
+
+for.config.species.blacklist=Species Blacklist
+for.config.species.blacklist.comment=Add species to blacklist identified by their uid, one per line.
+
+for.config.butterfly.alleles.rarity=Get the butterfly spawn rarity by their uid, one per line.
+for.config.butterfly.entities.spawn.limit=Butterfly Spawn Limit
+for.config.butterfly.entities.spawn.limit.comment=Butterflies will stop natural spawning once this limit is reached.
+for.config.butterfly.entities.spawn.leaves=Spawn Butterflies From Leaves
+for.config.butterfly.entities.spawn.leaves.comment=Whether butterflies should spawn from the leaves of trees.
+for.config.butterfly.entities.maximum=Butterfly Maximum
+for.config.butterfly.entities.maximum.comment=New butterflies will stay in item form and will not take flight once this limit is reached.
+for.config.butterfly.entities.maxDistance=Maximum Distance To Home
+for.config.butterfly.entities.maxDistance.comment=Butterflies will fly home if they are too far away from it.
+for.config.butterfly.entities.pollination=Butterfly Pollination
+for.config.butterfly.entities.pollination.comment=Allow butterflies to pollinate leaves.
+for.config.butterfly.cocoons.generate=Generate Butterfly Cocoons
+for.config.butterfly.cocoons.generate.comment=Whether cocoons containing butterfiles should generate in the world
+for.config.butterfly.cocoons.amount=Butterfly Cocoon Frequency
+for.config.butterfly.cocoons.amount.comment=How often butterfly cocoons should generate
+for.config.butterfly.cocoons.serum=Serum Drop Chance
+for.config.butterfly.cocoons.serum.comment=How often cocoons should drop a serum
+for.config.butterfly.cocoons.second.serum=Second Serum Drop Chance
+for.config.butterfly.cocoons.second.serum.comment=How often cocoons should drop a second serum
+for.config.butterfly.alleles.loot=Loot drops from cocoons. Format is modid:name:meta;chance
+
+for.config.backpacks.item.stacks.format=Add itemStacks for the %s's backpack here in the format 'modid:name:meta'. For wildcard metadata the format is 'modid:name'.
+for.config.backpacks.ore.dict.format=Add ore dictionary names for the %s's backpack here in the format 'oreDictName'. Regular expressions may also be used.
+
+for.config.crates.items.accepted.comment=Added items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.items.rejected.comment=Blacklisted items. The format is 'modid:meta:name'. For wildcard metadata the format is 'modid:name'.
+for.config.crates.oredict.accepted.comment=Added oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
+for.config.crates.oredict.rejected.comment=Blacklisted oredict. Format is 'oreDictName'. Regular expressions may also be used. See backpack config for more information.
+
+for.config.gamemode=Game Mode
+
+for.config.gamemode.energy.demand.modifier.comment=Modifies the energy required to activate machines, as well as the max amount of energy stored and accepted.
+for.config.gamemode.farms.fertilizer.modifier.value.comment=Modifies the time a piece of fertilizer lasts in a farm.
+
+for.config.gamemode.fuel.ethanol.generator.comment=modifies the energy provided by ethanol in a Bio Generator.
+for.config.gamemode.fuel.ethanol.combustion.comment=modifies the energy provided by ethanol in Buildcraft Combustion Engines.
+for.config.gamemode.fuel.biomass.generator.comment=modifies the energy provided by Biomass in a Bio Generator.
+for.config.gamemode.fuel.biomass.biogas.comment=modifies the energy provided by Biomass in Biogas Engines.
+
+for.config.gamemode.recipe.output.fertilizer.apatite.comment=amount of fertilizer yielded by the recipe using apatite.
+for.config.gamemode.recipe.output.fertilizer.ash.comment=amount of fertilizer yielded by the recipe using ash.
+for.config.gamemode.recipe.output.compost.wheat.comment=amount of compost yielded by the recipe using wheat.
+for.config.gamemode.recipe.output.compost.ash.comment=amount of compost yielded by the recipe using ash.
+for.config.gamemode.recipe.output.humus.fertilizer.comment=amount of humus yielded by the recipe using fertilizer.
+for.config.gamemode.recipe.output.humus.compost.comment=amount of humus yielded by the recipe using compost.
+for.config.gamemode.recipe.output.bogearth.bucket.comment=amount of bog earth yielded by the recipe using buckets.
+for.config.gamemode.recipe.output.bogearth.can.comment=amount of bog earth yielded by the recipes using cans, cells or capsules.
+for.config.gamemode.recipe.output.can.comment=amount yielded by the recipe for tin cans.
+for.config.gamemode.recipe.output.capsule.comment=amount yielded by the recipe for wax capsules.
+for.config.gamemode.recipe.output.refractory.comment=amount yielded by the recipe for refractory capsules.
+
+for.config.gamemode.fermenter.cycles.fertilizer.comment=modifies the amount of cycles fertilizer can keep a fermenter going.
+for.config.gamemode.fermenter.cycles.compost.comment=modifies the amount of cycles compost can keep a fermenter going.
+for.config.gamemode.fermenter.cycles.mulch.comment=modifies the amount of cycles mulch can keep a fermenter going.
+for.config.gamemode.fermenter.value.fertilizer.comment=modifies the amount of biomass per cycle a fermenter will produce using fertilizer.
+for.config.gamemode.fermenter.value.compost.comment=modifies the amount of biomass per cycle a fermenter will produce using compost.
+for.config.gamemode.fermenter.value.mulch.comment=modifies the amount of biomass per cycle a fermenter will produce using mulch.
+for.config.gamemode.fermenter.yield.sapling.comment=modifies the base amount of biomass a sapling will yield in a fermenter, affected by sappiness trait.
+for.config.gamemode.fermenter.yield.cactus.comment=modifies the amount of biomass a piece of cactus will yield in a fermenter.
+for.config.gamemode.fermenter.yield.wheat.comment=modifies the amount of biomass a piece of wheat will yield in a fermenter.
+for.config.gamemode.fermenter.yield.cane.comment=modifies the amount of biomass a piece of sugar cane will yield in a fermenter.
+for.config.gamemode.fermenter.yield.mushroom.comment=modifies the amount of biomass a mushroom will yield in a fermenter.
+
+for.config.gamemode.squeezer.liquid.seed.comment=modifies the amount of seed oil squeezed from a single seed. other sources are based off this.
+for.config.gamemode.squeezer.liquid.apple.comment=modifies the amount of juice squeezed from a single apple. other sources are based off this.
+for.config.gamemode.squeezer.mulch.apple.comment=modifies the chance of mulch per squeezed apple.
+
+for.config.gamemode.energy.engine.clockwork.comment=Enable the clockwork engine.
+
+for.config.power.types.rf=Redstone Flux
+for.config.power.types.rf.comment=Enable Redstone Flux power support.
+for.config.power.types.mj=MJ
+for.config.power.types.mj.comment=Enable MJ power support.
+for.config.power.types.tesla=Tesla
+for.config.power.types.tesla.comment=Enable Tesla power support.
+for.config.power.display.mode=Power Display Mode
+for.config.power.display.mode.comment=The format power will be displayed in in engine/machine interfaces.
+
+for.config.machines.enabled=Enabled machines.
+for.config.machines.enabled.comment=List of enabled machines. Note that some things may be impossible to do if you change this!
+
+
+###################################
+# CUSTOM BEE AND TREE SPECIES NAMES
+###################################
+# Syntax:
+# for.bees.custom.<type>.<species>=New custom bee name
+# for.trees.custom.<type>.<species>=New custom tree name
+# Examples:
+# for.bees.custom.drone.forest=Forest Drone
+# for.trees.custom.pollen.darkOak=New Dark Oak Pollen Name
+# Beealyzer/Treealyzer syntax:
+# for.bees.custom.beealyzer.<type>.<species>=New custom bee species name
+# for.trees.custom.treealyzer.<type>.<species>=New custom tree species name
+# Examples:
+# for.bees.custom.beealyzer.drone.forest=New Forest drone species name when used in a beealyzer
+# for.trees.custom.treealyzer.pollen.darkOak=New Dark Oak pollen species name when used in a treealyzer
+
+###################################
+# CUSTOM ALLELE ADJECTIVES
+###################################
+# Replaces forestry.allele.<adjective>
+#
+# Syntax:
+# forestry.allele.<category>.<adjective>=New custom adjective
+#
+# Available categories and [adjectives]:
+# speed: 		[slowest, slower, slow, normal, fast, faster, fastest]
+# maturation: 	[slowest, slower, slow, normal, fast, faster, fastest]
+# flowering:	[slowest, slower, slow, normal, fast, faster, fastest, maximum]
+#
+# size: 		[smallest, smaller, average, large, larger, largest]
+# height: 		[smallest, smaller, average, large, larger, largest, gigantic]
+# territory:	[average, large, larger, largest]
+#
+# saplings: 	[lowest, lower, low, average, high, higher, highest]
+# yield: 		[lowest, lower, low, average, high, higher, highest]
+# sappiness:	[lowest, lower, low, average, high, higher, highest]
+#
+# Examples:
+# forestry.allele.speed.slowest=New custom adjective for slowest worker speed, replacing forestry.allele.slowest
+# forestry.allele.flowering.slowest=New custom adjective for slowest flower pollination, replacing forestry.allele.slowest
+# forestry.allele.yield.low=New custom adjective for low yield, replacing forestry.allele.low
+
+###################################
+# CUSTOM TOOLTIPS
+###################################
+# Available custom tooltips:
+# for.tooltip.worker.<speed adjective> for bee worker speed.
+#
+# Example:
+# for.tooltip.worker.slowest=Slowest Worker
+
+###################################
+# CUSTOM WOOD NAMES
+###################################
+#
+# Examples:
+# tile.for.stairs.4.name=Chestnut Stairs
+# tile.for.planks.8.name=Kapok Wood Planks
+# tile.for.slab.5.name=Wenge Wood Slab
+# tile.for.log.10.name=Mahogany Wood
+# tile.for.fences.0.name=Larch Fence
+
+####################
+# JEI Descriptions
+####################
+for.jei.description.frames=양봉기에 프레임을 넣어 하찮은 혈통의 벌의 유전적 도태 확률을 줄이고 벌들의 생산성을 향상시킵니다.
+for.jei.description.apiarist.suit=양봉업자의 옷은 착용자가 벌들의 해로운 효과를 받는 것을 막아줍니다. 완성된 한 벌은 완벽하게 보호해줍니다.
+for.jei.description.habitat_locator=서식지 추적기는 벌의 가장 가까운 이상적인 서식지를 찾아줍니다. 적당한 장소를 찾으면, 그 장소를 가리킵니다. 현재 위치가 이상적일 경우, 지속적으로 회전합니다.
+for.jei.description.scoop=포충망은 자연 상태에서 찾을 수 있는 벌집을 부수어, 벌집 안의 벌을 수집할 수 있습니다. 또한 나비를 우클릭하는 것으로 나비를 수집할 수 있습니다.
+for.jei.description.imprinter=크리에이티브 전용입니다. 어떠한 종류의 혼종 벌이라도 만들 수 있습니다.
+for.jei.description.infuser=벌꿀 술에 꽃가루 뭉치를 주입해 치료용 벌꿀 술을 만들 수 있습니다.
+
+for.jei.description.chipsets=인두기를 이용해 회로판에 진공관을 납땜할 수 있습니다. 한번 완성하면, 기계의 회로판 장착 공간에 넣을 수 있습니다. 인두기를 이용해 회로판 장착 공간에서 제거할 수 있습니다.
+for.jei.description.soldering_iron=인두기를 손에 들고 우클릭하는 것으로 납떔 GUI를 열 수 있습니다. 만들고자 하는 회로판을 고르고 회로판에 진공관을 붙일 수 있습니다. 회로판 장착 공간에서 회로판을 분리할 때도 사용할 수 있습니다.
+for.jei.description.thermionic_tubes=인두기를 이용해 회로판에 진공관을 납땜할 수 있습니다. 인두기에 선택된 회로판의 종류에 따라 다양한 역할을 가집니다. 도움말을 통해 확인할 수 있습니다. 한번 납땜되면, 회로판에서 분리할 수 없습니다.
+for.jei.description.humus=작물을 기를 수 있고 물이 필요없는 기름진 땅입니다. 시간에 따라 모래로 변합니다.
+for.jei.description.bog_earth=물 옆에 두면 오랜 시간이 지난 뒤 토탄으로 변합니다.
+for.jei.description.analyzer=휴대용 유전분석기의 블록 버전입니다. 전력과 액체 꿀을 요구합니다.
+for.jei.description.escritoire=별, 나무, 그리고 나비 변이를 연구하기 위한 그림 맞추기 미니게임을 할 수 있습니다. 변이 확률을 높여주는 연구 노트와 다른 부산물들을 얻을 수 있습니다.
+for.jei.description.pipette=적은 양의 액체를 뜰 수 있습니다. 포레스트리 GUI에서, 피펫을 들고 액체 저장공간에 클릭하는 것으로 즉시 채우고 뺄 수 있습니다.
+for.jei.description.kit_shovel=청동 삽이 담긴 쌓을 수 있는 소포입니다. 들고 사용하는 것으로 열 수 있습니다.
+for.jei.description.kit_pickaxe=청동 곡괭이가 담긴 쌓을 수 있는 소포입니다. 들고 사용하는 것으로 열 수 있습니다.
+for.jei.description.fertilizer_compound=풍부한 비료입니다. 작물과 묘목에 뼛가루처럼 사용할 수 있습니다. 포레스트리 농장을 작동하기 위해서 필요합니다.
+
+for.jei.description.raintank=비가 올 때 물을 수집합니다. 밑 면으로 자동적으로 물을 빼낼 수 있습니다.
+for.jei.description.worktable=저장공간이 내장된 자동 조합대입니다. 최대 9개의 조합법까지 저장할 수 있습니다. 조합법 충돌 시 원하는 조합법을 고를 수 있습니다.
+
+for.jei.description.grafter=포레스트리 잎을 부술 때 묘목을 떨어뜨립니다. 굉장히 한정적입니다.
+for.jei.description.grafter_proven=포레스트리 잎을 부술 때 묘목을 떨어뜨립니다. 마을 주민으로부터 구매하는 것으로만 획득할 수 있습니다.
+
+for.jei.description.mailbox=사람들이 메일을 보내고 거래소를 이용할 수 있도록 해줍니다. 어떤 메일박스를 열든 본인의 고유한 메일박스만 열립니다.
+for.jei.description.trade_station=플레이어끼리 거래가 가능하게 해 주는 자동 우체통입니다.
+for.jei.description.stamp_collector=크리에이티브 전용입니다. 편지를 보낼 때 사용되는 모든 종류의 우편이 있습니다. 우표 경제를 만들 때 쓸만하겠군요.
+
+for.jei.description.adventurer_bag=/config/forestry/backpacks.cfg에 설절된 물건들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.builder_bag=건축과 관련된 아이템들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.digger_bag=흙, 조약돌, 그리고 땅 파는 것과 관련된 가치가 낮은 아이템들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.forester_bag=식물과 관련된 아이템들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.hunter_bag=몹의 전리품과 관련된 아이템들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.miner_bag=광석과 채광과 관련된 가치가 높은 아이템들을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.apiarist_bag=벌을 자동적으로 줍는 추가 저장공간입니다.
+for.jei.description.lepidopterist_bag=나비를 자동적으로 줍는 추가 저장공간입니다.
+
+####################
+# JEI Recipes
+####################
+for.jei.rainmaker.causes.rain=비 발생
+for.jei.rainmaker.stops.rain=비 소멸
+for.jei.rainmaker.speed=속도 : %s
+for.jei.rainmaker.duration=지속 시간 : %s틱
+for.jei.farming.name=농장
+for.jei.farming.soil=흙
+for.jei.farming.germlings=발아체
+for.jei.farming.products=생산물
+for.jei.charcoal.pile.name=목탄 더미
+for.jei.chance=확률 : %s
+for.jei.fortune=이 아이템은 행운 마법부여에 영향을 받습니다.

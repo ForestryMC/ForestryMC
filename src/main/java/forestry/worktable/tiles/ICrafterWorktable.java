@@ -9,14 +9,14 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public interface ICrafterWorktable {
-    ItemStack getResult(CraftingInventory inventory, World world);
+	ItemStack getResult(CraftingInventory inventory, World world);
 
-    boolean canTakeStack(int slotIndex);
+	boolean canTakeStack(int slotIndex);
 
-    boolean onCraftingStart(PlayerEntity player);
+	boolean onCraftingStart(PlayerEntity player);
 
-    void onCraftingComplete(PlayerEntity player);
+	void onCraftingComplete(PlayerEntity player);
 
-    @Nullable
-    IRecipe getRecipeUsed();
+	@Nullable
+	IRecipe getRecipeUsed();
 }

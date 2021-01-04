@@ -12,6 +12,7 @@ package forestry.farming;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,53 +20,53 @@ import javax.annotation.Nullable;
 
 public class FarmTarget {
 
-    private final BlockPos start;
-    private final FarmDirection direction;
-    private final int limit;
+	private final BlockPos start;
+	private final FarmDirection direction;
+	private final int limit;
 
-    private int yOffset;
-    private int extent;
+	private int yOffset;
+	private int extent;
 
-    public FarmTarget(BlockPos start, FarmDirection direction, int limit) {
-        this.start = start;
-        this.direction = direction;
-        this.limit = limit;
-    }
+	public FarmTarget(BlockPos start, FarmDirection direction, int limit) {
+		this.start = start;
+		this.direction = direction;
+		this.limit = limit;
+	}
 
-    public BlockPos getStart() {
-        return start;
-    }
+	public BlockPos getStart() {
+		return start;
+	}
 
-    public int getYOffset() {
-        return this.yOffset;
-    }
+	public int getYOffset() {
+		return this.yOffset;
+	}
 
-    public int getExtent() {
-        return extent;
-    }
+	public int getExtent() {
+		return extent;
+	}
 
-    public FarmDirection getDirection() {
-        return direction;
-    }
+	public FarmDirection getDirection() {
+		return direction;
+	}
 
-    public void setExtentAndYOffset(World world, @Nullable BlockPos platformPosition, IFarmHousing housing) {
-        if (platformPosition == null) {
-            extent = 0;
-            return;
-        }
+	public void setExtentAndYOffset(World world, @Nullable BlockPos platformPosition, IFarmHousing housing) {
+		if (platformPosition == null) {
+			extent = 0;
+			return;
+		}
 
-        BlockPos.Mutable position = new BlockPos.Mutable();
-        position.setPos(platformPosition);
-        for (extent = 0; extent < limit; extent++) {
-            if (!world.isBlockLoaded(position)) {
-                break;
-            }
-            if (!housing.isValidPlatform(world, position)) {
-                break;
-            }
-            position.move(getDirection().getFacing());
-        }
+		BlockPos.Mutable position = new BlockPos.Mutable();
+		position.setPos(platformPosition);
+		for (extent = 0; extent < limit; extent++) {
+			if (!world.isBlockLoaded(position)) {
+				break;
+			}
+			if (!housing.isValidPlatform(world, position)) {
+				break;
+			}
+			position.move(getDirection().getFacing());
+		}
 
-        yOffset = platformPosition.getY() + 1 - getStart().getY();
-    }
+		yOffset = platformPosition.getY() + 1 - getStart().getY();
+	}
 }

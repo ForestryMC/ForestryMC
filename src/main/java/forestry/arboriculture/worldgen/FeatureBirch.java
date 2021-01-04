@@ -11,6 +11,7 @@
 package forestry.arboriculture.worldgen;
 
 import forestry.api.arboriculture.ITreeGenData;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -19,18 +20,18 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import java.util.Random;
 
 public class FeatureBirch extends FeatureTreeVanilla {
-    public FeatureBirch(ITreeGenData tree) {
-        super(tree);
-    }
+	public FeatureBirch(ITreeGenData tree) {
+		super(tree);
+	}
 
-    @Override
-    public boolean generate(
-            ISeedReader world,
-            ChunkGenerator generator,
-            Random rand,
-            BlockPos pos,
-            NoFeatureConfig config
-    ) {
-        return place(world, rand, pos, false);
-    }
+	@Override
+	public boolean generate(
+			ISeedReader world,
+			ChunkGenerator generator,
+			Random rand,
+			BlockPos pos,
+			NoFeatureConfig config
+	) {
+		return place(world, rand, pos, false);
+	}
 }

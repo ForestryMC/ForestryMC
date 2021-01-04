@@ -12,6 +12,7 @@ package forestry.core.fluids;
 
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,19 +23,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public interface ITankManager extends IFluidHandler {
-    void containerAdded(Container container, IContainerListener crafter);
+	void containerAdded(Container container, IContainerListener crafter);
 
-    void sendTankUpdate(Container container, List<IContainerListener> crafters);
+	void sendTankUpdate(Container container, List<IContainerListener> crafters);
 
-    void containerRemoved(Container container);
+	void containerRemoved(Container container);
 
-    IFluidTank getTank(int tankIndex);
+	IFluidTank getTank(int tankIndex);
 
-    boolean canFillFluidType(FluidStack fluidStack);
+	boolean canFillFluidType(FluidStack fluidStack);
 
-    /**
-     * For updating tanks on the client
-     */
-    @OnlyIn(Dist.CLIENT)
-    void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
+	/**
+	 * For updating tanks on the client
+	 */
+	@OnlyIn(Dist.CLIENT)
+	void processTankUpdate(int tankIndex, @Nullable FluidStack contents);
 }

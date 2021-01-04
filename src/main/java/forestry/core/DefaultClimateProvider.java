@@ -13,31 +13,32 @@ package forestry.core;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 public class DefaultClimateProvider implements IClimateProvider {
-    private final World world;
-    private final BlockPos pos;
+	private final World world;
+	private final BlockPos pos;
 
-    public DefaultClimateProvider(World world, BlockPos pos) {
-        this.world = world;
-        this.pos = pos;
-    }
+	public DefaultClimateProvider(World world, BlockPos pos) {
+		this.world = world;
+		this.pos = pos;
+	}
 
-    @Override
-    public Biome getBiome() {
-        return world.getBiome(pos);
-    }
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(pos);
+	}
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.getFromBiome(getBiome(), pos);
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), pos);
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        return EnumHumidity.getFromValue(getBiome().getDownfall());
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(getBiome().getDownfall());
+	}
 }

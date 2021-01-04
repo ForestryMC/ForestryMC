@@ -17,27 +17,28 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineBiogas;
 import forestry.energy.tiles.TileEngineBiogas;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
-    public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
-        super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
+	public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
+		super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
 
-        this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
-    }
+		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));
+	}
 
-    //TODO dedupe
-    public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-        TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
-        return new ContainerEngineBiogas(windowId, inv, tile);
-    }
+	//TODO dedupe
+	public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
+		return new ContainerEngineBiogas(windowId, inv, tile);
+	}
 
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-        sendPacketToListeners(packet);
-    }
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
+	}
 }

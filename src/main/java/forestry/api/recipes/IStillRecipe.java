@@ -7,39 +7,40 @@ package forestry.api.recipes;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IStillRecipe extends IForestryRecipe {
-    IRecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
+	IRecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
 
-    /**
-     * @return Amount of work cycles required to run through the conversion once.
-     */
-    int getCyclesPerUnit();
+	/**
+	 * @return Amount of work cycles required to run through the conversion once.
+	 */
+	int getCyclesPerUnit();
 
-    /**
-     * @return FluidStack representing the input liquid.
-     */
-    FluidStack getInput();
+	/**
+	 * @return FluidStack representing the input liquid.
+	 */
+	FluidStack getInput();
 
-    /**
-     * @return FluidStack representing the output liquid.
-     */
-    FluidStack getOutput();
+	/**
+	 * @return FluidStack representing the output liquid.
+	 */
+	FluidStack getOutput();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:still")
-        public static final IRecipeSerializer<IStillRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:still")
+		public static final IRecipeSerializer<IStillRecipe> SERIALIZER = null;
+	}
 }

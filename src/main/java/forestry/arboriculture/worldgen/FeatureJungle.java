@@ -12,6 +12,7 @@ package forestry.arboriculture.worldgen;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
@@ -27,111 +28,111 @@ import java.util.Set;
  * This is a dummy and needs to be replaced with something proper.
  */
 public class FeatureJungle extends FeatureTreeVanilla {
-    public FeatureJungle(ITreeGenData tree) {
-        super(tree);
-    }
+	public FeatureJungle(ITreeGenData tree) {
+		super(tree);
+	}
 
-    @Override
-    public boolean generate(
-            ISeedReader world,
-            ChunkGenerator generator,
-            Random rand,
-            BlockPos pos,
-            NoFeatureConfig config
-    ) {
-        return place(world, rand, pos, false);
-    }
+	@Override
+	public boolean generate(
+			ISeedReader world,
+			ChunkGenerator generator,
+			Random rand,
+			BlockPos pos,
+			NoFeatureConfig config
+	) {
+		return place(world, rand, pos, false);
+	}
 
-    @Override
-    public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
-        int height = this.height;
-        float vinesChance = 0.0f;
-        if (girth >= 2) {
-            height *= 1.5f;
-            vinesChance = 0.8f;
-        }
+	@Override
+	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+		int height = this.height;
+		float vinesChance = 0.0f;
+		if (girth >= 2) {
+			height *= 1.5f;
+			vinesChance = 0.8f;
+		}
 
-        FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, vinesChance, null, 0);
+		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, vinesChance, null, 0);
 
-        Set<BlockPos> branchCoords = new HashSet<>();
-        if (height > 10) {
-            int branchSpawn = 6;
-            while (branchSpawn < height - 2) {
-                branchCoords.addAll(FeatureHelper.generateBranches(
-                        world,
-                        rand,
-                        wood,
-                        startPos.add(0, branchSpawn, 0),
-                        girth,
-                        0.5f,
-                        0f,
-                        2,
-                        1,
-                        0.25f
-                ));
-                branchSpawn += rand.nextInt(4);
-            }
-        }
+		Set<BlockPos> branchCoords = new HashSet<>();
+		if (height > 10) {
+			int branchSpawn = 6;
+			while (branchSpawn < height - 2) {
+				branchCoords.addAll(FeatureHelper.generateBranches(
+						world,
+						rand,
+						wood,
+						startPos.add(0, branchSpawn, 0),
+						girth,
+						0.5f,
+						0f,
+						2,
+						1,
+						0.25f
+				));
+				branchSpawn += rand.nextInt(4);
+			}
+		}
 
-        return branchCoords;
-    }
+		return branchCoords;
+	}
 
-    @Override
-    protected void generateLeaves(
-            IWorld world,
-            Random rand,
-            TreeBlockTypeLeaf leaf,
-            List<BlockPos> branchEnds,
-            BlockPos startPos
-    ) {
-        int height = this.height;
-        if (girth >= 2) {
-            height *= 1.5f;
-        }
+	@Override
+	protected void generateLeaves(
+			IWorld world,
+			Random rand,
+			TreeBlockTypeLeaf leaf,
+			List<BlockPos> branchEnds,
+			BlockPos startPos
+	) {
+		int height = this.height;
+		if (girth >= 2) {
+			height *= 1.5f;
+		}
 
-        for (BlockPos branchEnd : branchEnds) {
-            FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 1, FeatureHelper.EnumReplaceMode.AIR);
-        }
+		for (BlockPos branchEnd : branchEnds) {
+			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+		}
 
-        int leafSpawn = height + 1;
-        float canopyRadiusMultiplier = height / 7.0f;
+		int leafSpawn = height + 1;
+		float canopyRadiusMultiplier = height / 7.0f;
 
-        FeatureHelper.generateCylinderFromTreeStartPos(
-                world,
-                leaf,
-                startPos.add(0, leafSpawn--, 0),
-                girth,
-                girth,
-                1,
-                FeatureHelper.EnumReplaceMode.SOFT
-        );
-        FeatureHelper.generateCylinderFromTreeStartPos(
-                world,
-                leaf,
-                startPos.add(0, leafSpawn--, 0),
-                girth,
-                0.5f * canopyRadiusMultiplier + girth,
-                1,
-                FeatureHelper.EnumReplaceMode.SOFT
-        );
+		FeatureHelper.generateCylinderFromTreeStartPos(
+				world,
+				leaf,
+				startPos.add(0, leafSpawn--, 0),
+				girth,
+				girth,
+				1,
+				FeatureHelper.EnumReplaceMode.SOFT
+		);
+		FeatureHelper.generateCylinderFromTreeStartPos(
+				world,
+				leaf,
+				startPos.add(0, leafSpawn--, 0),
+				girth,
+				0.5f * canopyRadiusMultiplier + girth,
+				1,
+				FeatureHelper.EnumReplaceMode.SOFT
+		);
 
-        FeatureHelper.generateCylinderFromTreeStartPos(
-                world,
-                leaf,
-                startPos.add(0, leafSpawn--, 0),
-                girth,
-                1.9f * canopyRadiusMultiplier + girth,
-                1,
-                FeatureHelper.EnumReplaceMode.SOFT
-        );
-        FeatureHelper.generateCylinderFromTreeStartPos(
-                world,
-                leaf,
-                startPos.add(0, leafSpawn, 0),
-                girth,
-                1.9f * canopyRadiusMultiplier + girth,
-                1,
-                FeatureHelper.EnumReplaceMode.SOFT
-        );
-    }
+		FeatureHelper.generateCylinderFromTreeStartPos(
+				world,
+				leaf,
+				startPos.add(0, leafSpawn--, 0),
+				girth,
+				1.9f * canopyRadiusMultiplier + girth,
+				1,
+				FeatureHelper.EnumReplaceMode.SOFT
+		);
+		FeatureHelper.generateCylinderFromTreeStartPos(
+				world,
+				leaf,
+				startPos.add(0, leafSpawn, 0),
+				girth,
+				1.9f * canopyRadiusMultiplier + girth,
+				1,
+				FeatureHelper.EnumReplaceMode.SOFT
+		);
+	}
 }

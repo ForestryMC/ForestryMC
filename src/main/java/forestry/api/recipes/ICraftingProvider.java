@@ -10,19 +10,19 @@ import net.minecraft.item.crafting.RecipeManager;
 import java.util.Collection;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
-    /**
-     * Add a new recipe to the crafting provider for all worlds.
-     *
-     * @return <tt>true</tt> if this collection changed as a result of the call
-     * @since Forestry 4.1.0
-     */
-    boolean addRecipe(T recipe);
+	/**
+	 * Add a new recipe to the crafting provider for all worlds.
+	 *
+	 * @return <tt>true</tt> if this collection changed as a result of the call
+	 * @since Forestry 4.1.0
+	 */
+	boolean addRecipe(T recipe);
 
-    /**
-     * Gets a collection of all currently registered recipes which this provider supports
-     *
-     * @param manager The recipe manager to use
-     * @return A collection of recipes
-     */
-    Collection<T> getRecipes(RecipeManager manager);
+	/**
+	 * Gets a collection of all currently registered recipes which this provider supports
+	 *
+	 * @param manager The recipe manager to use
+	 * @return A collection of recipes
+	 */
+	Collection<T> getRecipes(RecipeManager manager);
 }

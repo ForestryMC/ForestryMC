@@ -10,16 +10,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public interface IElementLayout extends IElementGroup {
-    /**
-     * @return The distance between the different elements of this layout.
-     */
-    int getDistance();
+	/**
+	 * @return The distance between the different elements of this layout.
+	 */
+	int getDistance();
 
-    /**
-     * @param distance
-     * @return
-     */
-    IElementLayout setDistance(int distance);
+	/**
+	 * @param distance
+	 * @return
+	 */
+	IElementLayout setDistance(int distance);
 
-    int getSize();
+	int getSize();
 }

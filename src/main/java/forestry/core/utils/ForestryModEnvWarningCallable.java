@@ -11,10 +11,12 @@
 package forestry.core.utils;
 
 import com.google.common.base.Joiner;
+
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.config.Constants;
 import forestry.modules.ModuleManager;
+
 import net.minecraftforge.fml.CrashReportExtender;
 import net.minecraftforge.fml.common.ICrashCallable;
 
@@ -26,36 +28,36 @@ import java.util.Set;
  * ICrashCallable for listing disabled modules for crash reports.
  **/
 public class ForestryModEnvWarningCallable implements ICrashCallable {
-    private final String disabledModulesMessage;
+	private final String disabledModulesMessage;
 
-    private ForestryModEnvWarningCallable(String disabledModulesMessage) {
-        this.disabledModulesMessage = disabledModulesMessage;
-    }
+	private ForestryModEnvWarningCallable(String disabledModulesMessage) {
+		this.disabledModulesMessage = disabledModulesMessage;
+	}
 
-    public static void register() {
-        Set<IForestryModule> configDisabledModules = ModuleManager.configDisabledModules;
-        if (!configDisabledModules.isEmpty()) {
-            List<String> disabledModuleNames = new ArrayList<>();
-            for (IForestryModule module : configDisabledModules) {
-                ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-                disabledModuleNames.add(info.name());
-            }
+	public static void register() {
+		Set<IForestryModule> configDisabledModules = ModuleManager.configDisabledModules;
+		if (!configDisabledModules.isEmpty()) {
+			List<String> disabledModuleNames = new ArrayList<>();
+			for (IForestryModule module : configDisabledModules) {
+				ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+				disabledModuleNames.add(info.name());
+			}
 
-            String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(
-                    disabledModuleNames);
-            ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
-            CrashReportExtender.registerCrashCallable(callable);
-        }
-    }
+			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(
+					disabledModuleNames);
+			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
+			CrashReportExtender.registerCrashCallable(callable);
+		}
+	}
 
-    @Override
-    public String call() {
-        return disabledModulesMessage;
-    }
+	@Override
+	public String call() {
+		return disabledModulesMessage;
+	}
 
-    @Override
-    public String getLabel() {
-        return Constants.MOD_ID + " ";
-    }
+	@Override
+	public String getLabel() {
+		return Constants.MOD_ID + " ";
+	}
 
 }

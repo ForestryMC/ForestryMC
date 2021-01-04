@@ -15,6 +15,7 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
@@ -22,22 +23,22 @@ import net.minecraft.util.Hand;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-    public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-        Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-        PlayerEntity player = playerInv.player;
-        ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
-        return new ContainerHabitatLocator(windowId, player, inv);
-    }
+	public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
+		super(windowId, inventory, player.inventory, 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
 
-    public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
-        super(windowId, inventory, player.inventory, 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
+		// Energy
+		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));
 
-        // Energy
-        this.addSlot(new SlotFiltered(inventory, 2, 152, 8));
+		// Bee to analyze
+		this.addSlot(new SlotFiltered(inventory, 0, 152, 32));
+		// Analyzed bee
+		this.addSlot(new SlotOutput(inventory, 1, 152, 75));
+	}
 
-        // Bee to analyze
-        this.addSlot(new SlotFiltered(inventory, 0, 152, 32));
-        // Analyzed bee
-        this.addSlot(new SlotOutput(inventory, 1, 152, 75));
-    }
+	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+		PlayerEntity player = playerInv.player;
+		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
+		return new ContainerHabitatLocator(windowId, player, inv);
+	}
 }

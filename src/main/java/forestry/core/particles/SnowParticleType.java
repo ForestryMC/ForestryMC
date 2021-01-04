@@ -11,7 +11,9 @@
 package forestry.core.particles;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.particles.ParticleType;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,13 +21,13 @@ import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class SnowParticleType extends ParticleType<SnowParticleData> {
-    public SnowParticleType() {
-        super(false, SnowParticleData.DESERIALIZER);
-    }
+	public SnowParticleType() {
+		super(false, SnowParticleData.DESERIALIZER);
+	}
 
-    @Nonnull
-    @Override
-    public Codec<SnowParticleData> func_230522_e_() {
-        return SnowParticleData.CODEC;
-    }
+	@Nonnull
+	@Override
+	public Codec<SnowParticleData> func_230522_e_() {
+		return SnowParticleData.CODEC;
+	}
 }

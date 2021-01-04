@@ -14,25 +14,26 @@ import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
+
 import genetics.api.individual.IGenome;
 
 public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyComponent.BeeModifier {
 
-    private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
+	private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
 
-    public TileAlvearyStabiliser() {
-        super(BlockAlvearyType.STABILISER);
-    }
+	public TileAlvearyStabiliser() {
+		super(BlockAlvearyType.STABILISER);
+	}
 
-    @Override
-    public IBeeModifier getBeeModifier() {
-        return beeModifier;
-    }
+	@Override
+	public IBeeModifier getBeeModifier() {
+		return beeModifier;
+	}
 
-    private static class AlvearyStabiliserBeeModifier extends DefaultBeeModifier {
-        @Override
-        public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
-            return 0.0f;
-        }
-    }
+	private static class AlvearyStabiliserBeeModifier extends DefaultBeeModifier {
+		@Override
+		public float getMutationModifier(IGenome genome, IGenome mate, float currentModifier) {
+			return 0.0f;
+		}
+	}
 }

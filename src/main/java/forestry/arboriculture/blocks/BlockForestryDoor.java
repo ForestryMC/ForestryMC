@@ -14,37 +14,39 @@ import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.common.ToolType;
 
 public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 
-    private final EnumForestryWoodType woodType;
+	private final EnumForestryWoodType woodType;
 
-    public BlockForestryDoor(EnumForestryWoodType woodType) {
-        super(Block.Properties.create(Material.WOOD)
-                              .hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-                              .sound(SoundType.WOOD)
-                              .harvestTool(ToolType.AXE)
-                              .harvestLevel(0));
-        this.woodType = woodType;
-    }
+	public BlockForestryDoor(EnumForestryWoodType woodType) {
+		super(Block.Properties.create(Material.WOOD)
+				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0));
+		this.woodType = woodType;
+	}
 
-    @Override
-    public WoodBlockKind getBlockKind() {
-        return WoodBlockKind.DOOR;
-    }
+	@Override
+	public WoodBlockKind getBlockKind() {
+		return WoodBlockKind.DOOR;
+	}
 
-    @Override
-    public boolean isFireproof() {
-        return false;
-    }
+	@Override
+	public boolean isFireproof() {
+		return false;
+	}
 
-    @Override
-    public IWoodType getWoodType() {
-        return woodType;
-    }
+	@Override
+	public IWoodType getWoodType() {
+		return woodType;
+	}
 }

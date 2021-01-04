@@ -14,7 +14,9 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -27,102 +29,102 @@ import java.util.List;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
-    private static final int explosionChance = 50;
-    private static final byte defaultForce = 12;
-    private static final byte indexExplosionTimer = 1;
-    private static final byte indexExplosionForce = 2;
+	private static final int explosionChance = 50;
+	private static final byte defaultForce = 12;
+	private static final byte indexExplosionTimer = 1;
+	private static final byte indexExplosionForce = 2;
 
-    public AlleleEffectCreeper() {
-        super("creeper", true, 20, false, true);
-    }
+	public AlleleEffectCreeper() {
+		super("creeper", true, 20, false, true);
+	}
 
-    @Override
-    public IEffectData validateStorage(IEffectData storedData) {
-        if (!(storedData instanceof EffectData)) {
-            return new EffectData(3, 0);
-        }
+	private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
 
-        if (((EffectData) storedData).getIntSize() < 3) {
-            return new EffectData(3, 0);
-        }
+		int explosionTimer = storedData.getInteger(indexExplosionTimer);
+		explosionTimer--;
+		storedData.setInteger(indexExplosionTimer, explosionTimer);
 
-        return storedData;
-    }
+		if (explosionTimer > 0) {
+			return;
+		}
 
-    @Override
-    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+			world.createExplosion(
+					null,
+					pos.getX(),
+					pos.getY(),
+					pos.getZ(),
+					storedData.getInteger(indexExplosionForce),
+					false,
+					Explosion.Mode.NONE
+			);
+		}
+	}
 
-        World world = housing.getWorldObj();
-        BlockPos housingCoords = housing.getCoordinates();
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		if (!(storedData instanceof EffectData)) {
+			return new EffectData(3, 0);
+		}
 
-        // If we are already triggered, we continue the explosion sequence.
-        if (storedData.getInteger(indexExplosionTimer) > 0) {
-            progressExplosion(storedData, world, housingCoords);
-            return storedData;
-        }
+		if (((EffectData) storedData).getIntSize() < 3) {
+			return new EffectData(3, 0);
+		}
 
-        List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-        for (PlayerEntity player : players) {
-            int chance = explosionChance;
-            storedData.setInteger(indexExplosionForce, defaultForce);
+		return storedData;
+	}
 
-            // Entities are not attacked if they wear a full set of apiarist's armor.
-            int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
-            if (count > 3) {
-                continue; // Full set, no damage/effect
-            } else if (count > 2) {
-                chance = 5;
-                storedData.setInteger(indexExplosionForce, 6);
-            } else if (count > 1) {
-                chance = 20;
-                storedData.setInteger(indexExplosionForce, 8);
-            } else if (count > 0) {
-                chance = 35;
-                storedData.setInteger(indexExplosionForce, 10);
-            }
+	@Override
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-            if (world.rand.nextInt(1000) >= chance) {
-                continue;
-            }
+		World world = housing.getWorldObj();
+		BlockPos housingCoords = housing.getCoordinates();
 
-            float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-            world.playSound(
-                    null,
-                    housingCoords.getX(),
-                    housingCoords.getY(),
-                    housingCoords.getZ(),
-                    SoundEvents.ENTITY_GENERIC_EXPLODE,
-                    SoundCategory.BLOCKS,
-                    4.0F,
-                    pitch
-            );
-            storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
-        }
+		// If we are already triggered, we continue the explosion sequence.
+		if (storedData.getInteger(indexExplosionTimer) > 0) {
+			progressExplosion(storedData, world, housingCoords);
+			return storedData;
+		}
 
-        return storedData;
-    }
+		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
+		for (PlayerEntity player : players) {
+			int chance = explosionChance;
+			storedData.setInteger(indexExplosionForce, defaultForce);
 
-    private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
+			// Entities are not attacked if they wear a full set of apiarist's armor.
+			int count = BeeManager.armorApiaristHelper.wearsItems(player, getRegistryName(), true);
+			if (count > 3) {
+				continue; // Full set, no damage/effect
+			} else if (count > 2) {
+				chance = 5;
+				storedData.setInteger(indexExplosionForce, 6);
+			} else if (count > 1) {
+				chance = 20;
+				storedData.setInteger(indexExplosionForce, 8);
+			} else if (count > 0) {
+				chance = 35;
+				storedData.setInteger(indexExplosionForce, 10);
+			}
 
-        int explosionTimer = storedData.getInteger(indexExplosionTimer);
-        explosionTimer--;
-        storedData.setInteger(indexExplosionTimer, explosionTimer);
+			if (world.rand.nextInt(1000) >= chance) {
+				continue;
+			}
 
-        if (explosionTimer > 0) {
-            return;
-        }
+			float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
+			world.playSound(
+					null,
+					housingCoords.getX(),
+					housingCoords.getY(),
+					housingCoords.getZ(),
+					SoundEvents.ENTITY_GENERIC_EXPLODE,
+					SoundCategory.BLOCKS,
+					4.0F,
+					pitch
+			);
+			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
+		}
 
-        if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-            world.createExplosion(
-                    null,
-                    pos.getX(),
-                    pos.getY(),
-                    pos.getZ(),
-                    storedData.getInteger(indexExplosionForce),
-                    false,
-                    Explosion.Mode.NONE
-            );
-        }
-    }
+		return storedData;
+	}
 
 }

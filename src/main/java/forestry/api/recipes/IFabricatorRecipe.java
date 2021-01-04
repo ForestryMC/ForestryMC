@@ -9,39 +9,40 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.ShapedRecipe;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
-    IRecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
+	IRecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
 
-    /**
-     * @return the molten liquid (and amount) required for this recipe.
-     */
-    FluidStack getLiquid();
+	/**
+	 * @return the molten liquid (and amount) required for this recipe.
+	 */
+	FluidStack getLiquid();
 
-    /**
-     * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
-     */
-    ShapedRecipe getCraftingGridRecipe();
+	/**
+	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
+	 */
+	ShapedRecipe getCraftingGridRecipe();
 
-    /**
-     * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
-     */
-    ItemStack getPlan();
+	/**
+	 * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
+	 */
+	ItemStack getPlan();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:fabricator")
-        public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:fabricator")
+		public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
+	}
 }

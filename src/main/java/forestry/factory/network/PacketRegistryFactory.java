@@ -15,18 +15,19 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
 import forestry.factory.network.packets.PacketRecipeTransferRequest;
 import forestry.factory.network.packets.PacketRecipeTransferUpdate;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryFactory implements IPacketRegistry {
-    @Override
-    public void registerPacketsServer() {
-        PacketIdServer.RECIPE_TRANSFER_REQUEST.setPacketHandler(new PacketRecipeTransferRequest.Handler());
-    }
+	@Override
+	public void registerPacketsServer() {
+		PacketIdServer.RECIPE_TRANSFER_REQUEST.setPacketHandler(new PacketRecipeTransferRequest.Handler());
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerPacketsClient() {
-        PacketIdClient.RECIPE_TRANSFER_UPDATE.setPacketHandler(new PacketRecipeTransferUpdate.Handler());
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerPacketsClient() {
+		PacketIdClient.RECIPE_TRANSFER_UPDATE.setPacketHandler(new PacketRecipeTransferUpdate.Handler());
+	}
 }

@@ -11,22 +11,24 @@
 package forestry.arboriculture.commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
+
 import forestry.core.commands.CommandMode;
 import forestry.core.commands.CommandSaveStats;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.core.commands.IStatsSaveHelper;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 
 public class CommandTree {
-    public static ArgumentBuilder<CommandSource, ?> register() {
-        IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
-        ICommandModeHelper modeHelper = new TreeModeHelper();
+	public static ArgumentBuilder<CommandSource, ?> register() {
+		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
+		ICommandModeHelper modeHelper = new TreeModeHelper();
 
-        return Commands.literal("tree")
-                       .then(CommandTreeSpawn.register("spawnTree", new TreeSpawner()))
-                       .then(CommandTreeSpawn.register("spawnForest", new ForestSpawner()))
-                       .then(CommandMode.register(modeHelper))
-                       .then(CommandSaveStats.register(saveHelper, modeHelper));
-    }
+		return Commands.literal("tree")
+				.then(CommandTreeSpawn.register("spawnTree", new TreeSpawner()))
+				.then(CommandTreeSpawn.register("spawnForest", new ForestSpawner()))
+				.then(CommandMode.register(modeHelper))
+				.then(CommandSaveStats.register(saveHelper, modeHelper));
+	}
 }

@@ -17,41 +17,41 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenTree extends HiveGen {
-    @Override
-    public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-        BlockPos posAbove = pos.up();
-        BlockState blockStateAbove = world.getBlockState(posAbove);
-        if (!isTreeBlock(blockStateAbove, world, posAbove)) {
-            return false;
-        }
+	@Override
+	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
+		// get top leaf block
+		final BlockPos topPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).down();
+		if (topPos.getY() <= 0) {
+			return null;
+		}
 
-        // not a good location if right on top of something
-        BlockPos posBelow = pos.down();
-        BlockState blockStateBelow = world.getBlockState(posBelow);
-        return canReplace(blockStateBelow, world, posBelow);
-    }
+		BlockState blockState = world.getBlockState(topPos);
+		if (!isTreeBlock(blockState, world, topPos)) {
+			return null;
+		}
 
-    @Override
-    public BlockPos getPosForHive(ISeedReader world, int x, int z) {
-        // get top leaf block
-        final BlockPos topPos = world.getHeight(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z)).down();
-        if (topPos.getY() <= 0) {
-            return null;
-        }
+		// get to the bottom of the leaves
+		final BlockPos.Mutable pos = new BlockPos.Mutable();
+		pos.setPos(topPos);
+		do {
+			pos.move(Direction.DOWN);
+			blockState = world.getBlockState(pos);
+		} while (isTreeBlock(blockState, world, pos));
 
-        BlockState blockState = world.getBlockState(topPos);
-        if (!isTreeBlock(blockState, world, topPos)) {
-            return null;
-        }
+		return pos.toImmutable();
+	}
 
-        // get to the bottom of the leaves
-        final BlockPos.Mutable pos = new BlockPos.Mutable();
-        pos.setPos(topPos);
-        do {
-            pos.move(Direction.DOWN);
-            blockState = world.getBlockState(pos);
-        } while (isTreeBlock(blockState, world, pos));
+	@Override
+	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+		BlockPos posAbove = pos.up();
+		BlockState blockStateAbove = world.getBlockState(posAbove);
+		if (!isTreeBlock(blockStateAbove, world, posAbove)) {
+			return false;
+		}
 
-        return pos.toImmutable();
-    }
+		// not a good location if right on top of something
+		BlockPos posBelow = pos.down();
+		BlockState blockStateBelow = world.getBlockState(posBelow);
+		return canReplace(blockStateBelow, world, posBelow);
+	}
 }

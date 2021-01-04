@@ -12,6 +12,7 @@ package forestry.core.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
@@ -28,6 +29,7 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.render.ColourProperties;
 import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -38,6 +40,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -45,299 +48,299 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
-    public final ResourceLocation textureFile;
-    protected final C container;
-    protected final WidgetManager widgetManager;
-    protected final LedgerManager ledgerManager;
-    protected final TextLayoutHelper textLayout;
-    protected final Window<?> window;
+	public final ResourceLocation textureFile;
+	protected final C container;
+	protected final WidgetManager widgetManager;
+	protected final LedgerManager ledgerManager;
+	protected final TextLayoutHelper textLayout;
+	protected final Window<?> window;
 
-    protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
-        this(new ResourceLocation(Constants.MOD_ID, texture), container, inv, title);
-    }
+	protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
+		this(new ResourceLocation(Constants.MOD_ID, texture), container, inv, title);
+	}
 
-    protected GuiForestry(ResourceLocation texture, C container, PlayerInventory inv, ITextComponent title) {
-        super(container, inv, title);
+	protected GuiForestry(ResourceLocation texture, C container, PlayerInventory inv, ITextComponent title) {
+		super(container, inv, title);
 
-        this.widgetManager = new WidgetManager(this);
-        this.ledgerManager = new LedgerManager(this);
-        this.window = new Window<>(xSize, ySize, this);
+		this.widgetManager = new WidgetManager(this);
+		this.ledgerManager = new LedgerManager(this);
+		this.window = new Window<>(xSize, ySize, this);
 
-        this.textureFile = texture;
+		this.textureFile = texture;
 
-        this.container = container;
+		this.container = container;
 
-        this.textLayout = new TextLayoutHelper(this, ColourProperties.INSTANCE);
-    }
+		this.textLayout = new TextLayoutHelper(this, ColourProperties.INSTANCE);
+	}
 
-    /* LEDGERS */
-    @Override
-    public void init() {
-        super.init();
+	/* LEDGERS */
+	@Override
+	public void init() {
+		super.init();
 
-        int maxLedgerWidth = (this.width - this.xSize) / 2;
+		int maxLedgerWidth = (this.width - this.xSize) / 2;
 
-        this.ledgerManager.setMaxWidth(maxLedgerWidth);
-        this.ledgerManager.clear();
+		this.ledgerManager.setMaxWidth(maxLedgerWidth);
+		this.ledgerManager.clear();
 
-        this.window.init(guiLeft, guiTop);
+		this.window.init(guiLeft, guiTop);
 
-        addLedgers();
-    }
+		addLedgers();
+	}
 
-    @Override
-    public void init(Minecraft mc, int width, int height) {
-        window.setSize(width, height);
-        super.init(mc, width, height);
-    }
+	//TODO - I think this is the right method
+	@Override
+	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+		window.setMousePosition(mouseX, mouseY);
+		this.renderBackground(transform);
+		super.render(transform, mouseX, mouseY, partialTicks);
+		renderHoveredTooltip(transform, mouseX, mouseY);
+	}
 
-    @Override
-    public void tick() {
-        window.updateClient();
-    }
+	@Override
+	protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
+		ledgerManager.drawTooltips(transform, mouseY, mouseX);
 
-    //TODO - I think this is the right method
-    @Override
-    public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-        window.setMousePosition(mouseX, mouseY);
-        this.renderBackground(transform);
-        super.render(transform, mouseX, mouseY, partialTicks);
-        renderHoveredTooltip(transform, mouseX, mouseY);
-    }
+		if (this.playerInventory.getItemStack().isEmpty()) {
+			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, container.inventorySlots, mouseX, mouseY);
+			window.drawTooltip(transform, mouseY, mouseX);
+		}
+	}
 
-    protected abstract void addLedgers();
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		drawBackground(transform);
 
-    protected final void addErrorLedger(IErrorSource errorSource) {
-        ledgerManager.add(errorSource);
-    }
+		widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
 
-    protected final void addErrorLedger(IErrorLogicSource errorSource) {
-        ledgerManager.add(errorSource.getErrorLogic());
-    }
+		//RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
+		RenderSystem.disableLighting();
+		RenderSystem.enableRescaleNormal();
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.pushMatrix();
+		{
+			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
+			drawWidgets(transform);
+		}
+		RenderSystem.popMatrix();
 
-    protected final void addClimateLedger(IClimatised climatised) {
-        ledgerManager.add(new ClimateLedger(ledgerManager, climatised));
-    }
+		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+		window.draw(transform, mouseY, mouseX);
 
-    protected final void addPowerLedger(EnergyManager energyManager) {
-        if (Config.enableEnergyStat) {
-            ledgerManager.add(new PowerLedger(ledgerManager, energyManager));
-        }
-    }
+		bindTexture(textureFile);
+	}
 
-    protected final void addHintLedger(String hintsKey) {
-        if (Config.enableHints) {
-            List<String> hints = Config.hints.get(hintsKey);
-            addHintLedger(hints);
-        }
-    }
+	//super has double double int
+	//int is probably mousebutton?
+	//TODO - check params
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 
-    protected final void addHintLedger(List<String> hints) {
-        if (Config.enableHints) {
-            if (!hints.isEmpty()) {
-                ledgerManager.add(new HintLedger(ledgerManager, hints));
-            }
-        }
-    }
+		// Handle ledger clicks
+		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
+		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
+		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 
-    protected final void addOwnerLedger(IOwnedTile ownedTile) {
-        ledgerManager.add(new OwnerLedger(ledgerManager, ownedTile));
-    }
+		return true;
+	}
 
-    @Override
-    public void onClose() {
-        super.onClose();
-        ledgerManager.onClose();
-    }
+	@Override
+	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
+		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(
+				mouseX,
+				mouseY,
+				guiLeft,
+				guiTop,
+				0
+		);    //TODO - I have no idea what the last param actually does
+	}
 
-    public ColourProperties getFontColor() {
-        return ColourProperties.INSTANCE;
-    }
+	@Override
+	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
+			return true;
+		}
 
-    public FontRenderer getFontRenderer() {
-        return minecraft.fontRenderer;
-    }
+		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+		super.mouseReleased(mouseX, mouseY, mouseButton);
 
-    //super has double double int
-    //int is probably mousebutton?
-    //TODO - check params
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+		return true;
+	}
 
-        // Handle ledger clicks
-        ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
-        widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
-        IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-        window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+	@Override
+	public void onClose() {
+		super.onClose();
+		ledgerManager.onClose();
+	}
 
-        return true;
-    }
+	@Override
+	public void tick() {
+		window.updateClient();
+	}
 
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
-            return true;
-        }
+	@Override
+	public int getGuiLeft() {
+		return guiLeft;
+	}
 
-        IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-        window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
-        super.mouseReleased(mouseX, mouseY, mouseButton);
+	@Override
+	public int getGuiTop() {
+		return guiTop;
+	}
 
-        return true;
-    }
+	@Override
+	public void init(Minecraft mc, int width, int height) {
+		window.setSize(width, height);
+		super.init(mc, width, height);
+	}
 
-//    @Override
-//    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-//        InputMappings.Input mouseKey = InputMappings.getInputByCode(keyCode, scanCode);
-//        if (scanCode == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
-//            this.minecraft.player.closeScreen();
-//            return true;
-//        }
-//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-//        window.postEvent(new GuiEvent.KeyEvent(origin, keyCode, scanCode, modifiers), GuiEventDestination.ALL);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean charTyped(char codePoint, int modifiers) {
-//        InputMappings.Input mouseKey = InputMappings.getInputByCode(codePoint, modifiers);
-//        if (modifiers == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
-//            this.minecraft.player.closeScreen();
-//            return true;
-//        }
-//
-//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-//        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
-//        return true;
-//    }
+	protected abstract void addLedgers();
 
-    @Nullable
-    public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
-        for (Widget widget : widgetManager.getWidgets()) {
-            if (widget instanceof TankWidget && widget.isMouseOver(mouseX - guiLeft, mouseY - guiTop)) {
-                TankWidget tankWidget = (TankWidget) widget;
-                IFluidTank tank = tankWidget.getTank();
-                if (tank != null) {
-                    return tank.getFluid();
-                }
-            }
-        }
-        return null;
-    }
+	protected final void addErrorLedger(IErrorSource errorSource) {
+		ledgerManager.add(errorSource);
+	}
 
-    @Nullable
-    protected Slot getSlotAtPosition(double mouseX, double mouseY) {
-        for (int k = 0; k < this.container.inventorySlots.size(); ++k) {
-            Slot slot = this.container.inventorySlots.get(k);
+	protected final void addErrorLedger(IErrorLogicSource errorSource) {
+		ledgerManager.add(errorSource.getErrorLogic());
+	}
 
-            if (isMouseOverSlot(slot, mouseX, mouseY)) {
-                return slot;
-            }
-        }
+	protected final void addClimateLedger(IClimatised climatised) {
+		ledgerManager.add(new ClimateLedger(ledgerManager, climatised));
+	}
 
-        return null;
-    }
+	protected final void addPowerLedger(EnergyManager energyManager) {
+		if (Config.enableEnergyStat) {
+			ledgerManager.add(new PowerLedger(ledgerManager, energyManager));
+		}
+	}
 
-    private boolean isMouseOverSlot(Slot par1Slot, double mouseX, double mouseY) {
-        return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
-    }
+	//    @Override
+	//    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+	//        InputMappings.Input mouseKey = InputMappings.getInputByCode(keyCode, scanCode);
+	//        if (scanCode == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
+	//            this.minecraft.player.closeScreen();
+	//            return true;
+	//        }
+	//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+	//        window.postEvent(new GuiEvent.KeyEvent(origin, keyCode, scanCode, modifiers), GuiEventDestination.ALL);
+	//        return true;
+	//    }
+	//
+	//    @Override
+	//    public boolean charTyped(char codePoint, int modifiers) {
+	//        InputMappings.Input mouseKey = InputMappings.getInputByCode(codePoint, modifiers);
+	//        if (modifiers == GLFW.GLFW_KEY_ESCAPE || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
+	//            this.minecraft.player.closeScreen();
+	//            return true;
+	//        }
+	//
+	//        IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+	//        window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
+	//        return true;
+	//    }
 
-    @Override
-    protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
-        return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(
-                mouseX,
-                mouseY,
-                guiLeft,
-                guiTop,
-                0
-        );    //TODO - I have no idea what the last param actually does
-    }
+	protected final void addHintLedger(String hintsKey) {
+		if (Config.enableHints) {
+			List<String> hints = Config.hints.get(hintsKey);
+			addHintLedger(hints);
+		}
+	}
 
-    @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
-        ledgerManager.drawTooltips(transform, mouseY, mouseX);
+	protected final void addHintLedger(List<String> hints) {
+		if (Config.enableHints) {
+			if (!hints.isEmpty()) {
+				ledgerManager.add(new HintLedger(ledgerManager, hints));
+			}
+		}
+	}
 
-        if (this.playerInventory.getItemStack().isEmpty()) {
-            GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
-            GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
-            GuiUtil.drawToolTips(transform, this, container.inventorySlots, mouseX, mouseY);
-            window.drawTooltip(transform, mouseY, mouseX);
-        }
-    }
+	protected final void addOwnerLedger(IOwnedTile ownedTile) {
+		ledgerManager.add(new OwnerLedger(ledgerManager, ownedTile));
+	}
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-        drawBackground(transform);
+	public ColourProperties getFontColor() {
+		return ColourProperties.INSTANCE;
+	}
 
-        widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
+	public FontRenderer getFontRenderer() {
+		return minecraft.fontRenderer;
+	}
 
-        //RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
-        RenderSystem.disableLighting();
-        RenderSystem.enableRescaleNormal();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.pushMatrix();
-        {
-            RenderSystem.translatef(guiLeft, guiTop, 0.0F);
-            drawWidgets(transform);
-        }
-        RenderSystem.popMatrix();
+	@Nullable
+	public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
+		for (Widget widget : widgetManager.getWidgets()) {
+			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - guiLeft, mouseY - guiTop)) {
+				TankWidget tankWidget = (TankWidget) widget;
+				IFluidTank tank = tankWidget.getTank();
+				if (tank != null) {
+					return tank.getFluid();
+				}
+			}
+		}
+		return null;
+	}
 
-        RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-        window.draw(transform, mouseY, mouseX);
+	@Nullable
+	protected Slot getSlotAtPosition(double mouseX, double mouseY) {
+		for (int k = 0; k < this.container.inventorySlots.size(); ++k) {
+			Slot slot = this.container.inventorySlots.get(k);
 
-        bindTexture(textureFile);
-    }
+			if (isMouseOverSlot(slot, mouseX, mouseY)) {
+				return slot;
+			}
+		}
 
-    protected void drawBackground(MatrixStack transform) {
-        bindTexture(textureFile);
+		return null;
+	}
 
-        //int x = (width - xSize) / 2;
-        //int y = (height - ySize) / 2;
-        blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
-    }
+	private boolean isMouseOverSlot(Slot par1Slot, double mouseX, double mouseY) {
+		return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
+	}
 
-    protected void drawWidgets(MatrixStack transform) {
-        ledgerManager.drawLedgers(transform);
-        widgetManager.drawWidgets(transform);
-    }
+	protected void drawBackground(MatrixStack transform) {
+		bindTexture(textureFile);
 
-    protected void bindTexture(ResourceLocation texturePath) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-        textureManager.bindTexture(texturePath);
-    }
+		//int x = (width - xSize) / 2;
+		//int y = (height - ySize) / 2;
+		blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
+	}
 
-    @Override
-    public int getSizeX() {
-        return xSize;
-    }
+	protected void drawWidgets(MatrixStack transform) {
+		ledgerManager.drawLedgers(transform);
+		widgetManager.drawWidgets(transform);
+	}
 
-    @Override
-    public int getSizeY() {
-        return ySize;
-    }
+	protected void bindTexture(ResourceLocation texturePath) {
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+		textureManager.bindTexture(texturePath);
+	}
 
-    @Override
-    public int getGuiLeft() {
-        return guiLeft;
-    }
+	@Override
+	public int getSizeX() {
+		return xSize;
+	}
 
-    @Override
-    public int getGuiTop() {
-        return guiTop;
-    }
+	@Override
+	public int getSizeY() {
+		return ySize;
+	}
 
-    @Override
-    public Minecraft getMC() {
-        return minecraft;
-    }
+	@Override
+	public Minecraft getMC() {
+		return minecraft;
+	}
 
-    public List<Rectangle2d> getExtraGuiAreas() {
-        return ledgerManager.getLedgerAreas();
-    }
+	public List<Rectangle2d> getExtraGuiAreas() {
+		return ledgerManager.getLedgerAreas();
+	}
 
-    public TextLayoutHelper getTextLayout() {
-        return textLayout;
-    }
+	public TextLayoutHelper getTextLayout() {
+		return textLayout;
+	}
 }

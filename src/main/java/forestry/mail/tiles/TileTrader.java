@@ -11,6 +11,7 @@
 package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IStamps;
@@ -31,6 +32,7 @@ import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.ContainerTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,307 +42,308 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 
 public class TileTrader extends TileBase implements IOwnedTile {
-    private final OwnerHandler ownerHandler = new OwnerHandler();
-    private IMailAddress address;
+	private final OwnerHandler ownerHandler = new OwnerHandler();
+	private IMailAddress address;
 
-    public TileTrader() {
-        super(MailTiles.TRADER.tileType());
-        address = new MailAddress();
-        setInternalInventory(new InventoryTradeStation());
-    }
+	public TileTrader() {
+		super(MailTiles.TRADER.tileType());
+		address = new MailAddress();
+		setInternalInventory(new InventoryTradeStation());
+	}
 
-    @Override
-    public IOwnerHandler getOwnerHandler() {
-        return ownerHandler;
-    }
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
+	}
 
-    @Override
-    public void onRemoval() {
-        if (isLinked() && !world.isRemote) {
-            PostManager.postRegistry.deleteTradeStation((ServerWorld) world, address);
-        }
-    }
+	/**
+	 * The trade station should show errors for missing stamps and paper first.
+	 * Once it is able to send letters, it should display other error states.
+	 */
+	@Override
+	public void updateServerSide() {
 
-    /* SAVING & LOADING */
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
+		if (!isLinked() || !updateOnInterval(10)) {
+			return;
+		}
 
-        CompoundNBT nbt = new CompoundNBT();
-        address.write(nbt);
-        compoundNBT.put("address", nbt);
+		IErrorLogic errorLogic = getErrorLogic();
 
-        ownerHandler.write(compoundNBT);
-        return compoundNBT;
-    }
+		errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NO_STAMPS);
+		errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NO_PAPER);
 
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
+		IInventory inventory = getInternalInventory();
+		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+		errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
 
-        if (compoundNBT.contains("address")) {
-            address = new MailAddress(compoundNBT.getCompound("address"));
-        }
-        ownerHandler.read(compoundNBT);
-    }
+		boolean hasRequest = hasItemCount(
+				TradeStation.SLOT_EXCHANGE_1,
+				TradeStation.SLOT_EXCHANGE_COUNT,
+				ItemStack.EMPTY,
+				1
+		);
+		errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
 
-    /* NETWORK */
+		if (!tradeGood.isEmpty()) {
+			boolean hasSupplies = hasItemCount(
+					TradeStation.SLOT_SEND_BUFFER,
+					TradeStation.SLOT_SEND_BUFFER_COUNT,
+					tradeGood,
+					tradeGood.getCount()
+			);
+			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
+		}
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        ownerHandler.writeData(data);
-        String addressName = address.getName();
-        data.writeString(addressName);
-    }
+		if (inventory instanceof TradeStation && updateOnInterval(200)) {
+			boolean canReceivePayment = ((TradeStation) inventory).canReceivePayment();
+			errorLogic.setCondition(!canReceivePayment, EnumErrorCode.NO_SPACE_INVENTORY);
+		}
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        ownerHandler.readData(data);
-        String addressName = data.readString();
-        if (!addressName.isEmpty()) {
-            address = PostManager.postRegistry.getMailAddress(addressName);
-        }
-    }
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
-    /* UPDATING */
+		if (compoundNBT.contains("address")) {
+			address = new MailAddress(compoundNBT.getCompound("address"));
+		}
+		ownerHandler.read(compoundNBT);
+	}
 
-    /**
-     * The trade station should show errors for missing stamps and paper first.
-     * Once it is able to send letters, it should display other error states.
-     */
-    @Override
-    public void updateServerSide() {
+	/* SAVING & LOADING */
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-        if (!isLinked() || !updateOnInterval(10)) {
-            return;
-        }
+		CompoundNBT nbt = new CompoundNBT();
+		address.write(nbt);
+		compoundNBT.put("address", nbt);
 
-        IErrorLogic errorLogic = getErrorLogic();
+		ownerHandler.write(compoundNBT);
+		return compoundNBT;
+	}
 
-        errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NO_STAMPS);
-        errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NO_PAPER);
+	/* NETWORK */
 
-        IInventory inventory = getInternalInventory();
-        ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-        errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		ownerHandler.writeData(data);
+		String addressName = address.getName();
+		data.writeString(addressName);
+	}
 
-        boolean hasRequest = hasItemCount(
-                TradeStation.SLOT_EXCHANGE_1,
-                TradeStation.SLOT_EXCHANGE_COUNT,
-                ItemStack.EMPTY,
-                1
-        );
-        errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		ownerHandler.readData(data);
+		String addressName = data.readString();
+		if (!addressName.isEmpty()) {
+			address = PostManager.postRegistry.getMailAddress(addressName);
+		}
+	}
 
-        if (!tradeGood.isEmpty()) {
-            boolean hasSupplies = hasItemCount(
-                    TradeStation.SLOT_SEND_BUFFER,
-                    TradeStation.SLOT_SEND_BUFFER_COUNT,
-                    tradeGood,
-                    tradeGood.getCount()
-            );
-            errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
-        }
+	/* UPDATING */
 
-        if (inventory instanceof TradeStation && updateOnInterval(200)) {
-            boolean canReceivePayment = ((TradeStation) inventory).canReceivePayment();
-            errorLogic.setCondition(!canReceivePayment, EnumErrorCode.NO_SPACE_INVENTORY);
-        }
-    }
+	@Override
+	public void onRemoval() {
+		if (isLinked() && !world.isRemote) {
+			PostManager.postRegistry.deleteTradeStation((ServerWorld) world, address);
+		}
+	}
 
-    /* STATE INFORMATION */
-    public boolean isLinked() {
-        if (!address.isValid()) {
-            return false;
-        }
+	@Override
+	public IInventoryAdapter getInternalInventory() {
+		// Handle client side
+		if (world.isRemote || !address.isValid()) {
+			return super.getInternalInventory();
+		}
 
-        IErrorLogic errorLogic = getErrorLogic();
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(
+				(ServerWorld) world,
+				getOwnerHandler().getOwner(),
+				address
+		);
+	}
 
-        return !errorLogic.contains(EnumErrorCode.NOT_ALPHANUMERIC) && !errorLogic.contains(EnumErrorCode.NOT_UNIQUE);
-    }
+	/* STATE INFORMATION */
+	public boolean isLinked() {
+		if (!address.isValid()) {
+			return false;
+		}
 
-    /**
-     * Returns true if there are 'itemCount' of 'item' in the inventory
-     * wildcard when item == null, counts all types of items
-     */
-    private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
-        int count = 0;
+		IErrorLogic errorLogic = getErrorLogic();
 
-        IInventory tradeInventory = this.getInternalInventory();
-        for (int i = startSlot; i < startSlot + countSlots; i++) {
-            ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-            if (itemInSlot.isEmpty()) {
-                continue;
-            }
-            if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
-                count += itemInSlot.getCount();
-            }
-            if (count >= itemCount) {
-                return true;
-            }
-        }
+		return !errorLogic.contains(EnumErrorCode.NOT_ALPHANUMERIC) && !errorLogic.contains(EnumErrorCode.NOT_UNIQUE);
+	}
 
-        return false;
-    }
+	/**
+	 * Returns true if there are 'itemCount' of 'item' in the inventory
+	 * wildcard when item == null, counts all types of items
+	 */
+	private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
+		int count = 0;
 
-    /**
-     * Returns the percentage of the inventory that is occupied by 'item'
-     * if item == null, returns the percentage occupied by all kinds of items
-     */
-    private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
-        int count = 0;
-        int total = 0;
+		IInventory tradeInventory = this.getInternalInventory();
+		for (int i = startSlot; i < startSlot + countSlots; i++) {
+			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
+			if (itemInSlot.isEmpty()) {
+				continue;
+			}
+			if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
+				count += itemInSlot.getCount();
+			}
+			if (count >= itemCount) {
+				return true;
+			}
+		}
 
-        IInventory tradeInventory = this.getInternalInventory();
-        for (int i = startSlot; i < startSlot + countSlots; i++) {
-            ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
-            if (itemInSlot.isEmpty()) {
-                total += tradeInventory.getInventoryStackLimit();
-            } else {
-                total += itemInSlot.getMaxStackSize();
-                if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
-                    count += itemInSlot.getCount();
-                }
-            }
-        }
+		return false;
+	}
 
-        return (float) count / (float) total;
-    }
+	/**
+	 * Returns the percentage of the inventory that is occupied by 'item'
+	 * if item == null, returns the percentage occupied by all kinds of items
+	 */
+	private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
+		int count = 0;
+		int total = 0;
 
-    public boolean hasPaperMin(int count) {
-        return hasItemCount(
-                TradeStation.SLOT_LETTERS_1,
-                TradeStation.SLOT_LETTERS_COUNT,
-                new ItemStack(Items.PAPER),
-                count
-        );
-    }
+		IInventory tradeInventory = this.getInternalInventory();
+		for (int i = startSlot; i < startSlot + countSlots; i++) {
+			ItemStack itemInSlot = tradeInventory.getStackInSlot(i);
+			if (itemInSlot.isEmpty()) {
+				total += tradeInventory.getInventoryStackLimit();
+			} else {
+				total += itemInSlot.getMaxStackSize();
+				if (item.isEmpty() || ItemStackUtil.isIdenticalItem(itemInSlot, item)) {
+					count += itemInSlot.getCount();
+				}
+			}
+		}
 
-    //	public boolean hasInputBufMin(float percentage) {
-    //		IInventory inventory = getInternalInventory();
-    //		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
-    //		if (tradeGood.isEmpty()) {
-    //			return true;
-    //		}
-    //		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
-    //	}
+		return (float) count / (float) total;
+	}
 
-    //	public boolean hasOutputBufMin(float percentage) {
-    //		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, ItemStack.EMPTY) > percentage;
-    //	}
+	//	public boolean hasInputBufMin(float percentage) {
+	//		IInventory inventory = getInternalInventory();
+	//		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
+	//		if (tradeGood.isEmpty()) {
+	//			return true;
+	//		}
+	//		return percentOccupied(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood) > percentage;
+	//	}
 
-    public boolean hasPostageMin(int postage) {
+	//	public boolean hasOutputBufMin(float percentage) {
+	//		return percentOccupied(TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT, ItemStack.EMPTY) > percentage;
+	//	}
 
-        int posted = 0;
+	public boolean hasPaperMin(int count) {
+		return hasItemCount(
+				TradeStation.SLOT_LETTERS_1,
+				TradeStation.SLOT_LETTERS_COUNT,
+				new ItemStack(Items.PAPER),
+				count
+		);
+	}
 
-        IInventory tradeInventory = this.getInternalInventory();
-        for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
-            ItemStack stamp = tradeInventory.getStackInSlot(i);
-            if (!stamp.isEmpty()) {
-                if (stamp.getItem() instanceof IStamps) {
-                    posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.getCount();
-                    if (posted >= postage) {
-                        return true;
-                    }
-                }
-            }
-        }
+	public boolean hasPostageMin(int postage) {
 
-        return false;
-    }
+		int posted = 0;
 
-    /* ADDRESS */
-    public IMailAddress getAddress() {
-        return address;
-    }
+		IInventory tradeInventory = this.getInternalInventory();
+		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
+			ItemStack stamp = tradeInventory.getStackInSlot(i);
+			if (!stamp.isEmpty()) {
+				if (stamp.getItem() instanceof IStamps) {
+					posted += ((IStamps) stamp.getItem()).getPostage(stamp).getValue() * stamp.getCount();
+					if (posted >= postage) {
+						return true;
+					}
+				}
+			}
+		}
 
-    private void setAddress(IMailAddress address) {
-        Preconditions.checkNotNull(address, "address must not be null");
+		return false;
+	}
 
-        if (this.address.isValid() && this.address.equals(address)) {
-            return;
-        }
+	/* ADDRESS */
+	public IMailAddress getAddress() {
+		return address;
+	}
 
-        if (!world.isRemote) {
-            ServerWorld world = (ServerWorld) this.world;
-            IErrorLogic errorLogic = getErrorLogic();
+	private void setAddress(IMailAddress address) {
+		Preconditions.checkNotNull(address, "address must not be null");
 
-            boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(world, address);
-            errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOT_ALPHANUMERIC);
+		if (this.address.isValid() && this.address.equals(address)) {
+			return;
+		}
 
-            boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(world, address);
-            errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOT_UNIQUE);
+		if (!world.isRemote) {
+			ServerWorld world = (ServerWorld) this.world;
+			IErrorLogic errorLogic = getErrorLogic();
 
-            if (hasValidTradeAddress & hasUniqueTradeAddress) {
-                this.address = address;
-                PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
-            }
-        } else {
-            this.address = address;
-        }
-    }
+			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(world, address);
+			errorLogic.setCondition(!hasValidTradeAddress, EnumErrorCode.NOT_ALPHANUMERIC);
 
-    public void handleSetAddressRequest(String addressName) {
-        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-        setAddress(address);
+			boolean hasUniqueTradeAddress = PostManager.postRegistry.isAvailableTradeAddress(world, address);
+			errorLogic.setCondition(!hasUniqueTradeAddress, EnumErrorCode.NOT_UNIQUE);
 
-        IMailAddress newAddress = getAddress();
-        String newAddressName = newAddress.getName();
-        if (newAddressName.equals(addressName)) {
-            PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
-            NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
-        }
-    }
+			if (hasValidTradeAddress & hasUniqueTradeAddress) {
+				this.address = address;
+				PostManager.postRegistry.getOrCreateTradeStation(world, getOwnerHandler().getOwner(), address);
+			}
+		} else {
+			this.address = address;
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void handleSetAddressResponse(String addressName) {
-        IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
-        setAddress(address);
-    }
+	public void handleSetAddressRequest(String addressName) {
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+		setAddress(address);
 
-    @Override
-    public IInventoryAdapter getInternalInventory() {
-        // Handle client side
-        if (world.isRemote || !address.isValid()) {
-            return super.getInternalInventory();
-        }
+		IMailAddress newAddress = getAddress();
+		String newAddressName = newAddress.getName();
+		if (newAddressName.equals(addressName)) {
+			PacketTraderAddressResponse packetResponse = new PacketTraderAddressResponse(this, addressName);
+			NetworkUtil.sendNetworkPacket(packetResponse, pos, world);
+		}
+	}
 
-        return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(
-                (ServerWorld) world,
-                getOwnerHandler().getOwner(),
-                address
-        );
-    }
+	@OnlyIn(Dist.CLIENT)
+	public void handleSetAddressResponse(String addressName) {
+		IMailAddress address = PostManager.postRegistry.getMailAddress(addressName);
+		setAddress(address);
+	}
 
-    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-    //	@Override
-    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-    //		super.addExternalTriggers(triggers, side, tile);
-    //		triggers.add(MailTriggers.lowPaper64);
-    //		triggers.add(MailTriggers.lowPaper32);
-    //		triggers.add(MailTriggers.lowInput25);
-    //		triggers.add(MailTriggers.lowInput10);
-    //		triggers.add(MailTriggers.lowPostage40);
-    //		triggers.add(MailTriggers.lowPostage20);
-    //		triggers.add(MailTriggers.highBuffer90);
-    //		triggers.add(MailTriggers.highBuffer75);
-    //	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(MailTriggers.lowPaper64);
+	//		triggers.add(MailTriggers.lowPaper32);
+	//		triggers.add(MailTriggers.lowInput25);
+	//		triggers.add(MailTriggers.lowInput10);
+	//		triggers.add(MailTriggers.lowPostage40);
+	//		triggers.add(MailTriggers.lowPostage20);
+	//		triggers.add(MailTriggers.highBuffer90);
+	//		triggers.add(MailTriggers.highBuffer75);
+	//	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        if (isLinked()) {    //TODO does this sync over?
-            return new ContainerTrader(windowId, inv, this);
-        } else {
-            return new ContainerTradeName(windowId, inv, this);
-        }
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		if (isLinked()) {    //TODO does this sync over?
+			return new ContainerTrader(windowId, inv, this);
+		} else {
+			return new ContainerTradeName(windowId, inv, this);
+		}
+	}
 }

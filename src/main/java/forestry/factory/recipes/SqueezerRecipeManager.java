@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
@@ -20,32 +21,32 @@ import net.minecraft.util.NonNullList;
 import javax.annotation.Nullable;
 
 public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
-    public SqueezerRecipeManager() {
-        super(ISqueezerRecipe.TYPE);
-    }
+	public SqueezerRecipeManager() {
+		super(ISqueezerRecipe.TYPE);
+	}
 
-    @Nullable
-    public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
-        for (ISqueezerRecipe recipe : getRecipes(manager)) {
-            if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
-                return recipe;
-            }
-        }
+	@Nullable
+	public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
+		for (ISqueezerRecipe recipe : getRecipes(manager)) {
+			if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
+				return recipe;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public boolean canUse(RecipeManager manager, ItemStack itemStack) {
-        for (ISqueezerRecipe recipe : getRecipes(manager)) {
-            for (ItemStack recipeInput : recipe.getResources()) {
-                if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false)
-                    || recipe.isFilledContainer(itemStack)
-                ) {
-                    return true;
-                }
-            }
-        }
+	public boolean canUse(RecipeManager manager, ItemStack itemStack) {
+		for (ISqueezerRecipe recipe : getRecipes(manager)) {
+			for (ItemStack recipeInput : recipe.getResources()) {
+				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false)
+						|| recipe.isFilledContainer(itemStack)
+				) {
+					return true;
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 }

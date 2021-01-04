@@ -11,17 +11,22 @@
 package forestry.core.models.baker;
 
 import com.google.common.collect.ImmutableMap;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.utils.ResourceUtil;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.TransformationMatrix;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
@@ -29,174 +34,174 @@ import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelBakerModel implements IBakedModel {
-    private final boolean isGui3d;
-    private final Map<Direction, List<BakedQuad>> faceQuads;
-    private final List<BakedQuad> generalQuads;
-    private final List<Pair<BlockState, IBakedModel>> models;
-    private final List<Pair<BlockState, IBakedModel>> modelsPost;
-    private boolean isAmbientOcclusion;
-    private TextureAtlasSprite particleSprite;
-    @Nullable
-    private IModelTransform modelState;
-    private ImmutableMap<TransformType, TransformationMatrix> transforms = ImmutableMap.of();
-    private float[] rotation = getDefaultRotation();
-    private float[] translation = getDefaultTranslation();
-    private float[] scale = getDefaultScale();
+	private final boolean isGui3d;
+	private final Map<Direction, List<BakedQuad>> faceQuads;
+	private final List<BakedQuad> generalQuads;
+	private final List<Pair<BlockState, IBakedModel>> models;
+	private final List<Pair<BlockState, IBakedModel>> modelsPost;
+	private boolean isAmbientOcclusion;
+	private TextureAtlasSprite particleSprite;
+	@Nullable
+	private IModelTransform modelState;
+	private ImmutableMap<TransformType, TransformationMatrix> transforms = ImmutableMap.of();
+	private float[] rotation = getDefaultRotation();
+	private float[] translation = getDefaultTranslation();
+	private float[] scale = getDefaultScale();
 
-    ModelBakerModel(IModelTransform modelState) {
-        models = new ArrayList<>();
-        modelsPost = new ArrayList<>();
-        faceQuads = new EnumMap<>(Direction.class);
-        generalQuads = new ArrayList<>();
-        particleSprite = ResourceUtil.getMissingTexture();
-        isGui3d = true;
-        isAmbientOcclusion = false;
-        setModelState(modelState);
+	ModelBakerModel(IModelTransform modelState) {
+		models = new ArrayList<>();
+		modelsPost = new ArrayList<>();
+		faceQuads = new EnumMap<>(Direction.class);
+		generalQuads = new ArrayList<>();
+		particleSprite = ResourceUtil.getMissingTexture();
+		isGui3d = true;
+		isAmbientOcclusion = false;
+		setModelState(modelState);
 
-        for (Direction face : Direction.VALUES) {
-            faceQuads.put(face, new ArrayList<>());
-        }
-    }
+		for (Direction face : Direction.VALUES) {
+			faceQuads.put(face, new ArrayList<>());
+		}
+	}
 
-    private ModelBakerModel(ModelBakerModel old) {
-        this.models = new ArrayList<>(old.models);
-        this.modelsPost = new ArrayList<>(old.modelsPost);
-        this.faceQuads = new EnumMap<>(old.faceQuads);
-        this.generalQuads = new ArrayList<>(old.generalQuads);
-        this.isGui3d = old.isGui3d;
-        this.isAmbientOcclusion = old.isAmbientOcclusion;
-        this.rotation = Arrays.copyOf(old.rotation, 3);
-        this.translation = Arrays.copyOf(old.translation, 3);
-        this.scale = Arrays.copyOf(old.scale, 3);
-        this.particleSprite = old.particleSprite;
-        setModelState(old.modelState);
-    }
+	private ModelBakerModel(ModelBakerModel old) {
+		this.models = new ArrayList<>(old.models);
+		this.modelsPost = new ArrayList<>(old.modelsPost);
+		this.faceQuads = new EnumMap<>(old.faceQuads);
+		this.generalQuads = new ArrayList<>(old.generalQuads);
+		this.isGui3d = old.isGui3d;
+		this.isAmbientOcclusion = old.isAmbientOcclusion;
+		this.rotation = Arrays.copyOf(old.rotation, 3);
+		this.translation = Arrays.copyOf(old.translation, 3);
+		this.scale = Arrays.copyOf(old.scale, 3);
+		this.particleSprite = old.particleSprite;
+		setModelState(old.modelState);
+	}
 
-    private static float[] getDefaultRotation() {
-        return new float[]{-80, -45, 170};
-    }
+	private static float[] getDefaultRotation() {
+		return new float[]{-80, -45, 170};
+	}
 
-    private static float[] getDefaultTranslation() {
-        return new float[]{0, 1.5F, -2.75F};
-    }
+	private static float[] getDefaultTranslation() {
+		return new float[]{0, 1.5F, -2.75F};
+	}
 
-    private static float[] getDefaultScale() {
-        return new float[]{0.375F, 0.375F, 0.375F};
-    }
+	private static float[] getDefaultScale() {
+		return new float[]{0.375F, 0.375F, 0.375F};
+	}
 
-    @Override
-    public boolean isGui3d() {
-        return isGui3d;
-    }
+	public void setParticleSprite(TextureAtlasSprite particleSprite) {
+		this.particleSprite = particleSprite;
+	}
 
-    @Override
-    public boolean isSideLit() {
-        return true;
-    }
+	public float[] getRotation() {
+		return rotation;
+	}
 
-    @Override
-    public boolean isAmbientOcclusion() {
-        return isAmbientOcclusion;
-    }
+	public void setRotation(float[] rotation) {
+		this.rotation = rotation;
+	}
 
-    public void setAmbientOcclusion(boolean ambientOcclusion) {
-        this.isAmbientOcclusion = ambientOcclusion;
-    }
+	public float[] getTranslation() {
+		return translation;
+	}
 
-    public void setParticleSprite(TextureAtlasSprite particleSprite) {
-        this.particleSprite = particleSprite;
-    }
+	public void setTranslation(float[] translation) {
+		this.translation = translation;
+	}
 
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return particleSprite;
-    }
+	public float[] getScale() {
+		return scale;
+	}
 
-    @Override
-    public boolean isBuiltInRenderer() {
-        return false;
-    }
+	public void setScale(float[] scale) {
+		this.scale = scale;
+	}
 
-    @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
+	public void setModelState(IModelTransform modelState) {
+		this.modelState = modelState;
+		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
+	}
 
-    @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.EMPTY;
-    }
+	public void addQuad(@Nullable Direction facing, BakedQuad quad) {
+		if (facing != null) {
+			faceQuads.get(facing).add(quad);
+		} else {
+			generalQuads.add(quad);
+		}
+	}
 
-    public float[] getRotation() {
-        return rotation;
-    }
+	@Override
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+		List<BakedQuad> quads = new ArrayList<>();
+		for (Pair<BlockState, IBakedModel> model : this.models) {
+			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
+			if (!modelQuads.isEmpty()) {
+				quads.addAll(modelQuads);
+			}
+		}
+		if (side != null) {
+			quads.addAll(faceQuads.get(side));
+		}
+		quads.addAll(generalQuads);
+		for (Pair<BlockState, IBakedModel> model : this.modelsPost) {
+			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
+			if (!modelQuads.isEmpty()) {
+				quads.addAll(modelQuads);
+			}
+		}
+		return quads;
+	}
 
-    public void setRotation(float[] rotation) {
-        this.rotation = rotation;
-    }
+	@Override
+	public boolean isAmbientOcclusion() {
+		return isAmbientOcclusion;
+	}
 
-    public float[] getTranslation() {
-        return translation;
-    }
+	@Override
+	public boolean isGui3d() {
+		return isGui3d;
+	}
 
-    public void setTranslation(float[] translation) {
-        this.translation = translation;
-    }
+	@Override
+	public boolean isSideLit() {
+		return true;
+	}
 
-    public float[] getScale() {
-        return scale;
-    }
+	@Override
+	public boolean isBuiltInRenderer() {
+		return false;
+	}
 
-    public void setScale(float[] scale) {
-        this.scale = scale;
-    }
+	@Override
+	public TextureAtlasSprite getParticleTexture() {
+		return particleSprite;
+	}
 
-    public void setModelState(IModelTransform modelState) {
-        this.modelState = modelState;
-        this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
-    }
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms() {
+		return ItemCameraTransforms.DEFAULT;
+	}
 
-    public void addQuad(@Nullable Direction facing, BakedQuad quad) {
-        if (facing != null) {
-            faceQuads.get(facing).add(quad);
-        } else {
-            generalQuads.add(quad);
-        }
-    }
+	@Override
+	public ItemOverrideList getOverrides() {
+		return ItemOverrideList.EMPTY;
+	}
 
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-        List<BakedQuad> quads = new ArrayList<>();
-        for (Pair<BlockState, IBakedModel> model : this.models) {
-            List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
-            if (!modelQuads.isEmpty()) {
-                quads.addAll(modelQuads);
-            }
-        }
-        if (side != null) {
-            quads.addAll(faceQuads.get(side));
-        }
-        quads.addAll(generalQuads);
-        for (Pair<BlockState, IBakedModel> model : this.modelsPost) {
-            List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
-            if (!modelQuads.isEmpty()) {
-                quads.addAll(modelQuads);
-            }
-        }
-        return quads;
-    }
+	public void setAmbientOcclusion(boolean ambientOcclusion) {
+		this.isAmbientOcclusion = ambientOcclusion;
+	}
 
-    public ModelBakerModel copy() {
-        return new ModelBakerModel(this);
-    }
+	public ModelBakerModel copy() {
+		return new ModelBakerModel(this);
+	}
 
-    @Override
-    public IBakedModel handlePerspective(TransformType cameraTransformType, MatrixStack mat) {
-        return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType, mat);
-    }
+	@Override
+	public boolean doesHandlePerspectives() {
+		return true; //TODO: test if this is needed
+	}
 
-    @Override
-    public boolean doesHandlePerspectives() {
-        return true; //TODO: test if this is needed
-    }
+	@Override
+	public IBakedModel handlePerspective(TransformType cameraTransformType, MatrixStack mat) {
+		return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType, mat);
+	}
 }

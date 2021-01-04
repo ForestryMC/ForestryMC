@@ -13,6 +13,7 @@ package forestry.core.items;
 import forestry.api.core.IItemSubtype;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -20,44 +21,44 @@ import net.minecraft.util.NonNullList;
 
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
-    protected final IOverlayInfo overlay;
+	protected final IOverlayInfo overlay;
 
-    public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
-        super((new Item.Properties())
-                .group(tab)
-                .group(ItemGroupForestry.tabForestry));
+	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
+		super((new Item.Properties())
+				.group(tab)
+				.group(ItemGroupForestry.tabForestry));
 
-        this.overlay = overlay;
-    }
+		this.overlay = overlay;
+	}
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
+	@Override
+	public boolean isDamageable() {
+		return false;
+	}
 
-    @Override
-    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-        if (this.isInGroup(tab)) {
-            if (Config.isDebug || !overlay.isSecret()) {
-                subItems.add(new ItemStack(this));
-            }
-        }
-    }
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+			if (Config.isDebug || !overlay.isSecret()) {
+				subItems.add(new ItemStack(this));
+			}
+		}
+	}
 
-    @Override
-    public int getColorFromItemStack(ItemStack stack, int tintIndex) {
-        if (tintIndex == 0 || overlay.getSecondaryColor() == 0) {
-            return overlay.getPrimaryColor();
-        } else {
-            return overlay.getSecondaryColor();
-        }
-    }
+	@Override
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
+		if (tintIndex == 0 || overlay.getSecondaryColor() == 0) {
+			return overlay.getPrimaryColor();
+		} else {
+			return overlay.getSecondaryColor();
+		}
+	}
 
-    public interface IOverlayInfo extends IItemSubtype {
-        int getPrimaryColor();
+	public interface IOverlayInfo extends IItemSubtype {
+		int getPrimaryColor();
 
-        int getSecondaryColor();
+		int getSecondaryColor();
 
-        boolean isSecret();
-    }
+		boolean isSecret();
+	}
 }

@@ -24,6 +24,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,6 +34,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
+
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -44,281 +46,281 @@ import java.util.Collection;
 //import buildcraft.api.statements.ITriggerExternal;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
-    private final int ashForItem;
-    private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
-    private ItemStack fuel = ItemStack.EMPTY;
-    private int burnTime;
-    private int totalBurnTime;
-    private int ashProduction;
+	private final int ashForItem;
+	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
+	private ItemStack fuel = ItemStack.EMPTY;
+	private int burnTime;
+	private int totalBurnTime;
+	private int ashProduction;
 
-    public TileEnginePeat() {
-        super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+	public TileEnginePeat() {
+		super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
-        ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
-        setInternalInventory(new InventoryEnginePeat(this));
-    }
+		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
+		setInternalInventory(new InventoryEnginePeat(this));
+	}
 
-    /**
-     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-     */
-    private static int determineFuelValue(ItemStack fuel) {
-        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-            return FuelManager.copperEngineFuel.get(fuel).getPowerPerCycle();
-        } else {
-            return 0;
-        }
-    }
+	/**
+	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
+	 */
+	private static int determineFuelValue(ItemStack fuel) {
+		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
+			return FuelManager.copperEngineFuel.get(fuel).getPowerPerCycle();
+		} else {
+			return 0;
+		}
+	}
 
-    /**
-     * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
-     */
-    private static int determineBurnDuration(ItemStack fuel) {
-        if (FuelManager.copperEngineFuel.containsKey(fuel)) {
-            return FuelManager.copperEngineFuel.get(fuel).getBurnDuration();
-        } else {
-            return 0;
-        }
-    }
+	/**
+	 * Returns the fuel value (power per cycle) an item of the passed ItemStack provides
+	 */
+	private static int determineBurnDuration(ItemStack fuel) {
+		if (FuelManager.copperEngineFuel.containsKey(fuel)) {
+			return FuelManager.copperEngineFuel.get(fuel).getBurnDuration();
+		} else {
+			return 0;
+		}
+	}
 
-    private int getFuelSlot() {
-        IInventoryAdapter inventory = getInternalInventory();
-        if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL).isEmpty()) {
-            return -1;
-        }
+	private int getFuelSlot() {
+		IInventoryAdapter inventory = getInternalInventory();
+		if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL).isEmpty()) {
+			return -1;
+		}
 
-        if (determineFuelValue(inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL)) > 0) {
-            return InventoryEnginePeat.SLOT_FUEL;
-        }
+		if (determineFuelValue(inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL)) > 0) {
+			return InventoryEnginePeat.SLOT_FUEL;
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    private int getFreeWasteSlot() {
-        IInventoryAdapter inventory = getInternalInventory();
-        for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
-            ItemStack waste = inventory.getStackInSlot(i);
-            if (waste.isEmpty()) {
-                return i;
-            }
+	private int getFreeWasteSlot() {
+		IInventoryAdapter inventory = getInternalInventory();
+		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
+			ItemStack waste = inventory.getStackInSlot(i);
+			if (waste.isEmpty()) {
+				return i;
+			}
 
-            if (!CoreItems.ASH.itemEqual(waste)) {
-                continue;
-            }
+			if (!CoreItems.ASH.itemEqual(waste)) {
+				continue;
+			}
 
-            if (waste.getCount() < waste.getMaxStackSize()) {
-                return i;
-            }
-        }
+			if (waste.getCount() < waste.getMaxStackSize()) {
+				return i;
+			}
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    @Override
-    public void updateServerSide() {
-        super.updateServerSide();
+	@Override
+	public int dissipateHeat() {
+		if (heat <= 0) {
+			return 0;
+		}
 
-        if (!updateOnInterval(40)) {
-            return;
-        }
+		int loss = 0;
 
-        dumpStash();
+		if (!isBurning()) {
+			loss += 1;
+		}
 
-        int fuelSlot = getFuelSlot();
-        boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
-        getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
-    }
+		TemperatureState tempState = getTemperatureState();
+		if (tempState == TemperatureState.OVERHEATING || tempState == TemperatureState.OPERATING_TEMPERATURE) {
+			loss += 1;
+		}
 
-    @Override
-    public void burn() {
+		heat -= loss;
+		return loss;
+	}
 
-        currentOutput = 0;
+	@Override
+	public int generateHeat() {
 
-        if (burnTime > 0) {
-            burnTime--;
-            addAsh(1);
+		int heatToAdd = 0;
 
-            if (isRedstoneActivated()) {
-                currentOutput = determineFuelValue(fuel);
-                energyManager.generateEnergy(currentOutput);
-                world.updateComparatorOutputLevel(pos, getBlockState().getBlock());    //TODO - I thuink
-            }
-        } else if (isRedstoneActivated()) {
-            int fuelSlot = getFuelSlot();
-            int wasteSlot = getFreeWasteSlot();
+		if (isBurning()) {
+			heatToAdd++;
+			if ((double) energyManager.getEnergyStored() / (double) energyManager.getMaxEnergyStored() > 0.5) {
+				heatToAdd++;
+			}
+		}
 
-            if (fuelSlot >= 0 && wasteSlot >= 0) {
-                IInventoryAdapter inventory = getInternalInventory();
-                ItemStack fuelStack = inventory.getStackInSlot(fuelSlot);
-                burnTime = totalBurnTime = determineBurnDuration(fuelStack);
-                if (burnTime > 0 && !fuelStack.isEmpty()) {
-                    fuel = fuelStack.copy();
-                    decrStackSize(fuelSlot, 1);
-                }
-            }
-        }
-    }
+		addHeat(heatToAdd);
+		return heatToAdd;
+	}
 
-    @Override
-    public int dissipateHeat() {
-        if (heat <= 0) {
-            return 0;
-        }
+	@Override
+	public void burn() {
 
-        int loss = 0;
+		currentOutput = 0;
 
-        if (!isBurning()) {
-            loss += 1;
-        }
+		if (burnTime > 0) {
+			burnTime--;
+			addAsh(1);
 
-        TemperatureState tempState = getTemperatureState();
-        if (tempState == TemperatureState.OVERHEATING || tempState == TemperatureState.OPERATING_TEMPERATURE) {
-            loss += 1;
-        }
+			if (isRedstoneActivated()) {
+				currentOutput = determineFuelValue(fuel);
+				energyManager.generateEnergy(currentOutput);
+				world.updateComparatorOutputLevel(pos, getBlockState().getBlock());    //TODO - I thuink
+			}
+		} else if (isRedstoneActivated()) {
+			int fuelSlot = getFuelSlot();
+			int wasteSlot = getFreeWasteSlot();
 
-        heat -= loss;
-        return loss;
-    }
+			if (fuelSlot >= 0 && wasteSlot >= 0) {
+				IInventoryAdapter inventory = getInternalInventory();
+				ItemStack fuelStack = inventory.getStackInSlot(fuelSlot);
+				burnTime = totalBurnTime = determineBurnDuration(fuelStack);
+				if (burnTime > 0 && !fuelStack.isEmpty()) {
+					fuel = fuelStack.copy();
+					decrStackSize(fuelSlot, 1);
+				}
+			}
+		}
+	}
 
-    @Override
-    public int generateHeat() {
+	@Override
+	public void updateServerSide() {
+		super.updateServerSide();
 
-        int heatToAdd = 0;
+		if (!updateOnInterval(40)) {
+			return;
+		}
 
-        if (isBurning()) {
-            heatToAdd++;
-            if ((double) energyManager.getEnergyStored() / (double) energyManager.getMaxEnergyStored() > 0.5) {
-                heatToAdd++;
-            }
-        }
+		dumpStash();
 
-        addHeat(heatToAdd);
-        return heatToAdd;
-    }
+		int fuelSlot = getFuelSlot();
+		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
+		getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
+	}
 
-    private void addAsh(int amount) {
+	// LOADING AND SAVING
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
-        ashProduction += amount;
-        if (ashProduction < ashForItem) {
-            return;
-        }
+		if (compoundNBT.contains("EngineFuelItemStack")) {
+			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
+			fuel = ItemStack.read(fuelItemNbt);
+		}
 
-        // If we have reached the necessary amount, we need to add ash
-        int wasteSlot = getFreeWasteSlot();
-        if (wasteSlot >= 0) {
-            IInventoryAdapter inventory = getInternalInventory();
-            ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
-            if (wasteStack.isEmpty()) {
-                inventory.setInventorySlotContents(wasteSlot, CoreItems.ASH.stack());
-            } else {
-                wasteStack.grow(1);
-            }
-        }
-        // Reset
-        ashProduction = 0;
-        // try to dump stash
-        dumpStash();
-    }
+		burnTime = compoundNBT.getInt("EngineBurnTime");
+		totalBurnTime = compoundNBT.getInt("EngineTotalTime");
+		if (compoundNBT.contains("AshProduction")) {
+			ashProduction = compoundNBT.getInt("AshProduction");
+		}
+	}
 
-    /* AUTO-EJECTING */
-    private IInventory getWasteInventory() {
-        return new InventoryMapper(this, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-    private void dumpStash() {
-        IInventory wasteInventory = getWasteInventory();
+		if (!fuel.isEmpty()) {
+			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
+		}
 
-        IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
+		compoundNBT.putInt("EngineBurnTime", burnTime);
+		compoundNBT.putInt("EngineTotalTime", totalBurnTime);
+		compoundNBT.putInt("AshProduction", ashProduction);
+		return compoundNBT;
+	}
 
-        if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-            Direction powerSide = world.getBlockState(getPos()).get(BlockBase.FACING);
-            Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
-            InventoryUtil.moveItemStack(wasteItemHandler, inventories);
-        }
-    }
+	// STATE INFORMATION
+	@Override
+	public boolean isBurning() {
+		return mayBurn() && burnTime > 0;
+	}
 
-    // STATE INFORMATION
-    @Override
-    public boolean isBurning() {
-        return mayBurn() && burnTime > 0;
-    }
+	@Override
+	public int getBurnTimeRemainingScaled(int i) {
+		if (totalBurnTime == 0) {
+			return 0;
+		}
 
-    @Override
-    public int getBurnTimeRemainingScaled(int i) {
-        if (totalBurnTime == 0) {
-            return 0;
-        }
+		return burnTime * i / totalBurnTime;
+	}
 
-        return burnTime * i / totalBurnTime;
-    }
+	@Override
+	public boolean hasFuelMin(float percentage) {
+		int fuelSlot = this.getFuelSlot();
+		if (fuelSlot < 0) {
+			return false;
+		}
 
-    @Override
-    public boolean hasFuelMin(float percentage) {
-        int fuelSlot = this.getFuelSlot();
-        if (fuelSlot < 0) {
-            return false;
-        }
+		IInventoryAdapter inventory = getInternalInventory();
+		return (float) inventory.getStackInSlot(fuelSlot).getCount() /
+				(float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
+	}
 
-        IInventoryAdapter inventory = getInternalInventory();
-        return (float) inventory.getStackInSlot(fuelSlot).getCount() /
-               (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
-    }
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
+		data.writeInt(burnTime);
+		data.writeInt(totalBurnTime);
+	}
 
-    // LOADING AND SAVING
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
+	@Override
+	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
+		burnTime = data.readInt();
+		totalBurnTime = data.readInt();
+	}
 
-        if (compoundNBT.contains("EngineFuelItemStack")) {
-            CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
-            fuel = ItemStack.read(fuelItemNbt);
-        }
+	private void addAsh(int amount) {
 
-        burnTime = compoundNBT.getInt("EngineBurnTime");
-        totalBurnTime = compoundNBT.getInt("EngineTotalTime");
-        if (compoundNBT.contains("AshProduction")) {
-            ashProduction = compoundNBT.getInt("AshProduction");
-        }
-    }
+		ashProduction += amount;
+		if (ashProduction < ashForItem) {
+			return;
+		}
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
+		// If we have reached the necessary amount, we need to add ash
+		int wasteSlot = getFreeWasteSlot();
+		if (wasteSlot >= 0) {
+			IInventoryAdapter inventory = getInternalInventory();
+			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
+			if (wasteStack.isEmpty()) {
+				inventory.setInventorySlotContents(wasteSlot, CoreItems.ASH.stack());
+			} else {
+				wasteStack.grow(1);
+			}
+		}
+		// Reset
+		ashProduction = 0;
+		// try to dump stash
+		dumpStash();
+	}
 
-        if (!fuel.isEmpty()) {
-            compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
-        }
+	/* AUTO-EJECTING */
+	private IInventory getWasteInventory() {
+		return new InventoryMapper(this, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
+	}
 
-        compoundNBT.putInt("EngineBurnTime", burnTime);
-        compoundNBT.putInt("EngineTotalTime", totalBurnTime);
-        compoundNBT.putInt("AshProduction", ashProduction);
-        return compoundNBT;
-    }
+	private void dumpStash() {
+		IInventory wasteInventory = getWasteInventory();
 
-    @Override
-    public void writeGuiData(PacketBufferForestry data) {
-        super.writeGuiData(data);
-        data.writeInt(burnTime);
-        data.writeInt(totalBurnTime);
-    }
+		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
-    @Override
-    public void readGuiData(PacketBufferForestry data) throws IOException {
-        super.readGuiData(data);
-        burnTime = data.readInt();
-        totalBurnTime = data.readInt();
-    }
+		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
+			Direction powerSide = world.getBlockState(getPos()).get(BlockBase.FACING);
+			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
+			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
+		}
+	}
 
-    /* ITriggerProvider */
-    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-    //	@Override
-    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-    //		super.addExternalTriggers(triggers, side, tile);
-    //		triggers.add(FactoryTriggers.lowFuel25);
-    //		triggers.add(FactoryTriggers.lowFuel10);
-    //	}
+	/* ITriggerProvider */
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		super.addExternalTriggers(triggers, side, tile);
+	//		triggers.add(FactoryTriggers.lowFuel25);
+	//		triggers.add(FactoryTriggers.lowFuel10);
+	//	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerEnginePeat(windowId, player.inventory, this);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerEnginePeat(windowId, player.inventory, this);
+	}
 }

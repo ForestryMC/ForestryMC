@@ -19,7 +19,9 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.flowers.IFlowerProvider;
 import forestry.core.utils.TickHelper;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -34,214 +36,211 @@ import java.util.Iterator;
 import java.util.List;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {
-    private static final String NBT_KEY = "hasFlowerCache";
-    private static final String NBT_KEY_FLOWERS = "flowers";
-    private final int flowerCheckInterval;
+	private static final String NBT_KEY = "hasFlowerCache";
+	private static final String NBT_KEY_FLOWERS = "flowers";
+	private final int flowerCheckInterval;
 
-    private final TickHelper tickHelper = new TickHelper();
+	private final TickHelper tickHelper = new TickHelper();
+	private final ArrayList<BlockPos> flowerCoords = new ArrayList<>();
+	private final List<BlockState> flowers = new ArrayList<>();
+	@Nullable
+	private FlowerData flowerData;
+	private boolean needsSync = false;
+	public HasFlowersCache() {
+		this.flowerCheckInterval = 200;
+	}
 
-    public HasFlowersCache() {
-        this.flowerCheckInterval = 200;
-    }
+	public HasFlowersCache(int checkInterval) {
+		flowerCheckInterval = checkInterval;
+	}
 
-    public HasFlowersCache(int checkInterval) {
-        flowerCheckInterval = checkInterval;
-    }
+	public void update(IBee queen, IBeeHousing beeHousing) {
+		if (flowerData == null) {
+			this.flowerData = new FlowerData(queen, beeHousing);
+			this.flowerCoords.clear();
+			this.flowers.clear();
+		}
+		World world = beeHousing.getWorldObj();
+		tickHelper.onTick();
 
-    @Nullable
-    private FlowerData flowerData;
-    private final ArrayList<BlockPos> flowerCoords = new ArrayList<>();
-    private final List<BlockState> flowers = new ArrayList<>();
+		if (!flowerCoords.isEmpty() && tickHelper.updateOnInterval(flowerCheckInterval)) {
+			Iterator<BlockPos> iterator = flowerCoords.iterator();
+			while (iterator.hasNext()) {
+				BlockPos flowerPos = iterator.next();
+				if (!flowerData.flowerPredicate.test(world, flowerPos) && world.isBlockLoaded(flowerPos)) {
+					iterator.remove();
+					flowers.clear();
+					needsSync = true;
+				}
+			}
+		}
 
-    private boolean needsSync = false;
+		final int flowerCount = flowerCoords.size();
+		final int ticksPerCheck = 1 + (flowerCount * flowerCount);
 
-    private static class FlowerData {
-        public final String flowerType;
-        public final Vector3i territory;
-        public final IBlockPosPredicate flowerPredicate;
-        public Iterator<BlockPos.Mutable> areaIterator;
+		if (tickHelper.updateOnInterval(ticksPerCheck)) {
+			if (flowerData.areaIterator.hasNext()) {
+				BlockPos.Mutable blockPos = flowerData.areaIterator.next();
+				if (flowerData.flowerPredicate.test(world, blockPos)) {
+					addFlowerPos(blockPos.toImmutable());
+				}
+			} else {
+				flowerData.resetIterator(queen, beeHousing);
+			}
+		}
+	}
 
-        public FlowerData(IBee queen, IBeeHousing beeHousing) {
-            IFlowerProvider flowerProvider = queen.getGenome()
-                                                  .getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
-                                                  .getProvider();
-            this.flowerType = flowerProvider.getFlowerType();
-            this.territory = queen.getGenome().getActiveValue(BeeChromosomes.TERRITORY);
-            this.flowerPredicate = FlowerManager.flowerRegistry.createAcceptedFlowerPredicate(flowerType);
-            this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
-        }
+	public boolean hasFlowers() {
+		return !flowerCoords.isEmpty();
+	}
 
-        public void resetIterator(IBee queen, IBeeHousing beeHousing) {
-            this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
-        }
-    }
+	public boolean needsSync() {
+		boolean returnVal = needsSync;
+		needsSync = false;
+		return returnVal;
+	}
 
-    public void update(IBee queen, IBeeHousing beeHousing) {
-        if (flowerData == null) {
-            this.flowerData = new FlowerData(queen, beeHousing);
-            this.flowerCoords.clear();
-            this.flowers.clear();
-        }
-        World world = beeHousing.getWorldObj();
-        tickHelper.onTick();
+	public void onNewQueen(IBee queen, IBeeHousing housing) {
+		if (this.flowerData != null) {
+			IGenome genome = queen.getGenome();
+			String flowerType = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getFlowerType();
+			if (!this.flowerData.flowerType.equals(flowerType)
+					|| !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
+				flowerData = new FlowerData(queen, housing);
+				flowerCoords.clear();
+				flowers.clear();
+			}
+		}
+	}
 
-        if (!flowerCoords.isEmpty() && tickHelper.updateOnInterval(flowerCheckInterval)) {
-            Iterator<BlockPos> iterator = flowerCoords.iterator();
-            while (iterator.hasNext()) {
-                BlockPos flowerPos = iterator.next();
-                if (!flowerData.flowerPredicate.test(world, flowerPos) && world.isBlockLoaded(flowerPos)) {
-                    iterator.remove();
-                    flowers.clear();
-                    needsSync = true;
-                }
-            }
-        }
+	public List<BlockPos> getFlowerCoords() {
+		return Collections.unmodifiableList(flowerCoords);
+	}
 
-        final int flowerCount = flowerCoords.size();
-        final int ticksPerCheck = 1 + (flowerCount * flowerCount);
+	public List<BlockState> getFlowers(World world) {
+		if (flowers.isEmpty() && !flowerCoords.isEmpty()) {
+			for (BlockPos flowerCoord : flowerCoords) {
+				BlockState blockState = world.getBlockState(flowerCoord);
+				flowers.add(blockState);
+			}
+		}
+		return Collections.unmodifiableList(flowers);
+	}
 
-        if (tickHelper.updateOnInterval(ticksPerCheck)) {
-            if (flowerData.areaIterator.hasNext()) {
-                BlockPos.Mutable blockPos = flowerData.areaIterator.next();
-                if (flowerData.flowerPredicate.test(world, blockPos)) {
-                    addFlowerPos(blockPos.toImmutable());
-                }
-            } else {
-                flowerData.resetIterator(queen, beeHousing);
-            }
-        }
-    }
+	public void addFlowerPos(BlockPos blockPos) {
+		flowerCoords.add(blockPos);
+		flowers.clear();
+		needsSync = true;
+	}
 
-    public boolean hasFlowers() {
-        return !flowerCoords.isEmpty();
-    }
+	public void forceLookForFlowers(IBee queen, IBeeHousing housing) {
+		if (flowerData != null) {
+			flowerCoords.clear();
+			flowers.clear();
+			flowerData.resetIterator(queen, housing);
+			World world = housing.getWorldObj();
+			while (flowerData.areaIterator.hasNext()) {
+				BlockPos.Mutable blockPos = flowerData.areaIterator.next();
+				if (flowerData.flowerPredicate.test(world, blockPos)) {
+					addFlowerPos(blockPos.toImmutable());
+				}
+			}
+		}
+	}
 
-    public boolean needsSync() {
-        boolean returnVal = needsSync;
-        needsSync = false;
-        return returnVal;
-    }
+	@Override
+	public void read(CompoundNBT compoundNBT) {
+		if (!compoundNBT.contains(NBT_KEY)) {
+			return;
+		}
 
-    public void onNewQueen(IBee queen, IBeeHousing housing) {
-        if (this.flowerData != null) {
-            IGenome genome = queen.getGenome();
-            String flowerType = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getFlowerType();
-            if (!this.flowerData.flowerType.equals(flowerType)
-                || !this.flowerData.territory.equals(genome.getActiveValue(BeeChromosomes.TERRITORY))) {
-                flowerData = new FlowerData(queen, housing);
-                flowerCoords.clear();
-                flowers.clear();
-            }
-        }
-    }
+		CompoundNBT hasFlowerCacheNBT = compoundNBT.getCompound(NBT_KEY);
+		flowerCoords.clear();
+		if (hasFlowerCacheNBT.contains(NBT_KEY_FLOWERS)) {
+			int[] flowersList = hasFlowerCacheNBT.getIntArray(NBT_KEY_FLOWERS);
+			if (flowersList.length % 3 == 0) {
+				int flowerCount = flowersList.length / 3;
 
-    public List<BlockPos> getFlowerCoords() {
-        return Collections.unmodifiableList(flowerCoords);
-    }
+				flowerCoords.ensureCapacity(flowerCount);
 
-    public List<BlockState> getFlowers(World world) {
-        if (flowers.isEmpty() && !flowerCoords.isEmpty()) {
-            for (BlockPos flowerCoord : flowerCoords) {
-                BlockState blockState = world.getBlockState(flowerCoord);
-                flowers.add(blockState);
-            }
-        }
-        return Collections.unmodifiableList(flowers);
-    }
+				for (int i = 0; i < flowerCount; i++) {
+					int index = i * 3;
+					BlockPos flowerPos = new BlockPos(
+							flowersList[index],
+							flowersList[index + 1],
+							flowersList[index + 2]
+					);
+					flowerCoords.add(flowerPos);
+				}
+				needsSync = true;
+			}
+		}
+		flowers.clear();
+	}
 
-    public void addFlowerPos(BlockPos blockPos) {
-        flowerCoords.add(blockPos);
-        flowers.clear();
-        needsSync = true;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		CompoundNBT hasFlowerCacheNBT = new CompoundNBT();
 
-    public void forceLookForFlowers(IBee queen, IBeeHousing housing) {
-        if (flowerData != null) {
-            flowerCoords.clear();
-            flowers.clear();
-            flowerData.resetIterator(queen, housing);
-            World world = housing.getWorldObj();
-            while (flowerData.areaIterator.hasNext()) {
-                BlockPos.Mutable blockPos = flowerData.areaIterator.next();
-                if (flowerData.flowerPredicate.test(world, blockPos)) {
-                    addFlowerPos(blockPos.toImmutable());
-                }
-            }
-        }
-    }
+		if (!flowerCoords.isEmpty()) {
+			int[] flowersList = new int[flowerCoords.size() * 3];
+			int i = 0;
+			for (BlockPos flowerPos : flowerCoords) {
+				flowersList[i] = flowerPos.getX();
+				flowersList[i + 1] = flowerPos.getY();
+				flowersList[i + 2] = flowerPos.getZ();
+				i += 3;
+			}
 
-    @Override
-    public void read(CompoundNBT compoundNBT) {
-        if (!compoundNBT.contains(NBT_KEY)) {
-            return;
-        }
+			hasFlowerCacheNBT.putIntArray(NBT_KEY_FLOWERS, flowersList);
+		}
 
-        CompoundNBT hasFlowerCacheNBT = compoundNBT.getCompound(NBT_KEY);
-        flowerCoords.clear();
-        if (hasFlowerCacheNBT.contains(NBT_KEY_FLOWERS)) {
-            int[] flowersList = hasFlowerCacheNBT.getIntArray(NBT_KEY_FLOWERS);
-            if (flowersList.length % 3 == 0) {
-                int flowerCount = flowersList.length / 3;
+		CompoundNBT.put(NBT_KEY, hasFlowerCacheNBT);
+		return CompoundNBT;
+	}
 
-                flowerCoords.ensureCapacity(flowerCount);
+	public void writeData(PacketBuffer data) {
+		int size = flowerCoords.size();
+		data.writeVarInt(size);
+		if (size > 0) {
+			for (BlockPos pos : flowerCoords) {
+				data.writeVarInt(pos.getX());
+				data.writeVarInt(pos.getY());
+				data.writeVarInt(pos.getZ());
+			}
+		}
+	}
 
-                for (int i = 0; i < flowerCount; i++) {
-                    int index = i * 3;
-                    BlockPos flowerPos = new BlockPos(
-                            flowersList[index],
-                            flowersList[index + 1],
-                            flowersList[index + 2]
-                    );
-                    flowerCoords.add(flowerPos);
-                }
-                needsSync = true;
-            }
-        }
-        flowers.clear();
-    }
+	public void readData(PacketBuffer data) {
+		flowerCoords.clear();
+		flowers.clear();
 
-    @Override
-    public CompoundNBT write(CompoundNBT CompoundNBT) {
-        CompoundNBT hasFlowerCacheNBT = new CompoundNBT();
+		int size = data.readVarInt();
+		while (size > 0) {
+			BlockPos pos = new BlockPos(data.readVarInt(), data.readVarInt(), data.readVarInt());
+			flowerCoords.add(pos);
+			size--;
+		}
+	}
 
-        if (!flowerCoords.isEmpty()) {
-            int[] flowersList = new int[flowerCoords.size() * 3];
-            int i = 0;
-            for (BlockPos flowerPos : flowerCoords) {
-                flowersList[i] = flowerPos.getX();
-                flowersList[i + 1] = flowerPos.getY();
-                flowersList[i + 2] = flowerPos.getZ();
-                i += 3;
-            }
+	private static class FlowerData {
+		public final String flowerType;
+		public final Vector3i territory;
+		public final IBlockPosPredicate flowerPredicate;
+		public Iterator<BlockPos.Mutable> areaIterator;
 
-            hasFlowerCacheNBT.putIntArray(NBT_KEY_FLOWERS, flowersList);
-        }
+		public FlowerData(IBee queen, IBeeHousing beeHousing) {
+			IFlowerProvider flowerProvider = queen.getGenome()
+					.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER)
+					.getProvider();
+			this.flowerType = flowerProvider.getFlowerType();
+			this.territory = queen.getGenome().getActiveValue(BeeChromosomes.TERRITORY);
+			this.flowerPredicate = FlowerManager.flowerRegistry.createAcceptedFlowerPredicate(flowerType);
+			this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
+		}
 
-        CompoundNBT.put(NBT_KEY, hasFlowerCacheNBT);
-        return CompoundNBT;
-    }
-
-    public void writeData(PacketBuffer data) {
-        int size = flowerCoords.size();
-        data.writeVarInt(size);
-        if (size > 0) {
-            for (BlockPos pos : flowerCoords) {
-                data.writeVarInt(pos.getX());
-                data.writeVarInt(pos.getY());
-                data.writeVarInt(pos.getZ());
-            }
-        }
-    }
-
-    public void readData(PacketBuffer data) {
-        flowerCoords.clear();
-        flowers.clear();
-
-        int size = data.readVarInt();
-        while (size > 0) {
-            BlockPos pos = new BlockPos(data.readVarInt(), data.readVarInt(), data.readVarInt());
-            flowerCoords.add(pos);
-            size--;
-        }
-    }
+		public void resetIterator(IBee queen, IBeeHousing beeHousing) {
+			this.areaIterator = FlowerManager.flowerRegistry.getAreaIterator(beeHousing, queen);
+		}
+	}
 }

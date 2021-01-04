@@ -12,22 +12,22 @@ import java.util.Map;
 
 public class BiomeHelper {
 
-    private static final Map<Biome, Boolean> isBiomeHellishCache = new HashMap<>();
+	private static final Map<Biome, Boolean> isBiomeHellishCache = new HashMap<>();
 
-    /**
-     * Determines if a given Biome is of HELLISH temperature, since it is treated separately from actual temperature values.
-     * Uses the Biome.Category.
-     *
-     * @param biomeGen Biome of the biome in question
-     * @return true, if the Biome is a Nether-type biome; false otherwise.
-     */
-    public static boolean isBiomeHellish(Biome biomeGen) {
-        if (isBiomeHellishCache.containsKey(biomeGen)) {
-            return isBiomeHellishCache.get(biomeGen);
-        }
+	/**
+	 * Determines if a given Biome is of HELLISH temperature, since it is treated separately from actual temperature values.
+	 * Uses the Biome.Category.
+	 *
+	 * @param biomeGen Biome of the biome in question
+	 * @return true, if the Biome is a Nether-type biome; false otherwise.
+	 */
+	public static boolean isBiomeHellish(Biome biomeGen) {
+		if (isBiomeHellishCache.containsKey(biomeGen)) {
+			return isBiomeHellishCache.get(biomeGen);
+		}
 
-        boolean isBiomeHellish = Biome.Category.NETHER == biomeGen.getCategory();
-        isBiomeHellishCache.put(biomeGen, isBiomeHellish);
-        return isBiomeHellish;
-    }
+		boolean isBiomeHellish = Biome.Category.NETHER == biomeGen.getCategory();
+		isBiomeHellishCache.put(biomeGen, isBiomeHellish);
+		return isBiomeHellish;
+	}
 }

@@ -7,7 +7,9 @@ package forestry.api.arboriculture.genetics;
 
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.alleles.IAlleleEffect;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,6 +18,6 @@ import net.minecraft.world.World;
  */
 public interface IAlleleLeafEffect extends IAlleleEffect {
 
-    IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos);
+	IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos);
 
 }

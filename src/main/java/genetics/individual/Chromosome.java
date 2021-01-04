@@ -8,6 +8,7 @@ import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.ITemplateContainer;
 import genetics.utils.AlleleUtils;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
@@ -18,194 +19,194 @@ import java.util.Random;
 
 @Immutable
 public class Chromosome implements IChromosome {
-    private static final String ACTIVE_ALLELE_TAG = "UID0";
-    private static final String INACTIVE_ALLELE_TAG = "UID1";
-    private final IAllele active;
-    private final IAllele inactive;
-    private final IChromosomeType type;
+	private static final String ACTIVE_ALLELE_TAG = "UID0";
+	private static final String INACTIVE_ALLELE_TAG = "UID1";
+	private final IAllele active;
+	private final IAllele inactive;
+	private final IChromosomeType type;
 
-    private Chromosome(IAllele allele, IChromosomeType type) {
-        this.active = inactive = allele;
-        this.type = type;
-    }
+	private Chromosome(IAllele allele, IChromosomeType type) {
+		this.active = inactive = allele;
+		this.type = type;
+	}
 
-    private Chromosome(IAllele active, IAllele inactive, IChromosomeType type) {
-        this.active = active;
-        this.inactive = inactive;
-        this.type = type;
-    }
+	private Chromosome(IAllele active, IAllele inactive, IChromosomeType type) {
+		this.active = active;
+		this.inactive = inactive;
+		this.type = type;
+	}
 
-    public static Chromosome create(
-            @Nullable ResourceLocation primarySpeciesUid,
-            @Nullable ResourceLocation secondarySpeciesUid,
-            IChromosomeType type,
-            CompoundNBT nbt
-    ) {
-        IAllele firstAllele = AlleleUtils.getAlleleOrNull(nbt.getString(ACTIVE_ALLELE_TAG));
-        IAllele secondAllele = AlleleUtils.getAlleleOrNull(nbt.getString(INACTIVE_ALLELE_TAG));
-        return create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
-    }
+	public static Chromosome create(
+			@Nullable ResourceLocation primarySpeciesUid,
+			@Nullable ResourceLocation secondarySpeciesUid,
+			IChromosomeType type,
+			CompoundNBT nbt
+	) {
+		IAllele firstAllele = AlleleUtils.getAlleleOrNull(nbt.getString(ACTIVE_ALLELE_TAG));
+		IAllele secondAllele = AlleleUtils.getAlleleOrNull(nbt.getString(INACTIVE_ALLELE_TAG));
+		return create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
+	}
 
-    public static Chromosome create(
-            @Nullable ResourceLocation primaryTemplateIdentifier,
-            @Nullable ResourceLocation secondaryTemplateIdentifier,
-            IChromosomeType type,
-            @Nullable IAllele firstAllele,
-            @Nullable IAllele secondAllele
-    ) {
-        return create(
-                getStringOrNull(primaryTemplateIdentifier),
-                getStringOrNull(secondaryTemplateIdentifier),
-                type,
-                firstAllele,
-                secondAllele
-        );
-    }
+	public static Chromosome create(
+			@Nullable ResourceLocation primaryTemplateIdentifier,
+			@Nullable ResourceLocation secondaryTemplateIdentifier,
+			IChromosomeType type,
+			@Nullable IAllele firstAllele,
+			@Nullable IAllele secondAllele
+	) {
+		return create(
+				getStringOrNull(primaryTemplateIdentifier),
+				getStringOrNull(secondaryTemplateIdentifier),
+				type,
+				firstAllele,
+				secondAllele
+		);
+	}
 
-    public static Chromosome create(
-            @Nullable String primaryTemplateIdentifier,
-            @Nullable String secondaryTemplateIdentifier,
-            IChromosomeType type,
-            @Nullable IAllele firstAllele,
-            @Nullable IAllele secondAllele
-    ) {
-        firstAllele = validateAllele(primaryTemplateIdentifier, type, firstAllele);
-        secondAllele = validateAllele(secondaryTemplateIdentifier, type, secondAllele);
+	public static Chromosome create(
+			@Nullable String primaryTemplateIdentifier,
+			@Nullable String secondaryTemplateIdentifier,
+			IChromosomeType type,
+			@Nullable IAllele firstAllele,
+			@Nullable IAllele secondAllele
+	) {
+		firstAllele = validateAllele(primaryTemplateIdentifier, type, firstAllele);
+		secondAllele = validateAllele(secondaryTemplateIdentifier, type, secondAllele);
 
-        return new Chromosome(firstAllele, secondAllele, type);
-    }
+		return new Chromosome(firstAllele, secondAllele, type);
+	}
 
-    @Nullable
-    private static String getStringOrNull(@Nullable ResourceLocation location) {
-        return location != null ? location.toString() : null;
-    }
+	@Nullable
+	private static String getStringOrNull(@Nullable ResourceLocation location) {
+		return location != null ? location.toString() : null;
+	}
 
-    private static IAllele validateAllele(
-            @Nullable String templateIdentifier,
-            IChromosomeType type,
-            @Nullable IAllele allele
-    ) {
-        IAlleleRegistry alleleRegistry = ApiInstance.INSTANCE.getAlleleRegistry();
-        if (allele == null || !alleleRegistry.isValidAllele(allele, type)) {
-            ITemplateContainer container = type.getRoot().getTemplates();
-            IKaryotype karyotype = container.getKaryotype();
-            IAllele[] template = null;
+	private static IAllele validateAllele(
+			@Nullable String templateIdentifier,
+			IChromosomeType type,
+			@Nullable IAllele allele
+	) {
+		IAlleleRegistry alleleRegistry = ApiInstance.INSTANCE.getAlleleRegistry();
+		if (allele == null || !alleleRegistry.isValidAllele(allele, type)) {
+			ITemplateContainer container = type.getRoot().getTemplates();
+			IKaryotype karyotype = container.getKaryotype();
+			IAllele[] template = null;
 
-            if (templateIdentifier != null) {
-                template = container.getTemplate(templateIdentifier);
-            }
+			if (templateIdentifier != null) {
+				template = container.getTemplate(templateIdentifier);
+			}
 
-            if (template == null) {
-                template = karyotype.getDefaultTemplate().alleles();
-            }
+			if (template == null) {
+				template = karyotype.getDefaultTemplate().alleles();
+			}
 
-            return template[type.getIndex()];
-        }
-        return allele;
-    }
+			return template[type.getIndex()];
+		}
+		return allele;
+	}
 
-    public static Chromosome create(IAllele allele, IChromosomeType geneType) {
-        return new Chromosome(allele, geneType);
-    }
+	public static Chromosome create(IAllele allele, IChromosomeType geneType) {
+		return new Chromosome(allele, geneType);
+	}
 
-    static Optional<IAllele> getActiveAllele(CompoundNBT chromosomeNBT) {
-        String alleleUid = chromosomeNBT.getString(Chromosome.ACTIVE_ALLELE_TAG);
-        return AlleleUtils.getAllele(alleleUid);
-    }
+	static Optional<IAllele> getActiveAllele(CompoundNBT chromosomeNBT) {
+		String alleleUid = chromosomeNBT.getString(Chromosome.ACTIVE_ALLELE_TAG);
+		return AlleleUtils.getAllele(alleleUid);
+	}
 
-    static Optional<IAllele> getInactiveAllele(CompoundNBT chromosomeNBT) {
-        String alleleUid = chromosomeNBT.getString(Chromosome.INACTIVE_ALLELE_TAG);
-        return AlleleUtils.getAllele(alleleUid);
-    }
+	static Optional<IAllele> getInactiveAllele(CompoundNBT chromosomeNBT) {
+		String alleleUid = chromosomeNBT.getString(Chromosome.INACTIVE_ALLELE_TAG);
+		return AlleleUtils.getAllele(alleleUid);
+	}
 
-    @Override
-    public IChromosomeType getType() {
-        return type;
-    }
+	public static Chromosome create(IAllele firstAllele, IAllele secondAllele, IChromosomeType geneType) {
+		firstAllele = getActiveAllele(firstAllele, secondAllele);
+		secondAllele = getInactiveAllele(firstAllele, secondAllele);
+		return new Chromosome(firstAllele, secondAllele, geneType);
+	}
 
-    @Override
-    public IAllele getActiveAllele() {
-        return active;
-    }
+	private static IAllele getActiveAllele(IAllele firstAllele, IAllele secondAllele) {
+		if (firstAllele.isDominant()) {
+			return firstAllele;
+		}
+		if (secondAllele.isDominant()) {
+			return secondAllele;
+		}
+		// Leaves only the case of both being recessive
+		return firstAllele;
+	}
 
-    @Override
-    public IAllele getInactiveAllele() {
-        return inactive;
-    }
+	private static IAllele getInactiveAllele(IAllele firstAllele, IAllele secondAllele) {
+		if (!secondAllele.isDominant()) {
+			return secondAllele;
+		}
+		if (!firstAllele.isDominant()) {
+			return firstAllele;
+		}
+		// Leaves only the case of both being dominant
+		return secondAllele;
+	}
 
-    @Override
-    public boolean isPureBred() {
-        return active.equals(inactive);
-    }
+	@Override
+	public IChromosomeType getType() {
+		return type;
+	}
 
-    @Override
-    public boolean isGeneticEqual(IChromosome other) {
-        if (!active.equals(other.getActiveAllele())) {
-            return false;
-        }
-        return inactive.equals(other.getInactiveAllele());
-    }
+	@Override
+	public IAllele getActiveAllele() {
+		return active;
+	}
 
-    @Override
-    public CompoundNBT writeToNBT(CompoundNBT nbttagcompound) {
-        nbttagcompound.putString(ACTIVE_ALLELE_TAG, active.getRegistryName().toString());
-        nbttagcompound.putString(INACTIVE_ALLELE_TAG, inactive.getRegistryName().toString());
-        return nbttagcompound;
-    }
+	@Override
+	public IAllele getInactiveAllele() {
+		return inactive;
+	}
 
-    @Override
-    public IChromosome inheritChromosome(Random rand, IChromosome other) {
-        IAllele firstChoice;
-        if (rand.nextBoolean()) {
-            firstChoice = getActiveAllele();
-        } else {
-            firstChoice = getInactiveAllele();
-        }
+	@Override
+	public CompoundNBT writeToNBT(CompoundNBT nbttagcompound) {
+		nbttagcompound.putString(ACTIVE_ALLELE_TAG, active.getRegistryName().toString());
+		nbttagcompound.putString(INACTIVE_ALLELE_TAG, inactive.getRegistryName().toString());
+		return nbttagcompound;
+	}
 
-        IAllele secondChoice;
-        if (rand.nextBoolean()) {
-            secondChoice = other.getActiveAllele();
-        } else {
-            secondChoice = other.getInactiveAllele();
-        }
+	@Override
+	public IChromosome inheritChromosome(Random rand, IChromosome other) {
+		IAllele firstChoice;
+		if (rand.nextBoolean()) {
+			firstChoice = getActiveAllele();
+		} else {
+			firstChoice = getInactiveAllele();
+		}
 
-        if (rand.nextBoolean()) {
-            return Chromosome.create(firstChoice, secondChoice, type);
-        } else {
-            return Chromosome.create(secondChoice, firstChoice, type);
-        }
-    }
+		IAllele secondChoice;
+		if (rand.nextBoolean()) {
+			secondChoice = other.getActiveAllele();
+		} else {
+			secondChoice = other.getInactiveAllele();
+		}
 
-    public static Chromosome create(IAllele firstAllele, IAllele secondAllele, IChromosomeType geneType) {
-        firstAllele = getActiveAllele(firstAllele, secondAllele);
-        secondAllele = getInactiveAllele(firstAllele, secondAllele);
-        return new Chromosome(firstAllele, secondAllele, geneType);
-    }
+		if (rand.nextBoolean()) {
+			return Chromosome.create(firstChoice, secondChoice, type);
+		} else {
+			return Chromosome.create(secondChoice, firstChoice, type);
+		}
+	}
 
-    private static IAllele getActiveAllele(IAllele firstAllele, IAllele secondAllele) {
-        if (firstAllele.isDominant()) {
-            return firstAllele;
-        }
-        if (secondAllele.isDominant()) {
-            return secondAllele;
-        }
-        // Leaves only the case of both being recessive
-        return firstAllele;
-    }
+	@Override
+	public boolean isPureBred() {
+		return active.equals(inactive);
+	}
 
-    private static IAllele getInactiveAllele(IAllele firstAllele, IAllele secondAllele) {
-        if (!secondAllele.isDominant()) {
-            return secondAllele;
-        }
-        if (!firstAllele.isDominant()) {
-            return firstAllele;
-        }
-        // Leaves only the case of both being dominant
-        return secondAllele;
-    }
+	@Override
+	public boolean isGeneticEqual(IChromosome other) {
+		if (!active.equals(other.getActiveAllele())) {
+			return false;
+		}
+		return inactive.equals(other.getInactiveAllele());
+	}
 
-    @Override
-    public String toString() {
-        return "{" + active + ", " + inactive + "}";
-    }
+	@Override
+	public String toString() {
+		return "{" + active + ", " + inactive + "}";
+	}
 }

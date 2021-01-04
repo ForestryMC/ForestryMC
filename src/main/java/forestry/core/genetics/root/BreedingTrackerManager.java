@@ -1,17 +1,22 @@
 package forestry.core.genetics.root;
 
 import com.google.common.base.Preconditions;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
 import forestry.api.genetics.IBreedingTrackerManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
@@ -19,65 +24,65 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public enum BreedingTrackerManager implements IBreedingTrackerManager {
-    INSTANCE;
+	INSTANCE;
 
-    private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
-    private SidedHandler sidedHandler;
+	private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
+	private SidedHandler sidedHandler;
 
-    BreedingTrackerManager() {
-        sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);
-    }
+	BreedingTrackerManager() {
+		sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);
+	}
 
-    @Override
-    public void registerTracker(String rootUID, IBreedingTrackerHandler handler) {
-        factories.put(rootUID, handler);
-    }
+	@Override
+	public void registerTracker(String rootUID, IBreedingTrackerHandler handler) {
+		factories.put(rootUID, handler);
+	}
 
-    @Override
-    public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
-        return getSidedHandler().getTracker(rootUID, world, profile);
-    }
+	@Override
+	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
+		return getSidedHandler().getTracker(rootUID, world, profile);
+	}
 
-    private SidedHandler getSidedHandler() {
-        Preconditions.checkNotNull(sidedHandler, "Called breeding tracker method to early.");
-        return sidedHandler;
-    }
+	private SidedHandler getSidedHandler() {
+		Preconditions.checkNotNull(sidedHandler, "Called breeding tracker method to early.");
+		return sidedHandler;
+	}
 
-    private interface SidedHandler {
-        <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player);
-    }
+	private interface SidedHandler {
+		<T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player);
+	}
 
-    private static class ServerHandler implements SidedHandler {
+	private static class ServerHandler implements SidedHandler {
 
-        @SuppressWarnings("unchecked")
-        public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
-            IBreedingTrackerHandler handler = factories.get(rootUID);
-            String filename = handler.getFileName(player);
-            ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
-            T tracker = (T) overworld.getSavedData().getOrCreate(
-                    () -> (WorldSavedData) handler.createTracker(filename),
-                    filename
-            );
-            handler.populateTracker(tracker, overworld, player);
-            return tracker;
-        }
-    }
+		@SuppressWarnings("unchecked")
+		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
+			IBreedingTrackerHandler handler = factories.get(rootUID);
+			String filename = handler.getFileName(player);
+			ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
+			T tracker = (T) overworld.getSavedData().getOrCreate(
+					() -> (WorldSavedData) handler.createTracker(filename),
+					filename
+			);
+			handler.populateTracker(tracker, overworld, player);
+			return tracker;
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    private static class ClientHandler extends ServerHandler {
-        private final Map<String, IBreedingTracker> trackerByUID = new LinkedHashMap<>();
+	@OnlyIn(Dist.CLIENT)
+	private static class ClientHandler extends ServerHandler {
+		private final Map<String, IBreedingTracker> trackerByUID = new LinkedHashMap<>();
 
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
-            if (world instanceof ServerWorld) {
-                return super.getTracker(rootUID, world, profile);
-            }
-            IBreedingTrackerHandler handler = factories.get(rootUID);
-            String filename = handler.getFileName(profile);
-            T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));
-            handler.populateTracker(tracker, Minecraft.getInstance().world, profile);
-            return tracker;
-        }
-    }
+		@Override
+		@SuppressWarnings("unchecked")
+		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
+			if (world instanceof ServerWorld) {
+				return super.getTracker(rootUID, world, profile);
+			}
+			IBreedingTrackerHandler handler = factories.get(rootUID);
+			String filename = handler.getFileName(profile);
+			T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));
+			handler.populateTracker(tracker, Minecraft.getInstance().world, profile);
+			return tracker;
+		}
+	}
 }

@@ -7,20 +7,21 @@ package forestry.api.lepidopterology.genetics;
 
 import forestry.api.genetics.alleles.IAlleleProperty;
 import forestry.api.genetics.products.IDynamicProductList;
+
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 
 public interface IAlleleButterflyCocoon extends IAlleleProperty<IAlleleButterflyCocoon> {
 
-    ModelResourceLocation getCocoonItemModel(int age);
+	ModelResourceLocation getCocoonItemModel(int age);
 
-    String getCocoonName();
+	String getCocoonName();
 
-    IDynamicProductList getCocoonLoot();
+	IDynamicProductList getCocoonLoot();
 
-    void clearLoot();
+	void clearLoot();
 
-    void bakeLoot();
+	void bakeLoot();
 
-    void addLoot(ItemStack loot, float chance);
+	void addLoot(ItemStack loot, float chance);
 }

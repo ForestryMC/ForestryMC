@@ -14,8 +14,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IPacketRegistry {
-    void registerPacketsServer();
+	void registerPacketsServer();
 
-    @OnlyIn(Dist.CLIENT)
-    void registerPacketsClient();
+	@OnlyIn(Dist.CLIENT)
+	void registerPacketsClient();
 }

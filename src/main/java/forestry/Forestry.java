@@ -11,6 +11,7 @@
 package forestry;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
@@ -42,8 +43,10 @@ import forestry.factory.recipes.*;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
+
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
@@ -54,6 +57,7 @@ import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -64,11 +68,14 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+
 import net.minecraftforge.registries.IForgeRegistry;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -104,256 +111,253 @@ import java.io.File;
 //the big TODO - things have to be properly sided now, can't keep just using OnlyIn I think
 @Mod("forestry")
 public class Forestry {
-    @Nullable
-    public static Forestry instance;
+	private static final Logger LOGGER = LogManager.getLogger();
+	@Nullable
+	public static Forestry instance;
+	@Nullable
+	private static PacketHandlerServer packetHandler;
+	@Nullable
+	private final File configFolder;
 
-    private static final Logger LOGGER = LogManager.getLogger();
+	public Forestry() {
+		instance = this;
+		ForestryAPI.instance = this;
+		ForestryAPI.forestryConstants = new Constants();
+		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
+		ClimateManager.climateRoot = ClimateRoot.getInstance();
+		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
+		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
+		EnumErrorCode.init();
 
-    @Nullable
-    private final File configFolder;
+		configFolder = new File("./config/forestry");
+		Config.load(Dist.DEDICATED_SERVER);
 
-    public Forestry() {
-        instance = this;
-        ForestryAPI.instance = this;
-        ForestryAPI.forestryConstants = new Constants();
-        ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-        ClimateManager.climateRoot = ClimateRoot.getInstance();
-        ClimateManager.climateFactory = ClimateFactory.INSTANCE;
-        ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
-        EnumErrorCode.init();
+		ModuleManager moduleManager = ModuleManager.getInstance();
+		ForestryAPI.moduleManager = moduleManager;
+		moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
+		ModuleManager.runSetup();
+		NetworkHandler networkHandler = new NetworkHandler();
+		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
+		IEventBus modEventBus = ForgeUtils.modBus();
+		modEventBus.addListener(this::setup);
+		//		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+		modEventBus.addListener(this::processIMCMessages);
+		modEventBus.addListener(this::clientStuff);
+		modEventBus.addListener(this::gatherData);
 
-        configFolder = new File("./config/forestry");
-        Config.load(Dist.DEDICATED_SERVER);
+		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+		forgeBus.register(this);
+		forgeBus.register(new EventHandlerCore());
 
-        ModuleManager moduleManager = ModuleManager.getInstance();
-        ForestryAPI.moduleManager = moduleManager;
-        moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
-        ModuleManager.runSetup();
-        NetworkHandler networkHandler = new NetworkHandler();
-        //				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
-        IEventBus modEventBus = ForgeUtils.modBus();
-        modEventBus.addListener(this::setup);
-        //		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        modEventBus.addListener(this::processIMCMessages);
-        modEventBus.addListener(this::clientStuff);
-        modEventBus.addListener(this::gatherData);
+		Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
+		Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
 
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.register(this);
-        forgeBus.register(new EventHandlerCore());
+		ModuleManager.getModuleHandler().runSetup();
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
+		modEventBus.addListener(
+				EventPriority.NORMAL,
+				false,
+				FMLCommonSetupEvent.class,
+				evt -> networkHandler.serverPacketHandler()
+		);
+	}
 
-        Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
-        Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
+	public static PacketHandlerServer getPacketHandler() {
+		Preconditions.checkNotNull(packetHandler);
+		return packetHandler;
+	}
 
-        ModuleManager.getModuleHandler().runSetup();
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
-        modEventBus.addListener(
-                EventPriority.NORMAL,
-                false,
-                FMLCommonSetupEvent.class,
-                evt -> networkHandler.serverPacketHandler()
-        );
-    }
+	public void clientStuff(FMLClientSetupEvent e) {
+		ModuleManager.getModuleHandler().registerGuiFactories();
+	}
 
-    public void clientStuff(FMLClientSetupEvent e) {
-        ModuleManager.getModuleHandler().registerGuiFactories();
-    }
+	private void setup(FMLCommonSetupEvent event) {
+		packetHandler = new PacketHandlerServer();
 
-    @Nullable
-    private static PacketHandlerServer packetHandler;
+		// Register event handler
+		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+		MinecraftForge.EVENT_BUS.register(Config.class);
+		Proxies.common.registerEventHandlers();
+		Proxies.common.registerTickHandlers();
 
-    public static PacketHandlerServer getPacketHandler() {
-        Preconditions.checkNotNull(packetHandler);
-        return packetHandler;
-    }
+		String gameMode = Config.gameMode;
+		Preconditions.checkNotNull(gameMode);
+		ForestryAPI.activeMode = new GameMode(gameMode);
 
-    private void setup(FMLCommonSetupEvent event) {
-        packetHandler = new PacketHandlerServer();
+		//TODO - DistExecutor
+		callSetupListeners(true);
+		ModuleManager.getModuleHandler().runPreInit();
+		Proxies.render.registerItemAndBlockColors();
+		//TODO put these here for now
+		ModuleManager.getModuleHandler().runInit();
+		callSetupListeners(false);
+		ModuleManager.getModuleHandler().runPostInit();
+	}
 
-        // Register event handler
-        MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
-        MinecraftForge.EVENT_BUS.register(Config.class);
-        Proxies.common.registerEventHandlers();
-        Proxies.common.registerTickHandlers();
+	@OnlyIn(Dist.CLIENT)
+	public void setupClient(FMLClientSetupEvent event) {
+		ModuleManager.getModuleHandler().runClientSetup();
+	}
 
-        String gameMode = Config.gameMode;
-        Preconditions.checkNotNull(gameMode);
-        ForestryAPI.activeMode = new GameMode(gameMode);
+	//TODO: Move to somewhere else
+	private void callSetupListeners(boolean start) {
+		for (IAllele allele : AlleleUtils.getAlleles()) {
+			if (allele instanceof ISetupListener) {
+				ISetupListener listener = (ISetupListener) allele;
+				if (start) {
+					listener.onStartSetup();
+				} else {
+					listener.onFinishSetup();
+				}
+			}
+		}
+	}
 
-        //TODO - DistExecutor
-        callSetupListeners(true);
-        ModuleManager.getModuleHandler().runPreInit();
-        Proxies.render.registerItemAndBlockColors();
-        //TODO put these here for now
-        ModuleManager.getModuleHandler().runInit();
-        callSetupListeners(false);
-        ModuleManager.getModuleHandler().runPostInit();
-    }
+	private void gatherData(GatherDataEvent event) {
+		CapabilityFluidHandler.register();
+		DataGenerator generator = event.getGenerator();
 
-    @OnlyIn(Dist.CLIENT)
-    public void setupClient(FMLClientSetupEvent event) {
-        ModuleManager.getModuleHandler().runClientSetup();
-    }
+		if (event.includeServer()) {
+			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator);
+			generator.addProvider(blockTagsProvider);
+			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider));
+			generator.addProvider(new ForestryLootTableProvider(generator));
+			generator.addProvider(new WoodBlockStateProvider(generator));
+			generator.addProvider(new WoodBlockModelProvider(generator));
+			generator.addProvider(new WoodItemModelProvider(generator));
+			generator.addProvider(new ForestryBlockStateProvider(generator));
+			generator.addProvider(new ForestryBlockModelProvider(generator));
+			generator.addProvider(new ForestryItemModelProvider(generator));
+			try {
+				generator.run();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 
-    //TODO: Move to somewhere else
-    private void callSetupListeners(boolean start) {
-        for (IAllele allele : AlleleUtils.getAlleles()) {
-            if (allele instanceof ISetupListener) {
-                ISetupListener listener = (ISetupListener) allele;
-                if (start) {
-                    listener.onStartSetup();
-                } else {
-                    listener.onFinishSetup();
-                }
-            }
-        }
-    }
+	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
+		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(
+					minecraft.textureManager,
+					TextureManagerForestry.LOCATION_FORESTRY_TEXTURE,
+					"gui"
+			);
+			TextureManagerForestry.getInstance().init(spriteUploader);
+			IResourceManager resourceManager = minecraft.getResourceManager();
+			if (resourceManager instanceof IReloadableResourceManager) {
+				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
+				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
+				reloadableManager.addReloadListener(GuiElementFactory.INSTANCE);
+				reloadableManager.addReloadListener(spriteUploader);
+			}
 
-    private void gatherData(GatherDataEvent event) {
-        CapabilityFluidHandler.register();
-        DataGenerator generator = event.getGenerator();
+			ModuleManager.getModuleHandler().runClientInit();
 
-        if (event.includeServer()) {
-            ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator);
-            generator.addProvider(blockTagsProvider);
-            generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider));
-            generator.addProvider(new ForestryLootTableProvider(generator));
-            generator.addProvider(new WoodBlockStateProvider(generator));
-            generator.addProvider(new WoodBlockModelProvider(generator));
-            generator.addProvider(new WoodItemModelProvider(generator));
-            generator.addProvider(new ForestryBlockStateProvider(generator));
-            generator.addProvider(new ForestryBlockModelProvider(generator));
-            generator.addProvider(new ForestryItemModelProvider(generator));
-            try {
-                generator.run();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+		});
+		modEventBus.addListener(
+				EventPriority.NORMAL,
+				false,
+				FMLLoadCompleteEvent.class,
+				fmlLoadCompleteEvent -> networkHandler.clientPacketHandler()
+		);
+	}
 
-    private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
-        modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
-            Minecraft minecraft = Minecraft.getInstance();
-            ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(
-                    minecraft.textureManager,
-                    TextureManagerForestry.LOCATION_FORESTRY_TEXTURE,
-                    "gui"
-            );
-            TextureManagerForestry.getInstance().init(spriteUploader);
-            IResourceManager resourceManager = minecraft.getResourceManager();
-            if (resourceManager instanceof IReloadableResourceManager) {
-                IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
-                reloadableManager.addReloadListener(ColourProperties.INSTANCE);
-                reloadableManager.addReloadListener(GuiElementFactory.INSTANCE);
-                reloadableManager.addReloadListener(spriteUploader);
-            }
+	@SubscribeEvent
+	public void serverStarting(FMLServerStartingEvent event) {
+		ModuleManager.serverStarting(event.getServer());
+	}
 
-            ModuleManager.getModuleHandler().runClientInit();
+	//split
+	//TODO - when to run these events
+	//		@EventHandler
+	//		public void init(FMLInitializationEvent event) {
+	//			// Register gui handler
+	//			NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+	//
+	//			ModuleManager.getInternalHandler().runInit();
+	//
+	//			AdvancementManager.registerTriggers();
+	//		}
+	//
+	////	@EventHandler
+	//	public void postInit(FMLPostInitializationEvent event) {
+	//		ModuleManager.getInternalHandler().runPostInit();
+	//
+	//		// Register world generator
+	//		WorldGenerator worldGenerator = new WorldGenerator();
+	//		GameRegistry.registerWorldGenerator(worldGenerator, 0);
+	//
+	//		// Register tick handlers
+	//		Proxies.common.registerTickHandlers(worldGenerator);
+	//	}
 
-        });
-        modEventBus.addListener(
-                EventPriority.NORMAL,
-                false,
-                FMLLoadCompleteEvent.class,
-                fmlLoadCompleteEvent -> networkHandler.clientPacketHandler()
-        );
-    }
+	@Nullable
+	public File getConfigFolder() {
+		return configFolder;
+	}
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
-    public static class RegistryEvents {
-        @SubscribeEvent(priority = EventPriority.HIGH)
-        public static void createFeatures(RegistryEvent.Register<Block> event) {
-            ModuleManager.getModuleHandler().createFeatures();
-        }
+	public void processIMCMessages(InterModProcessEvent event) {
+		ModuleManager.getModuleHandler().processIMCMessages(event.getIMCStream());
+	}
 
-        @SubscribeEvent(priority = EventPriority.LOW)
-        public static void createObjects(RegistryEvent.Register<Block> event) {
-            ModuleManager.getModuleHandler()
-                         .createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
-            ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
-            ModuleManager.getModuleHandler()
-                         .createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
-        }
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
+	public static class RegistryEvents {
+		@SubscribeEvent(priority = EventPriority.HIGH)
+		public static void createFeatures(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler().createFeatures();
+		}
 
-        @SubscribeEvent(priority = EventPriority.LOWEST)
-        public static void registerObjects(RegistryEvent.Register event) {
-            //noinspection unchecked
-            ModuleManager.getModuleHandler().registerObjects(event);
-        }
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void createObjects(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler()
+					.createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
+			ModuleManager.getModuleHandler()
+					.createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+		}
 
-        @SubscribeEvent
-        public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
-            ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
-        }
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void registerObjects(RegistryEvent.Register event) {
+			//noinspection unchecked
+			ModuleManager.getModuleHandler().registerObjects(event);
+		}
 
-        @SubscribeEvent
-        public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-            IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
-            CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
-            CraftingHelper.register(
-                    new ResourceLocation(Constants.MOD_ID, "fallback"),
-                    FallbackIngredient.Serializer.INSTANCE
-            );
+		@SubscribeEvent
+		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
+			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
+		}
 
-            register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
-            register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
-            register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
-            register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
-            register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
-            register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
-            register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
-            register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
-            register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
-            register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
-        }
+		@SubscribeEvent
+		public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+			IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
+			CraftingHelper.register(
+					new ResourceLocation(Constants.MOD_ID, "fallback"),
+					FallbackIngredient.Serializer.INSTANCE
+			);
 
-        private static void register(
-                IForgeRegistry<IRecipeSerializer<?>> registry,
-                IRecipeType<?> type,
-                IRecipeSerializer<?> serializer
-        ) {
-            Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-            registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
-        }
-    }
+			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
+			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
+			register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
+			register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
+			register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
+			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
+			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
+			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
+			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
+			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
+		}
 
-    //split
-    //TODO - when to run these events
-    //		@EventHandler
-    //		public void init(FMLInitializationEvent event) {
-    //			// Register gui handler
-    //			NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-    //
-    //			ModuleManager.getInternalHandler().runInit();
-    //
-    //			AdvancementManager.registerTriggers();
-    //		}
-    //
-    ////	@EventHandler
-    //	public void postInit(FMLPostInitializationEvent event) {
-    //		ModuleManager.getInternalHandler().runPostInit();
-    //
-    //		// Register world generator
-    //		WorldGenerator worldGenerator = new WorldGenerator();
-    //		GameRegistry.registerWorldGenerator(worldGenerator, 0);
-    //
-    //		// Register tick handlers
-    //		Proxies.common.registerTickHandlers(worldGenerator);
-    //	}
-
-    @SubscribeEvent
-    public void serverStarting(FMLServerStartingEvent event) {
-        ModuleManager.serverStarting(event.getServer());
-    }
-
-    @Nullable
-    public File getConfigFolder() {
-        return configFolder;
-    }
-
-    public void processIMCMessages(InterModProcessEvent event) {
-        ModuleManager.getModuleHandler().processIMCMessages(event.getIMCStream());
-    }
+		private static void register(
+				IForgeRegistry<IRecipeSerializer<?>> registry,
+				IRecipeType<?> type,
+				IRecipeSerializer<?> serializer
+		) {
+			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
+			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+		}
+	}
 }

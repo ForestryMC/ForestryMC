@@ -30,6 +30,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -43,6 +44,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -56,256 +58,256 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
-    private static final int TICKS_PER_RECIPE_TIME = 1;
-    private static final int ENERGY_PER_WORK_CYCLE = 2040;
-    private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
+	private static final int TICKS_PER_RECIPE_TIME = 1;
+	private static final int ENERGY_PER_WORK_CYCLE = 2040;
+	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
 
-    private final FilteredTank resourceTank;
-    private final TankManager tankManager;
-    private final InventoryAdapterTile craftingInventory;
-    private final CraftResultInventory craftPreviewInventory;
+	private final FilteredTank resourceTank;
+	private final TankManager tankManager;
+	private final InventoryAdapterTile craftingInventory;
+	private final CraftResultInventory craftPreviewInventory;
 
-    @Nullable
-    private ICarpenterRecipe currentRecipe;
+	@Nullable
+	private ICarpenterRecipe currentRecipe;
 
-    public TileCarpenter() {
-        super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
-        setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
+	public TileCarpenter() {
+		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
+		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
-        craftingInventory = new InventoryGhostCrafting<>(this, 10);
-        craftPreviewInventory = new CraftResultInventory();
-        setInternalInventory(new InventoryCarpenter(this));
+		craftingInventory = new InventoryGhostCrafting<>(this, 10);
+		craftPreviewInventory = new CraftResultInventory();
+		setInternalInventory(new InventoryCarpenter(this));
 
-        tankManager = new TankManager(this, resourceTank);
-    }
+		tankManager = new TankManager(this, resourceTank);
+	}
 
-    private ItemStack getBoxStack() {
-        return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
-    }
+	private ItemStack getBoxStack() {
+		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
+	}
 
-    @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
+	@Override
+	public void setWorldAndPos(World world, BlockPos pos) {
+		super.setWorldAndPos(world, pos);
 
-        resourceTank.setFilters(RecipeManagers.carpenterManager.getRecipeFluids(world.getRecipeManager()));
-    }
+		resourceTank.setFilters(RecipeManagers.carpenterManager.getRecipeFluids(world.getRecipeManager()));
+	}
 
-    /* LOADING & SAVING */
+	/* LOADING & SAVING */
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		tankManager.writeData(data);
+	}
 
-        tankManager.write(compoundNBT);
-        craftingInventory.write(compoundNBT);
-        return compoundNBT;
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readData(data);
+	}
 
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
-        tankManager.read(compoundNBT);
-        craftingInventory.read(compoundNBT);
-    }
+	public void checkRecipe() {
+		if (world.isRemote) {
+			return;
+		}
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        tankManager.writeData(data);
-    }
+		//TODO optional could work quite well here
+		if (!RecipeManagers.carpenterManager.matches(
+				currentRecipe,
+				resourceTank.getFluid(),
+				getBoxStack(),
+				craftingInventory
+		)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(
+					world.getRecipeManager(),
+					resourceTank.getFluid(),
+					getBoxStack(),
+					craftingInventory
+			);
+			currentRecipe = optional.orElse(null);
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        tankManager.readData(data);
-    }
+			if (optional.isPresent()) {
+				int recipeTime = currentRecipe.getPackagingTime();
+				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
+				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 
-    public void checkRecipe() {
-        if (world.isRemote) {
-            return;
-        }
+				ItemStack craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+				craftPreviewInventory.setInventorySlotContents(0, craftingResult);
+			} else {
+				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
+			}
+		}
+	}
 
-        //TODO optional could work quite well here
-        if (!RecipeManagers.carpenterManager.matches(
-                currentRecipe,
-                resourceTank.getFluid(),
-                getBoxStack(),
-                craftingInventory
-        )) {
-            Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(
-                    world.getRecipeManager(),
-                    resourceTank.getFluid(),
-                    getBoxStack(),
-                    craftingInventory
-            );
-            currentRecipe = optional.orElse(null);
+	private boolean removeLiquidResources(boolean doRemove) {
+		if (currentRecipe == null) {
+			return true;
+		}
 
-            if (optional.isPresent()) {
-                int recipeTime = currentRecipe.getPackagingTime();
-                setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
-                setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
+		FluidStack fluid = currentRecipe.getFluidResource();
+		if (!fluid.isEmpty()) {
+			FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
+			if (!fluid.isFluidStackIdentical(drained)) {
+				return false;
+			}
+			if (doRemove) {
+				resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.EXECUTE);
+			}
+		}
 
-                ItemStack craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-                craftPreviewInventory.setInventorySlotContents(0, craftingResult);
-            } else {
-                craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
-            }
-        }
-    }
+		return true;
+	}
 
-    @Override
-    public void updateServerSide() {
-        super.updateServerSide();
+	private boolean removeItemResources(boolean doRemove) {
+		if (currentRecipe == null) {
+			return true;
+		}
 
-        if (updateOnInterval(20)) {
-            FluidHelper.drainContainers(tankManager, this, InventoryCarpenter.SLOT_CAN_INPUT);
-        }
-    }
+		if (!currentRecipe.getBox().hasNoMatchingItems()) {
+			ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
+			if (box.isEmpty()) {
+				return false;
+			}
 
-    @Override
-    public boolean workCycle() {
-        if (!removeLiquidResources(true)) {
-            return false;
-        }
-        if (!removeItemResources(true)) {
-            return false;
-        }
+			if (doRemove) {
+				decrStackSize(InventoryCarpenter.SLOT_BOX, 1);
+			}
+		}
 
-        if (currentRecipe != null) {
-            ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-            InventoryUtil.tryAddStack(
-                    this,
-                    pendingProduct,
-                    InventoryCarpenter.SLOT_PRODUCT,
-                    InventoryCarpenter.SLOT_PRODUCT_COUNT,
-                    true
-            );
-        }
-        return true;
-    }
+		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(
+				craftingInventory,
+				InventoryGhostCrafting.SLOT_CRAFTING_1,
+				InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+		);
+		IInventory inventory = new InventoryMapper(
+				getInternalInventory(),
+				InventoryCarpenter.SLOT_INVENTORY_1,
+				InventoryCarpenter.SLOT_INVENTORY_COUNT
+		);
+		return InventoryUtil.removeSets(inventory, 1, craftingSets, null, true, false, doRemove);
+	}
 
-    private boolean removeLiquidResources(boolean doRemove) {
-        if (currentRecipe == null) {
-            return true;
-        }
+	/* STATE INFORMATION */
+	@Override
+	public boolean hasWork() {
+		if (updateOnInterval(20)) {
+			checkRecipe();
+		}
 
-        FluidStack fluid = currentRecipe.getFluidResource();
-        if (!fluid.isEmpty()) {
-            FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
-            if (!fluid.isFluidStackIdentical(drained)) {
-                return false;
-            }
-            if (doRemove) {
-                resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.EXECUTE);
-            }
-        }
+		boolean hasRecipe = currentRecipe != null;
+		boolean hasLiquidResources = true;
+		boolean hasItemResources = true;
+		boolean canAdd = true;
 
-        return true;
-    }
+		if (hasRecipe) {
+			hasLiquidResources = removeLiquidResources(false);
+			hasItemResources = removeItemResources(false);
 
-    private boolean removeItemResources(boolean doRemove) {
-        if (currentRecipe == null) {
-            return true;
-        }
+			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+			canAdd = InventoryUtil.tryAddStack(
+					this,
+					pendingProduct,
+					InventoryCarpenter.SLOT_PRODUCT,
+					InventoryCarpenter.SLOT_PRODUCT_COUNT,
+					true,
+					false
+			);
+		}
 
-        if (!currentRecipe.getBox().hasNoMatchingItems()) {
-            ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
-            if (box.isEmpty()) {
-                return false;
-            }
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!hasLiquidResources, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(!hasItemResources, EnumErrorCode.NO_RESOURCE_INVENTORY);
+		errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
 
-            if (doRemove) {
-                decrStackSize(InventoryCarpenter.SLOT_BOX, 1);
-            }
-        }
+		return hasRecipe && hasItemResources && hasLiquidResources && canAdd;
+	}
 
-        NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(
-                craftingInventory,
-                InventoryGhostCrafting.SLOT_CRAFTING_1,
-                InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-        );
-        IInventory inventory = new InventoryMapper(
-                getInternalInventory(),
-                InventoryCarpenter.SLOT_INVENTORY_1,
-                InventoryCarpenter.SLOT_INVENTORY_COUNT
-        );
-        return InventoryUtil.removeSets(inventory, 1, craftingSets, null, true, false, doRemove);
-    }
+	@Override
+	public void updateServerSide() {
+		super.updateServerSide();
 
-    /* STATE INFORMATION */
-    @Override
-    public boolean hasWork() {
-        if (updateOnInterval(20)) {
-            checkRecipe();
-        }
+		if (updateOnInterval(20)) {
+			FluidHelper.drainContainers(tankManager, this, InventoryCarpenter.SLOT_CAN_INPUT);
+		}
+	}
 
-        boolean hasRecipe = currentRecipe != null;
-        boolean hasLiquidResources = true;
-        boolean hasItemResources = true;
-        boolean canAdd = true;
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		tankManager.read(compoundNBT);
+		craftingInventory.read(compoundNBT);
+	}
 
-        if (hasRecipe) {
-            hasLiquidResources = removeLiquidResources(false);
-            hasItemResources = removeItemResources(false);
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-            ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-            canAdd = InventoryUtil.tryAddStack(
-                    this,
-                    pendingProduct,
-                    InventoryCarpenter.SLOT_PRODUCT,
-                    InventoryCarpenter.SLOT_PRODUCT_COUNT,
-                    true,
-                    false
-            );
-        }
+		tankManager.write(compoundNBT);
+		craftingInventory.write(compoundNBT);
+		return compoundNBT;
+	}
 
-        IErrorLogic errorLogic = getErrorLogic();
-        errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
-        errorLogic.setCondition(!hasLiquidResources, EnumErrorCode.NO_RESOURCE_LIQUID);
-        errorLogic.setCondition(!hasItemResources, EnumErrorCode.NO_RESOURCE_INVENTORY);
-        errorLogic.setCondition(!canAdd, EnumErrorCode.NO_SPACE_INVENTORY);
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankManager).cast();
+		}
+		return super.getCapability(capability, facing);
+	}
 
-        return hasRecipe && hasItemResources && hasLiquidResources && canAdd;
-    }
+	@Override
+	public boolean workCycle() {
+		if (!removeLiquidResources(true)) {
+			return false;
+		}
+		if (!removeItemResources(true)) {
+			return false;
+		}
 
-    @Override
-    public TankRenderInfo getResourceTankInfo() {
-        return new TankRenderInfo(resourceTank);
-    }
+		if (currentRecipe != null) {
+			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+			InventoryUtil.tryAddStack(
+					this,
+					pendingProduct,
+					InventoryCarpenter.SLOT_PRODUCT,
+					InventoryCarpenter.SLOT_PRODUCT_COUNT,
+					true
+			);
+		}
+		return true;
+	}
 
-    /**
-     * @return Inaccessible crafting inventory for the craft grid.
-     */
-    public IInventory getCraftingInventory() {
-        return craftingInventory;
-    }
+	@Override
+	public TankRenderInfo getResourceTankInfo() {
+		return new TankRenderInfo(resourceTank);
+	}
 
-    public IInventory getCraftPreviewInventory() {
-        return craftPreviewInventory;
-    }
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public IInventory getCraftingInventory() {
+		return craftingInventory;
+	}
 
-    @Override
-    public void handleItemStackForDisplay(ItemStack itemStack) {
-        craftPreviewInventory.setInventorySlotContents(0, itemStack);
-    }
+	public IInventory getCraftPreviewInventory() {
+		return craftPreviewInventory;
+	}
 
-    @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		craftPreviewInventory.setInventorySlotContents(0, itemStack);
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager).cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerCarpenter(windowId, player.inventory, this);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerCarpenter(windowId, player.inventory, this);
+	}
 }

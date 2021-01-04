@@ -12,6 +12,7 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
@@ -19,22 +20,22 @@ import net.minecraft.item.crafting.RecipeManager;
 import javax.annotation.Nullable;
 
 public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
-    public CentrifugeRecipeManager() {
-        super(ICentrifugeRecipe.TYPE);
-    }
+	public CentrifugeRecipeManager() {
+		super(ICentrifugeRecipe.TYPE);
+	}
 
-    @Nullable
-    public ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack) {
-        if (itemStack.isEmpty()) {
-            return null;
-        }
+	@Nullable
+	public ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return null;
+		}
 
-        for (ICentrifugeRecipe recipe : getRecipes(manager)) {
-            Ingredient recipeInput = recipe.getInput();
-            if (recipeInput.test(itemStack)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
+		for (ICentrifugeRecipe recipe : getRecipes(manager)) {
+			Ingredient recipeInput = recipe.getInput();
+			if (recipeInput.test(itemStack)) {
+				return recipe;
+			}
+		}
+		return null;
+	}
 }

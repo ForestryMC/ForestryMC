@@ -15,9 +15,9 @@ import javax.annotation.Nullable;
  */
 public interface IAlleleFruit extends IAlleleProperty<IAlleleFruit> {
 
-    IFruitProvider getProvider();
+	IFruitProvider getProvider();
 
-    @Nullable
-    String getModelName();
+	@Nullable
+	String getModelName();
 
 }

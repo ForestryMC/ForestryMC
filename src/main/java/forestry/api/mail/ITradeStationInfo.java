@@ -6,17 +6,18 @@
 package forestry.api.mail;
 
 import com.mojang.authlib.GameProfile;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 public interface ITradeStationInfo {
-    IMailAddress getAddress();
+	IMailAddress getAddress();
 
-    GameProfile getOwner();
+	GameProfile getOwner();
 
-    ItemStack getTradegood();
+	ItemStack getTradegood();
 
-    NonNullList<ItemStack> getRequired();
+	NonNullList<ItemStack> getRequired();
 
-    EnumTradeStationState getState();
+	EnumTradeStationState getState();
 }

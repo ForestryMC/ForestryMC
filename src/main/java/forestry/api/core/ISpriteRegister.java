@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ISpriteRegister {
 
-    @OnlyIn(Dist.CLIENT)
-    void registerSprites(ISpriteRegistry registry);
+	@OnlyIn(Dist.CLIENT)
+	void registerSprites(ISpriteRegistry registry);
 
 }

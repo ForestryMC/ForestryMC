@@ -12,35 +12,37 @@ package forestry.api.recipes;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISolderRecipe extends IForestryRecipe {
 
-    IRecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
+	IRecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
 
-    boolean matches(ICircuitLayout layout, ItemStack itemstack);
+	boolean matches(ICircuitLayout layout, ItemStack itemstack);
 
-    ICircuitLayout getLayout();
+	ICircuitLayout getLayout();
 
-    ItemStack getResource();
+	ItemStack getResource();
 
-    ICircuit getCircuit();
+	ICircuit getCircuit();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:solder")
-        public static final IRecipeSerializer<ISolderRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:solder")
+		public static final IRecipeSerializer<ISolderRecipe> SERIALIZER = null;
+	}
 }

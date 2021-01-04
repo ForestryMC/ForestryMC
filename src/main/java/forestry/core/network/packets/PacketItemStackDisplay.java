@@ -14,47 +14,49 @@ import forestry.core.network.*;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 
 public class PacketItemStackDisplay extends ForestryPacket implements IForestryPacketClient {
-    private final BlockPos pos;
-    private final ItemStack itemStack;
+	private final BlockPos pos;
+	private final ItemStack itemStack;
 
-    public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
-        this.pos = tile.getPos();
-        this.itemStack = itemStack;
-    }
+	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
+		this.pos = tile.getPos();
+		this.itemStack = itemStack;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeBlockPos(pos);
-        data.writeItemStack(itemStack);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeBlockPos(pos);
+		data.writeItemStack(itemStack);
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.ITEMSTACK_DISPLAY;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.ITEMSTACK_DISPLAY;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-            BlockPos pos = data.readBlockPos();
-            ItemStack itemStack = data.readItemStack();
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+			BlockPos pos = data.readBlockPos();
+			ItemStack itemStack = data.readItemStack();
 
-            TileUtil.actOnTile(
-                    player.world,
-                    pos,
-                    IItemStackDisplay.class,
-                    tile -> tile.handleItemStackForDisplay(itemStack)
-            );
-        }
-    }
+			TileUtil.actOnTile(
+					player.world,
+					pos,
+					IItemStackDisplay.class,
+					tile -> tile.handleItemStackForDisplay(itemStack)
+			);
+		}
+	}
 }

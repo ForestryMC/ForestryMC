@@ -4,7 +4,9 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.VectUtil;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,109 +24,109 @@ import java.util.List;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
-    private static final int MAX_BLOCK_FIND_TRIES = 10;
-    private static final int ENTITY_THROTTLE = 6;
+	private static final int MAX_BLOCK_FIND_TRIES = 10;
+	private static final int ENTITY_THROTTLE = 6;
 
-    public AlleleEffectFungification() {
-        super("mycophilic", true, 20, false, false);
-    }
+	public AlleleEffectFungification() {
+		super("mycophilic", true, 20, false, false);
+	}
 
-    @Override
-    public IEffectData validateStorage(IEffectData storedData) {
-        if (storedData instanceof EffectData && ((EffectData) storedData).getIntSize() == 2) {
-            return storedData;
-        }
+	private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
+		List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
+		for (CowEntity cow : cows) {
+			if (convertCowToMooshroom(cow)) {
+				return;
+			}
+		}
+	}
 
-        return new EffectData(2, 0);
-    }
+	private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
+		Block block = blockState.getBlock();
+		if (block == Blocks.GRASS_BLOCK || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
+			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+	private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
+		Block block = blockState.getBlock();
+		if (block instanceof MushroomBlock) {
+			MushroomBlock mushroom = (MushroomBlock) block;
+			mushroom.grow(world, pos, blockState, world.rand);
+			return true;
+		}
+		return false;
+	}
 
-        doBlockEffect(genome, housing);
+	private static boolean convertCowToMooshroom(CowEntity cow) {
+		if (cow instanceof MooshroomEntity) {
+			return false;
+		}
+		World world = cow.world;
+		cow.remove();
+		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
+		mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
+		mooshroom.setHealth(cow.getHealth());
+		mooshroom.renderYawOffset = cow.renderYawOffset;
+		world.addEntity(mooshroom);
+		world.addParticle(
+				ParticleTypes.EXPLOSION,
+				cow.getPosX(),
+				cow.getPosY() + cow.getHeight() / 2.0F,
+				cow.getPosZ(),
+				0.0D,
+				0.0D,
+				0.0D
+		);
+		return true;
+	}
 
-        int entityThrottle = storedData.getInteger(1);
-        if (entityThrottle >= ENTITY_THROTTLE) {
-            doEntityEffect(genome, housing);
-            entityThrottle = 0;
-        } else {
-            ++entityThrottle;
-        }
-        storedData.setInteger(1, entityThrottle);
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		if (storedData instanceof EffectData && ((EffectData) storedData).getIntSize() == 2) {
+			return storedData;
+		}
 
-        return storedData;
-    }
+		return new EffectData(2, 0);
+	}
 
-    private void doBlockEffect(IGenome genome, IBeeHousing housing) {
-        World world = housing.getWorldObj();
-        BlockPos housingCoordinates = housing.getCoordinates();
-        Vector3i area = getModifiedArea(genome, housing);
-        Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
+	@Override
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-        for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-            BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area)
-                                   .subtract(halfArea)
-                                   .add(housingCoordinates);
-            if (world.isBlockLoaded(pos)) {
-                BlockState blockState = world.getBlockState(pos);
+		doBlockEffect(genome, housing);
 
-                if (convertToMycelium(world, blockState, pos)) {
-                    return;
-                } else if (growGiantMushroom((ServerWorld) world, blockState, pos)) {
-                    return;
-                }
-            }
-        }
-    }
+		int entityThrottle = storedData.getInteger(1);
+		if (entityThrottle >= ENTITY_THROTTLE) {
+			doEntityEffect(genome, housing);
+			entityThrottle = 0;
+		} else {
+			++entityThrottle;
+		}
+		storedData.setInteger(1, entityThrottle);
 
-    private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
-        List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
-        for (CowEntity cow : cows) {
-            if (convertCowToMooshroom(cow)) {
-                return;
-            }
-        }
-    }
+		return storedData;
+	}
 
-    private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
-        Block block = blockState.getBlock();
-        if (block == Blocks.GRASS_BLOCK || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
-            world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
-            return true;
-        }
-        return false;
-    }
+	private void doBlockEffect(IGenome genome, IBeeHousing housing) {
+		World world = housing.getWorldObj();
+		BlockPos housingCoordinates = housing.getCoordinates();
+		Vector3i area = getModifiedArea(genome, housing);
+		Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
 
-    private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
-        Block block = blockState.getBlock();
-        if (block instanceof MushroomBlock) {
-            MushroomBlock mushroom = (MushroomBlock) block;
-            mushroom.grow(world, pos, blockState, world.rand);
-            return true;
-        }
-        return false;
-    }
+		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
+			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area)
+					.subtract(halfArea)
+					.add(housingCoordinates);
+			if (world.isBlockLoaded(pos)) {
+				BlockState blockState = world.getBlockState(pos);
 
-    private static boolean convertCowToMooshroom(CowEntity cow) {
-        if (cow instanceof MooshroomEntity) {
-            return false;
-        }
-        World world = cow.world;
-        cow.remove();
-        MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
-        mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
-        mooshroom.setHealth(cow.getHealth());
-        mooshroom.renderYawOffset = cow.renderYawOffset;
-        world.addEntity(mooshroom);
-        world.addParticle(
-                ParticleTypes.EXPLOSION,
-                cow.getPosX(),
-                cow.getPosY() + cow.getHeight() / 2.0F,
-                cow.getPosZ(),
-                0.0D,
-                0.0D,
-                0.0D
-        );
-        return true;
-    }
+				if (convertToMycelium(world, blockState, pos)) {
+					return;
+				} else if (growGiantMushroom((ServerWorld) world, blockState, pos)) {
+					return;
+				}
+			}
+		}
+	}
 }

@@ -17,40 +17,42 @@ import forestry.core.tiles.TileUtil;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryRaintank;
 import forestry.factory.tiles.TileRaintank;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 
-    public ContainerRaintank(int windowId, PlayerInventory player, TileRaintank tile) {
-        super(windowId, FactoryContainers.RAINTANK.containerType(), player, tile, 8, 84);
+	public ContainerRaintank(int windowId, PlayerInventory player, TileRaintank tile) {
+		super(windowId, FactoryContainers.RAINTANK.containerType(), player, tile, 8, 84);
 
-        this.addSlot(new SlotEmptyLiquidContainerIn(this.tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
-        this.addSlot(new SlotOutput(this.tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
-    }
+		this.addSlot(new SlotEmptyLiquidContainerIn(this.tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
+		this.addSlot(new SlotOutput(this.tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
+	}
 
-    public static ContainerRaintank fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileRaintank tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileRaintank.class);
-        return new ContainerRaintank(windowId, inv, tile);    //TODO nullability.
-    }
+	public static ContainerRaintank fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileRaintank tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileRaintank.class);
+		return new ContainerRaintank(windowId, inv, tile);    //TODO nullability.
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void updateProgressBar(int messageId, int data) {
-//        super.updateProgressBar(messageId, data);
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void updateProgressBar(int messageId, int data) {
+		//        super.updateProgressBar(messageId, data);
 
-        tile.getGUINetworkData(messageId, data);
-    }
+		tile.getGUINetworkData(messageId, data);
+	}
 
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
 
-        for (IContainerListener crafter : listeners) {
-            tile.sendGUINetworkData(this, crafter);
-        }
-    }
+		for (IContainerListener crafter : listeners) {
+			tile.sendGUINetworkData(this, crafter);
+		}
+	}
 }

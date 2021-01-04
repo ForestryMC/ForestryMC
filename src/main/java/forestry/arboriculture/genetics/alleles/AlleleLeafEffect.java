@@ -13,29 +13,31 @@ package forestry.arboriculture.genetics.alleles;
 import forestry.api.arboriculture.genetics.IAlleleLeafEffect;
 import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
+
 import genetics.api.alleles.AlleleCategorized;
 import genetics.api.individual.IGenome;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
 
-    protected AlleleLeafEffect(String valueName, boolean isDominant) {
-        super(Constants.MOD_ID, "leaves", valueName, isDominant);
-    }
+	protected AlleleLeafEffect(String valueName, boolean isDominant) {
+		super(Constants.MOD_ID, "leaves", valueName, isDominant);
+	}
 
-    @Override
-    public boolean isCombinable() {
-        return true;
-    }
+	@Override
+	public boolean isCombinable() {
+		return true;
+	}
 
-    @Override
-    public IEffectData validateStorage(IEffectData storedData) {
-        return storedData;
-    }
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		return storedData;
+	}
 
-    @Override
-    public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
-        return storedData;
-    }
+	@Override
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
+		return storedData;
+	}
 }

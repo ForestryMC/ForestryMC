@@ -14,22 +14,23 @@ import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.PacketIdServer;
 import forestry.mail.network.packets.*;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryMail implements IPacketRegistry {
-    @Override
-    public void registerPacketsServer() {
-        PacketIdServer.LETTER_INFO_REQUEST.setPacketHandler(new PacketLetterInfoRequest.Handler());
-        PacketIdServer.TRADING_ADDRESS_REQUEST.setPacketHandler(new PacketTraderAddressRequest.Handler());
-        PacketIdServer.LETTER_TEXT_SET.setPacketHandler(new PacketLetterTextSet.Handler());
-    }
+	@Override
+	public void registerPacketsServer() {
+		PacketIdServer.LETTER_INFO_REQUEST.setPacketHandler(new PacketLetterInfoRequest.Handler());
+		PacketIdServer.TRADING_ADDRESS_REQUEST.setPacketHandler(new PacketTraderAddressRequest.Handler());
+		PacketIdServer.LETTER_TEXT_SET.setPacketHandler(new PacketLetterTextSet.Handler());
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerPacketsClient() {
-        PacketIdClient.LETTER_INFO_RESPONSE.setPacketHandler(new PacketLetterInfoResponse.Handler());
-        PacketIdClient.TRADING_ADDRESS_RESPONSE.setPacketHandler(new PacketTraderAddressResponse.Handler());
-        PacketIdClient.POBOX_INFO_RESPONSE.setPacketHandler(new PacketPOBoxInfoResponse.Handler());
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerPacketsClient() {
+		PacketIdClient.LETTER_INFO_RESPONSE.setPacketHandler(new PacketLetterInfoResponse.Handler());
+		PacketIdClient.TRADING_ADDRESS_RESPONSE.setPacketHandler(new PacketTraderAddressResponse.Handler());
+		PacketIdClient.POBOX_INFO_RESPONSE.setPacketHandler(new PacketPOBoxInfoResponse.Handler());
+	}
 }

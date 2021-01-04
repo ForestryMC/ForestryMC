@@ -18,108 +18,109 @@ import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
+
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.components.ComponentKeys;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
-    /**
-     * Required for creation from map storage
-     */
-    public ApiaristTracker(String s) {
-        super(s, ModuleApiculture.beekeepingMode);
-    }
+	private int queensTotal = 0;
+	private int dronesTotal = 0;
+	private int princessesTotal = 0;
+	/**
+	 * Required for creation from map storage
+	 */
+	public ApiaristTracker(String s) {
+		super(s, ModuleApiculture.beekeepingMode);
+	}
 
-    private int queensTotal = 0;
-    private int dronesTotal = 0;
-    private int princessesTotal = 0;
+	@Override
+	public void registerPickup(IIndividual individual) {
+		IBeeRoot speciesRoot = (IBeeRoot) individual.getRoot();
+		if (!speciesRoot.getUID().equals(speciesRootUID())) {
+			return;
+		}
 
-    @Override
-    public void read(CompoundNBT compoundNBT) {
+		if (!individual.isPureBred(BeeChromosomes.SPECIES)) {
+			return;
+		}
 
-        queensTotal = compoundNBT.getInt("QueensTotal");
-        princessesTotal = compoundNBT.getInt("PrincessesTotal");
-        dronesTotal = compoundNBT.getInt("DronesTotal");
+		IMutationContainer<IBee, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
+		if (!container.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
+			return;
+		}
 
-        super.read(compoundNBT);
+		registerSpecies(individual.getGenome().getPrimary());
+	}
 
-    }
+	@Override
+	public void registerQueen(IIndividual bee) {
+		queensTotal++;
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundnbt) {
+	@Override
+	public int getQueenCount() {
+		return queensTotal;
+	}
 
-        compoundnbt.putInt("QueensTotal", queensTotal);
-        compoundnbt.putInt("PrincessesTotal", princessesTotal);
-        compoundnbt.putInt("DronesTotal", dronesTotal);
+	@Override
+	public void registerPrincess(IIndividual bee) {
+		princessesTotal++;
+		registerBirth(bee);
+	}
 
-        compoundnbt = super.write(compoundnbt);
-        return compoundnbt;
-    }
+	@Override
+	public int getPrincessCount() {
+		return princessesTotal;
+	}
 
-    @Override
-    public void registerPickup(IIndividual individual) {
-        IBeeRoot speciesRoot = (IBeeRoot) individual.getRoot();
-        if (!speciesRoot.getUID().equals(speciesRootUID())) {
-            return;
-        }
+	@Override
+	public void registerDrone(IIndividual bee) {
+		dronesTotal++;
+		registerBirth(bee);
+	}
 
-        if (!individual.isPureBred(BeeChromosomes.SPECIES)) {
-            return;
-        }
+	@Override
+	public int getDroneCount() {
+		return dronesTotal;
+	}
 
-        IMutationContainer<IBee, ? extends IMutation> container = speciesRoot.getComponent(ComponentKeys.MUTATIONS);
-        if (!container.getCombinations(individual.getGenome().getPrimary()).isEmpty()) {
-            return;
-        }
+	@Override
+	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+		//TODO world cast
+		return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
+	}
 
-        registerSpecies(individual.getGenome().getPrimary());
-    }
+	@Override
+	protected String speciesRootUID() {
+		return BeeRoot.UID;
+	}
 
-    @Override
-    public void registerQueen(IIndividual bee) {
-        queensTotal++;
-    }
+	@Override
+	public void read(CompoundNBT compoundNBT) {
 
-    @Override
-    public int getQueenCount() {
-        return queensTotal;
-    }
+		queensTotal = compoundNBT.getInt("QueensTotal");
+		princessesTotal = compoundNBT.getInt("PrincessesTotal");
+		dronesTotal = compoundNBT.getInt("DronesTotal");
 
-    @Override
-    public void registerPrincess(IIndividual bee) {
-        princessesTotal++;
-        registerBirth(bee);
-    }
+		super.read(compoundNBT);
 
-    @Override
-    public int getPrincessCount() {
-        return princessesTotal;
-    }
+	}
 
-    @Override
-    public void registerDrone(IIndividual bee) {
-        dronesTotal++;
-        registerBirth(bee);
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundnbt) {
 
-    @Override
-    public int getDroneCount() {
-        return dronesTotal;
-    }
+		compoundnbt.putInt("QueensTotal", queensTotal);
+		compoundnbt.putInt("PrincessesTotal", princessesTotal);
+		compoundnbt.putInt("DronesTotal", dronesTotal);
 
-    @Override
-    protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-        //TODO world cast
-        return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
-    }
-
-    @Override
-    protected String speciesRootUID() {
-        return BeeRoot.UID;
-    }
+		compoundnbt = super.write(compoundnbt);
+		return compoundnbt;
+	}
 
 }

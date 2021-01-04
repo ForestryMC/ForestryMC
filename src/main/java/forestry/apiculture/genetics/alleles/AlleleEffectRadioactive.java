@@ -19,7 +19,9 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.VectUtil;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -34,82 +36,82 @@ import java.util.Random;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
-    private static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
+	private static final DamageSource damageSourceBeeRadioactive = new DamageSourceForestry("bee.radioactive");
 
-    public AlleleEffectRadioactive() {
-        super("radioactive", true, 40, false, true);
-    }
+	public AlleleEffectRadioactive() {
+		super("radioactive", true, 40, false, true);
+	}
 
-    @Override
-    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        harmEntities(genome, housing);
+	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		World world = housing.getWorldObj();
+		Random rand = world.rand;
 
-        return destroyEnvironment(genome, storedData, housing);
-    }
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+		BlockPos posHousing = housing.getCoordinates();
 
-    private void harmEntities(IGenome genome, IBeeHousing housing) {
-        List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-        for (LivingEntity entity : entities) {
-            int damage = 8;
+		for (int i = 0; i < 20; i++) {
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
+			BlockPos posBlock = randomPos.add(posHousing);
+			posBlock = posBlock.add(offset);
 
-            // Entities are not attacked if they wear a full set of apiarist's armor.
-            int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-            damage -= count * 2;
-            if (damage <= 0) {
-                continue;
-            }
+			if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
+				continue;
+			}
 
-            entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
-        }
-    }
+			// Don't destroy ourselves or blocks below us.
+			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() &&
+					posBlock.getY() <= posHousing.getY()) {
+				continue;
+			}
 
-    private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        World world = housing.getWorldObj();
-        Random rand = world.rand;
+			if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
+				continue;
+			}
 
-        Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
-        Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
-        BlockPos posHousing = housing.getCoordinates();
+			BlockState blockState = world.getBlockState(posBlock);
+			Block block = blockState.getBlock();
 
-        for (int i = 0; i < 20; i++) {
-            BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
-            BlockPos posBlock = randomPos.add(posHousing);
-            posBlock = posBlock.add(offset);
+			if (block instanceof BlockAlveary) {
+				continue;
+			}
 
-            if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
-                continue;
-            }
+			TileEntity tile = TileUtil.getTile(world, posBlock);
+			if (tile instanceof IBeeHousing) {
+				continue;
+			}
 
-            // Don't destroy ourselves or blocks below us.
-            if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() &&
-                posBlock.getY() <= posHousing.getY()) {
-                continue;
-            }
+			if (blockState.getBlockHardness(world, posBlock) < 0) {
+				continue;
+			}
 
-            if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
-                continue;
-            }
+			BlockUtil.setBlockToAirWithSound(world, posBlock, blockState);
+			break;
+		}
 
-            BlockState blockState = world.getBlockState(posBlock);
-            Block block = blockState.getBlock();
+		return storedData;
+	}
 
-            if (block instanceof BlockAlveary) {
-                continue;
-            }
+	@Override
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		harmEntities(genome, housing);
 
-            TileEntity tile = TileUtil.getTile(world, posBlock);
-            if (tile instanceof IBeeHousing) {
-                continue;
-            }
+		return destroyEnvironment(genome, storedData, housing);
+	}
 
-            if (blockState.getBlockHardness(world, posBlock) < 0) {
-                continue;
-            }
+	private void harmEntities(IGenome genome, IBeeHousing housing) {
+		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+		for (LivingEntity entity : entities) {
+			int damage = 8;
 
-            BlockUtil.setBlockToAirWithSound(world, posBlock, blockState);
-            break;
-        }
+			// Entities are not attacked if they wear a full set of apiarist's armor.
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+			damage -= count * 2;
+			if (damage <= 0) {
+				continue;
+			}
 
-        return storedData;
-    }
+			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
+		}
+	}
 }

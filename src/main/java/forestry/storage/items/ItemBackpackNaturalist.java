@@ -16,6 +16,7 @@ import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,79 +27,80 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
-    private final String rootUid;
+	private final String rootUid;
 
-    public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition) {
-        this(rootUid, definition, ItemGroupForestry.tabForestry);
-    }
+	public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition) {
+		this(rootUid, definition, ItemGroupForestry.tabForestry);
+	}
 
-    public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition, ItemGroup tab) {
-        super(definition, EnumBackpackType.NATURALIST, tab);
-        this.rootUid = rootUid;
-    }
+	public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition, ItemGroup tab) {
+		super(definition, EnumBackpackType.NATURALIST, tab);
+		this.rootUid = rootUid;
+	}
 
-    @Override
-    protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
-        NetworkHooks.openGui(playerEntity, new ContainerProvider(stack));
-    }
+	@Override
+	protected void openGui(ServerPlayerEntity playerEntity, ItemStack stack) {
+		NetworkHooks.openGui(playerEntity, new ContainerProvider(stack));
+	}
 
-//    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int page) {
-//        ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
-//                player,
-//                Constants.SLOTS_BACKPACK_APIARIST,
-//                heldItem,
-//                this
-//        );
-//        ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
-//        return new GuiNaturalistInventory(container, player.inventory, this.rootUid);
-//    }
+	//    @Override
+	//    @OnlyIn(Dist.CLIENT)
+	//    public ContainerScreen getGui(PlayerEntity player, ItemStack heldItem, int page) {
+	//        ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
+	//                player,
+	//                Constants.SLOTS_BACKPACK_APIARIST,
+	//                heldItem,
+	//                this
+	//        );
+	//        ContainerNaturalistBackpack container = new ContainerNaturalistBackpack(player, inventory, page);
+	//        return new GuiNaturalistInventory(container, player.inventory, this.rootUid);
+	//    }
 
-    @Override
-    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-        ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
-                player,
-                Constants.SLOTS_BACKPACK_APIARIST,
-                heldItem,
-                this
-        );
-        return new ContainerNaturalistBackpack(
-                windowId,
-                player.inventory,
-                inventory,
-                0
-        );    //TODO init on first page? Or is this server desync?
-    }
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
+				player,
+				Constants.SLOTS_BACKPACK_APIARIST,
+				heldItem,
+				this
+		);
+		return new ContainerNaturalistBackpack(
+				windowId,
+				player.inventory,
+				inventory,
+				0
+		);    //TODO init on first page? Or is this server desync?
+	}
 
-    //TODO see if this can be deduped. Given we pass in the held item etc.
-    public static class ContainerProvider implements INamedContainerProvider {
+	//TODO see if this can be deduped. Given we pass in the held item etc.
+	public static class ContainerProvider implements INamedContainerProvider {
 
-        private final ItemStack heldItem;
+		private final ItemStack heldItem;
 
-        public ContainerProvider(ItemStack heldItem) {
-            this.heldItem = heldItem;
-        }
+		public ContainerProvider(ItemStack heldItem) {
+			this.heldItem = heldItem;
+		}
 
-        @Override
-        public ITextComponent getDisplayName() {
-            return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
-        }
+		@Override
+		public ITextComponent getDisplayName() {
+			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+		}
 
-        @Nullable
-        @Override
-        public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-            Item item = heldItem.getItem();
-            if (!(item instanceof ItemBackpackNaturalist)) {
-                return null;
-            }
-            ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) item;
-            return backpack.getContainer(windowId, playerEntity, heldItem);
-        }
-    }
+		@Nullable
+		@Override
+		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+			Item item = heldItem.getItem();
+			if (!(item instanceof ItemBackpackNaturalist)) {
+				return null;
+			}
+			ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) item;
+			return backpack.getContainer(windowId, playerEntity, heldItem);
+		}
+	}
 }

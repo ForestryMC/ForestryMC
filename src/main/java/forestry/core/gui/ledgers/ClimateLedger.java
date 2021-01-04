@@ -11,10 +11,12 @@
 package forestry.core.gui.ledgers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
+
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -24,55 +26,55 @@ import net.minecraft.util.text.TranslationTextComponent;
  */
 public class ClimateLedger extends Ledger {
 
-    private final IClimatised tile;
+	private final IClimatised tile;
 
-    public ClimateLedger(LedgerManager manager, IClimatised tile) {
-        super(manager, "climate");
-        this.tile = tile;
-        maxHeight = 72;
-    }
+	public ClimateLedger(LedgerManager manager, IClimatised tile) {
+		super(manager, "climate");
+		this.tile = tile;
+		maxHeight = 72;
+	}
 
-    @Override
-    public void draw(MatrixStack transform, int y, int x) {
+	@Override
+	public void draw(MatrixStack transform, int y, int x) {
 
-        EnumTemperature temperature = tile.getTemperature();
+		EnumTemperature temperature = tile.getTemperature();
 
-        // Draw background
-        drawBackground(transform, y, x);
+		// Draw background
+		drawBackground(transform, y, x);
 
-        // Draw icon
-        drawSprite(transform, temperature.getSprite(), x + 3, y + 4);
+		// Draw icon
+		drawSprite(transform, temperature.getSprite(), x + 3, y + 4);
 
-        if (!isFullyOpened()) {
-            return;
-        }
+		if (!isFullyOpened()) {
+			return;
+		}
 
-        drawHeader(transform, new TranslationTextComponent("for.gui.climate"), x + 22, y + 8);
+		drawHeader(transform, new TranslationTextComponent("for.gui.climate"), x + 22, y + 8);
 
-        drawSubheader(transform, new TranslationTextComponent("for.gui.temperature").appendString(":"), x + 22, y + 20);
-        drawText(
-                transform,
-                AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' +
-                StringUtil.floatAsPercent(tile.getExactTemperature()),
-                x + 22,
-                y + 32
-        );
+		drawSubheader(transform, new TranslationTextComponent("for.gui.temperature").appendString(":"), x + 22, y + 20);
+		drawText(
+				transform,
+				AlleleManager.climateHelper.toDisplay(temperature).getString() + ' ' +
+						StringUtil.floatAsPercent(tile.getExactTemperature()),
+				x + 22,
+				y + 32
+		);
 
-        drawSubheader(transform, new TranslationTextComponent("for.gui.humidity").appendString(":"), x + 22, y + 44);
-        drawText(
-                transform,
-                AlleleManager.climateHelper.toDisplay(tile.getHumidity()).getString() + ' ' + StringUtil.floatAsPercent(
-                        tile.getExactHumidity()),
-                x + 22,
-                y + 56
-        );
-    }
+		drawSubheader(transform, new TranslationTextComponent("for.gui.humidity").appendString(":"), x + 22, y + 44);
+		drawText(
+				transform,
+				AlleleManager.climateHelper.toDisplay(tile.getHumidity()).getString() + ' ' + StringUtil.floatAsPercent(
+						tile.getExactHumidity()),
+				x + 22,
+				y + 56
+		);
+	}
 
-    @Override
-    public ITextComponent getTooltip() {
-        return new StringTextComponent("T: ")
-                .append(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
-                .append(new StringTextComponent(" / H: "))
-                .append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
-    }
+	@Override
+	public ITextComponent getTooltip() {
+		return new StringTextComponent("T: ")
+				.append(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
+				.append(new StringTextComponent(" / H: "))
+				.append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
+	}
 }

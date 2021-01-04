@@ -13,40 +13,40 @@ import net.minecraft.world.biome.Biome;
  * This enum concerns humidity.
  */
 public enum EnumHumidity {
-    ARID("Arid", 0xaad0db),
-    NORMAL("Normal", 0x4b7bff),
-    /**
-     * matches {@link Biome#isHighHumidity()}
-     */
-    DAMP("Damp", 0x6e56b3);
+	ARID("Arid", 0xaad0db),
+	NORMAL("Normal", 0x4b7bff),
+	/**
+	 * matches {@link Biome#isHighHumidity()}
+	 */
+	DAMP("Damp", 0x6e56b3);
 
-    public static final EnumHumidity[] VALUES = values();
+	public static final EnumHumidity[] VALUES = values();
 
-    public final String name;
-    public final int color;
+	public final String name;
+	public final int color;
 
-    EnumHumidity(String name, int color) {
-        this.name = name;
-        this.color = color;
-    }
+	EnumHumidity(String name, int color) {
+		this.name = name;
+		this.color = color;
+	}
 
-    /**
-     * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall.
-     *
-     * @param rawHumidity raw rainfall value
-     * @return EnumHumidity corresponding to rainfall value
-     */
-    public static EnumHumidity getFromValue(float rawHumidity) {
-        if (rawHumidity > 0.85f) {
-            return DAMP;
-        } else if (rawHumidity >= 0.3f) {
-            return NORMAL;
-        } else {
-            return ARID;
-        }
-    }
+	/**
+	 * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall.
+	 *
+	 * @param rawHumidity raw rainfall value
+	 * @return EnumHumidity corresponding to rainfall value
+	 */
+	public static EnumHumidity getFromValue(float rawHumidity) {
+		if (rawHumidity > 0.85f) {
+			return DAMP;
+		} else if (rawHumidity >= 0.3f) {
+			return NORMAL;
+		} else {
+			return ARID;
+		}
+	}
 
-    public String getName() {
-        return this.name;
-    }
+	public String getName() {
+		return this.name;
+	}
 }

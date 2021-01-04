@@ -11,6 +11,7 @@
 package forestry.worktable.gui.widgets;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
@@ -18,19 +19,19 @@ import forestry.worktable.gui.ContainerWorktable;
 
 public class ClearWorktable extends Widget {
 
-    public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
-        super(manager, xPos, yPos);
-        width = 7;
-        height = 7;
-    }
+	public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
+		super(manager, xPos, yPos);
+		width = 7;
+		height = 7;
+	}
 
-    @Override
-    public void draw(MatrixStack transform, int startY, int startX) {
-    }
+	@Override
+	public void draw(MatrixStack transform, int startY, int startX) {
+	}
 
-    @Override
-    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-        ContainerWorktable.clearRecipe();
-        SoundUtil.playButtonClick();
-    }
+	@Override
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		ContainerWorktable.clearRecipe();
+		SoundUtil.playButtonClick();
+	}
 }

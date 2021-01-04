@@ -13,18 +13,19 @@ package forestry.worktable.inventory;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.worktable.tiles.TileWorktable;
+
 import net.minecraft.item.ItemStack;
 
 public class InventoryWorktable extends InventoryAdapterTile<TileWorktable> {
-    public final static short SLOT_INVENTORY_1 = 0;
-    public final static short SLOT_INVENTORY_COUNT = 18;
+	public final static short SLOT_INVENTORY_1 = 0;
+	public final static short SLOT_INVENTORY_COUNT = 18;
 
-    public InventoryWorktable(TileWorktable worktable) {
-        super(worktable, 18, "Items");
-    }
+	public InventoryWorktable(TileWorktable worktable) {
+		super(worktable, 18, "Items");
+	}
 
-    @Override
-    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-        return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
-    }
+	@Override
+	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		return SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT);
+	}
 }

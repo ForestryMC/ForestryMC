@@ -6,10 +6,10 @@ import net.minecraft.inventory.container.ContainerType;
 import javax.annotation.Nullable;
 
 public interface IContainerTypeProvider<C extends Container> {
-    boolean hasContainerType();
+	boolean hasContainerType();
 
-    @Nullable
-    ContainerType<C> getContainerType();
+	@Nullable
+	ContainerType<C> getContainerType();
 
-    ContainerType<C> containerType();
+	ContainerType<C> containerType();
 }

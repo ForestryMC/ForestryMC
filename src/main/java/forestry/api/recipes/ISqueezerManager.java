@@ -22,8 +22,8 @@ import javax.annotation.Nullable;
  * @author SirSengir
  */
 public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
-    @Nullable
-    ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items);
+	@Nullable
+	ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items);
 
-    boolean canUse(RecipeManager manager, ItemStack itemStack);
+	boolean canUse(RecipeManager manager, ItemStack itemStack);
 }

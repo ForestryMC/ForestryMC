@@ -11,10 +11,11 @@
 package forestry.core.tiles;
 
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IItemStackDisplay {
-    @OnlyIn(Dist.CLIENT)
-    void handleItemStackForDisplay(ItemStack itemStack);
+	@OnlyIn(Dist.CLIENT)
+	void handleItemStackForDisplay(ItemStack itemStack);
 }

@@ -3,6 +3,7 @@ package genetics.classification;
 import genetics.ApiInstance;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.classification.IClassification;
+
 import net.minecraft.client.resources.I18n;
 
 import javax.annotation.Nullable;
@@ -11,77 +12,76 @@ import java.util.Locale;
 
 public class Classification implements IClassification {
 
-    private final EnumClassLevel level;
-    private final String uid;
-    private final String scientific;
-    @Nullable
-    private IClassification parent;
+	private final EnumClassLevel level;
+	private final String uid;
+	private final String scientific;
+	private final ArrayList<IAlleleSpecies> members = new ArrayList<>();
+	private final ArrayList<IClassification> groups = new ArrayList<>();
+	@Nullable
+	private IClassification parent;
 
-    private final ArrayList<IAlleleSpecies> members = new ArrayList<>();
-    private final ArrayList<IClassification> groups = new ArrayList<>();
+	public Classification(EnumClassLevel level, String uid, String scientific) {
+		this.level = level;
+		this.uid = level.name().toLowerCase(Locale.ENGLISH) + "." + uid;
+		this.scientific = scientific;
+		ApiInstance.INSTANCE.getClassificationRegistry().registerClassification(this);
+	}
 
-    public Classification(EnumClassLevel level, String uid, String scientific) {
-        this.level = level;
-        this.uid = level.name().toLowerCase(Locale.ENGLISH) + "." + uid;
-        this.scientific = scientific;
-        ApiInstance.INSTANCE.getClassificationRegistry().registerClassification(this);
-    }
+	@Override
+	public EnumClassLevel getLevel() {
+		return level;
+	}
 
-    @Override
-    public EnumClassLevel getLevel() {
-        return level;
-    }
+	@Override
+	public String getUID() {
+		return uid;
+	}
 
-    @Override
-    public String getUID() {
-        return uid;
-    }
+	@Override
+	public String getName() {
+		return I18n.format("genetics." + uid);
+	}
 
-    @Override
-    @Nullable
-    public IClassification getParent() {
-        return parent;
-    }
+	@Override
+	public String getScientific() {
+		return this.scientific;
+	}
 
-    @Override
-    public void setParent(IClassification parent) {
-        this.parent = parent;
-    }
+	@Override
+	public String getDescription() {
+		return I18n.format("genetics." + uid + ".description");
+	}
 
-    @Override
-    public String getScientific() {
-        return this.scientific;
-    }
+	@Override
+	public IClassification[] getMemberGroups() {
+		return groups.toArray(new IClassification[0]);
+	}
 
-    @Override
-    public String getName() {
-        return I18n.format("genetics." + uid);
-    }
+	@Override
+	public void addMemberGroup(IClassification group) {
+		groups.add(group);
+		group.setParent(this);
+	}
 
-    @Override
-    public String getDescription() {
-        return I18n.format("genetics." + uid + ".description");
-    }
+	@Override
+	public IAlleleSpecies[] getMemberSpecies() {
+		return members.toArray(new IAlleleSpecies[0]);
+	}
 
-    @Override
-    public IClassification[] getMemberGroups() {
-        return groups.toArray(new IClassification[0]);
-    }
+	@Override
+	public void addMemberSpecies(IAlleleSpecies species) {
+		members.add(species);
+	}
 
-    @Override
-    public void addMemberGroup(IClassification group) {
-        groups.add(group);
-        group.setParent(this);
-    }
+	@Override
+	@Nullable
+	public IClassification getParent() {
+		return parent;
+	}
 
-    @Override
-    public IAlleleSpecies[] getMemberSpecies() {
-        return members.toArray(new IAlleleSpecies[0]);
-    }
-
-    @Override
-    public void addMemberSpecies(IAlleleSpecies species) {
-        members.add(species);
-    }
+	@Override
+	public void setParent(IClassification parent) {
+		this.parent = parent;
+	}
 
 }

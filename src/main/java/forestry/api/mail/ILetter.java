@@ -6,6 +6,7 @@
 package forestry.api.mail;
 
 import forestry.api.core.INbtWritable;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -16,47 +17,47 @@ import java.util.List;
 
 public interface ILetter extends IInventory, INbtWritable {
 
-    NonNullList<ItemStack> getPostage();
+	NonNullList<ItemStack> getPostage();
 
-    boolean isProcessed();
+	boolean isProcessed();
 
-    void setProcessed(boolean flag);
+	void setProcessed(boolean flag);
 
-    boolean isMailable();
+	boolean isMailable();
 
-    IMailAddress getSender();
+	IMailAddress getSender();
 
-    void setSender(IMailAddress address);
+	void setSender(IMailAddress address);
 
-    boolean hasRecipient();
+	boolean hasRecipient();
 
-    @Nullable
-    IMailAddress getRecipient();
+	@Nullable
+	IMailAddress getRecipient();
 
-    void setRecipient(@Nullable IMailAddress address);
+	void setRecipient(@Nullable IMailAddress address);
 
-    String getRecipientString();
+	String getRecipientString();
 
-    String getText();
+	String getText();
 
-    void setText(String text);
+	void setText(String text);
 
-    void addTooltip(List<ITextComponent> list);
+	void addTooltip(List<ITextComponent> list);
 
-    boolean isPostPaid();
+	boolean isPostPaid();
 
-    int requiredPostage();
+	int requiredPostage();
 
-    void invalidatePostage();
+	void invalidatePostage();
 
-    NonNullList<ItemStack> getAttachments();
+	NonNullList<ItemStack> getAttachments();
 
-    void addAttachment(ItemStack itemstack);
+	void addAttachment(ItemStack itemstack);
 
-    void addAttachments(NonNullList<ItemStack> itemstacks);
+	void addAttachments(NonNullList<ItemStack> itemstacks);
 
-    int countAttachments();
+	int countAttachments();
 
-    void addStamps(ItemStack stamps);
+	void addStamps(ItemStack stamps);
 
 }

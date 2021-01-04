@@ -12,6 +12,7 @@ package forestry.core.items;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.utils.ItemTooltipUtil;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -21,6 +22,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,45 +30,45 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemForestry extends Item {
-    private final int burnTime;
+	private final int burnTime;
 
-    //TODO may be worth removing this
-    public ItemForestry() {
-        this(ItemGroupForestry.tabForestry);
-    }
+	//TODO may be worth removing this
+	public ItemForestry() {
+		this(ItemGroupForestry.tabForestry);
+	}
 
-    public ItemForestry(ItemGroup group) {
-        this(new Item.Properties(), group);
-    }
+	public ItemForestry(ItemGroup group) {
+		this(new Item.Properties(), group);
+	}
 
-    public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
-        this(properties.group(creativeTab));
-    }
+	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+		this(properties.group(creativeTab));
+	}
 
-    public ItemForestry(Item.Properties properties) {
-        //TODO - do the below at registration
-        super(properties);
-        if (properties instanceof ItemProperties) {
-            this.burnTime = ((ItemProperties) properties).burnTime;
-        } else {
-            burnTime = 0;
-        }
-    }
+	public ItemForestry(Item.Properties properties) {
+		//TODO - do the below at registration
+		super(properties);
+		if (properties instanceof ItemProperties) {
+			this.burnTime = ((ItemProperties) properties).burnTime;
+		} else {
+			burnTime = 0;
+		}
+	}
 
-    @Override
-    public int getBurnTime(ItemStack itemStack) {
-        return burnTime;
-    }
+	@Override
+	public int getBurnTime(ItemStack itemStack) {
+		return burnTime;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(
-            ItemStack stack,
-            @Nullable World world,
-            List<ITextComponent> tooltip,
-            ITooltipFlag advanced
-    ) {
-        super.addInformation(stack, world, tooltip, advanced);
-        ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(
+			ItemStack stack,
+			@Nullable World world,
+			List<ITextComponent> tooltip,
+			ITooltipFlag advanced
+	) {
+		super.addInformation(stack, world, tooltip, advanced);
+		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
+	}
 }

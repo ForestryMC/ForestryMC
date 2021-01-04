@@ -40,14 +40,17 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.feature.Feature;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -60,180 +63,177 @@ import java.util.Objects;
 import java.util.Set;
 
 @ForestryModule(
-        containerID = Constants.MOD_ID,
-        moduleID = ForestryModuleUids.ARBORICULTURE,
-        name = "Arboriculture",
-        author = "Binnie & SirSengir",
-        url = Constants.URL,
-        unlocalizedDescription = "for.module.arboriculture.description",
-        lootTable = "arboriculture"
+		containerID = Constants.MOD_ID,
+		moduleID = ForestryModuleUids.ARBORICULTURE,
+		name = "Arboriculture",
+		author = "Binnie & SirSengir",
+		url = Constants.URL,
+		unlocalizedDescription = "for.module.arboriculture.description",
+		lootTable = "arboriculture"
 )
 public class ModuleArboriculture extends BlankForestryModule {
 
-    private static final String CONFIG_CATEGORY = "arboriculture";
+	public static final List<Block> validFences = new ArrayList<>();
+	private static final String CONFIG_CATEGORY = "arboriculture";
+	@SuppressWarnings("NullableProblems")
+	//@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
+	public static ProxyArboriculture proxy = null;
+	public static String treekeepingMode = "NORMAL";
+	@Nullable
+	public static VillagerProfession villagerArborist;
 
-    @SuppressWarnings("NullableProblems")
-    //@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
-    public static ProxyArboriculture proxy = null;
-    public static String treekeepingMode = "NORMAL";
+	public ModuleArboriculture() {
+		proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
+		ForgeUtils.registerSubscriber(this);
 
-    public static final List<Block> validFences = new ArrayList<>();
+		if (Config.enableVillagers) {
+			RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
+			RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+		}
 
-    @Nullable
-    public static VillagerProfession villagerArborist;
+		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
+			IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+			modEventBus.addGenericListener(Feature.class, ArboricultureFeatures::registerFeatures);
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
+		}
+	}
 
-    public ModuleArboriculture() {
-        proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
-        ForgeUtils.registerSubscriber(this);
+	@Override
+	public void setupAPI() {
+		TreeManager.treeFactory = new TreeFactory();
+		TreeManager.treeMutationFactory = new TreeMutationFactory();
 
-        if (Config.enableVillagers) {
-            RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
-            RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
-            MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
-        }
+		TreeManager.woodAccess = WoodAccess.getInstance();
+	}
 
-        if (TreeConfig.getSpawnRarity(null) > 0.0F) {
-            IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-            modEventBus.addGenericListener(Feature.class, ArboricultureFeatures::registerFeatures);
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
-        }
-    }
+	@Override
+	public void disabledSetupAPI() {
+		TreeManager.woodAccess = WoodAccess.getInstance();
+	}
 
-    @Override
-    public void setupAPI() {
-        TreeManager.treeFactory = new TreeFactory();
-        TreeManager.treeMutationFactory = new TreeMutationFactory();
+	@Override
+	public void preInit() {
+		// Capabilities
+		CapabilityManager.INSTANCE.register(
+				IArmorNaturalist.class,
+				new NullStorage<>(),
+				() -> ArmorNaturalist.INSTANCE
+		);
 
-        TreeManager.woodAccess = WoodAccess.getInstance();
-    }
+		MinecraftForge.EVENT_BUS.register(this);
 
-    @Override
-    public void disabledSetupAPI() {
-        TreeManager.woodAccess = WoodAccess.getInstance();
-    }
+		// Init rendering
+		proxy.initializeModels();
 
-    @Override
-    public void preInit() {
-        // Capabilities
-        CapabilityManager.INSTANCE.register(
-                IArmorNaturalist.class,
-                new NullStorage<>(),
-                () -> ArmorNaturalist.INSTANCE
-        );
+		// Commands
+		ModuleCore.rootCommand.then(CommandTree.register());
 
-        MinecraftForge.EVENT_BUS.register(this);
+		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
+			ArboricultureFilterRuleType.init();
+		}
+	}
 
-        // Init rendering
-        proxy.initializeModels();
+	@Override
+	public void doInit() {
+		TreeDefinition.initTrees();
 
-        // Commands
-        ModuleCore.rootCommand.then(CommandTree.register());
+		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
 
-        if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-            ArboricultureFilterRuleType.init();
-        }
-    }
+		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
+			boolean deleted = configFile.delete();
+			if (deleted) {
+				config = new LocalizedConfiguration(configFile, "1.0.0");
+			}
+		}
+		TreeConfig.parse(config);
+		config.save();
+	}
 
-    @Override
-    public void addLootPoolNames(Set<String> lootPoolNames) {
-        lootPoolNames.add("forestry_arboriculture_items");
-    }
+	@Override
+	public void addLootPoolNames(Set<String> lootPoolNames) {
+		lootPoolNames.add("forestry_arboriculture_items");
+	}
 
-    @Override
-    public void doInit() {
-        TreeDefinition.initTrees();
+	@Override
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
+		//TODO: IMC
+		//		if (message.getMethod().equals("add-fence-block")) {
+		//			Supplier<String> blockName = message.getMessageSupplier();
+		//			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(message.getMessageSupplier().get()));
+		//
+		//			if (block != null) {
+		//				validFences.add(block);
+		//			} else {
+		//				IMCUtil.logInvalidIMCMessage(message);
+		//			}
+		//			return true;
+		//		} else if (message.getMethod().equals("blacklist-trees-dimension")) {
+		//			String treeUID = message.getNBTValue().getString("treeUID");
+		//			int[] dims = message.getNBTValue().getIntArray("dimensions");
+		//			for (int dim : dims) {
+		//				TreeConfig.blacklistTreeDim(treeUID, dim);
+		//			}
+		//			return true;
+		//		}
+		//		return false;
+		return false;
+	}
 
-        File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
+	@Override
+	public void registerCrates() {
+		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.WALNUT));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHESTNUT));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.LEMON));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PLUM));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PAPAYA));
+		crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.DATES));
+	}
 
-        LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-        if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
-            boolean deleted = configFile.delete();
-            if (deleted) {
-                config = new LocalizedConfiguration(configFile, "1.0.0");
-            }
-        }
-        TreeConfig.parse(config);
-        config.save();
-    }
+	@Override
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+		// sapling itemBlock is different from the normal item
+		hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
+	}
 
-    @Override
-    public void registerCrates() {
-        ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.WALNUT));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHESTNUT));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.LEMON));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PLUM));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.PAPAYA));
-        crateRegistry.registerCrate(CoreItems.FRUITS.stack(ItemFruit.EnumFruit.DATES));
-    }
+	@Override
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryArboriculture();
+	}
 
-    @Override
-    public IPacketRegistry getPacketRegistry() {
-        return new PacketRegistryArboriculture();
-    }
+	//    @SubscribeEvent
+	//    public void onHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
+	//        BlockState state = event.getState();
+	//        Block block = state.getBlock();
+	//        if (block instanceof LeavesBlock && !(block instanceof BlockForestryLeaves)) {
+	//            PlayerEntity player = event.getHarvester();
+	//            if (player != null) {
+	//                ItemStack harvestingTool = player.getHeldItemMainhand();
+	//                if (harvestingTool.getItem() instanceof IToolGrafter) {
+	//                    if (event.getDrops().isEmpty()) {
+	//                        World world = event.getWorld();
+	//                        Item itemDropped = block.getItemDropped(state, world.rand, 3);
+	//                        if (itemDropped != Items.AIR) {
+	//                            event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
+	//                        }
+	//                    }
+	//
+	//                    harvestingTool.damageItem(1, player, (entity) -> {
+	//                        entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+	//                    });
+	//                    if (harvestingTool.isEmpty()) {
+	//                        net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, Hand.MAIN_HAND);
+	//                    }
+	//                }
+	//            }
+	//        }
+	//    }
 
-    @Override
-    public boolean processIMCMessage(InterModComms.IMCMessage message) {
-        //TODO: IMC
-        //		if (message.getMethod().equals("add-fence-block")) {
-        //			Supplier<String> blockName = message.getMessageSupplier();
-        //			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(message.getMessageSupplier().get()));
-        //
-        //			if (block != null) {
-        //				validFences.add(block);
-        //			} else {
-        //				IMCUtil.logInvalidIMCMessage(message);
-        //			}
-        //			return true;
-        //		} else if (message.getMethod().equals("blacklist-trees-dimension")) {
-        //			String treeUID = message.getNBTValue().getString("treeUID");
-        //			int[] dims = message.getNBTValue().getIntArray("dimensions");
-        //			for (int dim : dims) {
-        //				TreeConfig.blacklistTreeDim(treeUID, dim);
-        //			}
-        //			return true;
-        //		}
-        //		return false;
-        return false;
-    }
-
-    @Override
-    public void getHiddenItems(List<ItemStack> hiddenItems) {
-        // sapling itemBlock is different from the normal item
-        hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
-    }
-
-//    @SubscribeEvent
-//    public void onHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
-//        BlockState state = event.getState();
-//        Block block = state.getBlock();
-//        if (block instanceof LeavesBlock && !(block instanceof BlockForestryLeaves)) {
-//            PlayerEntity player = event.getHarvester();
-//            if (player != null) {
-//                ItemStack harvestingTool = player.getHeldItemMainhand();
-//                if (harvestingTool.getItem() instanceof IToolGrafter) {
-//                    if (event.getDrops().isEmpty()) {
-//                        World world = event.getWorld();
-//                        Item itemDropped = block.getItemDropped(state, world.rand, 3);
-//                        if (itemDropped != Items.AIR) {
-//                            event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
-//                        }
-//                    }
-//
-//                    harvestingTool.damageItem(1, player, (entity) -> {
-//                        entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-//                    });
-//                    if (harvestingTool.isEmpty()) {
-//                        net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, Hand.MAIN_HAND);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    @Override
-    public ISidedModuleHandler getModuleHandler() {
-        return proxy;
-    }
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
+	}
 }

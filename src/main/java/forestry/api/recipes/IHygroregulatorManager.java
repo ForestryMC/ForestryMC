@@ -7,6 +7,7 @@ package forestry.api.recipes;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.RecipeManager;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -24,8 +25,8 @@ import java.util.Set;
  * @author Nedelosk
  */
 public interface IHygroregulatorManager extends ICraftingProvider<IHygroregulatorRecipe> {
-    @Nullable
-    IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid);
+	@Nullable
+	IHygroregulatorRecipe findMatchingRecipe(RecipeManager manager, FluidStack liquid);
 
-    Set<Fluid> getRecipeFluids(RecipeManager manager);
+	Set<Fluid> getRecipeFluids(RecipeManager manager);
 }

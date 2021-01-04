@@ -6,11 +6,14 @@
 package forestry.api.arboriculture.genetics;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.products.IProductList;
+
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +23,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,72 +32,72 @@ import java.util.List;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
-    @Override
-    ITreeRoot getRoot();
+	@Override
+	ITreeRoot getRoot();
 
-    boolean matchesTemplateGenome();
+	@Override
+	ITree copy();
 
-    IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
+	boolean isPureBred(IChromosomeType chromosome);
 
-    @OnlyIn(Dist.CLIENT)
-    IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
+	boolean matchesTemplateGenome();
 
-    /**
-     * @since Forestry 4.0
-     */
-    List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
+	IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos);
 
-    // Products, Chance
-    IProductList getProducts();
+	@OnlyIn(Dist.CLIENT)
+	IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos);
 
-    // Specialties, Chance
-    IProductList getSpecialties();
+	/**
+	 * @since Forestry 4.0
+	 */
+	List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier);
 
-    NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
+	// Products, Chance
+	IProductList getProducts();
 
-    /**
-     * @return Boolean indicating whether a sapling can stay planted at the given position.
-     */
-    boolean canStay(IBlockReader world, BlockPos pos);
+	// Specialties, Chance
+	IProductList getSpecialties();
 
-    /**
-     * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
-     * Returns null if a sapling at the given position can not grow into a tree.
-     */
-    @Override
-    @Nullable
-    BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
+	NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime);
 
-    /**
-     * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.
-     */
-    int getRequiredMaturity();
+	/**
+	 * @return Boolean indicating whether a sapling can stay planted at the given position.
+	 */
+	boolean canStay(IBlockReader world, BlockPos pos);
 
-    /**
-     * @return Integer denoting how resilient leaf blocks are against adverse influences (i.e. caterpillars).
-     */
-    int getResilience();
+	/**
+	 * @return Integer denoting the maturity (block ticks) required for a sapling to attempt to grow into a tree.
+	 */
+	int getRequiredMaturity();
 
-    /**
-     * @return Integer denoting the size of the tree trunk.
-     */
-    @Override
-    int getGirth();
+	/**
+	 * @return Integer denoting how resilient leaf blocks are against adverse influences (i.e. caterpillars).
+	 */
+	int getResilience();
 
-    Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed);
+	/**
+	 * @return Integer denoting the size of the tree trunk.
+	 */
+	@Override
+	int getGirth();
 
-    @Override
-    ITree copy();
+	/**
+	 * @return Position that this tree can grow. May be different from pos if there are multiple saplings.
+	 * Returns null if a sapling at the given position can not grow into a tree.
+	 */
+	@Override
+	@Nullable
+	BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-    boolean isPureBred(IChromosomeType chromosome);
+	Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed);
 
-    boolean canBearFruit();
+	boolean canBearFruit();
 
-    default boolean hasEffect() {
-        return getGenome().getActiveAllele(TreeChromosomes.SPECIES).hasEffect();
-    }
+	default boolean hasEffect() {
+		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).hasEffect();
+	}
 
-    default boolean isSecret() {
-        return getGenome().getActiveAllele(TreeChromosomes.SPECIES).isSecret();
-    }
+	default boolean isSecret() {
+		return getGenome().getActiveAllele(TreeChromosomes.SPECIES).isSecret();
+	}
 }

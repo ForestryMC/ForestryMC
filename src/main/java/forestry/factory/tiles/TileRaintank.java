@@ -20,6 +20,7 @@ import forestry.core.tiles.TileBase;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.inventory.InventoryRaintank;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -32,6 +33,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -46,164 +48,164 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
-    private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
-    private static final FluidStack WATER_PER_UPDATE = new FluidStack(
-            Fluids.WATER,
-            Constants.RAINTANK_AMOUNT_PER_UPDATE
-    );
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
+	private static final FluidStack WATER_PER_UPDATE = new FluidStack(
+			Fluids.WATER,
+			Constants.RAINTANK_AMOUNT_PER_UPDATE
+	);
 
-    private final FilteredTank resourceTank;
-    private final TankManager tankManager;
-    private final ContainerFiller containerFiller;
+	private final FilteredTank resourceTank;
+	private final TankManager tankManager;
+	private final ContainerFiller containerFiller;
 
-    @Nullable
-    private Boolean canDumpBelow = null;
-    private boolean dumpingFluid = false;
+	@Nullable
+	private Boolean canDumpBelow = null;
+	private boolean dumpingFluid = false;
 
-    // client
-    private int fillingProgress;
+	// client
+	private int fillingProgress;
 
-    public TileRaintank() {
-        super(FactoryTiles.RAIN_TANK.tileType());
-        setInternalInventory(new InventoryRaintank(this));
+	public TileRaintank() {
+		super(FactoryTiles.RAIN_TANK.tileType());
+		setInternalInventory(new InventoryRaintank(this));
 
-        resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);
+		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);
 
-        tankManager = new TankManager(this, resourceTank);
+		tankManager = new TankManager(this, resourceTank);
 
-        containerFiller = new ContainerFiller(
-                resourceTank,
-                Constants.RAINTANK_FILLING_TIME,
-                this,
-                InventoryRaintank.SLOT_RESOURCE,
-                InventoryRaintank.SLOT_PRODUCT
-        );
-    }
+		containerFiller = new ContainerFiller(
+				resourceTank,
+				Constants.RAINTANK_FILLING_TIME,
+				this,
+				InventoryRaintank.SLOT_RESOURCE,
+				InventoryRaintank.SLOT_PRODUCT
+		);
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
-        tankManager.write(compoundNBT);
-        return compoundNBT;
-    }
+	private boolean dumpFluidBelow() {
+		if (!resourceTank.isEmpty()) {
+			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
+			if (fluidCap.isPresent()) {
+				return !FluidUtil.tryFluidTransfer(
+						fluidCap.orElse(null),
+						tankManager,
+						FluidAttributes.BUCKET_VOLUME / 20,
+						true
+				).isEmpty();
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
-        tankManager.read(compoundNBT);
-    }
+	public boolean isFilling() {
+		return fillingProgress > 0;
+	}
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        tankManager.writeData(data);
-    }
+	public int getFillProgressScaled(int i) {
+		return fillingProgress * i / Constants.RAINTANK_FILLING_TIME;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        tankManager.readData(data);
-    }
+	/* SMP GUI */
+	public void getGUINetworkData(int i, int j) {
+		if (i == 0) {
+			fillingProgress = j;
+		}
+	}
 
-    @Override
-    public void updateServerSide() {
-        if (updateOnInterval(20)) {
-            IErrorLogic errorLogic = getErrorLogic();
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+		iCrafting.sendWindowProperty(container, 0, containerFiller.getFillingProgress());
+	}
 
-            BlockPos pos = getPos();
-            Biome biome = world.getBiome(pos);
-            errorLogic.setCondition(!(biome.getPrecipitation() == Biome.RainType.RAIN), EnumErrorCode.NO_RAIN_BIOME);
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
 
-            BlockPos posAbove = pos.up();
-            boolean hasSky = world.canBlockSeeSky(posAbove);
-            errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
+	@Override
+	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborTileChange(world, pos, neighbor);
 
-            errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
+		if (neighbor.equals(pos.down())) {
+			canDumpBelow = FluidHelper.canAcceptFluid(world, neighbor, Direction.UP, STACK_WATER);
+		}
+	}
 
-            if (!errorLogic.hasErrors()) {
-                resourceTank.fillInternal(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
-            }
+	@Override
+	public void updateServerSide() {
+		if (updateOnInterval(20)) {
+			IErrorLogic errorLogic = getErrorLogic();
 
-            containerFiller.updateServerSide();
-        }
+			BlockPos pos = getPos();
+			Biome biome = world.getBiome(pos);
+			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.RainType.RAIN), EnumErrorCode.NO_RAIN_BIOME);
 
-        if (canDumpBelow == null) {
-            canDumpBelow = FluidHelper.canAcceptFluid(world, getPos().down(), Direction.UP, STACK_WATER);
-        }
+			BlockPos posAbove = pos.up();
+			boolean hasSky = world.canBlockSeeSky(posAbove);
+			errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-        if (canDumpBelow) {
-            if (dumpingFluid || updateOnInterval(20)) {
-                dumpingFluid = dumpFluidBelow();
-            }
-        }
-    }
+			errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
-    private boolean dumpFluidBelow() {
-        if (!resourceTank.isEmpty()) {
-            LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
-            if (fluidCap.isPresent()) {
-                return !FluidUtil.tryFluidTransfer(
-                        fluidCap.orElse(null),
-                        tankManager,
-                        FluidAttributes.BUCKET_VOLUME / 20,
-                        true
-                ).isEmpty();
-            }
-        }
-        return false;
-    }
+			if (!errorLogic.hasErrors()) {
+				resourceTank.fillInternal(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
+			}
 
-    public boolean isFilling() {
-        return fillingProgress > 0;
-    }
+			containerFiller.updateServerSide();
+		}
 
-    public int getFillProgressScaled(int i) {
-        return fillingProgress * i / Constants.RAINTANK_FILLING_TIME;
-    }
+		if (canDumpBelow == null) {
+			canDumpBelow = FluidHelper.canAcceptFluid(world, getPos().down(), Direction.UP, STACK_WATER);
+		}
 
-    /* SMP GUI */
-    public void getGUINetworkData(int i, int j) {
-        if (i == 0) {
-            fillingProgress = j;
-        }
-    }
+		if (canDumpBelow) {
+			if (dumpingFluid || updateOnInterval(20)) {
+				dumpingFluid = dumpFluidBelow();
+			}
+		}
+	}
 
-    public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-        iCrafting.sendWindowProperty(container, 0, containerFiller.getFillingProgress());
-    }
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		tankManager.read(compoundNBT);
+	}
 
-    @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
+		return compoundNBT;
+	}
 
-    @Override
-    public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborTileChange(world, pos, neighbor);
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		tankManager.writeData(data);
+	}
 
-        if (neighbor.equals(pos.down())) {
-            canDumpBelow = FluidHelper.canAcceptFluid(world, neighbor, Direction.UP, STACK_WATER);
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readData(data);
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            final IFluidHandler fluidHandler;
-            if (facing == Direction.DOWN) {
-                fluidHandler = new DrainOnlyFluidHandlerWrapper(tankManager);
-            } else {
-                fluidHandler = tankManager;
-            }
-            return LazyOptional.of(() -> fluidHandler)
-                               .cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
-        }
-        return super.getCapability(capability, facing);
-    }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			final IFluidHandler fluidHandler;
+			if (facing == Direction.DOWN) {
+				fluidHandler = new DrainOnlyFluidHandlerWrapper(tankManager);
+			} else {
+				fluidHandler = tankManager;
+			}
+			return LazyOptional.of(() -> fluidHandler)
+					.cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
+		}
+		return super.getCapability(capability, facing);
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerRaintank(windowId, inv, this);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerRaintank(windowId, inv, this);
+	}
 }

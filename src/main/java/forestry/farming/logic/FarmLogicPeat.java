@@ -16,6 +16,7 @@ import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
 import forestry.core.features.CoreBlocks;
 import forestry.farming.logic.crops.CropPeat;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,29 +25,29 @@ import java.util.Collection;
 import java.util.Stack;
 
 public class FarmLogicPeat extends FarmLogicWatered {
-    public FarmLogicPeat(IFarmProperties properties, boolean isManual) {
-        super(properties, isManual);
-    }
+	public FarmLogicPeat(IFarmProperties properties, boolean isManual) {
+		super(properties, isManual);
+	}
 
-    @Override
-    public Collection<ICrop> harvest(
-            World world,
-            IFarmHousing housing,
-            FarmDirection direction,
-            int extent,
-            BlockPos pos
-    ) {
-        Stack<ICrop> crops = new Stack<>();
-        for (int i = 0; i < extent; i++) {
-            BlockPos position = translateWithOffset(pos, direction, i);
-            if (!world.isBlockLoaded(position)) {
-                return crops;
-            }
-            BlockState blockState = world.getBlockState(position);
-            if (CoreBlocks.PEAT.blockEqual(blockState)) {
-                crops.push(new CropPeat(world, position));
-            }
-        }
-        return crops;
-    }
+	@Override
+	public Collection<ICrop> harvest(
+			World world,
+			IFarmHousing housing,
+			FarmDirection direction,
+			int extent,
+			BlockPos pos
+	) {
+		Stack<ICrop> crops = new Stack<>();
+		for (int i = 0; i < extent; i++) {
+			BlockPos position = translateWithOffset(pos, direction, i);
+			if (!world.isBlockLoaded(position)) {
+				return crops;
+			}
+			BlockState blockState = world.getBlockState(position);
+			if (CoreBlocks.PEAT.blockEqual(blockState)) {
+				crops.push(new CropPeat(world, position));
+			}
+		}
+		return crops;
+	}
 }

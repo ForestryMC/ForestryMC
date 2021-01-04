@@ -20,57 +20,59 @@ import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.gui.ContainerBeeHousing;
 import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.core.network.PacketBufferForestry;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.Collections;
 
 public class TileBeeHouse extends TileBeeHousingBase {
-    private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
+	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
 
-    private final IBeeListener beeListener;
-    private final InventoryBeeHousing beeInventory;
+	private final IBeeListener beeListener;
+	private final InventoryBeeHousing beeInventory;
 
-    public TileBeeHouse() {
-        super(ApicultureTiles.BEE_HOUSE.tileType(), "bee.house");
-        this.beeListener = new DefaultBeeListener();
+	public TileBeeHouse() {
+		super(ApicultureTiles.BEE_HOUSE.tileType(), "bee.house");
+		this.beeListener = new DefaultBeeListener();
 
-        beeInventory = new InventoryBeeHousing(12);
-        beeInventory.disableAutomation();
-        setInternalInventory(beeInventory);
-    }
+		beeInventory = new InventoryBeeHousing(12);
+		beeInventory.disableAutomation();
+		setInternalInventory(beeInventory);
+	}
 
-    @Override
-    public IBeeHousingInventory getBeeInventory() {
-        return beeInventory;
-    }
+	@Override
+	public Iterable<IBeeModifier> getBeeModifiers() {
+		return Collections.singleton(beeModifier);
+	}
 
-    @Override
-    public Iterable<IBeeModifier> getBeeModifiers() {
-        return Collections.singleton(beeModifier);
-    }
+	@Override
+	public Iterable<IBeeListener> getBeeListeners() {
+		return Collections.singleton(beeListener);
+	}
 
-    @Override
-    public Iterable<IBeeListener> getBeeListeners() {
-        return Collections.singleton(beeListener);
-    }
+	@Override
+	public IBeeHousingInventory getBeeInventory() {
+		return beeInventory;
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerBeeHousing(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerBeeHousing(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
+	}
 
-    @Override
-    public void openGui(ServerPlayerEntity player, BlockPos pos) {
-        NetworkHooks.openGui(player, this, p -> {
-            PacketBufferForestry forestryP = new PacketBufferForestry(p);
-            forestryP.writeBlockPos(pos);
-            forestryP.writeBoolean(false);
-            forestryP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
-        });
-    }
+	@Override
+	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+		NetworkHooks.openGui(player, this, p -> {
+			PacketBufferForestry forestryP = new PacketBufferForestry(p);
+			forestryP.writeBlockPos(pos);
+			forestryP.writeBoolean(false);
+			forestryP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
+		});
+	}
 }

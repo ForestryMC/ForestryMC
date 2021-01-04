@@ -17,32 +17,33 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
 
-    public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
-        super(windowId, EnergyContainers.ENGINE_ELECTRIC.containerType(), player, tile, 8, 84);
+	public ContainerEngineElectric(int windowId, PlayerInventory player, TileEngineElectric tile) {
+		super(windowId, EnergyContainers.ENGINE_ELECTRIC.containerType(), player, tile, 8, 84);
 
-        this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
-    }
+		this.addSlot(new SlotFiltered(tile, InventoryEngineElectric.SLOT_BATTERY, 84, 53));
+	}
 
-    //TODO dedupe
-    public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-        TileEngineElectric tile = TileUtil.getTile(
-                inv.player.world,
-                extraData.readBlockPos(),
-                TileEngineElectric.class
-        );
-        return new ContainerEngineElectric(windowId, inv, tile);
-    }
+	//TODO dedupe
+	public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+		TileEngineElectric tile = TileUtil.getTile(
+				inv.player.world,
+				extraData.readBlockPos(),
+				TileEngineElectric.class
+		);
+		return new ContainerEngineElectric(windowId, inv, tile);
+	}
 
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-        sendPacketToListeners(packet);
-    }
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+		sendPacketToListeners(packet);
+	}
 
 }

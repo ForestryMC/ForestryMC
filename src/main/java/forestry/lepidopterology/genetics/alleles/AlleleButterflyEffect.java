@@ -14,27 +14,28 @@ import forestry.api.genetics.IEffectData;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
 import forestry.core.config.Constants;
+
 import genetics.api.alleles.AlleleCategorized;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
 
-    protected AlleleButterflyEffect(String valueName, boolean isDominant) {
-        super(Constants.MOD_ID, "bf", valueName, isDominant);
-    }
+	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
+		super(Constants.MOD_ID, "bf", valueName, isDominant);
+	}
 
-    @Override
-    public boolean isCombinable() {
-        return true;
-    }
+	@Override
+	public boolean isCombinable() {
+		return true;
+	}
 
-    @Override
-    public IEffectData validateStorage(IEffectData storedData) {
-        return storedData;
-    }
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		return storedData;
+	}
 
-    @Override
-    public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
-        return storedData;
-    }
+	@Override
+	public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
+		return storedData;
+	}
 
 }

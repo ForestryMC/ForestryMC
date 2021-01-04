@@ -9,50 +9,51 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
-    IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
+	IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
 
-    /**
-     * @return Ingredient representing the input resource.
-     */
-    Ingredient getResource();
+	/**
+	 * @return Ingredient representing the input resource.
+	 */
+	Ingredient getResource();
 
-    /**
-     * @return FluidStack representing the input fluid resource.
-     */
-    FluidStack getFluidResource();
+	/**
+	 * @return FluidStack representing the input fluid resource.
+	 */
+	FluidStack getFluidResource();
 
-    /**
-     * @return Value of the given resource, i.e. how much needs to be fermented for the output to be deposited into the product tank.
-     */
-    int getFermentationValue();
+	/**
+	 * @return Value of the given resource, i.e. how much needs to be fermented for the output to be deposited into the product tank.
+	 */
+	int getFermentationValue();
 
-    /**
-     * @return Modifies the amount of liquid output per work cycle.
-     * (water = 1.0f, honey = 1.5f)
-     */
-    float getModifier();
+	/**
+	 * @return Modifies the amount of liquid output per work cycle.
+	 * (water = 1.0f, honey = 1.5f)
+	 */
+	float getModifier();
 
-    /**
-     * @return Fluid representing output. Amount is determined by fermentationValue * modifier.
-     */
-    Fluid getOutput();
+	/**
+	 * @return Fluid representing output. Amount is determined by fermentationValue * modifier.
+	 */
+	Fluid getOutput();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:fermenter")
-        public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:fermenter")
+		public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
+	}
 }

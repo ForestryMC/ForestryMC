@@ -6,7 +6,9 @@
 package forestry.api.genetics.gatgets;
 
 import genetics.api.individual.IIndividual;
+
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,10 +22,10 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public interface IDatabasePlugin<I extends IIndividual> {
 
-    /* ALYZER */
-    List<String> getHints();
+	/* ALYZER */
+	List<String> getHints();
 
-    IDatabaseTab[] getTabs();
+	IDatabaseTab[] getTabs();
 
-    Map<String, ItemStack> getIndividualStacks();
+	Map<String, ItemStack> getIndividualStacks();
 }

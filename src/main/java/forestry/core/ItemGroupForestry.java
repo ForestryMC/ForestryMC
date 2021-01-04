@@ -28,84 +28,86 @@ import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureProvider;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.registries.ForgeRegistries;
 
 //Provides no features but needs to be loaded
 @FeatureProvider
 public class ItemGroupForestry extends ItemGroup {
 
-    public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
+	public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
 
-    static {
-        ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
+	static {
+		ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
 
-        if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-            ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
-        }
+		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
+			ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
+		}
 
-        if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-            ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
-        }
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+			ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
+		}
 
-        if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-            ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
-        }
-    }
+		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+			ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
+		}
+	}
 
-    private final int icon;
+	private final int icon;
 
-    private ItemGroupForestry(int icon, String label) {
-        super(label);
-        this.icon = icon;
-    }
+	private ItemGroupForestry(int icon, String label) {
+		super(label);
+		this.icon = icon;
+	}
 
-    public static void create() {
-        //Needed to load the groups before the feature creation
-    }
+	public static void create() {
+		//Needed to load the groups before the feature creation
+	}
 
-    @Override
-    public ItemStack getIcon() {
-        Item iconItem;
-        switch (icon) {
-            case 1:
-                if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
-                    iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
-                } else {
-                    iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
-                }
-                break;
-            case 2:
-                return BeeManager.beeRoot.getTypes().createStack(
-                        new Bee(BeeDefinition.FOREST.getGenome()),
-                        EnumBeeType.DRONE
-                );
-            case 3:
-                return TreeManager.treeRoot.getTypes().createStack(
-                        new Tree(TreeDefinition.Oak.getGenome()),
-                        EnumGermlingType.SAPLING
-                );
-            case 4:
-                return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone
-                        .getGenome()), EnumFlutterType.BUTTERFLY);
-            default:
-                iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(
-                        Constants.MOD_ID,
-                        "fertilizer_compound"
-                ));
-                break;
-        }
-        if (iconItem == null) {
-            iconItem = CoreItems.WRENCH.item();
-        }
-        return new ItemStack(iconItem);
-    }
+	@Override
+	public ItemStack getIcon() {
+		Item iconItem;
+		switch (icon) {
+			case 1:
+				if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
+					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
+				} else {
+					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
+				}
+				break;
+			case 2:
+				return BeeManager.beeRoot.getTypes().createStack(
+						new Bee(BeeDefinition.FOREST.getGenome()),
+						EnumBeeType.DRONE
+				);
+			case 3:
+				return TreeManager.treeRoot.getTypes().createStack(
+						new Tree(TreeDefinition.Oak.getGenome()),
+						EnumGermlingType.SAPLING
+				);
+			case 4:
+				return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone
+						.getGenome()), EnumFlutterType.BUTTERFLY);
+			default:
+				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(
+						Constants.MOD_ID,
+						"fertilizer_compound"
+				));
+				break;
+		}
+		if (iconItem == null) {
+			iconItem = CoreItems.WRENCH.item();
+		}
+		return new ItemStack(iconItem);
+	}
 
-    @Override
-    public ItemStack createIcon() {
-        return getIcon();
-    }
+	@Override
+	public ItemStack createIcon() {
+		return getIcon();
+	}
 }

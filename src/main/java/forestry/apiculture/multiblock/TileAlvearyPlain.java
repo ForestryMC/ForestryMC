@@ -23,30 +23,31 @@ import forestry.apiculture.blocks.BlockAlvearyType;
 
 //@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
 public class TileAlvearyPlain extends TileAlveary {//implements ITriggerProvider {
-    public TileAlvearyPlain() {
-        super(BlockAlvearyType.PLAIN);
-    }
 
-    @Override
-    public boolean allowsAutomation() {
-        return true;
-    }
+	public TileAlvearyPlain() {
+		super(BlockAlvearyType.PLAIN);
+	}
 
-    /* ITRIGGERPROVIDER */
-    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-    //	@Override
-    //	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-    //	}
+	@Override
+	public boolean allowsAutomation() {
+		return true;
+	}
 
-    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-    //	@Override
-    //	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-    //	}
+	/* ITRIGGERPROVIDER */
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
+	//	}
 
-    //	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-    //	@Override
-    //	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-    //		triggers.add(ApicultureTriggers.missingQueen);
-    //		triggers.add(ApicultureTriggers.missingDrone);
-    //	}
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
+	//	}
+
+	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
+	//	@Override
+	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
+	//		triggers.add(ApicultureTriggers.missingQueen);
+	//		triggers.add(ApicultureTriggers.missingDrone);
+	//	}
 }

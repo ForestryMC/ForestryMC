@@ -12,53 +12,54 @@ package forestry.apiculture.flowers;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+
 import net.minecraft.block.BlockState;
 
 public final class Flower {
 
-    private final BlockState blockState;
-    private Double weight;
+	private final BlockState blockState;
+	private Double weight;
 
-    public Flower(BlockState blockState, double weight) {
-        this.blockState = blockState;
-        this.weight = weight;
-    }
+	public Flower(BlockState blockState, double weight) {
+		this.blockState = blockState;
+		this.weight = weight;
+	}
 
-    public boolean isPlantable() {
-        return this.weight != 0.0;
-    }
+	public boolean isPlantable() {
+		return this.weight != 0.0;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Flower)) {
-            return false;
-        }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(blockState);
+	}
 
-        Flower flower = (Flower) obj;
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Flower)) {
+			return false;
+		}
 
-        return this.blockState == flower.getBlockState();
-    }
+		Flower flower = (Flower) obj;
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(blockState);
-    }
+		return this.blockState == flower.getBlockState();
+	}
 
-    public BlockState getBlockState() {
-        return blockState;
-    }
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
+	}
 
-    public double getWeight() {
-        return weight;
-    }
+	public BlockState getBlockState() {
+		return blockState;
+	}
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
+	public double getWeight() {
+		return weight;
+	}
 
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
-    }
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
 
 }

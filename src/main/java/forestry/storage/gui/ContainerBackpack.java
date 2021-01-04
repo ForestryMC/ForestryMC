@@ -14,6 +14,7 @@ import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFilteredInventory;
 import forestry.storage.features.BackpackContainers;
 import forestry.storage.inventory.ItemInventoryBackpack;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -22,55 +23,55 @@ import net.minecraft.network.PacketBuffer;
 //TODO it may be simpler to split this up into two containerTypes. One for normal size and one for t2
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
 
-    public enum Size {
-        DEFAULT(3, 5, 44, 19),
-        T2(5, 9, 8, 8);
+	private final Size size;
 
-        final int rows;
-        final int columns;
-        final int startX;
-        final int startY;
+	public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
+		super(
+				windowID,
+				new ItemInventoryBackpack(player, size.getSize(), parent),
+				player.inventory,
+				8,
+				11 + size.startY + size.rows * 18,
+				BackpackContainers.BACKPACK.containerType()
+		);
+		this.size = size;
+		// Inventory
+		for (int j = 0; j < size.rows; j++) {
+			for (int k = 0; k < size.columns; k++) {
+				int slot = k + j * size.columns;
+				addSlot(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
+			}
+		}
+	}
 
-        Size(int rows, int columns, int startX, int startY) {
-            this.rows = rows;
-            this.columns = columns;
-            this.startX = startX;
-            this.startY = startY;
-        }
+	public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
+		Size size = extraData.readEnumValue(Size.class);
+		ItemStack parent = extraData.readItemStack();
+		return new ContainerBackpack(windowID, inv.player, size, parent);
+	}
 
-        public int getSize() {
-            return rows * columns;
-        }
-    }
+	public Size getSize() {
+		return size;
+	}
 
-    private final Size size;
+	public enum Size {
+		DEFAULT(3, 5, 44, 19),
+		T2(5, 9, 8, 8);
 
-    public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
-        Size size = extraData.readEnumValue(Size.class);
-        ItemStack parent = extraData.readItemStack();
-        return new ContainerBackpack(windowID, inv.player, size, parent);
-    }
+		final int rows;
+		final int columns;
+		final int startX;
+		final int startY;
 
-    public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
-        super(
-                windowID,
-                new ItemInventoryBackpack(player, size.getSize(), parent),
-                player.inventory,
-                8,
-                11 + size.startY + size.rows * 18,
-                BackpackContainers.BACKPACK.containerType()
-        );
-        this.size = size;
-        // Inventory
-        for (int j = 0; j < size.rows; j++) {
-            for (int k = 0; k < size.columns; k++) {
-                int slot = k + j * size.columns;
-                addSlot(new SlotFilteredInventory(inventory, slot, size.startX + k * 18, size.startY + j * 18));
-            }
-        }
-    }
+		Size(int rows, int columns, int startX, int startY) {
+			this.rows = rows;
+			this.columns = columns;
+			this.startX = startX;
+			this.startY = startY;
+		}
 
-    public Size getSize() {
-        return size;
-    }
+		public int getSize() {
+			return rows * columns;
+		}
+	}
 }

@@ -19,81 +19,83 @@ import forestry.core.network.packets.PacketSocketUpdate;
 import forestry.core.network.packets.PacketSolderingIronClick;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ContainerSocketedHelper<T extends TileEntity & ISocketable> implements IContainerSocketed {
 
-    private final T tile;
+	private final T tile;
 
-    public ContainerSocketedHelper(T tile) {
-        this.tile = tile;
-    }
+	public ContainerSocketedHelper(T tile) {
+		this.tile = tile;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void handleChipsetClick(int slot) {
-        NetworkUtil.sendToServer(new PacketChipsetClick(slot));
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handleChipsetClick(int slot) {
+		NetworkUtil.sendToServer(new PacketChipsetClick(slot));
+	}
 
-    @Override
-    public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
-        if (!tile.getSocket(slot).isEmpty()) {
-            return;
-        }
+	@Override
+	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+		if (!tile.getSocket(slot).isEmpty()) {
+			return;
+		}
 
-        if (!ChipsetManager.circuitRegistry.isChipset(itemstack)) {
-            return;
-        }
+		if (!ChipsetManager.circuitRegistry.isChipset(itemstack)) {
+			return;
+		}
 
-        ICircuitBoard circuitBoard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
-        if (circuitBoard == null) {
-            return;
-        }
+		ICircuitBoard circuitBoard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
+		if (circuitBoard == null) {
+			return;
+		}
 
-        if (!tile.getSocketType().equals(circuitBoard.getSocketType())) {
-            return;
-        }
+		if (!tile.getSocketType().equals(circuitBoard.getSocketType())) {
+			return;
+		}
 
-        ItemStack toSocket = itemstack.copy();
-        toSocket.setCount(1);
-        tile.setSocket(slot, toSocket);
+		ItemStack toSocket = itemstack.copy();
+		toSocket.setCount(1);
+		tile.setSocket(slot, toSocket);
 
-        ItemStack stack = player.inventory.getItemStack();
-        stack.shrink(1);
-        player.updateHeldItem();
+		ItemStack stack = player.inventory.getItemStack();
+		stack.shrink(1);
+		player.updateHeldItem();
 
-        PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-        NetworkUtil.sendToPlayer(packet, player);
-    }
+		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
+		NetworkUtil.sendToPlayer(packet, player);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void handleSolderingIronClick(int slot) {
-        NetworkUtil.sendToServer(new PacketSolderingIronClick(slot));
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handleSolderingIronClick(int slot) {
+		NetworkUtil.sendToServer(new PacketSolderingIronClick(slot));
+	}
 
-    @Override
-    public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
-        ItemStack socket = tile.getSocket(slot);
-        if (socket.isEmpty() || !(itemstack.getItem() instanceof ISolderingIron)) {
-            return;
-        }
+	@Override
+	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+		ItemStack socket = tile.getSocket(slot);
+		if (socket.isEmpty() || !(itemstack.getItem() instanceof ISolderingIron)) {
+			return;
+		}
 
-        // Not sufficient space in player's inventory. failed to stow.
-        if (!InventoryUtil.stowInInventory(socket, player.inventory, false)) {
-            return;
-        }
+		// Not sufficient space in player's inventory. failed to stow.
+		if (!InventoryUtil.stowInInventory(socket, player.inventory, false)) {
+			return;
+		}
 
-        tile.setSocket(slot, ItemStack.EMPTY);
-        InventoryUtil.stowInInventory(socket, player.inventory, true);
-        itemstack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));    //TODO onBreak
-        player.updateHeldItem();
+		tile.setSocket(slot, ItemStack.EMPTY);
+		InventoryUtil.stowInInventory(socket, player.inventory, true);
+		itemstack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));    //TODO onBreak
+		player.updateHeldItem();
 
-        PacketSocketUpdate packet = new PacketSocketUpdate(tile);
-        NetworkUtil.sendToPlayer(packet, player);
-    }
+		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
+		NetworkUtil.sendToPlayer(packet, player);
+	}
 }

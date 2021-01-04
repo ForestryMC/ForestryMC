@@ -13,7 +13,9 @@ package forestry.apiculture.genetics;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.entity.MobEntity;
 
 import java.util.List;
@@ -22,9 +24,9 @@ import java.util.List;
  * Hermits will not produce if there are any other living creatures nearby.
  */
 public class JubilanceProviderHermit extends JubilanceDefault {
-    @Override
-    public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
-        List<MobEntity> list = AlleleEffect.getEntitiesInRange(genome, housing, MobEntity.class);
-        return list.size() <= 0;
-    }
+	@Override
+	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
+		List<MobEntity> list = AlleleEffect.getEntitiesInRange(genome, housing, MobEntity.class);
+		return list.size() <= 0;
+	}
 }

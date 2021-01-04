@@ -15,7 +15,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.EmptyProductList;
 import forestry.api.genetics.products.IProductList;
 import forestry.core.config.Constants;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +27,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -35,133 +38,131 @@ import java.util.Random;
 
 public class FruitProviderNone implements IFruitProvider {
 
-    private static class OverlayType {
-        public final String ident;
-        public final ResourceLocation sprite;
+	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<>();
 
-        public OverlayType(String ident) {
-            this.ident = ident;
-            this.sprite = new ResourceLocation(Constants.MOD_ID, "block/leaves/fruits." + ident);
-        }
-    }
+	static {
+		overlayTypes.put("berries", new OverlayType("berries"));
+		overlayTypes.put("pomes", new OverlayType("pomes"));
+		overlayTypes.put("nuts", new OverlayType("nuts"));
+		overlayTypes.put("citrus", new OverlayType("citrus"));
+		overlayTypes.put("plums", new OverlayType("plums"));
+	}
 
-    private static final HashMap<String, OverlayType> overlayTypes = new HashMap<>();
+	private final String unlocalizedDescription;
+	private final IFruitFamily family;
+	protected int ripeningPeriod = 10;
+	@Nullable
+	private OverlayType overlay = null;
 
-    static {
-        overlayTypes.put("berries", new OverlayType("berries"));
-        overlayTypes.put("pomes", new OverlayType("pomes"));
-        overlayTypes.put("nuts", new OverlayType("nuts"));
-        overlayTypes.put("citrus", new OverlayType("citrus"));
-        overlayTypes.put("plums", new OverlayType("plums"));
-    }
+	public FruitProviderNone(String unlocalizedDescription, IFruitFamily family) {
+		this.unlocalizedDescription = unlocalizedDescription;
+		this.family = family;
+	}
 
-    private final String unlocalizedDescription;
-    private final IFruitFamily family;
+	public IFruitProvider setOverlay(String ident) {
+		overlay = overlayTypes.get(ident);
+		return this;
+	}
 
-    protected int ripeningPeriod = 10;
+	@Override
+	public IFruitFamily getFamily() {
+		return family;
+	}
 
-    @Nullable
-    private OverlayType overlay = null;
+	@Override
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		return 0xffffff;
+	}
 
-    public FruitProviderNone(String unlocalizedDescription, IFruitFamily family) {
-        this.unlocalizedDescription = unlocalizedDescription;
-        this.family = family;
-    }
+	@Override
+	public int getDecorativeColor() {
+		return 0xffffff;
+	}
 
-    public IFruitProvider setOverlay(String ident) {
-        overlay = overlayTypes.get(ident);
-        return this;
-    }
+	@Override
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
+		return false;
+	}
 
-    @Override
-    public IFruitFamily getFamily() {
-        return family;
-    }
+	@Override
+	public int getRipeningPeriod() {
+		return ripeningPeriod;
+	}
 
-    @Override
-    public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
-        return NonNullList.create();
-    }
+	@Override
+	public IProductList getProducts() {
+		return EmptyProductList.INSTANCE;
+	}
 
-    @Override
-    public boolean requiresFruitBlocks() {
-        return false;
-    }
+	@Override
+	public IProductList getSpecialty() {
+		return EmptyProductList.INSTANCE;
+	}
 
-    @Override
-    public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
-        return false;
-    }
+	@Override
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+		return NonNullList.create();
+	}
 
-    @Override
-    public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-        return 0xffffff;
-    }
+	@Override
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent(unlocalizedDescription);
+	}
 
-    @Override
-    public int getDecorativeColor() {
-        return 0xffffff;
-    }
+	@Nullable
+	@Override
+	public String getModelName() {
+		return null;
+	}
 
-    @Override
-    public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
-        return false;
-    }
+	@Override
+	public String getModID() {
+		return Constants.MOD_ID;
+	}
 
-    @Override
-    public int getRipeningPeriod() {
-        return ripeningPeriod;
-    }
+	@Override
+	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		if (overlay != null) {
+			return overlay.sprite;
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public IProductList getProducts() {
-        return EmptyProductList.INSTANCE;
-    }
+	@Override
+	public ResourceLocation getDecorativeSprite() {
+		if (overlay != null) {
+			return overlay.sprite;
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public IProductList getSpecialty() {
-        return EmptyProductList.INSTANCE;
-    }
+	@Override
+	public boolean requiresFruitBlocks() {
+		return false;
+	}
 
-    @Override
-    public ITextComponent getDescription() {
-        return new TranslationTextComponent(unlocalizedDescription);
-    }
+	@Override
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
+		return false;
+	}
 
-    @Override
-    public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-        if (overlay != null) {
-            return overlay.sprite;
-        } else {
-            return null;
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(TextureStitchEvent.Pre event) {
+		if (overlay != null) {
+			event.addSprite(overlay.sprite);
+		}
+	}
 
-    @Override
-    public ResourceLocation getDecorativeSprite() {
-        if (overlay != null) {
-            return overlay.sprite;
-        } else {
-            return null;
-        }
-    }
+	private static class OverlayType {
+		public final String ident;
+		public final ResourceLocation sprite;
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerSprites(TextureStitchEvent.Pre event) {
-        if (overlay != null) {
-            event.addSprite(overlay.sprite);
-        }
-    }
-
-    @Nullable
-    @Override
-    public String getModelName() {
-        return null;
-    }
-
-    @Override
-    public String getModID() {
-        return Constants.MOD_ID;
-    }
+		public OverlayType(String ident) {
+			this.ident = ident;
+			this.sprite = new ResourceLocation(Constants.MOD_ID, "block/leaves/fruits." + ident);
+		}
+	}
 }

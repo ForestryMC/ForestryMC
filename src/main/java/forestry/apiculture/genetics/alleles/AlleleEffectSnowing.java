@@ -15,7 +15,9 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,76 +25,77 @@ import net.minecraft.block.SnowBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
-    public AlleleEffectSnowing() {
-        super("snowing", false, 20, true, true);
-    }
+	public AlleleEffectSnowing() {
+		super("snowing", false, 20, true, true);
+	}
 
-    @Override
-    public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        World world = housing.getWorldObj();
-        EnumTemperature temp = housing.getTemperature();
+	@Override
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		World world = housing.getWorldObj();
+		EnumTemperature temp = housing.getTemperature();
 
-        switch (temp) {
-            case HELLISH:
-            case HOT:
-            case WARM:
-                return storedData;
-            default:
-        }
+		switch (temp) {
+			case HELLISH:
+			case HOT:
+			case WARM:
+				return storedData;
+			default:
+		}
 
-        Vector3i area = getModifiedArea(genome, housing);
-        Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vector3i area = getModifiedArea(genome, housing);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
-        for (int i = 0; i < 1; i++) {
-            BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
+		for (int i = 0; i < 1; i++) {
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
 
-            BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
+			BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
 
-            // Put snow on the ground
-            BlockState stateTop = world.getBlockState(posBlock.down());
-            Block blockTop = stateTop.getBlock();
+			// Put snow on the ground
+			BlockState stateTop = world.getBlockState(posBlock.down());
+			Block blockTop = stateTop.getBlock();
 
-            if (world.isBlockLoaded(posBlock) && blockTop.hasSolidSideOnTop(world, posBlock.down())) {
-                BlockState state = world.getBlockState(posBlock);
-                Block block = state.getBlock();
-                if (block == Blocks.SNOW) {
-                    int layers = state.get(SnowBlock.LAYERS);
-                    if (layers < 7) {
-                        BlockState moreSnow = state.with(SnowBlock.LAYERS, layers + 1);
-                        world.setBlockState(posBlock, moreSnow);
-                    } else {
-                        world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
-                    }
-                } else if (block.getDefaultState().getMaterial().isReplaceable()) {
-                    world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
-                }
-            }
-        }
+			if (world.isBlockLoaded(posBlock) && blockTop.hasSolidSideOnTop(world, posBlock.down())) {
+				BlockState state = world.getBlockState(posBlock);
+				Block block = state.getBlock();
+				if (block == Blocks.SNOW) {
+					int layers = state.get(SnowBlock.LAYERS);
+					if (layers < 7) {
+						BlockState moreSnow = state.with(SnowBlock.LAYERS, layers + 1);
+						world.setBlockState(posBlock, moreSnow);
+					} else {
+						world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+					}
+				} else if (block.getDefaultState().getMaterial().isReplaceable()) {
+					world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+				}
+			}
+		}
 
-        return storedData;
-    }
+		return storedData;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        if (housing.getWorldObj().rand.nextInt(3) == 0) {
-            Vector3i area = getModifiedArea(genome, housing);
-            Vector3i offset = VectUtil.scale(area, -0.5F);
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		if (housing.getWorldObj().rand.nextInt(3) == 0) {
+			Vector3i area = getModifiedArea(genome, housing);
+			Vector3i offset = VectUtil.scale(area, -0.5F);
 
-            BlockPos coordinates = housing.getCoordinates();
-            World world = housing.getWorldObj();
+			BlockPos coordinates = housing.getCoordinates();
+			World world = housing.getWorldObj();
 
-            BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
-            ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
-            return storedData;
-        } else {
-            return super.doFX(genome, storedData, housing);
-        }
-    }
+			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
+			ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
+			return storedData;
+		} else {
+			return super.doFX(genome, storedData, housing);
+		}
+	}
 
 }

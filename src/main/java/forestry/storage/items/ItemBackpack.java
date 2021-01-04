@@ -11,6 +11,7 @@
 package forestry.storage.items;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.core.ItemGroups;
 import forestry.api.storage.BackpackStowEvent;
 import forestry.api.storage.EnumBackpackType;
@@ -27,6 +28,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.storage.BackpackMode;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.inventory.ItemInventoryBackpack;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -45,6 +47,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,245 +57,245 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
-    private final IBackpackDefinition definition;
-    private final EnumBackpackType type;
+	private final IBackpackDefinition definition;
+	private final EnumBackpackType type;
 
-    public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
-        this(definition, type, ItemGroups.tabStorage);
-    }
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type) {
+		this(definition, type, ItemGroups.tabStorage);
+	}
 
-    public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
-        super((new Item.Properties()).group(tab));
-        Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
-        Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
+		super((new Item.Properties()).group(tab));
+		Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
+		Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
 
-        this.definition = definition;
-        this.type = type;
-    }
+		this.definition = definition;
+		this.type = type;
+	}
 
-    public IBackpackDefinition getDefinition() {
-        return definition;
-    }
+	public static void tryStowing(PlayerEntity player, ItemStack backpackStack, ItemStack stack) {
+		if (getMode(backpackStack) == BackpackMode.LOCKED) {
+			return;
+		}
 
-    @Override
-    protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-        buffer.writeEnum(
-                type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT,
-                ContainerBackpack.Size.values()
-        );
-        buffer.writeItemStack(stack);
-    }
+		ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
+		ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        if (!playerIn.isSneaking()) {
-            return super.onItemRightClick(worldIn, playerIn, handIn);
-        } else {
-            ItemStack heldItem = playerIn.getHeldItem(handIn);
-            switchMode(heldItem);
-            return ActionResult.resultSuccess(heldItem);
-        }
-    }
+		if (MinecraftForge.EVENT_BUS.post(new BackpackStowEvent(player, backpack.getDefinition(), inventory, stack))) {
+			return;
+		}
+		if (stack.isEmpty()) {
+			return;
+		}
 
-    @Override
-    public ActionResultType onItemUse(ItemUseContext ctx) {
-        if (getInventoryHit(ctx.getWorld(), ctx.getPos(), ctx.getFace()) != null) {
-            return ActionResultType.SUCCESS;
-        }
-        return ActionResultType.FAIL;
-    }
+		IItemHandler itemHandler = inventory.getItemHandler();
+		ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(itemHandler);
+		ItemStack remainder = manipulator.addStack(stack);
 
-    @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        // We only do this when shift is clicked
-        if (player.isSneaking()) {
-            ItemStack heldItem = player.getHeldItem(context.getHand());
-            return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace())
-                   ? ActionResultType.PASS : ActionResultType.FAIL;
-        }
-        return super.onItemUseFirst(stack, context);
-    }
+		stack.setCount(remainder == null ? 0 : remainder.getCount());
+	}
 
-    public static void tryStowing(PlayerEntity player, ItemStack backpackStack, ItemStack stack) {
-        if (getMode(backpackStack) == BackpackMode.LOCKED) {
-            return;
-        }
+	private static void switchMode(ItemStack itemstack) {
+		BackpackMode mode = getMode(itemstack);
+		int nextMode = mode.ordinal() + 1;
+		if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
+			nextMode++;
+		}
+		nextMode %= BackpackMode.values().length;
+		itemstack.setDamage(nextMode);
+	}
 
-        ItemBackpack backpack = (ItemBackpack) backpackStack.getItem();
-        ItemInventory inventory = new ItemInventoryBackpack(player, backpack.getBackpackSize(), backpackStack);
+	@Nullable
+	private static IItemHandler getInventoryHit(World world, BlockPos pos, Direction side) {
+		TileEntity targeted = TileUtil.getTile(world, pos);
+		return TileUtil.getInventoryFromTile(targeted, side);
+	}
 
-        if (MinecraftForge.EVENT_BUS.post(new BackpackStowEvent(player, backpack.getDefinition(), inventory, stack))) {
-            return;
-        }
-        if (stack.isEmpty()) {
-            return;
-        }
+	private static void transferToChest(ItemInventoryBackpack backpackInventory, IItemHandler target) {
+		ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(backpackInventory.getItemHandler());
+		manipulator.transferStacks(target, StandardStackFilters.ALL);
+	}
 
-        IItemHandler itemHandler = inventory.getItemHandler();
-        ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(itemHandler);
-        ItemStack remainder = manipulator.addStack(stack);
+	private static int getSlotsForType(EnumBackpackType type) {
+		switch (type) {
+			case NATURALIST:
+				return Constants.SLOTS_BACKPACK_APIARIST;
+			case WOVEN:
+				return Constants.SLOTS_BACKPACK_WOVEN;
+			case NORMAL:
+			default:
+				return Constants.SLOTS_BACKPACK_DEFAULT;
+		}
+	}
 
-        stack.setCount(remainder == null ? 0 : remainder.getCount());
-    }
+	public static BackpackMode getMode(ItemStack backpack) {
+		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
 
-    private static void switchMode(ItemStack itemstack) {
-        BackpackMode mode = getMode(itemstack);
-        int nextMode = mode.ordinal() + 1;
-        if (!Config.enableBackpackResupply && nextMode == BackpackMode.RESUPPLY.ordinal()) {
-            nextMode++;
-        }
-        nextMode %= BackpackMode.values().length;
-        itemstack.setDamage(nextMode);
-    }
+		int meta = backpack.getDamage();
 
-    @Nullable
-    private static IItemHandler getInventoryHit(World world, BlockPos pos, Direction side) {
-        TileEntity targeted = TileUtil.getTile(world, pos);
-        return TileUtil.getInventoryFromTile(targeted, side);
-    }
+		if (meta >= 3) {
+			return BackpackMode.RESUPPLY;
+		} else if (meta >= 2) {
+			return BackpackMode.RECEIVE;
+		} else if (meta >= 1) {
+			return BackpackMode.LOCKED;
+		} else {
+			return BackpackMode.NEUTRAL;
+		}
+	}
 
-    private boolean evaluateTileHit(ItemStack stack, PlayerEntity player, World world, BlockPos pos, Direction side) {
+	public static EnumBackpackType getType(ItemStack backpack) {
+		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
+		return ((ItemBackpack) backpack.getItem()).type;
+	}
 
-        // Shift right-clicking on an inventory tile will attempt to transfer
-        // items contained in the backpack
-        IItemHandler inventory = getInventoryHit(world, pos, side);
-        // Process only inventories
-        if (inventory != null) {
+	public IBackpackDefinition getDefinition() {
+		return definition;
+	}
 
-            // Must have inventory slots
-            if (inventory.getSlots() <= 0) {
-                return true;
-            }
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (!playerIn.isSneaking()) {
+			return super.onItemRightClick(worldIn, playerIn, handIn);
+		} else {
+			ItemStack heldItem = playerIn.getHeldItem(handIn);
+			switchMode(heldItem);
+			return ActionResult.resultSuccess(heldItem);
+		}
+	}
 
-            if (!world.isRemote) {
-                // Create our own backpack inventory
-                ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
+	@Override
+	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
+		buffer.writeEnum(
+				type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT,
+				ContainerBackpack.Size.values()
+		);
+		buffer.writeItemStack(stack);
+	}
 
-                BackpackMode mode = getMode(stack);
-                if (mode == BackpackMode.RECEIVE) {
-                    receiveFromChest(backpackInventory, inventory);
-                } else {
-                    transferToChest(backpackInventory, inventory);
-                }
-            }
+	@Override
+	@Nullable
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		Item item = heldItem.getItem();
+		if (!(item instanceof ItemBackpack)) {
+			return null;
+		}
+		ItemBackpack backpack = (ItemBackpack) item;
+		switch (backpack.type) {
+			case NORMAL:
+				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
+			case WOVEN:
+				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
+			default:
+				return null;
+		}
+	}
 
-            return true;
-        }
+	@Override
+	public ActionResultType onItemUse(ItemUseContext ctx) {
+		if (getInventoryHit(ctx.getWorld(), ctx.getPos(), ctx.getFace()) != null) {
+			return ActionResultType.SUCCESS;
+		}
+		return ActionResultType.FAIL;
+	}
 
-        return false;
-    }
+	@Override
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		return definition.getName(itemstack);
+	}
 
-    private static void transferToChest(ItemInventoryBackpack backpackInventory, IItemHandler target) {
-        ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(backpackInventory.getItemHandler());
-        manipulator.transferStacks(target, StandardStackFilters.ALL);
-    }
+	@Override
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		// We only do this when shift is clicked
+		if (player.isSneaking()) {
+			ItemStack heldItem = player.getHeldItem(context.getHand());
+			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace())
+					? ActionResultType.PASS : ActionResultType.FAIL;
+		}
+		return super.onItemUseFirst(stack, context);
+	}
 
-    private void receiveFromChest(ItemInventoryBackpack backpackInventory, IItemHandler target) {
-        ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(target);
-        manipulator.transferStacks(backpackInventory.getItemHandler(), definition.getFilter());
-    }
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		Item oldItem = oldStack.getItem();
+		Item newItem = newStack.getItem();
+		return oldItem != newItem || getMode(oldStack) != getMode(newStack);
+	}
 
-    public int getBackpackSize() {
-        return getSlotsForType(type);
-    }
+	private boolean evaluateTileHit(ItemStack stack, PlayerEntity player, World world, BlockPos pos, Direction side) {
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void addInformation(
-            ItemStack itemstack,
-            @Nullable World world,
-            List<ITextComponent> list,
-            ITooltipFlag flag
-    ) {
-        super.addInformation(itemstack, world, list, flag);
+		// Shift right-clicking on an inventory tile will attempt to transfer
+		// items contained in the backpack
+		IItemHandler inventory = getInventoryHit(world, pos, side);
+		// Process only inventories
+		if (inventory != null) {
 
-        int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
+			// Must have inventory slots
+			if (inventory.getSlots() <= 0) {
+				return true;
+			}
 
-        BackpackMode mode = getMode(itemstack);
-        String infoKey = mode.getUnlocalizedInfo();
-        if (infoKey != null) {
-            list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
-        }
-        list.add(new TranslationTextComponent(
-                "for.gui.slots",
-                String.valueOf(occupied),
-                String.valueOf(getBackpackSize())
-        ).mergeStyle(TextFormatting.GRAY));
-    }
+			if (!world.isRemote) {
+				// Create our own backpack inventory
+				ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
 
-    @Override
-    public ITextComponent getDisplayName(ItemStack itemstack) {
-        return definition.getName(itemstack);
-    }
+				BackpackMode mode = getMode(stack);
+				if (mode == BackpackMode.RECEIVE) {
+					receiveFromChest(backpackInventory, inventory);
+				} else {
+					transferToChest(backpackInventory, inventory);
+				}
+			}
 
-    @Override
-    public int getColorFromItemStack(ItemStack itemstack, int j) {
+			return true;
+		}
 
-        if (j == 0) {
-            return definition.getPrimaryColour();
-        } else if (j == 1) {
-            return definition.getSecondaryColour();
-        } else {
-            return 0xffffff;
-        }
-    }
+		return false;
+	}
 
-    private static int getSlotsForType(EnumBackpackType type) {
-        switch (type) {
-            case NATURALIST:
-                return Constants.SLOTS_BACKPACK_APIARIST;
-            case WOVEN:
-                return Constants.SLOTS_BACKPACK_WOVEN;
-            case NORMAL:
-            default:
-                return Constants.SLOTS_BACKPACK_DEFAULT;
-        }
-    }
+	private void receiveFromChest(ItemInventoryBackpack backpackInventory, IItemHandler target) {
+		ItemHandlerInventoryManipulator manipulator = new ItemHandlerInventoryManipulator(target);
+		manipulator.transferStacks(backpackInventory.getItemHandler(), definition.getFilter());
+	}
 
-    public static BackpackMode getMode(ItemStack backpack) {
-        Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
+	public int getBackpackSize() {
+		return getSlotsForType(type);
+	}
 
-        int meta = backpack.getDamage();
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(
+			ItemStack itemstack,
+			@Nullable World world,
+			List<ITextComponent> list,
+			ITooltipFlag flag
+	) {
+		super.addInformation(itemstack, world, list, flag);
 
-        if (meta >= 3) {
-            return BackpackMode.RESUPPLY;
-        } else if (meta >= 2) {
-            return BackpackMode.RECEIVE;
-        } else if (meta >= 1) {
-            return BackpackMode.LOCKED;
-        } else {
-            return BackpackMode.NEUTRAL;
-        }
-    }
+		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 
-    public static EnumBackpackType getType(ItemStack backpack) {
-        Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
-        return ((ItemBackpack) backpack.getItem()).type;
-    }
+		BackpackMode mode = getMode(itemstack);
+		String infoKey = mode.getUnlocalizedInfo();
+		if (infoKey != null) {
+			list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
+		}
+		list.add(new TranslationTextComponent(
+				"for.gui.slots",
+				String.valueOf(occupied),
+				String.valueOf(getBackpackSize())
+		).mergeStyle(TextFormatting.GRAY));
+	}
 
-    @Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        Item oldItem = oldStack.getItem();
-        Item newItem = newStack.getItem();
-        return oldItem != newItem || getMode(oldStack) != getMode(newStack);
-    }
+	@Override
+	public int getColorFromItemStack(ItemStack itemstack, int j) {
 
-    @Override
-    @Nullable
-    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-        Item item = heldItem.getItem();
-        if (!(item instanceof ItemBackpack)) {
-            return null;
-        }
-        ItemBackpack backpack = (ItemBackpack) item;
-        switch (backpack.type) {
-            case NORMAL:
-                return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
-            case WOVEN:
-                return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
-            default:
-                return null;
-        }
-    }
+		if (j == 0) {
+			return definition.getPrimaryColour();
+		} else if (j == 1) {
+			return definition.getSecondaryColour();
+		} else {
+			return 0xffffff;
+		}
+	}
 }

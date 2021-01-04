@@ -18,6 +18,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,51 +27,51 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public class StructureBlockAccess implements IBlockReader {
 
-    private final StructureInfo data;
-    private final BlockState[][][] structure;
+	private final StructureInfo data;
+	private final BlockState[][][] structure;
 
-    public StructureBlockAccess(StructureInfo data) {
-        this.data = data;
-        this.structure = data.data;
-    }
+	public StructureBlockAccess(StructureInfo data) {
+		this.data = data;
+		this.structure = data.data;
+	}
 
-    public boolean isAirBlock(BlockPos pos) {
-        return this.getBlockState(pos).isAir(this, pos);
-    }
+	public boolean isAirBlock(BlockPos pos) {
+		return this.getBlockState(pos).isAir(this, pos);
+	}
 
-    @Nullable
-    @Override
-    public TileEntity getTileEntity(BlockPos pos) {
-        return null;
-    }
+	@Nullable
+	@Override
+	public TileEntity getTileEntity(BlockPos pos) {
+		return null;
+	}
 
-    @Override
-    public int getLightValue(BlockPos pos) {
-        return 15 << 20 | 15 << 4;
-    }
+	@Override
+	public BlockState getBlockState(BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 
-    @Override
-    public BlockState getBlockState(BlockPos pos) {
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
+		if (y >= 0 && y < structure.length) {
+			if (x >= 0 && x < structure[y].length) {
+				if (z >= 0 && z < structure[y][x].length) {
+					int index = y * (data.structureLength * data.structureWidth) + x * data.structureWidth + z;
+					if (index <= data.getLimiter()) {
+						return structure[y][x][z] != null ? structure[y][x][z] : Blocks.AIR.getDefaultState();
+					}
+				}
+			}
+		}
+		return Blocks.AIR.getDefaultState();
+	}
 
-        if (y >= 0 && y < structure.length) {
-            if (x >= 0 && x < structure[y].length) {
-                if (z >= 0 && z < structure[y][x].length) {
-                    int index = y * (data.structureLength * data.structureWidth) + x * data.structureWidth + z;
-                    if (index <= data.getLimiter()) {
-                        return structure[y][x][z] != null ? structure[y][x][z] : Blocks.AIR.getDefaultState();
-                    }
-                }
-            }
-        }
-        return Blocks.AIR.getDefaultState();
-    }
+	@Override
+	public FluidState getFluidState(BlockPos blockPos) {
+		return null;
+	}
 
-    @Override
-    public FluidState getFluidState(BlockPos blockPos) {
-        return null;
-    }
+	@Override
+	public int getLightValue(BlockPos pos) {
+		return 15 << 20 | 15 << 4;
+	}
 
 }

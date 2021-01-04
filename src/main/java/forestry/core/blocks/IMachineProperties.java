@@ -11,6 +11,7 @@
 package forestry.core.blocks;
 
 import forestry.core.tiles.TileForestry;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -20,18 +21,18 @@ import net.minecraft.util.IStringSerializable;
 import javax.annotation.Nullable;
 
 public interface IMachineProperties<T extends TileForestry> extends IStringSerializable, IShapeProvider {
-    TileEntityType<? extends T> getTeType();
+	TileEntityType<? extends T> getTeType();
 
-    default void clientSetup() {
-    }
+	default void clientSetup() {
+	}
 
-    @Nullable
-    TileEntity createTileEntity();
+	@Nullable
+	TileEntity createTileEntity();
 
-    @Nullable
-    Block getBlock();
+	@Nullable
+	Block getBlock();
 
-    void setBlock(Block block);
+	void setBlock(Block block);
 
-    boolean isFullCube(BlockState state);
+	boolean isFullCube(BlockState state);
 }

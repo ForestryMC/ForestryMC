@@ -11,43 +11,45 @@
 package forestry.factory.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileCarpenter;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
-    private final TileCarpenter tile;
+	private final TileCarpenter tile;
 
-    public GuiCarpenter(ContainerCarpenter container, PlayerInventory inventory, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "carpenter.png", container, inventory, title);
+	public GuiCarpenter(ContainerCarpenter container, PlayerInventory inventory, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "carpenter.png", container, inventory, title);
 
-        this.tile = container.getTile();
-        this.ySize = 218;
-        this.widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
-    }
+		this.tile = container.getTile();
+		this.ySize = 218;
+		this.widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
+	}
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
-        int progressScaled = tile.getProgressScaled(16);
-        blit(
-                transform,
-                guiLeft + 98,
-                guiTop + 51 + 16 - progressScaled,
-                176,
-                60 + 16 - progressScaled,
-                4,
-                progressScaled
-        );
-    }
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+		int progressScaled = tile.getProgressScaled(16);
+		blit(
+				transform,
+				guiLeft + 98,
+				guiTop + 51 + 16 - progressScaled,
+				176,
+				60 + 16 - progressScaled,
+				4,
+				progressScaled
+		);
+	}
 
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(tile);
-        addPowerLedger(tile.getEnergyManager());
-        addHintLedger("carpenter");
-    }
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addPowerLedger(tile.getEnergyManager());
+		addHintLedger("carpenter");
+	}
 }

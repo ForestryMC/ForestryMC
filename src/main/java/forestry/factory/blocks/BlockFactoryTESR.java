@@ -11,18 +11,20 @@
 package forestry.factory.blocks;
 
 import forestry.core.blocks.BlockBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.common.ToolType;
 
 public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
-    public BlockFactoryTESR(BlockTypeFactoryTesr type) {
-        super(
-                type,
-                Block.Properties.create(Material.IRON)
-                                .harvestTool(ToolType.PICKAXE)
-                                .harvestLevel(0)
-                                .hardnessAndResistance(1.5f)
-        );
-    }
+	public BlockFactoryTESR(BlockTypeFactoryTesr type) {
+		super(
+				type,
+				Block.Properties.create(Material.IRON)
+						.harvestTool(ToolType.PICKAXE)
+						.harvestLevel(0)
+						.hardnessAndResistance(1.5f)
+		);
+	}
 }

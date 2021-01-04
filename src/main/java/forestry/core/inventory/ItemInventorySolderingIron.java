@@ -11,6 +11,7 @@
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -22,6 +23,7 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -29,172 +31,172 @@ import net.minecraft.item.ItemStack;
 
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
-    private static final short inputCircuitBoardSlot = 0;
-    private static final short finishedCircuitBoardSlot = 1;
-    private static final short ingredientSlot1 = 2;
-    private static final short ingredientSlotCount = 4;
-    private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(
-            ChipsetManager.circuitRegistry.getRegisteredLayouts().values()
-    );
+	private static final short inputCircuitBoardSlot = 0;
+	private static final short finishedCircuitBoardSlot = 1;
+	private static final short ingredientSlot1 = 2;
+	private static final short ingredientSlotCount = 4;
+	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(
+			ChipsetManager.circuitRegistry.getRegisteredLayouts().values()
+	);
 
-    public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
-        super(player, 6, itemStack);
+	public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
+		super(player, 6, itemStack);
 
-        layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
-    }
+		layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
+	}
 
-    @Override
-    public int getInventoryStackLimit() {
-        return 1;
-    }
+	public ICircuitLayout getLayout() {
+		return layouts.getCurrent();
+	}
 
-    public ICircuitLayout getLayout() {
-        return layouts.getCurrent();
-    }
+	public void setLayout(ICircuitLayout layout) {
+		layouts.setCurrent(layout);
+	}
 
-    public void setLayout(ICircuitLayout layout) {
-        layouts.setCurrent(layout);
-    }
+	public void advanceLayout() {
+		layouts.rotateRight();
+	}
 
-    public void advanceLayout() {
-        layouts.rotateRight();
-    }
+	public void regressLayout() {
+		layouts.rotateLeft();
+	}
 
-    public void regressLayout() {
-        layouts.rotateLeft();
-    }
+	private ICircuit[] getCircuits(boolean doConsume) {
 
-    private ICircuit[] getCircuits(boolean doConsume) {
+		ICircuit[] circuits = new ICircuit[ingredientSlotCount];
 
-        ICircuit[] circuits = new ICircuit[ingredientSlotCount];
+		for (short i = 0; i < ingredientSlotCount; i++) {
+			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
+			if (!ingredient.isEmpty()) {
+				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
+						Minecraft.getInstance().world.getRecipeManager(),
+						layouts.getCurrent(),
+						ingredient
+				);
+				if (recipe != null) {
+					if (doConsume) {
+						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
+					}
+					circuits[i] = recipe.getCircuit();
+				}
+			}
+		}
 
-        for (short i = 0; i < ingredientSlotCount; i++) {
-            ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
-            if (!ingredient.isEmpty()) {
-                ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
-                        Minecraft.getInstance().world.getRecipeManager(),
-                        layouts.getCurrent(),
-                        ingredient
-                );
-                if (recipe != null) {
-                    if (doConsume) {
-                        decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
-                    }
-                    circuits[i] = recipe.getCircuit();
-                }
-            }
-        }
+		return circuits;
+	}
 
-        return circuits;
-    }
+	@Override
+	public void onSlotClick(int slotIndex, PlayerEntity player) {
+		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
+			return;
+		}
 
-    @Override
-    public void onSlotClick(int slotIndex, PlayerEntity player) {
-        if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
-            return;
-        }
+		ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-        ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
+		if (inputCircuitBoard.isEmpty() || inputCircuitBoard.getCount() > 1) {
+			return;
+		}
+		if (!getStackInSlot(finishedCircuitBoardSlot).isEmpty()) {
+			return;
+		}
 
-        if (inputCircuitBoard.isEmpty() || inputCircuitBoard.getCount() > 1) {
-            return;
-        }
-        if (!getStackInSlot(finishedCircuitBoardSlot).isEmpty()) {
-            return;
-        }
+		// Need a chipset item
+		if (!ChipsetManager.circuitRegistry.isChipset(inputCircuitBoard)) {
+			return;
+		}
 
-        // Need a chipset item
-        if (!ChipsetManager.circuitRegistry.isChipset(inputCircuitBoard)) {
-            return;
-        }
+		Item item = inputCircuitBoard.getItem();
+		if (!(item instanceof ItemCircuitBoard)) {
+			return;
+		}
 
-        Item item = inputCircuitBoard.getItem();
-        if (!(item instanceof ItemCircuitBoard)) {
-            return;
-        }
+		ItemCircuitBoard circuitBoard = ((ItemCircuitBoard) item);
 
-        ItemCircuitBoard circuitBoard = ((ItemCircuitBoard) item);
+		EnumCircuitBoardType type = circuitBoard.getType();
+		if (getCircuitCount() != type.getSockets()) {
+			return;
+		}
 
-        EnumCircuitBoardType type = circuitBoard.getType();
-        if (getCircuitCount() != type.getSockets()) {
-            return;
-        }
+		ICircuit[] circuits = getCircuits(true);
 
-        ICircuit[] circuits = getCircuits(true);
+		ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
-        ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
+		setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
+		setInventorySlotContents(inputCircuitBoardSlot, ItemStack.EMPTY);
+	}
 
-        setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
-        setInventorySlotContents(inputCircuitBoardSlot, ItemStack.EMPTY);
-    }
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
 
-    private int getCircuitCount() {
-        ICircuit[] circuits = getCircuits(false);
-        int count = 0;
-        for (ICircuit circuit : circuits) {
-            if (circuit != null) {
-                count++;
-            }
-        }
-        return count;
-    }
+	@Override
+	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return false;
+		}
 
-    @Override
-    public ImmutableSet<IErrorState> getErrorStates() {
-        ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
+		Item item = itemStack.getItem();
+		if (slotIndex == inputCircuitBoardSlot) {
+			return item instanceof ItemCircuitBoard;
+		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
+					Minecraft.getInstance().world.getRecipeManager(),
+					layouts.getCurrent(),
+					itemStack
+			);
+			return recipe != null;
+		}
+		return false;
+	}
 
-        if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
-            errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
-        }
+	private int getCircuitCount() {
+		ICircuit[] circuits = getCircuits(false);
+		int count = 0;
+		for (ICircuit circuit : circuits) {
+			if (circuit != null) {
+				count++;
+			}
+		}
+		return count;
+	}
 
-        ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
+	@Override
+	public ImmutableSet<IErrorState> getErrorStates() {
+		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-        if (blankCircuitBoard.isEmpty()) {
-            errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
-        } else {
-            Item item = blankCircuitBoard.getItem();
-            if (!(item instanceof ItemCircuitBoard)) {
-                return errorStates.build();
-            }
-            EnumCircuitBoardType type = ((ItemCircuitBoard) item).getType();
+		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
+			errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
+		}
 
-            int circuitCount = 0;
-            for (short i = 0; i < type.getSockets(); i++) {
-                if (!getStackInSlot(ingredientSlot1 + i).isEmpty()) {
-                    circuitCount++;
-                }
-            }
+		ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
 
-            if (circuitCount != type.getSockets()) {
-                errorStates.add(EnumErrorCode.CIRCUIT_MISMATCH);
-            } else {
-                int count = getCircuitCount();
-                if (count != type.getSockets()) {
-                    errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
-                }
-            }
-        }
+		if (blankCircuitBoard.isEmpty()) {
+			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
+		} else {
+			Item item = blankCircuitBoard.getItem();
+			if (!(item instanceof ItemCircuitBoard)) {
+				return errorStates.build();
+			}
+			EnumCircuitBoardType type = ((ItemCircuitBoard) item).getType();
 
-        return errorStates.build();
-    }
+			int circuitCount = 0;
+			for (short i = 0; i < type.getSockets(); i++) {
+				if (!getStackInSlot(ingredientSlot1 + i).isEmpty()) {
+					circuitCount++;
+				}
+			}
 
-    @Override
-    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-        if (itemStack.isEmpty()) {
-            return false;
-        }
+			if (circuitCount != type.getSockets()) {
+				errorStates.add(EnumErrorCode.CIRCUIT_MISMATCH);
+			} else {
+				int count = getCircuitCount();
+				if (count != type.getSockets()) {
+					errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
+				}
+			}
+		}
 
-        Item item = itemStack.getItem();
-        if (slotIndex == inputCircuitBoardSlot) {
-            return item instanceof ItemCircuitBoard;
-        } else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-            ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
-                    Minecraft.getInstance().world.getRecipeManager(),
-                    layouts.getCurrent(),
-                    itemStack
-            );
-            return recipe != null;
-        }
-        return false;
-    }
+		return errorStates.build();
+	}
 }

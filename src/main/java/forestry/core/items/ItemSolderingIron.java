@@ -14,6 +14,7 @@ import forestry.core.ItemGroupForestry;
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.circuits.ISolderingIron;
 import forestry.core.inventory.ItemInventorySolderingIron;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
@@ -21,12 +22,12 @@ import net.minecraft.item.ItemStack;
 
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 
-    public ItemSolderingIron() {
-        super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
-    }
+	public ItemSolderingIron() {
+		super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
+	}
 
-    @Override
-    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-        return new ContainerSolderingIron(windowId, player, new ItemInventorySolderingIron(player, heldItem));
-    }
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerSolderingIron(windowId, player, new ItemInventorySolderingIron(player, heldItem));
+	}
 }

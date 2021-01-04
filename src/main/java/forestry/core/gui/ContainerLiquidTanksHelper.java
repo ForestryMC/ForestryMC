@@ -15,11 +15,13 @@ import forestry.core.fluids.StandardTank;
 import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.NetworkUtil;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
@@ -33,71 +35,71 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
-    private final T tile;
+	private final T tile;
 
-    public ContainerLiquidTanksHelper(T tile) {
-        this.tile = tile;
-    }
+	public ContainerLiquidTanksHelper(T tile) {
+		this.tile = tile;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void handlePipetteClickClient(int slot, PlayerEntity player) {
-        ItemStack itemstack = player.inventory.getItemStack();
-        if (itemstack.getItem() instanceof IToolPipette) {
-            NetworkUtil.sendToServer(new PacketPipetteClick(slot));
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handlePipetteClickClient(int slot, PlayerEntity player) {
+		ItemStack itemstack = player.inventory.getItemStack();
+		if (itemstack.getItem() instanceof IToolPipette) {
+			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
+		}
+	}
 
-    @Override
-    public void handlePipetteClick(int slot, ServerPlayerEntity player) {
-        ItemStack itemstack = player.inventory.getItemStack();
-        Item held = itemstack.getItem();
-        if (!(held instanceof IToolPipette)) {
-            return;
-        }
+	@Override
+	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
+		ItemStack itemstack = player.inventory.getItemStack();
+		Item held = itemstack.getItem();
+		if (!(held instanceof IToolPipette)) {
+			return;
+		}
 
-        IToolPipette pipette = (IToolPipette) held;
-        IFluidTank tank = tile.getTankManager().getTank(slot);
-        int liquidAmount = tank.getFluidAmount();
+		IToolPipette pipette = (IToolPipette) held;
+		IFluidTank tank = tile.getTankManager().getTank(slot);
+		int liquidAmount = tank.getFluidAmount();
 
-        LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
-        fluidCap.ifPresent(fluidHandlerItem -> {
-            if (pipette.canPipette(itemstack) && liquidAmount > 0) {
-                FluidStack fillAmount;
-                if (tank instanceof StandardTank) {
-                    fillAmount = ((StandardTank) tank).drainInternal(
-                            FluidAttributes.BUCKET_VOLUME,
-                            IFluidHandler.FluidAction.EXECUTE
-                    );
-                    int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
-                    tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-                } else {//TODO: Test if this works
-                    fillAmount = tank.drain(
-                            FluidAttributes.BUCKET_VOLUME,
-                            IFluidHandler.FluidAction.EXECUTE
-                    );
-                    int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
-                    tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-                }
+		LazyOptional<IFluidHandlerItem> fluidCap = FluidUtil.getFluidHandler(itemstack);
+		fluidCap.ifPresent(fluidHandlerItem -> {
+			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
+				FluidStack fillAmount;
+				if (tank instanceof StandardTank) {
+					fillAmount = ((StandardTank) tank).drainInternal(
+							FluidAttributes.BUCKET_VOLUME,
+							IFluidHandler.FluidAction.EXECUTE
+					);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+				} else {//TODO: Test if this works
+					fillAmount = tank.drain(
+							FluidAttributes.BUCKET_VOLUME,
+							IFluidHandler.FluidAction.EXECUTE
+					);
+					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
+					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+				}
 
-                player.inventory.setItemStack(fluidHandlerItem.getContainer());
-                player.updateHeldItem();
-            } else {
-                FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-                if (!potential.isEmpty()) {
-                    if (tank instanceof FluidTank) {
-                        int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
-                        fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
-                        player.inventory.setItemStack(fluidHandlerItem.getContainer());
-                        player.updateHeldItem();
-                    }
-                }
-            }
-        });
-    }
+				player.inventory.setItemStack(fluidHandlerItem.getContainer());
+				player.updateHeldItem();
+			} else {
+				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+				if (!potential.isEmpty()) {
+					if (tank instanceof FluidTank) {
+						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
+						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
+						player.inventory.setItemStack(fluidHandlerItem.getContainer());
+						player.updateHeldItem();
+					}
+				}
+			}
+		});
+	}
 
-    @Override
-    public IFluidTank getTank(int slot) {
-        return tile.getTankManager().getTank(slot);
-    }
+	@Override
+	public IFluidTank getTank(int slot) {
+		return tile.getTankManager().getTank(slot);
+	}
 }

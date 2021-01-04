@@ -9,10 +9,10 @@ import forestry.modules.features.ModFeatureRegistry;
 
 @FeatureProvider
 public class CultivationContainers {
-    private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCultivation.class);
+	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCultivation.class);
 
-    public static final FeatureContainerType<ContainerPlanter> PLANTER = REGISTRY.container(
-            ContainerPlanter::fromNetwork,
-            "planter"
-    );
+	public static final FeatureContainerType<ContainerPlanter> PLANTER = REGISTRY.container(
+			ContainerPlanter::fromNetwork,
+			"planter"
+	);
 }

@@ -12,20 +12,20 @@ import javax.annotation.Nullable;
  */
 public class MultiblockValidationException extends Exception {
 
-    @Nullable
-    private BlockPos position;
+	@Nullable
+	private BlockPos position;
 
-    public MultiblockValidationException(String reason) {
-        super(reason);
-    }
+	public MultiblockValidationException(String reason) {
+		super(reason);
+	}
 
-    public MultiblockValidationException(String reason, BlockPos position) {
-        super(reason);
-        this.position = position;
-    }
+	public MultiblockValidationException(String reason, BlockPos position) {
+		super(reason);
+		this.position = position;
+	}
 
-    @Nullable
-    public BlockPos getPosition() {
-        return position;
-    }
+	@Nullable
+	public BlockPos getPosition() {
+		return position;
+	}
 }

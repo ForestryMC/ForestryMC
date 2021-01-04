@@ -11,7 +11,9 @@
 package forestry.apiculture.particles;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.particles.ParticleType;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,13 +21,13 @@ import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeParticleType extends ParticleType<BeeParticleData> {
-    public BeeParticleType() {
-        super(false, BeeParticleData.DESERIALIZER);
-    }
+	public BeeParticleType() {
+		super(false, BeeParticleData.DESERIALIZER);
+	}
 
-    @Nonnull
-    @Override
-    public Codec<BeeParticleData> func_230522_e_() {
-        return BeeParticleData.CODEC;
-    }
+	@Nonnull
+	@Override
+	public Codec<BeeParticleData> func_230522_e_() {
+		return BeeParticleData.CODEC;
+	}
 }

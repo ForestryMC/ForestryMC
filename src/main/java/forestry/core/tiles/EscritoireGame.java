@@ -17,8 +17,10 @@ import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+
 import genetics.api.individual.IIndividual;
 import genetics.utils.RootUtils;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,147 +31,148 @@ import java.util.Optional;
 import java.util.Random;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
-    public static final int BOUNTY_MAX = 16;
-    private static final Random rand = new Random();
-    private EscritoireGameBoard gameBoard;
-    private long lastUpdate;
-    private int bountyLevel;
-    private Status status = Status.EMPTY;
-    public EscritoireGame() {
-        gameBoard = new EscritoireGameBoard();
-    }
+	public static final int BOUNTY_MAX = 16;
+	private static final Random rand = new Random();
+	private EscritoireGameBoard gameBoard;
+	private long lastUpdate;
+	private int bountyLevel;
+	private Status status = Status.EMPTY;
 
-    @Nullable
-    public EscritoireGameToken getToken(int index) {
-        return gameBoard.getToken(index);
-    }
+	public EscritoireGame() {
+		gameBoard = new EscritoireGameBoard();
+	}
 
-    public Status getStatus() {
-        return status;
-    }
+	@Nullable
+	public EscritoireGameToken getToken(int index) {
+		return gameBoard.getToken(index);
+	}
 
-    public long getLastUpdate() {
-        return lastUpdate;
-    }
+	public Status getStatus() {
+		return status;
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT.putInt("bountyLevel", bountyLevel);
-        compoundNBT.putLong("lastUpdate", lastUpdate);
-        gameBoard.write(compoundNBT);
+	public long getLastUpdate() {
+		return lastUpdate;
+	}
 
-        compoundNBT.putInt("Status", status.ordinal());
-        return compoundNBT;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT.putInt("bountyLevel", bountyLevel);
+		compoundNBT.putLong("lastUpdate", lastUpdate);
+		gameBoard.write(compoundNBT);
 
-    @Override
-    public void read(CompoundNBT nbt) {
-        bountyLevel = nbt.getInt("bountyLevel");
-        lastUpdate = nbt.getLong("lastUpdate");
-        gameBoard = new EscritoireGameBoard(nbt);
+		compoundNBT.putInt("Status", status.ordinal());
+		return compoundNBT;
+	}
 
-        if (nbt.contains("Status")) {
-            int statusOrdinal = nbt.getInt("Status");
-            status = Status.values()[statusOrdinal];
-        }
+	@Override
+	public void read(CompoundNBT nbt) {
+		bountyLevel = nbt.getInt("bountyLevel");
+		lastUpdate = nbt.getLong("lastUpdate");
+		gameBoard = new EscritoireGameBoard(nbt);
 
-        lastUpdate = System.currentTimeMillis();
-    }
+		if (nbt.contains("Status")) {
+			int statusOrdinal = nbt.getInt("Status");
+			status = Status.values()[statusOrdinal];
+		}
 
-    /* NETWORK */
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        data.writeInt(bountyLevel);
-        gameBoard.writeData(data);
-        data.writeEnum(status, Status.VALUES);
-    }
+		lastUpdate = System.currentTimeMillis();
+	}
 
-    @Override
-    public void readData(PacketBufferForestry data) throws IOException {
-        bountyLevel = data.readInt();
-        gameBoard.readData(data);
-        status = data.readEnum(Status.VALUES);
-    }
+	/* NETWORK */
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		data.writeInt(bountyLevel);
+		gameBoard.writeData(data);
+		data.writeEnum(status, Status.VALUES);
+	}
 
-    /* INTERACTION */
-    public void initialize(ItemStack specimen) {
-        reset();
-        if (gameBoard.initialize(specimen)) {
-            status = Status.PLAYING;
-            bountyLevel = BOUNTY_MAX;
-            lastUpdate = System.currentTimeMillis();
-        }
-    }
+	@Override
+	public void readData(PacketBufferForestry data) throws IOException {
+		bountyLevel = data.readInt();
+		gameBoard.readData(data);
+		status = data.readEnum(Status.VALUES);
+	}
 
-    public void probe(ItemStack specimen, IInventory inventory, int startSlot, int slotCount) {
-        if (status != Status.PLAYING) {
-            return;
-        }
+	/* INTERACTION */
+	public void initialize(ItemStack specimen) {
+		reset();
+		if (gameBoard.initialize(specimen)) {
+			status = Status.PLAYING;
+			bountyLevel = BOUNTY_MAX;
+			lastUpdate = System.currentTimeMillis();
+		}
+	}
 
-        Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
-        if (!optional.isPresent()) {
-            return;
-        }
-        IIndividual individual = optional.get();
+	public void probe(ItemStack specimen, IInventory inventory, int startSlot, int slotCount) {
+		if (status != Status.PLAYING) {
+			return;
+		}
 
-        if (bountyLevel > 1) {
-            bountyLevel--;
-        }
+		Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
+		if (!optional.isPresent()) {
+			return;
+		}
+		IIndividual individual = optional.get();
 
-        IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
-        IResearchHandler handler = species.getRoot().getComponent(ForestryComponentKeys.RESEARCH);
-        gameBoard.hideProbedTokens();
+		if (bountyLevel > 1) {
+			bountyLevel--;
+		}
 
-        int revealCount = getSampleSize(slotCount);
-        for (int i = 0; i < revealCount; i++) {
-            ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
-            if (!sample.isEmpty()) {
-                if (rand.nextFloat() < handler.getResearchSuitability(species, sample)) {
-                    gameBoard.probe();
-                }
-            }
-        }
+		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
+		IResearchHandler handler = species.getRoot().getComponent(ForestryComponentKeys.RESEARCH);
+		gameBoard.hideProbedTokens();
 
-        lastUpdate = System.currentTimeMillis();
-    }
+		int revealCount = getSampleSize(slotCount);
+		for (int i = 0; i < revealCount; i++) {
+			ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
+			if (!sample.isEmpty()) {
+				if (rand.nextFloat() < handler.getResearchSuitability(species, sample)) {
+					gameBoard.probe();
+				}
+			}
+		}
 
-    public void reset() {
-        bountyLevel = BOUNTY_MAX;
-        gameBoard.reset();
-        status = Status.EMPTY;
+		lastUpdate = System.currentTimeMillis();
+	}
 
-        lastUpdate = System.currentTimeMillis();
-    }
+	public void reset() {
+		bountyLevel = BOUNTY_MAX;
+		gameBoard.reset();
+		status = Status.EMPTY;
 
-    public void choose(int tokenIndex) {
-        if (getStatus() != Status.PLAYING) {
-            return;
-        }
+		lastUpdate = System.currentTimeMillis();
+	}
 
-        EscritoireGameToken token = gameBoard.getToken(tokenIndex);
-        if (token != null) {
-            status = gameBoard.choose(token);
-            lastUpdate = System.currentTimeMillis();
-        }
-    }
+	public void choose(int tokenIndex) {
+		if (getStatus() != Status.PLAYING) {
+			return;
+		}
 
-    public int getBountyLevel() {
-        return bountyLevel;
-    }
+		EscritoireGameToken token = gameBoard.getToken(tokenIndex);
+		if (token != null) {
+			status = gameBoard.choose(token);
+			lastUpdate = System.currentTimeMillis();
+		}
+	}
 
-    /* RETRIEVAL */
-    public int getSampleSize(int slotCount) {
-        if (status == Status.EMPTY) {
-            return 0;
-        }
+	public int getBountyLevel() {
+		return bountyLevel;
+	}
 
-        int samples = gameBoard.getTokenCount() / 4;
-        samples = Math.max(samples, 2);
-        return Math.min(samples, slotCount);
-    }
+	/* RETRIEVAL */
+	public int getSampleSize(int slotCount) {
+		if (status == Status.EMPTY) {
+			return 0;
+		}
 
-    public enum Status {
-        EMPTY, PLAYING, FAILURE, SUCCESS;
-        public static final Status[] VALUES = values();
-    }
+		int samples = gameBoard.getTokenCount() / 4;
+		samples = Math.max(samples, 2);
+		return Math.min(samples, slotCount);
+	}
+
+	public enum Status {
+		EMPTY, PLAYING, FAILURE, SUCCESS;
+		public static final Status[] VALUES = values();
+	}
 }

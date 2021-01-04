@@ -13,39 +13,41 @@ package forestry.apiculture.network.packets;
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.network.*;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketAlvearyChange extends ForestryPacket implements IForestryPacketClient {
-    private final BlockPos controllerPos;
+	private final BlockPos controllerPos;
 
-    public PacketAlvearyChange(BlockPos controllerPos) {
-        this.controllerPos = controllerPos;
-    }
+	public PacketAlvearyChange(BlockPos controllerPos) {
+		this.controllerPos = controllerPos;
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.ALVERAY_CONTROLLER_CHANGE;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.ALVERAY_CONTROLLER_CHANGE;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeBlockPos(controllerPos);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeBlockPos(controllerPos);
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-            BlockPos pos = data.readBlockPos();
-            TileUtil.actOnTile(
-                    player.world,
-                    pos,
-                    IMultiblockComponent.class,
-                    tile -> tile.getMultiblockLogic().getController().reassemble()
-            );
-        }
-    }
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+			BlockPos pos = data.readBlockPos();
+			TileUtil.actOnTile(
+					player.world,
+					pos,
+					IMultiblockComponent.class,
+					tile -> tile.getMultiblockLogic().getController().reassemble()
+			);
+		}
+	}
 }

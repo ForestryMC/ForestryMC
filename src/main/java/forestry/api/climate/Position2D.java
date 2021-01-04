@@ -6,7 +6,9 @@
 package forestry.api.climate;
 
 import com.google.common.base.MoreObjects;
+
 import forestry.api.core.INbtWritable;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -16,122 +18,122 @@ import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public class Position2D implements Comparable<Position2D>, INbtWritable {
-    public static final Position2D NULL_POSITION = new Position2D(0, 0);
-    /**
-     * X coordinate
-     */
-    private final int x;
-    /**
-     * Z coordinate
-     */
-    private final int z;
+	public static final Position2D NULL_POSITION = new Position2D(0, 0);
+	/**
+	 * X coordinate
+	 */
+	private final int x;
+	/**
+	 * Z coordinate
+	 */
+	private final int z;
 
-    public Position2D(Vector3i pos) {
-        this(pos.getX(), pos.getZ());
-    }
+	public Position2D(Vector3i pos) {
+		this(pos.getX(), pos.getZ());
+	}
 
-    public Position2D(Position2D pos) {
-        this(pos.getX(), pos.getZ());
-    }
+	public Position2D(Position2D pos) {
+		this(pos.getX(), pos.getZ());
+	}
 
-    public Position2D(int xIn, int zIn) {
-        this.x = xIn;
-        this.z = zIn;
-    }
+	public Position2D(int xIn, int zIn) {
+		this.x = xIn;
+		this.z = zIn;
+	}
 
-    public Position2D(CompoundNBT CompoundNBT) {
-        this.x = CompoundNBT.getInt("xPosition");
-        this.z = CompoundNBT.getInt("zPosition");
-    }
+	public Position2D(CompoundNBT CompoundNBT) {
+		this.x = CompoundNBT.getInt("xPosition");
+		this.z = CompoundNBT.getInt("zPosition");
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o instanceof Vector3i) {
-            Vector3i position = (Vector3i) o;
-            return this.getX() == position.getX() && this.getZ() == position.getZ();
-        } else if (!(o instanceof Position2D)) {
-            return false;
-        } else {
-            Position2D position = (Position2D) o;
-            return this.getX() == position.getX() && this.getZ() == position.getZ();
-        }
-    }
+	public Position2D clamp(Position2D min, Position2D max) {
+		int x = MathHelper.clamp(this.x, min.getX(), max.getX());
+		int z = MathHelper.clamp(this.z, min.getZ(), max.getZ());
+		return new Position2D(x, z);
+	}
 
-    public Position2D clamp(Position2D min, Position2D max) {
-        int x = MathHelper.clamp(this.x, min.getX(), max.getX());
-        int z = MathHelper.clamp(this.z, min.getZ(), max.getZ());
-        return new Position2D(x, z);
-    }
+	public Position2D add(int x, int z) {
+		return x == 0 && z == 0 ? this : new Position2D(this.getX() + x, this.getZ() + z);
+	}
 
-    public Position2D add(int x, int z) {
-        return x == 0 && z == 0 ? this : new Position2D(this.getX() + x, this.getZ() + z);
-    }
+	public int hashCode() {
+		return (this.getZ() + this.getX() * 31);
+	}
 
-    public int hashCode() {
-        return (this.getZ() + this.getX() * 31);
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		} else if (o instanceof Vector3i) {
+			Vector3i position = (Vector3i) o;
+			return this.getX() == position.getX() && this.getZ() == position.getZ();
+		} else if (!(o instanceof Position2D)) {
+			return false;
+		} else {
+			Position2D position = (Position2D) o;
+			return this.getX() == position.getX() && this.getZ() == position.getZ();
+		}
+	}
 
-    public int compareTo(Position2D o) {
-        return this.getZ() == o.getZ() ? this.getX() - o.getX() : this.getZ() - o.getZ();
-    }
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT nbt) {
-        nbt.putInt("xPosition", x);
-        nbt.putInt("zPosition", z);
-        return nbt;
-    }
+	public int compareTo(Position2D o) {
+		return this.getZ() == o.getZ() ? this.getX() - o.getX() : this.getZ() - o.getZ();
+	}
 
-    /**
-     * Gets the X coordinate.
-     */
-    public int getX() {
-        return this.x;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT nbt) {
+		nbt.putInt("xPosition", x);
+		nbt.putInt("zPosition", z);
+		return nbt;
+	}
 
-    /**
-     * Gets the Z coordinate.
-     */
-    public int getZ() {
-        return this.z;
-    }
+	/**
+	 * Gets the X coordinate.
+	 */
+	public int getX() {
+		return this.x;
+	}
 
-    public double getDistance(int xIn, int zIn) {
-        double d0 = this.getX() - xIn;
-        double d2 = this.getZ() - zIn;
-        return Math.sqrt(d0 * d0 + d2 * d2);
-    }
+	/**
+	 * Gets the Z coordinate.
+	 */
+	public int getZ() {
+		return this.z;
+	}
 
-    public double getDistance(Position2D pos) {
-        return getDistance(pos.getX(), pos.getZ());
-    }
+	public double getDistance(int xIn, int zIn) {
+		double d0 = this.getX() - xIn;
+		double d2 = this.getZ() - zIn;
+		return Math.sqrt(d0 * d0 + d2 * d2);
+	}
 
-    public double getDistance(BlockPos pos) {
-        return getDistance(pos.getX(), pos.getZ());
-    }
+	public double getDistance(Position2D pos) {
+		return getDistance(pos.getX(), pos.getZ());
+	}
 
-    public double distanceSq(double toX, double toZ) {
-        double d0 = (double) this.getX() - toX;
-        double d2 = (double) this.getZ() - toZ;
-        return d0 * d0 + d2 * d2;
-    }
+	public double getDistance(BlockPos pos) {
+		return getDistance(pos.getX(), pos.getZ());
+	}
 
-    public double distanceSqToCenter(double xIn, double zIn) {
-        double d0 = (double) this.getX() + 0.5D - xIn;
-        double d2 = (double) this.getZ() + 0.5D - zIn;
-        return d0 * d0 + d2 * d2;
-    }
+	public double distanceSq(double toX, double toZ) {
+		double d0 = (double) this.getX() - toX;
+		double d2 = (double) this.getZ() - toZ;
+		return d0 * d0 + d2 * d2;
+	}
 
-    public double distanceSq(Position2D to) {
-        return distanceSq(to.getX(), to.getZ());
-    }
+	public double distanceSqToCenter(double xIn, double zIn) {
+		double d0 = (double) this.getX() + 0.5D - xIn;
+		double d2 = (double) this.getZ() + 0.5D - zIn;
+		return d0 * d0 + d2 * d2;
+	}
 
-    public double distanceSq(BlockPos to) {
-        return distanceSq(to.getX(), to.getZ());
-    }
+	public double distanceSq(Position2D to) {
+		return distanceSq(to.getX(), to.getZ());
+	}
 
-    public String toString() {
-        return MoreObjects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
-    }
+	public double distanceSq(BlockPos to) {
+		return distanceSq(to.getX(), to.getZ());
+	}
 }

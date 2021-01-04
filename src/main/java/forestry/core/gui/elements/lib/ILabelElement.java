@@ -1,6 +1,7 @@
 package forestry.core.gui.elements.lib;
 
 import forestry.core.gui.elements.IProviderElement;
+
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 
@@ -11,20 +12,20 @@ import java.util.function.UnaryOperator;
  */
 public interface ILabelElement extends ITextElement, IProviderElement<ITextComponent> {
 
-    boolean isFitText();
+	boolean isFitText();
 
-    ILabelElement setFitText(boolean fitText);
+	ILabelElement setFitText(boolean fitText);
 
-    ILabelElement setShadow(boolean value);
+	ILabelElement setShadow(boolean value);
 
-    boolean hasShadow();
+	boolean hasShadow();
 
-    Style getStyle();
+	Style getStyle();
 
-    ILabelElement setStyle(Style style);
+	ILabelElement setStyle(Style style);
 
-    default ILabelElement actStyle(UnaryOperator<Style> action) {
-        return setStyle(action.apply(getStyle()));
-    }
+	default ILabelElement actStyle(UnaryOperator<Style> action) {
+		return setStyle(action.apply(getStyle()));
+	}
 
 }

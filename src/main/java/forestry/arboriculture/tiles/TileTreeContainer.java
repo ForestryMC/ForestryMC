@@ -11,6 +11,7 @@
 package forestry.arboriculture.tiles;
 
 import com.google.common.base.Preconditions;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.genetics.Tree;
@@ -21,7 +22,9 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.RenderUtil;
+
 import genetics.api.alleles.IAllele;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -30,6 +33,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -43,113 +47,113 @@ import java.util.Random;
  */
 public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnedTile {
 
-    @Nullable
-    private ITree containedTree;
-    private final OwnerHandler ownerHandler = new OwnerHandler();
+	private final OwnerHandler ownerHandler = new OwnerHandler();
+	@Nullable
+	private ITree containedTree;
 
-    public TileTreeContainer(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
-    }
+	public TileTreeContainer(TileEntityType<?> tileEntityTypeIn) {
+		super(tileEntityTypeIn);
+	}
 
-    /* SAVING & LOADING */
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
+	private static ITree getTree(String speciesUID) {
+		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
+		Preconditions.checkArgument(treeTemplate.length > 0, "There is no tree template for speciesUID %s", speciesUID);
+		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
+	}
 
-        if (compoundNBT.contains("ContainedTree")) {
-            containedTree = new Tree(compoundNBT.getCompound("ContainedTree"));
-        }
-        ownerHandler.read(compoundNBT);
-    }
+	/* SAVING & LOADING */
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
+		if (compoundNBT.contains("ContainedTree")) {
+			containedTree = new Tree(compoundNBT.getCompound("ContainedTree"));
+		}
+		ownerHandler.read(compoundNBT);
+	}
 
-        if (containedTree != null) {
-            CompoundNBT subcompound = new CompoundNBT();
-            containedTree.write(subcompound);
-            compoundNBT.put("ContainedTree", subcompound);
-        }
-        ownerHandler.write(compoundNBT);
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
 
-        return compoundNBT;
-    }
+		if (containedTree != null) {
+			CompoundNBT subcompound = new CompoundNBT();
+			containedTree.write(subcompound);
+			compoundNBT.put("ContainedTree", subcompound);
+		}
+		ownerHandler.write(compoundNBT);
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        String speciesUID = "";
-        ITree tree = getTree();
-        if (tree != null) {
-            speciesUID = tree.getIdentifier();
-        }
-        data.writeString(speciesUID);
-    }
+		return compoundNBT;
+	}
 
-    @Override
-    public void readData(PacketBufferForestry data) {
-        String speciesUID = data.readString();
-        ITree tree = getTree(speciesUID);
-        setTree(tree);
-    }
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+	}
 
-    private static ITree getTree(String speciesUID) {
-        IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
-        Preconditions.checkArgument(treeTemplate.length > 0, "There is no tree template for speciesUID %s", speciesUID);
-        return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
-    }
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
+		return NBTUtilForestry.writeStreamableToNbt(this, tag);
+	}
 
-    /* CLIENT INFORMATION */
+	/* CLIENT INFORMATION */
 
-    /* CONTAINED TREE */
-    public void setTree(ITree tree) {
-        this.containedTree = tree;
-        if (world != null && world.isRemote) {
-            RenderUtil.markForUpdate(getPos());
-        }
-    }
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		String speciesUID = "";
+		ITree tree = getTree();
+		if (tree != null) {
+			speciesUID = tree.getIdentifier();
+		}
+		data.writeString(speciesUID);
+	}
 
-    @Nullable
-    public ITree getTree() {
-        return this.containedTree;
-    }
+	@Override
+	public void readData(PacketBufferForestry data) {
+		String speciesUID = data.readString();
+		ITree tree = getTree(speciesUID);
+		setTree(tree);
+	}
 
-    @Override
-    public IOwnerHandler getOwnerHandler() {
-        return ownerHandler;
-    }
+	@Nullable
+	public ITree getTree() {
+		return this.containedTree;
+	}
 
-    /* UPDATING */
+	/* UPDATING */
 
-    /**
-     * Leaves and saplings will implement their logic here.
-     */
-    public abstract void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand);
+	/* CONTAINED TREE */
+	public void setTree(ITree tree) {
+		this.containedTree = tree;
+		if (world != null && world.isRemote) {
+			RenderUtil.markForUpdate(getPos());
+		}
+	}
 
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
-    }
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        super.onDataPacket(net, pkt);
-        CompoundNBT nbt = pkt.getNbtCompound();
-        handleUpdateTag(getBlockState(), nbt);
-    }
+	/**
+	 * Leaves and saplings will implement their logic here.
+	 */
+	public abstract void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand);
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT tag = super.getUpdateTag();
-        return NBTUtilForestry.writeStreamableToNbt(this, tag);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		super.onDataPacket(net, pkt);
+		CompoundNBT nbt = pkt.getNbtCompound();
+		handleUpdateTag(getBlockState(), nbt);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        super.handleUpdateTag(state, tag);
-        NBTUtilForestry.readStreamableFromNbt(this, tag);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
+		NBTUtilForestry.readStreamableFromNbt(this, tag);
+	}
 
 }

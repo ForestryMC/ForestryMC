@@ -13,6 +13,7 @@ package forestry.mail.items;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.mail.gui.ContainerCatalogue;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
@@ -22,13 +23,13 @@ import javax.annotation.Nullable;
 
 public class ItemCatalogue extends ItemWithGui {
 
-    public ItemCatalogue() {
-        super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
-    }
+	public ItemCatalogue() {
+		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
+	}
 
-    @Nullable
-    @Override
-    public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-        return new ContainerCatalogue(windowId, player.inventory);
-    }
+	@Nullable
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return new ContainerCatalogue(windowId, player.inventory);
+	}
 }

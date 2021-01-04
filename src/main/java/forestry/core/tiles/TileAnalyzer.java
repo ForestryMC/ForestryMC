@@ -29,9 +29,11 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.utils.RootUtils;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,6 +45,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -55,227 +58,227 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
-    private static final int TIME_TO_ANALYZE = 125;
-    private static final int HONEY_REQUIRED = 100;
+	private static final int TIME_TO_ANALYZE = 125;
+	private static final int HONEY_REQUIRED = 100;
 
-    private final FilteredTank resourceTank;
-    private final TankManager tankManager;
-    private final IInventory invInput;
-    private final IInventory invOutput;
+	private final FilteredTank resourceTank;
+	private final TankManager tankManager;
+	private final IInventory invInput;
+	private final IInventory invOutput;
 
-    @Nullable
-    private IIndividual specimenToAnalyze;
-    private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
+	@Nullable
+	private IIndividual specimenToAnalyze;
+	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
-    /* CONSTRUCTOR */
-    public TileAnalyzer() {
-        super(CoreTiles.ANALYZER.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
-        setInternalInventory(new InventoryAnalyzer(this));
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
-        tankManager = new TankManager(this, resourceTank);
-        invInput = new InventoryMapper(
-                getInternalInventory(),
-                InventoryAnalyzer.SLOT_INPUT_1,
-                InventoryAnalyzer.SLOT_INPUT_COUNT
-        );
-        invOutput = new InventoryMapper(
-                getInternalInventory(),
-                InventoryAnalyzer.SLOT_OUTPUT_1,
-                InventoryAnalyzer.SLOT_OUTPUT_COUNT
-        );
-    }
+	/* CONSTRUCTOR */
+	public TileAnalyzer() {
+		super(CoreTiles.ANALYZER.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
+		setInternalInventory(new InventoryAnalyzer(this));
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
+		tankManager = new TankManager(this, resourceTank);
+		invInput = new InventoryMapper(
+				getInternalInventory(),
+				InventoryAnalyzer.SLOT_INPUT_1,
+				InventoryAnalyzer.SLOT_INPUT_COUNT
+		);
+		invOutput = new InventoryMapper(
+				getInternalInventory(),
+				InventoryAnalyzer.SLOT_OUTPUT_1,
+				InventoryAnalyzer.SLOT_OUTPUT_COUNT
+		);
+	}
 
-    /* SAVING & LOADING */
+	/* SAVING & LOADING */
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
-        tankManager.write(compoundNBT);
-        return compoundNBT;
-    }
+	@Nullable
+	private Integer getInputSlotIndex() {
+		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
+			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
+			if (RootUtils.isIndividual(inputStack)) {
+				return slotIndex;
+			}
+		}
+		return null;
+	}
 
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
-        tankManager.read(compoundNBT);
+	/* Network */
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		ItemStack displayStack = getIndividualOnDisplay();
+		data.writeItemStack(displayStack);
+		tankManager.writeData(data);
+	}
 
-        ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
-        if (!stackToAnalyze.isEmpty()) {
-            specimenToAnalyze = RootUtils.getIndividualOrNull(stackToAnalyze);
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		individualOnDisplayClient = data.readItemStack();
+		tankManager.readData(data);
+	}
 
-    @Override
-    protected void updateServerSide() {
-        super.updateServerSide();
+	@Override
+	public void handleItemStackForDisplay(ItemStack itemStack) {
+		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
+			individualOnDisplayClient = itemStack;
+			//TODO
+			BlockPos pos = getPos();
+			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			//			world.markForRerender(getPos());
+		}
+	}
 
-        if (updateOnInterval(20)) {
-            // Check if we have suitable items waiting in the can slot
-            FluidHelper.drainContainers(tankManager, this, InventoryAnalyzer.SLOT_CAN);
-        }
-    }
+	/* STATE INFORMATION */
+	@Override
+	public boolean hasWork() {
+		moveSpecimenToAnalyzeSlot();
 
-    /* WORKING */
-    @Override
-    public boolean workCycle() {
-        ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
-        if (stackToAnalyze.isEmpty() || specimenToAnalyze == null) {
-            return false;
-        }
+		ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
 
-        if (!specimenToAnalyze.isAnalyzed()) {
-            FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
-            if (drained.isEmpty() || drained.getAmount() != HONEY_REQUIRED) {
-                return false;
-            }
-            resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.EXECUTE);
+		boolean hasSpecimen = !specimen.isEmpty();
+		boolean hasResource = true;
+		boolean hasSpace = true;
 
-            specimenToAnalyze.analyze();
+		if (hasSpecimen) {
+			hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
 
-            GeneticHelper.setIndividual(stackToAnalyze, specimenToAnalyze);
-        }
+			if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
+				FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+				hasResource = !drained.isEmpty() && drained.getAmount() == HONEY_REQUIRED;
+			}
+		}
 
-        boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
-        if (!added) {
-            return false;
-        }
+		getErrorLogic().setCondition(!hasSpecimen, EnumErrorCode.NO_SPECIMEN);
+		getErrorLogic().setCondition(!hasResource, EnumErrorCode.NO_RESOURCE_LIQUID);
+		getErrorLogic().setCondition(!hasSpace, EnumErrorCode.NO_SPACE_INVENTORY);
 
-        setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
-        PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-        NetworkUtil.sendNetworkPacket(packet, pos, world);
+		return hasSpecimen && hasResource && hasSpace;
+	}
 
-        return true;
-    }
+	@Override
+	protected void updateServerSide() {
+		super.updateServerSide();
 
-    @Nullable
-    private Integer getInputSlotIndex() {
-        for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
-            ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-            if (RootUtils.isIndividual(inputStack)) {
-                return slotIndex;
-            }
-        }
-        return null;
-    }
+		if (updateOnInterval(20)) {
+			// Check if we have suitable items waiting in the can slot
+			FluidHelper.drainContainers(tankManager, this, InventoryAnalyzer.SLOT_CAN);
+		}
+	}
 
-    /* Network */
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        ItemStack displayStack = getIndividualOnDisplay();
-        data.writeItemStack(displayStack);
-        tankManager.writeData(data);
-    }
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		tankManager.read(compoundNBT);
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        individualOnDisplayClient = data.readItemStack();
-        tankManager.readData(data);
-    }
+		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		if (!stackToAnalyze.isEmpty()) {
+			specimenToAnalyze = RootUtils.getIndividualOrNull(stackToAnalyze);
+		}
+	}
 
-    @Override
-    public void handleItemStackForDisplay(ItemStack itemStack) {
-        if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
-            individualOnDisplayClient = itemStack;
-            //TODO
-            BlockPos pos = getPos();
-            Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-            //			world.markForRerender(getPos());
-        }
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		tankManager.write(compoundNBT);
+		return compoundNBT;
+	}
 
-    /* STATE INFORMATION */
-    @Override
-    public boolean hasWork() {
-        moveSpecimenToAnalyzeSlot();
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankManager).cast();
+		}
+		return super.getCapability(capability, facing);
+	}
 
-        ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+	/* WORKING */
+	@Override
+	public boolean workCycle() {
+		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		if (stackToAnalyze.isEmpty() || specimenToAnalyze == null) {
+			return false;
+		}
 
-        boolean hasSpecimen = !specimen.isEmpty();
-        boolean hasResource = true;
-        boolean hasSpace = true;
+		if (!specimenToAnalyze.isAnalyzed()) {
+			FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
+			if (drained.isEmpty() || drained.getAmount() != HONEY_REQUIRED) {
+				return false;
+			}
+			resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.EXECUTE);
 
-        if (hasSpecimen) {
-            hasSpace = InventoryUtil.tryAddStack(invOutput, specimen, true, false);
+			specimenToAnalyze.analyze();
 
-            if (specimenToAnalyze != null && !specimenToAnalyze.isAnalyzed()) {
-                FluidStack drained = resourceTank.drain(HONEY_REQUIRED, IFluidHandler.FluidAction.SIMULATE);
-                hasResource = !drained.isEmpty() && drained.getAmount() == HONEY_REQUIRED;
-            }
-        }
+			GeneticHelper.setIndividual(stackToAnalyze, specimenToAnalyze);
+		}
 
-        getErrorLogic().setCondition(!hasSpecimen, EnumErrorCode.NO_SPECIMEN);
-        getErrorLogic().setCondition(!hasResource, EnumErrorCode.NO_RESOURCE_LIQUID);
-        getErrorLogic().setCondition(!hasSpace, EnumErrorCode.NO_SPACE_INVENTORY);
+		boolean added = InventoryUtil.tryAddStack(invOutput, stackToAnalyze, true);
+		if (!added) {
+			return false;
+		}
 
-        return hasSpecimen && hasResource && hasSpace;
-    }
+		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
+		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-    private void moveSpecimenToAnalyzeSlot() {
-        if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
-            return;
-        }
+		return true;
+	}
 
-        Integer slotIndex = getInputSlotIndex();
-        if (slotIndex == null) {
-            return;
-        }
+	private void moveSpecimenToAnalyzeSlot() {
+		if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
+			return;
+		}
 
-        ItemStack inputStack = invInput.getStackInSlot(slotIndex);
-        if (inputStack.isEmpty()) {
-            return;
-        }
+		Integer slotIndex = getInputSlotIndex();
+		if (slotIndex == null) {
+			return;
+		}
 
-        if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
-            inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
-        }
+		ItemStack inputStack = invInput.getStackInSlot(slotIndex);
+		if (inputStack.isEmpty()) {
+			return;
+		}
 
-        specimenToAnalyze = RootUtils.getIndividualOrNull(inputStack);
-        if (specimenToAnalyze == null) {
-            return;
-        }
+		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
+			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
+		}
 
-        setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
-        invInput.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
+		specimenToAnalyze = RootUtils.getIndividualOrNull(inputStack);
+		if (specimenToAnalyze == null) {
+			return;
+		}
 
-        if (specimenToAnalyze.isAnalyzed()) {
-            setTicksPerWorkCycle(1);
-            setEnergyPerWorkCycle(0);
-        } else {
-            setTicksPerWorkCycle(TIME_TO_ANALYZE);
-            setEnergyPerWorkCycle(Config.analyzerEnergyPerWork);
-        }
+		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
+		invInput.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
 
-        PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-        NetworkUtil.sendNetworkPacket(packet, pos, world);
-    }
+		if (specimenToAnalyze.isAnalyzed()) {
+			setTicksPerWorkCycle(1);
+			setEnergyPerWorkCycle(0);
+		} else {
+			setTicksPerWorkCycle(TIME_TO_ANALYZE);
+			setEnergyPerWorkCycle(Config.analyzerEnergyPerWork);
+		}
 
-    public ItemStack getIndividualOnDisplay() {
-        if (world.isRemote) {
-            return individualOnDisplayClient;
-        }
-        return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
-    }
+		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
+		NetworkUtil.sendNetworkPacket(packet, pos, world);
+	}
 
-    /* ILiquidTankTile */
+	/* ILiquidTankTile */
 
-    @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
+	public ItemStack getIndividualOnDisplay() {
+		if (world.isRemote) {
+			return individualOnDisplayClient;
+		}
+		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager).cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerAnalyzer(windowId, player.inventory, this);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAnalyzer(windowId, player.inventory, this);
+	}
 }

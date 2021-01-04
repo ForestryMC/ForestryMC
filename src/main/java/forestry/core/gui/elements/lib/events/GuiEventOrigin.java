@@ -2,6 +2,7 @@ package forestry.core.gui.elements.lib.events;
 
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -10,34 +11,34 @@ import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public enum GuiEventOrigin {
-    ANY {
-        @Override
-        public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-            return true;
-        }
-    },
-    SELF {
-        @Override
-        public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-            return element == origin;
-        }
-    },
-    PARENT {
-        @Override
-        public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-            return element != null && element.getParent() == origin;
-        }
-    },
-    DIRECT_CHILD {
-        @Override
-        public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-            if (!(element instanceof IElementGroup)) {
-                return false;
-            }
-            Collection<IGuiElement> elements = ((IElementGroup) element).getElements();
-            return elements.contains(origin);
-        }
-    };
+	ANY {
+		@Override
+		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+			return true;
+		}
+	},
+	SELF {
+		@Override
+		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+			return element == origin;
+		}
+	},
+	PARENT {
+		@Override
+		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+			return element != null && element.getParent() == origin;
+		}
+	},
+	DIRECT_CHILD {
+		@Override
+		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+			if (!(element instanceof IElementGroup)) {
+				return false;
+			}
+			Collection<IGuiElement> elements = ((IElementGroup) element).getElements();
+			return elements.contains(origin);
+		}
+	};
 
-    public abstract boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element);
+	public abstract boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element);
 }

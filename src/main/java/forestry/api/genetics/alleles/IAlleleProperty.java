@@ -6,18 +6,19 @@
 package forestry.api.genetics.alleles;
 
 import forestry.api.core.IBlockSubtype;
+
 import genetics.api.alleles.IAllele;
 
 public interface IAlleleProperty<A extends IAlleleProperty<A>> extends IAllele, Comparable<A>, IBlockSubtype {
 
-    /**
-     * To compare the allele for the properties
-     */
-    @Override
-    int compareTo(A o);
+	/**
+	 * To compare the allele for the properties
+	 */
+	@Override
+	int compareTo(A o);
 
-    @Override
-    default String getString() {
-        return getRegistryName().toString().replace(":", "_");
-    }
+	@Override
+	default String getString() {
+		return getRegistryName().toString().replace(":", "_");
+	}
 }

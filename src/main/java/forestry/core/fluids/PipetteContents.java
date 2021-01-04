@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -23,35 +24,35 @@ import java.util.List;
 
 public class PipetteContents {
 
-    private final FluidStack contents;
+	private final FluidStack contents;
 
-    public PipetteContents(FluidStack contents) {
-        this.contents = contents;
-    }
+	public PipetteContents(FluidStack contents) {
+		this.contents = contents;
+	}
 
-    @Nullable
-    public static PipetteContents create(ItemStack itemStack) {
-        FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(FluidStack.EMPTY);
-        if (contents.isEmpty()) {
-            return null;
-        }
-        return new PipetteContents(contents);
-    }
+	@Nullable
+	public static PipetteContents create(ItemStack itemStack) {
+		FluidStack contents = FluidUtil.getFluidContained(itemStack).orElse(FluidStack.EMPTY);
+		if (contents.isEmpty()) {
+			return null;
+		}
+		return new PipetteContents(contents);
+	}
 
-    public FluidStack getContents() {
-        return contents;
-    }
+	public FluidStack getContents() {
+		return contents;
+	}
 
-    public boolean isFull() {
-        return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
-    }
+	public boolean isFull() {
+		return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
+	}
 
-    public void addTooltip(List<ITextComponent> list) {
-        TextComponent descr = new TranslationTextComponent(contents.getFluid()
-                                                                   .getAttributes()
-                                                                   .getTranslationKey(contents));
-        descr.appendString(" (" + contents.getAmount() + " mb)");
+	public void addTooltip(List<ITextComponent> list) {
+		TextComponent descr = new TranslationTextComponent(contents.getFluid()
+				.getAttributes()
+				.getTranslationKey(contents));
+		descr.appendString(" (" + contents.getAmount() + " mb)");
 
-        list.add(descr);
-    }
+		list.add(descr);
+	}
 }

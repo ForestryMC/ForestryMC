@@ -31,6 +31,7 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.inventory.InventoryFabricator;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -45,6 +46,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -59,311 +61,311 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
-    private static final int MAX_HEAT = 5000;
+	private static final int MAX_HEAT = 5000;
 
-    private final InventoryAdapterTile craftingInventory;
-    private final TankManager tankManager;
-    private final FilteredTank moltenTank;
-    private int heat = 0;
-    private int meltingPoint = 0;
+	private final InventoryAdapterTile craftingInventory;
+	private final TankManager tankManager;
+	private final FilteredTank moltenTank;
+	private int heat = 0;
+	private int meltingPoint = 0;
 
-    public TileFabricator() {
-        super(FactoryTiles.FABRICATOR.tileType(), 1100, 3300);
-        setEnergyPerWorkCycle(200);
-        craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-        setInternalInventory(new InventoryFabricator(this));
+	public TileFabricator() {
+		super(FactoryTiles.FABRICATOR.tileType(), 1100, 3300);
+		setEnergyPerWorkCycle(200);
+		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+		setInternalInventory(new InventoryFabricator(this));
 
-        moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, true);
-        tankManager = new TankManager(this, moltenTank);
-    }
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, true);
+		tankManager = new TankManager(this, moltenTank);
+	}
 
-    @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
+	@Override
+	public void setWorldAndPos(World world, BlockPos pos) {
+		super.setWorldAndPos(world, pos);
 
-        moltenTank.setFilters(RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(world.getRecipeManager()));
-    }
+		moltenTank.setFilters(RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(world.getRecipeManager()));
+	}
 
-    /* SAVING & LOADING */
+	/* SAVING & LOADING */
 
-    @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        compound = super.write(compound);
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		tankManager.writeData(data);
+	}
 
-        compound.putInt("Heat", heat);
-        tankManager.write(compound);
-        craftingInventory.write(compound);
-        return compound;
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readData(data);
+	}
 
-    @Override
-    public void read(BlockState state, CompoundNBT compound) {
-        super.read(state, compound);
+	private void trySmelting() {
+		IInventoryAdapter inventory = getInternalInventory();
 
-        heat = compound.getInt("Heat");
-        tankManager.read(compound);
-        craftingInventory.read(compound);
-    }
+		ItemStack smeltResource = inventory.getStackInSlot(InventoryFabricator.SLOT_METAL);
+		if (smeltResource.isEmpty()) {
+			return;
+		}
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        tankManager.writeData(data);
-    }
+		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
+				world.getRecipeManager(),
+				smeltResource
+		);
+		if (smelt == null || smelt.getMeltingPoint() > heat) {
+			return;
+		}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        tankManager.readData(data);
-    }
+		FluidStack smeltFluid = smelt.getProduct();
+		if (moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.SIMULATE) == smeltFluid.getAmount()) {
+			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
+			moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.EXECUTE);
+			meltingPoint = smelt.getMeltingPoint();
+		}
+	}
 
-    /* UPDATING */
-    @Override
-    public void updateServerSide() {
-        super.updateServerSide();
+	private Optional<IFabricatorRecipe> getRecipe() {
+		IInventoryAdapter inventory = getInternalInventory();
+		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
+		FluidStack liquid = moltenTank.getFluid();
+		Optional<IFabricatorRecipe> recipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
+				world.getRecipeManager(),
+				plan,
+				craftingInventory
+		);
 
-        if (!moltenTank.isFull()) {
-            trySmelting();
-        }
+		if (!liquid.isEmpty() && recipe.isPresent() && !liquid.containsFluid(recipe.get().getLiquid())) {
+			return Optional.empty();
+		}
 
-        if (!moltenTank.isEmpty()) {
-            // Remove smelt if we have gone below melting point
-            if (heat < getMeltingPoint() - 100) {
-                moltenTank.drain(5, IFluidHandler.FluidAction.EXECUTE);
-            }
-        }
+		return recipe;
+	}
 
-        if (heat > 2500) {
-            this.heat -= 2;
-        } else if (heat > 0) {
-            this.heat--;
-        }
-    }
+	public ItemStack getResult(Optional<IFabricatorRecipe> myRecipePair) {
+		IFabricatorRecipe myRecipe = myRecipePair.get();
+		if (myRecipe == null) {
+			return ItemStack.EMPTY;
+		}
 
-    private void trySmelting() {
-        IInventoryAdapter inventory = getInternalInventory();
+		return myRecipe.getCraftingGridRecipe().getRecipeOutput().copy();
+	}
 
-        ItemStack smeltResource = inventory.getStackInSlot(InventoryFabricator.SLOT_METAL);
-        if (smeltResource.isEmpty()) {
-            return;
-        }
+	/* ISlotPickupWatcher */
+	@Override
+	public void onTake(int slotIndex, PlayerEntity player) {
+		if (slotIndex == InventoryFabricator.SLOT_RESULT) {
+			decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
+		}
+	}
 
-        IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-                world.getRecipeManager(),
-                smeltResource
-        );
-        if (smelt == null || smelt.getMeltingPoint() > heat) {
-            return;
-        }
+	private void craftResult() {
+		Optional<IFabricatorRecipe> recipe = getRecipe();
+		ItemStack craftResult = getResult(recipe);
+		IFabricatorRecipe myRecipe = recipe.get();
+		if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
+			FluidStack liquid = myRecipe.getLiquid();
 
-        FluidStack smeltFluid = smelt.getProduct();
-        if (moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.SIMULATE) == smeltFluid.getAmount()) {
-            this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
-            moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.EXECUTE);
-            meltingPoint = smelt.getMeltingPoint();
-        }
-    }
+			// Remove resources
+			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
+					craftingInventory,
+					InventoryGhostCrafting.SLOT_CRAFTING_1,
+					InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+			);
+			if (removeFromInventory(crafting, false)) {
+				FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
+				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
+					removeFromInventory(crafting, true);
+					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
-    @Override
-    public boolean workCycle() {
-        this.heat += 100;
-        if (this.heat > MAX_HEAT) {
-            this.heat = MAX_HEAT;
-        }
+					// Damage plan
+					if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
+						Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
+						if (planItem instanceof ICraftingPlan) {
+							ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(
+									getStackInSlot(InventoryFabricator.SLOT_PLAN),
+									craftResult
+							);
+							setInventorySlotContents(InventoryFabricator.SLOT_PLAN, planUsed);
+						}
+					}
 
-        craftResult();
+					setInventorySlotContents(InventoryFabricator.SLOT_RESULT, craftResult);
+				}
+			}
+		}
+	}
 
-        return true;
-    }
+	private boolean removeFromInventory(
+			NonNullList<ItemStack> set,
+			boolean doRemove
+	) {
+		IInventory inventory = new InventoryMapper(
+				this,
+				InventoryFabricator.SLOT_INVENTORY_1,
+				InventoryFabricator.SLOT_INVENTORY_COUNT
+		);
+		return InventoryUtil.removeSets(inventory, 1, set, null, true, false, doRemove);
+	}
 
-    private Optional<IFabricatorRecipe> getRecipe() {
-        IInventoryAdapter inventory = getInternalInventory();
-        ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
-        FluidStack liquid = moltenTank.getFluid();
-        Optional<IFabricatorRecipe> recipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
-                world.getRecipeManager(),
-                plan,
-                craftingInventory
-        );
+	@Override
+	public boolean hasWork() {
+		boolean hasRecipe = true;
+		boolean hasLiquidResources = true;
+		boolean hasResources = true;
 
-        if (!liquid.isEmpty() && recipe.isPresent() && !liquid.containsFluid(recipe.get().getLiquid())) {
-            return Optional.empty();
-        }
+		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
+		Optional<IFabricatorRecipe> optionalRecipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
+				world.getRecipeManager(),
+				plan,
+				craftingInventory
+		);
+		if (optionalRecipe.isPresent()) {
+			IFabricatorRecipe recipe = optionalRecipe.get();
+			if (recipe == null) {
+				return false;
+			}
+			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
+					craftingInventory,
+					InventoryGhostCrafting.SLOT_CRAFTING_1,
+					InventoryGhostCrafting.SLOT_CRAFTING_COUNT
+			);
+			hasResources = removeFromInventory(crafting, false);
+			FluidStack toDrain = recipe.getLiquid();
+			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
+			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
+		} else {
+			hasRecipe = false;
+		}
 
-        return recipe;
-    }
+		IErrorLogic errorLogic = getErrorLogic();
+		errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
+		errorLogic.setCondition(!hasLiquidResources, EnumErrorCode.NO_RESOURCE_LIQUID);
+		errorLogic.setCondition(!hasResources, EnumErrorCode.NO_RESOURCE_INVENTORY);
 
-    public ItemStack getResult(Optional<IFabricatorRecipe> myRecipePair) {
-        IFabricatorRecipe myRecipe = myRecipePair.get();
-        if (myRecipe == null) {
-            return ItemStack.EMPTY;
-        }
+		return hasRecipe;
+	}
 
-        return myRecipe.getCraftingGridRecipe().getRecipeOutput().copy();
-    }
+	/* UPDATING */
+	@Override
+	public void updateServerSide() {
+		super.updateServerSide();
 
-    /* ISlotPickupWatcher */
-    @Override
-    public void onTake(int slotIndex, PlayerEntity player) {
-        if (slotIndex == InventoryFabricator.SLOT_RESULT) {
-            decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
-        }
-    }
+		if (!moltenTank.isFull()) {
+			trySmelting();
+		}
 
-    private void craftResult() {
-        Optional<IFabricatorRecipe> recipe = getRecipe();
-        ItemStack craftResult = getResult(recipe);
-        IFabricatorRecipe myRecipe = recipe.get();
-        if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
-            FluidStack liquid = myRecipe.getLiquid();
+		if (!moltenTank.isEmpty()) {
+			// Remove smelt if we have gone below melting point
+			if (heat < getMeltingPoint() - 100) {
+				moltenTank.drain(5, IFluidHandler.FluidAction.EXECUTE);
+			}
+		}
 
-            // Remove resources
-            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
-                    craftingInventory,
-                    InventoryGhostCrafting.SLOT_CRAFTING_1,
-                    InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-            );
-            if (removeFromInventory(crafting, false)) {
-                FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
-                if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
-                    removeFromInventory(crafting, true);
-                    moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
+		if (heat > 2500) {
+			this.heat -= 2;
+		} else if (heat > 0) {
+			this.heat--;
+		}
+	}
 
-                    // Damage plan
-                    if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
-                        Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
-                        if (planItem instanceof ICraftingPlan) {
-                            ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(
-                                    getStackInSlot(InventoryFabricator.SLOT_PLAN),
-                                    craftResult
-                            );
-                            setInventorySlotContents(InventoryFabricator.SLOT_PLAN, planUsed);
-                        }
-                    }
+	@Override
+	public void read(BlockState state, CompoundNBT compound) {
+		super.read(state, compound);
 
-                    setInventorySlotContents(InventoryFabricator.SLOT_RESULT, craftResult);
-                }
-            }
-        }
-    }
+		heat = compound.getInt("Heat");
+		tankManager.read(compound);
+		craftingInventory.read(compound);
+	}
 
-    private boolean removeFromInventory(
-            NonNullList<ItemStack> set,
-            boolean doRemove
-    ) {
-        IInventory inventory = new InventoryMapper(
-                this,
-                InventoryFabricator.SLOT_INVENTORY_1,
-                InventoryFabricator.SLOT_INVENTORY_COUNT
-        );
-        return InventoryUtil.removeSets(inventory, 1, set, null, true, false, doRemove);
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compound) {
+		compound = super.write(compound);
 
-    @Override
-    public boolean hasWork() {
-        boolean hasRecipe = true;
-        boolean hasLiquidResources = true;
-        boolean hasResources = true;
+		compound.putInt("Heat", heat);
+		tankManager.write(compound);
+		craftingInventory.write(compound);
+		return compound;
+	}
 
-        ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-        Optional<IFabricatorRecipe> optionalRecipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
-                world.getRecipeManager(),
-                plan,
-                craftingInventory
-        );
-        if (optionalRecipe.isPresent()) {
-            IFabricatorRecipe recipe = optionalRecipe.get();
-            if (recipe == null) {
-                return false;
-            }
-            NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
-                    craftingInventory,
-                    InventoryGhostCrafting.SLOT_CRAFTING_1,
-                    InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-            );
-            hasResources = removeFromInventory(crafting, false);
-            FluidStack toDrain = recipe.getLiquid();
-            FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
-            hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
-        } else {
-            hasRecipe = false;
-        }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankManager).cast();
+		}
+		return super.getCapability(capability, facing);
+	}
 
-        IErrorLogic errorLogic = getErrorLogic();
-        errorLogic.setCondition(!hasRecipe, EnumErrorCode.NO_RECIPE);
-        errorLogic.setCondition(!hasLiquidResources, EnumErrorCode.NO_RESOURCE_LIQUID);
-        errorLogic.setCondition(!hasResources, EnumErrorCode.NO_RESOURCE_INVENTORY);
+	@Override
+	public boolean workCycle() {
+		this.heat += 100;
+		if (this.heat > MAX_HEAT) {
+			this.heat = MAX_HEAT;
+		}
 
-        return hasRecipe;
-    }
+		craftResult();
 
-    public int getHeatScaled(int i) {
-        return heat * i / MAX_HEAT;
-    }
+		return true;
+	}
 
-    private int getMeltingPoint() {
-        if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
-            IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-                    world.getRecipeManager(),
-                    this.getStackInSlot(InventoryFabricator.SLOT_METAL)
-            );
-            if (smelt != null) {
-                return smelt.getMeltingPoint();
-            }
-        } else if (moltenTank.getFluidAmount() > 0) {
-            return meltingPoint;
-        }
+	public int getHeatScaled(int i) {
+		return heat * i / MAX_HEAT;
+	}
 
-        return 0;
-    }
+	private int getMeltingPoint() {
+		if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
+			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
+					world.getRecipeManager(),
+					this.getStackInSlot(InventoryFabricator.SLOT_METAL)
+			);
+			if (smelt != null) {
+				return smelt.getMeltingPoint();
+			}
+		} else if (moltenTank.getFluidAmount() > 0) {
+			return meltingPoint;
+		}
 
-    public int getMeltingPointScaled(int i) {
-        int meltingPoint = getMeltingPoint();
+		return 0;
+	}
 
-        if (meltingPoint <= 0) {
-            return 0;
-        } else {
-            return meltingPoint * i / MAX_HEAT;
-        }
-    }
+	public int getMeltingPointScaled(int i) {
+		int meltingPoint = getMeltingPoint();
 
-    /* SMP */
-    public void getGUINetworkData(int i, int j) {
-        if (i == 0) {
-            heat = j;
-        } else if (i == 1) {
-            meltingPoint = j;
-        }
-    }
+		if (meltingPoint <= 0) {
+			return 0;
+		} else {
+			return meltingPoint * i / MAX_HEAT;
+		}
+	}
 
-    public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-        iCrafting.sendWindowProperty(container, 0, heat);
-        iCrafting.sendWindowProperty(container, 1, getMeltingPoint());
-    }
+	/* SMP */
+	public void getGUINetworkData(int i, int j) {
+		if (i == 0) {
+			heat = j;
+		} else if (i == 1) {
+			meltingPoint = j;
+		}
+	}
 
-    /**
-     * @return Inaccessible crafting inventory for the craft grid.
-     */
-    public InventoryAdapter getCraftingInventory() {
-        return craftingInventory;
-    }
+	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+		iCrafting.sendWindowProperty(container, 0, heat);
+		iCrafting.sendWindowProperty(container, 1, getMeltingPoint());
+	}
 
-    @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
+	/**
+	 * @return Inaccessible crafting inventory for the craft grid.
+	 */
+	public InventoryAdapter getCraftingInventory() {
+		return craftingInventory;
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager).cast();
-        }
-        return super.getCapability(capability, facing);
-    }
+	@Override
+	public TankManager getTankManager() {
+		return tankManager;
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerFabricator(windowId, player.inventory, this);
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerFabricator(windowId, player.inventory, this);
+	}
 }

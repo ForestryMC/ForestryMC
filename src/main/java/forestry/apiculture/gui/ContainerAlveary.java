@@ -18,40 +18,42 @@ import forestry.core.gui.ContainerTile;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+
 import net.minecraftforge.common.util.LazyOptional;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-    public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-        TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
-        return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
-    }
+	private int beeProgress = -1;
 
-    public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
-        super(windowid, ApicultureContainers.ALVEARY.containerType(), playerInv, tile, 8, 108);
-        ContainerBeeHelper.addSlots(this, tile, false);
+	public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
+		super(windowid, ApicultureContainers.ALVEARY.containerType(), playerInv, tile, 8, 108);
+		ContainerBeeHelper.addSlots(this, tile, false);
 
-        tile.getBeekeepingLogic().clearCachedValues();
-        LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
-        if (playerInv.player instanceof ServerPlayerEntity) {
-            listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
-        }
-    }
+		tile.getBeekeepingLogic().clearCachedValues();
+		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		if (playerInv.player instanceof ServerPlayerEntity) {
+			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
+		}
+	}
 
-    private int beeProgress = -1;
+	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+		TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
+		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
+	}
 
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
 
-        int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
-        if (this.beeProgress != beeProgress) {
-            this.beeProgress = beeProgress;
-            IForestryPacketClient packet = new PacketGuiUpdate(tile);
-            sendPacketToListeners(packet);
-        }
-    }
+		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
+		if (this.beeProgress != beeProgress) {
+			this.beeProgress = beeProgress;
+			IForestryPacketClient packet = new PacketGuiUpdate(tile);
+			sendPacketToListeners(packet);
+		}
+	}
 }

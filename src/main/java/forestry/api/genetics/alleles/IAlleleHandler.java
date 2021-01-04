@@ -7,6 +7,7 @@ package forestry.api.genetics.alleles;
 
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IGeneticRegistry;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.classification.IClassification;
 
@@ -18,24 +19,24 @@ import genetics.api.classification.IClassification;
  */
 public interface IAlleleHandler {
 
-    /**
-     * Called when an allele is registered with {@link IGeneticRegistry}.
-     *
-     * @param allele Allele which was registered.
-     */
-    void onRegisterAllele(IAllele allele);
+	/**
+	 * Called when an allele is registered with {@link IGeneticRegistry}.
+	 *
+	 * @param allele Allele which was registered.
+	 */
+	void onRegisterAllele(IAllele allele);
 
-    /**
-     * Called when a classification is registered with {@link IGeneticRegistry}.
-     *
-     * @param classification Classification which was registered.
-     */
-    void onRegisterClassification(IClassification classification);
+	/**
+	 * Called when a classification is registered with {@link IGeneticRegistry}.
+	 *
+	 * @param classification Classification which was registered.
+	 */
+	void onRegisterClassification(IClassification classification);
 
-    /**
-     * Called when a fruit family is registered with {@link IGeneticRegistry}.
-     *
-     * @param family Fruit family which was registered.
-     */
-    void onRegisterFruitFamily(IFruitFamily family);
+	/**
+	 * Called when a fruit family is registered with {@link IGeneticRegistry}.
+	 *
+	 * @param family Fruit family which was registered.
+	 */
+	void onRegisterFruitFamily(IFruitFamily family);
 }

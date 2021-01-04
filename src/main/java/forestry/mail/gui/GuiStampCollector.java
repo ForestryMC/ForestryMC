@@ -13,22 +13,23 @@ package forestry.mail.gui;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.mail.tiles.TileStampCollector;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiStampCollector extends GuiForestry<ContainerStampCollector> {
-    private final TileStampCollector tile;
+	private final TileStampCollector tile;
 
-    public GuiStampCollector(ContainerStampCollector container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "philatelist.png", container, inv, title);
-        this.tile = container.getTile();
-        this.xSize = 176;
-        this.ySize = 193;
-    }
+	public GuiStampCollector(ContainerStampCollector container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "philatelist.png", container, inv, title);
+		this.tile = container.getTile();
+		this.xSize = 176;
+		this.ySize = 193;
+	}
 
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(tile);
-        addHintLedger("philatelist");
-    }
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+		addHintLedger("philatelist");
+	}
 }

@@ -13,37 +13,38 @@ package forestry.mail.network.packets;
 import forestry.core.network.*;
 import forestry.core.tiles.TileUtil;
 import forestry.mail.tiles.TileTrader;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 public class PacketTraderAddressRequest extends ForestryPacket implements IForestryPacketServer {
-    private final BlockPos pos;
-    private final String addressName;
+	private final BlockPos pos;
+	private final String addressName;
 
-    public PacketTraderAddressRequest(TileTrader tile, String addressName) {
-        this.pos = tile.getPos();
-        this.addressName = addressName;
-    }
+	public PacketTraderAddressRequest(TileTrader tile, String addressName) {
+		this.pos = tile.getPos();
+		this.addressName = addressName;
+	}
 
-    @Override
-    public PacketIdServer getPacketId() {
-        return PacketIdServer.TRADING_ADDRESS_REQUEST;
-    }
+	@Override
+	public PacketIdServer getPacketId() {
+		return PacketIdServer.TRADING_ADDRESS_REQUEST;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeBlockPos(pos);
-        data.writeString(addressName);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeBlockPos(pos);
+		data.writeString(addressName);
+	}
 
-    public static class Handler implements IForestryPacketHandlerServer {
+	public static class Handler implements IForestryPacketHandlerServer {
 
-        @Override
-        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-            BlockPos pos = data.readBlockPos();
-            String addressName = data.readString();
+		@Override
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+			BlockPos pos = data.readBlockPos();
+			String addressName = data.readString();
 
-            TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressRequest(addressName));
-        }
-    }
+			TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressRequest(addressName));
+		}
+	}
 }

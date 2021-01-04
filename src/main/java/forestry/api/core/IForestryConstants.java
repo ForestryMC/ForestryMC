@@ -6,11 +6,12 @@
 package forestry.api.core;
 
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.event.LootTableLoadEvent;
 
 public interface IForestryConstants {
-    /**
-     * @return The {@link LootTableLoadEvent} key for adding items to the Forestry Villager chest.
-     */
-    ResourceLocation getVillagerChestLootKey();
+	/**
+	 * @return The {@link LootTableLoadEvent} key for adding items to the Forestry Villager chest.
+	 */
+	ResourceLocation getVillagerChestLootKey();
 }

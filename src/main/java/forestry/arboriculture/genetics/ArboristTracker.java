@@ -15,31 +15,33 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.core.genetics.BreedingTracker;
+
 import genetics.api.individual.IIndividual;
+
 import net.minecraft.entity.player.PlayerEntity;
 
 public class ArboristTracker extends BreedingTracker implements IArboristTracker {
 
-    /**
-     * Required for creation from map storage
-     */
-    public ArboristTracker(String s) {
-        super(s, ModuleArboriculture.treekeepingMode);
-    }
+	/**
+	 * Required for creation from map storage
+	 */
+	public ArboristTracker(String s) {
+		super(s, ModuleArboriculture.treekeepingMode);
+	}
 
-    @Override
-    protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-        //TODO world cast
-        return TreeManager.treeRoot.getBreedingTracker(player.world, player.getGameProfile());
-    }
+	@Override
+	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+		//TODO world cast
+		return TreeManager.treeRoot.getBreedingTracker(player.world, player.getGameProfile());
+	}
 
-    @Override
-    protected String speciesRootUID() {
-        return TreeRoot.UID;
-    }
+	@Override
+	protected String speciesRootUID() {
+		return TreeRoot.UID;
+	}
 
-    @Override
-    public void registerPickup(IIndividual individual) {
-    }
+	@Override
+	public void registerPickup(IIndividual individual) {
+	}
 
 }

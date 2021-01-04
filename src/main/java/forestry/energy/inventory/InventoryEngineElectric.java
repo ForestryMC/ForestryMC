@@ -12,23 +12,24 @@ package forestry.energy.inventory;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.energy.tiles.TileEngineElectric;
+
 import net.minecraft.item.ItemStack;
 
 //import ic2.api.item.ElectricItem;
 
 public class InventoryEngineElectric extends InventoryAdapterTile<TileEngineElectric> {
-    public static final short SLOT_BATTERY = 0;
+	public static final short SLOT_BATTERY = 0;
 
-    public InventoryEngineElectric(TileEngineElectric engineTin) {
-        super(engineTin, 1, "electrical");
-    }
+	public InventoryEngineElectric(TileEngineElectric engineTin) {
+		super(engineTin, 1, "electrical");
+	}
 
-    @Override
-    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-        if (slotIndex == SLOT_BATTERY) {
-            //			return ElectricItem.manager.getCharge(itemStack) > 0;
-            return false;
-        }
-        return false;
-    }
+	@Override
+	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		if (slotIndex == SLOT_BATTERY) {
+			//			return ElectricItem.manager.getCharge(itemStack) > 0;
+			return false;
+		}
+		return false;
+	}
 }

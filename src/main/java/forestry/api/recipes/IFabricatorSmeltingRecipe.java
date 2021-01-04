@@ -8,39 +8,40 @@ package forestry.api.recipes;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
-    IRecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
+	IRecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
 
-    /**
-     * @return item to be melted down
-     */
-    Ingredient getResource();
+	/**
+	 * @return item to be melted down
+	 */
+	Ingredient getResource();
 
-    /**
-     * @return temperature at which the item melts. Glass is 1000, Sand is 3000.
-     */
-    int getMeltingPoint();
+	/**
+	 * @return temperature at which the item melts. Glass is 1000, Sand is 3000.
+	 */
+	int getMeltingPoint();
 
-    /**
-     * @return resulting fluid
-     */
-    FluidStack getProduct();
+	/**
+	 * @return resulting fluid
+	 */
+	FluidStack getProduct();
 
-    @Override
-    default IRecipeType<?> getType() {
-        return TYPE;
-    }
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 
-    @Override
-    default IRecipeSerializer<?> getSerializer() {
-        return Companion.SERIALIZER;
-    }
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-    class Companion {
-        @ObjectHolder("forestry:fabricator_smelting")
-        public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
-    }
+	class Companion {
+		@ObjectHolder("forestry:fabricator_smelting")
+		public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
+	}
 }

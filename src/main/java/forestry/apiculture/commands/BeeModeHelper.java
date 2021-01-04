@@ -13,6 +13,7 @@ package forestry.apiculture.commands;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.core.commands.ICommandModeHelper;
+
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -20,40 +21,40 @@ import java.util.Collections;
 import java.util.List;
 
 public class BeeModeHelper implements ICommandModeHelper {
-    @Override
-    public String[] getModeNames() {
-        List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
-        int modeStringCount = beekeepingModes.size();
-        List<String> modeStrings = new ArrayList<>(modeStringCount);
-        for (IBeekeepingMode mode : beekeepingModes) {
-            modeStrings.add(mode.getName());
-        }
+	@Override
+	public String[] getModeNames() {
+		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
+		int modeStringCount = beekeepingModes.size();
+		List<String> modeStrings = new ArrayList<>(modeStringCount);
+		for (IBeekeepingMode mode : beekeepingModes) {
+			modeStrings.add(mode.getName());
+		}
 
-        return modeStrings.toArray(new String[modeStringCount]);
-    }
+		return modeStrings.toArray(new String[modeStringCount]);
+	}
 
-    @Override
-    public String getModeName(World world) {
-        return BeeManager.beeRoot.getBeekeepingMode(world).getName();
-    }
+	@Override
+	public String getModeName(World world) {
+		return BeeManager.beeRoot.getBeekeepingMode(world).getName();
+	}
 
-    @Override
-    public boolean setMode(World world, String modeName) {
-        IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
-        if (mode != null) {
-            BeeManager.beeRoot.setBeekeepingMode(world, mode);
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean setMode(World world, String modeName) {
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
+		if (mode != null) {
+			BeeManager.beeRoot.setBeekeepingMode(world, mode);
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public Iterable<String> getDescription(String modeName) {
-        IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
-        if (mode == null) {
-            return Collections.emptyList();
-        }
-        return mode.getDescription();
-    }
+	@Override
+	public Iterable<String> getDescription(String modeName) {
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
+		if (mode == null) {
+			return Collections.emptyList();
+		}
+		return mode.getDescription();
+	}
 
 }

@@ -11,6 +11,7 @@
 package forestry.apiculture;
 
 import forestry.api.apiculture.IBeekeepingLogic;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -19,64 +20,64 @@ import java.util.Collections;
 import java.util.List;
 
 public class FakeBeekeepingLogic implements IBeekeepingLogic {
-    public static final FakeBeekeepingLogic instance = new FakeBeekeepingLogic();
+	public static final FakeBeekeepingLogic instance = new FakeBeekeepingLogic();
 
-    private FakeBeekeepingLogic() {
+	private FakeBeekeepingLogic() {
 
-    }
+	}
 
-    @Override
-    public boolean canWork() {
-        return false;
-    }
+	@Override
+	public boolean canWork() {
+		return false;
+	}
 
-    @Override
-    public void doWork() {
+	@Override
+	public void doWork() {
 
-    }
+	}
 
-    @Override
-    public void clearCachedValues() {
+	@Override
+	public void clearCachedValues() {
 
-    }
+	}
 
-    @Override
-    public void syncToClient() {
+	@Override
+	public void syncToClient() {
 
-    }
+	}
 
-    @Override
-    public void syncToClient(ServerPlayerEntity player) {
+	@Override
+	public void syncToClient(ServerPlayerEntity player) {
 
-    }
+	}
 
-    @Override
-    public int getBeeProgressPercent() {
-        return 0;
-    }
+	@Override
+	public int getBeeProgressPercent() {
+		return 0;
+	}
 
-    @Override
-    public boolean canDoBeeFX() {
-        return false;
-    }
+	@Override
+	public boolean canDoBeeFX() {
+		return false;
+	}
 
-    @Override
-    public void doBeeFX() {
+	@Override
+	public void doBeeFX() {
 
-    }
+	}
 
-    @Override
-    public List<BlockPos> getFlowerPositions() {
-        return Collections.emptyList();
-    }
+	@Override
+	public List<BlockPos> getFlowerPositions() {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public void read(CompoundNBT CompoundNBT) {
+	@Override
+	public void read(CompoundNBT CompoundNBT) {
 
-    }
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT CompoundNBT) {
-        return CompoundNBT;
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT CompoundNBT) {
+		return CompoundNBT;
+	}
 }

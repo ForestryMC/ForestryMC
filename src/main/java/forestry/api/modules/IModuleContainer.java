@@ -10,26 +10,26 @@ import forestry.core.config.forge_old.Configuration;
 import java.util.Collection;
 
 public interface IModuleContainer {
-    /**
-     * @return Unique identifier for the module container, no spaces!
-     */
-    String getID();
+	/**
+	 * @return Unique identifier for the module container, no spaces!
+	 */
+	String getID();
 
-    boolean isAvailable();
+	boolean isAvailable();
 
-    Configuration getModulesConfig();
+	Configuration getModulesConfig();
 
-    /**
-     * @return true if the module is enabled in the config file of this container.
-     */
-    boolean isModuleEnabled(IForestryModule module);
+	/**
+	 * @return true if the module is enabled in the config file of this container.
+	 */
+	boolean isModuleEnabled(IForestryModule module);
 
-    /**
-     * Called after configured the modules.
-     */
-    default void onConfiguredModules(
-            Collection<IForestryModule> activeModules,
-            Collection<IForestryModule> unloadedModules
-    ) {
-    }
+	/**
+	 * Called after configured the modules.
+	 */
+	default void onConfiguredModules(
+			Collection<IForestryModule> activeModules,
+			Collection<IForestryModule> unloadedModules
+	) {
+	}
 }

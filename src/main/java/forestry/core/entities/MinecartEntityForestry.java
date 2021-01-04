@@ -11,6 +11,7 @@
 package forestry.core.entities;
 
 import forestry.core.tiles.ITitled;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -24,75 +25,75 @@ import net.minecraft.world.World;
 //TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
 public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {
 
-    public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, World world) {
-        super(type, world);
-        setHasDisplayTile(true);
-    }
+	public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, World world) {
+		super(type, world);
+		setHasDisplayTile(true);
+	}
 
-    public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
-        super(type, world, posX, posY, posZ);
-        setHasDisplayTile(true);
-    }
+	public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
+		super(type, world, posX, posY, posZ);
+		setHasDisplayTile(true);
+	}
 
-    //	//TODO - check
-    //	@Override
-    //	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
-    //		if(super.processInitialInteract(player, hand)) {
-    //			return true;
-    //		}
-    //		//TODO sides
-    //		NetworkHooks.openGui((ServerPlayerEntity) player, );
-    //		return true;
-    //	}
+	//	//TODO - check
+	//	@Override
+	//	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+	//		if(super.processInitialInteract(player, hand)) {
+	//			return true;
+	//		}
+	//		//TODO sides
+	//		NetworkHooks.openGui((ServerPlayerEntity) player, );
+	//		return true;
+	//	}
 
-    /* MinecartEntity */
-    @Override
-    public boolean canBeRidden() {
-        return false;
-    }
+	// cart itemStack
+	@Override
+	public abstract ItemStack getCartItem();
 
-    @Override
-    public boolean isPoweredCart() {
-        return false;
-    }
+	@Override
+	public boolean isPoweredCart() {
+		return false;
+	}
 
-    // cart contents
-    @Override
-    public abstract BlockState getDisplayTile();
+	/* MinecartEntity */
+	@Override
+	public boolean canBeRidden() {
+		return false;
+	}
 
-    // cart itemStack
-    @Override
-    public abstract ItemStack getCartItem();
+	@Override
+	public void killMinecart(DamageSource damageSource) {
+		super.killMinecart(damageSource);
+		if (/*this.world.getGameRules().getBoolean("doEntityDrops")*/ true) {    //TODO - revisit when class is deobsfucated
+			Block block = getDisplayTile().getBlock();
+			entityDropItem(new ItemStack(block), 0.0F);
+		}
+	}
 
-    @Override
-    public void killMinecart(DamageSource damageSource) {
-        super.killMinecart(damageSource);
-        if (/*this.world.getGameRules().getBoolean("doEntityDrops")*/ true) {    //TODO - revisit when class is deobsfucated
-            Block block = getDisplayTile().getBlock();
-            entityDropItem(new ItemStack(block), 0.0F);
-        }
-    }
+	@Override
+	public Type getMinecartType() {
+		return null;
+	}
 
-    // fix cart contents rendering as black in the End dimension
-    @Override
-    public float getBrightness() {
-        return 1.0f;
-    }
+	// cart contents
+	@Override
+	public abstract BlockState getDisplayTile();
 
-    @Override
-    public ITextComponent getName() {
-        return new TranslationTextComponent(getUnlocalizedTitle());
-    }
+	// fix cart contents rendering as black in the End dimension
+	@Override
+	public float getBrightness() {
+		return 1.0f;
+	}
 
-    /* ITitled */
-    @Override
-    public String getUnlocalizedTitle() {
-        ItemStack cartItem = getCartItem();
-        return cartItem.getTranslationKey();
-    }
+	@Override
+	public ITextComponent getName() {
+		return new TranslationTextComponent(getUnlocalizedTitle());
+	}
 
-    @Override
-    public Type getMinecartType() {
-        return null;
-    }
+	/* ITitled */
+	@Override
+	public String getUnlocalizedTitle() {
+		ItemStack cartItem = getCartItem();
+		return cartItem.getTranslationKey();
+	}
 }

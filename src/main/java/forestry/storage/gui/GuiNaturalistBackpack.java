@@ -12,21 +12,22 @@ package forestry.storage.gui;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiNaturalistBackpack extends GuiForestry<ContainerNaturalistBackpack> {
 
-    public GuiNaturalistBackpack(ContainerNaturalistBackpack container, PlayerInventory inv, ITextComponent title) {
-        super(getTextureString(container), container, inv, title);
-    }
+	public GuiNaturalistBackpack(ContainerNaturalistBackpack container, PlayerInventory inv, ITextComponent title) {
+		super(getTextureString(container), container, inv, title);
+	}
 
-    private static String getTextureString(ContainerNaturalistBackpack container) {
-        return Constants.TEXTURE_PATH_GUI + "backpack.png";
-    }
+	private static String getTextureString(ContainerNaturalistBackpack container) {
+		return Constants.TEXTURE_PATH_GUI + "backpack.png";
+	}
 
-    @Override
-    protected void addLedgers() {
+	@Override
+	protected void addLedgers() {
 
-    }
+	}
 }

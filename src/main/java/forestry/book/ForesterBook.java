@@ -3,6 +3,7 @@ package forestry.book;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IForesterBook;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,55 +16,55 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class ForesterBook implements IForesterBook {
 
-    private final Map<String, IBookCategory> categoriesByName = new HashMap<>();
+	private final Map<String, IBookCategory> categoriesByName = new HashMap<>();
 
-    @Override
-    public Collection<String> getCategoryNames() {
-        return categoriesByName.keySet();
-    }
+	@Override
+	public IBookCategory addCategory(String name) {
+		IBookCategory category = getCategory(name);
+		if (category == null) {
+			categoriesByName.put(name, category = new BookCategory(name));
+		}
+		return category;
+	}
 
-    @Override
-    public IBookCategory addCategory(String name) {
-        IBookCategory category = getCategory(name);
-        if (category == null) {
-            categoriesByName.put(name, category = new BookCategory(name));
-        }
-        return category;
-    }
+	@Nullable
+	@Override
+	public IBookCategory getCategory(String name) {
+		return categoriesByName.get(name);
+	}
 
-    void addCategories(IBookCategory[] categories) {
-        for (IBookCategory category : categories) {
-            categoriesByName.put(category.getName(), category);
-        }
-    }
+	@Override
+	public Collection<IBookCategory> getCategories() {
+		return categoriesByName.values();
+	}
 
-    @Nullable
-    @Override
-    public IBookCategory getCategory(String name) {
-        return categoriesByName.get(name);
-    }
+	@Override
+	public Collection<String> getCategoryNames() {
+		return categoriesByName.keySet();
+	}
 
-    @Override
-    public Collection<IBookCategory> getCategories() {
-        return categoriesByName.values();
-    }
+	@Override
+	public Collection<IBookEntry> getEntries(String category) {
+		IBookCategory c = getCategory(category);
+		return c == null ? Collections.emptySet() : c.getEntries();
+	}
 
-    @Override
-    public Collection<IBookEntry> getEntries(String category) {
-        IBookCategory c = getCategory(category);
-        return c == null ? Collections.emptySet() : c.getEntries();
-    }
+	@Nullable
+	@Override
+	public IBookEntry getEntry(String name) {
+		for (IBookCategory category : categoriesByName.values()) {
+			for (IBookEntry entry : category.getEntries()) {
+				if (entry.getName().equalsIgnoreCase(name)) {
+					return entry;
+				}
+			}
+		}
+		return null;
+	}
 
-    @Nullable
-    @Override
-    public IBookEntry getEntry(String name) {
-        for (IBookCategory category : categoriesByName.values()) {
-            for (IBookEntry entry : category.getEntries()) {
-                if (entry.getName().equalsIgnoreCase(name)) {
-                    return entry;
-                }
-            }
-        }
-        return null;
-    }
+	void addCategories(IBookCategory[] categories) {
+		for (IBookCategory category : categories) {
+			categoriesByName.put(category.getName(), category);
+		}
+	}
 }

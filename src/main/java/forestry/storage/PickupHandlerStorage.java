@@ -15,83 +15,84 @@ import forestry.core.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.items.ItemBackpack;
+
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class PickupHandlerStorage implements IPickupHandler {
 
-    @Override
-    public boolean onItemPickup(PlayerEntity player, ItemEntity entityitem) {
+	/**
+	 * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
+	 * constantly by picked up items.
+	 */
+	private static void topOffPlayerInventory(PlayerEntity player, ItemStack itemstack) {
 
-        ItemStack itemstack = entityitem.getItem();
-        if (itemstack.isEmpty()) {
-            return false;
-        }
+		// Add to player inventory first, if there is an incomplete stack in
+		// there.
+		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
+			// We only add to existing stacks.
+			if (inventoryStack.isEmpty()) {
+				continue;
+			}
 
-        // Do not pick up if a backpack is open
-        if (player.openContainer instanceof ContainerBackpack ||
-            player.openContainer instanceof ContainerNaturalistBackpack) {
-            return false;
-        }
+			// Already full
+			if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
+				continue;
+			}
 
-        // Make sure to top off manually placed itemstacks in player inventory first
-        topOffPlayerInventory(player, itemstack);
+			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
+				int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
 
-        for (ItemStack pack : player.inventory.mainInventory) {
-            if (itemstack.isEmpty()) {
-                break;
-            }
+				if (space > itemstack.getCount()) {
+					// Enough space to add all
+					inventoryStack.grow(itemstack.getCount());
+					itemstack.setCount(0);
+				} else {
+					// Only part can be added
+					inventoryStack.setCount(inventoryStack.getMaxStackSize());
+					itemstack.shrink(space);
+				}
+			}
+		}
 
-            if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack)) {
-                continue;
-            }
+	}
 
-            ItemBackpack backpack = (ItemBackpack) pack.getItem();
-            IBackpackDefinition backpackDefinition = backpack.getDefinition();
-            if (backpackDefinition.getFilter().test(itemstack)) {
-                ItemBackpack.tryStowing(player, pack, itemstack);
-            }
-        }
+	@Override
+	public boolean onItemPickup(PlayerEntity player, ItemEntity entityitem) {
 
-        return itemstack.isEmpty();
-    }
+		ItemStack itemstack = entityitem.getItem();
+		if (itemstack.isEmpty()) {
+			return false;
+		}
 
-    /**
-     * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
-     * constantly by picked up items.
-     */
-    private static void topOffPlayerInventory(PlayerEntity player, ItemStack itemstack) {
+		// Do not pick up if a backpack is open
+		if (player.openContainer instanceof ContainerBackpack ||
+				player.openContainer instanceof ContainerNaturalistBackpack) {
+			return false;
+		}
 
-        // Add to player inventory first, if there is an incomplete stack in
-        // there.
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            ItemStack inventoryStack = player.inventory.getStackInSlot(i);
-            // We only add to existing stacks.
-            if (inventoryStack.isEmpty()) {
-                continue;
-            }
+		// Make sure to top off manually placed itemstacks in player inventory first
+		topOffPlayerInventory(player, itemstack);
 
-            // Already full
-            if (inventoryStack.getCount() >= inventoryStack.getMaxStackSize()) {
-                continue;
-            }
+		for (ItemStack pack : player.inventory.mainInventory) {
+			if (itemstack.isEmpty()) {
+				break;
+			}
 
-            if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
-                int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
+			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack)) {
+				continue;
+			}
 
-                if (space > itemstack.getCount()) {
-                    // Enough space to add all
-                    inventoryStack.grow(itemstack.getCount());
-                    itemstack.setCount(0);
-                } else {
-                    // Only part can be added
-                    inventoryStack.setCount(inventoryStack.getMaxStackSize());
-                    itemstack.shrink(space);
-                }
-            }
-        }
+			ItemBackpack backpack = (ItemBackpack) pack.getItem();
+			IBackpackDefinition backpackDefinition = backpack.getDefinition();
+			if (backpackDefinition.getFilter().test(itemstack)) {
+				ItemBackpack.tryStowing(player, pack, itemstack);
+			}
+		}
 
-    }
+		return itemstack.isEmpty();
+	}
 
 }

@@ -14,7 +14,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+
 import com.mojang.brigadier.CommandDispatcher;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -25,9 +27,11 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
@@ -35,229 +39,227 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModuleManager implements IModuleManager {
-    private static final String CONFIG_CATEGORY = "modules";
-    private static final ModuleManager ourInstance = new ModuleManager();
+	public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
+	public static final List<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
+	public static final List<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
+	public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
+	private static final String CONFIG_CATEGORY = "modules";
+	private static final ModuleManager ourInstance = new ModuleManager();
+	private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
+	private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
+	private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
+	private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
+	@Nullable
+	public static CommonModuleHandler moduleHandler;
 
-    public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
-    public static final List<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
-    public static final List<IResupplyHandler> resupplyHandlers = Lists.newArrayList();
+	public static ModuleManager getInstance() {
+		return ourInstance;
+	}
 
-    private static final HashMap<ResourceLocation, IForestryModule> sortedModules = new LinkedHashMap<>();
-    private static final Set<IForestryModule> loadedModules = new LinkedHashSet<>();
-    private static final Set<IForestryModule> unloadedModules = new LinkedHashSet<>();
-    private static final HashMap<String, IModuleContainer> moduleContainers = new HashMap<>();
-    public static final Set<IForestryModule> configDisabledModules = new HashSet<>();
-    @Nullable
-    public static CommonModuleHandler moduleHandler;
+	public static Set<IForestryModule> getLoadedModules() {
+		return ImmutableSet.copyOf(sortedModules.values());
+	}
 
-    public static ModuleManager getInstance() {
-        return ourInstance;
-    }
+	@Nullable
+	private static IForestryModule getModuleCore(List<IForestryModule> forestryModules) {
+		for (IForestryModule module : forestryModules) {
+			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+			if (module.isAvailable() && info.coreModule()) {
+				return module;
+			}
+		}
 
-    @Override
-    public boolean isModuleEnabled(ResourceLocation id) {
-        return sortedModules.get(id) != null;
-    }
+		return null;
+	}
 
-    @Override
-    public void registerContainers(IModuleContainer... containers) {
-        for (IModuleContainer container : containers) {
-            Preconditions.checkNotNull(container);
-            moduleContainers.put(container.getID(), container);
-        }
-    }
+	private static void configureModules(Map<String, List<IForestryModule>> modules) {
+		Locale locale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
 
-    @Override
-    public Collection<IModuleContainer> getContainers() {
-        return moduleContainers.values();
-    }
+		Set<ResourceLocation> toLoad = new HashSet<>();
+		Set<IForestryModule> modulesToLoad = new HashSet<>();
 
-    public static Set<IForestryModule> getLoadedModules() {
-        return ImmutableSet.copyOf(sortedModules.values());
-    }
+		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values()
+				.stream()
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList()));
 
-    @Nullable
-    private static IForestryModule getModuleCore(List<IForestryModule> forestryModules) {
-        for (IForestryModule module : forestryModules) {
-            ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-            if (module.isAvailable() && info.coreModule()) {
-                return module;
-            }
-        }
+		for (IModuleContainer container : moduleContainers.values()) {
+			String containerID = container.getID();
+			List<IForestryModule> containerModules = modules.get(containerID);
+			Configuration config = container.getModulesConfig();
 
-        return null;
-    }
+			config.load();
+			config.addCustomCategoryComment(
+					CONFIG_CATEGORY,
+					"Disabling these modules can greatly change how the mod functions.\n"
+							+ "Your mileage may vary, please report any issues."
+			);
+			IForestryModule coreModule = getModuleCore(containerModules);
+			if (coreModule != null) {
+				containerModules.remove(coreModule);
+				containerModules.add(0, coreModule);
+			} else {
+				Log.debug("Could not find core module for the module container: {}", containerID);
+			}
 
-    private static void configureModules(Map<String, List<IForestryModule>> modules) {
-        Locale locale = Locale.getDefault();
-        Locale.setDefault(Locale.ENGLISH);
+			Iterator<IForestryModule> iterator = containerModules.iterator();
+			while (iterator.hasNext()) {
+				IForestryModule module = iterator.next();
+				if (!container.isAvailable()) {
+					iterator.remove();
+					Log.info("Module disabled: {}", module);
+					continue;
+				}
 
-        Set<ResourceLocation> toLoad = new HashSet<>();
-        Set<IForestryModule> modulesToLoad = new HashSet<>();
+				if (module.canBeDisabled()) {
+					if (!container.isModuleEnabled(module)) {
+						configDisabledModules.add(module);
+						iterator.remove();
+						Log.info("Module disabled: {}", module);
+						continue;
+					}
+					if (!module.isAvailable()) {
+						iterator.remove();
+						Log.info("Module {} failed to load: {}", module, module.getFailMessage());
+						continue;
+					}
+				}
 
-        ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values()
-                                                                                .stream()
-                                                                                .flatMap(Collection::stream)
-                                                                                .collect(Collectors.toList()));
+				ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+				toLoad.add(new ResourceLocation(containerID, info.moduleID()));
+				modulesToLoad.add(module);
+			}
+		}
 
-        for (IModuleContainer container : moduleContainers.values()) {
-            String containerID = container.getID();
-            List<IForestryModule> containerModules = modules.get(containerID);
-            Configuration config = container.getModulesConfig();
+		//Check Dependencies
+		Iterator<IForestryModule> iterator;
+		boolean changed;
+		do {
+			changed = false;
+			iterator = modulesToLoad.iterator();
+			while (iterator.hasNext()) {
+				IForestryModule module = iterator.next();
+				Set<ResourceLocation> dependencies = module.getDependencyUids();
+				if (!toLoad.containsAll(dependencies)) {
+					iterator.remove();
+					changed = true;
+					ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+					String moduleId = info.moduleID();
+					toLoad.remove(new ResourceLocation(moduleId));
+					Log.warning("Module {} is missing dependencies: {}", moduleId, dependencies);
+				}
+			}
+		} while (changed);
 
-            config.load();
-            config.addCustomCategoryComment(
-                    CONFIG_CATEGORY,
-                    "Disabling these modules can greatly change how the mod functions.\n"
-                    + "Your mileage may vary, please report any issues."
-            );
-            IForestryModule coreModule = getModuleCore(containerModules);
-            if (coreModule != null) {
-                containerModules.remove(coreModule);
-                containerModules.add(0, coreModule);
-            } else {
-                Log.debug("Could not find core module for the module container: {}", containerID);
-            }
+		//Sort Modules
+		do {
+			changed = false;
+			iterator = modulesToLoad.iterator();
+			while (iterator.hasNext()) {
+				IForestryModule module = iterator.next();
+				if (sortedModules.keySet().containsAll(module.getDependencyUids())) {
+					iterator.remove();
+					ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+					sortedModules.put(new ResourceLocation(info.containerID(), info.moduleID()), module);
+					changed = true;
+					break;
+				}
+			}
+		} while (changed);
 
-            Iterator<IForestryModule> iterator = containerModules.iterator();
-            while (iterator.hasNext()) {
-                IForestryModule module = iterator.next();
-                if (!container.isAvailable()) {
-                    iterator.remove();
-                    Log.info("Module disabled: {}", module);
-                    continue;
-                }
+		for (IModuleContainer container : moduleContainers.values()) {
+			Configuration config = container.getModulesConfig();
+			if (config.hasChanged()) {
+				config.save();
+			}
+		}
 
-                if (module.canBeDisabled()) {
-                    if (!container.isModuleEnabled(module)) {
-                        configDisabledModules.add(module);
-                        iterator.remove();
-                        Log.info("Module disabled: {}", module);
-                        continue;
-                    }
-                    if (!module.isAvailable()) {
-                        iterator.remove();
-                        Log.info("Module {} failed to load: {}", module, module.getFailMessage());
-                        continue;
-                    }
-                }
+		loadedModules.addAll(sortedModules.values());
+		unloadedModules.addAll(allModules);
+		unloadedModules.removeAll(sortedModules.values());
 
-                ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-                toLoad.add(new ResourceLocation(containerID, info.moduleID()));
-                modulesToLoad.add(module);
-            }
-        }
+		for (IModuleContainer container : moduleContainers.values()) {
+			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
+			).collect(Collectors.toList());
+			Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
+			).collect(Collectors.toList());
+			container.onConfiguredModules(loadedModules, unloadedModules);
+		}
 
-        //Check Dependencies
-        Iterator<IForestryModule> iterator;
-        boolean changed;
-        do {
-            changed = false;
-            iterator = modulesToLoad.iterator();
-            while (iterator.hasNext()) {
-                IForestryModule module = iterator.next();
-                Set<ResourceLocation> dependencies = module.getDependencyUids();
-                if (!toLoad.containsAll(dependencies)) {
-                    iterator.remove();
-                    changed = true;
-                    ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-                    String moduleId = info.moduleID();
-                    toLoad.remove(new ResourceLocation(moduleId));
-                    Log.warning("Module {} is missing dependencies: {}", moduleId, dependencies);
-                }
-            }
-        } while (changed);
+		ForestryAPI.enabledModules = new HashSet<>();
+		for (IForestryModule module : sortedModules.values()) {
+			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
+		}
 
-        //Sort Modules
-        do {
-            changed = false;
-            iterator = modulesToLoad.iterator();
-            while (iterator.hasNext()) {
-                IForestryModule module = iterator.next();
-                if (sortedModules.keySet().containsAll(module.getDependencyUids())) {
-                    iterator.remove();
-                    ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-                    sortedModules.put(new ResourceLocation(info.containerID(), info.moduleID()), module);
-                    changed = true;
-                    break;
-                }
-            }
-        } while (changed);
+		Locale.setDefault(locale);
+	}
 
-        for (IModuleContainer container : moduleContainers.values()) {
-            Configuration config = container.getModulesConfig();
-            if (config.hasChanged()) {
-                config.save();
-            }
-        }
+	public static void runSetup() {
+		Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
 
-        loadedModules.addAll(sortedModules.values());
-        unloadedModules.addAll(allModules);
-        unloadedModules.removeAll(sortedModules.values());
+		moduleHandler = DistExecutor.safeRunForDist(() -> ClientModuleHandler::new, () -> CommonModuleHandler::new);
+		configureModules(forestryModules);
+	}
 
-        for (IModuleContainer container : moduleContainers.values()) {
-            Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
-                        ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-                        return info.containerID().equals(container.getID());
-                    }
-            ).collect(Collectors.toList());
-            Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
-                        ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-                        return info.containerID().equals(container.getID());
-                    }
-            ).collect(Collectors.toList());
-            container.onConfiguredModules(loadedModules, unloadedModules);
-        }
+	public static CommonModuleHandler getModuleHandler() {
+		Preconditions.checkNotNull(moduleHandler);
+		return moduleHandler;
+	}
 
-        ForestryAPI.enabledModules = new HashSet<>();
-        for (IForestryModule module : sortedModules.values()) {
-            ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-            ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
-        }
+	public static void serverStarting(MinecraftServer server) {
+		CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
 
-        Locale.setDefault(locale);
-    }
+		loadedModules.stream()
+				.map(IForestryModule::register)
+				.filter(Objects::nonNull)
+				.forEach(dispatcher::register);
+	}
 
-    public static void runSetup() {
-        Map<String, List<IForestryModule>> forestryModules = ForestryPluginUtil.getForestryModules();
+	public static Set<String> getLootPoolNames() {
+		Set<String> lootPoolNames = new HashSet<>();
+		for (IForestryModule module : loadedModules) {
+			module.addLootPoolNames(lootPoolNames);
+		}
 
-        moduleHandler = DistExecutor.safeRunForDist(() -> ClientModuleHandler::new, () -> CommonModuleHandler::new);
-        configureModules(forestryModules);
-    }
+		return lootPoolNames;
+	}
 
-    public static CommonModuleHandler getModuleHandler() {
-        Preconditions.checkNotNull(moduleHandler);
-        return moduleHandler;
-    }
+	public static Set<String> getLootTableFiles() {
+		Set<String> lootTableNames = new HashSet<>();
+		for (IForestryModule module : loadedModules) {
+			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
+			String lootTableFolder = info.lootTable();
+			if (!lootTableFolder.isEmpty()) {
+				lootTableNames.add(lootTableFolder);
+			}
+		}
 
-    public static void serverStarting(MinecraftServer server) {
-        CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
+		return lootTableNames;
+	}
 
-        loadedModules.stream()
-                     .map(IForestryModule::register)
-                     .filter(Objects::nonNull)
-                     .forEach(dispatcher::register);
-    }
+	@Override
+	public boolean isModuleEnabled(ResourceLocation id) {
+		return sortedModules.get(id) != null;
+	}
 
-    public static Set<String> getLootPoolNames() {
-        Set<String> lootPoolNames = new HashSet<>();
-        for (IForestryModule module : loadedModules) {
-            module.addLootPoolNames(lootPoolNames);
-        }
+	@Override
+	public void registerContainers(IModuleContainer... containers) {
+		for (IModuleContainer container : containers) {
+			Preconditions.checkNotNull(container);
+			moduleContainers.put(container.getID(), container);
+		}
+	}
 
-        return lootPoolNames;
-    }
-
-    public static Set<String> getLootTableFiles() {
-        Set<String> lootTableNames = new HashSet<>();
-        for (IForestryModule module : loadedModules) {
-            ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-            String lootTableFolder = info.lootTable();
-            if (!lootTableFolder.isEmpty()) {
-                lootTableNames.add(lootTableFolder);
-            }
-        }
-
-        return lootTableNames;
-    }
+	@Override
+	public Collection<IModuleContainer> getContainers() {
+		return moduleContainers.values();
+	}
 }

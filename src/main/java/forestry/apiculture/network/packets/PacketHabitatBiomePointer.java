@@ -11,34 +11,36 @@
 package forestry.apiculture.network.packets;
 
 import forestry.core.network.*;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketHabitatBiomePointer extends ForestryPacket implements IForestryPacketClient {
-    private final BlockPos pos;
+	private final BlockPos pos;
 
-    public PacketHabitatBiomePointer(BlockPos coordinates) {
-        this.pos = coordinates;
-    }
+	public PacketHabitatBiomePointer(BlockPos coordinates) {
+		this.pos = coordinates;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeBlockPos(pos);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeBlockPos(pos);
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.HABITAT_BIOME_POINTER;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.HABITAT_BIOME_POINTER;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-            BlockPos pos = data.readBlockPos();
-            //TextureHabitatLocator.getInstance().setTargetCoordinates(pos);//TODO: TextureHabitatLocator
-        }
-    }
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+			BlockPos pos = data.readBlockPos();
+			//TextureHabitatLocator.getInstance().setTargetCoordinates(pos);//TODO: TextureHabitatLocator
+		}
+	}
 }

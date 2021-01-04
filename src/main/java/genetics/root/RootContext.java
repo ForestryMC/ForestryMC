@@ -1,6 +1,7 @@
 package genetics.root;
 
 import com.google.common.collect.Multimap;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
@@ -17,43 +18,43 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class RootContext<I extends IIndividual> implements IRootContext<I> {
-    private final IKaryotype karyotype;
-    private final Collection<IGeneticListener<I>> listeners;
-    private final Multimap<ComponentKey, Consumer> componentListeners;
-    private final Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory;
+	private final IKaryotype karyotype;
+	private final Collection<IGeneticListener<I>> listeners;
+	private final Multimap<ComponentKey, Consumer> componentListeners;
+	private final Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory;
 
-    public RootContext(
-            IKaryotype karyotype,
-            Collection<IGeneticListener<I>> listeners,
-            Multimap<ComponentKey, Consumer> componentListeners,
-            Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory
-    ) {
-        this.karyotype = karyotype;
-        this.listeners = listeners;
-        this.componentListeners = componentListeners;
-        this.componentFactory = componentFactory;
-    }
+	public RootContext(
+			IKaryotype karyotype,
+			Collection<IGeneticListener<I>> listeners,
+			Multimap<ComponentKey, Consumer> componentListeners,
+			Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory
+	) {
+		this.karyotype = karyotype;
+		this.listeners = listeners;
+		this.componentListeners = componentListeners;
+		this.componentFactory = componentFactory;
+	}
 
-    public Collection<IGeneticListener<I>> getListeners() {
-        return listeners;
-    }
+	@Override
+	public IKaryotype getKaryotype() {
+		return karyotype;
+	}
 
-    public Multimap<ComponentKey, Consumer> getComponentListeners() {
-        return componentListeners;
-    }
+	@Override
+	public IRootDefinition getDefinition() {
+		return GeneticsAPI.apiInstance.getRoot(karyotype.getUID());
+	}
 
-    @Override
-    public IKaryotype getKaryotype() {
-        return karyotype;
-    }
+	public Collection<IGeneticListener<I>> getListeners() {
+		return listeners;
+	}
 
-    @Override
-    public IRootDefinition getDefinition() {
-        return GeneticsAPI.apiInstance.getRoot(karyotype.getUID());
-    }
+	public Multimap<ComponentKey, Consumer> getComponentListeners() {
+		return componentListeners;
+	}
 
-    @Override
-    public Map<ComponentKey, IRootComponent<I>> createComponents(IIndividualRoot<I> root) {
-        return componentFactory.apply(root);
-    }
+	@Override
+	public Map<ComponentKey, IRootComponent<I>> createComponents(IIndividualRoot<I> root) {
+		return componentFactory.apply(root);
+	}
 }

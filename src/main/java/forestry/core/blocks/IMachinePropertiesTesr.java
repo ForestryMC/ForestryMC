@@ -12,13 +12,14 @@ package forestry.core.blocks;
 
 import forestry.core.render.IForestryRenderer;
 import forestry.core.tiles.TileForestry;
+
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachineProperties<T> {
-    ResourceLocation getParticleTexture();
+	ResourceLocation getParticleTexture();
 
-    @Nullable
-    IForestryRenderer<? super T> getRenderer();
+	@Nullable
+	IForestryRenderer<? super T> getRenderer();
 }

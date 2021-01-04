@@ -20,88 +20,91 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
+
 import genetics.api.alleles.AlleleCategorized;
 import genetics.api.individual.IGenome;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
 public abstract class AlleleEffect extends AlleleCategorized implements IAlleleBeeEffect {
-    protected AlleleEffect(String valueName, boolean isDominant) {
-        super(Constants.MOD_ID, "effect", valueName, isDominant);
-    }
+	protected AlleleEffect(String valueName, boolean isDominant) {
+		super(Constants.MOD_ID, "effect", valueName, isDominant);
+	}
 
-    @Override
-    public IEffectData validateStorage(IEffectData storedData) {
-        return storedData;
-    }
+	public static Vector3i getModifiedArea(IGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
 
-    @Override
-    public boolean isCombinable() {
-        return false;
-    }
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
+		int x = area.getX();
+		int y = area.getY();
+		int z = area.getZ();
 
-    @Override
-    public IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        return storedData;
-    }
+		if (x < 1) {
+			x = 1;
+		}
+		if (y < 1) {
+			y = 1;
+		}
+		if (z < 1) {
+			z = 1;
+		}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-        IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
-        List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
+		return new Vector3i(x, y, z);
+	}
 
-        ParticleRender.addBeeHiveFX(housing, genome, flowerPositions);
-        return storedData;
-    }
+	public static AxisAlignedBB getBounding(IGenome genome, IBeeHousing housing) {
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
+		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
 
-    public static Vector3i getModifiedArea(IGenome genome, IBeeHousing housing) {
-        IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-        float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
+		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
+		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
-        Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
-        int x = area.getX();
-        int y = area.getY();
-        int z = area.getZ();
+		BlockPos min = housing.getCoordinates().add(offset);
+		BlockPos max = min.add(area);
 
-        if (x < 1) {
-            x = 1;
-        }
-        if (y < 1) {
-            y = 1;
-        }
-        if (z < 1) {
-            z = 1;
-        }
+		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+	}
 
-        return new Vector3i(x, y, z);
-    }
+	public static <T extends Entity> List<T> getEntitiesInRange(
+			IGenome genome,
+			IBeeHousing housing,
+			Class<T> entityClass
+	) {
+		AxisAlignedBB boundingBox = getBounding(genome, housing);
+		return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
+	}
 
-    public static AxisAlignedBB getBounding(IGenome genome, IBeeHousing housing) {
-        IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-        float territoryModifier = beeModifier.getTerritoryModifier(genome, 1.0f);
+	@Override
+	public boolean isCombinable() {
+		return false;
+	}
 
-        Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
-        Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		return storedData;
+	}
 
-        BlockPos min = housing.getCoordinates().add(offset);
-        BlockPos max = min.add(area);
+	@Override
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		return storedData;
+	}
 
-        return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
+		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
 
-    public static <T extends Entity> List<T> getEntitiesInRange(
-            IGenome genome,
-            IBeeHousing housing,
-            Class<T> entityClass
-    ) {
-        AxisAlignedBB boundingBox = getBounding(genome, housing);
-        return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
-    }
+		ParticleRender.addBeeHiveFX(housing, genome, flowerPositions);
+		return storedData;
+	}
 }

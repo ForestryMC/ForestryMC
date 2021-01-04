@@ -13,35 +13,36 @@ package forestry.apiculture.network.packets;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.core.network.*;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class PacketBeeLogicEntityRequest extends ForestryPacket implements IForestryPacketServer {
-    private final Entity entity;
+	private final Entity entity;
 
-    public PacketBeeLogicEntityRequest(Entity entity) {
-        this.entity = entity;
-    }
+	public PacketBeeLogicEntityRequest(Entity entity) {
+		this.entity = entity;
+	}
 
-    @Override
-    public PacketIdServer getPacketId() {
-        return PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST;
-    }
+	@Override
+	public PacketIdServer getPacketId() {
+		return PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeEntityById(entity);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeEntityById(entity);
+	}
 
-    public static class Handler implements IForestryPacketHandlerServer {
-        @Override
-        public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-            Entity entity = data.readEntityById(player.world);
-            if (entity instanceof IBeeHousing) {
-                IBeeHousing beeHousing = (IBeeHousing) entity;
-                IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-                beekeepingLogic.syncToClient(player);
-            }
-        }
-    }
+	public static class Handler implements IForestryPacketHandlerServer {
+		@Override
+		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+			Entity entity = data.readEntityById(player.world);
+			if (entity instanceof IBeeHousing) {
+				IBeeHousing beeHousing = (IBeeHousing) entity;
+				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+				beekeepingLogic.syncToClient(player);
+			}
+		}
+	}
 }

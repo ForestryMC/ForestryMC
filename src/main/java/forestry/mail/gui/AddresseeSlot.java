@@ -12,6 +12,7 @@ package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
@@ -19,49 +20,50 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
+
 import net.minecraft.client.gui.AbstractGui;
 
 public class AddresseeSlot extends Widget {
 
-    private final ContainerLetter containerLetter;
+	private final ContainerLetter containerLetter;
 
-    public AddresseeSlot(WidgetManager widgetManager, int xPos, int yPos, ContainerLetter containerLetter) {
-        super(widgetManager, xPos, yPos);
-        this.containerLetter = containerLetter;
-        this.width = 26;
-        this.height = 15;
-    }
+	public AddresseeSlot(WidgetManager widgetManager, int xPos, int yPos, ContainerLetter containerLetter) {
+		super(widgetManager, xPos, yPos);
+		this.containerLetter = containerLetter;
+		this.width = 26;
+		this.height = 15;
+	}
 
-    @Override
-    public void draw(MatrixStack transform, int startY, int startX) {
-        IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
-        if (carrier != null) {
-            RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
-            TextureManagerForestry.getInstance().bindGuiTextureMap();
-            AbstractGui.blit(
-                    transform,
-                    startX + xPos,
-                    startY + yPos,
-                    manager.gui.getBlitOffset(),
-                    32,
-                    32,
-                    carrier.getSprite()
-            );
-        }
-    }
+	@Override
+	public void draw(MatrixStack transform, int startY, int startX) {
+		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
+		if (carrier != null) {
+			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+			TextureManagerForestry.getInstance().bindGuiTextureMap();
+			AbstractGui.blit(
+					transform,
+					startX + xPos,
+					startY + yPos,
+					manager.gui.getBlitOffset(),
+					32,
+					32,
+					carrier.getSprite()
+			);
+		}
+	}
 
-    @Override
-    public ToolTip getToolTip(int mouseX, int mouseY) {
-        ToolTip tooltip = new ToolTip();
-        tooltip.translated("for.gui.addressee." + containerLetter.getCarrierType());
-        return tooltip;
-    }
+	@Override
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		ToolTip tooltip = new ToolTip();
+		tooltip.translated("for.gui.addressee." + containerLetter.getCarrierType());
+		return tooltip;
+	}
 
-    @Override
-    public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-        if (!containerLetter.getLetter().isProcessed()) {
-            containerLetter.advanceCarrierType();
-            SoundUtil.playButtonClick();
-        }
-    }
+	@Override
+	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		if (!containerLetter.getLetter().isProcessed()) {
+			containerLetter.advanceCarrierType();
+			SoundUtil.playButtonClick();
+		}
+	}
 }

@@ -12,6 +12,7 @@ package forestry.farming.blocks;
 
 import forestry.core.blocks.BlockStructure;
 import forestry.farming.tiles.*;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -25,78 +26,78 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
 public class BlockFarm extends BlockStructure {
-    private final EnumFarmBlockType type;
-    private final EnumFarmMaterial farmMaterial;
+	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
+	private final EnumFarmBlockType type;
+	private final EnumFarmMaterial farmMaterial;
 
-    public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
+	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
+		super(Block.Properties.create(Material.ROCK)
+				.hardnessAndResistance(1.0f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
+		this.type = type;
+		this.farmMaterial = farmMaterial;
+		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
+	}
 
-    public enum State implements IStringSerializable {
-        PLAIN, BAND;
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+		super.fillItemGroup(tab, list);
+	}
 
-        @Override
-        public String getString() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-    }
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(STATE);
+	}
 
-    public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-        super(Block.Properties.create(Material.ROCK)
-                              .hardnessAndResistance(1.0f)
-                              .harvestTool(ToolType.PICKAXE)
-                              .harvestLevel(0));
-        this.type = type;
-        this.farmMaterial = farmMaterial;
-        setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
-    }
+	public EnumFarmBlockType getType() {
+		return type;
+	}
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(STATE);
-    }
+	public EnumFarmMaterial getFarmMaterial() {
+		return farmMaterial;
+	}
 
-    @Override
-    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-        super.fillItemGroup(tab, list);
-    }
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
 
-    public EnumFarmBlockType getType() {
-        return type;
-    }
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		switch (type) {
+			case GEARBOX:
+				return new TileFarmGearbox();
+			case HATCH:
+				return new TileFarmHatch();
+			case VALVE:
+				return new TileFarmValve();
+			case CONTROL:
+				return new TileFarmControl();
+			default:
+				return new TileFarmPlain();
+		}
+	}
 
-    public EnumFarmMaterial getFarmMaterial() {
-        return farmMaterial;
-    }
+	@Override
+	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+		return getType() == EnumFarmBlockType.CONTROL;
+	}
 
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        switch (type) {
-            case GEARBOX:
-                return new TileFarmGearbox();
-            case HATCH:
-                return new TileFarmHatch();
-            case VALVE:
-                return new TileFarmValve();
-            case CONTROL:
-                return new TileFarmControl();
-            default:
-                return new TileFarmPlain();
-        }
-    }
+	public enum State implements IStringSerializable {
+		PLAIN, BAND;
 
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
-    }
-
-    @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
-        return getType() == EnumFarmBlockType.CONTROL;
-    }
+		@Override
+		public String getString() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
+	}
 }

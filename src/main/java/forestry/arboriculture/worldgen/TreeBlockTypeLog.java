@@ -11,25 +11,26 @@
 package forestry.arboriculture.worldgen;
 
 import forestry.api.arboriculture.ITreeGenData;
+
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
 public class TreeBlockTypeLog implements ITreeBlockType {
-    private final ITreeGenData tree;
-    private Direction facing = Direction.UP;
+	private final ITreeGenData tree;
+	private Direction facing = Direction.UP;
 
-    public TreeBlockTypeLog(ITreeGenData tree) {
-        this.tree = tree;
-    }
+	public TreeBlockTypeLog(ITreeGenData tree) {
+		this.tree = tree;
+	}
 
-    @Override
-    public void setDirection(Direction facing) {
-        this.facing = facing;
-    }
+	@Override
+	public void setDirection(Direction facing) {
+		this.facing = facing;
+	}
 
-    @Override
-    public boolean setBlock(IWorld world, BlockPos pos) {
-        return tree.setLogBlock(world, pos, facing);
-    }
+	@Override
+	public boolean setBlock(IWorld world, BlockPos pos) {
+		return tree.setLogBlock(world, pos, facing);
+	}
 }

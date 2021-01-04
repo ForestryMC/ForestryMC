@@ -14,51 +14,54 @@ package forestry.core.recipes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
+
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class ModuleCondition implements ICondition {
 
-    private static final ResourceLocation NAME = new ResourceLocation(Constants.MOD_ID, "module");
-    private final ResourceLocation module;
+	private static final ResourceLocation NAME = new ResourceLocation(Constants.MOD_ID, "module");
+	private final ResourceLocation module;
 
-    public ModuleCondition(ResourceLocation module) {
-        this.module = module;
-    }
+	public ModuleCondition(ResourceLocation module) {
+		this.module = module;
+	}
 
-    @Override
-    public ResourceLocation getID() {
-        return NAME;
-    }
+	@Override
+	public ResourceLocation getID() {
+		return NAME;
+	}
 
-    @Override
-    public boolean test() {
-        return ForestryAPI.enabledModules.contains(module);
-    }
+	@Override
+	public boolean test() {
+		return ForestryAPI.enabledModules.contains(module);
+	}
 
-    public static class Serializer implements IConditionSerializer<ModuleCondition> {
+	public static class Serializer implements IConditionSerializer<ModuleCondition> {
 
-        public static final Serializer INSTANCE = new Serializer();
+		public static final Serializer INSTANCE = new Serializer();
 
-        @Override
-        public void write(JsonObject json, ModuleCondition value) {
-            json.addProperty("module", value.module.toString());
-        }
+		@Override
+		public void write(JsonObject json, ModuleCondition value) {
+			json.addProperty("module", value.module.toString());
+		}
 
-        @Override
-        public ModuleCondition read(JsonObject json) {
-            String module = json.get("module").getAsString();
-            JsonElement conElement = json.get("container");
-            String container = conElement == null ? "forestry" : conElement.getAsString();
-            return new ModuleCondition(new ResourceLocation(container, module));
-        }
+		@Override
+		public ModuleCondition read(JsonObject json) {
+			String module = json.get("module").getAsString();
+			JsonElement conElement = json.get("container");
+			String container = conElement == null ? "forestry" : conElement.getAsString();
+			return new ModuleCondition(new ResourceLocation(container, module));
+		}
 
-        @Override
-        public ResourceLocation getID() {
-            return ModuleCondition.NAME;
-        }
-    }
+		@Override
+		public ResourceLocation getID() {
+			return ModuleCondition.NAME;
+		}
+	}
 }

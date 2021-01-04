@@ -18,9 +18,9 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import java.util.Random;
 
 public abstract class FeatureBase extends Feature<NoFeatureConfig> {
-    protected FeatureBase() {
-        super(NoFeatureConfig.field_236558_a_);
-    }
+	protected FeatureBase() {
+		super(NoFeatureConfig.field_236558_a_);
+	}
 
-    public abstract boolean place(IWorld world, Random rand, BlockPos pos, boolean forced);
+	public abstract boolean place(IWorld world, Random rand, BlockPos pos, boolean forced);
 }

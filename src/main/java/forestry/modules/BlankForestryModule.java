@@ -1,6 +1,7 @@
 package forestry.modules;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.IPickupHandler;
@@ -8,9 +9,11 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.fml.InterModComms;
 
 import javax.annotation.Nullable;
@@ -18,63 +21,63 @@ import java.util.List;
 import java.util.Set;
 
 public class BlankForestryModule implements IForestryModule {
-    /**
-     * The ForestryModule.moduleID()s of any other modules this module depends on.
-     */
-    public Set<ResourceLocation> getDependencyUids() {
-        return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
-    }
+	/**
+	 * The ForestryModule.moduleID()s of any other modules this module depends on.
+	 */
+	public Set<ResourceLocation> getDependencyUids() {
+		return ImmutableSet.of(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CORE));
+	}
 
-    @Override
-    public String toString() {
-        ForestryModule forestryModule = getClass().getAnnotation(ForestryModule.class);
-        if (forestryModule == null) {
-            return getClass().getSimpleName();
-        }
-        return forestryModule.name() + " Module";
-    }
+	@Override
+	public String toString() {
+		ForestryModule forestryModule = getClass().getAnnotation(ForestryModule.class);
+		if (forestryModule == null) {
+			return getClass().getSimpleName();
+		}
+		return forestryModule.name() + " Module";
+	}
 
-    public boolean processIMCMessage(InterModComms.IMCMessage message) {
-        return false;
-    }
+	public boolean processIMCMessage(InterModComms.IMCMessage message) {
+		return false;
+	}
 
-    public void addBiomeDecorations(Biome biome) {
-    }
+	public void addBiomeDecorations(Biome biome) {
+	}
 
-    /**
-     * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
-     */
-    public void registerCrates() {
-    }
+	/**
+	 * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
+	 */
+	public void registerCrates() {
+	}
 
-    /**
-     * Can be used to hide items in JEI.
-     */
-    public void getHiddenItems(List<ItemStack> hiddenItems) {
-    }
+	/**
+	 * Can be used to hide items in JEI.
+	 */
+	public void getHiddenItems(List<ItemStack> hiddenItems) {
+	}
 
-    @Nullable
-    public ISaveEventHandler getSaveEventHandler() {
-        return null;
-    }
+	@Nullable
+	public ISaveEventHandler getSaveEventHandler() {
+		return null;
+	}
 
-    @Nullable
-    public IPacketRegistry getPacketRegistry() {
-        return null;
-    }
+	@Nullable
+	public IPacketRegistry getPacketRegistry() {
+		return null;
+	}
 
-    @Nullable
-    public IPickupHandler getPickupHandler() {
-        return null;
-    }
+	@Nullable
+	public IPickupHandler getPickupHandler() {
+		return null;
+	}
 
-    @Nullable
-    public IResupplyHandler getResupplyHandler() {
-        return null;
-    }
+	@Nullable
+	public IResupplyHandler getResupplyHandler() {
+		return null;
+	}
 
-    @Nullable
-    public ISidedModuleHandler getModuleHandler() {
-        return null;
-    }
+	@Nullable
+	public ISidedModuleHandler getModuleHandler() {
+		return null;
+	}
 }

@@ -13,7 +13,9 @@ package forestry.farming.tiles;
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.farming.features.FarmingTiles;
+
 import net.minecraft.util.Direction;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -21,24 +23,24 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nullable;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
-    public TileFarmValve() {
-        super(FarmingTiles.VALVE.tileType());
-    }
+	public TileFarmValve() {
+		super(FarmingTiles.VALVE.tileType());
+	}
 
-    @Override
-    public ITankManager getTankManager() {
-        return getMultiblockLogic().getController().getTankManager();
-    }
+	@Override
+	public ITankManager getTankManager() {
+		return getMultiblockLogic().getController().getTankManager();
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        LazyOptional<T> superCap = super.getCapability(capability, facing);
-        if (superCap.isPresent()) {
-            return superCap;
-        }
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(this::getTankManager).cast();
-        }
-        return LazyOptional.empty();
-    }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> superCap = super.getCapability(capability, facing);
+		if (superCap.isPresent()) {
+			return superCap;
+		}
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(this::getTankManager).cast();
+		}
+		return LazyOptional.empty();
+	}
 }

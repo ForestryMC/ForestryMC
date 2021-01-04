@@ -12,20 +12,22 @@ package forestry.core.network.packets;
 
 import forestry.core.network.IForestryPacketHandlerClient;
 import forestry.core.network.PacketBufferForestry;
+
 import net.minecraft.entity.player.PlayerEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerDummyClient extends PacketHandlerDummy implements IForestryPacketHandlerClient {
-    public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
+	public static final PacketHandlerDummyClient INSTANCE = new PacketHandlerDummyClient();
 
-    private PacketHandlerDummyClient() {
+	private PacketHandlerDummyClient() {
 
-    }
+	}
 
-    @Override
-    public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+	@Override
+	public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 
-    }
+	}
 }

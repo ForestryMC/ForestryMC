@@ -11,21 +11,23 @@
 package forestry.core.commands;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+
 import net.minecraft.world.World;
 
 import java.util.Collection;
 
 public interface IStatsSaveHelper {
 
-    String getUnlocalizedSaveStatsString();
+	String getUnlocalizedSaveStatsString();
 
-    void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
+	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
-    Collection<? extends IAlleleForestrySpecies> getSpecies();
+	Collection<? extends IAlleleForestrySpecies> getSpecies();
 
-    String getFileSuffix();
+	String getFileSuffix();
 
-    IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
+	IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
 }

@@ -13,35 +13,37 @@ package forestry.mail.network.packets;
 import forestry.core.network.*;
 import forestry.mail.POBoxInfo;
 import forestry.mail.gui.GuiMailboxInfo;
+
 import net.minecraft.entity.player.PlayerEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketPOBoxInfoResponse extends ForestryPacket implements IForestryPacketClient {
-    public final POBoxInfo poboxInfo;
+	public final POBoxInfo poboxInfo;
 
-    public PacketPOBoxInfoResponse(POBoxInfo info) {
-        this.poboxInfo = info;
-    }
+	public PacketPOBoxInfoResponse(POBoxInfo info) {
+		this.poboxInfo = info;
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.POBOX_INFO_RESPONSE;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.POBOX_INFO_RESPONSE;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeInt(poboxInfo.playerLetters);
-        data.writeInt(poboxInfo.tradeLetters);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeInt(poboxInfo.playerLetters);
+		data.writeInt(poboxInfo.tradeLetters);
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
 
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-            POBoxInfo poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
-            GuiMailboxInfo.instance.setPOBoxInfo(player, poboxInfo);
-        }
-    }
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+			POBoxInfo poboxInfo = new POBoxInfo(data.readInt(), data.readInt());
+			GuiMailboxInfo.instance.setPOBoxInfo(player, poboxInfo);
+		}
+	}
 }

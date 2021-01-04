@@ -11,6 +11,7 @@
 package forestry.core.models;
 
 import forestry.core.utils.ResourceUtil;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -28,54 +30,54 @@ import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractBakedModel implements IBakedModel {
-    @Nullable
-    protected ItemOverrideList overrideList;
+	@Nullable
+	protected ItemOverrideList overrideList;
 
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-        return Collections.emptyList();
-    }
+	@Override
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
+		return Collections.emptyList();
+	}
 
-    protected ItemOverrideList createOverrides() {
-        return ItemOverrideList.EMPTY;
-    }
+	@Override
+	public boolean isAmbientOcclusion() {
+		return true;
+	}
 
-    @Override
-    public ItemOverrideList getOverrides() {
-        if (overrideList == null) {
-            overrideList = createOverrides();
-        }
-        return overrideList;
-    }
+	@Override
+	public boolean isGui3d() {
+		return true;
+	}
 
-    @Override
-    public boolean isAmbientOcclusion() {
-        return true;
-    }
+	@Override
+	public boolean isSideLit() {
+		return false;
+	}
 
-    @Override
-    public boolean isGui3d() {
-        return true;
-    }
+	@Override
+	public boolean isBuiltInRenderer() {
+		return false;
+	}
 
-    @Override
-    public boolean isSideLit() {
-        return false;
-    }
+	@Override
+	public TextureAtlasSprite getParticleTexture() {
+		return ResourceUtil.getMissingTexture();
+	}
 
-    @Override
-    public boolean isBuiltInRenderer() {
-        return false;
-    }
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms() {
+		return ItemCameraTransforms.DEFAULT;
+	}
 
-    @Override
-    public TextureAtlasSprite getParticleTexture() {
-        return ResourceUtil.getMissingTexture();
-    }
+	@Override
+	public ItemOverrideList getOverrides() {
+		if (overrideList == null) {
+			overrideList = createOverrides();
+		}
+		return overrideList;
+	}
 
-    @Override
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
+	protected ItemOverrideList createOverrides() {
+		return ItemOverrideList.EMPTY;
+	}
 
 }

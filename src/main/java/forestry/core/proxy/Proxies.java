@@ -16,11 +16,11 @@ import javax.annotation.Nullable;
 
 //TODO - DistExecutor
 public class Proxies {
-    //	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
-    @Nullable
-    public static ProxyCommon common;
+	//	@SidedProxy(clientSide = "forestry.core.proxy.ProxyClient", serverSide = "forestry.core.proxy.ProxyCommon")
+	@Nullable
+	public static ProxyCommon common;
 
-    //	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
-    @Nullable
-    public static ProxyRender render;
+	//	@SidedProxy(clientSide = "forestry.core.proxy.ProxyRenderClient", serverSide = "forestry.core.proxy.ProxyRender")
+	@Nullable
+	public static ProxyRender render;
 }

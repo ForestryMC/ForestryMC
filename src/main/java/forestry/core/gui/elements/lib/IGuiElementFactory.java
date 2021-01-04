@@ -10,11 +10,14 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
+
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,67 +29,67 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElementFactory {
 
-    IGeneticAnalyzer createAnalyzer(
-            IWindowElement window,
-            int xPos,
-            int yPos,
-            boolean rightBoarder,
-            IGeneticAnalyzerProvider provider
-    );
+	IGeneticAnalyzer createAnalyzer(
+			IWindowElement window,
+			int xPos,
+			int yPos,
+			boolean rightBoarder,
+			IGeneticAnalyzerProvider provider
+	);
 
-    /* GENETIC*/
+	/* GENETIC*/
 
-    /**
-     * @param dominant True if you want the dominant color and false if you want the recessive color.
-     * @return The color code that forestry uses to show if a allele is dominant (true) or recessive (false).
-     */
-    int getColorCoding(boolean dominant);
+	/**
+	 * @param dominant True if you want the dominant color and false if you want the recessive color.
+	 * @return The color code that forestry uses to show if a allele is dominant (true) or recessive (false).
+	 */
+	int getColorCoding(boolean dominant);
 
-    Style getStateStyle(boolean dominant);
+	Style getStateStyle(boolean dominant);
 
-    Style getGuiStyle();
+	Style getGuiStyle();
 
-    /**
-     * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
-     */
-    @Nullable
-    IGuiElement createMutation(
-            int x,
-            int y,
-            int width,
-            int height,
-            IMutation mutation,
-            IAllele species,
-            IBreedingTracker breedingTracker
-    );
+	/**
+	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
+	 */
+	@Nullable
+	IGuiElement createMutation(
+			int x,
+			int y,
+			int width,
+			int height,
+			IMutation mutation,
+			IAllele species,
+			IBreedingTracker breedingTracker
+	);
 
-    /**
-     * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
-     */
-    @Nullable
-    IGuiElement createMutationResultant(
-            int x,
-            int y,
-            int width,
-            int height,
-            IMutation mutation,
-            IBreedingTracker breedingTracker
-    );
+	/**
+	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
+	 */
+	@Nullable
+	IGuiElement createMutationResultant(
+			int x,
+			int y,
+			int width,
+			int height,
+			IMutation mutation,
+			IBreedingTracker breedingTracker
+	);
 
-    IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
+	IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
 
-    IGuiElement createToleranceInfo(
-            IAlleleValue<EnumTolerance> toleranceAllele,
-            IAlleleForestrySpecies species,
-            ITextComponent text
-    );
+	IGuiElement createToleranceInfo(
+			IAlleleValue<EnumTolerance> toleranceAllele,
+			IAlleleForestrySpecies species,
+			ITextComponent text
+	);
 
-    IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
+	IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
 
-    /* LAYOUTS */
-    IElementLayout createHorizontal(int xPos, int yPos, int height);
+	/* LAYOUTS */
+	IElementLayout createHorizontal(int xPos, int yPos, int height);
 
-    IElementLayout createVertical(int xPos, int yPos, int width);
+	IElementLayout createVertical(int xPos, int yPos, int width);
 
-    IElementGroup createPane(int xPos, int yPos, int width, int height);
+	IElementGroup createPane(int xPos, int yPos, int width, int height);
 }

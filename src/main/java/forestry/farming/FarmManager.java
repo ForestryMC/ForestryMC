@@ -2,6 +2,7 @@ package forestry.farming;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -19,12 +20,14 @@ import forestry.farming.FarmHelper.FarmWorkStatus;
 import forestry.farming.FarmHelper.Stage;
 import forestry.farming.multiblock.FarmFertilizerManager;
 import forestry.farming.multiblock.FarmHydrationManager;
+
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -32,315 +35,311 @@ import java.io.IOException;
 import java.util.*;
 
 public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IExtentCache {
-    private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
-    private final Table<FarmDirection, BlockPos, Integer> lastExtents = HashBasedTable.create();
-    private final IFarmHousingInternal housing;
-    @Nullable
-    private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
-    private final List<ICrop> pendingCrops = new LinkedList<>();
-    private final Stack<ItemStack> pendingProduce = new Stack<>();
+	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
+	private final Table<FarmDirection, BlockPos, Integer> lastExtents = HashBasedTable.create();
+	private final IFarmHousingInternal housing;
+	private final List<ICrop> pendingCrops = new LinkedList<>();
+	private final Stack<ItemStack> pendingProduce = new Stack<>();
+	private final Set<IFarmListener> farmListeners = new HashSet<>();
+	private final FarmHydrationManager hydrationManager;
+	private final FarmFertilizerManager fertilizerManager;
+	private final TankManager tankManager;
+	private final StandardTank resourceTank;
+	@Nullable
+	private IFarmLogic harvestProvider; // The farm logic which supplied the pending crops.
+	private Stage stage = Stage.CULTIVATE;
+	// tick updates can come from multiple gearboxes so keep track of them here
+	private int farmWorkTicks = 0;
 
-    private Stage stage = Stage.CULTIVATE;
+	public FarmManager(IFarmHousingInternal housing) {
+		this.housing = housing;
+		this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 
-    private final Set<IFarmListener> farmListeners = new HashSet<>();
+		this.tankManager = new TankManager(housing, resourceTank);
 
-    private final FarmHydrationManager hydrationManager;
-    private final FarmFertilizerManager fertilizerManager;
-    private final TankManager tankManager;
-    private final StandardTank resourceTank;
+		this.hydrationManager = new FarmHydrationManager(housing);
+		this.fertilizerManager = new FarmFertilizerManager(housing);
+	}
 
-    // tick updates can come from multiple gearboxes so keep track of them here
-    private int farmWorkTicks = 0;
+	public FarmHydrationManager getHydrationManager() {
+		return hydrationManager;
+	}
 
-    public FarmManager(IFarmHousingInternal housing) {
-        this.housing = housing;
-        this.resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
+	public TankManager getTankManager() {
+		return tankManager;
+	}
 
-        this.tankManager = new TankManager(housing, resourceTank);
+	public FarmFertilizerManager getFertilizerManager() {
+		return fertilizerManager;
+	}
 
-        this.hydrationManager = new FarmHydrationManager(housing);
-        this.fertilizerManager = new FarmFertilizerManager(housing);
-    }
+	public StandardTank getResourceTank() {
+		return resourceTank;
+	}
 
-    public FarmHydrationManager getHydrationManager() {
-        return hydrationManager;
-    }
+	public void addListener(IFarmListener listener) {
+		farmListeners.add(listener);
+	}
 
-    public TankManager getTankManager() {
-        return tankManager;
-    }
+	public void removeListener(IFarmListener listener) {
+		farmListeners.remove(listener);
+	}
 
-    public FarmFertilizerManager getFertilizerManager() {
-        return fertilizerManager;
-    }
+	public boolean doWork() {
+		farmWorkTicks++;
+		if (targets.isEmpty() || farmWorkTicks % 20 == 0) {
+			housing.setUpFarmlandTargets(targets);
+		}
 
-    public StandardTank getResourceTank() {
-        return resourceTank;
-    }
+		IErrorLogic errorLogic = housing.getErrorLogic();
 
-    public void addListener(IFarmListener listener) {
-        farmListeners.add(listener);
-    }
+		if (!pendingProduce.isEmpty()) {
+			boolean added = housing.getFarmInventory().tryAddPendingProduce(pendingProduce);
+			errorLogic.setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
+			return added;
+		}
 
-    public void removeListener(IFarmListener listener) {
-        farmListeners.remove(listener);
-    }
+		boolean hasFertilizer = fertilizerManager.maintainFertilizer();
+		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
+			return false;
+		}
 
-    public boolean doWork() {
-        farmWorkTicks++;
-        if (targets.isEmpty() || farmWorkTicks % 20 == 0) {
-            housing.setUpFarmlandTargets(targets);
-        }
+		// Cull queued crops.
+		if (!pendingCrops.isEmpty() && harvestProvider != null) {
+			ICrop first = pendingCrops.get(0);
+			if (cullCrop(first, harvestProvider)) {
+				pendingCrops.remove(0);
+				return true;
+			} else {
+				return false;
+			}
+		}
 
-        IErrorLogic errorLogic = housing.getErrorLogic();
+		// Cultivation and collection
+		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
-        if (!pendingProduce.isEmpty()) {
-            boolean added = housing.getFarmInventory().tryAddPendingProduce(pendingProduce);
-            errorLogic.setCondition(!added, EnumErrorCode.NO_SPACE_INVENTORY);
-            return added;
-        }
+		World world = housing.getWorldObj();
+		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
+		Collections.shuffle(farmDirections, world.rand);
+		for (FarmDirection farmSide : farmDirections) {
+			IFarmLogic logic = housing.getFarmLogic(farmSide);
+			List<FarmTarget> farmTargets = targets.get(farmSide);
 
-        boolean hasFertilizer = fertilizerManager.maintainFertilizer();
-        if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
-            return false;
-        }
+			if (stage == Stage.CULTIVATE) {
+				for (FarmTarget target : farmTargets) {
+					if (target.getExtent() > 0) {
+						farmWorkStatus.hasFarmland = true;
+						break;
+					}
+				}
+			}
 
-        // Cull queued crops.
-        if (!pendingCrops.isEmpty() && harvestProvider != null) {
-            ICrop first = pendingCrops.get(0);
-            if (cullCrop(first, harvestProvider)) {
-                pendingCrops.remove(0);
-                return true;
-            } else {
-                return false;
-            }
-        }
+			if (FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+				continue;
+			}
 
-        // Cultivation and collection
-        FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
+			// Always try to collect windfall.
+			if (collectWindfall(logic)) {
+				farmWorkStatus.didWork = true;
+			}
 
-        World world = housing.getWorldObj();
-        List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
-        Collections.shuffle(farmDirections, world.rand);
-        for (FarmDirection farmSide : farmDirections) {
-            IFarmLogic logic = housing.getFarmLogic(farmSide);
-            List<FarmTarget> farmTargets = targets.get(farmSide);
+			if (stage == Stage.HARVEST) {
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(
+						world,
+						housing,
+						farmTargets,
+						logic,
+						farmListeners
+				);
+				farmWorkStatus.didWork = !harvested.isEmpty();
+				if (!harvested.isEmpty()) {
+					pendingCrops.addAll(harvested);
+					pendingCrops.sort(FarmHelper.TopDownICropComparator.INSTANCE);
+					harvestProvider = logic;
+				}
+			} else if (stage == Stage.CULTIVATE) {
+				cultivateTargets(farmWorkStatus, farmTargets, logic, farmSide);
+			}
 
-            if (stage == Stage.CULTIVATE) {
-                for (FarmTarget target : farmTargets) {
-                    if (target.getExtent() > 0) {
-                        farmWorkStatus.hasFarmland = true;
-                        break;
-                    }
-                }
-            }
+			if (farmWorkStatus.didWork) {
+				break;
+			}
+		}
 
-            if (FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
-                continue;
-            }
+		if (stage == Stage.CULTIVATE) {
+			errorLogic.setCondition(!farmWorkStatus.hasFarmland, EnumErrorCode.NO_FARMLAND);
+			errorLogic.setCondition(!farmWorkStatus.hasFertilizer, EnumErrorCode.NO_FERTILIZER);
+			errorLogic.setCondition(!farmWorkStatus.hasLiquid, EnumErrorCode.NO_LIQUID_FARM);
+		}
 
-            // Always try to collect windfall.
-            if (collectWindfall(logic)) {
-                farmWorkStatus.didWork = true;
-            }
+		// alternate between cultivation and harvest.
+		stage = stage.next();
 
-            if (stage == Stage.HARVEST) {
-                Collection<ICrop> harvested = FarmHelper.harvestTargets(
-                        world,
-                        housing,
-                        farmTargets,
-                        logic,
-                        farmListeners
-                );
-                farmWorkStatus.didWork = !harvested.isEmpty();
-                if (!harvested.isEmpty()) {
-                    pendingCrops.addAll(harvested);
-                    pendingCrops.sort(FarmHelper.TopDownICropComparator.INSTANCE);
-                    harvestProvider = logic;
-                }
-            } else if (stage == Stage.CULTIVATE) {
-                cultivateTargets(farmWorkStatus, farmTargets, logic, farmSide);
-            }
+		return farmWorkStatus.didWork;
+	}
 
-            if (farmWorkStatus.didWork) {
-                break;
-            }
-        }
+	private void cultivateTargets(
+			FarmWorkStatus farmWorkStatus,
+			List<FarmTarget> farmTargets,
+			IFarmLogic logic,
+			FarmDirection farmSide
+	) {
+		World world = housing.getWorldObj();
+		if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
+			final float hydrationModifier = hydrationManager.getHydrationModifier();
+			final int fertilizerConsumption = Math.round(
+					logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+			final int liquidConsumption = logic.getProperties().getWaterConsumption(housing, hydrationModifier);
+			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
-        if (stage == Stage.CULTIVATE) {
-            errorLogic.setCondition(!farmWorkStatus.hasFarmland, EnumErrorCode.NO_FARMLAND);
-            errorLogic.setCondition(!farmWorkStatus.hasFertilizer, EnumErrorCode.NO_FERTILIZER);
-            errorLogic.setCondition(!farmWorkStatus.hasLiquid, EnumErrorCode.NO_LIQUID_FARM);
-        }
+			for (FarmTarget target : farmTargets) {
+				// Check fertilizer and water
+				if (!fertilizerManager.hasFertilizer(fertilizerConsumption)) {
+					farmWorkStatus.hasFertilizer = false;
+					continue;
+				}
 
-        // alternate between cultivation and harvest.
-        stage = stage.next();
+				if (liquid.getAmount() > 0 && !housing.hasLiquid(liquid)) {
+					farmWorkStatus.hasLiquid = false;
+					continue;
+				}
 
-        return farmWorkStatus.didWork;
-    }
+				if (FarmHelper.cultivateTarget(world, housing, target, logic, farmListeners)) {
+					// Remove fertilizer and water
+					fertilizerManager.removeFertilizer(fertilizerConsumption);
+					housing.removeLiquid(liquid);
 
-    private void cultivateTargets(
-            FarmWorkStatus farmWorkStatus,
-            List<FarmTarget> farmTargets,
-            IFarmLogic logic,
-            FarmDirection farmSide
-    ) {
-        World world = housing.getWorldObj();
-        if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
-            final float hydrationModifier = hydrationManager.getHydrationModifier();
-            final int fertilizerConsumption = Math.round(
-                    logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
-            final int liquidConsumption = logic.getProperties().getWaterConsumption(housing, hydrationModifier);
-            final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
+					farmWorkStatus.didWork = true;
+				}
+			}
+		}
+	}
 
-            for (FarmTarget target : farmTargets) {
-                // Check fertilizer and water
-                if (!fertilizerManager.hasFertilizer(fertilizerConsumption)) {
-                    farmWorkStatus.hasFertilizer = false;
-                    continue;
-                }
+	private boolean collectWindfall(IFarmLogic logic) {
+		NonNullList<ItemStack> collected = logic.collect(housing.getWorldObj(), housing);
+		if (collected.isEmpty()) {
+			return false;
+		}
 
-                if (liquid.getAmount() > 0 && !housing.hasLiquid(liquid)) {
-                    farmWorkStatus.hasLiquid = false;
-                    continue;
-                }
+		// Let event handlers know.
+		for (IFarmListener listener : farmListeners) {
+			listener.hasCollected(collected, logic);
+		}
 
-                if (FarmHelper.cultivateTarget(world, housing, target, logic, farmListeners)) {
-                    // Remove fertilizer and water
-                    fertilizerManager.removeFertilizer(fertilizerConsumption);
-                    housing.removeLiquid(liquid);
+		housing.getFarmInventory().stowProducts(collected, pendingProduce);
 
-                    farmWorkStatus.didWork = true;
-                }
-            }
-        }
-    }
+		return true;
+	}
 
-    private boolean collectWindfall(IFarmLogic logic) {
-        NonNullList<ItemStack> collected = logic.collect(housing.getWorldObj(), housing);
-        if (collected.isEmpty()) {
-            return false;
-        }
+	private boolean cullCrop(ICrop crop, IFarmLogic provider) {
 
-        // Let event handlers know.
-        for (IFarmListener listener : farmListeners) {
-            listener.hasCollected(collected, logic);
-        }
+		// Let event handlers handle the harvest first.
+		for (IFarmListener listener : farmListeners) {
+			if (listener.beforeCropHarvest(crop)) {
+				return true;
+			}
+		}
 
-        housing.getFarmInventory().stowProducts(collected, pendingProduce);
+		final int fertilizerConsumption = Math.round(
+				provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
 
-        return true;
-    }
+		IErrorLogic errorLogic = housing.getErrorLogic();
 
-    private boolean cullCrop(ICrop crop, IFarmLogic provider) {
+		// Check fertilizer
+		boolean hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
+		if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
+			return false;
+		}
 
-        // Let event handlers handle the harvest first.
-        for (IFarmListener listener : farmListeners) {
-            if (listener.beforeCropHarvest(crop)) {
-                return true;
-            }
-        }
+		// Check water
+		float hydrationModifier = hydrationManager.getHydrationModifier();
+		int waterConsumption = provider.getProperties().getWaterConsumption(housing, hydrationModifier);
+		FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
+		boolean hasLiquid = requiredLiquid.getAmount() == 0 || housing.hasLiquid(requiredLiquid);
 
-        final int fertilizerConsumption = Math.round(
-                provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+		if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
+			return false;
+		}
 
-        IErrorLogic errorLogic = housing.getErrorLogic();
+		NonNullList<ItemStack> harvested = crop.harvest();
+		if (harvested != null) {
+			// Remove fertilizer and water
+			fertilizerManager.removeFertilizer(fertilizerConsumption);
+			housing.removeLiquid(requiredLiquid);
 
-        // Check fertilizer
-        boolean hasFertilizer = fertilizerManager.hasFertilizer(fertilizerConsumption);
-        if (errorLogic.setCondition(!hasFertilizer, EnumErrorCode.NO_FERTILIZER)) {
-            return false;
-        }
+			// Let event handlers handle the harvest first.
+			for (IFarmListener listener : farmListeners) {
+				listener.afterCropHarvest(harvested, crop);
+			}
 
-        // Check water
-        float hydrationModifier = hydrationManager.getHydrationModifier();
-        int waterConsumption = provider.getProperties().getWaterConsumption(housing, hydrationModifier);
-        FluidStack requiredLiquid = new FluidStack(Fluids.WATER, waterConsumption);
-        boolean hasLiquid = requiredLiquid.getAmount() == 0 || housing.hasLiquid(requiredLiquid);
+			housing.getFarmInventory().stowProducts(harvested, pendingProduce);
+		}
+		return true;
+	}
 
-        if (errorLogic.setCondition(!hasLiquid, EnumErrorCode.NO_LIQUID_FARM)) {
-            return false;
-        }
+	@Override
+	public CompoundNBT write(CompoundNBT data) {
+		hydrationManager.write(data);
+		tankManager.write(data);
+		fertilizerManager.write(data);
+		return data;
+	}
 
-        NonNullList<ItemStack> harvested = crop.harvest();
-        if (harvested != null) {
-            // Remove fertilizer and water
-            fertilizerManager.removeFertilizer(fertilizerConsumption);
-            housing.removeLiquid(requiredLiquid);
+	@Override
+	public void read(CompoundNBT data) {
+		hydrationManager.read(data);
+		tankManager.read(data);
+		fertilizerManager.read(data);
+	}
 
-            // Let event handlers handle the harvest first.
-            for (IFarmListener listener : farmListeners) {
-                listener.afterCropHarvest(harvested, crop);
-            }
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		tankManager.writeData(data);
+		hydrationManager.writeData(data);
+		fertilizerManager.writeData(data);
+	}
 
-            housing.getFarmInventory().stowProducts(harvested, pendingProduce);
-        }
-        return true;
-    }
+	@Override
+	public void readData(PacketBufferForestry data) throws IOException {
+		tankManager.readData(data);
+		hydrationManager.readData(data);
+		fertilizerManager.readData(data);
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT data) {
-        hydrationManager.write(data);
-        tankManager.write(data);
-        fertilizerManager.write(data);
-        return data;
-    }
+	public void clearTargets() {
+		targets.clear();
+	}
 
-    @Override
-    public void read(CompoundNBT data) {
-        hydrationManager.read(data);
-        tankManager.read(data);
-        fertilizerManager.read(data);
-    }
+	public void addPendingProduct(ItemStack stack) {
+		this.pendingProduce.add(stack);
+	}
 
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        tankManager.writeData(data);
-        hydrationManager.writeData(data);
-        fertilizerManager.writeData(data);
-    }
+	public BlockPos getFarmCorner(FarmDirection direction) {
+		List<FarmTarget> targetList = this.targets.get(direction);
+		if (targetList.isEmpty()) {
+			return housing.getCoords();
+		}
+		FarmTarget target = targetList.get(0);
+		return target.getStart().offset(direction.getFacing().getOpposite());
+	}
 
-    @Override
-    public void readData(PacketBufferForestry data) throws IOException {
-        tankManager.readData(data);
-        hydrationManager.readData(data);
-        fertilizerManager.readData(data);
-    }
+	@Override
+	public int getExtents(FarmDirection direction, BlockPos pos) {
+		if (!lastExtents.contains(direction, pos)) {
+			lastExtents.put(direction, pos, 0);
+			return 0;
+		}
 
-    public void clearTargets() {
-        targets.clear();
-    }
+		return lastExtents.get(direction, pos);
+	}
 
-    public void addPendingProduct(ItemStack stack) {
-        this.pendingProduce.add(stack);
-    }
+	@Override
+	public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
+		lastExtents.put(direction, pos, extend);
+	}
 
-    public BlockPos getFarmCorner(FarmDirection direction) {
-        List<FarmTarget> targetList = this.targets.get(direction);
-        if (targetList.isEmpty()) {
-            return housing.getCoords();
-        }
-        FarmTarget target = targetList.get(0);
-        return target.getStart().offset(direction.getFacing().getOpposite());
-    }
-
-    @Override
-    public int getExtents(FarmDirection direction, BlockPos pos) {
-        if (!lastExtents.contains(direction, pos)) {
-            lastExtents.put(direction, pos, 0);
-            return 0;
-        }
-
-        return lastExtents.get(direction, pos);
-    }
-
-    @Override
-    public void setExtents(FarmDirection direction, BlockPos pos, int extend) {
-        lastExtents.put(direction, pos, extend);
-    }
-
-    @Override
-    public void cleanExtents(FarmDirection direction) {
-        lastExtents.row(direction).clear();
-    }
+	@Override
+	public void cleanExtents(FarmDirection direction) {
+		lastExtents.row(direction).clear();
+	}
 }

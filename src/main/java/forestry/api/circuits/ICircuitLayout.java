@@ -9,24 +9,24 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public interface ICircuitLayout {
 
-    /**
-     * unique ID for this circuit layout
-     */
-    String getUID();
+	/**
+	 * unique ID for this circuit layout
+	 */
+	String getUID();
 
-    /**
-     * localized name for this circuit layout
-     */
-    TranslationTextComponent getName();
+	/**
+	 * localized name for this circuit layout
+	 */
+	TranslationTextComponent getName();
 
-    /**
-     * localized string for how this circuit layout is used
-     */
-    TranslationTextComponent getUsage();
+	/**
+	 * localized string for how this circuit layout is used
+	 */
+	TranslationTextComponent getUsage();
 
-    /**
-     * Specifies where a circuit layout is used.
-     */
-    ICircuitSocketType getSocketType();
+	/**
+	 * Specifies where a circuit layout is used.
+	 */
+	ICircuitSocketType getSocketType();
 
 }

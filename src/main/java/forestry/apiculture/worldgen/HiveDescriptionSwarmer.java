@@ -18,6 +18,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -31,44 +32,44 @@ import java.util.Random;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {
 
-    private final List<ItemStack> bees;
+	private final List<ItemStack> bees;
 
-    public HiveDescriptionSwarmer(ItemStack... bees) {
-        this.bees = Arrays.asList(bees);
-    }
+	public HiveDescriptionSwarmer(ItemStack... bees) {
+		this.bees = Arrays.asList(bees);
+	}
 
-    @Override
-    public IHiveGen getHiveGen() {
-        return new HiveGenGround(Blocks.DIRT, Blocks.GRASS);
-    }
+	@Override
+	public IHiveGen getHiveGen() {
+		return new HiveGenGround(Blocks.DIRT, Blocks.GRASS);
+	}
 
-    @Override
-    public BlockState getBlockState() {
-        return ApicultureBlocks.BEEHIVE.get(IHiveRegistry.HiveType.SWARM).defaultState();
-    }
+	@Override
+	public BlockState getBlockState() {
+		return ApicultureBlocks.BEEHIVE.get(IHiveRegistry.HiveType.SWARM).defaultState();
+	}
 
-    @Override
-    public boolean isGoodBiome(Biome biome) {
-        return true;
-    }
+	@Override
+	public boolean isGoodBiome(Biome biome) {
+		return true;
+	}
 
-    @Override
-    public boolean isGoodHumidity(EnumHumidity humidity) {
-        return true;
-    }
+	@Override
+	public boolean isGoodHumidity(EnumHumidity humidity) {
+		return true;
+	}
 
-    @Override
-    public boolean isGoodTemperature(EnumTemperature temperature) {
-        return true;
-    }
+	@Override
+	public boolean isGoodTemperature(EnumTemperature temperature) {
+		return true;
+	}
 
-    @Override
-    public float getGenChance() {
-        return 128.0f;
-    }
+	@Override
+	public float getGenChance() {
+		return 128.0f;
+	}
 
-    @Override
-    public void postGen(ISeedReader world, Random rand, BlockPos pos) {
-        TileUtil.actOnTile(world, pos, TileHive.class, tile -> tile.setContained(bees));
-    }
+	@Override
+	public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		TileUtil.actOnTile(world, pos, TileHive.class, tile -> tile.setContained(bees));
+	}
 }

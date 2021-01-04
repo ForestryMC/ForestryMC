@@ -21,8 +21,8 @@ import javax.annotation.Nullable;
  * @author SirSengir
  */
 public interface IMoistenerManager extends ICraftingProvider<IMoistenerRecipe> {
-    boolean isResource(RecipeManager manager, ItemStack resource);
+	boolean isResource(RecipeManager manager, ItemStack resource);
 
-    @Nullable
-    IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item);
+	@Nullable
+	IMoistenerRecipe findMatchingRecipe(RecipeManager manager, ItemStack item);
 }

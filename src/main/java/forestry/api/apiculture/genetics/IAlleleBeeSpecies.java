@@ -8,41 +8,44 @@ package forestry.api.apiculture.genetics;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.products.IDynamicProductList;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 
-    /**
-     * @return the IBeeRoot
-     */
-    @Override
-    IBeeRoot getRoot();
+	/**
+	 * @return the IBeeRoot
+	 */
+	@Override
+	IBeeRoot getRoot();
 
-    /**
-     * @return true if this species is only active at night.
-     */
-    boolean isNocturnal();
+	/**
+	 * @return true if this species is only active at night.
+	 */
+	boolean isNocturnal();
 
-    /**
-     * @return List of possible products with the chance for drop each bee cycle. (0 - 1]
-     */
-    IDynamicProductList getProducts();
+	/**
+	 * @return List of possible products with the chance for drop each bee cycle. (0 - 1]
+	 */
+	IDynamicProductList getProducts();
 
-    /**
-     * @return List of possible specialities with the chance for drop each bee cycle. (0 - 1]
-     */
-    IDynamicProductList getSpecialties();
+	/**
+	 * @return List of possible specialities with the chance for drop each bee cycle. (0 - 1]
+	 */
+	IDynamicProductList getSpecialties();
 
-    /**
-     * Only jubilant bees produce specialities.
-     *
-     * @return true if the bee is jubilant, false otherwise.
-     */
-    boolean isJubilant(IGenome genome, IBeeHousing housing);
+	/**
+	 * Only jubilant bees produce specialities.
+	 *
+	 * @return true if the bee is jubilant, false otherwise.
+	 */
+	boolean isJubilant(IGenome genome, IBeeHousing housing);
 
-    @OnlyIn(Dist.CLIENT)
-    ModelResourceLocation getModel(EnumBeeType type);
+	@OnlyIn(Dist.CLIENT)
+	ModelResourceLocation getModel(EnumBeeType type);
 }

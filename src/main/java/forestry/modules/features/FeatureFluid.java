@@ -4,6 +4,7 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.ForestryFluid;
 import forestry.core.items.DrinkProperties;
+
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 
@@ -12,151 +13,150 @@ import java.awt.*;
 import java.util.function.Supplier;
 
 public class FeatureFluid implements IFluidFeature {
-    private final FeatureBlock<BlockForestryFluid, BlockItem> block;
-    private final FluidProperties properties;
-    private final String moduleID;
-    private final String identifier;
-    @Nullable
-    private FlowingFluid fluid;
-    @Nullable
-    private FlowingFluid flowing;
+	private final FeatureBlock<BlockForestryFluid, BlockItem> block;
+	private final FluidProperties properties;
+	private final String moduleID;
+	private final String identifier;
+	@Nullable
+	private FlowingFluid fluid;
+	@Nullable
+	private FlowingFluid flowing;
 
-    public FeatureFluid(Builder builder) {
-        this.moduleID = builder.moduleID;
-        this.identifier = builder.identifier;
-        this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
-        this.properties = new FluidProperties(builder);
-    }
+	public FeatureFluid(Builder builder) {
+		this.moduleID = builder.moduleID;
+		this.identifier = builder.identifier;
+		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
+		this.properties = new FluidProperties(builder);
+	}
 
-    @Override
-    public FeatureBlock<BlockForestryFluid, BlockItem> fluidBlock() {
-        return block;
-    }
+	@Override
+	public FeatureBlock<BlockForestryFluid, BlockItem> fluidBlock() {
+		return block;
+	}
 
-    @Override
-    public void setFluid(FlowingFluid fluid) {
-        this.fluid = fluid;
-    }
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}	@Override
+	public void setFluid(FlowingFluid fluid) {
+		this.fluid = fluid;
+	}
 
-    @Override
-    public void setFlowing(@Nullable FlowingFluid flowing) {
-        this.flowing = flowing;
-    }
+	@Override
+	public FeatureType getType() {
+		return FeatureType.FLUID;
+	}	@Override
+	public void setFlowing(@Nullable FlowingFluid flowing) {
+		this.flowing = flowing;
+	}
 
-    @Override
-    public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
-        return () -> flowing ? new ForestryFluid.Flowing(this) : new ForestryFluid.Source(this);
-    }
+	@Override
+	public String getModId() {
+		return Constants.MOD_ID;
+	}	@Override
+	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
+		return () -> flowing ? new ForestryFluid.Flowing(this) : new ForestryFluid.Source(this);
+	}
 
-    @Nullable
-    @Override
-    public FlowingFluid getFluid() {
-        return fluid;
-    }
+	@Override
+	public String getModuleId() {
+		return moduleID;
+	}	@Nullable
+	@Override
+	public FlowingFluid getFluid() {
+		return fluid;
+	}
 
-    @Nullable
-    @Override
-    public FlowingFluid getFlowing() {
-        return flowing;
-    }
+	public static class Builder {
+		final String identifier;
+		private final IFeatureRegistry registry;
+		private final String moduleID;
+		int density = 1000;
+		int viscosity = 1000;
+		int temperature = 295;
+		Color particleColor = Color.WHITE;
+		int flammability = 0;
+		boolean flammable = false;
+		@Nullable
+		DrinkProperties properties = null;
 
-    @Override
-    public FluidProperties getProperties() {
-        return properties;
-    }
+		public Builder(IFeatureRegistry registry, String moduleID, String identifier) {
+			this.registry = registry;
+			this.moduleID = moduleID;
+			this.identifier = identifier;
+		}
 
-    @Override
-    public boolean hasFlowing() {
-        return flowing != null;
-    }
+		public Builder flammable() {
+			this.flammable = true;
+			return this;
+		}
 
-    @Override
-    public boolean hasFluid() {
-        return fluid != null;
-    }
+		public Builder flammability(int flammability) {
+			this.flammability = flammability;
+			return this;
+		}
 
-    @Override
-    public FeatureType getType() {
-        return FeatureType.FLUID;
-    }
+		public Builder density(int density) {
+			this.density = density;
+			return this;
+		}
 
-    @Override
-    public String getIdentifier() {
-        return identifier;
-    }
+		public Builder viscosity(int viscosity) {
+			this.viscosity = viscosity;
+			return this;
+		}
 
-    @Override
-    public String getModId() {
-        return Constants.MOD_ID;
-    }
+		public Builder temperature(int temperature) {
+			this.temperature = temperature;
+			return this;
+		}
 
-    @Override
-    public String getModuleId() {
-        return moduleID;
-    }
+		public Builder setParticleColor(Color particleColor) {
+			this.particleColor = particleColor;
+			return this;
+		}
 
-    public static class Builder {
-        private final IFeatureRegistry registry;
-        private final String moduleID;
-        final String identifier;
+		public Builder particleColor(Color color) {
+			this.particleColor = color;
+			return this;
+		}
 
-        int density = 1000;
-        int viscosity = 1000;
-        int temperature = 295;
-        Color particleColor = Color.WHITE;
-        int flammability = 0;
-        boolean flammable = false;
-        @Nullable
-        DrinkProperties properties = null;
+		public Builder drinkProperties(int healAmount, float saturationModifier, int maxItemUseDuration) {
+			this.properties = new DrinkProperties(healAmount, saturationModifier, maxItemUseDuration);
+			return this;
+		}
 
-        public Builder(IFeatureRegistry registry, String moduleID, String identifier) {
-            this.registry = registry;
-            this.moduleID = moduleID;
-            this.identifier = identifier;
-        }
+		public FeatureFluid create() {
+			return registry.register(new FeatureFluid(this));
+		}
+	}	@Nullable
+	@Override
+	public FlowingFluid getFlowing() {
+		return flowing;
+	}
 
-        public Builder flammable() {
-            this.flammable = true;
-            return this;
-        }
+	@Override
+	public FluidProperties getProperties() {
+		return properties;
+	}
 
-        public Builder flammability(int flammability) {
-            this.flammability = flammability;
-            return this;
-        }
+	@Override
+	public boolean hasFlowing() {
+		return flowing != null;
+	}
 
-        public Builder density(int density) {
-            this.density = density;
-            return this;
-        }
+	@Override
+	public boolean hasFluid() {
+		return fluid != null;
+	}
 
-        public Builder viscosity(int viscosity) {
-            this.viscosity = viscosity;
-            return this;
-        }
 
-        public Builder temperature(int temperature) {
-            this.temperature = temperature;
-            return this;
-        }
 
-        public Builder setParticleColor(Color particleColor) {
-            this.particleColor = particleColor;
-            return this;
-        }
 
-        public Builder particleColor(Color color) {
-            this.particleColor = color;
-            return this;
-        }
 
-        public Builder drinkProperties(int healAmount, float saturationModifier, int maxItemUseDuration) {
-            this.properties = new DrinkProperties(healAmount, saturationModifier, maxItemUseDuration);
-            return this;
-        }
 
-        public FeatureFluid create() {
-            return registry.register(new FeatureFluid(this));
-        }
-    }
+
+
+
+
 }

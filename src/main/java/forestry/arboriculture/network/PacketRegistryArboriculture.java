@@ -12,18 +12,19 @@ package forestry.arboriculture.network;
 
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdClient;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryArboriculture implements IPacketRegistry {
-    @Override
-    public void registerPacketsServer() {
+	@Override
+	public void registerPacketsServer() {
 
-    }
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerPacketsClient() {
-        PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerPacketsClient() {
+		PacketIdClient.RIPENING_UPDATE.setPacketHandler(new PacketRipeningUpdate.Handler());
+	}
 }

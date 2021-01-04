@@ -14,7 +14,9 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.api.genetics.products.Product;
 import forestry.core.genetics.ProductListWrapper;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -26,86 +28,86 @@ import java.awt.*;
 import java.util.function.Supplier;
 
 public class FruitProviderRipening extends FruitProviderNone {
-    private int colourCallow = 0xffffff;
-    private int diffR;
-    private int diffG;
-    private int diffB;
-    private ProductListWrapper products;
+	private int colourCallow = 0xffffff;
+	private int diffR;
+	private int diffG;
+	private int diffB;
+	private ProductListWrapper products;
 
-    public FruitProviderRipening(
-            String unlocalizedDescription,
-            IFruitFamily family,
-            Supplier<ItemStack> product,
-            float modifier
-    ) {
-        super(unlocalizedDescription, family);
-        this.products = ProductListWrapper.create();
-        this.products.addProduct(product, modifier);
-    }
+	public FruitProviderRipening(
+			String unlocalizedDescription,
+			IFruitFamily family,
+			Supplier<ItemStack> product,
+			float modifier
+	) {
+		super(unlocalizedDescription, family);
+		this.products = ProductListWrapper.create();
+		this.products.addProduct(product, modifier);
+	}
 
-    @Override
-    public void onStartSetup() {
-        this.products = products.bake();
-    }
+	@Override
+	public void onStartSetup() {
+		this.products = products.bake();
+	}
 
-    public FruitProviderRipening setColours(Color ripe, Color callow) {
-        colourCallow = callow.getRGB();
-        int ripeRGB = ripe.getRGB();
+	public FruitProviderRipening setColours(Color ripe, Color callow) {
+		colourCallow = callow.getRGB();
+		int ripeRGB = ripe.getRGB();
 
-        diffR = (ripeRGB >> 16 & 255) - (colourCallow >> 16 & 255);
-        diffG = (ripeRGB >> 8 & 255) - (colourCallow >> 8 & 255);
-        diffB = (ripeRGB & 255) - (colourCallow & 255);
+		diffR = (ripeRGB >> 16 & 255) - (colourCallow >> 16 & 255);
+		diffG = (ripeRGB >> 8 & 255) - (colourCallow >> 8 & 255);
+		diffB = (ripeRGB & 255) - (colourCallow & 255);
 
-        return this;
-    }
+		return this;
+	}
 
-    public FruitProviderRipening setRipeningPeriod(int period) {
-        ripeningPeriod = period;
-        return this;
-    }
+	public FruitProviderRipening setRipeningPeriod(int period) {
+		ripeningPeriod = period;
+		return this;
+	}
 
-    private float getRipeningStage(int ripeningTime) {
-        if (ripeningTime >= ripeningPeriod) {
-            return 1.0f;
-        }
+	private float getRipeningStage(int ripeningTime) {
+		if (ripeningTime >= ripeningPeriod) {
+			return 1.0f;
+		}
 
-        return (float) ripeningTime / ripeningPeriod;
-    }
+		return (float) ripeningTime / ripeningPeriod;
+	}
 
-    @Override
-    public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
-        NonNullList<ItemStack> product = NonNullList.create();
-        products.addProducts(world, pos, product, Product::getChance, world.rand);
+	@Override
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		float stage = getRipeningStage(ripeningTime);
+		return getColour(stage);
+	}
 
-        return product;
-    }
+	@Override
+	public int getDecorativeColor() {
+		return getColour(1.0f);
+	}
 
-    @Override
-    public IProductList getProducts() {
-        return products;
-    }
+	@Override
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
+		return true;
+	}
 
-    @Override
-    public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
-        return true;
-    }
+	@Override
+	public IProductList getProducts() {
+		return products;
+	}
 
-    @Override
-    public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-        float stage = getRipeningStage(ripeningTime);
-        return getColour(stage);
-    }
+	@Override
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+		NonNullList<ItemStack> product = NonNullList.create();
+		products.addProducts(world, pos, product, Product::getChance, world.rand);
 
-    private int getColour(float stage) {
-        int r = (colourCallow >> 16 & 255) + (int) (diffR * stage);
-        int g = (colourCallow >> 8 & 255) + (int) (diffG * stage);
-        int b = (colourCallow & 255) + (int) (diffB * stage);
+		return product;
+	}
 
-        return (r & 255) << 16 | (g & 255) << 8 | b & 255;
-    }
+	private int getColour(float stage) {
+		int r = (colourCallow >> 16 & 255) + (int) (diffR * stage);
+		int g = (colourCallow >> 8 & 255) + (int) (diffG * stage);
+		int b = (colourCallow & 255) + (int) (diffB * stage);
 
-    @Override
-    public int getDecorativeColor() {
-        return getColour(1.0f);
-    }
+		return (r & 255) << 16 | (g & 255) << 8 | b & 255;
+	}
 }

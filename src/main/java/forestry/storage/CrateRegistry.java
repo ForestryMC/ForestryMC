@@ -17,81 +17,83 @@ import forestry.core.utils.Log;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 import forestry.storage.items.ItemCrated;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
+
 import net.minecraftforge.common.Tags;
 
 import java.util.Collection;
 
 public class CrateRegistry implements ICrateRegistry {
 
-    private static void setRegisterCrate(ItemStack stack) {
-        if (stack.isEmpty()) {
-            Log.error("Tried to make a crate without an item");
-            return;
-        }
+	private static void setRegisterCrate(ItemStack stack) {
+		if (stack.isEmpty()) {
+			Log.error("Tried to make a crate without an item");
+			return;
+		}
 
-        String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
-        if (stringForItemStack == null) {
-            Log.error("Could not get string name for itemStack {}", stack);
-            return;
-        }
-        String itemName = stringForItemStack.replace(':', '.');
-        String crateName = "crated." + itemName;
+		String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
+		if (stringForItemStack == null) {
+			Log.error("Could not get string name for itemStack {}", stack);
+			return;
+		}
+		String itemName = stringForItemStack.replace(':', '.');
+		String crateName = "crated." + itemName;
 
-        IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
-        ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack), crateName));
-    }
+		IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
+		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack), crateName));
+	}
 
-    @Override
-    public void registerCrate(ITag tag) {
-        if (ModuleCrates.cratesRejectedOreDict.contains(tag.toString())) {
-            return;
-        }
+	@Override
+	public void registerCrate(Item item) {
+		setRegisterCrate(new ItemStack(item));
+	}
 
-        Ingredient ingredient = Ingredient.fromTag(tag);
-        for (ItemStack stack : ingredient.getMatchingStacks()) {
-            if (stack != null) {
-                registerCrate(stack);
-                break;
-            }
-        }
-    }
+	@Override
+	public void registerCrate(Block block) {
+		setRegisterCrate(new ItemStack(block));
+	}
 
-    @Override
-    public void registerCrate(Block block) {
-        setRegisterCrate(new ItemStack(block));
-    }
+	@Override
+	public void registerCrate(ItemStack stack) {
+		Collection<ItemStack> testStacks = ModuleCrates.cratesRejectedItem.get(stack.getItem());
+		for (ItemStack testStack : testStacks) {
+			if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, testStack)) {
+				return;
+			}
+		}
 
-    @Override
-    public void registerCrate(Item item) {
-        setRegisterCrate(new ItemStack(item));
-    }
+		setRegisterCrate(stack);
+	}
 
-    @Override
-    public void registerCrate(IItemProvider provider) {
-        if (provider.hasItem()) {
-            registerCrate(provider.item());
-        }
-    }
+	@Override
+	public void registerCrate(ITag tag) {
+		if (ModuleCrates.cratesRejectedOreDict.contains(tag.toString())) {
+			return;
+		}
 
-    @Override
-    public void registerCrate(ItemStack stack) {
-        Collection<ItemStack> testStacks = ModuleCrates.cratesRejectedItem.get(stack.getItem());
-        for (ItemStack testStack : testStacks) {
-            if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, testStack)) {
-                return;
-            }
-        }
+		Ingredient ingredient = Ingredient.fromTag(tag);
+		for (ItemStack stack : ingredient.getMatchingStacks()) {
+			if (stack != null) {
+				registerCrate(stack);
+				break;
+			}
+		}
+	}
 
-        setRegisterCrate(stack);
-    }
+	@Override
+	public void registerCrate(IItemProvider provider) {
+		if (provider.hasItem()) {
+			registerCrate(provider.item());
+		}
+	}
 
-    @Override
-    public void blacklistCrate(ItemStack stack) {
-        ModuleCrates.cratesRejectedItem.put(stack.getItem(), stack);
-    }
+	@Override
+	public void blacklistCrate(ItemStack stack) {
+		ModuleCrates.cratesRejectedItem.put(stack.getItem(), stack);
+	}
 }

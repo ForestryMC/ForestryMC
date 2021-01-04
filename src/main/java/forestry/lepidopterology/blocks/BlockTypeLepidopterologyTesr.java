@@ -17,44 +17,45 @@ import forestry.core.proxy.Proxies;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.lepidopterology.features.LepidopterologyTiles;
 import forestry.modules.features.FeatureTileType;
+
 import net.minecraft.util.math.shapes.VoxelShape;
 
 import java.util.function.Supplier;
 
 public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
-    LEPICHEST(
-            () -> LepidopterologyTiles.LEPIDOPTERIST_CHEST,
-            "lepi_chest",
-            "lepichest",
-            TileNaturalistChest.CHEST_SHAPE
-    );
+	LEPICHEST(
+			() -> LepidopterologyTiles.LEPIDOPTERIST_CHEST,
+			"lepi_chest",
+			"lepichest",
+			TileNaturalistChest.CHEST_SHAPE
+	);
 
-    public static final BlockTypeLepidopterologyTesr[] VALUES = values();
+	public static final BlockTypeLepidopterologyTesr[] VALUES = values();
 
-    private final IMachinePropertiesTesr<?> machineProperties;
+	private final IMachinePropertiesTesr<?> machineProperties;
 
-    <T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(
-            Supplier<FeatureTileType<? extends T>> teClass,
-            String name,
-            String renderName,
-            VoxelShape shape
-    ) {
-        MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-                .setParticleTexture(name + ".0")
-                .setNotFullCube()
-                .setShape(shape)
-                .create();
-        Proxies.render.setRenderChest(machineProperties, renderName);
-        this.machineProperties = machineProperties;
-    }
+	<T extends TileNaturalistChest> BlockTypeLepidopterologyTesr(
+			Supplier<FeatureTileType<? extends T>> teClass,
+			String name,
+			String renderName,
+			VoxelShape shape
+	) {
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+				.setParticleTexture(name + ".0")
+				.setNotFullCube()
+				.setShape(shape)
+				.create();
+		Proxies.render.setRenderChest(machineProperties, renderName);
+		this.machineProperties = machineProperties;
+	}
 
-    @Override
-    public IMachinePropertiesTesr<?> getMachineProperties() {
-        return machineProperties;
-    }
+	@Override
+	public IMachinePropertiesTesr<?> getMachineProperties() {
+		return machineProperties;
+	}
 
-    @Override
-    public String getString() {
-        return getMachineProperties().getString();
-    }
+	@Override
+	public String getString() {
+		return getMachineProperties().getString();
+	}
 }

@@ -12,9 +12,11 @@ package forestry.factory.recipes;
 
 import forestry.api.recipes.IFabricatorSmeltingManager;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -23,36 +25,36 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
-    private final Set<Fluid> recipeFluids = new HashSet<>();
+	private final Set<Fluid> recipeFluids = new HashSet<>();
 
-    public FabricatorSmeltingRecipeManager() {
-        super(IFabricatorSmeltingRecipe.TYPE);
-    }
+	public FabricatorSmeltingRecipeManager() {
+		super(IFabricatorSmeltingRecipe.TYPE);
+	}
 
-    @Nullable
-    public IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource) {
-        if (resource.isEmpty()) {
-            return null;
-        }
+	@Nullable
+	public IFabricatorSmeltingRecipe findMatchingSmelting(RecipeManager manager, ItemStack resource) {
+		if (resource.isEmpty()) {
+			return null;
+		}
 
-        for (IFabricatorSmeltingRecipe smelting : getRecipes(manager)) {
-            if (smelting.getResource().test(resource)) {
-                return smelting;
-            }
-        }
+		for (IFabricatorSmeltingRecipe smelting : getRecipes(manager)) {
+			if (smelting.getResource().test(resource)) {
+				return smelting;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public Set<Fluid> getRecipeFluids(RecipeManager manager) {
-        if (recipeFluids.isEmpty()) {
-            for (IFabricatorSmeltingRecipe recipe : getRecipes(manager)) {
-                FluidStack fluidStack = recipe.getProduct();
-                if (!fluidStack.isEmpty()) {
-                    recipeFluids.add(fluidStack.getFluid());
-                }
-            }
-        }
-        return Collections.unmodifiableSet(recipeFluids);
-    }
+	public Set<Fluid> getRecipeFluids(RecipeManager manager) {
+		if (recipeFluids.isEmpty()) {
+			for (IFabricatorSmeltingRecipe recipe : getRecipes(manager)) {
+				FluidStack fluidStack = recipe.getProduct();
+				if (!fluidStack.isEmpty()) {
+					recipeFluids.add(fluidStack.getFluid());
+				}
+			}
+		}
+		return Collections.unmodifiableSet(recipeFluids);
+	}
 }

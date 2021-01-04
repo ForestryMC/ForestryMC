@@ -11,21 +11,23 @@
 package forestry.core.network;
 
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.network.PacketBuffer;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 public abstract class ForestryPacket implements IForestryPacket {
-    @Override
-    public final Pair<PacketBuffer, Integer> getPacketData() {
-        PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
+	@Override
+	public final Pair<PacketBuffer, Integer> getPacketData() {
+		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
 
-        IPacketId id = getPacketId();
-        int ordinal = id.ordinal();
-        data.writeByte(id.ordinal());
-        writeData(data);
+		IPacketId id = getPacketId();
+		int ordinal = id.ordinal();
+		data.writeByte(id.ordinal());
+		writeData(data);
 
-        return Pair.of(data, ordinal);
-    }
+		return Pair.of(data, ordinal);
+	}
 
-    protected abstract void writeData(PacketBufferForestry data);
+	protected abstract void writeData(PacketBufferForestry data);
 }

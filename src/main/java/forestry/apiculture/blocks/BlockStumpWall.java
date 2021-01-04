@@ -13,6 +13,7 @@ package forestry.apiculture.blocks;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
@@ -28,35 +29,35 @@ import net.minecraft.world.World;
 
 public class BlockStumpWall extends WallTorchBlock {
 
-    public BlockStumpWall() {
-        super(Properties.create(Material.MISCELLANEOUS)
-                        .hardnessAndResistance(0.0f)
-                        .sound(SoundType.WOOD), ParticleTypes.FLAME);
-    }
+	public BlockStumpWall() {
+		super(Properties.create(Material.MISCELLANEOUS)
+				.hardnessAndResistance(0.0f)
+				.sound(SoundType.WOOD), ParticleTypes.FLAME);
+	}
 
-    @Override
-    public ActionResultType onBlockActivated(
-            BlockState state,
-            World worldIn,
-            BlockPos pos,
-            PlayerEntity playerIn,
-            Hand hand,
-            BlockRayTraceResult hit
-    ) {
-        ItemStack heldItem = playerIn.getHeldItem(hand);
-        if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-            BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).with(
-                    HORIZONTAL_FACING,
-                    state.get(HORIZONTAL_FACING)
-            );
-            worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
-            TileCandle tc = new TileCandle();
-            tc.setColour(16777215); // default to white
-            tc.setLit(true);
-            worldIn.setTileEntity(pos, tc);
-            return ActionResultType.SUCCESS;
-        }
+	@Override
+	public ActionResultType onBlockActivated(
+			BlockState state,
+			World worldIn,
+			BlockPos pos,
+			PlayerEntity playerIn,
+			Hand hand,
+			BlockRayTraceResult hit
+	) {
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
+			BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).with(
+					HORIZONTAL_FACING,
+					state.get(HORIZONTAL_FACING)
+			);
+			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
+			TileCandle tc = new TileCandle();
+			tc.setColour(16777215); // default to white
+			tc.setLit(true);
+			worldIn.setTileEntity(pos, tc);
+			return ActionResultType.SUCCESS;
+		}
 
-        return ActionResultType.PASS;
-    }
+		return ActionResultType.PASS;
+	}
 }

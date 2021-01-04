@@ -4,86 +4,88 @@ import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
 public class FakeClimateListener implements IClimateListener {
-    public static final FakeClimateListener INSTANCE = new FakeClimateListener();
+	public static final FakeClimateListener INSTANCE = new FakeClimateListener();
 
-    private FakeClimateListener() {
-    }
+	private FakeClimateListener() {
+	}
 
-    @Override
-    public IClimateState getClimateState() {
-        return AbsentClimateState.INSTANCE;
-    }
+	@Override
+	public IClimateState getClimateState() {
+		return AbsentClimateState.INSTANCE;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void setClimateState(IClimateState climateState) {
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void setClimateState(IClimateState climateState) {
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void updateClientSide(boolean spawnParticles) {
+	@Override
+	public float getExactTemperature() {
+		return 0.0F;
+	}
 
-    }
+	@Override
+	public float getExactHumidity() {
+		return 0.0F;
+	}
 
-    @Override
-    public Biome getBiome() {
-        return ((Supplier<Biome>) Biomes.PLAINS).get();
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void updateClientSide(boolean spawnParticles) {
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.NORMAL;
-    }
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        return EnumHumidity.NORMAL;
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void syncToClient() {
 
-    @Override
-    public float getExactTemperature() {
-        return 0.0F;
-    }
+	}
 
-    @Override
-    public float getExactHumidity() {
-        return 0.0F;
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void syncToClient(ServerPlayerEntity player) {
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void syncToClient() {
+	}
 
-    }
+	@Override
+	public void markLocatableDirty() {
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void syncToClient(ServerPlayerEntity player) {
+	@Override
+	public Biome getBiome() {
+		return ((Supplier<Biome>) Biomes.PLAINS).get();
+	}
 
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.NORMAL;
+	}
 
-    @Override
-    public BlockPos getCoordinates() {
-        return BlockPos.ZERO;
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.NORMAL;
+	}
 
-    @Override
-    public World getWorldObj() {
-        return null;
-    }
+	@Override
+	public BlockPos getCoordinates() {
+		return BlockPos.ZERO;
+	}
 
-    @Override
-    public void markLocatableDirty() {
-    }
+	@Override
+	public World getWorldObj() {
+		return null;
+	}
 }

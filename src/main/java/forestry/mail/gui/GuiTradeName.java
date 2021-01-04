@@ -11,108 +11,112 @@
 package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
+
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
 import org.apache.commons.lang3.StringUtils;
+
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
-    private final TileTrader tile;
-    @Nullable
-    private TextFieldWidget addressNameField;
+	private final TileTrader tile;
+	@Nullable
+	private TextFieldWidget addressNameField;
 
-    public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
-        super(Constants.TEXTURE_PATH_GUI + "tradername.png", container, inv, title);
-        this.tile = container.getTile();
-        this.xSize = 176;
-        this.ySize = 90;
-    }
+	public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
+		super(Constants.TEXTURE_PATH_GUI + "tradername.png", container, inv, title);
+		this.tile = container.getTile();
+		this.xSize = 176;
+		this.ySize = 90;
+	}
 
-    @Override
-    public void init() {
-        super.init();
+	@Override
+	public void init() {
+		super.init();
 
-        addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
-        addressNameField.setText(container.getAddress().getName());
-        addressNameField.setVisible(true);
-        addressNameField.setFocused2(true);
-    }
+		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
+		addressNameField.setText(container.getAddress().getName());
+		addressNameField.setVisible(true);
+		addressNameField.setFocused2(true);
+	}
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        // Set focus or enter text into address
-        if (addressNameField.isFocused()) {
-            if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
-                setAddress();
-            } else {
-                addressNameField.keyPressed(keyCode, scanCode, modifiers);
-            }
-            return true;
-        }
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
+		textLayout.startPage();
+		textLayout.newLine();
+		textLayout.drawCenteredLine(
+				transform,
+				new TranslationTextComponent("for.gui.mail.nametrader"),
+				0,
+				ColourProperties.INSTANCE.get("gui.mail.text")
+		);
+		textLayout.endPage();
+		addressNameField.render(transform, mouseX, mouseY, partialTicks);
+	}
 
-    @Override
-    public boolean charTyped(char codePoint, int modifiers) {
-        // Set focus or enter text into address
-        if (addressNameField.isFocused()) {
-            addressNameField.charTyped(codePoint, modifiers);
-            return true;
-        }
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
+		return true;
+	}
 
-        return super.charTyped(codePoint, modifiers);
-    }
+	@Override
+	public void onClose() {
+		super.onClose();
+		setAddress();
+	}
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-        addressNameField.mouseClicked(mouseX, mouseY, mouseButton);
-        return true;
-    }
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(tile);
+	}
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		// Set focus or enter text into address
+		if (addressNameField.isFocused()) {
+			if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+				setAddress();
+			} else {
+				addressNameField.keyPressed(keyCode, scanCode, modifiers);
+			}
+			return true;
+		}
 
-        textLayout.startPage();
-        textLayout.newLine();
-        textLayout.drawCenteredLine(
-                transform,
-                new TranslationTextComponent("for.gui.mail.nametrader"),
-                0,
-                ColourProperties.INSTANCE.get("gui.mail.text")
-        );
-        textLayout.endPage();
-        addressNameField.render(transform, mouseX, mouseY, partialTicks);
-    }
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
 
-    @Override
-    public void onClose() {
-        super.onClose();
-        setAddress();
-    }
+	@Override
+	public boolean charTyped(char codePoint, int modifiers) {
+		// Set focus or enter text into address
+		if (addressNameField.isFocused()) {
+			addressNameField.charTyped(codePoint, modifiers);
+			return true;
+		}
 
-    private void setAddress() {
-        String address = addressNameField.getText();
-        if (StringUtils.isNotBlank(address)) {
-            PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
-            NetworkUtil.sendToServer(packet);
-        }
-    }
+		return super.charTyped(codePoint, modifiers);
+	}
 
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(tile);
-    }
+	private void setAddress() {
+		String address = addressNameField.getText();
+		if (StringUtils.isNotBlank(address)) {
+			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
+			NetworkUtil.sendToServer(packet);
+		}
+	}
 }

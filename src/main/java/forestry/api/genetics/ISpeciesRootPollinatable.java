@@ -6,7 +6,9 @@
 package forestry.api.genetics;
 
 import com.mojang.authlib.GameProfile;
+
 import genetics.api.individual.IIndividual;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,14 +21,14 @@ import javax.annotation.Nullable;
 //TODO: Move to a component ?
 public interface ISpeciesRootPollinatable<I extends IIndividual> extends IForestrySpeciesRoot<I> {
 
-    ICheckPollinatable createPollinatable(IIndividual individual);
+	ICheckPollinatable createPollinatable(IIndividual individual);
 
-    @Nullable
-    IPollinatable tryConvertToPollinatable(
-            @Nullable GameProfile owner,
-            World world,
-            final BlockPos pos,
-            final IIndividual pollen
-    );
+	@Nullable
+	IPollinatable tryConvertToPollinatable(
+			@Nullable GameProfile owner,
+			World world,
+			final BlockPos pos,
+			final IIndividual pollen
+	);
 
 }

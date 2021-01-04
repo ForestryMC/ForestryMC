@@ -11,10 +11,12 @@
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.WorldUtils;
 import forestry.modules.ModuleManager;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
@@ -23,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
+
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,106 +34,106 @@ import java.util.*;
 
 public class TickHandlerCoreServer {
 
-    private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
-    private final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
+	private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
+	private final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
 
-    private static Random getRetrogenRandom(World world, ChunkCoords coords) {
-        long worldSeed = WorldUtils.asServer(world).getSeed();
-        Random random = new Random(worldSeed);
-        long xSeed = random.nextLong() >> 2 + 1L;
-        long zSeed = random.nextLong() >> 2 + 1L;
-        random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
-        return random;
-    }
+	private static Random getRetrogenRandom(World world, ChunkCoords coords) {
+		long worldSeed = WorldUtils.asServer(world).getSeed();
+		Random random = new Random(worldSeed);
+		long xSeed = random.nextLong() >> 2 + 1L;
+		long zSeed = random.nextLong() >> 2 + 1L;
+		random.setSeed(xSeed * coords.x + zSeed * coords.z ^ worldSeed);
+		return random;
+	}
 
-    private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
-        ServerChunkProvider chunkProvider = server.getChunkProvider();
-        for (int x = 0; x <= 1; x++) {
-            for (int z = 0; z <= 1; z++) {
-                if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
+		ServerChunkProvider chunkProvider = server.getChunkProvider();
+		for (int x = 0; x <= 1; x++) {
+			for (int z = 0; z <= 1; z++) {
+				if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-    @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		if (event.phase != TickEvent.Phase.END) {
+			return;
+		}
 
-        if (Config.enableBackpackResupply) {
-            for (PlayerEntity obj : event.world.getPlayers()) {
-                for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
-                    handler.resupply(obj);
-                }
-            }
-        }
+		if (Config.enableBackpackResupply) {
+			for (PlayerEntity obj : event.world.getPlayers()) {
+				for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
+					handler.resupply(obj);
+				}
+			}
+		}
 
-        if (Config.doRetrogen && event.world instanceof ServerWorld) {
-            ServerWorld world = (ServerWorld) event.world;
-            RegistryKey<World> dim = world.getDimensionKey();
-            String dimName = dim.getLocation().getNamespace();
-            if (checkForRetrogen.contains(dimName)) {
-                List<ChunkCoords> chunkList = chunkRegenList.get(dim);
-                Iterator<ChunkCoords> iterator = chunkList.iterator();
-                while (iterator.hasNext()) {
-                    ChunkCoords coords = iterator.next();
-                    if (canDecorate(world, coords)) {
-                        iterator.remove();
-                        Random random = getRetrogenRandom(world, coords);
-                        //						worldGenerator.retroGen(random, coords.x, coords.z, world);
-                    }
-                }
-                checkForRetrogen.remove(dimName);
-            }
-        }
-    }
+		if (Config.doRetrogen && event.world instanceof ServerWorld) {
+			ServerWorld world = (ServerWorld) event.world;
+			RegistryKey<World> dim = world.getDimensionKey();
+			String dimName = dim.getLocation().getNamespace();
+			if (checkForRetrogen.contains(dimName)) {
+				List<ChunkCoords> chunkList = chunkRegenList.get(dim);
+				Iterator<ChunkCoords> iterator = chunkList.iterator();
+				while (iterator.hasNext()) {
+					ChunkCoords coords = iterator.next();
+					if (canDecorate(world, coords)) {
+						iterator.remove();
+						Random random = getRetrogenRandom(world, coords);
+						//						worldGenerator.retroGen(random, coords.x, coords.z, world);
+					}
+				}
+				checkForRetrogen.remove(dimName);
+			}
+		}
+	}
 
-    @SubscribeEvent
-    public void chunkSaveEventHandler(ChunkDataEvent.Save event) {
-        CompoundNBT tag = new CompoundNBT();
-        if (Config.doRetrogen) {
-            tag.putBoolean("retrogen", true);
-        }
+	@SubscribeEvent
+	public void chunkSaveEventHandler(ChunkDataEvent.Save event) {
+		CompoundNBT tag = new CompoundNBT();
+		if (Config.doRetrogen) {
+			tag.putBoolean("retrogen", true);
+		}
 
-        //TODO - correct?
-        event.getData().put(Constants.MOD_ID, tag);
-    }
+		//TODO - correct?
+		event.getData().put(Constants.MOD_ID, tag);
+	}
 
-    @SubscribeEvent
-    public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
-        if (Config.doRetrogen) {
-            CompoundNBT eventData = event.getData();
-            if (eventData.contains(Constants.MOD_ID)) {
-                CompoundNBT tag = eventData.getCompound(Constants.MOD_ID);
-                if (!tag.contains("retrogen") || Config.forceRetrogen) {
-                    ChunkCoords coords = new ChunkCoords(event.getChunk());
-                    chunkRegenList.put(coords.dimension, coords);
-                    checkForRetrogen.add(coords.dimension);
-                }
-            }
-        }
-    }
+	@SubscribeEvent
+	public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
+		if (Config.doRetrogen) {
+			CompoundNBT eventData = event.getData();
+			if (eventData.contains(Constants.MOD_ID)) {
+				CompoundNBT tag = eventData.getCompound(Constants.MOD_ID);
+				if (!tag.contains("retrogen") || Config.forceRetrogen) {
+					ChunkCoords coords = new ChunkCoords(event.getChunk());
+					chunkRegenList.put(coords.dimension, coords);
+					checkForRetrogen.add(coords.dimension);
+				}
+			}
+		}
+	}
 
-    private static class ChunkCoords {
-        public final RegistryKey<World> dimension;
-        public final int x;
-        public final int z;
+	private static class ChunkCoords {
+		public final RegistryKey<World> dimension;
+		public final int x;
+		public final int z;
 
-        public ChunkCoords(IChunk chunk) {
-            IWorld world = chunk.getWorldForge();
-            if (world == null) {
-                this.dimension = World.OVERWORLD;
-                this.x = 0;
-                this.z = 0;
-            } else {
-                this.dimension = ((World) world).getDimensionKey();
-                this.x = chunk.getPos().x;
-                this.z = chunk.getPos().z;
-            }
-        }
-    }
+		public ChunkCoords(IChunk chunk) {
+			IWorld world = chunk.getWorldForge();
+			if (world == null) {
+				this.dimension = World.OVERWORLD;
+				this.x = 0;
+				this.z = 0;
+			} else {
+				this.dimension = ((World) world).getDimensionKey();
+				this.x = chunk.getPos().x;
+				this.z = chunk.getPos().z;
+			}
+		}
+	}
 }

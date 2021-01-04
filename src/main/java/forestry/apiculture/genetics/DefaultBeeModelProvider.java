@@ -12,7 +12,9 @@ package forestry.apiculture.genetics;
 
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.genetics.EnumBeeType;
+
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,19 +22,18 @@ import java.util.EnumMap;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 
-    @OnlyIn(Dist.CLIENT)
-    private static final EnumMap<EnumBeeType, ModelResourceLocation> models = new EnumMap<>(EnumBeeType.class);
-    public static final String MODEL_DIR = "bees/default/";
+	public static final String MODEL_DIR = "bees/default/";
+	public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
+	@OnlyIn(Dist.CLIENT)
+	private static final EnumMap<EnumBeeType, ModelResourceLocation> models = new EnumMap<>(EnumBeeType.class);
 
-    public static final DefaultBeeModelProvider instance = new DefaultBeeModelProvider();
+	private DefaultBeeModelProvider() {
 
-    private DefaultBeeModelProvider() {
+	}
 
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public ModelResourceLocation getModel(EnumBeeType type) {
-        return models.get(type);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ModelResourceLocation getModel(EnumBeeType type) {
+		return models.get(type);
+	}
 }

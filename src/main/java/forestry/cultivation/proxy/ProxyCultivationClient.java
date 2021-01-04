@@ -12,20 +12,23 @@ package forestry.cultivation.proxy;
 
 import forestry.cultivation.features.CultivationBlocks;
 import forestry.modules.IClientModuleHandler;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class ProxyCultivationClient extends ProxyCultivation implements IClientModuleHandler {
 
-    @Override
-    public void setupClient(FMLClientSetupEvent event) {
-        CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(
-                block,
-                RenderType.getCutout()
-        ));
-    }
+	@Override
+	public void setupClient(FMLClientSetupEvent event) {
+		CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(
+				block,
+				RenderType.getCutout()
+		));
+	}
 }

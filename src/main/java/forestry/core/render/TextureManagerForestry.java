@@ -16,12 +16,14 @@ import forestry.api.core.ISpriteRegistry;
 import forestry.api.core.ITextureManager;
 import forestry.core.config.Constants;
 import forestry.core.errors.ErrorStateRegistry;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -31,124 +33,124 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class TextureManagerForestry implements ITextureManager {
-    public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(
-            Constants.MOD_ID,
-            "textures/atlas/gui.png"
-    );
-    private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
+	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(
+			Constants.MOD_ID,
+			"textures/atlas/gui.png"
+	);
+	private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
 
-    static {
-        ForestryAPI.textureManager = INSTANCE;
-    }
+	static {
+		ForestryAPI.textureManager = INSTANCE;
+	}
 
-    private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
+	private final List<ISpriteRegister> spriteRegisters = new ArrayList<>();
 
-    @Nullable
-    private ForestrySpriteUploader spriteUploader;
+	@Nullable
+	private ForestrySpriteUploader spriteUploader;
 
-    public static TextureManagerForestry getInstance() {
-        return INSTANCE;
-    }
+	public static TextureManagerForestry getInstance() {
+		return INSTANCE;
+	}
 
-    private static void initDefaultSprites(ISpriteRegistry registry) {
-        String[] defaultIconNames = new String[]{
-                "habitats/desert",
-                "habitats/end",
-                "habitats/forest",
-                "habitats/hills",
-                "habitats/jungle",
-                "habitats/mushroom",
-                "habitats/nether",
-                "habitats/ocean",
-                "habitats/plains",
-                "habitats/snow",
-                "habitats/swamp",
-                "habitats/taiga",
-                "misc/access.shared",
-                "misc/energy",
-                "misc/hint",
-                "analyzer/anything",
-                "analyzer/bee",
-                "analyzer/cave",
-                "analyzer/closed",
-                "analyzer/drone",
-                "analyzer/flyer",
-                "analyzer/item",
-                "analyzer/nocturnal",
-                "analyzer/princess",
-                "analyzer/pure_breed",
-                "analyzer/pure_cave",
-                "analyzer/pure_flyer",
-                "analyzer/pure_nocturnal",
-                "analyzer/queen",
-                "analyzer/tree",
-                "analyzer/sapling",
-                "analyzer/pollen",
-                "analyzer/flutter",
-                "analyzer/butterfly",
-                "analyzer/serum",
-                "analyzer/caterpillar",
-                "analyzer/cocoon",
-                "errors/errored",
-                "errors/unknown",
-                "slots/blocked",
-                "slots/blocked_2",
-                "slots/liquid",
-                "slots/container",
-                "slots/locked",
-                "slots/cocoon",
-                "slots/bee",
-                "mail/carrier.player",
-                "mail/carrier.trader"
-        };
-        for (String identifier : defaultIconNames) {
-            registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
-        }
-    }
+	private static void initDefaultSprites(ISpriteRegistry registry) {
+		String[] defaultIconNames = new String[]{
+				"habitats/desert",
+				"habitats/end",
+				"habitats/forest",
+				"habitats/hills",
+				"habitats/jungle",
+				"habitats/mushroom",
+				"habitats/nether",
+				"habitats/ocean",
+				"habitats/plains",
+				"habitats/snow",
+				"habitats/swamp",
+				"habitats/taiga",
+				"misc/access.shared",
+				"misc/energy",
+				"misc/hint",
+				"analyzer/anything",
+				"analyzer/bee",
+				"analyzer/cave",
+				"analyzer/closed",
+				"analyzer/drone",
+				"analyzer/flyer",
+				"analyzer/item",
+				"analyzer/nocturnal",
+				"analyzer/princess",
+				"analyzer/pure_breed",
+				"analyzer/pure_cave",
+				"analyzer/pure_flyer",
+				"analyzer/pure_nocturnal",
+				"analyzer/queen",
+				"analyzer/tree",
+				"analyzer/sapling",
+				"analyzer/pollen",
+				"analyzer/flutter",
+				"analyzer/butterfly",
+				"analyzer/serum",
+				"analyzer/caterpillar",
+				"analyzer/cocoon",
+				"errors/errored",
+				"errors/unknown",
+				"slots/blocked",
+				"slots/blocked_2",
+				"slots/liquid",
+				"slots/container",
+				"slots/locked",
+				"slots/cocoon",
+				"slots/bee",
+				"mail/carrier.player",
+				"mail/carrier.trader"
+		};
+		for (String identifier : defaultIconNames) {
+			registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
+		}
+	}
 
-    public void init(ForestrySpriteUploader spriteUploader) {
-        ErrorStateRegistry.initSprites(spriteUploader);
-        initDefaultSprites(spriteUploader);
-        this.spriteUploader = spriteUploader;
-    }
+	public void init(ForestrySpriteUploader spriteUploader) {
+		ErrorStateRegistry.initSprites(spriteUploader);
+		initDefaultSprites(spriteUploader);
+		this.spriteUploader = spriteUploader;
+	}
 
-    @Nullable
-    public ForestrySpriteUploader getSpriteUploader() {
-        return spriteUploader;
-    }
+	@Nullable
+	public ForestrySpriteUploader getSpriteUploader() {
+		return spriteUploader;
+	}
 
-    @Override
-    public TextureAtlasSprite getDefault(String identifier) {
-        return spriteUploader.getSprite(new ResourceLocation(Constants.MOD_ID, identifier));
-    }
+	@Override
+	public ResourceLocation getGuiTextureMap() {
+		return LOCATION_FORESTRY_TEXTURE;
+	}
 
-    @Override
-    public ResourceLocation getGuiTextureMap() {
-        return LOCATION_FORESTRY_TEXTURE;
-    }
+	@Override
+	public TextureAtlasSprite getDefault(String identifier) {
+		return spriteUploader.getSprite(new ResourceLocation(Constants.MOD_ID, identifier));
+	}
 
-    public void bindGuiTextureMap() {
-        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-        ResourceLocation guiTextureMap = getGuiTextureMap();
-        textureManager.bindTexture(guiTextureMap);
-    }
+	public void bindGuiTextureMap() {
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+		ResourceLocation guiTextureMap = getGuiTextureMap();
+		textureManager.bindTexture(guiTextureMap);
+	}
 
-    public void registerBlock(Block block) {
-        if (block instanceof ISpriteRegister) {
-            spriteRegisters.add((ISpriteRegister) block);
-        }
-    }
+	public void registerBlock(Block block) {
+		if (block instanceof ISpriteRegister) {
+			spriteRegisters.add((ISpriteRegister) block);
+		}
+	}
 
-    public void registerItem(Item item) {
-        if (item instanceof ISpriteRegister) {
-            spriteRegisters.add((ISpriteRegister) item);
-        }
-    }
+	public void registerItem(Item item) {
+		if (item instanceof ISpriteRegister) {
+			spriteRegisters.add((ISpriteRegister) item);
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void registerSprites(ISpriteRegistry registry) {
-        for (ISpriteRegister spriteRegister : spriteRegisters) {
-            spriteRegister.registerSprites(registry);
-        }
-    }
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(ISpriteRegistry registry) {
+		for (ISpriteRegister spriteRegister : spriteRegisters) {
+			spriteRegister.registerSprites(registry);
+		}
+	}
 }

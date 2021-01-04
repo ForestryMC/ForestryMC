@@ -17,54 +17,54 @@ import net.minecraft.world.IWorldReader;
 import javax.annotation.Nullable;
 
 public class BlockCandleWall extends BlockCandle {
-    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
-    public BlockCandleWall() {
-        setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(STATE, State.OFF));
-    }
+	public BlockCandleWall() {
+		setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(STATE, State.OFF));
+	}
 
-    @Override
-    public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        return WallTorchBlock.getShapeForState(state);
-    }
+	@Override
+	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+		return WallTorchBlock.getShapeForState(state);
+	}
 
-    @Override
-    public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
-        return Blocks.WALL_TORCH.isValidPosition(state, reader, pos);
-    }
+	@Override
+	public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
+		return Blocks.WALL_TORCH.isValidPosition(state, reader, pos);
+	}
 
-    @Override
-    public BlockState updatePostPlacement(
-            BlockState state,
-            Direction direction,
-            BlockState blockState,
-            IWorld world,
-            BlockPos pos,
-            BlockPos blockPos
-    ) {
-        return Blocks.WALL_TORCH.updatePostPlacement(state, direction, blockState, world, pos, blockPos);
-    }
+	@Override
+	public BlockState updatePostPlacement(
+			BlockState state,
+			Direction direction,
+			BlockState blockState,
+			IWorld world,
+			BlockPos pos,
+			BlockPos blockPos
+	) {
+		return Blocks.WALL_TORCH.updatePostPlacement(state, direction, blockState, world, pos, blockPos);
+	}
 
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockState state = Blocks.WALL_TORCH.getStateForPlacement(context);
-        return state == null ? null : this.getDefaultState().with(FACING, state.get(FACING));
-    }
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(FACING);
+	}
 
-    @Override
-    public BlockState rotate(BlockState state, Rotation rotation) {
-        return Blocks.WALL_TORCH.rotate(state, rotation);
-    }
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		BlockState state = Blocks.WALL_TORCH.getStateForPlacement(context);
+		return state == null ? null : this.getDefaultState().with(FACING, state.get(FACING));
+	}
 
-    @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return Blocks.WALL_TORCH.mirror(state, mirror);
-    }
+	@Override
+	public BlockState rotate(BlockState state, Rotation rotation) {
+		return Blocks.WALL_TORCH.rotate(state, rotation);
+	}
 
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(FACING);
-    }
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		return Blocks.WALL_TORCH.mirror(state, mirror);
+	}
 }

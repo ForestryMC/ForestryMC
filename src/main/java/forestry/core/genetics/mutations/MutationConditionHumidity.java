@@ -14,53 +14,55 @@ import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.AlleleManager;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class MutationConditionHumidity implements IMutationCondition {
-    private final EnumHumidity minHumidity;
-    private final EnumHumidity maxHumidity;
+	private final EnumHumidity minHumidity;
+	private final EnumHumidity maxHumidity;
 
-    public MutationConditionHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
-        this.minHumidity = minHumidity;
-        this.maxHumidity = maxHumidity;
-    }
+	public MutationConditionHumidity(EnumHumidity minHumidity, EnumHumidity maxHumidity) {
+		this.minHumidity = minHumidity;
+		this.maxHumidity = maxHumidity;
+	}
 
-    @Override
-    public float getChance(
-            World world,
-            BlockPos pos,
-            IAllele allele0,
-            IAllele allele1,
-            IGenome genome0,
-            IGenome genome1,
-            IClimateProvider climate
-    ) {
-        EnumHumidity biomeHumidity = climate.getHumidity();
+	@Override
+	public float getChance(
+			World world,
+			BlockPos pos,
+			IAllele allele0,
+			IAllele allele1,
+			IGenome genome0,
+			IGenome genome1,
+			IClimateProvider climate
+	) {
+		EnumHumidity biomeHumidity = climate.getHumidity();
 
-        if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
-            return 0;
-        }
-        return 1;
-    }
+		if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
+			return 0;
+		}
+		return 1;
+	}
 
-    @Override
-    public ITextComponent getDescription() {
-        ITextComponent minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity);
+	@Override
+	public ITextComponent getDescription() {
+		ITextComponent minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity);
 
-        if (minHumidity != maxHumidity) {
-            ITextComponent maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
-            return new TranslationTextComponent(
-                    "for.mutation.condition.humidity.range",
-                    minHumidityString,
-                    maxHumidityString
-            );
-        } else {
-            return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
-        }
-    }
+		if (minHumidity != maxHumidity) {
+			ITextComponent maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity);
+			return new TranslationTextComponent(
+					"for.mutation.condition.humidity.range",
+					minHumidityString,
+					maxHumidityString
+			);
+		} else {
+			return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
+		}
+	}
 }

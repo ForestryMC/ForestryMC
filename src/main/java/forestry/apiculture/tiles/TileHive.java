@@ -11,7 +11,9 @@
 package forestry.apiculture.tiles;
 
 import com.google.common.base.Predicate;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.*;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveRegistry;
@@ -31,8 +33,10 @@ import forestry.core.inventory.InventoryAdapter;
 import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.*;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -55,6 +59,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -64,338 +69,338 @@ import java.util.List;
 import java.util.Optional;
 
 public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTile, IActivatable, IBeeHousing {
-    private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
+	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
 
-    private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
-    private final HiveBeeHousingInventory inventory;
-    private final WorldgenBeekeepingLogic beeLogic;
-    private final IErrorLogic errorLogic;
-    private final Predicate<LivingEntity> beeTargetPredicate;
-    private final TickHelper tickHelper = new TickHelper();
+	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
+	private final HiveBeeHousingInventory inventory;
+	private final WorldgenBeekeepingLogic beeLogic;
+	private final IErrorLogic errorLogic;
+	private final Predicate<LivingEntity> beeTargetPredicate;
+	private final TickHelper tickHelper = new TickHelper();
 
-    @Nullable
-    private IBee containedBee = null;
-    private boolean active = false;
-    private boolean angry = false;
-    private int calmTime;
+	@Nullable
+	private IBee containedBee = null;
+	private boolean active = false;
+	private boolean angry = false;
+	private int calmTime;
 
-    public TileHive() {
-        super(ApicultureTiles.HIVE.tileType());
-        inventory = new HiveBeeHousingInventory(this);
-        beeLogic = new WorldgenBeekeepingLogic(this);
-        errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
-        beeTargetPredicate = new BeeTargetPredicate(this);
-    }
+	public TileHive() {
+		super(ApicultureTiles.HIVE.tileType());
+		inventory = new HiveBeeHousingInventory(this);
+		beeLogic = new WorldgenBeekeepingLogic(this);
+		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
+		beeTargetPredicate = new BeeTargetPredicate(this);
+	}
 
-    @Override
-    public void tick() {
-        if (Config.generateBeehivesDebug) {
-            return;
-        }
-        tickHelper.onTick();
+	private static void attack(LivingEntity entity, int maxDamage) {
+		double attackAmount = entity.world.rand.nextDouble() / 2.0 + 0.5;
+		int damage = (int) (attackAmount * maxDamage);
+		if (damage > 0) {
+			// Entities are not attacked if they wear a full set of apiarist's armor.
+			int count = BeeManager.armorApiaristHelper.wearsItems(
+					entity,
+					new ResourceLocation(damageSourceBeeHive.damageType),
+					true
+			);
+			if (entity.world.rand.nextInt(4) >= count) {
+				entity.attackEntityFrom(damageSourceBeeHive, damage);
+			}
+		}
+	}
 
-        if (world.isRemote) {
-            if (active && tickHelper.updateOnInterval(4)) {
-                if (beeLogic.canDoBeeFX()) {
-                    beeLogic.doBeeFX();
-                }
-            }
-        } else {
-            boolean canWork = beeLogic.canWork(); // must be called every tick to stay updated
+	@Override
+	public void tick() {
+		if (Config.generateBeehivesDebug) {
+			return;
+		}
+		tickHelper.onTick();
 
-            if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
-                if (calmTime == 0) {
-                    if (canWork) {
-                        if (angry && ModuleApiculture.hiveDamageOnAttack && (
-                                world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL ||
-                                ModuleApiculture.hivesDamageOnPeaceful)) {
-                            AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-                            List<LivingEntity> entities = world.getEntitiesWithinAABB(
-                                    LivingEntity.class,
-                                    boundingBox,
-                                    beeTargetPredicate
-                            );
-                            if (!entities.isEmpty()) {
-                                Collections.shuffle(entities);
-                                LivingEntity entity = entities.get(0);
-                                if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) &&
-                                    (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
-                                    attack(entity, 2);
-                                }
-                            }
-                        }
-                        beeLogic.doWork();
-                    }
-                } else {
-                    calmTime--;
-                }
-            }
+		if (world.isRemote) {
+			if (active && tickHelper.updateOnInterval(4)) {
+				if (beeLogic.canDoBeeFX()) {
+					beeLogic.doBeeFX();
+				}
+			}
+		} else {
+			boolean canWork = beeLogic.canWork(); // must be called every tick to stay updated
 
-            setActive(calmTime == 0);
-        }
-    }
+			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
+				if (calmTime == 0) {
+					if (canWork) {
+						if (angry && ModuleApiculture.hiveDamageOnAttack && (
+								world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL ||
+										ModuleApiculture.hivesDamageOnPeaceful)) {
+							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
+							List<LivingEntity> entities = world.getEntitiesWithinAABB(
+									LivingEntity.class,
+									boundingBox,
+									beeTargetPredicate
+							);
+							if (!entities.isEmpty()) {
+								Collections.shuffle(entities);
+								LivingEntity entity = entities.get(0);
+								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) &&
+										(!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
+									attack(entity, 2);
+								}
+							}
+						}
+						beeLogic.doWork();
+					}
+				} else {
+					calmTime--;
+				}
+			}
 
-    public IBee getContainedBee() {
-        if (this.containedBee == null) {
-            IGenome beeGenome = null;
-            ItemStack containedBee = contained.getStackInSlot(0);
-            if (!containedBee.isEmpty()) {
-                Optional<IBee> optionalBee = BeeManager.beeRoot.create(containedBee);
-                if (optionalBee.isPresent()) {
-                    IBee bee = optionalBee.get();
-                    beeGenome = bee.getGenome();
-                }
-            }
+			setActive(calmTime == 0);
+		}
+	}
 
-            if (beeGenome == null) {
-                beeGenome = getGenomeFromBlock();
-            }
+	public IBee getContainedBee() {
+		if (this.containedBee == null) {
+			IGenome beeGenome = null;
+			ItemStack containedBee = contained.getStackInSlot(0);
+			if (!containedBee.isEmpty()) {
+				Optional<IBee> optionalBee = BeeManager.beeRoot.create(containedBee);
+				if (optionalBee.isPresent()) {
+					IBee bee = optionalBee.get();
+					beeGenome = bee.getGenome();
+				}
+			}
 
-            if (beeGenome == null) {
-                beeGenome = BeeDefinition.FOREST.getGenome();
-            }
+			if (beeGenome == null) {
+				beeGenome = getGenomeFromBlock();
+			}
 
-            this.containedBee = BeeManager.beeRoot.create(beeGenome);
-        }
+			if (beeGenome == null) {
+				beeGenome = BeeDefinition.FOREST.getGenome();
+			}
 
-        return this.containedBee;
-    }
+			this.containedBee = BeeManager.beeRoot.create(beeGenome);
+		}
 
-    @Nullable
-    private IGenome getGenomeFromBlock() {
-        if (world.isBlockLoaded(pos)) {
-            BlockState blockState = world.getBlockState(pos);
-            Block block = blockState.getBlock();
-            if (block instanceof BlockBeeHive) {
-                IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
-                String speciesUid = hiveType.getSpeciesUid();
-                IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
-                if (template.length > 0) {
-                    return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
-                }
-            }
-        }
+		return this.containedBee;
+	}
 
-        return null;
-    }
+	@Nullable
+	private IGenome getGenomeFromBlock() {
+		if (world.isBlockLoaded(pos)) {
+			BlockState blockState = world.getBlockState(pos);
+			Block block = blockState.getBlock();
+			if (block instanceof BlockBeeHive) {
+				IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
+				String speciesUid = hiveType.getSpeciesUid();
+				IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
+				if (template.length > 0) {
+					return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
+				}
+			}
+		}
 
-    public void setContained(List<ItemStack> bees) {
-        for (ItemStack itemstack : bees) {
-            InventoryUtil.addStack(contained, itemstack, true);
-        }
-    }
+		return null;
+	}
 
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
-        contained.read(compoundNBT);
-        beeLogic.read(compoundNBT);
-    }
+	public void setContained(List<ItemStack> bees) {
+		for (ItemStack itemstack : bees) {
+			InventoryUtil.addStack(contained, itemstack, true);
+		}
+	}
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
-        contained.write(compoundNBT);
-        beeLogic.write(compoundNBT);
-        return compoundNBT;
-    }
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		contained.read(compoundNBT);
+		beeLogic.read(compoundNBT);
+	}
 
-    @Override
-    public void calmBees() {
-        calmTime = 5;
-        angry = false;
-        setActive(false);
-    }
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		contained.write(compoundNBT);
+		beeLogic.write(compoundNBT);
+		return compoundNBT;
+	}
 
-    @Override
-    public boolean isAngry() {
-        return angry;
-    }
+	@Nullable
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
+	}
 
-    @Override
-    public void onAttack(World world, BlockPos pos, PlayerEntity player) {
-        if (calmTime == 0) {
-            angry = true;
-        }
-    }
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT nbt = super.getUpdateTag();
+		nbt.putBoolean("active", calmTime == 0);
+		beeLogic.write(nbt);
+		return nbt;
+	}
 
-    @Override
-    public void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest) {
-        if (calmTime == 0) {
-            attack(player, 10);
-        }
+	@Override
+	public void calmBees() {
+		calmTime = 5;
+		angry = false;
+		setActive(false);
+	}
 
-        if (canHarvest) {
-            for (ItemStack beeStack : InventoryUtil.getStacks(contained)) {
-                if (beeStack != null) {
-                    ItemStackUtil.dropItemStackAsEntity(beeStack, world, pos);
-                }
-            }
-        }
-    }
+	@Override
+	public boolean isAngry() {
+		return angry;
+	}
 
-    private static void attack(LivingEntity entity, int maxDamage) {
-        double attackAmount = entity.world.rand.nextDouble() / 2.0 + 0.5;
-        int damage = (int) (attackAmount * maxDamage);
-        if (damage > 0) {
-            // Entities are not attacked if they wear a full set of apiarist's armor.
-            int count = BeeManager.armorApiaristHelper.wearsItems(
-                    entity,
-                    new ResourceLocation(damageSourceBeeHive.damageType),
-                    true
-            );
-            if (entity.world.rand.nextInt(4) >= count) {
-                entity.attackEntityFrom(damageSourceBeeHive, damage);
-            }
-        }
-    }
+	@Override
+	public void onAttack(World world, BlockPos pos, PlayerEntity player) {
+		if (calmTime == 0) {
+			angry = true;
+		}
+	}
 
-    @Override
-    public boolean isActive() {
-        return active;
-    }
+	@Override
+	public void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest) {
+		if (calmTime == 0) {
+			attack(player, 10);
+		}
 
-    @Override
-    public void setActive(boolean active) {
-        if (this.active == active) {
-            return;
-        }
-        this.active = active;
+		if (canHarvest) {
+			for (ItemStack beeStack : InventoryUtil.getStacks(contained)) {
+				if (beeStack != null) {
+					ItemStackUtil.dropItemStackAsEntity(beeStack, world, pos);
+				}
+			}
+		}
+	}
 
-        if (!world.isRemote) {
-            NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
-        }
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		super.onDataPacket(net, pkt);
+		CompoundNBT nbt = pkt.getNbtCompound();
+		handleUpdateTag(getBlockState(), nbt);
+	}
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
-    }
+	@Override
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
+		setActive(tag.getBoolean("active"));
+		beeLogic.read(tag);
+	}
 
-    @Override
-    public CompoundNBT getUpdateTag() {
-        CompoundNBT nbt = super.getUpdateTag();
-        nbt.putBoolean("active", calmTime == 0);
-        beeLogic.write(nbt);
-        return nbt;
-    }
+	@Override
+	public Iterable<IBeeModifier> getBeeModifiers() {
+		return Collections.emptyList();
+	}
 
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-        super.handleUpdateTag(state, tag);
-        setActive(tag.getBoolean("active"));
-        beeLogic.read(tag);
-    }
+	@Override
+	public Iterable<IBeeListener> getBeeListeners() {
+		return Collections.emptyList();
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        super.onDataPacket(net, pkt);
-        CompoundNBT nbt = pkt.getNbtCompound();
-        handleUpdateTag(getBlockState(), nbt);
-    }
+	@Override
+	public IBeeHousingInventory getBeeInventory() {
+		return inventory;
+	}
 
-    @Override
-    public Iterable<IBeeModifier> getBeeModifiers() {
-        return Collections.emptyList();
-    }
+	@Override
+	public IBeekeepingLogic getBeekeepingLogic() {
+		return beeLogic;
+	}
 
-    @Override
-    public Iterable<IBeeListener> getBeeListeners() {
-        return Collections.emptyList();
-    }
+	@Override
+	public int getBlockLightValue() {
+		return getWorld().isDaytime() ? 15 : 0; // hives may have the sky obstructed but should still be active
+	}
 
-    @Override
-    public IBeeHousingInventory getBeeInventory() {
-        return inventory;
-    }
+	@Override
+	public boolean canBlockSeeTheSky() {
+		return true; // hives may have the sky obstructed but should still be active
+	}
 
-    @Override
-    public IBeekeepingLogic getBeekeepingLogic() {
-        return beeLogic;
-    }
+	@Override
+	public boolean isRaining() {
+		return world.isRainingAt(getPos().up());
+	}
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.getFromBiome(getBiome(), getPos());
-    }
+	@Override
+	@Nullable
+	public GameProfile getOwner() {
+		return null;
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        float humidity = getBiome().getDownfall();
-        return EnumHumidity.getFromValue(humidity);
-    }
+	@Override
+	public Vector3d getBeeFXCoordinates() {
+		BlockPos pos = getPos();
+		return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
+	}
 
-    @Override
-    public int getBlockLightValue() {
-        return getWorld().isDaytime() ? 15 : 0; // hives may have the sky obstructed but should still be active
-    }
+	@Override
+	public World getWorldObj() {
+		return world;
+	}
 
-    @Override
-    public boolean canBlockSeeTheSky() {
-        return true; // hives may have the sky obstructed but should still be active
-    }
+	@Override
+	public Biome getBiome() {
+		return getWorld().getBiome(getPos());
+	}
 
-    @Override
-    public boolean isRaining() {
-        return world.isRainingAt(getPos().up());
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), getPos());
+	}
 
-    @Override
-    public World getWorldObj() {
-        return world;
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		float humidity = getBiome().getDownfall();
+		return EnumHumidity.getFromValue(humidity);
+	}
 
-    @Override
-    public Biome getBiome() {
-        return getWorld().getBiome(getPos());
-    }
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return errorLogic;
+	}
 
-    @Override
-    @Nullable
-    public GameProfile getOwner() {
-        return null;
-    }
+	@Override
+	public BlockPos getCoordinates() {
+		return getPos();
+	}
 
-    @Override
-    public Vector3d getBeeFXCoordinates() {
-        BlockPos pos = getPos();
-        return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
-    }
+	@Override
+	public boolean isActive() {
+		return active;
+	}
 
-    @Override
-    public IErrorLogic getErrorLogic() {
-        return errorLogic;
-    }
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+		this.active = active;
 
-    @Override
-    public BlockPos getCoordinates() {
-        return getPos();
-    }
+		if (!world.isRemote) {
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+		}
+	}
 
-    private static class BeeTargetPredicate implements Predicate<LivingEntity> {
+	private static class BeeTargetPredicate implements Predicate<LivingEntity> {
 
-        private final IHiveTile hive;
+		private final IHiveTile hive;
 
-        public BeeTargetPredicate(IHiveTile hive) {
-            this.hive = hive;
-        }
+		public BeeTargetPredicate(IHiveTile hive) {
+			this.hive = hive;
+		}
 
-        @Override
-        public boolean apply(@Nullable LivingEntity input) {
-            if (input != null && input.isAlive() && !input.isInvisible()) {
-                if (input instanceof PlayerEntity) {
-                    return EntityPredicates.CAN_AI_TARGET.test(input);
-                } else if (hive.isAngry()) {
-                    return true;
-                } else if (input instanceof IMob) {
-                    // don't attack semi-passive vanilla mobs
-                    return !(input instanceof EndermanEntity) && !(input instanceof ZombifiedPiglinEntity);
-                }
-            }
-            return false;
-        }
-    }
+		@Override
+		public boolean apply(@Nullable LivingEntity input) {
+			if (input != null && input.isAlive() && !input.isInvisible()) {
+				if (input instanceof PlayerEntity) {
+					return EntityPredicates.CAN_AI_TARGET.test(input);
+				} else if (hive.isAngry()) {
+					return true;
+				} else if (input instanceof IMob) {
+					// don't attack semi-passive vanilla mobs
+					return !(input instanceof EndermanEntity) && !(input instanceof ZombifiedPiglinEntity);
+				}
+			}
+			return false;
+		}
+	}
 
 }

@@ -11,59 +11,61 @@
 package forestry.mail;
 
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 public class TradeStationInfo implements ITradeStationInfo {
-    private final IMailAddress address;
-    private final GameProfile owner;
-    private final ItemStack tradegood;
-    private final NonNullList<ItemStack> required;
-    private final EnumTradeStationState state;
+	private final IMailAddress address;
+	private final GameProfile owner;
+	private final ItemStack tradegood;
+	private final NonNullList<ItemStack> required;
+	private final EnumTradeStationState state;
 
-    public TradeStationInfo(
-            IMailAddress address,
-            GameProfile owner,
-            ItemStack tradegood,
-            NonNullList<ItemStack> required,
-            EnumTradeStationState state
-    ) {
-        if (address.getType() != EnumAddressee.TRADER) {
-            throw new IllegalArgumentException("TradeStation address must be a trader");
-        }
-        this.address = address;
-        this.owner = owner;
-        this.tradegood = tradegood;
-        this.required = required;
-        this.state = state;
-    }
+	public TradeStationInfo(
+			IMailAddress address,
+			GameProfile owner,
+			ItemStack tradegood,
+			NonNullList<ItemStack> required,
+			EnumTradeStationState state
+	) {
+		if (address.getType() != EnumAddressee.TRADER) {
+			throw new IllegalArgumentException("TradeStation address must be a trader");
+		}
+		this.address = address;
+		this.owner = owner;
+		this.tradegood = tradegood;
+		this.required = required;
+		this.state = state;
+	}
 
-    @Override
-    public IMailAddress getAddress() {
-        return address;
-    }
+	@Override
+	public IMailAddress getAddress() {
+		return address;
+	}
 
-    @Override
-    public GameProfile getOwner() {
-        return owner;
-    }
+	@Override
+	public GameProfile getOwner() {
+		return owner;
+	}
 
-    @Override
-    public ItemStack getTradegood() {
-        return tradegood;
-    }
+	@Override
+	public ItemStack getTradegood() {
+		return tradegood;
+	}
 
-    @Override
-    public NonNullList<ItemStack> getRequired() {
-        return required;
-    }
+	@Override
+	public NonNullList<ItemStack> getRequired() {
+		return required;
+	}
 
-    @Override
-    public EnumTradeStationState getState() {
-        return state;
-    }
+	@Override
+	public EnumTradeStationState getState() {
+		return state;
+	}
 }

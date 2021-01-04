@@ -2,7 +2,9 @@ package forestry.core.gui.slots;
 
 import forestry.core.gui.GuiAnalyzerProvider;
 import forestry.core.inventory.ItemInventoryAlyzer;
+
 import net.minecraft.inventory.container.Slot;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -12,34 +14,34 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 public class SlotAnalyzer extends SlotFiltered {
-    @Nullable
-    @OnlyIn(Dist.CLIENT)
-    private GuiAnalyzerProvider gui;
+	@Nullable
+	@OnlyIn(Dist.CLIENT)
+	private GuiAnalyzerProvider gui;
 
-    public SlotAnalyzer(ItemInventoryAlyzer inventory, int slotIndex, int xPos, int yPos) {
-        super(inventory, slotIndex, xPos, yPos);
-    }
+	public SlotAnalyzer(ItemInventoryAlyzer inventory, int slotIndex, int xPos, int yPos) {
+		super(inventory, slotIndex, xPos, yPos);
+	}
 
-    public void setPosition(int xPos, int yPos) {
-        try {
-            Field fieldXPos = this.getClass().getField("xPos");
-            fieldXPos.setAccessible(true);
-            fieldXPos.set(this, xPos);
+	public void setPosition(int xPos, int yPos) {
+		try {
+			Field fieldXPos = this.getClass().getField("xPos");
+			fieldXPos.setAccessible(true);
+			fieldXPos.set(this, xPos);
 
-            Field fieldYPos = this.getClass().getField("yPos");
-            fieldYPos.setAccessible(true);
-            fieldYPos.set(this, yPos);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
+			Field fieldYPos = this.getClass().getField("yPos");
+			fieldYPos.setAccessible(true);
+			fieldYPos.set(this, yPos);
+		} catch (NoSuchFieldException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void setGui(@Nullable GuiAnalyzerProvider gui) {
-        this.gui = gui;
-    }
+	public void setGui(@Nullable GuiAnalyzerProvider gui) {
+		this.gui = gui;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return gui != null && gui.analyzer.isVisible();
-    }
+	@Override
+	public boolean isEnabled() {
+		return gui != null && gui.analyzer.isVisible();
+	}
 }

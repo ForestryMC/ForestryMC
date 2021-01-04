@@ -11,6 +11,7 @@
 package forestry.farming.logic.farmables;
 
 import forestry.core.utils.BlockUtil;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CocoaBlock;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,19 +22,19 @@ import net.minecraft.world.World;
 
 public class FarmableCocoa extends FarmableAgingCrop {
 
-    public FarmableCocoa() {
-        super(
-                new ItemStack(Items.COCOA_BEANS),
-                Blocks.COCOA,
-                new ItemStack(Items.COCOA_BEANS),
-                CocoaBlock.AGE,
-                2,
-                null
-        );
-    }
+	public FarmableCocoa() {
+		super(
+				new ItemStack(Items.COCOA_BEANS),
+				Blocks.COCOA,
+				new ItemStack(Items.COCOA_BEANS),
+				CocoaBlock.AGE,
+				2,
+				null
+		);
+	}
 
-    @Override
-    public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-        return BlockUtil.tryPlantCocoaPod(world, pos);
-    }
+	@Override
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+		return BlockUtil.tryPlantCocoaPod(world, pos);
+	}
 }

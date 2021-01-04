@@ -7,7 +7,9 @@ import forestry.modules.IClientModuleHandler;
 import forestry.storage.BackpackMode;
 import forestry.storage.models.BackpackItemModel;
 import forestry.storage.models.CrateModel;
+
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -18,22 +20,22 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 @OnlyIn(Dist.CLIENT)
 public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandler {
 
-    public ProxyCratesClient() {
-        ForgeUtils.registerSubscriber(this);
-    }
+	public ProxyCratesClient() {
+		ForgeUtils.registerSubscriber(this);
+	}
 
-    @Override
-    public void registerModels(ModelRegistryEvent event) {
-        ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
-        ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
+	@Override
+	public void registerModels(ModelRegistryEvent event) {
+		ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
+		ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
 
-        for (EnumBackpackType backpackType : EnumBackpackType.values()) {
-            for (BackpackMode mode : BackpackMode.values()) {
-                ModelLoader.addSpecialModel(backpackType.getLocation(mode));
-            }
-        }
+		for (EnumBackpackType backpackType : EnumBackpackType.values()) {
+			for (BackpackMode mode : BackpackMode.values()) {
+				ModelLoader.addSpecialModel(backpackType.getLocation(mode));
+			}
+		}
 
-        ModelLoader.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
-    }
+		ModelLoader.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
+	}
 
 }

@@ -14,6 +14,7 @@ import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;
 import forestry.api.lepidopterology.genetics.IButterflyMutationFactory;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
@@ -21,18 +22,18 @@ import genetics.api.root.components.ComponentKeys;
 
 public class ButterflyMutationFactory implements IButterflyMutationFactory {
 
-    @Override
-    public IButterflyMutationBuilder createMutation(
-            IAlleleButterflySpecies parentButterfly0,
-            IAlleleButterflySpecies parentButterfly1,
-            IAllele[] result,
-            int chance
-    ) {
-        ButterflyMutation butterflyMutation = new ButterflyMutation(parentButterfly0, parentButterfly1, result, chance);
-        IMutationContainer<IButterfly, IMutation> container = ButterflyHelper.getRoot()
-                                                                             .getComponent(ComponentKeys.MUTATIONS);
-        container.registerMutation(butterflyMutation);
-        return butterflyMutation;
-    }
+	@Override
+	public IButterflyMutationBuilder createMutation(
+			IAlleleButterflySpecies parentButterfly0,
+			IAlleleButterflySpecies parentButterfly1,
+			IAllele[] result,
+			int chance
+	) {
+		ButterflyMutation butterflyMutation = new ButterflyMutation(parentButterfly0, parentButterfly1, result, chance);
+		IMutationContainer<IButterfly, IMutation> container = ButterflyHelper.getRoot()
+				.getComponent(ComponentKeys.MUTATIONS);
+		container.registerMutation(butterflyMutation);
+		return butterflyMutation;
+	}
 
 }

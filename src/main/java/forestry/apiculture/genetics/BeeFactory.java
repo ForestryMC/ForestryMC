@@ -13,16 +13,17 @@ package forestry.apiculture.genetics;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.genetics.IBeeFactory;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
+
 import genetics.api.classification.IClassification;
 
 public class BeeFactory implements IBeeFactory {
-    @Override
-    public IAlleleBeeSpeciesBuilder createSpecies(String modId, String uid, String speciesIdentifier) {
-        return new AlleleBeeSpecies.Builder(modId, uid, speciesIdentifier);
-    }
+	@Override
+	public IAlleleBeeSpeciesBuilder createSpecies(String modId, String uid, String speciesIdentifier) {
+		return new AlleleBeeSpecies.Builder(modId, uid, speciesIdentifier);
+	}
 
-    @Override
-    public IClassification createBranch(String uid, String scientific) {
-        return new BranchBees(uid, scientific);
-    }
+	@Override
+	public IClassification createBranch(String uid, String scientific) {
+		return new BranchBees(uid, scientific);
+	}
 }

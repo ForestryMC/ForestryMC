@@ -6,12 +6,14 @@
 package forestry.api.apiculture;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
+
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IBeeModelProvider {
 
-    @OnlyIn(Dist.CLIENT)
-    ModelResourceLocation getModel(EnumBeeType type);
+	@OnlyIn(Dist.CLIENT)
+	ModelResourceLocation getModel(EnumBeeType type);
 }

@@ -6,7 +6,9 @@
 package forestry.api.arboriculture;
 
 import com.mojang.authlib.GameProfile;
+
 import genetics.api.individual.IGenome;
+
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -20,9 +22,9 @@ import java.util.Random;
  * Implements the tree generation for a tree species.
  */
 public interface ITreeGenerator {
-    Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
+	Feature<NoFeatureConfig> getTreeFeature(ITreeGenData tree);
 
-    boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
+	boolean setLogBlock(IGenome genome, IWorld world, BlockPos pos, Direction facing);
 
-    boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
+	boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand);
 }

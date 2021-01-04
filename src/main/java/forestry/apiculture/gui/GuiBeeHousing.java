@@ -11,98 +11,100 @@
 package forestry.apiculture.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.GuiAnalyzerProvider;
 import forestry.core.gui.slots.SlotWatched;
 import forestry.core.render.EnumTankLevel;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> extends GuiAnalyzerProvider<C> {
-    private final IGuiBeeHousingDelegate delegate;
+	private final IGuiBeeHousingDelegate delegate;
 
-    public enum Icon {
-        APIARY("apiary.png"),
-        BEE_HOUSE("alveary.png");
+	//TODO be hacky and use title to get the icon?
+	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
+		super(
+				Constants.TEXTURE_PATH_GUI + container.getIcon().path,
+				container,
+				inv,
+				container.getDelegate(),
+				25,
+				7,
+				2,
+				0
+		);
+		this.delegate = container.getDelegate();
+		this.ySize = 190;
 
-        private final String path;
+		for (int i = 0; i < 2; i++) {
+			Slot queenSlot = container.getForestrySlot(1 + i);
+			if (queenSlot instanceof SlotWatched) {
+				SlotWatched watched = (SlotWatched) queenSlot;
+				watched.setChangeWatcher(this);
+			}
+		}
+		analyzer.init();
+	}
 
-        Icon(String path) {
-            this.path = path;
-        }
-    }
+	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
+		int i = 176 + rated.getLevelScaled(16);
+		int k = 0;
 
-    //TODO be hacky and use title to get the icon?
-    public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
-        super(
-                Constants.TEXTURE_PATH_GUI + container.getIcon().path,
-                container,
-                inv,
-                container.getDelegate(),
-                25,
-                7,
-                2,
-                0
-        );
-        this.delegate = container.getDelegate();
-        this.ySize = 190;
+		this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
+	}
 
-        for (int i = 0; i < 2; i++) {
-            Slot queenSlot = container.getForestrySlot(1 + i);
-            if (queenSlot instanceof SlotWatched) {
-                SlotWatched watched = (SlotWatched) queenSlot;
-                watched.setChangeWatcher(this);
-            }
-        }
-        analyzer.init();
-    }
+	@Override
+	protected void addLedgers() {
+		addErrorLedger(delegate);
+		addClimateLedger(delegate);
+		addHintLedger(delegate.getHintKey());
+		addOwnerLedger(delegate);
+	}
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	@Override
+	public ItemStack getSpecimen(int index) {
+		Slot slot = container.getForestrySlot(getSelectedSlot(index));
+		return slot.getStack();
+	}
 
-        bindTexture(textureFile);
-        drawHealthMeter(
-                transform,
-                guiLeft + 20,
-                guiTop + 37,
-                delegate.getHealthScaled(46),
-                EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100))
-        );
-    }
+	@Override
+	protected boolean hasErrors() {
+		return delegate.getErrorLogic().hasErrors();
+	}
 
-    @Override
-    protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
-        Slot slot = container.getForestrySlot(1 + selectedSlot);
-        SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
-    }
+	@Override
+	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
+		Slot slot = container.getForestrySlot(1 + selectedSlot);
+		SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
+	}
 
-    private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
-        int i = 176 + rated.getLevelScaled(16);
-        int k = 0;
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
-        this.blit(transform, x, y + 46 - height, i, k + 46 - height, 4, height);
-    }
+		bindTexture(textureFile);
+		drawHealthMeter(
+				transform,
+				guiLeft + 20,
+				guiTop + 37,
+				delegate.getHealthScaled(46),
+				EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100))
+		);
+	}
 
-    @Override
-    protected void addLedgers() {
-        addErrorLedger(delegate);
-        addClimateLedger(delegate);
-        addHintLedger(delegate.getHintKey());
-        addOwnerLedger(delegate);
-    }
+	public enum Icon {
+		APIARY("apiary.png"),
+		BEE_HOUSE("alveary.png");
 
-    @Override
-    public ItemStack getSpecimen(int index) {
-        Slot slot = container.getForestrySlot(getSelectedSlot(index));
-        return slot.getStack();
-    }
+		private final String path;
 
-    @Override
-    protected boolean hasErrors() {
-        return delegate.getErrorLogic().hasErrors();
-    }
+		Icon(String path) {
+			this.path = path;
+		}
+	}
 }

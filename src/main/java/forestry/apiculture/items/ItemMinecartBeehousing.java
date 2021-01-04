@@ -15,6 +15,7 @@ import forestry.api.core.ItemGroups;
 import forestry.apiculture.entities.MinecartEntityApiary;
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.entities.MinecartEntityBeehouse;
+
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IDispenseItemBehavior;
@@ -31,65 +32,65 @@ import java.util.Locale;
 
 public class ItemMinecartBeehousing extends MinecartItem {
 
-    //TODO merge with BlockTypeApiculture?
-    public enum Type implements IItemSubtype {
-        BEE_HOUSE,
-        APIARY;
+	private final Type type;
 
-        @Override
-        public String getString() {
-            return toString().toLowerCase(Locale.ENGLISH);
-        }
-    }
+	public ItemMinecartBeehousing(Type type) {
+		super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
+		this.type = type;
 
-    private final Type type;
+		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
+	}
 
-    public ItemMinecartBeehousing(Type type) {
-        super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
-        this.type = type;
+	//TODO world.addEntity returns successfully here but nothing ever appears in the world
+	@Override
+	public ActionResultType onItemUse(ItemUseContext context) {
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+		PlayerEntity player = context.getPlayer();
 
-        DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
-    }
+		if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
+			return ActionResultType.PASS;
+		}
 
-    //TODO world.addEntity returns successfully here but nothing ever appears in the world
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        PlayerEntity player = context.getPlayer();
+		ItemStack stack = player.getHeldItem(context.getHand());
 
-        if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
-            return ActionResultType.PASS;
-        }
+		if (!context.getWorld().isRemote) {
+			MinecartEntityBeeHousingBase minecart;
 
-        ItemStack stack = player.getHeldItem(context.getHand());
+			if (type == Type.BEE_HOUSE) {
+				minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+			} else {
+				minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
+			}
 
-        if (!context.getWorld().isRemote) {
-            MinecartEntityBeeHousingBase minecart;
+			minecart.getOwnerHandler().setOwner(player.getGameProfile());
 
-            if (type == Type.BEE_HOUSE) {
-                minecart = new MinecartEntityBeehouse(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-            } else {
-                minecart = new MinecartEntityApiary(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F);
-            }
+			if (stack.hasDisplayName()) {
+				minecart.setCustomName(stack.getDisplayName());
+			}
 
-            minecart.getOwnerHandler().setOwner(player.getGameProfile());
+			if (!world.addEntity(minecart)) {
+				return ActionResultType.FAIL;
+			}
+		}
 
-            if (stack.hasDisplayName()) {
-                minecart.setCustomName(stack.getDisplayName());
-            }
+		stack.shrink(1);
+		return ActionResultType.SUCCESS;
+	}
 
-            if (!world.addEntity(minecart)) {
-                return ActionResultType.FAIL;
-            }
-        }
+	@Override
+	public String getTranslationKey(ItemStack stack) {
+		return "cart." + type.getString();
+	}
 
-        stack.shrink(1);
-        return ActionResultType.SUCCESS;
-    }
+	//TODO merge with BlockTypeApiculture?
+	public enum Type implements IItemSubtype {
+		BEE_HOUSE,
+		APIARY;
 
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-        return "cart." + type.getString();
-    }
+		@Override
+		public String getString() {
+			return toString().toLowerCase(Locale.ENGLISH);
+		}
+	}
 }

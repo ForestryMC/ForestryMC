@@ -11,18 +11,20 @@
 package forestry.factory.blocks;
 
 import forestry.core.blocks.BlockBase;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.common.ToolType;
 
 public class BlockFactoryPlain extends BlockBase<BlockTypeFactoryPlain> {
-    public BlockFactoryPlain(BlockTypeFactoryPlain type) {
-        super(
-                type,
-                Block.Properties.create(Material.IRON)
-                                .harvestTool(ToolType.PICKAXE)
-                                .harvestLevel(0)
-                                .hardnessAndResistance(1.5f)
-        );
-    }
+	public BlockFactoryPlain(BlockTypeFactoryPlain type) {
+		super(
+				type,
+				Block.Properties.create(Material.IRON)
+						.harvestTool(ToolType.PICKAXE)
+						.harvestLevel(0)
+						.hardnessAndResistance(1.5f)
+		);
+	}
 }

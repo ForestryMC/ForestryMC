@@ -15,11 +15,14 @@ import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.genetics.BreedingTracker;
 import forestry.core.network.*;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,40 +30,40 @@ import net.minecraftforge.common.MinecraftForge;
 import java.io.IOException;
 
 public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
-    private final CompoundNBT nbt;
+	private final CompoundNBT nbt;
 
-    public PacketGenomeTrackerSync(CompoundNBT CompoundNBT) {
-        this.nbt = CompoundNBT;
-    }
+	public PacketGenomeTrackerSync(CompoundNBT CompoundNBT) {
+		this.nbt = CompoundNBT;
+	}
 
-    @Override
-    public PacketIdClient getPacketId() {
-        return PacketIdClient.GENOME_TRACKER_UPDATE;
-    }
+	@Override
+	public PacketIdClient getPacketId() {
+		return PacketIdClient.GENOME_TRACKER_UPDATE;
+	}
 
-    @Override
-    protected void writeData(PacketBufferForestry data) {
-        data.writeCompoundTag(nbt);
-    }
+	@Override
+	protected void writeData(PacketBufferForestry data) {
+		data.writeCompoundTag(nbt);
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public static class Handler implements IForestryPacketHandlerClient {
-        @Override
-        public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-            CompoundNBT nbt = data.readCompoundTag();
-            if (nbt != null) {
-                String type = nbt.getString(BreedingTracker.TYPE_KEY);
+	@OnlyIn(Dist.CLIENT)
+	public static class Handler implements IForestryPacketHandlerClient {
+		@Override
+		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+			CompoundNBT nbt = data.readCompoundTag();
+			if (nbt != null) {
+				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 
-                IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
-                definition.ifPresent(root -> {
-                    IBreedingTracker tracker = root.getBreedingTracker(
-                            player.getEntityWorld(),
-                            player.getGameProfile()
-                    );
-                    tracker.decodeFromNBT(nbt);
-                    MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
-                });
-            }
-        }
-    }
+				IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
+				definition.ifPresent(root -> {
+					IBreedingTracker tracker = root.getBreedingTracker(
+							player.getEntityWorld(),
+							player.getGameProfile()
+					);
+					tracker.decodeFromNBT(nbt);
+					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
+				});
+			}
+		}
+	}
 }

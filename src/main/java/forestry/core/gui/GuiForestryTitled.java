@@ -11,31 +11,33 @@
 package forestry.core.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import forestry.core.render.ColourProperties;
+
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
-    protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
-        super(texture, container, inv, title);
-    }
+	protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
+		super(texture, container, inv, title);
+	}
 
-    @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
-        textLayout.line = 6;
-        if (centeredTitle()) {
-            textLayout.drawCenteredLine(transform, title, 0, ColourProperties.INSTANCE.get("gui.title"));
-        } else {
-            textLayout.drawLine(transform, title, 8, ColourProperties.INSTANCE.get("gui.title"));
-        }
+		textLayout.line = 6;
+		if (centeredTitle()) {
+			textLayout.drawCenteredLine(transform, title, 0, ColourProperties.INSTANCE.get("gui.title"));
+		} else {
+			textLayout.drawLine(transform, title, 8, ColourProperties.INSTANCE.get("gui.title"));
+		}
 
-        bindTexture(textureFile);
-    }
+		bindTexture(textureFile);
+	}
 
-    protected boolean centeredTitle() {
-        return true;
-    }
+	protected boolean centeredTitle() {
+		return true;
+	}
 }

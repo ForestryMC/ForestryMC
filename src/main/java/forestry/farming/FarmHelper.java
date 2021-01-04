@@ -11,8 +11,10 @@
 package forestry.farming;
 
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.farming.*;
 import forestry.core.utils.VectUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
@@ -24,267 +26,267 @@ import java.util.*;
 
 public class FarmHelper {
 
-    public enum Stage {
-        CULTIVATE, HARVEST;
+	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
+			Blocks.BRICKS,
+			Blocks.STONE_BRICKS,
+			Blocks.SANDSTONE,
+			Blocks.NETHER_BRICKS,
+			Blocks.QUARTZ_BLOCK
+	);
 
-        public Stage next() {
-            if (this == CULTIVATE) {
-                return HARVEST;
-            } else {
-                return CULTIVATE;
-            }
-        }
-    }
+	public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
+		switch (farmSide) {
+			case NORTH:
+				return FarmDirection.WEST;
+			case WEST:
+				return FarmDirection.SOUTH;
+			case SOUTH:
+				return FarmDirection.EAST;
+			case EAST:
+				return FarmDirection.NORTH;
+		}
+		return null;
+	}
 
-    public static class FarmWorkStatus {
-        public boolean didWork = false;
-        public boolean hasFarmland = false;
-        public boolean hasFertilizer = true;
-        public boolean hasLiquid = true;
-    }
+	public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
+		switch (farmSide) {
+			case NORTH:
+				return FarmDirection.EAST;
+			case WEST:
+				return FarmDirection.NORTH;
+			case SOUTH:
+				return FarmDirection.WEST;
+			case EAST:
+				return FarmDirection.SOUTH;
+		}
+		return null;
+	}
 
-    public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
-        switch (farmSide) {
-            case NORTH:
-                return FarmDirection.WEST;
-            case WEST:
-                return FarmDirection.SOUTH;
-            case SOUTH:
-                return FarmDirection.EAST;
-            case EAST:
-                return FarmDirection.NORTH;
-        }
-        return null;
-    }
+	private static FarmDirection getOpposite(FarmDirection farmDirection) {
+		Direction forgeDirection = farmDirection.getFacing();
+		Direction forgeDirectionOpposite = forgeDirection.getOpposite();
+		return FarmDirection.getFarmDirection(forgeDirectionOpposite);
+	}
 
-    public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
-        switch (farmSide) {
-            case NORTH:
-                return FarmDirection.EAST;
-            case WEST:
-                return FarmDirection.NORTH;
-            case SOUTH:
-                return FarmDirection.WEST;
-            case EAST:
-                return FarmDirection.SOUTH;
-        }
-        return null;
-    }
+	/**
+	 * @return the corner of the farm for the given side and layout. Returns null if the corner is not in a loaded chunk.
+	 */
+	private static BlockPos getFarmMultiblockCorner(
+			BlockPos start,
+			FarmDirection farmSide,
+			FarmDirection layoutDirection,
+			BlockPos minFarmCoord,
+			BlockPos maxFarmCoord
+	) {
+		BlockPos edge = getFarmMultiblockEdge(start, farmSide, maxFarmCoord, minFarmCoord);
+		return getFarmMultiblockEdge(edge, getOpposite(layoutDirection), maxFarmCoord, minFarmCoord);
+	}
 
-    public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-            Blocks.BRICKS,
-            Blocks.STONE_BRICKS,
-            Blocks.SANDSTONE,
-            Blocks.NETHER_BRICKS,
-            Blocks.QUARTZ_BLOCK
-    );
+	/**
+	 * @return the edge of the farm for the given starting point and direction.
+	 */
+	private static BlockPos getFarmMultiblockEdge(
+			BlockPos start,
+			FarmDirection direction,
+			BlockPos maxFarmCoord,
+			BlockPos minFarmCoord
+	) {
+		switch (direction) {
+			case NORTH: // -z
+				return new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
+			case EAST: // +x
+				return new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
+			case SOUTH: // +z
+				return new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
+			case WEST: // -x
+				return new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
+			default:
+				throw new IllegalArgumentException("Invalid farm direction: " + direction);
+		}
+	}
 
-    private static FarmDirection getOpposite(FarmDirection farmDirection) {
-        Direction forgeDirection = farmDirection.getFacing();
-        Direction forgeDirectionOpposite = forgeDirection.getOpposite();
-        return FarmDirection.getFarmDirection(forgeDirectionOpposite);
-    }
+	public static void createTargets(
+			World world,
+			IFarmHousing farmHousing,
+			Map<FarmDirection, List<FarmTarget>> targets,
+			BlockPos targetStart,
+			final int allowedExtent,
+			final int farmSizeNorthSouth,
+			final int farmSizeEastWest,
+			BlockPos minFarmCoord,
+			BlockPos maxFarmCoord
+	) {
+		for (FarmDirection farmSide : FarmDirection.values()) {
+			final int farmWidth;
+			if (farmSide == FarmDirection.NORTH || farmSide == FarmDirection.SOUTH) {
+				farmWidth = farmSizeEastWest;
+			} else {
+				farmWidth = farmSizeNorthSouth;
+			}
 
-    /**
-     * @return the corner of the farm for the given side and layout. Returns null if the corner is not in a loaded chunk.
-     */
-    private static BlockPos getFarmMultiblockCorner(
-            BlockPos start,
-            FarmDirection farmSide,
-            FarmDirection layoutDirection,
-            BlockPos minFarmCoord,
-            BlockPos maxFarmCoord
-    ) {
-        BlockPos edge = getFarmMultiblockEdge(start, farmSide, maxFarmCoord, minFarmCoord);
-        return getFarmMultiblockEdge(edge, getOpposite(layoutDirection), maxFarmCoord, minFarmCoord);
-    }
+			// targets extend sideways in a pinwheel pattern around the farm, so they need to go a little extra distance
+			final int targetMaxLimit = allowedExtent + farmWidth;
 
-    /**
-     * @return the edge of the farm for the given starting point and direction.
-     */
-    private static BlockPos getFarmMultiblockEdge(
-            BlockPos start,
-            FarmDirection direction,
-            BlockPos maxFarmCoord,
-            BlockPos minFarmCoord
-    ) {
-        switch (direction) {
-            case NORTH: // -z
-                return new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
-            case EAST: // +x
-                return new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
-            case SOUTH: // +z
-                return new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
-            case WEST: // -x
-                return new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
-            default:
-                throw new IllegalArgumentException("Invalid farm direction: " + direction);
-        }
-    }
+			FarmDirection layoutDirection = getLayoutDirection(farmSide);
 
-    public static void createTargets(
-            World world,
-            IFarmHousing farmHousing,
-            Map<FarmDirection, List<FarmTarget>> targets,
-            BlockPos targetStart,
-            final int allowedExtent,
-            final int farmSizeNorthSouth,
-            final int farmSizeEastWest,
-            BlockPos minFarmCoord,
-            BlockPos maxFarmCoord
-    ) {
-        for (FarmDirection farmSide : FarmDirection.values()) {
-            final int farmWidth;
-            if (farmSide == FarmDirection.NORTH || farmSide == FarmDirection.SOUTH) {
-                farmWidth = farmSizeEastWest;
-            } else {
-                farmWidth = farmSizeNorthSouth;
-            }
+			List<FarmTarget> farmSideTargets = new ArrayList<>();
+			targets.put(farmSide, farmSideTargets);
 
-            // targets extend sideways in a pinwheel pattern around the farm, so they need to go a little extra distance
-            final int targetMaxLimit = allowedExtent + farmWidth;
+			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(
+					targetStart,
+					farmSide,
+					layoutDirection,
+					minFarmCoord,
+					maxFarmCoord
+			);
+			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
+			BlockPos firstGroundPosition = getGroundPosition(world, farmHousing, firstLocation);
+			if (firstGroundPosition != null) {
+				int groundHeight = firstGroundPosition.getY();
 
-            FarmDirection layoutDirection = getLayoutDirection(farmSide);
+				for (int i = 0; i < allowedExtent; i++) {
+					targetLocation = targetLocation.offset(farmSide.getFacing());
+					BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
-            List<FarmTarget> farmSideTargets = new ArrayList<>();
-            targets.put(farmSide, farmSideTargets);
+					if (!world.isBlockLoaded(groundLocation) || !farmHousing.isValidPlatform(world, groundLocation)) {
+						break;
+					}
 
-            BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(
-                    targetStart,
-                    farmSide,
-                    layoutDirection,
-                    minFarmCoord,
-                    maxFarmCoord
-            );
-            BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
-            BlockPos firstGroundPosition = getGroundPosition(world, farmHousing, firstLocation);
-            if (firstGroundPosition != null) {
-                int groundHeight = firstGroundPosition.getY();
+					int targetLimit = targetMaxLimit;
+					if (!farmHousing.isSquare()) {
+						targetLimit = targetMaxLimit - i - 1;
+					}
 
-                for (int i = 0; i < allowedExtent; i++) {
-                    targetLocation = targetLocation.offset(farmSide.getFacing());
-                    BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
+					FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
+					farmSideTargets.add(target);
+				}
+			}
+		}
+	}
 
-                    if (!world.isBlockLoaded(groundLocation) || !farmHousing.isValidPlatform(world, groundLocation)) {
-                        break;
-                    }
+	@Nullable
+	private static BlockPos getGroundPosition(World world, IFarmHousing farmHousing, BlockPos targetPosition) {
+		if (!world.isBlockLoaded(targetPosition)) {
+			return null;
+		}
 
-                    int targetLimit = targetMaxLimit;
-                    if (!farmHousing.isSquare()) {
-                        targetLimit = targetMaxLimit - i - 1;
-                    }
+		for (int yOffset = 2; yOffset > -4; yOffset--) {
+			BlockPos position = targetPosition.add(0, yOffset, 0);
+			if (world.isBlockLoaded(position) && farmHousing.isValidPlatform(world, position)) {
+				return position;
+			}
+		}
 
-                    FarmTarget target = new FarmTarget(targetLocation, layoutDirection, targetLimit);
-                    farmSideTargets.add(target);
-                }
-            }
-        }
-    }
+		return null;
+	}
 
-    @Nullable
-    private static BlockPos getGroundPosition(World world, IFarmHousing farmHousing, BlockPos targetPosition) {
-        if (!world.isBlockLoaded(targetPosition)) {
-            return null;
-        }
+	public static boolean isCycleCanceledByListeners(
+			IFarmLogic logic,
+			FarmDirection direction,
+			Iterable<IFarmListener> farmListeners
+	) {
+		for (IFarmListener listener : farmListeners) {
+			if (listener.cancelTask(logic, direction)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-        for (int yOffset = 2; yOffset > -4; yOffset--) {
-            BlockPos position = targetPosition.add(0, yOffset, 0);
-            if (world.isBlockLoaded(position) && farmHousing.isValidPlatform(world, position)) {
-                return position;
-            }
-        }
+	public static void setExtents(World world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets) {
+		for (List<FarmTarget> targetsList : targets.values()) {
+			if (!targetsList.isEmpty()) {
+				BlockPos groundPosition = getGroundPosition(world, farmHousing, targetsList.get(0).getStart());
 
-        return null;
-    }
+				for (FarmTarget target : targetsList) {
+					target.setExtentAndYOffset(world, groundPosition, farmHousing);
+				}
+			}
+		}
+	}
 
-    public static boolean isCycleCanceledByListeners(
-            IFarmLogic logic,
-            FarmDirection direction,
-            Iterable<IFarmListener> farmListeners
-    ) {
-        for (IFarmListener listener : farmListeners) {
-            if (listener.cancelTask(logic, direction)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public static boolean cultivateTarget(
+			World world,
+			IFarmHousing farmHousing,
+			FarmTarget target,
+			IFarmLogic logic,
+			Iterable<IFarmListener> farmListeners
+	) {
+		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
+			for (IFarmListener listener : farmListeners) {
+				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
+			}
+			return true;
+		}
 
-    public static void setExtents(World world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets) {
-        for (List<FarmTarget> targetsList : targets.values()) {
-            if (!targetsList.isEmpty()) {
-                BlockPos groundPosition = getGroundPosition(world, farmHousing, targetsList.get(0).getStart());
+		return false;
+	}
 
-                for (FarmTarget target : targetsList) {
-                    target.setExtentAndYOffset(world, groundPosition, farmHousing);
-                }
-            }
-        }
-    }
+	public static Collection<ICrop> harvestTargets(
+			World world,
+			IFarmHousing housing,
+			List<FarmTarget> farmTargets,
+			IFarmLogic logic,
+			Iterable<IFarmListener> farmListeners
+	) {
+		for (FarmTarget target : farmTargets) {
+			Collection<ICrop> harvested = harvestTarget(world, housing, target, logic, farmListeners);
+			if (!harvested.isEmpty()) {
+				return harvested;
+			}
+		}
 
-    public static boolean cultivateTarget(
-            World world,
-            IFarmHousing farmHousing,
-            FarmTarget target,
-            IFarmLogic logic,
-            Iterable<IFarmListener> farmListeners
-    ) {
-        BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
-        if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
-            for (IFarmListener listener : farmListeners) {
-                listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
-            }
-            return true;
-        }
+		return Collections.emptyList();
+	}
 
-        return false;
-    }
+	public static Collection<ICrop> harvestTarget(
+			World world,
+			IFarmHousing housing,
+			FarmTarget target,
+			IFarmLogic logic,
+			Iterable<IFarmListener> farmListeners
+	) {
+		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
+		Collection<ICrop> harvested = logic.harvest(world, housing, target.getDirection(), target.getExtent(), pos);
+		if (!harvested.isEmpty()) {
+			// Let event handlers know.
+			for (IFarmListener listener : farmListeners) {
+				listener.hasScheduledHarvest(harvested, logic, pos, target.getDirection(), target.getExtent());
+			}
+		}
+		return harvested;
+	}
 
-    public static Collection<ICrop> harvestTargets(
-            World world,
-            IFarmHousing housing,
-            List<FarmTarget> farmTargets,
-            IFarmLogic logic,
-            Iterable<IFarmListener> farmListeners
-    ) {
-        for (FarmTarget target : farmTargets) {
-            Collection<ICrop> harvested = harvestTarget(world, housing, target, logic, farmListeners);
-            if (!harvested.isEmpty()) {
-                return harvested;
-            }
-        }
+	public enum Stage {
+		CULTIVATE, HARVEST;
 
-        return Collections.emptyList();
-    }
+		public Stage next() {
+			if (this == CULTIVATE) {
+				return HARVEST;
+			} else {
+				return CULTIVATE;
+			}
+		}
+	}
 
-    public static Collection<ICrop> harvestTarget(
-            World world,
-            IFarmHousing housing,
-            FarmTarget target,
-            IFarmLogic logic,
-            Iterable<IFarmListener> farmListeners
-    ) {
-        BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
-        Collection<ICrop> harvested = logic.harvest(world, housing, target.getDirection(), target.getExtent(), pos);
-        if (!harvested.isEmpty()) {
-            // Let event handlers know.
-            for (IFarmListener listener : farmListeners) {
-                listener.hasScheduledHarvest(harvested, logic, pos, target.getDirection(), target.getExtent());
-            }
-        }
-        return harvested;
-    }
+	public static class FarmWorkStatus {
+		public boolean didWork = false;
+		public boolean hasFarmland = false;
+		public boolean hasFertilizer = true;
+		public boolean hasLiquid = true;
+	}
 
-    public static class TopDownICropComparator implements Comparator<ICrop> {
-        public static final TopDownICropComparator INSTANCE = new TopDownICropComparator();
+	public static class TopDownICropComparator implements Comparator<ICrop> {
+		public static final TopDownICropComparator INSTANCE = new TopDownICropComparator();
 
-        private TopDownICropComparator() {
+		private TopDownICropComparator() {
 
-        }
+		}
 
-        @Override
-        public int compare(ICrop o1, ICrop o2) {
-            return VectUtil.TOP_DOWN_COMPARATOR.compare(o1.getPosition(), o2.getPosition());
-        }
-    }
+		@Override
+		public int compare(ICrop o1, ICrop o2) {
+			return VectUtil.TOP_DOWN_COMPARATOR.compare(o1.getPosition(), o2.getPosition());
+		}
+	}
 }

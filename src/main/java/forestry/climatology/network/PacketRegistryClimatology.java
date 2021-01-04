@@ -13,17 +13,18 @@ package forestry.climatology.network;
 import forestry.climatology.network.packets.PacketSelectClimateTargeted;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketIdServer;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PacketRegistryClimatology implements IPacketRegistry {
-    @Override
-    public void registerPacketsServer() {
-        PacketIdServer.SELECT_CLIMATE_TARGETED.setPacketHandler(new PacketSelectClimateTargeted.Handler());
-    }
+	@Override
+	public void registerPacketsServer() {
+		PacketIdServer.SELECT_CLIMATE_TARGETED.setPacketHandler(new PacketSelectClimateTargeted.Handler());
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerPacketsClient() {
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerPacketsClient() {
+	}
 }

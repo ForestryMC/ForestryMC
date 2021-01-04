@@ -9,6 +9,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -29,31 +30,31 @@ import java.util.Set;
  * @author SirSengir
  */
 public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
-    /**
-     * Finds the matching recipe
-     *
-     * @param liquid    Present liquid
-     * @param item      Present item
-     * @param inventory Present inventory
-     * @return An optional carpenter recipe if any matches
-     */
-    Optional<ICarpenterRecipe> findMatchingRecipe(
-            RecipeManager recipeManager,
-            FluidStack liquid,
-            ItemStack item,
-            IInventory inventory
-    );
+	/**
+	 * Finds the matching recipe
+	 *
+	 * @param liquid    Present liquid
+	 * @param item      Present item
+	 * @param inventory Present inventory
+	 * @return An optional carpenter recipe if any matches
+	 */
+	Optional<ICarpenterRecipe> findMatchingRecipe(
+			RecipeManager recipeManager,
+			FluidStack liquid,
+			ItemStack item,
+			IInventory inventory
+	);
 
-    boolean matches(
-            @Nullable ICarpenterRecipe recipe,
-            FluidStack resource,
-            ItemStack item,
-            IInventory craftingInventory
-    );
+	boolean matches(
+			@Nullable ICarpenterRecipe recipe,
+			FluidStack resource,
+			ItemStack item,
+			IInventory craftingInventory
+	);
 
-    boolean isBox(RecipeManager manager, ItemStack resource);
+	boolean isBox(RecipeManager manager, ItemStack resource);
 
-    Set<Fluid> getRecipeFluids(RecipeManager manager);
+	Set<Fluid> getRecipeFluids(RecipeManager manager);
 
-    Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
+	Collection<ICarpenterRecipe> getRecipes(RecipeManager manager, ItemStack itemStack);
 }

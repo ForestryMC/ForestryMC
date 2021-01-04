@@ -26,52 +26,55 @@ import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
+
 import net.minecraft.client.gui.ScreenManager;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+
 import net.minecraftforge.fml.DistExecutor;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Climatology", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleClimatology extends BlankForestryModule {
 
-    @SuppressWarnings("NullableProblems")
-    public static ProxyClimatology proxy = null;
+	@SuppressWarnings("NullableProblems")
+	public static ProxyClimatology proxy = null;
 
-    public ModuleClimatology() {
-        proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
-    }
+	public ModuleClimatology() {
+		proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerGuiFactories() {
-        ScreenManager.registerFactory(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerGuiFactories() {
+		ScreenManager.registerFactory(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
+	}
 
-    @Override
-    public void preInit() {
-        proxy.preInit();
+	@Override
+	public void preInit() {
+		proxy.preInit();
 
-        // Capabilities
-        CapabilityManager.INSTANCE.register(
-                IClimateListener.class,
-                new NullStorage<>(),
-                () -> FakeClimateListener.INSTANCE
-        );
-        CapabilityManager.INSTANCE.register(
-                IClimateTransformer.class,
-                new NullStorage<>(),
-                () -> FakeClimateTransformer.INSTANCE
-        );
-    }
+		// Capabilities
+		CapabilityManager.INSTANCE.register(
+				IClimateListener.class,
+				new NullStorage<>(),
+				() -> FakeClimateListener.INSTANCE
+		);
+		CapabilityManager.INSTANCE.register(
+				IClimateTransformer.class,
+				new NullStorage<>(),
+				() -> FakeClimateTransformer.INSTANCE
+		);
+	}
 
-    @Override
-    public IPacketRegistry getPacketRegistry() {
-        return new PacketRegistryClimatology();
-    }
+	@Override
+	public IPacketRegistry getPacketRegistry() {
+		return new PacketRegistryClimatology();
+	}
 
-    @Override
-    public ISidedModuleHandler getModuleHandler() {
-        return proxy;
-    }
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
+	}
 }

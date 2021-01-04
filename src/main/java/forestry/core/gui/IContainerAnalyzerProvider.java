@@ -5,6 +5,6 @@ import net.minecraft.inventory.container.Slot;
 import javax.annotation.Nullable;
 
 public interface IContainerAnalyzerProvider extends IGuiSelectable {
-    @Nullable
-    Slot getAnalyzerSlot();
+	@Nullable
+	Slot getAnalyzerSlot();
 }

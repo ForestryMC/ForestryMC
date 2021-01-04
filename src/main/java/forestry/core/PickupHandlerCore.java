@@ -12,9 +12,11 @@ package forestry.core;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
+
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 import genetics.utils.RootUtils;
+
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,25 +25,25 @@ import java.util.Optional;
 
 public class PickupHandlerCore implements IPickupHandler {
 
-    @Override
-    public boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity entityitem) {
-        ItemStack itemstack = entityitem.getItem();
-        if (itemstack.isEmpty()) {
-            return false;
-        }
+	@Override
+	public boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity entityitem) {
+		ItemStack itemstack = entityitem.getItem();
+		if (itemstack.isEmpty()) {
+			return false;
+		}
 
-        IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemstack);
-        if (definition.isPresent()) {
-            IForestrySpeciesRoot<IIndividual> root = definition.get();
-            Optional<IIndividual> optionalIndividual = root.create(itemstack);
-            if (optionalIndividual.isPresent()) {
-                IIndividual individual = optionalIndividual.get();
-                IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
-                tracker.registerPickup(individual);
-            }
-        }
+		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(itemstack);
+		if (definition.isPresent()) {
+			IForestrySpeciesRoot<IIndividual> root = definition.get();
+			Optional<IIndividual> optionalIndividual = root.create(itemstack);
+			if (optionalIndividual.isPresent()) {
+				IIndividual individual = optionalIndividual.get();
+				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
+				tracker.registerPickup(individual);
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

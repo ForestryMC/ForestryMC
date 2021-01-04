@@ -15,19 +15,19 @@ import forestry.core.triggers.Trigger;
 import javax.annotation.Nullable;
 
 public class FactoryTriggers {
-    @Nullable
-    public static Trigger lowResource25;
-    @Nullable
-    public static Trigger lowResource10;
-    @Nullable
-    public static Trigger lowFuel25;
-    @Nullable
-    public static Trigger lowFuel10;
+	@Nullable
+	public static Trigger lowResource25;
+	@Nullable
+	public static Trigger lowResource10;
+	@Nullable
+	public static Trigger lowFuel25;
+	@Nullable
+	public static Trigger lowFuel10;
 
-    public static void initialize() {
-        lowResource25 = new TriggerLowResource("lowResources.25", 0.25f);
-        lowResource10 = new TriggerLowResource("lowResources.10", 0.1f);
-        lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f);
-        lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f);
-    }
+	public static void initialize() {
+		lowResource25 = new TriggerLowResource("lowResources.25", 0.25f);
+		lowResource10 = new TriggerLowResource("lowResources.10", 0.1f);
+		lowFuel25 = new TriggerLowFuel("lowFuel.25", 0.25f);
+		lowFuel10 = new TriggerLowFuel("lowFuel.10", 0.1f);
+	}
 }

@@ -17,13 +17,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.commands.PermLevel;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -34,58 +37,58 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public final class CommandTreeSpawn {
-    public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
-        return Commands.literal(name).requires(PermLevel.ADMIN)
-                       .then(Commands.argument("type", TreeArgument.treeArgument())
-                                     .executes(a -> run(
-                                             treeSpawner,
-                                             a.getSource(),
-                                             a.getArgument("type", ITree.class)
-                                     )))
-                       .executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
-    }
+	public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
+		return Commands.literal(name).requires(PermLevel.ADMIN)
+				.then(Commands.argument("type", TreeArgument.treeArgument())
+						.executes(a -> run(
+								treeSpawner,
+								a.getSource(),
+								a.getArgument("type", ITree.class)
+						)))
+				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
+	}
 
-    public static int run(
-            ITreeSpawner treeSpawner,
-            CommandSource source,
-            ITree tree
-    ) throws CommandSyntaxException {
-        return treeSpawner.spawn(source, tree, source.asPlayer());
-    }
+	public static int run(
+			ITreeSpawner treeSpawner,
+			CommandSource source,
+			ITree tree
+	) throws CommandSyntaxException {
+		return treeSpawner.spawn(source, tree, source.asPlayer());
+	}
 
-    public static class TreeArgument implements ArgumentType<ITree> {
+	public static class TreeArgument implements ArgumentType<ITree> {
 
-        public static TreeArgument treeArgument() {
-            return new TreeArgument();
-        }
+		public static TreeArgument treeArgument() {
+			return new TreeArgument();
+		}
 
-        @Override
-        public ITree parse(final StringReader reader) throws CommandSyntaxException {
-            ResourceLocation location = ResourceLocation.read(reader);
+		@Override
+		public ITree parse(final StringReader reader) throws CommandSyntaxException {
+			ResourceLocation location = ResourceLocation.read(reader);
 
-            return TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getTemplate(location.toString()));
-        }
+			return TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getTemplate(location.toString()));
+		}
 
-        @Override
-        public <S> CompletableFuture<Suggestions> listSuggestions(
-                final CommandContext<S> context,
-                final SuggestionsBuilder builder
-        ) {
-            return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
-                                                                   .map(IIndividual::getGenome)
-                                                                   .map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
-                                                                   .map(IAllele::getRegistryName)
-                                                                   .map(ResourceLocation::toString), builder);
-        }
+		@Override
+		public <S> CompletableFuture<Suggestions> listSuggestions(
+				final CommandContext<S> context,
+				final SuggestionsBuilder builder
+		) {
+			return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString), builder);
+		}
 
-        @Override
-        public Collection<String> getExamples() {
-            return TreeManager.treeRoot.getIndividualTemplates().stream()
-                                       .map(IIndividual::getGenome)
-                                       .map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
-                                       .map(IAllele::getRegistryName)
-                                       .map(ResourceLocation::toString)
-                                       .collect(Collectors.toList());
-        }
-    }
+		@Override
+		public Collection<String> getExamples() {
+			return TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString)
+					.collect(Collectors.toList());
+		}
+	}
 }

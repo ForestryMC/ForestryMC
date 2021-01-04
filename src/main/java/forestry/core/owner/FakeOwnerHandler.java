@@ -15,27 +15,27 @@ import com.mojang.authlib.GameProfile;
 import javax.annotation.Nullable;
 
 public class FakeOwnerHandler implements IOwnerHandler {
-    @Nullable
-    private static FakeOwnerHandler instance;
+	@Nullable
+	private static FakeOwnerHandler instance;
 
-    private FakeOwnerHandler() {
+	private FakeOwnerHandler() {
 
-    }
+	}
 
-    public static FakeOwnerHandler getInstance() {
-        if (instance == null) {
-            instance = new FakeOwnerHandler();
-        }
-        return instance;
-    }
+	public static FakeOwnerHandler getInstance() {
+		if (instance == null) {
+			instance = new FakeOwnerHandler();
+		}
+		return instance;
+	}
 
-    @Override
-    public GameProfile getOwner() {
-        return null;
-    }
+	@Override
+	public GameProfile getOwner() {
+		return null;
+	}
 
-    @Override
-    public void setOwner(GameProfile owner) {
+	@Override
+	public void setOwner(GameProfile owner) {
 
-    }
+	}
 }

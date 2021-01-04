@@ -11,9 +11,11 @@
 package forestry.core;
 
 import forestry.core.utils.GeneticsUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
@@ -22,34 +24,34 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
 
-    private boolean hasNaturalistEye;
+	private boolean hasNaturalistEye;
 
-    //TODO - register event handlers
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft != null) {
-                PlayerEntity player = minecraft.player;
-                if (player != null) {
-                    boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-                    if (this.hasNaturalistEye != hasNaturalistEye) {
-                        this.hasNaturalistEye = hasNaturalistEye;
-                        //TODO - I think this is the correct field
-                        WorldRenderer renderGlobal = minecraft.worldRenderer;
-                        if (renderGlobal != null) {
-                            renderGlobal.markBlockRangeForRenderUpdate(
-                                    (int) player.getPosX() - 32,
-                                    (int) player.getPosY() - 32,
-                                    (int) player.getPosZ() - 32,
-                                    (int) player.getPosX() + 32,
-                                    (int) player.getPosY() + 32,
-                                    (int) player.getPosZ() + 32
-                            );
-                        }
-                    }
-                }
-            }
-        }
-    }
+	//TODO - register event handlers
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.END) {
+			Minecraft minecraft = Minecraft.getInstance();
+			if (minecraft != null) {
+				PlayerEntity player = minecraft.player;
+				if (player != null) {
+					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
+					if (this.hasNaturalistEye != hasNaturalistEye) {
+						this.hasNaturalistEye = hasNaturalistEye;
+						//TODO - I think this is the correct field
+						WorldRenderer renderGlobal = minecraft.worldRenderer;
+						if (renderGlobal != null) {
+							renderGlobal.markBlockRangeForRenderUpdate(
+									(int) player.getPosX() - 32,
+									(int) player.getPosY() - 32,
+									(int) player.getPosZ() - 32,
+									(int) player.getPosX() + 32,
+									(int) player.getPosY() + 32,
+									(int) player.getPosZ() + 32
+							);
+						}
+					}
+				}
+			}
+		}
+	}
 }

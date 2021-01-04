@@ -11,13 +11,14 @@
 package forestry.core.commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 
 public class CommandMode {
-    public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
-        return Commands.literal("mode")
-                       .then(CommandModeInfo.register(modeHelper))
-                       .then(CommandModeSet.register(modeHelper));
-    }
+	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
+		return Commands.literal("mode")
+				.then(CommandModeInfo.register(modeHelper))
+				.then(CommandModeSet.register(modeHelper));
+	}
 }

@@ -12,10 +12,12 @@ package forestry.mail.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.SoundUtil;
 import forestry.mail.POBoxInfo;
+
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -24,6 +26,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -31,94 +34,95 @@ import javax.annotation.Nullable;
 
 public class GuiMailboxInfo extends AbstractGui {
 
-    public static final GuiMailboxInfo instance = new GuiMailboxInfo();
-    private static final int WIDTH = 98;
-    private static final int HEIGHT = 17;
-    private final FontRenderer fontRenderer;
-    // TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
-    private final ResourceLocation textureAlert = new ResourceLocation(
-            Constants.MOD_ID,
-            Constants.TEXTURE_PATH_GUI + "mailalert.png"
-    );
-    @Nullable
-    private POBoxInfo poInfo;
-    private GuiMailboxInfo() {
-        fontRenderer = Minecraft.getInstance().fontRenderer;
-    }
+	public static final GuiMailboxInfo instance = new GuiMailboxInfo();
+	private static final int WIDTH = 98;
+	private static final int HEIGHT = 17;
+	private final FontRenderer fontRenderer;
+	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
+	private final ResourceLocation textureAlert = new ResourceLocation(
+			Constants.MOD_ID,
+			Constants.TEXTURE_PATH_GUI + "mailalert.png"
+	);
+	@Nullable
+	private POBoxInfo poInfo;
 
-    public void render(MatrixStack transform) {
-        if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
-            return;
-        }
+	private GuiMailboxInfo() {
+		fontRenderer = Minecraft.getInstance().fontRenderer;
+	}
 
-        int x = 0;
-        int y = 0;
+	public void render(MatrixStack transform) {
+		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
+			return;
+		}
 
-        Minecraft minecraft = Minecraft.getInstance();
-        MainWindow win = minecraft.getMainWindow();
-        if (Config.mailAlertXPosition == XPosition.RIGHT) {
-            x = win.getScaledWidth() - WIDTH;
-        }
-        if (Config.mailAlertYPosition == YPosition.BOTTOM) {
-            y = win.getScaledHeight() - HEIGHT;
-        }
+		int x = 0;
+		int y = 0;
 
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.disableLighting();
-        TextureManager textureManager = minecraft.getTextureManager();
-        textureManager.bindTexture(textureAlert);
+		Minecraft minecraft = Minecraft.getInstance();
+		MainWindow win = minecraft.getMainWindow();
+		if (Config.mailAlertXPosition == XPosition.RIGHT) {
+			x = win.getScaledWidth() - WIDTH;
+		}
+		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
+			y = win.getScaledHeight() - HEIGHT;
+		}
 
-        this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableLighting();
+		TextureManager textureManager = minecraft.getTextureManager();
+		textureManager.bindTexture(textureAlert);
 
-        fontRenderer.drawString(
-                transform,
-                Integer.toString(poInfo.playerLetters),
-                x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22),
-                y + 5,
-                0xffffff
-        );
-        fontRenderer.drawString(
-                transform,
-                Integer.toString(poInfo.tradeLetters),
-                x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22),
-                y + 5,
-                0xffffff
-        );
-    }
+		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-    protected int getCenteredOffset(String string, int xWidth) {
-        return (xWidth - fontRenderer.getStringWidth(string)) / 2;
-    }
+		fontRenderer.drawString(
+				transform,
+				Integer.toString(poInfo.playerLetters),
+				x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22),
+				y + 5,
+				0xffffff
+		);
+		fontRenderer.drawString(
+				transform,
+				Integer.toString(poInfo.tradeLetters),
+				x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22),
+				y + 5,
+				0xffffff
+		);
+	}
 
-    public boolean hasPOBoxInfo() {
-        return poInfo != null;
-    }
+	protected int getCenteredOffset(String string, int xWidth) {
+		return (xWidth - fontRenderer.getStringWidth(string)) / 2;
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
-        boolean playJingle = false;
+	public boolean hasPOBoxInfo() {
+		return poInfo != null;
+	}
 
-        if (info.hasMail()) {
-            if (this.poInfo == null) {
-                playJingle = true;
-            } else if (this.poInfo.playerLetters != info.playerLetters ||
-                       this.poInfo.tradeLetters != info.tradeLetters) {
-                playJingle = true;
-            }
-        }
+	@OnlyIn(Dist.CLIENT)
+	public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
+		boolean playJingle = false;
 
-        if (playJingle) {
-            SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
-        }
+		if (info.hasMail()) {
+			if (this.poInfo == null) {
+				playJingle = true;
+			} else if (this.poInfo.playerLetters != info.playerLetters ||
+					this.poInfo.tradeLetters != info.tradeLetters) {
+				playJingle = true;
+			}
+		}
 
-        this.poInfo = info;
-    }
+		if (playJingle) {
+			SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
+		}
 
-    public enum XPosition {
-        LEFT, RIGHT
-    }
+		this.poInfo = info;
+	}
 
-    public enum YPosition {
-        TOP, BOTTOM
-    }
+	public enum XPosition {
+		LEFT, RIGHT
+	}
+
+	public enum YPosition {
+		TOP, BOTTOM
+	}
 }

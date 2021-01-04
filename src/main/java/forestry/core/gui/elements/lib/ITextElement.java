@@ -9,10 +9,10 @@ import java.util.Collection;
  */
 public interface ITextElement extends IGuiElement {
 
-    /**
-     * @return The text this element displays.
-     */
-    Collection<ITextComponent> getLines();
+	/**
+	 * @return The text this element displays.
+	 */
+	Collection<ITextComponent> getLines();
 
-    ITextElement setText(ITextComponent text);
+	ITextElement setText(ITextComponent text);
 }

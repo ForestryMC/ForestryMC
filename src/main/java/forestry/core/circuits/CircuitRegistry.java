@@ -12,6 +12,7 @@ package forestry.core.circuits;
 
 import forestry.api.circuits.*;
 import forestry.core.features.CoreItems;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.server.ServerWorld;
@@ -22,91 +23,91 @@ import java.util.Map;
 
 public class CircuitRegistry implements ICircuitRegistry {
 
-    public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy", CircuitSocketType.NONE);
-    private static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<>();
+	public static final ICircuitLayout DUMMY_LAYOUT = new CircuitLayout("dummy", CircuitSocketType.NONE);
+	private static final Map<String, ICircuitLayout> DUMMY_MAP = new LinkedHashMap<>();
 
-    static {
-        DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
-    }
+	static {
+		DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
+	}
 
-    private final Map<String, ICircuit> deprecatedCircuits = new LinkedHashMap<>();
-    private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<>();
-    private final Map<String, ICircuit> circuitMap = new LinkedHashMap<>();
+	private final Map<String, ICircuit> deprecatedCircuits = new LinkedHashMap<>();
+	private final Map<String, ICircuitLayout> layoutMap = new LinkedHashMap<>();
+	private final Map<String, ICircuit> circuitMap = new LinkedHashMap<>();
 
-    //TODO - dimensionsavedddatamanager? check later
-    @Override
-    public ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName) {
-        return world.getSavedData().getOrCreate(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
-    }
+	/* CIRCUITS */
+	@Override
+	public Map<String, ICircuit> getRegisteredCircuits() {
+		return circuitMap;
+	}
 
-    /* CIRCUIT LAYOUTS */
-    @Override
-    public ICircuitLayout getDefaultLayout() {
-        if (layoutMap.containsKey("forestry.engine.tin")) {
-            return layoutMap.get("forestry.engine.tin");
-        } else if (!layoutMap.isEmpty()) {
-            return layoutMap.values().iterator().next();
-        } else {
-            return DUMMY_LAYOUT;
-        }
-    }
+	@Override
+	public void registerCircuit(ICircuit circuit) {
+		circuitMap.put(circuit.getUID(), circuit);
+	}
 
-    @Override
-    public Map<String, ICircuitLayout> getRegisteredLayouts() {
-        if (layoutMap.isEmpty()) {
-            return DUMMY_MAP;
-        }
-        return layoutMap;
-    }
+	@Override
+	public void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement) {
+		deprecatedCircuits.put(deprecatedCircuit, replacement);
+	}
 
-    @Override
-    public void registerLayout(ICircuitLayout layout) {
-        layoutMap.put(layout.getUID(), layout);
-    }
+	@Override
+	@Nullable
+	public ICircuit getCircuit(String uid) {
+		if (deprecatedCircuits.containsKey(uid)) {
+			return deprecatedCircuits.get(uid);
+		}
+		return circuitMap.get(uid);
+	}
 
-    @Override
-    public void registerDeprecatedCircuitReplacement(String deprecatedCircuit, ICircuit replacement) {
-        deprecatedCircuits.put(deprecatedCircuit, replacement);
-    }
+	//TODO - dimensionsavedddatamanager? check later
+	@Override
+	public ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName) {
+		return world.getSavedData().getOrCreate(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
+	}
 
-    @Override
-    @Nullable
-    public ICircuitLayout getLayout(String uid) {
-        return layoutMap.getOrDefault(uid, null);
-    }
+	@Override
+	public Map<String, ICircuitLayout> getRegisteredLayouts() {
+		if (layoutMap.isEmpty()) {
+			return DUMMY_MAP;
+		}
+		return layoutMap;
+	}
 
-    /* CIRCUITS */
-    @Override
-    public Map<String, ICircuit> getRegisteredCircuits() {
-        return circuitMap;
-    }
+	@Override
+	public void registerLayout(ICircuitLayout layout) {
+		layoutMap.put(layout.getUID(), layout);
+	}
 
-    @Override
-    public void registerCircuit(ICircuit circuit) {
-        circuitMap.put(circuit.getUID(), circuit);
-    }
+	@Override
+	@Nullable
+	public ICircuitLayout getLayout(String uid) {
+		return layoutMap.getOrDefault(uid, null);
+	}
 
-    @Override
-    @Nullable
-    public ICircuit getCircuit(String uid) {
-        if (deprecatedCircuits.containsKey(uid)) {
-            return deprecatedCircuits.get(uid);
-        }
-        return circuitMap.get(uid);
-    }
+	/* CIRCUIT LAYOUTS */
+	@Override
+	public ICircuitLayout getDefaultLayout() {
+		if (layoutMap.containsKey("forestry.engine.tin")) {
+			return layoutMap.get("forestry.engine.tin");
+		} else if (!layoutMap.isEmpty()) {
+			return layoutMap.values().iterator().next();
+		} else {
+			return DUMMY_LAYOUT;
+		}
+	}
 
-    @Override
-    public boolean isChipset(ItemStack itemstack) {
-        return CoreItems.CIRCUITBOARDS.itemEqual(itemstack);
-    }
+	@Override
+	public ICircuitBoard getCircuitBoard(ItemStack itemstack) {
+		CompoundNBT compoundNBT = itemstack.getTag();
+		if (compoundNBT == null) {
+			return null;
+		}
 
-    @Override
-    public ICircuitBoard getCircuitBoard(ItemStack itemstack) {
-        CompoundNBT compoundNBT = itemstack.getTag();
-        if (compoundNBT == null) {
-            return null;
-        }
+		return new CircuitBoard(compoundNBT);
+	}
 
-        return new CircuitBoard(compoundNBT);
-    }
+	@Override
+	public boolean isChipset(ItemStack itemstack) {
+		return CoreItems.CIRCUITBOARDS.itemEqual(itemstack);
+	}
 }

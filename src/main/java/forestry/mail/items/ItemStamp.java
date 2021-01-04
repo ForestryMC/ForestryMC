@@ -14,19 +14,20 @@ import forestry.api.mail.EnumPostage;
 import forestry.api.mail.IStamps;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemOverlay;
+
 import net.minecraft.item.ItemStack;
 
 public class ItemStamp extends ItemOverlay implements IStamps {
 
-    private final EnumStampDefinition def;
+	private final EnumStampDefinition def;
 
-    public ItemStamp(EnumStampDefinition def) {
-        super(ItemGroupForestry.tabForestry, def);
-        this.def = def;
-    }
+	public ItemStamp(EnumStampDefinition def) {
+		super(ItemGroupForestry.tabForestry, def);
+		this.def = def;
+	}
 
-    @Override
-    public EnumPostage getPostage(ItemStack itemstack) {
-        return def.getPostage();
-    }
+	@Override
+	public EnumPostage getPostage(ItemStack itemstack) {
+		return def.getPostage();
+	}
 }

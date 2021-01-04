@@ -9,7 +9,7 @@ import forestry.api.recipes.ISolderManager;
 
 public class ChipsetManager {
 
-    public static ISolderManager solderManager;
-    public static ICircuitRegistry circuitRegistry;
+	public static ISolderManager solderManager;
+	public static ICircuitRegistry circuitRegistry;
 
 }

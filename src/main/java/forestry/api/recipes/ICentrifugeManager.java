@@ -21,6 +21,6 @@ import javax.annotation.Nullable;
  * @author SirSengir
  */
 public interface ICentrifugeManager extends ICraftingProvider<ICentrifugeRecipe> {
-    @Nullable
-    ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack);
+	@Nullable
+	ICentrifugeRecipe findMatchingRecipe(RecipeManager manager, ItemStack itemStack);
 }

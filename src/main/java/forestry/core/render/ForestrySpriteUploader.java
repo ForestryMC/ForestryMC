@@ -1,6 +1,7 @@
 package forestry.core.render;
 
 import forestry.api.core.ISpriteRegistry;
+
 import net.minecraft.client.renderer.texture.SpriteUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -12,23 +13,23 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class ForestrySpriteUploader extends SpriteUploader implements ISpriteRegistry {
-    private final Set<ResourceLocation> registeredSprites = new HashSet<>();
+	private final Set<ResourceLocation> registeredSprites = new HashSet<>();
 
-    public ForestrySpriteUploader(TextureManager manager, ResourceLocation atlasLocation, String prefix) {
-        super(manager, atlasLocation, prefix);
-    }
+	public ForestrySpriteUploader(TextureManager manager, ResourceLocation atlasLocation, String prefix) {
+		super(manager, atlasLocation, prefix);
+	}
 
-    public boolean addSprite(ResourceLocation location) {
-        return this.registeredSprites.add(location);
-    }
+	public boolean addSprite(ResourceLocation location) {
+		return this.registeredSprites.add(location);
+	}
 
-    @Override
-    protected Stream<ResourceLocation> getResourceLocations() {
-        return Collections.unmodifiableSet(this.registeredSprites).stream();
-    }
+	@Override
+	protected Stream<ResourceLocation> getResourceLocations() {
+		return Collections.unmodifiableSet(this.registeredSprites).stream();
+	}
 
-    @Override
-    public TextureAtlasSprite getSprite(ResourceLocation location) {
-        return super.getSprite(location);
-    }
+	@Override
+	public TextureAtlasSprite getSprite(ResourceLocation location) {
+		return super.getSprite(location);
+	}
 }

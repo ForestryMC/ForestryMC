@@ -11,96 +11,96 @@ import javax.annotation.Nullable;
  */
 public interface IClassification {
 
-    enum EnumClassLevel {
+	/**
+	 * @return Level inside the full hierarchy this particular classification is located at.
+	 */
+	EnumClassLevel getLevel();
 
-        DOMAIN(0x777fff, true), KINGDOM(0x77c3ff), PHYLUM(0x77ffb6, true), DIVISION(
-                0x77ffb6,
-                true
-        ), CLASS(0x7bff77), ORDER(0xbeff77), FAMILY(0xfffd77),
-        SUBFAMILY(0xfffd77), TRIBE(0xfffd77), GENUS(0xffba77);
+	/**
+	 * @return Unique String identifier.
+	 */
+	String getUID();
 
-        private final int colour;
-        private final boolean isDroppable;
+	/**
+	 * @return Localized branch name for user display.
+	 */
+	String getName();
 
-        EnumClassLevel(int colour) {
-            this(colour, false);
-        }
+	/**
+	 * A branch approximates a "genus" in real life. Real life examples: "Micrapis", "Megapis"
+	 *
+	 * @return flavour text
+	 */
+	String getScientific();
 
-        EnumClassLevel(int colour, boolean isDroppable) {
-            this.colour = colour;
-            this.isDroppable = isDroppable;
-        }
+	/**
+	 * @return Localized description of this branch.
+	 */
+	String getDescription();
 
-        /**
-         * @return Colour to use for displaying this classification.
-         */
-        public int getColour() {
-            return colour;
-        }
+	/**
+	 * @return Member groups of this one.
+	 */
+	IClassification[] getMemberGroups();
 
-        /**
-         * @return Indicates whether display of this classification level can be ommitted in case of space constraints.
-         */
-        public boolean isDroppable() {
-            return isDroppable;
-        }
-    }
+	/**
+	 * Adds subgroups to this group.
+	 */
+	void addMemberGroup(IClassification group);
 
-    /**
-     * @return Level inside the full hierarchy this particular classification is located at.
-     */
-    EnumClassLevel getLevel();
+	/**
+	 * @return Member species of this group.
+	 */
+	IAlleleSpecies[] getMemberSpecies();
 
-    /**
-     * @return Unique String identifier.
-     */
-    String getUID();
+	/**
+	 * Used by the allele registry to populate internal collection of branch members on the fly.
+	 */
+	void addMemberSpecies(IAlleleSpecies species);
 
-    /**
-     * @return Localized branch name for user display.
-     */
-    String getName();
+	/**
+	 * @return Parent classification, null if this is root.
+	 */
+	@Nullable
+	IClassification getParent();
 
-    /**
-     * A branch approximates a "genus" in real life. Real life examples: "Micrapis", "Megapis"
-     *
-     * @return flavour text
-     */
-    String getScientific();
+	/**
+	 * Only used internally by the AlleleRegistry if this classification has been added to another one.
+	 */
+	void setParent(IClassification parent);
 
-    /**
-     * @return Localized description of this branch.
-     */
-    String getDescription();
+	enum EnumClassLevel {
 
-    /**
-     * @return Member groups of this one.
-     */
-    IClassification[] getMemberGroups();
+		DOMAIN(0x777fff, true), KINGDOM(0x77c3ff), PHYLUM(0x77ffb6, true), DIVISION(
+				0x77ffb6,
+				true
+		), CLASS(0x7bff77), ORDER(0xbeff77), FAMILY(0xfffd77),
+		SUBFAMILY(0xfffd77), TRIBE(0xfffd77), GENUS(0xffba77);
 
-    /**
-     * Adds subgroups to this group.
-     */
-    void addMemberGroup(IClassification group);
+		private final int colour;
+		private final boolean isDroppable;
 
-    /**
-     * @return Member species of this group.
-     */
-    IAlleleSpecies[] getMemberSpecies();
+		EnumClassLevel(int colour) {
+			this(colour, false);
+		}
 
-    /**
-     * Used by the allele registry to populate internal collection of branch members on the fly.
-     */
-    void addMemberSpecies(IAlleleSpecies species);
+		EnumClassLevel(int colour, boolean isDroppable) {
+			this.colour = colour;
+			this.isDroppable = isDroppable;
+		}
 
-    /**
-     * @return Parent classification, null if this is root.
-     */
-    @Nullable
-    IClassification getParent();
+		/**
+		 * @return Colour to use for displaying this classification.
+		 */
+		public int getColour() {
+			return colour;
+		}
 
-    /**
-     * Only used internally by the AlleleRegistry if this classification has been added to another one.
-     */
-    void setParent(IClassification parent);
+		/**
+		 * @return Indicates whether display of this classification level can be ommitted in case of space constraints.
+		 */
+		public boolean isDroppable() {
+			return isDroppable;
+		}
+	}
 }

@@ -12,47 +12,50 @@ package forestry.core.gui.elements;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiUtil;
 import forestry.core.utils.ItemTooltipUtil;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class AbstractItemElement extends GuiElement {
 
-    public AbstractItemElement(int xPos, int yPos, int width, int height) {
-        super(xPos, yPos, width, height);
-    }
+	public AbstractItemElement(int xPos, int yPos, int width, int height) {
+		super(xPos, yPos, width, height);
+	}
 
-    public AbstractItemElement(int xPos, int yPos) {
-        super(xPos, yPos, 16, 16);
-    }
+	public AbstractItemElement(int xPos, int yPos) {
+		super(xPos, yPos, 16, 16);
+	}
 
-    @Override
-    public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-        ItemStack itemStack = getStack();
-        if (!itemStack.isEmpty()) {
-            //RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-            GlStateManager.enableRescaleNormal();
-            GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, itemStack, 0, 0);
-            RenderHelper.disableStandardItemLighting();
-        }
-    }
+	@Override
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		ItemStack itemStack = getStack();
+		if (!itemStack.isEmpty()) {
+			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
+			GlStateManager.enableRescaleNormal();
+			GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, itemStack, 0, 0);
+			RenderHelper.disableStandardItemLighting();
+		}
+	}
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public ToolTip getTooltip(int mouseX, int mouseY) {
-        ItemStack itemStack = getStack();
-        return ItemTooltipUtil.getInformation(itemStack);
-    }
+	@Override
+	public boolean hasTooltip() {
+		return true;
+	}
 
-    @Override
-    public boolean hasTooltip() {
-        return true;
-    }
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public ToolTip getTooltip(int mouseX, int mouseY) {
+		ItemStack itemStack = getStack();
+		return ItemTooltipUtil.getInformation(itemStack);
+	}
 
-    protected abstract ItemStack getStack();
+	protected abstract ItemStack getStack();
 }

@@ -31,6 +31,7 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.energy.EnergyManager;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -41,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -53,290 +55,289 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 public class TileHabitatFormer extends TilePowered implements IClimateHousing, IClimatised, ILiquidTankTile {
-    private static final String TRANSFORMER_KEY = "Transformer";
+	private static final String TRANSFORMER_KEY = "Transformer";
 
-    //The logic that handles the climate  changes.
-    private final ClimateTransformer transformer;
+	//The logic that handles the climate  changes.
+	private final ClimateTransformer transformer;
 
-    private final FilteredTank resourceTank;
-    private final TankManager tankManager;
+	private final FilteredTank resourceTank;
+	private final TankManager tankManager;
+	@Nullable
+	private FluidStack cachedStack = null;
 
-    public TileHabitatFormer() {
-        super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
-        this.transformer = new ClimateTransformer(this);
-        setInternalInventory(new InventoryHabitatFormer(this));
-        resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
+	public TileHabitatFormer() {
+		super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
+		this.transformer = new ClimateTransformer(this);
+		setInternalInventory(new InventoryHabitatFormer(this));
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY);
 
-        tankManager = new TankManager(this, resourceTank);
-        setTicksPerWorkCycle(10);
-        setEnergyPerWorkCycle(0);
-    }
+		tankManager = new TankManager(this, resourceTank);
+		setTicksPerWorkCycle(10);
+		setEnergyPerWorkCycle(0);
+	}
 
-    @Override
-    public void setWorldAndPos(World world, BlockPos pos) {
-        super.setWorldAndPos(world, pos);
+	@Override
+	public void setWorldAndPos(World world, BlockPos pos) {
+		super.setWorldAndPos(world, pos);
 
-        resourceTank.setFilters(RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
-    }
+		resourceTank.setFilters(RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
+	}
 
-    @Override
-    public ITankManager getTankManager() {
-        return tankManager;
-    }
+	@Override
+	public ITankManager getTankManager() {
+		return tankManager;
+	}
 
-    @Override
-    public void onRemoval() {
-        transformer.removeTransformer();
-    }
+	@Override
+	public boolean hasWork() {
+		return true;
+	}
 
-    @Override
-    protected void updateServerSide() {
-        super.updateServerSide();
-        transformer.update();
-        if (updateOnInterval(20)) {
-            // Check if we have suitable items waiting in the item slot
-            FluidHelper.drainContainers(tankManager, this, 0);
-        }
-    }
+	@Override
+	protected void updateServerSide() {
+		super.updateServerSide();
+		transformer.update();
+		if (updateOnInterval(20)) {
+			// Check if we have suitable items waiting in the item slot
+			FluidHelper.drainContainers(tankManager, this, 0);
+		}
+	}
 
-    @Override
-    public boolean hasWork() {
-        return true;
-    }
+	@Override
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
 
-    @Nullable
-    private FluidStack cachedStack = null;
+		tankManager.read(data);
 
-    @Override
-    protected boolean workCycle() {
-        IErrorLogic errorLogic = getErrorLogic();
-        IClimateState currentState = transformer.getCurrent();
-        IClimateState changedState = transformer.getTarget().subtract(currentState);
-        IClimateState difference = getClimateDifference();
-        cachedStack = null;
-        if (difference.getHumidity() != 0.0F) {
-            updateHumidity(errorLogic, changedState);
-        }
-        if (difference.getTemperature() != 0.0F) {
-            updateTemperature(errorLogic, changedState);
-        }
-        return true;
-    }
+		if (data.contains(TRANSFORMER_KEY)) {
+			CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
+			transformer.read(nbtTag);
+		}
+	}
 
-    private void updateHumidity(IErrorLogic errorLogic, IClimateState changedState) {
-        IClimateManipulator manipulator = transformer.createManipulator(ClimateType.HUMIDITY).build();
-        if (manipulator.canAdd()) {
-            errorLogic.setCondition(false, EnumErrorCode.WRONG_RESOURCE);
-            int currentCost = getFluidCost(changedState);
-            if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
-                IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
-                        changedState.toImmutable().add(manipulator.addChange(true));
-                int fluidCost = getFluidCost(simulatedState);
-                if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
-                    cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);
-                    manipulator.addChange(false);
-                } else {
-                    cachedStack = resourceTank.drain(currentCost, IFluidHandler.FluidAction.EXECUTE);
-                }
-                errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
-            } else {
+	/* Methods - SAVING & LOADING */
+	@Override
+	public CompoundNBT write(CompoundNBT data) {
+		super.write(data);
 
-                manipulator.removeChange(false);
-                errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_LIQUID);
-            }
-        } else {
-            if (resourceTank.isEmpty()) {
-                errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_LIQUID);
-            } else {
-                errorLogic.setCondition(true, EnumErrorCode.WRONG_RESOURCE);
-                errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
-            }
-        }
-        manipulator.finish();
-    }
+		tankManager.write(data);
 
-    private void updateTemperature(IErrorLogic errorLogic, IClimateState changedState) {
-        IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE)
-                                                     .setAllowBackwards()
-                                                     .build();
-        EnergyManager energyManager = getEnergyManager();
-        int currentCost = getEnergyCost(changedState);
-        if (energyManager.extractEnergy(currentCost, true) > 0) {
-            IClimateState simulatedState = manipulator.addChange(true);
-            int energyCost = getEnergyCost(simulatedState);
-            if (energyManager.extractEnergy(energyCost, true) > 0) {
-                energyManager.extractEnergy(energyCost, false);
-                manipulator.addChange(false);
-            } else {
-                energyManager.extractEnergy(currentCost, false);
-            }
-            errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
-        } else {
-            manipulator.removeChange(false);
-            errorLogic.setCondition(true, EnumErrorCode.NO_POWER);
-        }
-        manipulator.finish();
-    }
+		data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
 
-    private int getFluidCost(IClimateState state) {
-        FluidStack fluid = resourceTank.getFluid();
-        if (fluid == null) {
-            return 0;
-        }
-        IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-                world.getRecipeManager(),
-                fluid
-        );
-        if (recipe == null) {
-            return 0;
-        }
-        return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() *
-                          recipe.getResource().getAmount());
-    }
+		return data;
+	}
 
-    private int getEnergyCost(IClimateState state) {
-        return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * transformer.getCostModifier());
-    }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankManager).cast();
+		}
 
-    @Override
-    public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
-        if (type == ClimateType.HUMIDITY) {
-            FluidStack fluid = resourceTank.getFluid();
-            if (fluid != null) {
-                IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-                        world.getRecipeManager(),
-                        fluid
-                );
-                if (recipe != null) {
-                    return recipe.getHumidChange() / transformer.getSpeedModifier();
-                }
-            }
-        }
+		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
+			return LazyOptional.of(() -> transformer).cast();
+		}
 
-        float fluidChange = 0.0F;
-        if (cachedStack != null) {
-            IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-                    world.getRecipeManager(),
-                    cachedStack
-            );
-            if (recipe != null) {
-                fluidChange = Math.abs(recipe.getTempChange());
-            }
-        }
+		return super.getCapability(capability, facing);
+	}
 
-        return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
-    }
+	@Override
+	protected boolean workCycle() {
+		IErrorLogic errorLogic = getErrorLogic();
+		IClimateState currentState = transformer.getCurrent();
+		IClimateState changedState = transformer.getTarget().subtract(currentState);
+		IClimateState difference = getClimateDifference();
+		cachedStack = null;
+		if (difference.getHumidity() != 0.0F) {
+			updateHumidity(errorLogic, changedState);
+		}
+		if (difference.getTemperature() != 0.0F) {
+			updateTemperature(errorLogic, changedState);
+		}
+		return true;
+	}
 
-    private IClimateState getClimateDifference() {
-        IClimateState defaultState = transformer.getDefault();
-        IClimateState targetedState = transformer.getTarget();
-        return targetedState.subtract(defaultState);
-    }
+	/* Methods - Implement IStreamableGui */
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
+		transformer.writeData(data);
+	}
 
-    @Override
-    public void markNetworkUpdate() {
-        setNeedsNetworkUpdate();
-    }
+	@Override
+	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
+		transformer.readData(data);
+	}
 
-    @Override
-    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-        return new ContainerHabitatFormer(windowId, inv, this);
-    }
+	private void updateHumidity(IErrorLogic errorLogic, IClimateState changedState) {
+		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.HUMIDITY).build();
+		if (manipulator.canAdd()) {
+			errorLogic.setCondition(false, EnumErrorCode.WRONG_RESOURCE);
+			int currentCost = getFluidCost(changedState);
+			if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
+				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
+						changedState.toImmutable().add(manipulator.addChange(true));
+				int fluidCost = getFluidCost(simulatedState);
+				if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
+					cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);
+					manipulator.addChange(false);
+				} else {
+					cachedStack = resourceTank.drain(currentCost, IFluidHandler.FluidAction.EXECUTE);
+				}
+				errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
+			} else {
 
-    @Override
-    public EnumTemperature getTemperature() {
-        return EnumTemperature.getFromValue(getExactTemperature());
-    }
+				manipulator.removeChange(false);
+				errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_LIQUID);
+			}
+		} else {
+			if (resourceTank.isEmpty()) {
+				errorLogic.setCondition(true, EnumErrorCode.NO_RESOURCE_LIQUID);
+			} else {
+				errorLogic.setCondition(true, EnumErrorCode.WRONG_RESOURCE);
+				errorLogic.setCondition(false, EnumErrorCode.NO_RESOURCE_LIQUID);
+			}
+		}
+		manipulator.finish();
+	}
 
-    @Override
-    public EnumHumidity getHumidity() {
-        return EnumHumidity.getFromValue(getExactHumidity());
-    }
+	private void updateTemperature(IErrorLogic errorLogic, IClimateState changedState) {
+		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE)
+				.setAllowBackwards()
+				.build();
+		EnergyManager energyManager = getEnergyManager();
+		int currentCost = getEnergyCost(changedState);
+		if (energyManager.extractEnergy(currentCost, true) > 0) {
+			IClimateState simulatedState = manipulator.addChange(true);
+			int energyCost = getEnergyCost(simulatedState);
+			if (energyManager.extractEnergy(energyCost, true) > 0) {
+				energyManager.extractEnergy(energyCost, false);
+				manipulator.addChange(false);
+			} else {
+				energyManager.extractEnergy(currentCost, false);
+			}
+			errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
+		} else {
+			manipulator.removeChange(false);
+			errorLogic.setCondition(true, EnumErrorCode.NO_POWER);
+		}
+		manipulator.finish();
+	}
 
-    @Override
-    public Biome getBiome() {
-        return world.getBiome(getPos());
-    }
+	private int getFluidCost(IClimateState state) {
+		FluidStack fluid = resourceTank.getFluid();
+		if (fluid == null) {
+			return 0;
+		}
+		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
+				world.getRecipeManager(),
+				fluid
+		);
+		if (recipe == null) {
+			return 0;
+		}
+		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() *
+				recipe.getResource().getAmount());
+	}
 
-    @Override
-    public float getExactTemperature() {
-        return transformer.getCurrent().getTemperature();
-    }
+	private int getEnergyCost(IClimateState state) {
+		return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * transformer.getCostModifier());
+	}
 
-    @Override
-    public float getExactHumidity() {
-        return transformer.getCurrent().getHumidity();
-    }
+	private IClimateState getClimateDifference() {
+		IClimateState defaultState = transformer.getDefault();
+		IClimateState targetedState = transformer.getTarget();
+		return targetedState.subtract(defaultState);
+	}
 
-    /* Methods - Implement IClimateHousing */
-    @Override
-    public IClimateTransformer getTransformer() {
-        return transformer;
-    }
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerHabitatFormer(windowId, inv, this);
+	}
 
-    /* Methods - Implement IStreamableGui */
-    @Override
-    public void writeGuiData(PacketBufferForestry data) {
-        super.writeGuiData(data);
-        transformer.writeData(data);
-    }
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromValue(getExactTemperature());
+	}
 
-    @Override
-    public void readGuiData(PacketBufferForestry data) throws IOException {
-        super.readGuiData(data);
-        transformer.readData(data);
-    }
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(getExactHumidity());
+	}
 
-    /* Methods - SAVING & LOADING */
-    @Override
-    public CompoundNBT write(CompoundNBT data) {
-        super.write(data);
+	@Override
+	public float getExactTemperature() {
+		return transformer.getCurrent().getTemperature();
+	}
 
-        tankManager.write(data);
+	@Override
+	public float getExactHumidity() {
+		return transformer.getCurrent().getHumidity();
+	}
 
-        data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
+	/* Methods - Implement IClimateHousing */
+	@Override
+	public IClimateTransformer getTransformer() {
+		return transformer;
+	}
 
-        return data;
-    }
+	@Override
+	public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
+		if (type == ClimateType.HUMIDITY) {
+			FluidStack fluid = resourceTank.getFluid();
+			if (fluid != null) {
+				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
+						world.getRecipeManager(),
+						fluid
+				);
+				if (recipe != null) {
+					return recipe.getHumidChange() / transformer.getSpeedModifier();
+				}
+			}
+		}
 
-    @Override
-    public void read(BlockState state, CompoundNBT data) {
-        super.read(state, data);
+		float fluidChange = 0.0F;
+		if (cachedStack != null) {
+			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
+					world.getRecipeManager(),
+					cachedStack
+			);
+			if (recipe != null) {
+				fluidChange = Math.abs(recipe.getTempChange());
+			}
+		}
 
-        tankManager.read(data);
+		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
+	}
 
-        if (data.contains(TRANSFORMER_KEY)) {
-            CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
-            transformer.read(nbtTag);
-        }
-    }
+	@Override
+	public void markNetworkUpdate() {
+		setNeedsNetworkUpdate();
+	}
 
-    /* Network */
-    @Override
-    public void writeData(PacketBufferForestry data) {
-        super.writeData(data);
-        tankManager.writeData(data);
-        transformer.writeData(data);
-    }
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(getPos());
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferForestry data) throws IOException {
-        super.readData(data);
-        tankManager.readData(data);
-        transformer.readData(data);
-    }
+	/* Network */
+	@Override
+	public void writeData(PacketBufferForestry data) {
+		super.writeData(data);
+		tankManager.writeData(data);
+		transformer.writeData(data);
+	}
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> tankManager).cast();
-        }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void readData(PacketBufferForestry data) throws IOException {
+		super.readData(data);
+		tankManager.readData(data);
+		transformer.readData(data);
+	}
 
-        if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
-            return LazyOptional.of(() -> transformer).cast();
-        }
-
-        return super.getCapability(capability, facing);
-    }
+	@Override
+	public void onRemoval() {
+		transformer.removeTransformer();
+	}
 }

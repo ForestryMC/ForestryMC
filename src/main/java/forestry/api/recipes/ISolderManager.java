@@ -7,15 +7,16 @@ package forestry.api.recipes;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;
 
 public interface ISolderManager extends ICraftingProvider<ISolderRecipe> {
-    @Nullable
-    ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource);
+	@Nullable
+	ICircuit getCircuit(RecipeManager manager, ICircuitLayout layout, ItemStack resource);
 
-    @Nullable
-    ISolderRecipe getMatchingRecipe(RecipeManager manager, @Nullable ICircuitLayout layout, ItemStack resource);
+	@Nullable
+	ISolderRecipe getMatchingRecipe(RecipeManager manager, @Nullable ICircuitLayout layout, ItemStack resource);
 }

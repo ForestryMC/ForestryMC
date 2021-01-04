@@ -14,23 +14,24 @@ import forestry.api.genetics.alleles.IAlleleFactory;
 import forestry.api.genetics.alleles.IAlleleFlowers;
 import forestry.api.genetics.flowers.IFlowerProvider;
 import forestry.apiculture.genetics.alleles.AlleleFlowers;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 
 public class AlleleFactory implements IAlleleFactory {
 
-    @Override
-    public IAlleleFlowers createFlowers(
-            String modId,
-            String category,
-            String valueName,
-            IFlowerProvider value,
-            boolean isDominant,
-            IChromosomeType... types
-    ) {
-        IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, valueName, value, isDominant);
-        GeneticsAPI.apiInstance.getAlleleRegistry().registerAllele(alleleFlowers, types);
-        //TODO: Test if this is a good idea to register it at here
-        return alleleFlowers;
-    }
+	@Override
+	public IAlleleFlowers createFlowers(
+			String modId,
+			String category,
+			String valueName,
+			IFlowerProvider value,
+			boolean isDominant,
+			IChromosomeType... types
+	) {
+		IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, valueName, value, isDominant);
+		GeneticsAPI.apiInstance.getAlleleRegistry().registerAllele(alleleFlowers, types);
+		//TODO: Test if this is a good idea to register it at here
+		return alleleFlowers;
+	}
 }

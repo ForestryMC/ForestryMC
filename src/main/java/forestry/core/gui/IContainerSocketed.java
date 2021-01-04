@@ -12,17 +12,18 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IContainerSocketed {
-    @OnlyIn(Dist.CLIENT)
-    void handleChipsetClick(int slot);
+	@OnlyIn(Dist.CLIENT)
+	void handleChipsetClick(int slot);
 
-    void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
+	void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
 
-    @OnlyIn(Dist.CLIENT)
-    void handleSolderingIronClick(int slot);
+	@OnlyIn(Dist.CLIENT)
+	void handleSolderingIronClick(int slot);
 
-    void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
+	void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack);
 }

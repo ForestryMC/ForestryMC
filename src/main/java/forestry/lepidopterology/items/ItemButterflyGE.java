@@ -32,10 +32,12 @@ import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
+
 import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.utils.AlleleUtils;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,6 +51,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -58,16 +61,15 @@ import java.util.Random;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
-    private static final Random rand = new Random();
-    public static final String NBT_AGE = "Age";
-    public static final int MAX_AGE = 3;
-    //private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+	public static final String NBT_AGE = "Age";
+	public static final int MAX_AGE = 3;
+	private static final Random rand = new Random();
+	//private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+	private final EnumFlutterType type;
 
-    private final EnumFlutterType type;
-
-    public ItemButterflyGE(EnumFlutterType type) {
-        super(new Properties().group(ItemGroups.tabLepidopterology));
-        this.type = type;
+	public ItemButterflyGE(EnumFlutterType type) {
+		super(new Properties().group(ItemGroups.tabLepidopterology));
+		this.type = type;
 		/*ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
 		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (double)attackSpeedIn, AttributeModifier.Operation.ADDITION));
@@ -75,279 +77,279 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			addPropertyOverride(new ResourceLocation("age"), (stack, world, livingEntity) -> getAge(stack));
 		}
 		this.attributeModifiers = builder.build();*/
-    }
+	}
 
-    @Override
-    protected IAlleleForestrySpecies getSpecies(ItemStack itemStack) {
-        return GeneticHelper.getOrganism(itemStack).getAllele(ButterflyChromosomes.SPECIES, true);
-    }
+	public static void setAge(ItemStack cocoon, int age) {
+		if (cocoon.isEmpty()) {
+			return;
+		}
+		if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
+			return;
+		}
+		CompoundNBT tagCompound = cocoon.getTag();
+		if (tagCompound == null) {
+			cocoon.setTag(tagCompound = new CompoundNBT());
+		}
+		tagCompound.putInt(NBT_AGE, age);
+	}
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return GeneticHelper.createOrganism(stack, type, ButterflyHelper.getRoot().getDefinition());
-    }
+	public static int getAge(ItemStack cocoon) {
+		if (cocoon.isEmpty()) {
+			return 0;
+		}
+		if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
+			return 0;
+		}
+		CompoundNBT tagCompound = cocoon.getTag();
+		if (tagCompound == null) {
+			return 0;
+		}
+		return tagCompound.getInt(NBT_AGE);
+	}
 
-    @Override
-    public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-        if (this.isInGroup(tab)) {
-            addCreativeItems(subItems, true);
-        }
-    }
+	@Override
+	protected IAlleleForestrySpecies getSpecies(ItemStack itemStack) {
+		return GeneticHelper.getOrganism(itemStack).getAllele(ButterflyChromosomes.SPECIES, true);
+	}
 
-    public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
-        if (type == EnumFlutterType.COCOON) {
-            for (int age = 0; age < MAX_AGE; age++) {
-                for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
-                    // Don't show secret butterflies unless ordered to.
-                    if (hideSecrets && individual.isSecret() && !Config.isDebug) {
-                        continue;
-                    }
+	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
+		if (type == EnumFlutterType.COCOON) {
+			for (int age = 0; age < MAX_AGE; age++) {
+				for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
+					// Don't show secret butterflies unless ordered to.
+					if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+						continue;
+					}
 
-                    ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(individual, type);
+					ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(individual, type);
 
-                    ItemButterflyGE.setAge(butterfly, age);
+					ItemButterflyGE.setAge(butterfly, age);
 
-                    subItems.add(butterfly);
-                }
-            }
-        } else {
-            for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
-                // Don't show secret butterflies unless ordered to.
-                if (hideSecrets && individual.isSecret() && !Config.isDebug) {
-                    continue;
-                }
+					subItems.add(butterfly);
+				}
+			}
+		} else {
+			for (IButterfly individual : ButterflyManager.butterflyRoot.getIndividualTemplates()) {
+				// Don't show secret butterflies unless ordered to.
+				if (hideSecrets && individual.isSecret() && !Config.isDebug) {
+					continue;
+				}
 
-                subItems.add(ButterflyManager.butterflyRoot.getTypes().createStack(individual, type));
-            }
-        }
-    }
+				subItems.add(ButterflyManager.butterflyRoot.getTypes().createStack(individual, type));
+			}
+		}
+	}
 
-    @Override
-    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem) {
-        if (type != EnumFlutterType.BUTTERFLY) {
-            return false;
-        }
-        if (entityItem.world.isRemote || entityItem.ticksExisted < 80) {
-            return false;
-        }
-        if (rand.nextInt(24) != 0) {
-            return false;
-        }
+	@Override
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entityItem) {
+		if (type != EnumFlutterType.BUTTERFLY) {
+			return false;
+		}
+		if (entityItem.world.isRemote || entityItem.ticksExisted < 80) {
+			return false;
+		}
+		if (rand.nextInt(24) != 0) {
+			return false;
+		}
 
-        IButterfly butterfly = ButterflyManager.butterflyRoot.getTypes().createIndividual(entityItem.getItem()).orElse(
-                null);
-        if (butterfly == null) {
-            return false;
-        }
+		IButterfly butterfly = ButterflyManager.butterflyRoot.getTypes().createIndividual(entityItem.getItem()).orElse(
+				null);
+		if (butterfly == null) {
+			return false;
+		}
 
-        if (butterfly.canTakeFlight(
-                entityItem.world,
-                entityItem.getPosX(),
-                entityItem.getPosY(),
-                entityItem.getPosZ()
-        )) {
-            return false;
-        }
+		if (butterfly.canTakeFlight(
+				entityItem.world,
+				entityItem.getPosX(),
+				entityItem.getPosY(),
+				entityItem.getPosZ()
+		)) {
+			return false;
+		}
 
-        if (ButterflyUtils.countButterfly(entityItem.getEntityWorld()) > ModuleLepidopterology.entityConstraint) {
-            return false;
-        }
+		if (ButterflyUtils.countButterfly(entityItem.getEntityWorld()) > ModuleLepidopterology.entityConstraint) {
+			return false;
+		}
 
-        EntityUtil.spawnEntity(entityItem.world,
-                EntityButterfly.create(
-                        LepidopterologyEntities.BUTTERFLY.entityType(),
-                        entityItem.world,
-                        butterfly,
-                        entityItem.getPosition()
-                ), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ()
-        );
-        if (!entityItem.getItem().isEmpty()) {
-            entityItem.getItem().shrink(1);
-        } else {
-            entityItem.remove();
-        }
-        return true;
-    }
+		EntityUtil.spawnEntity(entityItem.world,
+				EntityButterfly.create(
+						LepidopterologyEntities.BUTTERFLY.entityType(),
+						entityItem.world,
+						butterfly,
+						entityItem.getPosition()
+				), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ()
+		);
+		if (!entityItem.getItem().isEmpty()) {
+			entityItem.getItem().shrink(1);
+		} else {
+			entityItem.remove();
+		}
+		return true;
+	}
 
-    /* MODELS */
-    //	@OnlyIn(Dist.CLIENT)
-    //	@Override
-    //	public void registerModel(Item item, IModelManager manager) {
-    //		switch (this.type) {
-    //			case CATERPILLAR:
-    //				manager.registerItemModel(item, 0, "caterpillar");
-    //				break;
-    //			case BUTTERFLY:
-    //				manager.registerItemModel(item, 0, "butterflyge");
-    //				break;
-    //			case COCOON:
-    //				manager.registerItemModel(item, new CocoonMeshDefinition());
-    //				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-    //					if (allele instanceof IAlleleButterflyCocoon) {
-    //						for (int age = 0; age < 3; age++) {
-    //							ModelBakery.registerItemVariants(this,
-    //								((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
-    //						}
-    //					}
-    //				}
-    //				break;
-    //			default:
-    //				manager.registerItemModel(item, 0, "liquids/jar");
-    //		}
-    //	}
+	/* MODELS */
+	//	@OnlyIn(Dist.CLIENT)
+	//	@Override
+	//	public void registerModel(Item item, IModelManager manager) {
+	//		switch (this.type) {
+	//			case CATERPILLAR:
+	//				manager.registerItemModel(item, 0, "caterpillar");
+	//				break;
+	//			case BUTTERFLY:
+	//				manager.registerItemModel(item, 0, "butterflyge");
+	//				break;
+	//			case COCOON:
+	//				manager.registerItemModel(item, new CocoonMeshDefinition());
+	//				for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+	//					if (allele instanceof IAlleleButterflyCocoon) {
+	//						for (int age = 0; age < 3; age++) {
+	//							ModelBakery.registerItemVariants(this,
+	//								((IAlleleButterflyCocoon) allele).getCocoonItemModel(age));
+	//						}
+	//					}
+	//				}
+	//				break;
+	//			default:
+	//				manager.registerItemModel(item, 0, "liquids/jar");
+	//		}
+	//	}
 
-    //	private static class CocoonMeshDefinition implements ItemMeshDefinition {
-    //		@Override
-    //		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
-    //			CompoundNBT tagCompound = itemstack.getTag();
-    //			IButterflyGenome genome;
-    //			int age;
-    //			if (tagCompound == null) {
-    //				genome = ButterflyDefinition.CabbageWhite.getGenome();
-    //				age = 0;
-    //			} else {
-    //				if (!tagCompound.contains(NBT_AGE)) {
-    //					tagCompound.putInt(NBT_AGE, 0);
-    //				}
-    //				age = tagCompound.getInt(NBT_AGE);
-    //				IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
-    //				Preconditions.checkNotNull(individual);
-    //				genome = (IButterflyGenome) individual.getGenome();
-    //			}
-    //			return genome.getCocoon().getCocoonItemModel(age);
-    //		}
-    //
-    //	}
+	//	private static class CocoonMeshDefinition implements ItemMeshDefinition {
+	//		@Override
+	//		public ModelResourceLocation getModelLocation(ItemStack itemstack) {
+	//			CompoundNBT tagCompound = itemstack.getTag();
+	//			IButterflyGenome genome;
+	//			int age;
+	//			if (tagCompound == null) {
+	//				genome = ButterflyDefinition.CabbageWhite.getGenome();
+	//				age = 0;
+	//			} else {
+	//				if (!tagCompound.contains(NBT_AGE)) {
+	//					tagCompound.putInt(NBT_AGE, 0);
+	//				}
+	//				age = tagCompound.getInt(NBT_AGE);
+	//				IIndividual individual = AlleleManager.alleleRegistry.getIndividual(itemstack);
+	//				Preconditions.checkNotNull(individual);
+	//				genome = (IButterflyGenome) individual.getGenome();
+	//			}
+	//			return genome.getCocoon().getCocoonItemModel(age);
+	//		}
+	//
+	//	}
 
-    @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
-        World world = context.getWorld();
-        PlayerEntity player = context.getPlayer();
-        BlockPos pos = context.getPos();
-        if (world.isRemote) {
-            return ActionResultType.PASS;
-        }
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return GeneticHelper.createOrganism(stack, type, ButterflyHelper.getRoot().getDefinition());
+	}
 
-        ItemStack stack = player.getHeldItem(context.getHand());
+	@Override
+	public ActionResultType onItemUse(ItemUseContext context) {
+		World world = context.getWorld();
+		PlayerEntity player = context.getPlayer();
+		BlockPos pos = context.getPos();
+		if (world.isRemote) {
+			return ActionResultType.PASS;
+		}
 
-        IButterfly flutter = ButterflyManager.butterflyRoot.getTypes().createIndividual(stack).orElse(null);
+		ItemStack stack = player.getHeldItem(context.getHand());
 
-        BlockState blockState = world.getBlockState(pos);
-        if (type == EnumFlutterType.COCOON) {
-            pos = ButterflyManager.butterflyRoot.plantCocoon(
-                    world,
-                    pos,
-                    flutter,
-                    player.getGameProfile(),
-                    getAge(stack),
-                    true
-            );
-            if (pos != BlockPos.ZERO) {
-                PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
-                NetworkUtil.sendNetworkPacket(packet, pos, world);
+		IButterfly flutter = ButterflyManager.butterflyRoot.getTypes().createIndividual(stack).orElse(null);
 
-                if (!player.isCreative()) {
-                    stack.shrink(1);
-                }
-                return ActionResultType.SUCCESS;
-            } else {
-                return ActionResultType.PASS;
-            }
-        } else if (type == EnumFlutterType.CATERPILLAR) {
-            IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(player.getGameProfile(), world, pos, true);
-            if (nursery != null) {
-                if (!nursery.canNurse(flutter)) {
-                    return ActionResultType.PASS;
-                }
+		BlockState blockState = world.getBlockState(pos);
+		if (type == EnumFlutterType.COCOON) {
+			pos = ButterflyManager.butterflyRoot.plantCocoon(
+					world,
+					pos,
+					flutter,
+					player.getGameProfile(),
+					getAge(stack),
+					true
+			);
+			if (pos != BlockPos.ZERO) {
+				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
+				NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-                nursery.setCaterpillar(flutter);
+				if (!player.isCreative()) {
+					stack.shrink(1);
+				}
+				return ActionResultType.SUCCESS;
+			} else {
+				return ActionResultType.PASS;
+			}
+		} else if (type == EnumFlutterType.CATERPILLAR) {
+			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(player.getGameProfile(), world, pos, true);
+			if (nursery != null) {
+				if (!nursery.canNurse(flutter)) {
+					return ActionResultType.PASS;
+				}
 
-                PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
-                        PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState
-                );
-                NetworkUtil.sendNetworkPacket(packet, pos, world);
+				nursery.setCaterpillar(flutter);
 
-                if (!player.isCreative()) {
-                    stack.shrink(1);
-                }
-                return ActionResultType.SUCCESS;
-            }
-            return ActionResultType.PASS;
-        } else {
-            return ActionResultType.PASS;
-        }
-    }
+				PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK,
+						PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState
+				);
+				NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-    public static void setAge(ItemStack cocoon, int age) {
-        if (cocoon.isEmpty()) {
-            return;
-        }
-        if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
-            return;
-        }
-        CompoundNBT tagCompound = cocoon.getTag();
-        if (tagCompound == null) {
-            cocoon.setTag(tagCompound = new CompoundNBT());
-        }
-        tagCompound.putInt(NBT_AGE, age);
-    }
+				if (!player.isCreative()) {
+					stack.shrink(1);
+				}
+				return ActionResultType.SUCCESS;
+			}
+			return ActionResultType.PASS;
+		} else {
+			return ActionResultType.PASS;
+		}
+	}
 
-    public static int getAge(ItemStack cocoon) {
-        if (cocoon.isEmpty()) {
-            return 0;
-        }
-        if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
-            return 0;
-        }
-        CompoundNBT tagCompound = cocoon.getTag();
-        if (tagCompound == null) {
-            return 0;
-        }
-        return tagCompound.getInt(NBT_AGE);
-    }
+	@Override
+	public ITextComponent getDisplayName(ItemStack itemstack) {
+		if (itemstack.getTag() == null) {
+			return super.getDisplayName(itemstack);
+		}
 
-    /**
-     * Register butterfly item sprites
-     *
-     * @param registry
-     */
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void registerSprites(ISpriteRegistry registry) {
-        AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (allele) -> allele.registerSprites(registry));
-    }
+		IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
+		String customKey = "for.butterflies.custom." + type.getName() + "."
+				+ individual.getGenome().getPrimary().getLocalisationKey().replace(
+				"butterflies.species.",
+				""
+		);
+		return ResourceUtil.tryTranslate(customKey, () -> {
+			ITextComponent speciesString = individual.getDisplayName();
+			ITextComponent typeString = new TranslationTextComponent(
+					"for.butterflies.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
+		});
+	}
 
-    @Override
-    public ITextComponent getDisplayName(ItemStack itemstack) {
-        if (itemstack.getTag() == null) {
-            return super.getDisplayName(itemstack);
-        }
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+			addCreativeItems(subItems, true);
+		}
+	}
 
-        IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
-        String customKey = "for.butterflies.custom." + type.getName() + "."
-                           + individual.getGenome().getPrimary().getLocalisationKey().replace(
-                "butterflies.species.",
-                ""
-        );
-        return ResourceUtil.tryTranslate(customKey, () -> {
-            ITextComponent speciesString = individual.getDisplayName();
-            ITextComponent typeString = new TranslationTextComponent(
-                    "for.butterflies.grammar." + type.getName() + ".type");
-            return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
-        });
-    }
+	/**
+	 * Register butterfly item sprites
+	 *
+	 * @param registry
+	 */
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void registerSprites(ISpriteRegistry registry) {
+		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (allele) -> allele.registerSprites(registry));
+	}
 
-    @Override
-    public int getColorFromItemStack(ItemStack stack, int tintIndex) {
-        if (stack.hasTag()) {
-            IIndividual individual = GeneticHelper.getIndividual(stack).orElse(null);
-            if (individual != null) {
-                IAlleleSpecies species = individual.getGenome().getPrimary();
-                return ((IAlleleForestrySpecies) species).getSpriteColour(tintIndex);
-            }
-        }
-        return 0xffffff;
-    }
+	@Override
+	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
+		if (stack.hasTag()) {
+			IIndividual individual = GeneticHelper.getIndividual(stack).orElse(null);
+			if (individual != null) {
+				IAlleleSpecies species = individual.getGenome().getPrimary();
+				return ((IAlleleForestrySpecies) species).getSpriteColour(tintIndex);
+			}
+		}
+		return 0xffffff;
+	}
 
 }

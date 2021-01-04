@@ -14,6 +14,7 @@ import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmableInfo;
 import forestry.core.utils.BlockUtil;
 import forestry.farming.logic.crops.CropDestroy;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,32 +23,32 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class FarmableVanillaMushroom extends FarmableBase {
-    private final Block hugeMushroomBlock;
+	private final Block hugeMushroomBlock;
 
-    public FarmableVanillaMushroom(ItemStack mushroom, BlockState plantedMushroom, Block hugeMushroomBlock) {
-        super(mushroom, plantedMushroom, hugeMushroomBlock.getDefaultState(), false);
-        this.hugeMushroomBlock = hugeMushroomBlock;
-    }
+	public FarmableVanillaMushroom(ItemStack mushroom, BlockState plantedMushroom, Block hugeMushroomBlock) {
+		super(mushroom, plantedMushroom, hugeMushroomBlock.getDefaultState(), false);
+		this.hugeMushroomBlock = hugeMushroomBlock;
+	}
 
-    @Override
-    public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-        if (blockState.getBlock() != hugeMushroomBlock) {
-            return null;
-        }
+	@Override
+	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+		if (blockState.getBlock() != hugeMushroomBlock) {
+			return null;
+		}
 
-        return new CropDestroy(world, blockState, pos, null);
-    }
+		return new CropDestroy(world, blockState, pos, null);
+	}
 
-    @Override
-    public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-        if (!plantedState.isValidPosition(world, pos)) {
-            return false;
-        }
-        return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
-    }
+	@Override
+	public void addInformation(IFarmableInfo info) {
+		info.addProducts(germling);
+	}
 
-    @Override
-    public void addInformation(IFarmableInfo info) {
-        info.addProducts(germling);
-    }
+	@Override
+	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+		if (!plantedState.isValidPosition(world, pos)) {
+			return false;
+		}
+		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
+	}
 }

@@ -11,21 +11,23 @@
 package forestry.apiculture.commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
+
 import forestry.core.commands.CommandMode;
 import forestry.core.commands.CommandSaveStats;
 import forestry.core.commands.ICommandModeHelper;
 import forestry.core.commands.IStatsSaveHelper;
+
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 
 public class CommandBee {
-    public static ArgumentBuilder<CommandSource, ?> register() {
-        IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
-        ICommandModeHelper modeHelper = new BeeModeHelper();
+	public static ArgumentBuilder<CommandSource, ?> register() {
+		IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
+		ICommandModeHelper modeHelper = new BeeModeHelper();
 
-        return Commands.literal("bee")
-                       .then(CommandMode.register(modeHelper))
-                       .then(CommandSaveStats.register(saveHelper, modeHelper))
-                       .then(CommandBeeGive.register());
-    }
+		return Commands.literal("bee")
+				.then(CommandMode.register(modeHelper))
+				.then(CommandSaveStats.register(saveHelper, modeHelper))
+				.then(CommandBeeGive.register());
+	}
 }

@@ -19,11 +19,13 @@ import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.EnergyTransferMode;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -31,115 +33,112 @@ import javax.annotation.Nullable;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IActivatable, IAlvearyComponent.Climatiser {
 
-    private static final int WORK_CYCLES = 1;
-    private static final int ENERGY_PER_OPERATION = 50;
+	private static final int WORK_CYCLES = 1;
+	private static final int ENERGY_PER_OPERATION = 50;
+	private final EnergyManager energyManager;
+	private final IClimitiserDefinition definition;
+	private int workingTime = 0;
+	// CLIENT
+	private boolean active;
 
-    protected interface IClimitiserDefinition {
-        float getChangePerTransfer();
+	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, IClimitiserDefinition definition) {
+		super(alvearyType);
+		this.definition = definition;
 
-        float getBoundaryUp();
+		this.energyManager = new EnergyManager(1000, 2000);
+		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
+	}
 
-        float getBoundaryDown();
-    }
+	/* UPDATING */
+	@Override
+	public void changeClimate(int tick, IClimateControlled climateControlled) {
+		if (workingTime < 20 && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
+			// one tick of work for every 10 RF
+			workingTime += ENERGY_PER_OPERATION / 10;
+		}
 
-    private final EnergyManager energyManager;
-    private final IClimitiserDefinition definition;
+		if (workingTime > 0) {
+			workingTime--;
+			climateControlled.addTemperatureChange(
+					definition.getChangePerTransfer(),
+					definition.getBoundaryDown(),
+					definition.getBoundaryUp()
+			);
+		}
 
-    private int workingTime = 0;
+		setActive(workingTime > 0);
+	}
 
-    // CLIENT
-    private boolean active;
+	/* LOADING & SAVING */
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		energyManager.read(compoundNBT);
+		workingTime = compoundNBT.getInt("Heating");
+		setActive(workingTime > 0);
+	}
 
-    protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, IClimitiserDefinition definition) {
-        super(alvearyType);
-        this.definition = definition;
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		energyManager.write(compoundNBT);
+		compoundNBT.putInt("Heating", workingTime);
+		return compoundNBT;
+	}
 
-        this.energyManager = new EnergyManager(1000, 2000);
-        this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
-    }
+	/* Network */
+	@Override
+	protected void encodeDescriptionPacket(CompoundNBT packetData) {
+		super.encodeDescriptionPacket(packetData);
+		packetData.putBoolean("Active", active);
+	}
 
-    /* UPDATING */
-    @Override
-    public void changeClimate(int tick, IClimateControlled climateControlled) {
-        if (workingTime < 20 && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
-            // one tick of work for every 10 RF
-            workingTime += ENERGY_PER_OPERATION / 10;
-        }
+	@Override
+	protected void decodeDescriptionPacket(CompoundNBT packetData) {
+		super.decodeDescriptionPacket(packetData);
+		setActive(packetData.getBoolean("Active"));
+	}
 
-        if (workingTime > 0) {
-            workingTime--;
-            climateControlled.addTemperatureChange(
-                    definition.getChangePerTransfer(),
-                    definition.getBoundaryDown(),
-                    definition.getBoundaryUp()
-            );
-        }
+	/* IActivatable */
+	@Override
+	public boolean isActive() {
+		return active;
+	}
 
-        setActive(workingTime > 0);
-    }
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
 
-    /* LOADING & SAVING */
-    @Override
-    public void read(BlockState state, CompoundNBT compoundNBT) {
-        super.read(state, compoundNBT);
-        energyManager.read(compoundNBT);
-        workingTime = compoundNBT.getInt("Heating");
-        setActive(workingTime > 0);
-    }
+		this.active = active;
 
-    @Override
-    public CompoundNBT write(CompoundNBT compoundNBT) {
-        compoundNBT = super.write(compoundNBT);
-        energyManager.write(compoundNBT);
-        compoundNBT.putInt("Heating", workingTime);
-        return compoundNBT;
-    }
+		if (world != null) {
+			if (world.isRemote) {
+				//TODO
+				BlockPos pos = getPos();
+				Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+				//				world.markForRerender(getPos());
+			} else {
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+			}
+		}
+	}
 
-    /* Network */
-    @Override
-    protected void encodeDescriptionPacket(CompoundNBT packetData) {
-        super.encodeDescriptionPacket(packetData);
-        packetData.putBoolean("Active", active);
-    }
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		LazyOptional<T> energyCapability = energyManager.getCapability(capability);
+		if (energyCapability.isPresent()) {
+			return energyCapability;
+		}
+		return super.getCapability(capability, facing);
+	}
 
-    @Override
-    protected void decodeDescriptionPacket(CompoundNBT packetData) {
-        super.decodeDescriptionPacket(packetData);
-        setActive(packetData.getBoolean("Active"));
-    }
+	protected interface IClimitiserDefinition {
+		float getChangePerTransfer();
 
-    /* IActivatable */
-    @Override
-    public boolean isActive() {
-        return active;
-    }
+		float getBoundaryUp();
 
-    @Override
-    public void setActive(boolean active) {
-        if (this.active == active) {
-            return;
-        }
-
-        this.active = active;
-
-        if (world != null) {
-            if (world.isRemote) {
-                //TODO
-                BlockPos pos = getPos();
-                Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
-                //				world.markForRerender(getPos());
-            } else {
-                NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
-            }
-        }
-    }
-
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        LazyOptional<T> energyCapability = energyManager.getCapability(capability);
-        if (energyCapability.isPresent()) {
-            return energyCapability;
-        }
-        return super.getCapability(capability, facing);
-    }
+		float getBoundaryDown();
+	}
 }

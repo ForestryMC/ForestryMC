@@ -6,22 +6,23 @@
 package forestry.api.apiculture.genetics;
 
 import forestry.api.apiculture.IBeeHousing;
+
 import genetics.api.individual.IGenome;
 import genetics.api.mutation.IMutation;
 
 public interface IBeeMutation extends IMutation {
 
-    @Override
-    IBeeRoot getRoot();
+	@Override
+	IBeeRoot getRoot();
 
-    /**
-     * @return float representing the chance for mutation to occur. note that this is 0 - 100 based, since it was an integer previously!
-     */
-    float getChance(
-            IBeeHousing housing,
-            IAlleleBeeSpecies allele0,
-            IAlleleBeeSpecies allele1,
-            IGenome genome0,
-            IGenome genome1
-    );
+	/**
+	 * @return float representing the chance for mutation to occur. note that this is 0 - 100 based, since it was an integer previously!
+	 */
+	float getChance(
+			IBeeHousing housing,
+			IAlleleBeeSpecies allele0,
+			IAlleleBeeSpecies allele1,
+			IGenome genome0,
+			IGenome genome1
+	);
 }
