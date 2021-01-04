@@ -20,6 +20,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
@@ -51,7 +52,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 
-		pos = pos.add(x, -1, z);
+		pos = pos.offset(Direction.DOWN);
 		if (entity.world.isAirBlock(pos)) {
 			return false;
 		}
