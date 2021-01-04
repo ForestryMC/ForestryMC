@@ -2,6 +2,7 @@ package forestry.farming.blocks;
 
 import com.google.common.collect.ImmutableList;
 
+import java.util.Arrays;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
@@ -19,7 +20,6 @@ import forestry.core.utils.ResourceUtil;
 
 public enum EnumFarmBlockType implements IBlockSubtype {
 	PLAIN,
-	BAND,
 	GEARBOX,
 	HATCH,
 	VALVE,
@@ -84,8 +84,6 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 				}
 				return sprites.get(TYPE_PLAIN);
 			}
-			case BAND:
-				return sprites.get(TYPE_BAND);
 			case GEARBOX:
 				return sprites.get(TYPE_GEARS);
 			case HATCH:
@@ -105,6 +103,14 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 		for (int side = 0; side < textures.length; side++) {
 			textures[side] = getSprite(this, side);
 		}
+		return textures;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static TextureAtlasSprite[] getBandSprites() {
+		TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
+		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+		Arrays.fill(textures, band);
 		return textures;
 	}
 

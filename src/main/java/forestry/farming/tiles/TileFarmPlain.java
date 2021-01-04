@@ -10,7 +10,11 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import forestry.farming.blocks.BlockFarm.State;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.features.FarmingBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
@@ -18,7 +22,6 @@ import forestry.farming.blocks.BlockFarm;
 import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingTiles;
 
-//TODO: Fix band: currently breaks multiblocks because removes the old tile and adds a new tile, this causes a ConcurrentModificationException (attachBlock, detachBlock)
 public class TileFarmPlain extends TileFarm {
 	public TileFarmPlain() {
 		super(FarmingTiles.PLAIN.tileType());
@@ -32,11 +35,12 @@ public class TileFarmPlain extends TileFarm {
 		int bandY = maxCoord.getY() - 1;
 		if (getPos().getY() == bandY) {
 			EnumFarmMaterial material = EnumFarmMaterial.BRICK_STONE;
-			Block block = getBlockState().getBlock();
+			BlockState state = getBlockState();
+			Block block = state.getBlock();
 			if (block instanceof BlockFarm) {
 				material = ((BlockFarm) block).getFarmMaterial();
 			}
-			//this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.BAND, material).defaultState(), 2);
+			this.world.setBlockState(getPos(), state.with(BlockFarm.STATE, BlockFarm.State.BAND), 2);
 		}
 	}
 
@@ -46,10 +50,11 @@ public class TileFarmPlain extends TileFarm {
 
 		// set band block meta back to normal
 		EnumFarmMaterial material = EnumFarmMaterial.BRICK_STONE;
-		Block block = getBlockState().getBlock();
+		BlockState state = getBlockState();
+		Block block = state.getBlock();
 		if (block instanceof BlockFarm) {
 			material = ((BlockFarm) block).getFarmMaterial();
 		}
-		//this.world.setBlockState(getPos(), FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, material).defaultState(), 2);
+		this.world.setBlockState(getPos(), state.with(BlockFarm.STATE, State.PLAIN), 2);
 	}
 }
