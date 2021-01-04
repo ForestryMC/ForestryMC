@@ -139,13 +139,10 @@ public class BlockAlveary extends BlockStructure {
 		return true;
 	}
 
-
-	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
-		TileAlveary tile = TileUtil.getTile(world, pos, TileAlveary.class);
-		if (tile == null) {
-			return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
-		}
+	public BlockState getNewState(TileAlveary tile) {
+		BlockState state = this.getDefaultState();
+		World world = tile.getWorld();
+		BlockPos pos = tile.getPos();
 
 		if (tile instanceof IActivatable) {
 			if (((IActivatable) tile).isActive()) {
@@ -182,10 +179,8 @@ public class BlockAlveary extends BlockStructure {
 				}
 			}
 		}
-		RenderUtil.markForUpdate(pos);
-		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
+		return state;
 	}
-
 
 	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
 		List<Direction> touching = new ArrayList<>();
