@@ -36,6 +36,7 @@ import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -235,7 +236,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	public void checkRecipe() {
-		IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
+		IMoistenerRecipe sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(getWorld().getRecipeManager(), getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();

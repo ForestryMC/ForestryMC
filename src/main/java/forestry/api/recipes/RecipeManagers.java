@@ -36,6 +36,10 @@ public class RecipeManagers {
 	 */
 	public static ISqueezerManager squeezerManager;
 	/**
+	 * Allows you to add container recipes to the squeezer. See {@link ISqueezerContainerManager} for details.
+	 */
+	public static ISqueezerContainerManager squeezerContainerManager;
+	/**
 	 * Allows you to add recipes to the still. See {@link IStillManager} for details.
 	 */
 	public static IStillManager stillManager;

@@ -61,6 +61,7 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.api.recipes.ISolderRecipe;
+import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.EventHandlerCore;
@@ -105,6 +106,7 @@ import forestry.factory.recipes.FabricatorRecipe;
 import forestry.factory.recipes.FabricatorSmeltingRecipe;
 import forestry.factory.recipes.FermenterRecipe;
 import forestry.factory.recipes.MoistenerRecipe;
+import forestry.factory.recipes.SqueezerContainerRecipe;
 import forestry.factory.recipes.SqueezerRecipe;
 import forestry.factory.recipes.StillRecipe;
 import forestry.modules.ForestryModuleUids;
@@ -331,6 +333,7 @@ public class Forestry {
 			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
 			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
 			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
+			register(registry, ISqueezerContainerRecipe.TYPE, new SqueezerContainerRecipe.Serializer());
 			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
 			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
 		}

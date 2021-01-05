@@ -12,10 +12,15 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,12 +57,13 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 		addRecipe(fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
 	}
 
+	@Override
 	@Nullable
-	public IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
+	public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
 		if (res.isEmpty()) {
 			return null;
 		}
-		for (IFermenterRecipe recipe : recipes) {
+		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, res, liqu)) {
 				return recipe;
 			}
@@ -75,27 +81,17 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 		return liqu.isFluidEqual(fluid);
 	}
 
-	public boolean isResource(ItemStack resource) {
-		if (resource.isEmpty()) {
-			return false;
-		}
-
-		for (IFermenterRecipe recipe : recipes) {
-			if (recipe.getResource().test(resource)) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getFluidResource().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean addRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.add(liquid.getFluid());
-
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.add(output);
-
-		return super.addRecipe(recipe);
+	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 }

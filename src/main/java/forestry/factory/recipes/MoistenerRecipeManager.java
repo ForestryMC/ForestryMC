@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
@@ -31,12 +32,13 @@ public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerR
 		addRecipe(recipe);
 	}
 
-	public boolean isResource(ItemStack resource) {
+	@Override
+	public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
 
-		for (IMoistenerRecipe rec : recipes) {
+		for (IMoistenerRecipe rec : getRecipes(recipeManager)) {
 			if (rec.getResource().test(resource)) {
 				return true;
 			}
@@ -45,9 +47,10 @@ public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerR
 		return false;
 	}
 
+	@Override
 	@Nullable
-	public IMoistenerRecipe findMatchingRecipe(ItemStack item) {
-		for (IMoistenerRecipe recipe : recipes) {
+	public IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
+		for (IMoistenerRecipe recipe : getRecipes(recipeManager)) {
 			if (recipe.getResource().test(item)) {
 				return recipe;
 			}

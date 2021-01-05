@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.server.integrated.IntegratedServer;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -50,7 +51,16 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	protected static RecipeManager adjust(@Nullable RecipeManager recipeManager) {
 		if (recipeManager == null) {
 			return DistExecutor.safeRunForDist(() -> () -> {
-				return Minecraft.getInstance().getConnection().getRecipeManager();
+				Minecraft minecraft = Minecraft.getInstance();
+				IntegratedServer integratedServer = minecraft.getIntegratedServer();
+
+				if (integratedServer != null) {
+					if (integratedServer.isOnExecutionThread()) {
+						throw new NullPointerException("RecipeManager was null on the integrated server");
+					}
+				}
+
+				return minecraft.getConnection().getRecipeManager();
 			}, () -> () -> {
 				throw new NullPointerException("RecipeManager was null on the dedicated server");
 			});

@@ -8,11 +8,14 @@ package forestry.api.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -72,5 +75,9 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 
 	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory);
 
+	boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource);
+
 	Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
+
+	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

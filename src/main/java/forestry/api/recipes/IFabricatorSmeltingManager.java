@@ -5,11 +5,19 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+import java.util.Set;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorSmeltingManager extends ICraftingProvider<IFabricatorSmeltingRecipe> {
+	@Nullable
+	IFabricatorSmeltingRecipe findMatchingSmelting(@Nullable RecipeManager recipeManager, ItemStack resource);
+
 	/**
 	 * Add a smelting recipe to the Fabricator
 	 *
@@ -18,4 +26,6 @@ public interface IFabricatorSmeltingManager extends ICraftingProvider<IFabricato
 	 * @param meltingPoint temperature at which the item melts. Glass is 1000, Sand is 3000.
 	 */
 	void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint);
+
+	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

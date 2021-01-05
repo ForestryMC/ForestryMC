@@ -37,6 +37,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Constants;
@@ -167,7 +168,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
 				matchingRecipe = currentRecipe;
 			} else {
-				matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
+				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
 			}
 		}
 

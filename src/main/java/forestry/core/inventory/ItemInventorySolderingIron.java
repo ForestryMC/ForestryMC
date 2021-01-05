@@ -66,13 +66,12 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	private ICircuit[] getCircuits(boolean doConsume) {
-
 		ICircuit[] circuits = new ICircuit[ingredientSlotCount];
 
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
-				ISolderRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
+				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layouts.getCurrent(), ingredient);
 				if (recipe != null) {
 					if (doConsume) {
 						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
@@ -185,7 +184,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-			ISolderRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), itemStack);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layouts.getCurrent(), itemStack);
 			return recipe != null;
 		}
 		return false;

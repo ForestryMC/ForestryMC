@@ -33,7 +33,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 
 	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {
 		this(0, 0, Stream.of(stacks)
-				.map(stack -> RecipeManagers.carpenterManager.getRecipesWithOutput(stack))
+				.map(stack -> RecipeManagers.carpenterManager.getRecipesWithOutput(null, stack))
 				.flatMap(Collection::stream)
 				.toArray(ICarpenterRecipe[]::new));
 	}

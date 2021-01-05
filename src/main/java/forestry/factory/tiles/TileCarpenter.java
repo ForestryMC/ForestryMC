@@ -79,7 +79,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public TileCarpenter() {
 		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(CarpenterRecipeManager.getRecipeFluids());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getWorld().getRecipeManager()));
 
 		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		craftPreviewInventory = new CraftResultInventory();

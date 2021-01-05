@@ -5,9 +5,11 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 /**
  * Provides an interface to the recipe manager of the centrifuge.
@@ -31,4 +33,6 @@ public interface ICentrifugeManager extends ICraftingProvider<ICentrifugeRecipe>
 	 */
 	void addRecipe(int timePerItem, ItemStack input, Map<ItemStack, Float> products);
 
+	@Nullable
+	ICentrifugeRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack);
 }

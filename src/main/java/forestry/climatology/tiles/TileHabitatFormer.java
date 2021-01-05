@@ -179,7 +179,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (fluid == null) {
 			return 0;
 		}
-		IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(fluid);
+		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
 		if (recipe == null) {
 			return 0;
 		}
@@ -195,7 +195,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
 			if (fluid != null) {
-				IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(fluid);
+				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
 				if (recipe != null) {
 					return recipe.getHumidChange() / transformer.getSpeedModifier();
 				}
@@ -203,7 +203,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		}
 		float fluidChange = 0.0F;
 		if (cachedStack != null) {
-			IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(cachedStack);
+			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, cachedStack);
 			if (recipe != null) {
 				fluidChange = Math.abs(recipe.getTempChange());
 			}

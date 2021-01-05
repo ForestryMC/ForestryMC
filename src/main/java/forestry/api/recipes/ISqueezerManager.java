@@ -5,7 +5,10 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -72,4 +75,12 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
 	 * @param chance         Chance remnants will be produced by a single recipe cycle, from 0 to 1.
 	 */
 	void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance);
+
+	@Nullable
+	ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer);
+
+	@Nullable
+	ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items);
+
+	boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack);
 }

@@ -67,14 +67,14 @@ public abstract class RecipeUtil {
 			return;
 		}
 
-		RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
+		// RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.0f, outputStack, new FluidStack(Fluids.WATER, 1));
 
 		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.JUICE.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
+			// RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.JUICE.getFluid(1));
 		}
 
 		if (ForgeRegistries.FLUIDS.containsValue(ForestryFluids.HONEY.getFluid())) {
-			RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
+			// RecipeManagers.fermenterManager.addRecipe(resource, fermentationValue, 1.5f, outputStack, ForestryFluids.HONEY.getFluid(1));
 		}
 	}
 

@@ -85,6 +85,7 @@ import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.recipes.MoistenerRecipeManager;
+import forestry.factory.recipes.SqueezerContainerRecipeManager;
 import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
@@ -110,6 +111,7 @@ public class ModuleFactory extends BlankForestryModule {
 		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
 		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
 		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.squeezerContainerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerContainerRecipeManager() : new DummyManagers.DummySqueezerContainerManager();
 		RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();

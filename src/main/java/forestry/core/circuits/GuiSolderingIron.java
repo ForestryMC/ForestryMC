@@ -20,6 +20,7 @@ import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.circuits.ICircuitSocketType;
@@ -54,7 +55,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		for (int i = 0; i < 4; i++) {
 			String description;
 			ItemStack tube = itemInventory.getStackInSlot(i + 2);
-			ISolderRecipe recipe = SolderManager.getMatchingRecipe(layout, tube);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {

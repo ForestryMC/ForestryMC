@@ -19,12 +19,11 @@ import net.minecraftforge.common.crafting.CompoundIngredient;
 
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
-import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
@@ -38,7 +37,10 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	}
 
 	public FabricatorElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Stream.of(stacks).map(FabricatorRecipeManager::getRecipes).flatMap(Collection::stream).toArray(IFabricatorRecipe[]::new));
+		this(0, 0, Stream.of(stacks)
+				.map(stack -> RecipeManagers.fabricatorManager.getRecipesWithOutput(null, stack))
+				.flatMap(Collection::stream)
+				.toArray(IFabricatorRecipe[]::new));
 	}
 
 	public FabricatorElement(int xPos, int yPos, IFabricatorRecipe[] recipes) {
@@ -81,7 +83,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
 		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
+		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(null)) {
 			Fluid fluid = smelting.getProduct().getFluid();
 			if (!smeltingInputs.containsKey(fluid)) {
 				smeltingInputs.put(fluid, new ArrayList<>());

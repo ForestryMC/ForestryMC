@@ -10,17 +10,20 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.RecipePair;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
@@ -41,10 +44,11 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 		//		addRecipe(recipe);
 	}
 
-	public RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
+	@Override
+	public RecipePair<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
 		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
 
-		for (IFabricatorRecipe recipe : recipes) {
+		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
 			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
 				continue;
 			}
@@ -57,8 +61,9 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 		return RecipePair.EMPTY;
 	}
 
-	public boolean isPlan(ItemStack plan) {
-		for (IFabricatorRecipe recipe : recipes) {
+	@Override
+	public boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan) {
+		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
 			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
 				return true;
 			}
@@ -67,14 +72,15 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 		return false;
 	}
 
-	public Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
-		if (itemStack.isEmpty()) {
+	@Override
+	public Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+		if (output.isEmpty()) {
 			return Collections.emptyList();
 		}
 
-		return recipes.stream().filter(recipe -> {
-			ItemStack output = recipe.getRecipeOutput();
-			return ItemStackUtil.isIdenticalItem(itemStack, output);
+		return getRecipes(recipeManager).stream().filter(recipe -> {
+			ItemStack o = recipe.getRecipeOutput();
+			return ItemStackUtil.isIdenticalItem(output, o);
 		}).collect(Collectors.toList());
 	}
 }

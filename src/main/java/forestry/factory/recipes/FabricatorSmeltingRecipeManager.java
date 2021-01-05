@@ -13,10 +13,13 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -30,13 +33,14 @@ public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IF
 		super(IFabricatorSmeltingRecipe.TYPE);
 	}
 
+	@Override
 	@Nullable
-	public IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
+	public IFabricatorSmeltingRecipe findMatchingSmelting(@Nullable RecipeManager recipeManager, ItemStack resource) {
 		if (resource.isEmpty()) {
 			return null;
 		}
 
-		for (IFabricatorSmeltingRecipe smelting : recipes) {
+		for (IFabricatorSmeltingRecipe smelting : getRecipes(recipeManager)) {
 			if (smelting.getResource().test(resource)) {
 				return smelting;
 			}
@@ -50,15 +54,12 @@ public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IF
 		addRecipe(new FabricatorSmeltingRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), molten, meltingPoint));
 	}
 
-	public Set<Fluid> getRecipeFluids() {
-		if (recipeFluids.isEmpty()) {
-			for (IFabricatorSmeltingRecipe recipe : recipes) {
-				FluidStack fluidStack = recipe.getProduct();
-				if (!fluidStack.isEmpty()) {
-					recipeFluids.add(fluidStack.getFluid());
-				}
-			}
-		}
-		return Collections.unmodifiableSet(recipeFluids);
+	@Override
+	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(IFabricatorSmeltingRecipe::getProduct)
+				.filter(fluidStack -> !fluidStack.isEmpty())
+				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 }

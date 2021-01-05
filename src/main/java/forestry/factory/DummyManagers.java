@@ -39,10 +39,13 @@ import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.ISqueezerContainerManager;
+import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
+import forestry.core.recipes.RecipePair;
 
 public class DummyManagers {
 
@@ -86,7 +89,17 @@ public class DummyManagers {
 		}
 
 		@Override
+		public boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource) {
+			return false;
+		}
+
+		@Override
 		public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+			return Collections.emptySet();
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 			return Collections.emptySet();
 		}
 	}
@@ -97,6 +110,12 @@ public class DummyManagers {
 		public void addRecipe(int timePerItem, ItemStack resource, Map<ItemStack, Float> products) {
 
 		}
+
+		@Nullable
+		@Override
+		public ICentrifugeRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
+			return null;
+		}
 	}
 
 	public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
@@ -106,13 +125,39 @@ public class DummyManagers {
 
 		}
 
+		@Override
+		public RecipePair<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
+			return RecipePair.EMPTY;
+		}
+
+		@Override
+		public boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan) {
+			return false;
+		}
+
+		@Override
+		public Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+			return Collections.emptySet();
+		}
+
 	}
 
 	public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 
+		@Nullable
+		@Override
+		public IFabricatorSmeltingRecipe findMatchingSmelting(@Nullable RecipeManager recipeManager, ItemStack resource) {
+			return null;
+		}
+
 		@Override
 		public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
 
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
+			return Collections.emptySet();
 		}
 	}
 
@@ -137,6 +182,22 @@ public class DummyManagers {
 		public void addRecipe(int fermentationValue, float modifier, FluidStack output) {
 
 		}
+
+		@Nullable
+		@Override
+		public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
+			return null;
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
+			return Collections.emptySet();
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
+			return Collections.emptySet();
+		}
 	}
 
 	public static class DummyMoistenerManager extends DummyCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
@@ -144,6 +205,17 @@ public class DummyManagers {
 		@Override
 		public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
 
+		}
+
+		@Override
+		public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
+			return false;
+		}
+
+		@Nullable
+		@Override
+		public IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
+			return null;
 		}
 	}
 
@@ -173,6 +245,27 @@ public class DummyManagers {
 		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
 
 		}
+
+		@Nullable
+		@Override
+		public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
+			return null;
+		}
+
+		@Nullable
+		@Override
+		public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
+			return null;
+		}
+
+		@Override
+		public boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
+			return false;
+		}
+	}
+
+	public static class DummySqueezerContainerManager extends DummyCraftingProvider<ISqueezerContainerRecipe> implements ISqueezerContainerManager {
+
 	}
 
 	public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {
@@ -183,12 +276,12 @@ public class DummyManagers {
 		}
 
 		@Override
-		public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack item) {
+		public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item) {
 			return null;
 		}
 
 		@Override
-		public boolean matches(IStillRecipe recipe, FluidStack item) {
+		public boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
 			return false;
 		}
 

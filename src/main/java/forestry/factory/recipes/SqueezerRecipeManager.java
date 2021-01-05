@@ -13,11 +13,13 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IForestryRecipe;
+import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
@@ -56,20 +58,21 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 
 	@Override
 	public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance) {
-		containerRecipes.put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
 	}
 
+	@Override
 	@Nullable
 	public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
 		if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
 			return null;
 		}
 
-		return containerRecipes.get(new ItemStack(filledContainer.getItem()));
+		return null;
 	}
 
+	@Override
 	@Nullable
-	public ISqueezerRecipe findMatchingRecipe(NonNullList<ItemStack> items) {
+	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
 		// Find container recipes
 		for (ItemStack itemStack : items) {
 			ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);
@@ -81,7 +84,7 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 			}
 		}
 
-		for (ISqueezerRecipe recipe : recipes) {
+		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
 			if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
 				return recipe;
 			}
@@ -90,8 +93,9 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 		return null;
 	}
 
-	public boolean canUse(ItemStack itemStack) {
-		for (ISqueezerRecipe recipe : recipes) {
+	@Override
+	public boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
+		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
 			for (ItemStack recipeInput : recipe.getResources()) {
 				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, true, false)) {
 					return true;
@@ -99,6 +103,6 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 			}
 		}
 
-		return SqueezerRecipeManager.findMatchingContainerRecipe(itemStack) != null;
+		return false;
 	}
 }

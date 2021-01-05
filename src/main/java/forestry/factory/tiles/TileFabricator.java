@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
 import forestry.core.fluids.TankManager;
@@ -74,7 +75,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(FabricatorSmeltingRecipeManager.getRecipeFluids());
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(() -> RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(getWorld().getRecipeManager()));
 
 		tankManager = new TankManager(this, moltenTank);
 	}
@@ -144,7 +145,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(smeltResource);
+		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getWorld().getRecipeManager(), smeltResource);
 		if (smelt == null || smelt.getMeltingPoint() > heat) {
 			return;
 		}
@@ -173,7 +174,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		RecipePair<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
 		IFabricatorRecipe recipe = recipePair.getRecipe();
 		if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
 			return RecipePair.EMPTY;
@@ -240,7 +241,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasResources = true;
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		RecipePair<IFabricatorRecipe> recipePair = FabricatorRecipeManager.findMatchingRecipe(plan, craftingInventory);
+		RecipePair<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
 		if (!recipePair.isEmpty()) {
 			IFabricatorRecipe recipe = recipePair.getRecipe();
 			if (recipe == null) {
@@ -269,7 +270,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private int getMeltingPoint() {
 		if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
-			IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(this.getStackInSlot(InventoryFabricator.SLOT_METAL));
+			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getWorld().getRecipeManager(), this.getStackInSlot(InventoryFabricator.SLOT_METAL));
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}

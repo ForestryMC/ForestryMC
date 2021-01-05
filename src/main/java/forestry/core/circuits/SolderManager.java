@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -35,22 +36,24 @@ public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> imple
 		Preconditions.checkNotNull(resource, "resource may not be null");
 		Preconditions.checkNotNull(circuit, "circuit may not be null");
 
-		recipes.add(new CircuitRecipe(IForestryRecipe.anonymous(), layout, resource, circuit));
+		addRecipe(new CircuitRecipe(IForestryRecipe.anonymous(), layout, resource, circuit));
 	}
 
+	@Override
 	@Nullable
-	public ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
-		ISolderRecipe circuitRecipe = getMatchingRecipe(layout, resource);
+	public ICircuit getCircuit(@Nullable RecipeManager recipeManager, ICircuitLayout layout, ItemStack resource) {
+		ISolderRecipe circuitRecipe = getMatchingRecipe(recipeManager, layout, resource);
 		if (circuitRecipe == null) {
 			return null;
 		}
 		return circuitRecipe.getCircuit();
 	}
 
+	@Override
 	@Nullable
-	public ISolderRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+	public ISolderRecipe getMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable ICircuitLayout layout, ItemStack resource) {
 		if (layout != null) {
-			for (ISolderRecipe recipe : recipes) {
+			for (ISolderRecipe recipe : getRecipes(recipeManager)) {
 				if (recipe.matches(layout, resource)) {
 					return recipe;
 				}

@@ -5,7 +5,12 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+import java.util.Set;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -77,4 +82,11 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 * @throws NullPointerException if resource, output or liquid is null
 	 */
 	void addRecipe(int fermentationValue, float modifier, FluidStack output);
+
+	@Nullable
+	IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu);
+
+	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
+
+	Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager);
 }

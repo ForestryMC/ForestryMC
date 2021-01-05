@@ -17,6 +17,7 @@ import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -48,7 +49,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 				return false;
 			}
 
-			return SqueezerRecipeManager.canUse(itemStack);
+			return RecipeManagers.squeezerManager.canUse(null, itemStack);
 		}
 
 		return false;

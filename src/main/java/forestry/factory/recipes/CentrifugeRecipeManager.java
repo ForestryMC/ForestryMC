@@ -15,6 +15,7 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
@@ -39,13 +40,14 @@ public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifug
 		addRecipe(recipe);
 	}
 
+	@Override
 	@Nullable
-	public ICentrifugeRecipe findMatchingRecipe(ItemStack itemStack) {
+	public ICentrifugeRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
 			return null;
 		}
 
-		for (ICentrifugeRecipe recipe : recipes) {
+		for (ICentrifugeRecipe recipe : getRecipes(recipeManager)) {
 			Ingredient recipeInput = recipe.getInput();
 			if (recipeInput.test(itemStack)) {
 				return recipe;

@@ -13,10 +13,9 @@ package forestry.factory.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
-import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 import forestry.factory.tiles.TileFabricator;
 
 public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
@@ -34,13 +33,13 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_METAL) {
-			return FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null;
+			return RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(null, itemStack) != null;
 		} else if (slotIndex == SLOT_PLAN) {
-			return FabricatorRecipeManager.isPlan(itemStack);
+			return RecipeManagers.fabricatorManager.isPlan(null, itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
-			if (FabricatorRecipeManager.isPlan(itemStack)) {
+			if (RecipeManagers.fabricatorManager.isPlan(null, itemStack)) {
 				return false;
-			} else if (FabricatorSmeltingRecipeManager.findMatchingSmelting(itemStack) != null) {
+			} else if (RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(null, itemStack) != null) {
 				return false;
 			}
 		}

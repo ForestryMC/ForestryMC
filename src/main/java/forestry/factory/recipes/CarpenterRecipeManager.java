@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -87,12 +88,13 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		return RecipeUtil.matches(internal, craftingInventory) != null;
 	}
 
-	public boolean isBox(ItemStack resource) {
+	@Override
+	public boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
 
-		for (ICarpenterRecipe recipe : recipes) {
+		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
 			Ingredient box = recipe.getBox();
 			if (box.test(resource)) {
 				return true;
@@ -116,15 +118,12 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 				.collect(Collectors.toList());
 	}
 
-	public Set<Fluid> getRecipeFluids() {
-		if (recipeFluids.isEmpty()) {
-			for (ICarpenterRecipe recipe : recipes) {
-				FluidStack fluidStack = recipe.getFluidResource();
-				if (!fluidStack.isEmpty()) {
-					recipeFluids.add(fluidStack.getFluid());
-				}
-			}
-		}
-		return Collections.unmodifiableSet(recipeFluids);
+	@Override
+	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(ICarpenterRecipe::getFluidResource)
+				.filter(fluidStack -> !fluidStack.isEmpty())
+				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 }

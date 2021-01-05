@@ -11,28 +11,36 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IForestryRecipe;
+import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
+	private final ResourceLocation id;
 	private final ItemStack emptyContainer;
 	private final int processingTime;
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerContainerRecipe(ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+	public SqueezerContainerRecipe(ResourceLocation id, ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+		this.id = id;
 		Preconditions.checkNotNull(emptyContainer);
 		Preconditions.checkArgument(!emptyContainer.isEmpty());
 		Preconditions.checkNotNull(remnants);
@@ -80,4 +88,25 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		}).orElse(null);
 	}
 
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerContainerRecipe> {
+
+		@Override
+		public SqueezerContainerRecipe read(ResourceLocation recipeId, JsonObject json) {
+			return null;
+		}
+
+		@Override
+		public SqueezerContainerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			return null;
+		}
+
+		@Override
+		public void write(PacketBuffer buffer, SqueezerContainerRecipe recipe) {
+		}
+	}
 }
