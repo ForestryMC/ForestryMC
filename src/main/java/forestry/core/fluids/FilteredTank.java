@@ -52,8 +52,9 @@ public class FilteredTank extends StandardTank {
 		super(capacity, canFill, canDrain);
 	}
 
-	public void setFilters(Supplier<Set<ResourceLocation>> filters) {
+	public FilteredTank setFilters(Supplier<Set<ResourceLocation>> filters) {
 		this.filters = filters;
+		return this;
 	}
 
 	public FilteredTank setFilters(Fluid... filters) {
@@ -99,8 +100,8 @@ public class FilteredTank extends StandardTank {
 		} else {
 			//TODO can this be simplified
 			ITextComponent tmiComponent = new StringTextComponent("<")
-				.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-				.append(new StringTextComponent(">"));
+					.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
+					.append(new StringTextComponent(">"));
 			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
 		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
