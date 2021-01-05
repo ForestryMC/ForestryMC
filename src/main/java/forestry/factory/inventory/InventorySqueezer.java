@@ -49,7 +49,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 				return false;
 			}
 
-			return RecipeManagers.squeezerManager.canUse(null, itemStack);
+			return RecipeManagers.squeezerManager.canUse(null, itemStack) || RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(null, itemStack) != null;
 		}
 
 		return false;

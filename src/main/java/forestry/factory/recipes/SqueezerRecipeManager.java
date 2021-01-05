@@ -19,10 +19,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IForestryRecipe;
-import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
@@ -57,33 +55,8 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	}
 
 	@Override
-	public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance) {
-	}
-
-	@Override
-	@Nullable
-	public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
-		if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
-			return null;
-		}
-
-		return null;
-	}
-
-	@Override
 	@Nullable
 	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
-		// Find container recipes
-		for (ItemStack itemStack : items) {
-			ISqueezerContainerRecipe containerRecipe = findMatchingContainerRecipe(itemStack);
-			if (containerRecipe != null) {
-				ISqueezerRecipe recipe = containerRecipe.getSqueezerRecipe(itemStack);
-				if (recipe != null) {
-					return recipe;
-				}
-			}
-		}
-
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
 			if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
 				return recipe;

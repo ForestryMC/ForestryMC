@@ -169,6 +169,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 				matchingRecipe = currentRecipe;
 			} else {
 				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
+
+				if (matchingRecipe == null) {
+					for (ItemStack resource : resources) {
+						RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getWorld().getRecipeManager(), resource);
+					}
+				}
 			}
 		}
 

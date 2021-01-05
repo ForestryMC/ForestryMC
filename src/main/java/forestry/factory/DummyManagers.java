@@ -241,17 +241,6 @@ public class DummyManagers {
 
 		}
 
-		@Override
-		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
-
-		}
-
-		@Nullable
-		@Override
-		public ISqueezerContainerRecipe findMatchingContainerRecipe(ItemStack filledContainer) {
-			return null;
-		}
-
 		@Nullable
 		@Override
 		public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
@@ -266,6 +255,16 @@ public class DummyManagers {
 
 	public static class DummySqueezerContainerManager extends DummyCraftingProvider<ISqueezerContainerRecipe> implements ISqueezerContainerManager {
 
+		@Override
+		public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance) {
+
+		}
+
+		@Nullable
+		@Override
+		public ISqueezerContainerRecipe findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer) {
+			return null;
+		}
 	}
 
 	public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {
