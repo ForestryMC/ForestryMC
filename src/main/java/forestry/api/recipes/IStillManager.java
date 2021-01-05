@@ -37,11 +37,11 @@ public interface IStillManager extends ICraftingProvider<IStillRecipe> {
 	void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output);
 
 	@Nullable
-	IStillRecipe findMatchingRecipe(RecipeManager manager, @Nullable FluidStack item);
+	IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item);
 
 	boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item);
 
-	Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager);
+	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
 
-	Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager);
+	Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager);
 }

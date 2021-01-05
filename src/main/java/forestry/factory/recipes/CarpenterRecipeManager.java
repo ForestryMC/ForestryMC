@@ -55,7 +55,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
+	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
 		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, liquid, item, inventory)) {
 				return Optional.of(recipe);
@@ -102,15 +102,18 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		return false;
 	}
 
-	public Collection<ICarpenterRecipe> getRecipes(ItemStack itemStack) {
-		if (itemStack.isEmpty()) {
+	@Override
+	public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+		if (output.isEmpty()) {
 			return Collections.emptyList();
 		}
 
-		return recipes.stream().filter(recipe -> {
-			ItemStack output = recipe.getCraftingGridRecipe().getRecipeOutput();
-			return ItemStackUtil.isIdenticalItem(itemStack, output);
-		}).collect(Collectors.toList());
+		return getRecipes(recipeManager).stream()
+				.filter(recipe -> {
+					ItemStack o = recipe.getCraftingGridRecipe().getRecipeOutput();
+					return ItemStackUtil.isIdenticalItem(o, output);
+				})
+				.collect(Collectors.toList());
 	}
 
 	public Set<Fluid> getRecipeFluids() {

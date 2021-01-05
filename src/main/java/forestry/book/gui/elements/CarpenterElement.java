@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
@@ -31,7 +32,10 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	}
 
 	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Stream.of(stacks).map(CarpenterRecipeManager::getRecipes).flatMap(Collection::stream).toArray(ICarpenterRecipe[]::new));
+		this(0, 0, Stream.of(stacks)
+				.map(stack -> RecipeManagers.carpenterManager.getRecipesWithOutput(stack))
+				.flatMap(Collection::stream)
+				.toArray(ICarpenterRecipe[]::new));
 	}
 
 	public CarpenterElement(int xPos, int yPos, ICarpenterRecipe[] recipes) {

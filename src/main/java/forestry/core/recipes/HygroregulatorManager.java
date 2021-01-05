@@ -27,7 +27,7 @@ public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregula
 
 	@Override
 	@Nullable
-	public IHygroregulatorRecipe findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid) {
+	public IHygroregulatorRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid) {
 		if (liquid.getAmount() <= 0) {
 			return null;
 		}
@@ -42,7 +42,7 @@ public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregula
 	}
 
 	@Override
-	public Set<ResourceLocation> getRecipeFluids(RecipeManager recipeManager) {
+	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager).stream()
 				.map(recipe -> recipe.getResource().getFluid().getRegistryName())
 				.collect(Collectors.toSet());

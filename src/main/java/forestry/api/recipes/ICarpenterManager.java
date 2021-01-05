@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Optional;
 
 import net.minecraft.inventory.IInventory;
@@ -67,7 +68,9 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param inventory Present inventory
 	 * @return An optional carpenter recipe if any matches
 	 */
-	Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory);
+	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory);
 
 	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory);
+
+	Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
 }

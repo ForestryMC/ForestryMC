@@ -37,7 +37,7 @@ public interface IHygroregulatorManager extends ICraftingProvider<IHygroregulato
 	void addRecipe(FluidStack resource, int transferTime, float tempChange, float humidChange);
 
 	@Nullable
-	IHygroregulatorRecipe findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid);
+	IHygroregulatorRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid);
 
-	Set<ResourceLocation> getRecipeFluids(RecipeManager recipeManager);
+	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

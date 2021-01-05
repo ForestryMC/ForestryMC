@@ -37,11 +37,11 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 
 	@Override
 	@Nullable
-	public IStillRecipe findMatchingRecipe(RecipeManager manager, @Nullable FluidStack item) {
+	public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item) {
 		if (item == null) {
 			return null;
 		}
-		for (IStillRecipe recipe : getRecipes(manager)) {
+		for (IStillRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, item)) {
 				return recipe;
 			}
@@ -59,14 +59,14 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 	}
 
 	@Override
-	public Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager) {
+	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager).stream()
 				.map(recipe -> recipe.getInput().getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager) {
+	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager).stream()
 				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
 				.collect(Collectors.toSet());

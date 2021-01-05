@@ -53,7 +53,7 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Collection<T> getRecipes(RecipeManager manager) {
+		public Collection<T> getRecipes(@Nullable RecipeManager recipeManager) {
 			return Collections.emptySet();
 		}
 	}
@@ -76,13 +76,18 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
+		public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
 			return Optional.empty();
 		}
 
 		@Override
 		public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 			return false;
+		}
+
+		@Override
+		public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+			return Collections.emptySet();
 		}
 	}
 
@@ -178,7 +183,7 @@ public class DummyManagers {
 		}
 
 		@Override
-		public IStillRecipe findMatchingRecipe(RecipeManager manager, FluidStack item) {
+		public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack item) {
 			return null;
 		}
 
@@ -188,12 +193,12 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager) {
+		public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 			return Collections.emptySet();
 		}
 
 		@Override
-		public Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager) {
+		public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 			return Collections.emptySet();
 		}
 	}
