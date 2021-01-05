@@ -15,11 +15,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -183,6 +185,16 @@ public class DummyManagers {
 		@Override
 		public boolean matches(IStillRecipe recipe, FluidStack item) {
 			return false;
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager) {
+			return Collections.emptySet();
+		}
+
+		@Override
+		public Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager) {
+			return Collections.emptySet();
 		}
 	}
 }

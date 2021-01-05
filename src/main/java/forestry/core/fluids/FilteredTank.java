@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import com.google.common.base.Suppliers;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.fluid.Fluid;
@@ -38,7 +41,7 @@ import forestry.api.core.tooltips.ToolTip;
  */
 public class FilteredTank extends StandardTank {
 
-	private final Set<ResourceLocation> filters = new HashSet<>(); // FluidNames
+	private Supplier<Set<ResourceLocation>> filters = Suppliers.ofInstance(new HashSet<>()); // FluidNames
 
 	public FilteredTank(int capacity) {
 		super(capacity);
@@ -49,20 +52,25 @@ public class FilteredTank extends StandardTank {
 		super(capacity, canFill, canDrain);
 	}
 
+	public void setFilters(Supplier<Set<ResourceLocation>> filters) {
+		this.filters = filters;
+	}
+
 	public FilteredTank setFilters(Fluid... filters) {
 		return setFilters(Arrays.asList(filters));
 	}
 
 	public FilteredTank setFilters(Collection<Fluid> filters) {
-		this.filters.clear();
+		Set<ResourceLocation> set = new HashSet<>();
+		this.filters = () -> set;
 		for (Fluid fluid : filters) {
-			this.filters.add(fluid.getRegistryName());
+			set.add(fluid.getRegistryName());
 		}
 		return this;
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != Fluids.EMPTY && filters.contains(resource.getFluid().getRegistryName());
+		return resource.getFluid() != Fluids.EMPTY && filters.get().contains(resource.getFluid().getRegistryName());
 	}
 
 	@Override
@@ -75,6 +83,8 @@ public class FilteredTank extends StandardTank {
 
 		ToolTip toolTip = getToolTip();
 		toolTip.clear();
+		Set<ResourceLocation> filters = this.filters.get();
+
 		if (Screen.hasShiftDown() || filters.size() < 5) {
 			for (ResourceLocation filterName : filters) {
 				Fluid fluidFilter = ForgeRegistries.FLUIDS.getValue(filterName);

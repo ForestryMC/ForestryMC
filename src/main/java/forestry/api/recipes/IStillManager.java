@@ -7,7 +7,10 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 
+import java.util.Set;
+
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -37,4 +40,8 @@ public interface IStillManager extends ICraftingProvider<IStillRecipe> {
 	IStillRecipe findMatchingRecipe(RecipeManager manager, @Nullable FluidStack item);
 
 	boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item);
+
+	Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager);
+
+	Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager);
 }

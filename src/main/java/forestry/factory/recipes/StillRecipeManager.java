@@ -11,8 +11,11 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -56,13 +59,16 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 	}
 
 	@Override
-	public boolean addRecipe(IStillRecipe recipe) {
-		FluidStack input = recipe.getInput();
-		recipeFluidInputs.add(input.getFluid());
+	public Set<ResourceLocation> getRecipeFluidInputs(RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getInput().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
+	}
 
-		FluidStack output = recipe.getOutput();
-		recipeFluidOutputs.add(output.getFluid());
-
-		return super.addRecipe(recipe);
+	@Override
+	public Set<ResourceLocation> getRecipeFluidOutputs(RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 }
