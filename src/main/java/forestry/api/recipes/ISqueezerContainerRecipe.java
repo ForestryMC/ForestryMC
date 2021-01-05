@@ -10,15 +10,13 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 
 import net.minecraftforge.registries.ObjectHolder;
 
-public interface ISqueezerContainerRecipe extends IForestryRecipe {
+public interface ISqueezerContainerRecipe extends IForestryRecipe, ISqueezerRecipe {
 
 	IRecipeType<ISqueezerContainerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
 
@@ -34,9 +32,6 @@ public interface ISqueezerContainerRecipe extends IForestryRecipe {
 	ItemStack getRemnants();
 
 	float getRemnantsChance();
-
-	@Nullable
-	ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer);
 
 	@Override
 	default IRecipeType<?> getType() {

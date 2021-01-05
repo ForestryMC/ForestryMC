@@ -53,7 +53,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
-import forestry.factory.recipes.SqueezerRecipeManager;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -162,6 +161,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	private boolean checkRecipe() {
 		ISqueezerRecipe matchingRecipe = null;
+
 		if (inventory.hasResources()) {
 			NonNullList<ItemStack> resources = inventory.getResources();
 
@@ -169,10 +169,12 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 				matchingRecipe = currentRecipe;
 			} else {
 				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
+			}
 
-				if (matchingRecipe == null) {
-					for (ItemStack resource : resources) {
-						RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getWorld().getRecipeManager(), resource);
+			if (matchingRecipe == null) {
+				for (ItemStack resource : resources) {
+					if (matchingRecipe == null) {
+						matchingRecipe = RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getWorld().getRecipeManager(), resource);
 					}
 				}
 			}
@@ -180,6 +182,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
+
 			if (currentRecipe != null) {
 				int recipeTime = currentRecipe.getProcessingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
