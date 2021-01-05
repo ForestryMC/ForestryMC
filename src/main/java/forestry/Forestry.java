@@ -211,7 +211,6 @@ public class Forestry {
 		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
-
 		String gameMode = Config.gameMode;
 		Preconditions.checkNotNull(gameMode);
 		ForestryAPI.activeMode = new GameMode(gameMode);

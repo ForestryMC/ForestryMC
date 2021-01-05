@@ -31,12 +31,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.core.ISpriteRegister;
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.core.ItemGroups;
@@ -57,6 +51,11 @@ import forestry.core.utils.ResourceUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
+
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.utils.AlleleUtils;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 

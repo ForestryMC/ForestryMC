@@ -9,10 +9,11 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 
-import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -102,7 +103,8 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default Command[] getConsoleCommands() {
+	default LiteralArgumentBuilder<CommandSource> register() {
 		return null;
 	}
+
 }
