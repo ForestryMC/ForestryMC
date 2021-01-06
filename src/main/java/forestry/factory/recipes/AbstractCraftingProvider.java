@@ -6,11 +6,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.server.integrated.IntegratedServer;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -50,22 +54,35 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	 */
 	protected static RecipeManager adjust(@Nullable RecipeManager recipeManager) {
 		if (recipeManager == null) {
-			return DistExecutor.safeRunForDist(() -> () -> {
-				Minecraft minecraft = Minecraft.getInstance();
-				IntegratedServer integratedServer = minecraft.getIntegratedServer();
-
-				if (integratedServer != null) {
-					if (integratedServer.isOnExecutionThread()) {
-						throw new NullPointerException("RecipeManager was null on the integrated server");
-					}
-				}
-
-				return minecraft.getConnection().getRecipeManager();
-			}, () -> () -> {
+			return DistExecutor.unsafeRunForDist(() -> AbstractCraftingProvider::adjustClient, () -> () -> {
 				throw new NullPointerException("RecipeManager was null on the dedicated server");
 			});
 		} else {
 			return recipeManager;
+		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private static final RecipeManager DUMMY = new RecipeManager();
+
+	@OnlyIn(Dist.CLIENT)
+	private static RecipeManager adjustClient() {
+		Minecraft minecraft = Minecraft.getInstance();
+		IntegratedServer integratedServer = minecraft.getIntegratedServer();
+
+		if (integratedServer != null) {
+			if (integratedServer.isOnExecutionThread()) {
+				throw new NullPointerException("RecipeManager was null on the integrated server");
+			}
+		}
+
+		ClientPlayNetHandler connection = minecraft.getConnection();
+
+		if (connection == null) {
+			// Usage of this code path is probably a bug
+			return DUMMY;
+		} else {
+			return connection.getRecipeManager();
 		}
 	}
 }

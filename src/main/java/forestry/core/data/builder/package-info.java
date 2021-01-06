@@ -1,5 +1,5 @@
 @ParametersAreNonnullByDefault
-//@FieldsAreNonnullByDefault
+@FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 package forestry.core.data.builder;
 
