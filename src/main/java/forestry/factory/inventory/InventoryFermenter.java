@@ -38,7 +38,7 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			return RecipeManagers.moistenerManager.isResource(null, itemStack);
+			return RecipeManagers.moistenerManager.isResource(tile.getWorld().getRecipeManager(), itemStack);
 		} else if (slotIndex == SLOT_INPUT) {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);

@@ -41,7 +41,7 @@ public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		} else if (slotIndex == SLOT_BOX) {
-			return RecipeManagers.carpenterManager.isBox(null, itemStack);
+			return RecipeManagers.carpenterManager.isBox(tile.getWorld().getRecipeManager(), itemStack);
 		} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
 			return false;
 		}

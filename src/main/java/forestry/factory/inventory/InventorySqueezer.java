@@ -12,6 +12,7 @@ package forestry.factory.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
@@ -49,7 +50,8 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 				return false;
 			}
 
-			return RecipeManagers.squeezerManager.canUse(null, itemStack) || RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(null, itemStack) != null;
+			RecipeManager recipeManager = tile.getWorld().getRecipeManager();
+			return RecipeManagers.squeezerManager.canUse(recipeManager, itemStack) || RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(recipeManager, itemStack) != null;
 		}
 
 		return false;
