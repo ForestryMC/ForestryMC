@@ -1,12 +1,6 @@
 package forestry.farming.models;
 
-import forestry.core.models.ModelBlockCached;
-import forestry.core.models.baker.ModelBaker;
-import forestry.farming.blocks.BlockFarm;
-import forestry.farming.blocks.BlockFarm.State;
-import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.blocks.EnumFarmMaterial;
-import forestry.farming.features.FarmingBlocks;
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,7 +11,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
-import org.apache.commons.lang3.tuple.Pair;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.models.baker.ModelBaker;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.BlockFarm.State;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.blocks.EnumFarmMaterial;
+import forestry.farming.features.FarmingBlocks;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, State>> {

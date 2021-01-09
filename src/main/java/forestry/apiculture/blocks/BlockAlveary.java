@@ -190,8 +190,18 @@ public class BlockAlveary extends BlockStructure {
 				}
 			}
 		}
-
 		return state;
+	}
+
+	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
+		List<Direction> touching = new ArrayList<>();
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
+			BlockState blockState = world.getBlockState(blockPos.offset(direction));
+			if (blockState.getBlock() instanceof BlockAlveary) {
+				touching.add(direction);
+			}
+		}
+		return touching;
 	}
 
 	@Override

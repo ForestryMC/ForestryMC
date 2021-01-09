@@ -10,8 +10,8 @@
  */
 package forestry.farming.blocks;
 
-import forestry.core.blocks.BlockStructure;
-import forestry.farming.tiles.*;
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,13 +29,23 @@ import net.minecraft.world.IBlockReader;
 
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
+import forestry.core.blocks.BlockStructure;
 
 public class BlockFarm extends BlockStructure {
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
+
+	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
+
+	public enum State implements IStringSerializable {
+		PLAIN, BAND;
+
+		@Override
+		public String getString() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
+	}
 
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
 		super(Block.Properties.create(Material.ROCK)
@@ -45,6 +55,12 @@ public class BlockFarm extends BlockStructure {
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		super.fillStateContainer(builder);
+		builder.add(STATE);
 	}
 
 	@Override

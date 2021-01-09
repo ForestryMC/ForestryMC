@@ -2,9 +2,9 @@ package forestry.farming.blocks;
 
 import com.google.common.collect.ImmutableList;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.config.Constants;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -14,9 +14,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Locale;
+import forestry.api.core.IBlockSubtype;
+import forestry.core.config.Constants;
+import forestry.core.utils.ResourceUtil;
 
 public enum EnumFarmBlockType implements IBlockSubtype {
 	PLAIN,
@@ -111,6 +111,14 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 		for (int side = 0; side < textures.length; side++) {
 			textures[side] = getSprite(this, side);
 		}
+		return textures;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static TextureAtlasSprite[] getBandSprites() {
+		TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
+		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+		Arrays.fill(textures, band);
 		return textures;
 	}
 
