@@ -183,6 +183,11 @@ public class DummyManagers {
 
 		}
 
+		@Override
+		public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
+			return false;
+		}
+
 		@Nullable
 		@Override
 		public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {

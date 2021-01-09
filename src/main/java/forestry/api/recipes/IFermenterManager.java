@@ -83,6 +83,8 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 */
 	void addRecipe(int fermentationValue, float modifier, FluidStack output);
 
+	boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource);
+
 	@Nullable
 	IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu);
 

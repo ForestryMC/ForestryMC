@@ -58,6 +58,21 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 	}
 
 	@Override
+	public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
+		if (resource.isEmpty()) {
+			return false;
+		}
+
+		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
+			if (recipe.getResource().test(resource)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	@Nullable
 	public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
 		if (res.isEmpty()) {
