@@ -13,6 +13,7 @@ package forestry.factory.gui;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IntArray;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,6 +35,7 @@ public class ContainerRaintank extends ContainerLiquidTanks<TileRaintank> {
 
 	public ContainerRaintank(int windowId, PlayerInventory player, TileRaintank tile) {
 		super(windowId, FactoryContainers.RAINTANK.containerType(), player, tile, 8, 84);
+		trackIntArray(new IntArray(1));
 
 		this.addSlot(new SlotEmptyLiquidContainerIn(this.tile, InventoryRaintank.SLOT_RESOURCE, 116, 19));
 		this.addSlot(new SlotOutput(this.tile, InventoryRaintank.SLOT_PRODUCT, 116, 55));
