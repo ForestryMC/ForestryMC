@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -29,7 +28,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
@@ -50,9 +48,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 
 	@Override
 	public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object[] materials) {
-		//		ICarpenterRecipe recipe = new CarpenterRecipe(packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
-		//		addRecipe(recipe);
-		//TODO json
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -85,7 +81,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		}
 
 		ShapedRecipe internal = recipe.getCraftingGridRecipe();
-		return RecipeUtil.matches(internal, craftingInventory) != null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

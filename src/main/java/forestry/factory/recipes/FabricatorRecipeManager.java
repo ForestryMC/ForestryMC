@@ -23,9 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.RecipePair;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
@@ -46,18 +44,6 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 
 	@Override
 	public RecipePair<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
-		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
-
-		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
-			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
-				continue;
-			}
-			String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
-			if (oreDicts != null) {
-				return new RecipePair<>(recipe, oreDicts);
-			}
-		}
-
 		return RecipePair.EMPTY;
 	}
 

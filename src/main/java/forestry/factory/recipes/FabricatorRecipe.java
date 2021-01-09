@@ -31,19 +31,17 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	private final ItemStack plan;
 	private final FluidStack molten;
 	private final NonNullList<Ingredient> ingredients;
-	private final NonNullList<String> oreDicts;
 	private final ItemStack result;
 	private final int width;
 	private final int height;
 
-	public FabricatorRecipe(ResourceLocation id, ItemStack plan, FluidStack molten, ItemStack result, NonNullList<Ingredient> ingredients, NonNullList<String> oreDicts, int width, int height) {
+	public FabricatorRecipe(ResourceLocation id, ItemStack plan, FluidStack molten, ItemStack result, NonNullList<Ingredient> ingredients, int width, int height) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
 		Preconditions.checkNotNull(result);
 		Preconditions.checkArgument(!result.isEmpty());
 		Preconditions.checkNotNull(ingredients);
-		Preconditions.checkNotNull(oreDicts);
 		Preconditions.checkArgument(width > 0);
 		Preconditions.checkArgument(height > 0);
 
@@ -52,24 +50,18 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 		this.molten = molten;
 		this.result = result;
 		this.ingredients = ingredients;
-		this.oreDicts = oreDicts;
 		this.width = width;
 		this.height = height;
 	}
 
 	@Override
-	public NonNullList<Ingredient> getIngredients() {
+	public NonNullList<Ingredient> getFabricatorIngredients() {
 		return ingredients;
 	}
 
 	@Override
 	public ResourceLocation getId() {
 		return id;
-	}
-
-	@Override
-	public NonNullList<String> getOreDicts() {
-		return oreDicts;
 	}
 
 	@Override

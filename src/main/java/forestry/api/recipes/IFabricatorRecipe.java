@@ -31,9 +31,7 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	/**
 	 * @return the list of ingredients in the crafting grid to create this recipe.
 	 */
-	NonNullList<Ingredient> getIngredients();
-
-	NonNullList<String> getOreDicts();
+	NonNullList<Ingredient> getFabricatorIngredients();
 
 	/**
 	 * @return the width of ingredients in the crafting grid to create this recipe.
