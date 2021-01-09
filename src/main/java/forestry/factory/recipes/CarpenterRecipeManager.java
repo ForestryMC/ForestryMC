@@ -48,7 +48,6 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 
 	@Override
 	public void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object[] materials) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
