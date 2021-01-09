@@ -30,13 +30,16 @@ import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
 import forestry.core.blocks.BlockStructure;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
 
 public class BlockFarm extends BlockStructure {
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
-
-	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
 	public enum State implements IStringSerializable {
 		PLAIN, BAND;
@@ -55,12 +58,6 @@ public class BlockFarm extends BlockStructure {
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
-		builder.add(STATE);
 	}
 
 	@Override
@@ -106,14 +103,5 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
 		return getType() == EnumFarmBlockType.CONTROL;
-	}
-
-	public enum State implements IStringSerializable {
-		PLAIN, BAND;
-
-		@Override
-		public String getString() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
 	}
 }

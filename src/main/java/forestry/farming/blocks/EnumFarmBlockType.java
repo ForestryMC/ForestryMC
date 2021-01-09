@@ -98,14 +98,6 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite[] getBandSprites() {
-		TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
-		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		Arrays.fill(textures, band);
-		return textures;
-	}
-
-	@OnlyIn(Dist.CLIENT)
 	public TextureAtlasSprite[] getSprites() {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
 		for (int side = 0; side < textures.length; side++) {

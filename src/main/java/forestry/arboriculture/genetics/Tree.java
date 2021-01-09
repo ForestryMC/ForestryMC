@@ -10,23 +10,11 @@
  */
 package forestry.arboriculture.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.IArboristTracker;
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.*;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.IProductList;
-import forestry.core.config.Config;
-import forestry.core.genetics.TemplateMatcher;
-
-import genetics.api.individual.*;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-import genetics.individual.Genome;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -43,16 +31,37 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.IArboristTracker;
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleLeafEffect;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeMutation;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.config.Config;
+import forestry.core.genetics.TemplateMatcher;
+
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeMatcher;
+import genetics.api.individual.Individual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+import genetics.individual.Genome;
 
 public class Tree extends Individual implements ITree, IPlantable {
 

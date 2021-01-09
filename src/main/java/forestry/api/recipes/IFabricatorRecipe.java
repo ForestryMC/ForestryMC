@@ -22,7 +22,7 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	FluidStack getLiquid();
 
 	/**
-	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
+	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the IFabricatorRecipe's output.
 	 */
 	ShapedRecipe getCraftingGridRecipe();
 

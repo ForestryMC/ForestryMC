@@ -10,6 +10,15 @@
  */
 package forestry.factory.gui;
 
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IntArray;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotWatched;
@@ -19,18 +28,11 @@ import forestry.core.tiles.TileUtil;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.tiles.TileMoistener;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
 	public ContainerMoistener(int windowId, PlayerInventory player, TileMoistener tile) {
 		super(windowId, FactoryContainers.MOISTENER.containerType(), player, tile, 8, 84);
+		trackIntArray(new IntArray(4));
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
@@ -66,7 +68,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
-		//        super.updateProgressBar(messageId, data);
+		super.updateProgressBar(messageId, data);
 
 		tile.getGUINetworkData(messageId, data);
 	}

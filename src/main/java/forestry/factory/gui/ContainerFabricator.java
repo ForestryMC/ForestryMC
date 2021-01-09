@@ -10,6 +10,16 @@
  */
 package forestry.factory.gui;
 
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IntArray;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.IContainerCrafting;
 import forestry.core.gui.slots.SlotCraftMatrix;
@@ -21,19 +31,11 @@ import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.tiles.TileFabricator;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
 
 	public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
 		super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
+		trackIntArray(new IntArray(4));
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
@@ -83,7 +85,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void updateProgressBar(int messageId, int data) {
-		//        super.updateProgressBar(messageId, data);
+		super.updateProgressBar(messageId, data);
 
 		tile.getGUINetworkData(messageId, data);
 	}

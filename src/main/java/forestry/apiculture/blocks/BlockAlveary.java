@@ -10,15 +10,10 @@
  */
 package forestry.apiculture.blocks;
 
-import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.multiblock.*;
-import forestry.apiculture.network.packets.PacketAlvearyChange;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.tiles.IActivatable;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.RenderUtil;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,17 +32,28 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.multiblock.IAlvearyControllerInternal;
+import forestry.apiculture.multiblock.TileAlveary;
+import forestry.apiculture.multiblock.TileAlvearyFan;
+import forestry.apiculture.multiblock.TileAlvearyHeater;
+import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
+import forestry.apiculture.multiblock.TileAlvearyPlain;
+import forestry.apiculture.multiblock.TileAlvearySieve;
+import forestry.apiculture.multiblock.TileAlvearyStabiliser;
+import forestry.apiculture.multiblock.TileAlvearySwarmer;
+import forestry.apiculture.network.packets.PacketAlvearyChange;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.tiles.IActivatable;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemTooltipUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class BlockAlveary extends BlockStructure {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
@@ -72,17 +78,6 @@ public class BlockAlveary extends BlockStructure {
 			defaultState = defaultState.with(STATE, State.OFF);
 		}
 		setDefaultState(defaultState);
-	}
-
-	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
-		List<Direction> touching = new ArrayList<>();
-		for (Direction direction : Direction.Plane.HORIZONTAL) {
-			BlockState blockState = world.getBlockState(blockPos.offset(direction));
-			if (blockState.getBlock() instanceof BlockAlveary) {
-				touching.add(direction);
-			}
-		}
-		return touching;
 	}
 
 	@Override
