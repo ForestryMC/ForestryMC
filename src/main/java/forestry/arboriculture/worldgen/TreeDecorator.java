@@ -158,7 +158,7 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
 					}
 
 					if (species.getGrowthProvider().canSpawn(tree, seedReader.getWorld(), validPos)) {
-						if (TreeGenHelper.generateTree(tree, seedReader.getWorld(), validPos)) {
+						if (TreeGenHelper.generateTree(tree, seedReader, validPos)) {
 							if (Config.logTreePlacement) {
 								Log.info("Placed {} at {}", treeUID.toString(), pos.getCoordinatesAsString());
 							}

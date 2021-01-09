@@ -57,7 +57,7 @@ public class FeatureEbony extends FeatureTree {
 					trunksGenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						world.setBlockState(new BlockPos(x, i, z), Blocks.AIR.getDefaultState(), 18);
+						world.setBlockState(startPos.add(x, i, z), Blocks.AIR.getDefaultState(), 18);
 					}
 				}
 			}
