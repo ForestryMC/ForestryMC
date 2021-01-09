@@ -404,8 +404,10 @@ public class ModuleFactory extends BlankForestryModule {
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_WHEAT, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_POTATO, 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), ForestryFluids.BIOMASS);
-		// RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.BROWN_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), ForestryFluids.BIOMASS);
-		// RecipeUtil.addFermenterRecipes(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), ForestryFluids.BIOMASS);
+		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.BROWN_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.HONEY.getFluid(1));
+		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.BROWN_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.JUICE.getFluid(1));
+		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.HONEY.getFluid(1));
+		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.JUICE.getFluid(1));
 
 		// FABRICATOR
 		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
@@ -567,8 +569,7 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	public static boolean machineEnabled(String machineName) {
-		Boolean ret = MACHINE_ENABLED.get(machineName);
-		return ret != null && ret;
+		return true;
 	}
 }
 

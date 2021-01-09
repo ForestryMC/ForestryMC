@@ -11,11 +11,9 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -37,8 +35,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid);
-		addRecipe(recipe);
+		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid));
 	}
 
 	@Override
@@ -48,8 +45,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public void addRecipe(int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(IForestryRecipe.anonymous(), fermentationValue, modifier, output.getFluid(), liquid);
-		addRecipe(recipe);
+		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), fermentationValue, modifier, output.getFluid(), liquid));
 	}
 
 	@Override
