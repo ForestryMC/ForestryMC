@@ -229,7 +229,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, NonNullList.withSize(9, ""), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, null, true, false, doRemove);
 	}
 
 	@Override

@@ -227,40 +227,6 @@ public abstract class ItemStackUtil {
 	}
 
 	/**
-	 * Counts how many full sets are contained in the passed stock
-	 */
-	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, NonNullList<String> oreDicts, boolean craftingTools) {
-		int totalSets = 0;
-
-		Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(set, oreDicts);
-		NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
-		NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
-		NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
-
-		for (int y = 0; y < condensedRequiredStacks.size(); y++) {
-			ItemStack req = condensedRequiredStacks.get(y);
-			String offerDict = condensedRequiredDicts.get(y);
-			int reqCount = 0;
-			for (ItemStack offer : condensedOfferedStacks) {
-				if (isCraftingEquivalent(req, offer, craftingTools)) {
-					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
-					reqCount = Math.max(reqCount, stackCount);
-				}
-			}
-
-			if (reqCount == 0) {
-				return 0;
-			} else if (totalSets == 0) {
-				totalSets = reqCount;
-			} else if (totalSets > reqCount) {
-				totalSets = reqCount;
-			}
-		}
-
-		return totalSets;
-	}
-
-	/**
 	 * Compare two item stacks for crafting equivalency without oreDictionary or craftingTools
 	 */
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison) {

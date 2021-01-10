@@ -131,62 +131,23 @@ public abstract class InventoryUtil {
 	 * If the inventory doesn't have all the required items, returns false without removing anything.
 	 * If stowContainer is true, items with containers will have their container stowed.
 	 */
-	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
+	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (doRemove) {
-			NonNullList<ItemStack> removed = removeSets(inventory, count, set, player, stowContainer, oreDictionary, craftingTools);
+			NonNullList<ItemStack> removed = removeSets(inventory, count, set, player, stowContainer, craftingTools);
 			return removed != null && removed.size() >= count;
 		} else {
 			return ItemStackUtil.containsSets(set, stock, craftingTools) >= count;
 		}
 	}
 
-	public static boolean removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
-		NonNullList<ItemStack> stock = getStacks(inventory);
-
-		if (doRemove) {
-			NonNullList<ItemStack> removed = removeSets(inventory, count, set, oreDicts, player, stowContainer, craftingTools);
-			return removed != null && removed.size() >= count;
-		} else {
-			return ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) >= count;
-		}
-	}
-
 	@Nullable
-	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
 		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
 		if (ItemStackUtil.containsSets(set, stock, craftingTools) < count) {
-			return null;
-		}
-
-		for (int i = 0; i < set.size(); i++) {
-			ItemStack itemStack = set.get(i);
-			if (!itemStack.isEmpty()) {
-				ItemStack stackToRemove = itemStack.copy();
-				stackToRemove.setCount(stackToRemove.getCount() * count);
-
-				// try to remove the exact stack first
-				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false);
-				if (removedStack.isEmpty()) {
-					// remove crafting equivalents next
-					removedStack = removeStack(inventory, stackToRemove, player, stowContainer, craftingTools);
-				}
-
-				removed.set(i, removedStack);
-			}
-		}
-		return removed;
-	}
-
-	@Nullable
-	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, NonNullList<String> oreDicts, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
-		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
-		NonNullList<ItemStack> stock = getStacks(inventory);
-
-		if (ItemStackUtil.containsSets(set, stock, oreDicts, craftingTools) < count) {
 			return null;
 		}
 
