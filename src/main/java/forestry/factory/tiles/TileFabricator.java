@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,15 +51,12 @@ import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.RecipePair;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.inventory.InventoryFabricator;
-import forestry.factory.recipes.FabricatorRecipeManager;
-import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
 
 public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
 	private static final int MAX_HEAT = 5000;
@@ -170,20 +168,20 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		return true;
 	}
 
-	private RecipePair<IFabricatorRecipe> getRecipe() {
+	private Optional<IFabricatorRecipe> getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		RecipePair<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
-		IFabricatorRecipe recipe = recipePair.getRecipe();
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
+		IFabricatorRecipe recipe = recipePair.orElse(null);
 		if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
-			return RecipePair.EMPTY;
+			return Optional.empty();
 		}
 		return recipePair;
 	}
 
-	public ItemStack getResult(RecipePair<IFabricatorRecipe> myRecipePair) {
-		IFabricatorRecipe myRecipe = myRecipePair.getRecipe();
+	public ItemStack getResult(Optional<IFabricatorRecipe> myRecipePair) {
+		IFabricatorRecipe myRecipe = myRecipePair.orElse(null);
 		if (myRecipe == null) {
 			return ItemStack.EMPTY;
 		}
@@ -200,18 +198,18 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	private void craftResult() {
-		RecipePair<IFabricatorRecipe> myRecipePair = getRecipe();
+		Optional<IFabricatorRecipe> myRecipePair = getRecipe();
 		ItemStack craftResult = getResult(myRecipePair);
-		IFabricatorRecipe myRecipe = myRecipePair.getRecipe();
+		IFabricatorRecipe myRecipe = myRecipePair.orElse(null);
 		if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
 			FluidStack liquid = myRecipe.getLiquid();
 
 			// Remove resources
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			if (removeFromInventory(crafting, myRecipePair, false)) {
+			if (removeFromInventory(crafting, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
-					removeFromInventory(crafting, myRecipePair, true);
+					removeFromInventory(crafting, true);
 					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
 					// Damage plan
@@ -229,9 +227,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(NonNullList<ItemStack> set, RecipePair<IFabricatorRecipe> recipePair, boolean doRemove) {
+	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, recipePair.getOreDictEntries(), null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, set, NonNullList.withSize(9, ""), null, true, false, doRemove);
 	}
 
 	@Override
@@ -241,14 +239,11 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasResources = true;
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		RecipePair<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
-		if (!recipePair.isEmpty()) {
-			IFabricatorRecipe recipe = recipePair.getRecipe();
-			if (recipe == null) {
-				return false;
-			}
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
+		if (recipePair.isPresent()) {
+			IFabricatorRecipe recipe = recipePair.orElse(null);
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			hasResources = removeFromInventory(crafting, recipePair, false);
+			hasResources = removeFromInventory(crafting, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);

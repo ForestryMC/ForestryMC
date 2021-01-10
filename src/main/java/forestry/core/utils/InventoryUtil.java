@@ -354,7 +354,7 @@ public abstract class InventoryUtil {
 		return result;
 	}
 
-	public static NonNullList<String> getOreDictAsList(String[][] oreDicts) {
+	public static NonNullList<String> getOreDictAsList(@Nullable String[][] oreDicts) {
 		NonNullList<String> result = NonNullList.withSize(9, "");
 		if (oreDicts == null || oreDicts.length == 0) {
 			return result;

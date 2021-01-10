@@ -27,7 +27,7 @@ class FakeCraftingInventory {
 	public static CraftingInventory of(IInventory backing) {
 		CraftingInventory inventory = new CraftingInventory(EMPTY_CONTAINER, 3, 3);
 
-		for (int i = 0; i < backing.getSizeInventory(); i++) {
+		for (int i = 0; i < 9; i++) {
 			inventory.setInventorySlotContents(i, backing.getStackInSlot(i));
 		}
 

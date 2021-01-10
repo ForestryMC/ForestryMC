@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
@@ -23,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipePair;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
@@ -43,8 +43,8 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 	}
 
 	@Override
-	public RecipePair<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
-		return RecipePair.EMPTY;
+	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
+		return Optional.empty();
 	}
 
 	@Override

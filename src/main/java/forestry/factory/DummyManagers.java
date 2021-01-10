@@ -46,7 +46,6 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
-import forestry.core.recipes.RecipePair;
 
 public class DummyManagers {
 
@@ -127,8 +126,8 @@ public class DummyManagers {
 		}
 
 		@Override
-		public RecipePair<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
-			return RecipePair.EMPTY;
+		public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
+			return Optional.empty();
 		}
 
 		@Override
