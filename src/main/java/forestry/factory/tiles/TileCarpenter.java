@@ -54,7 +54,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
-import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 
@@ -69,8 +68,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
-	@Nullable
-	private NonNullList<String> oreDicts;
 
 	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
@@ -125,8 +122,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		//TODO optional could work quite well here
-		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
-			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory);
+		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory, world)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory, world);
 			currentRecipe = optional.orElse(null);
 
 			if (optional.isPresent()) {
@@ -203,7 +200,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, craftingSets, oreDicts, null, true, false, doRemove);
+		return InventoryUtil.removeSets(inventory, 1, craftingSets, null, null, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */

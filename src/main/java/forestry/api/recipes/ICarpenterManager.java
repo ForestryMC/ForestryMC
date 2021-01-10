@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -69,11 +69,12 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param liquid    Present liquid
 	 * @param item      Present item
 	 * @param inventory Present inventory
+	 * @param world		Current world
 	 * @return An optional carpenter recipe if any matches
 	 */
-	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory);
+	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world);
 
-	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory);
+	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world);
 
 	boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource);
 
