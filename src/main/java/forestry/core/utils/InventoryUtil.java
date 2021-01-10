@@ -138,7 +138,7 @@ public abstract class InventoryUtil {
 			NonNullList<ItemStack> removed = removeSets(inventory, count, set, player, stowContainer, oreDictionary, craftingTools);
 			return removed != null && removed.size() >= count;
 		} else {
-			return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
+			return ItemStackUtil.containsSets(set, stock, craftingTools) >= count;
 		}
 	}
 
@@ -153,54 +153,12 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static boolean deleteExactSet(IInventory inventory, NonNullList<ItemStack> required) {
-		NonNullList<ItemStack> offered = getStacks(inventory);
-		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(required);
-		NonNullList<ItemStack> condensedOffered = ItemStackUtil.condenseStacks(offered);
-
-		for (ItemStack req : condensedRequired) {
-			if (!containsExactStack(req, condensedOffered)) {
-				return false;
-			}
-		}
-
-		for (ItemStack itemStack : condensedRequired) {
-			deleteExactStack(inventory, itemStack);
-		}
-		return true;
-	}
-
-	private static boolean containsExactStack(ItemStack req, NonNullList<ItemStack> condensedOffered) {
-		for (ItemStack offer : condensedOffered) {
-			if (offer.getCount() >= req.getCount() && ItemStackUtil.areItemStacksEqualIgnoreCount(req, offer)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static void deleteExactStack(IInventory inventory, ItemStack itemStack) {
-		int count = itemStack.getCount();
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack stackInSlot = inventory.getStackInSlot(j);
-			if (!stackInSlot.isEmpty()) {
-				if (ItemStackUtil.areItemStacksEqualIgnoreCount(itemStack, stackInSlot)) {
-					ItemStack removed = inventory.decrStackSize(j, count);
-					count -= removed.getCount();
-					if (count == 0) {
-						return;
-					}
-				}
-			}
-		}
-	}
-
 	@Nullable
 	public static NonNullList<ItemStack> removeSets(IInventory inventory, int count, NonNullList<ItemStack> set, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
 		NonNullList<ItemStack> removed = NonNullList.withSize(set.size(), ItemStack.EMPTY);
 		NonNullList<ItemStack> stock = getStacks(inventory);
 
-		if (ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) < count) {
+		if (ItemStackUtil.containsSets(set, stock, craftingTools) < count) {
 			return null;
 		}
 
@@ -211,10 +169,10 @@ public abstract class InventoryUtil {
 				stackToRemove.setCount(stackToRemove.getCount() * count);
 
 				// try to remove the exact stack first
-				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
+				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false);
 				if (removedStack.isEmpty()) {
 					// remove crafting equivalents next
-					removedStack = removeStack(inventory, stackToRemove, player, stowContainer, oreDictionary, craftingTools);
+					removedStack = removeStack(inventory, stackToRemove, player, stowContainer, craftingTools);
 				}
 
 				removed.set(i, removedStack);
@@ -239,10 +197,10 @@ public abstract class InventoryUtil {
 				stackToRemove.setCount(stackToRemove.getCount() * count);
 
 				// try to remove the exact stack first
-				ItemStack removedStack = removeStack(inventory, stackToRemove, null, player, stowContainer, false);
+				ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false);
 				if (removedStack.isEmpty()) {
 					// remove crafting equivalents next
-					removedStack = removeStack(inventory, stackToRemove, oreDicts.get(i), player, stowContainer, craftingTools);
+					removedStack = removeStack(inventory, stackToRemove, player, stowContainer, craftingTools);
 				}
 
 				removed.set(i, removedStack);
@@ -254,32 +212,11 @@ public abstract class InventoryUtil {
 	/**
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
 	 */
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable PlayerEntity player, boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
+	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
 		for (int j = 0; j < inventory.getSizeInventory(); j++) {
 			ItemStack stackInSlot = inventory.getStackInSlot(j);
 			if (!stackInSlot.isEmpty()) {
-				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictionary, craftingTools)) {
-					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
-					stackToRemove.shrink(removed.getCount());
-
-					if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
-						stowContainerItem(removed, inventory, j, player);
-					}
-
-					if (stackToRemove.isEmpty()) {
-						return removed;
-					}
-				}
-			}
-		}
-		return ItemStack.EMPTY;
-	}
-
-	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable String oreDictOfStack, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack stackInSlot = inventory.getStackInSlot(j);
-			if (!stackInSlot.isEmpty()) {
-				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, oreDictOfStack, craftingTools)) {
+				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, craftingTools)) {
 					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 
@@ -307,28 +244,6 @@ public abstract class InventoryUtil {
 		return ItemStackUtil.containsSets(query, stock) > 0;
 	}
 
-	public static boolean containsPercent(IInventory inventory, float percent) {
-		return containsPercent(inventory, percent, 0, inventory.getSizeInventory());
-	}
-
-	public static boolean containsPercent(IInventory inventory, float percent, int slot1, int length) {
-		int amount = 0;
-		int stackMax = 0;
-		for (ItemStack itemStack : getStacks(inventory, slot1, length)) {
-			if (itemStack == null) {
-				stackMax += 64;
-				continue;
-			}
-
-			amount += itemStack.getCount();
-			stackMax += itemStack.getMaxStackSize();
-		}
-		if (stackMax == 0) {
-			return false;
-		}
-		return (float) amount / (float) stackMax >= percent;
-	}
-
 	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
 		for (int i = slotStart; i < slotStart + slotCount; i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {
@@ -350,19 +265,6 @@ public abstract class InventoryUtil {
 		NonNullList<ItemStack> result = NonNullList.withSize(length, ItemStack.EMPTY);
 		for (int i = slot1; i < slot1 + length; i++) {
 			result.set(i - slot1, inventory.getStackInSlot(i));
-		}
-		return result;
-	}
-
-	public static NonNullList<String> getOreDictAsList(@Nullable String[][] oreDicts) {
-		NonNullList<String> result = NonNullList.withSize(9, "");
-		if (oreDicts == null || oreDicts.length == 0) {
-			return result;
-		}
-		for (int i = 0; i < oreDicts.length; i++) {
-			for (int d = 0; d < oreDicts[i].length; d++) {
-				result.set(i * 3 + d, oreDicts[d][i]);
-			}
 		}
 		return result;
 	}

@@ -58,7 +58,7 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	@Nullable
 	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			if (ItemStackUtil.containsSets(recipe.getResources(), items, false, false) > 0) {
+			if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
 				return recipe;
 			}
 		}
@@ -70,7 +70,7 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	public boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
 			for (ItemStack recipeInput : recipe.getResources()) {
-				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, true, false)) {
+				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false)) {
 					return true;
 				}
 			}

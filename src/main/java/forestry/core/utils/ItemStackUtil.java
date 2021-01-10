@@ -12,7 +12,6 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -193,13 +192,13 @@ public abstract class ItemStackUtil {
 	 * Counts how many full sets are contained in the passed stock
 	 */
 	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock) {
-		return containsSets(set, stock, false, false);
+		return containsSets(set, stock, false);
 	}
 
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
-	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, boolean oreDictionary, boolean craftingTools) {
+	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, boolean craftingTools) {
 		int totalSets = 0;
 
 		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(set);
@@ -209,7 +208,7 @@ public abstract class ItemStackUtil {
 
 			int reqCount = 0;
 			for (ItemStack offer : condensedOffered) {
-				if (isCraftingEquivalent(req, offer, oreDictionary, craftingTools)) {
+				if (isCraftingEquivalent(req, offer, craftingTools)) {
 					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
 					reqCount = Math.max(reqCount, stackCount);
 				}
@@ -243,7 +242,7 @@ public abstract class ItemStackUtil {
 			String offerDict = condensedRequiredDicts.get(y);
 			int reqCount = 0;
 			for (ItemStack offer : condensedOfferedStacks) {
-				if (isCraftingEquivalent(req, offer, offerDict, craftingTools)) {
+				if (isCraftingEquivalent(req, offer, craftingTools)) {
 					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
 					reqCount = Math.max(reqCount, stackCount);
 				}
@@ -259,24 +258,6 @@ public abstract class ItemStackUtil {
 		}
 
 		return totalSets;
-	}
-
-	public static boolean equalSets(NonNullList<ItemStack> set1, NonNullList<ItemStack> set2) {
-		if (set1 == set2) {
-			return true;
-		}
-
-		if (set1.size() != set2.size()) {
-			return false;
-		}
-
-		for (int i = 0; i < set1.size(); i++) {
-			if (!isIdenticalItem(set1.get(i), set2.get(i))) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	/**
@@ -308,17 +289,6 @@ public abstract class ItemStackUtil {
 	/**
 	 * Compare two item stacks for crafting equivalency.
 	 */
-	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
-		return isCraftingEquivalent(base, comparison, craftingTools);
-	}
-
-	/**
-	 * Compare two item stacks for crafting equivalency.
-	 */
-	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, @Nullable String oreDict, boolean craftingTools) {
-		return isCraftingEquivalent(base, comparison, craftingTools);
-	}
-
 	public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean craftingTools) {
 		if (base.isEmpty() || comparison.isEmpty()) {
 			return false;
@@ -442,7 +412,6 @@ public abstract class ItemStackUtil {
 	private static ItemStack getItemStack(Stack stack) {
 		Item item = stack.getItem();
 		if (item != null) {
-			int meta = stack.getMeta();
 			return new ItemStack(item, 1);//, meta);
 		}
 		return null;

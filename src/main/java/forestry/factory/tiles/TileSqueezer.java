@@ -165,7 +165,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		if (inventory.hasResources()) {
 			NonNullList<ItemStack> resources = inventory.getResources();
 
-			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
+			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, false) > 0) {
 				matchingRecipe = currentRecipe;
 			} else {
 				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
