@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanksSocketed;
 import forestry.core.gui.slots.SlotFiltered;
@@ -18,9 +21,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.factory.features.FactoryContainers;
 import forestry.factory.inventory.InventorySqueezer;
 import forestry.factory.tiles.TileSqueezer;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 

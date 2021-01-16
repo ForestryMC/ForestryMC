@@ -10,13 +10,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public enum FeatureType {
-	MACHINE(Block.class),
-	FLUID(Fluid.class),
-	BLOCK(Block.class),
-	ENTITY(EntityType.class),
-	ITEM(Item.class),
-	TILE(TileEntityType.class),
-	CONTAINER(ContainerType.class);
+	MACHINE(Block.class), FLUID(Fluid.class), BLOCK(Block.class), ENTITY(EntityType.class), ITEM(Item.class), TILE(TileEntityType.class), CONTAINER(ContainerType.class);
 
 	public final Class<? extends IForgeRegistryEntry> superType;
 

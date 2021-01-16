@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.gui;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -21,13 +28,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.farming.multiblock.IFarmControllerInternal;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
-
 public class FarmLogicSlot extends Widget {
 
 	private final IFarmControllerInternal farmController;
@@ -37,31 +37,12 @@ public class FarmLogicSlot extends Widget {
 		public void refresh() {
 			toolTip.clear();
 			toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
-			toolTip.add(
-					new TranslationTextComponent("for.gui.fertilizer")
-							.appendString(": ")
-							.appendString(String.valueOf(Math.round(getProperties().getFertilizerConsumption(
-									farmController) * Config.fertilizerModifier
-							)))
-			);
-			toolTip.add(
-					new TranslationTextComponent("for.gui.water")
-							.appendString(": ")
-							.appendString(String.valueOf(getProperties().getWaterConsumption(
-									farmController,
-									farmController.getFarmLedgerDelegate().getHydrationModifier()
-							)))
-			);
+			toolTip.add(new TranslationTextComponent("for.gui.fertilizer").appendString(": ").appendString(String.valueOf(Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier))));
+			toolTip.add(new TranslationTextComponent("for.gui.water").appendString(": ").appendString(String.valueOf(getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()))));
 		}
 	};
 
-	public FarmLogicSlot(
-			IFarmControllerInternal farmController,
-			WidgetManager manager,
-			int xPos,
-			int yPos,
-			FarmDirection farmDirection
-	) {
+	public FarmLogicSlot(IFarmControllerInternal farmController, WidgetManager manager, int xPos, int yPos, FarmDirection farmDirection) {
 		super(manager, xPos, yPos);
 		this.farmController = farmController;
 		this.farmDirection = farmDirection;

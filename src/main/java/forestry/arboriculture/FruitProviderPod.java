@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.IProductList;
-import forestry.core.genetics.ProductListWrapper;
-import forestry.core.utils.BlockUtil;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.Locale;
+import java.util.Random;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -32,22 +27,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
-import java.util.Random;
-import java.util.function.Supplier;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.genetics.ProductListWrapper;
+import forestry.core.utils.BlockUtil;
 
 public class FruitProviderPod extends FruitProviderNone {
 
 	private final EnumPodType type;
 	private ProductListWrapper products;
 
-	public FruitProviderPod(
-			String unlocalizedDescription,
-			IFruitFamily family,
-			EnumPodType type,
-			Supplier<ItemStack> dropOnMature
-	) {
+	public FruitProviderPod(String unlocalizedDescription, IFruitFamily family, EnumPodType type, Supplier<ItemStack> dropOnMature) {
 		super(unlocalizedDescription, family);
 		this.type = type;
 		this.products = ProductListWrapper.create();
@@ -60,12 +55,32 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
+	public IProductList getProducts() {
+		return products;
+	}
+
+	@Override
 	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		if (ripeningTime >= 2) {
 			return products.getPossibleStacks();
 		}
 
 		return NonNullList.create();
+	}
+
+	@Override
+	public String getModelName() {
+		return type.getModelName();
+	}
+
+	@Override
+	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		return null;
+	}
+
+	@Override
+	public ResourceLocation getDecorativeSprite() {
+		return null;
 	}
 
 	@Override
@@ -83,39 +98,13 @@ public class FruitProviderPod extends FruitProviderNone {
 			return BlockUtil.tryPlantCocoaPod(world, pos);
 		} else {
 			IAlleleFruit activeAllele = genome.getActiveAllele(TreeChromosomes.FRUITS);
-			return TreeManager.treeRoot.setFruitBlock(
-					world,
-					genome,
-					activeAllele,
-					genome.getActiveValue(TreeChromosomes.YIELD),
-					pos
-			);
+			return TreeManager.treeRoot.setFruitBlock(world, genome, activeAllele, genome.getActiveValue(TreeChromosomes.YIELD), pos);
 		}
-	}
-
-	@Override
-	public IProductList getProducts() {
-		return products;
-	}
-
-	@Override
-	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-		return null;
-	}
-
-	@Override
-	public ResourceLocation getDecorativeSprite() {
-		return null;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
-	}
-
-	@Override
-	public String getModelName() {
-		return type.getModelName();
 	}
 
 	public enum EnumPodType {

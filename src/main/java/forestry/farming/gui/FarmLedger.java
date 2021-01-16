@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.gui;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.gui.ledgers.Ledger;
-import forestry.core.gui.ledgers.LedgerManager;
-import forestry.core.utils.ResourceUtil;
-import forestry.core.utils.StringUtil;
 
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -23,8 +16,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.gui.ledgers.Ledger;
+import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.StringUtil;
 
 public class FarmLedger extends Ledger {
 	private final IFarmLedgerDelegate delegate;
@@ -71,20 +71,9 @@ public class FarmLedger extends Ledger {
 		y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
 		y += 3;
 
-		y += drawSubheader(
-				transform,
-				new TranslationTextComponent("for.gui.hydr.rainfall").appendString(":"),
-				xBody,
-				y
-		);
+		y += drawSubheader(transform, new TranslationTextComponent("for.gui.hydr.rainfall").appendString(":"), xBody, y);
 		y += 3;
-		y += drawText(
-				transform,
-				StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() +
-						" d)",
-				xBody,
-				y
-		);
+		y += drawText(transform, StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
 		y += 3;
 
 		y += drawSubheader(transform, new TranslationTextComponent("for.gui.hydr.overall").appendString(":"), xBody, y);
@@ -95,7 +84,6 @@ public class FarmLedger extends Ledger {
 	@Override
 	public ITextComponent getTooltip() {
 		float hydrationModifier = delegate.getHydrationModifier();
-		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
-				.append(new TranslationTextComponent("for.gui.hydration"));
+		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ').append(new TranslationTextComponent("for.gui.hydration"));
 	}
 }

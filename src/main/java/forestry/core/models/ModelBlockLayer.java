@@ -1,7 +1,6 @@
 package forestry.core.models;
 
-import forestry.core.models.baker.ModelBaker;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,7 +10,8 @@ import net.minecraft.util.Direction;
 
 import net.minecraftforge.client.model.data.IModelData;
 
-import javax.annotation.Nullable;
+import forestry.core.models.baker.ModelBaker;
+import forestry.core.utils.ResourceUtil;
 
 public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
 	private final ModelProvider<K> provider;

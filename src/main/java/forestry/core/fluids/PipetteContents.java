@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -18,9 +21,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class PipetteContents {
 
@@ -48,9 +48,7 @@ public class PipetteContents {
 	}
 
 	public void addTooltip(List<ITextComponent> list) {
-		TextComponent descr = new TranslationTextComponent(contents.getFluid()
-				.getAttributes()
-				.getTranslationKey(contents));
+		TextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
 		descr.appendString(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);

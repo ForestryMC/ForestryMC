@@ -1,5 +1,8 @@
 package forestry.factory.recipes.jei.bottler;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.config.Constants;
@@ -15,9 +18,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeWrapper> {
 	private static final int inputFull = 0;
 	private static final int outputEmpty = 1;
@@ -25,10 +25,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 	private static final int outputFull = 3;
 	private static final int tankIndex = 0;
 
-	private final static ResourceLocation guiTexture = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "bottler.png"
-	);
+	private final static ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "bottler.png");
 
 	private final IDrawable icon;
 	private final IDrawable slot;
@@ -43,8 +40,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 		this.tank = guiHelper.createDrawable(guiTexture, 79, 13, 18, 60);
 		this.arrowDown = guiHelper.createDrawable(guiTexture, 20, 25, 12, 8);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER)
-				.block()));
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block()));
 	}
 
 	@Override

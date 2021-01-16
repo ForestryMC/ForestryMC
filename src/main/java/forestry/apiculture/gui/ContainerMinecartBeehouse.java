@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.features.ApicultureContainers;
@@ -19,14 +27,6 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdateEntity;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-
-import javax.annotation.Nullable;
-
 public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBeeHousingBase> implements IContainerBeeHousing {
 	/* Attributes - Final*/
 	private final ContainerAnalyzerProviderHelper providerHelper;
@@ -34,13 +34,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	private final GuiBeeHousing.Icon icon;
 	private int beeProgress = -1;
 
-	public ContainerMinecartBeehouse(
-			int windowId,
-			PlayerInventory player,
-			MinecartEntityBeeHousingBase entity,
-			boolean hasFrames,
-			GuiBeeHousing.Icon icon
-	) {
+	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ApicultureContainers.BEEHOUSE_MINECART.containerType(), entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
@@ -52,11 +46,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	}
 
 	//TODO writing things to packets here
-	public static ContainerMinecartBeehouse fromNetwork(
-			int windowId,
-			PlayerInventory playerInv,
-			PacketBuffer extraData
-	) {
+	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		PacketBufferForestry buf = new PacketBufferForestry(extraData);
 		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);    //TODO cast
 		PlayerEntity player = playerInv.player;

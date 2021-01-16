@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,26 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
-
-import forestry.api.core.IItemSubtype;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Config;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import forestry.api.core.IItemSubtype;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Config;
+
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	protected final IOverlayInfo overlay;
 
 	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
-		super((new Item.Properties())
-				.group(tab)
-				.group(ItemGroupForestry.tabForestry));
+		super((new Item.Properties()).group(tab).group(ItemGroupForestry.tabForestry));
 
 		this.overlay = overlay;
 	}

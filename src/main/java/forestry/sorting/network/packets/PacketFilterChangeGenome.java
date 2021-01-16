@@ -1,12 +1,6 @@
 package forestry.sorting.network.packets;
 
-import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.filter.IFilterLogic;
-import forestry.core.network.*;
-import forestry.core.tiles.TileUtil;
-
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
@@ -14,7 +8,17 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.genetics.GeneticCapabilities;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
 
 public class PacketFilterChangeGenome extends ForestryPacket implements IForestryPacketServer {
 	private final BlockPos pos;
@@ -24,13 +28,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 	@Nullable
 	private final IAllele allele;
 
-	public PacketFilterChangeGenome(
-			BlockPos pos,
-			Direction facing,
-			short index,
-			boolean active,
-			@Nullable IAllele allele
-	) {
+	public PacketFilterChangeGenome(BlockPos pos, Direction facing, short index, boolean active, @Nullable IAllele allele) {
 		this.pos = pos;
 		this.facing = facing;
 		this.index = index;
@@ -70,12 +68,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 			} else {
 				allele = null;
 			}
-			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(
-					player.world,
-					pos,
-					GeneticCapabilities.FILTER_LOGIC,
-					null
-			);
+			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
 			logic.ifPresent(l -> {
 				if (l.setGenomeFilter(facing, index, active, allele)) {
 					l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);

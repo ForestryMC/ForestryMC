@@ -1,14 +1,5 @@
 package forestry.core.features;
 
-import forestry.core.ModuleFluids;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemFluidContainerForestry;
-import forestry.modules.features.FeatureItemGroup;
-import forestry.modules.features.FeatureProvider;
-import forestry.modules.features.IFeatureRegistry;
-import forestry.modules.features.ModFeatureRegistry;
-
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 
@@ -18,13 +9,19 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import forestry.core.ModuleFluids;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.items.EnumContainerType;
+import forestry.core.items.ItemFluidContainerForestry;
+import forestry.modules.features.FeatureItemGroup;
+import forestry.modules.features.FeatureProvider;
+import forestry.modules.features.IFeatureRegistry;
+import forestry.modules.features.ModFeatureRegistry;
+
 @FeatureProvider
 public class FluidsItems {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFluids.class);
-	public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(
-			ItemFluidContainerForestry::new,
-			EnumContainerType.values()
-	).create();
+	public static final FeatureItemGroup<ItemFluidContainerForestry, EnumContainerType> CONTAINERS = REGISTRY.itemGroup(ItemFluidContainerForestry::new, EnumContainerType.values()).create();
 
 	private FluidsItems() {
 	}

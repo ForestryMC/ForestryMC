@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.genetics.IEffectData;
-import forestry.apiculture.blocks.BlockAlveary;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.DamageSourceForestry;
-import forestry.core.utils.VectUtil;
-
-import genetics.api.individual.IGenome;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,8 +22,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Random;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.genetics.IEffectData;
+import forestry.apiculture.blocks.BlockAlveary;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.DamageSourceForestry;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
@@ -60,8 +60,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 			}
 
 			// Don't destroy ourselves or blocks below us.
-			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() &&
-					posBlock.getY() <= posHousing.getY()) {
+			if (posBlock.getX() == posHousing.getX() && posBlock.getZ() == posHousing.getZ() && posBlock.getY() <= posHousing.getY()) {
 				continue;
 			}
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-
-import genetics.api.individual.IGenome;
+import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
 

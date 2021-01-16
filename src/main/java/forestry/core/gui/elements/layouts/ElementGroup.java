@@ -1,20 +1,35 @@
 package forestry.core.gui.elements.layouts;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.*;
-import forestry.core.gui.elements.lib.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.DrawableElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.ItemElement;
+import forestry.core.gui.elements.LabelElement;
+import forestry.core.gui.elements.SplitTextElement;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IElementLayoutHelper;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IItemElement;
+import forestry.core.gui.elements.lib.ILabelElement;
+import forestry.core.gui.elements.lib.ITextElement;
 
 @OnlyIn(Dist.CLIENT)
 public class ElementGroup extends GuiElement implements IElementGroup {
@@ -110,18 +125,8 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public ILabelElement label(
-			ITextComponent text,
-			int x,
-			int y,
-			int width,
-			int height,
-			GuiElementAlignment align,
-			Style textStyle
-	) {
-		return add(
-				(ILabelElement) new LabelElement(x, y, width, height, text, true).setStyle(textStyle).setAlign(align)
-		);
+	public ILabelElement label(ITextComponent text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
+		return add((ILabelElement) new LabelElement(x, y, width, height, text, true).setStyle(textStyle).setAlign(align));
 	}
 
 	@Override
@@ -135,24 +140,12 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public ITextElement splitText(
-			IFormattableTextComponent text,
-			int width,
-			GuiElementAlignment align,
-			Style textStyle
-	) {
+	public ITextElement splitText(IFormattableTextComponent text, int width, GuiElementAlignment align, Style textStyle) {
 		return splitText(text, 0, 0, width, align, textStyle);
 	}
 
 	@Override
-	public ITextElement splitText(
-			IFormattableTextComponent text,
-			int x,
-			int y,
-			int width,
-			GuiElementAlignment align,
-			Style textStyle
-	) {
+	public ITextElement splitText(IFormattableTextComponent text, int x, int y, int width, GuiElementAlignment align, Style textStyle) {
 		return (ITextElement) add(new SplitTextElement(x, y, width, text, textStyle)).setAlign(align);
 	}
 

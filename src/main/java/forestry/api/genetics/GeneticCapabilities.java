@@ -1,14 +1,14 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics;
-
-import forestry.api.genetics.filter.IFilterLogic;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+
+import forestry.api.genetics.filter.IFilterLogic;
 
 public class GeneticCapabilities {
 	/**

@@ -1,12 +1,12 @@
 package forestry.cultivation.tiles;
 
-import forestry.cultivation.features.CultivationTiles;
-import forestry.farming.logic.ForestryFarmIdentifier;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
+
+import forestry.cultivation.features.CultivationTiles;
+import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmNether extends TilePlanter {
 	public TileFarmNether() {
@@ -15,31 +15,16 @@ public class TileFarmNether extends TilePlanter {
 
 	@Override
 	public NonNullList<ItemStack> createGermlingStacks() {
-		return createList(
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART)
-		);
+		return createList(new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART));
 	}
 
 	@Override
 	public NonNullList<ItemStack> createResourceStacks() {
-		return createList(
-				new ItemStack(Blocks.SOUL_SAND),
-				new ItemStack(Blocks.SOUL_SAND),
-				new ItemStack(Blocks.SOUL_SAND),
-				new ItemStack(Blocks.SOUL_SAND)
-		);
+		return createList(new ItemStack(Blocks.SOUL_SAND), new ItemStack(Blocks.SOUL_SAND), new ItemStack(Blocks.SOUL_SAND), new ItemStack(Blocks.SOUL_SAND));
 	}
 
 	@Override
 	public NonNullList<ItemStack> createProductionStacks() {
-		return createList(
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART),
-				new ItemStack(Items.NETHER_WART)
-		);
+		return createList(new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART), new ItemStack(Items.NETHER_WART));
 	}
 }

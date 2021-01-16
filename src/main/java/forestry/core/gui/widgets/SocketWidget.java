@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.widgets;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.circuits.ISocketable;
-import forestry.core.circuits.ISolderingIron;
-import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.gui.IContainerSocketed;
-import forestry.core.utils.ItemTooltipUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
@@ -26,8 +17,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.circuits.ISocketable;
+import forestry.core.circuits.ISolderingIron;
+import forestry.core.circuits.ItemCircuitBoard;
+import forestry.core.gui.IContainerSocketed;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class SocketWidget extends Widget {
 

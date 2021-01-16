@@ -1,11 +1,6 @@
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
-import forestry.core.utils.VectUtil;
-
-import genetics.api.individual.IGenome;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +15,12 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
+import forestry.core.utils.VectUtil;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -70,15 +70,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.renderYawOffset = cow.renderYawOffset;
 		world.addEntity(mooshroom);
-		world.addParticle(
-				ParticleTypes.EXPLOSION,
-				cow.getPosX(),
-				cow.getPosY() + cow.getHeight() / 2.0F,
-				cow.getPosZ(),
-				0.0D,
-				0.0D,
-				0.0D
-		);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 
@@ -115,9 +107,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area)
-					.subtract(halfArea)
-					.add(housingCoordinates);
+			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area).subtract(halfArea).add(housingCoordinates);
 			if (world.isBlockLoaded(pos)) {
 				BlockState blockState = world.getBlockState(pos);
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
 
 import com.google.common.base.Joiner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import net.minecraftforge.fml.CrashReportExtender;
+import net.minecraftforge.fml.common.ICrashCallable;
 
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.core.config.Constants;
 import forestry.modules.ModuleManager;
-
-import net.minecraftforge.fml.CrashReportExtender;
-import net.minecraftforge.fml.common.ICrashCallable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * ICrashCallable for listing disabled modules for crash reports.
@@ -43,8 +43,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 				disabledModuleNames.add(info.name());
 			}
 
-			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(
-					disabledModuleNames);
+			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(disabledModuleNames);
 			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
 			CrashReportExtender.registerCrashCallable(callable);
 		}

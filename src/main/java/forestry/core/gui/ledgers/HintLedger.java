@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.render.TextureManagerForestry;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.List;
-import java.util.Random;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.core.render.TextureManagerForestry;
 
 public class HintLedger extends Ledger {
 

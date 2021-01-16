@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.core.gui.ContainerNaturalistInventory;
-import forestry.core.gui.IPagedInventory;
-import forestry.core.inventory.InventoryNaturalistChest;
-import forestry.core.network.PacketBufferForestry;
+import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +29,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import java.io.IOException;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.core.gui.ContainerNaturalistInventory;
+import forestry.core.gui.IPagedInventory;
+import forestry.core.inventory.InventoryNaturalistChest;
+import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
@@ -111,14 +111,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(SoundEvent sound) {
-		this.world.playSound(
-				null,
-				getPos(),
-				sound,
-				SoundCategory.BLOCKS,
-				0.5F,
-				this.world.rand.nextFloat() * 0.1F + 0.9F
-		);
+		this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override

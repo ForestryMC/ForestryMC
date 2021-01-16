@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics;
+
+import net.minecraftforge.common.PlantType;
+
+import genetics.api.individual.IIndividual;
 
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.apiculture.ModuleApiculture;
-
-import genetics.api.individual.IIndividual;
-
-import net.minecraftforge.common.PlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
 	private final ITree tree;
@@ -38,9 +38,7 @@ public class CheckPollinatableTree implements ICheckPollinatable {
 
 	@Override
 	public boolean canMateWith(IIndividual pollen) {
-		return pollen instanceof ITree &&
-				!isPollinated() &&
-				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
+		return pollen instanceof ITree && !isPollinated() && (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(pollen));
 	}
 
 	@Override

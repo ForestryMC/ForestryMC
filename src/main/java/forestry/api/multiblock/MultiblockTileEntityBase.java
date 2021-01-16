@@ -1,8 +1,8 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.multiblock;
 
 import net.minecraft.block.BlockState;
@@ -40,11 +40,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
-	public abstract void onMachineAssembled(
-			IMultiblockController multiblockController,
-			BlockPos minCoord,
-			BlockPos maxCoord
-	);
+	public abstract void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord);
 
 	@Override
 	public abstract void onMachineBroken();
@@ -63,25 +59,10 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
-	}
-
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT updateTag = super.getUpdateTag();
-		multiblockLogic.encodeDescriptionPacket(updateTag);
-		this.encodeDescriptionPacket(updateTag);
-		return updateTag;
-	}
-
-	@Override
 	public void remove() {
 		super.remove();
 		multiblockLogic.invalidate(world, this);
 	}
-
-	/* Network Communication */
 
 	@Override
 	public void onChunkUnloaded() {
@@ -93,6 +74,21 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public final void validate() {
 		super.validate();
 		multiblockLogic.validate(world, this);
+	}
+
+	/* Network Communication */
+
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT updateTag = super.getUpdateTag();
+		multiblockLogic.encodeDescriptionPacket(updateTag);
+		this.encodeDescriptionPacket(updateTag);
+		return updateTag;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package forestry.modules.features;
 
-import forestry.api.core.IItemProvider;
-import forestry.core.proxy.Proxies;
+import java.util.function.Supplier;
 
 import net.minecraft.item.Item;
 
@@ -9,7 +8,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import java.util.function.Supplier;
+import forestry.api.core.IItemProvider;
+import forestry.core.proxy.Proxies;
 
 public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I>, net.minecraft.util.IItemProvider {
 
@@ -20,8 +20,7 @@ public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider
 	default I item() {
 		I item = getItem();
 		if (item == null) {
-			throw new IllegalStateException(
-					"Called feature getter method before content creation was called in the pre init.");
+			throw new IllegalStateException("Called feature getter method before content creation was called in the pre init.");
 		}
 		return item;
 	}

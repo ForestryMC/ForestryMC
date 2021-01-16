@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,27 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.apiculture.*;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.IBeeSpriteColourProvider;
+import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
@@ -24,17 +39,6 @@ import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
-
-import genetics.api.individual.IGenome;
-
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, ISetupListener {
 	private final IBeeModelProvider beeModelProvider;

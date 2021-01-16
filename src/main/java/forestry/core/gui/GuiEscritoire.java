@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -21,13 +28,6 @@ import forestry.core.render.ColourProperties;
 import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireTextSource;
 import forestry.core.tiles.TileEscritoire;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final ItemStack LEVEL_ITEM = new ItemStack(Items.PAPER);
@@ -100,20 +100,9 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 
 			int attemptNo = EscritoireGame.BOUNTY_MAX - tile.getGame().getBountyLevel();
 
-			textLayout.drawLine(
-					transform,
-					new TranslationTextComponent("for.gui.escritoire.attempt.number", attemptNo)
-							.mergeStyle(TextFormatting.UNDERLINE, TextFormatting.ITALIC),
-					170,
-					ColourProperties.INSTANCE.get("gui.mail.lettertext")
-			);
+			textLayout.drawLine(transform, new TranslationTextComponent("for.gui.escritoire.attempt.number", attemptNo).mergeStyle(TextFormatting.UNDERLINE, TextFormatting.ITALIC), 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			textLayout.newLine();
-			textLayout.drawSplitLine(
-					tile.getDisplayName(),
-					170,
-					90,
-					ColourProperties.INSTANCE.get("gui.mail.lettertext")
-			);
+			textLayout.drawSplitLine(tile.getDisplayName(), 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		}
 		textLayout.endPage();
 	}

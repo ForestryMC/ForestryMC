@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.arboriculture.genetics.alleles.AlleleFruits;
-import forestry.arboriculture.tiles.TileFruitPod;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.ItemStackUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -34,9 +31,12 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.ItemStackUtil;
 
 //eg    public static final Block COCOA = register("cocoa", new CocoaBlock(Block.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2F, 3.0F).sound(SoundType.WOOD)));
 public class BlockFruitPod extends CocoaBlock {
@@ -44,10 +44,7 @@ public class BlockFruitPod extends CocoaBlock {
 	private final IAlleleFruit fruit;
 
 	public BlockFruitPod(IAlleleFruit fruit) {
-		super(BlockSapling.Properties.create(Material.PLANTS)
-				.tickRandomly()
-				.hardnessAndResistance(0.2f, 3.0f)
-				.sound(SoundType.WOOD));
+		super(BlockSapling.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2f, 3.0f).sound(SoundType.WOOD));
 		this.fruit = fruit;
 	}
 
@@ -119,14 +116,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public boolean removedByPlayer(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			PlayerEntity player,
-			boolean willHarvest,
-			FluidState fluid
-	) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
 		if (!world.isRemote) {
 			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 			if (tile != null) {
@@ -140,13 +130,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(
-			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
-			BlockPos pos,
-			PlayerEntity player
-	) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;

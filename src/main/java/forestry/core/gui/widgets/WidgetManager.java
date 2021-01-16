@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.widgets;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.gui.GuiForestry;
-
-import net.minecraft.client.Minecraft;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.Minecraft;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.gui.GuiForestry;
 
 @OnlyIn(Dist.CLIENT)
 public class WidgetManager {

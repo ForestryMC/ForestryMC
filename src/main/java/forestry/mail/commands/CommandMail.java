@@ -12,19 +12,6 @@
  */
 package forestry.mail.commands;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import forestry.api.mail.ITradeStation;
-import forestry.api.mail.ITradeStationInfo;
-import forestry.api.mail.PostManager;
-import forestry.core.utils.StringUtil;
-import forestry.mail.MailAddress;
-
-import genetics.commands.CommandHelpers;
-import genetics.commands.PermLevel;
-
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -34,14 +21,25 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import genetics.commands.CommandHelpers;
+import genetics.commands.PermLevel;
+
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.utils.StringUtil;
+import forestry.mail.MailAddress;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandMail {
 	public static ArgumentBuilder<CommandSource, ?> register() {
-		return Commands.literal("mail")
-				.then(CommandMailTrades.register())
-				.then(CommandMailVirtualize.register());
+		return Commands.literal("mail").then(CommandMailTrades.register()).then(CommandMailVirtualize.register());
 	}
 
 	public static class CommandMailTrades {
@@ -52,9 +50,7 @@ public class CommandMail {
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
 			ServerPlayerEntity player = context.getSource().asPlayer();
 			ServerWorld world = (ServerWorld) player.world;
-			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(world)
-					.getActiveTradeStations(world)
-					.values()) {
+			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(world).getActiveTradeStations(world).values()) {
 				CommandHelpers.sendChatMessage(context.getSource(), makeTradeListEntry(trade.getTradeInfo()));
 			}
 
@@ -96,25 +92,14 @@ public class CommandMail {
 			if (trade == null) {
 				Style red = Style.EMPTY;
 				red.setFormatting(TextFormatting.RED);
-				CommandHelpers.sendLocalizedChatMessage(
-						context.getSource(),
-						red,
-						"for.chat.command.forestry.mail.virtualize.no_tradestation",
-						player.getDisplayName()
-				);
+				CommandHelpers.sendLocalizedChatMessage(context.getSource(), red, "for.chat.command.forestry.mail.virtualize.no_tradestation", player.getDisplayName());
 				return 0;
 			}
 
 			trade.setVirtual(!trade.isVirtual());
 			Style green = Style.EMPTY;
 			green.setFormatting(TextFormatting.GREEN);
-			CommandHelpers.sendLocalizedChatMessage(
-					context.getSource(),
-					green,
-					"for.chat.command.forestry.mail.virtualize.set",
-					trade.getAddress().getName(),
-					trade.isVirtual()
-			);
+			CommandHelpers.sendLocalizedChatMessage(context.getSource(), green, "for.chat.command.forestry.mail.virtualize.set", trade.getAddress().getName(), trade.isVirtual());
 
 			return 1;
 		}

@@ -1,10 +1,6 @@
 package genetics.individual;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IKaryotype;
-import genetics.utils.SimpleByteBuf;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -12,7 +8,11 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IKaryotype;
+import genetics.utils.SimpleByteBuf;
 
 public enum SaveFormat {
 	//Used before forge fires the FMLLoadCompleteEvent.
@@ -46,12 +46,7 @@ public enum SaveFormat {
 
 				if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
 					IChromosomeType geneType = geneTypes[chromosomeOrdinal];
-					Chromosome chromosome = Chromosome.create(
-							primaryTemplateIdentifier,
-							secondaryTemplateIdentifier,
-							geneType,
-							chromosomeNBT
-					);
+					Chromosome chromosome = Chromosome.create(primaryTemplateIdentifier, secondaryTemplateIdentifier, geneType, chromosomeNBT);
 					chromosomes[chromosomeOrdinal] = chromosome;
 
 					if (geneType.equals(karyotype.getSpeciesType())) {
@@ -74,9 +69,7 @@ public enum SaveFormat {
 			if (chromosomeTag.isEmpty()) {
 				return null;
 			}
-			return (
-					active ? Chromosome.getActiveAllele(chromosomeTag)
-							: Chromosome.getInactiveAllele(chromosomeTag)).orElse(null);
+			return (active ? Chromosome.getActiveAllele(chromosomeTag) : Chromosome.getInactiveAllele(chromosomeTag)).orElse(null);
 		}
 
 		@Override
@@ -89,8 +82,7 @@ public enum SaveFormat {
 		public boolean canLoad(CompoundNBT tagCompound) {
 			return tagCompound.contains(CHROMOSOMES_TAG) && tagCompound.contains(VERSION_TAG);
 		}
-	},
-	//Used for backward compatibility because before Forestry 5.8 the first allele was not always the active allele.
+	}, //Used for backward compatibility because before Forestry 5.8 the first allele was not always the active allele.
 	UUID_DEPRECATED {
 		@Override
 		public CompoundNBT writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundNBT tagCompound) {
@@ -112,12 +104,7 @@ public enum SaveFormat {
 
 				if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
 					IChromosomeType geneType = geneTypes[chromosomeOrdinal];
-					Chromosome chromosome = Chromosome.create(
-							primaryTemplateIdentifier,
-							secondaryTemplateIdentifier,
-							geneType,
-							chromosomeNBT
-					);
+					Chromosome chromosome = Chromosome.create(primaryTemplateIdentifier, secondaryTemplateIdentifier, geneType, chromosomeNBT);
 					chromosomes[chromosomeOrdinal] = chromosome;
 
 					if (geneType == karyotype.getSpeciesType()) {
@@ -154,8 +141,7 @@ public enum SaveFormat {
 		public boolean canLoad(CompoundNBT tagCompound) {
 			return tagCompound.contains(CHROMOSOMES_TAG);
 		}
-	},
-	//Used to save the chromosomes as compact as possible
+	}, //Used to save the chromosomes as compact as possible
 	BINARY {
 		private static final String DATA_TAG = "data";
 
@@ -205,13 +191,7 @@ public enum SaveFormat {
 			IChromosomeType geneType = missingChromosome.chromosomeType;
 			IKaryotype karyotype = geneType.getRoot().getKaryotype();
 			IChromosome[] chromosomes = readTag(karyotype, genomeNBT);
-			IChromosome chromosome = Chromosome.create(
-					missingChromosome.activeSpeciesUid,
-					missingChromosome.inactiveSpeciesUid,
-					geneType,
-					null,
-					null
-			);
+			IChromosome chromosome = Chromosome.create(missingChromosome.activeSpeciesUid, missingChromosome.inactiveSpeciesUid, geneType, null, null);
 			chromosomes[geneType.getIndex()] = chromosome;
 			writeTag(chromosomes, karyotype, genomeNBT);
 			return chromosome;

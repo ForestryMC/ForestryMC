@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.fuels.EngineBronzeFuel;
-import forestry.api.fuels.FuelManager;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.StandardTank;
-import forestry.core.fluids.TankManager;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.energy.features.EnergyTiles;
-import forestry.energy.gui.ContainerEngineBiogas;
-import forestry.energy.inventory.InventoryEngineBiogas;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,8 +32,20 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.StandardTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.energy.features.EnergyTiles;
+import forestry.energy.gui.ContainerEngineBiogas;
+import forestry.energy.inventory.InventoryEngineBiogas;
 
 public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank fuelTank;
@@ -168,8 +168,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 
 		currentOutput = 0;
 
-		if (isRedstoneActivated() &&
-				(fuelTank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
+		if (isRedstoneActivated() && (fuelTank.getFluidAmount() >= FluidAttributes.BUCKET_VOLUME || burnTank.getFluidAmount() > 0)) {
 
 			double heatStage = getHeatLevel();
 
@@ -177,9 +176,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 			if (heatStage > 0.25 && shutdown) {
 				shutdown(false);
 			} else if (shutdown) {
-				if (heatingTank.getFluidAmount() > 0 &&
-						heatingTank.getFluidType() == null
-				) {// TODO fluids FluidRegistry.LAVA) {
+				if (heatingTank.getFluidAmount() > 0 && heatingTank.getFluidType() == null) {// TODO fluids FluidRegistry.LAVA) {
 					addHeat(Constants.ENGINE_HEAT_VALUE_LAVA);
 					heatingTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
 				}
@@ -193,10 +190,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 					energyManager.generateEnergy(currentOutput);
 					world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
 				} else {
-					FluidStack fuel = fuelTank.drainInternal(
-							FluidAttributes.BUCKET_VOLUME,
-							IFluidHandler.FluidAction.EXECUTE
-					);
+					FluidStack fuel = fuelTank.drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int burnTime = determineBurnTime(fuel);
 					if (!fuel.isEmpty()) {
 						fuel.setAmount(burnTime);

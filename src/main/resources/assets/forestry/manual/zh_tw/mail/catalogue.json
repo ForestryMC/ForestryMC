@@ -1,0 +1,19 @@
+{
+	"title": "貿易目錄",
+	"icon": {
+		"item": "forestry:catalogue"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:catalogue"
+				]
+			},
+			{
+				"text": "使用貿易目錄即可瀏覽伺服器上所有可用的貿易站。點擊「使用」後，它會在你下次寫郵件時自動填上對應貿易站的地址。"
+			}
+		]
+	]
+}

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage;
 
-import forestry.api.storage.BackpackResupplyEvent;
-import forestry.core.IResupplyHandler;
-import forestry.core.inventory.ItemInventory;
-import forestry.storage.inventory.ItemInventoryBackpack;
-import forestry.storage.items.ItemBackpack;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,8 +22,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
-import java.util.LinkedList;
-import java.util.List;
+import forestry.api.storage.BackpackResupplyEvent;
+import forestry.core.IResupplyHandler;
+import forestry.core.inventory.ItemInventory;
+import forestry.storage.inventory.ItemInventoryBackpack;
+import forestry.storage.items.ItemBackpack;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -77,11 +77,7 @@ public class ResupplyHandler implements IResupplyHandler {
 			if (ItemBackpack.getMode(backpack) == BackpackMode.RESUPPLY) {
 				// Load their inventory
 				ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
-				ItemInventory backpackInventory = new ItemInventoryBackpack(
-						player,
-						backpackItem.getBackpackSize(),
-						backpack
-				);
+				ItemInventory backpackInventory = new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
 
 				Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
 				if (!MinecraftForge.EVENT_BUS.post(event)) {

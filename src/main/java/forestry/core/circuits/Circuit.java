@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuit;
-import forestry.core.utils.ResourceUtil;
+import java.util.List;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.List;
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuit;
+import forestry.core.utils.ResourceUtil;
 
 public abstract class Circuit implements ICircuit {
 	private final String uid;

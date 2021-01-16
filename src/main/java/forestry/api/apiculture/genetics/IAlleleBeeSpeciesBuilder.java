@@ -1,18 +1,18 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture.genetics;
+
+import java.util.function.Supplier;
+
+import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
-
-import net.minecraft.item.ItemStack;
-
-import java.util.function.Supplier;
 
 public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleBeeSpeciesBuilder> {
 

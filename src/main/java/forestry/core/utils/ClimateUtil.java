@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
+
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Set;
+
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -18,20 +25,9 @@ import forestry.api.genetics.IClimateHelper;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.core.errors.EnumErrorCode;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Set;
-
 public class ClimateUtil implements IClimateHelper {
 
-	public static void addClimateErrorStates(
-			EnumTemperature temperature, EnumHumidity humidity,
-			EnumTemperature baseTemp, EnumTolerance tolTemp,
-			EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates
-	) {
+	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity, EnumTemperature baseTemp, EnumTolerance tolTemp, EnumHumidity baseHumid, EnumTolerance tolHumid, Set<IErrorState> errorStates) {
 
 		if (!AlleleManager.climateHelper.isWithinLimits(temperature, baseTemp, tolTemp)) {
 			if (baseTemp.ordinal() > temperature.ordinal()) {
@@ -72,16 +68,8 @@ public class ClimateUtil implements IClimateHelper {
 	}
 
 	@Override
-	public boolean isWithinLimits(
-			EnumTemperature temperature,
-			EnumHumidity humidity,
-			EnumTemperature baseTemp,
-			EnumTolerance tolTemp,
-			EnumHumidity baseHumid,
-			EnumTolerance tolHumid
-	) {
-		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) &&
-				getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
+	public boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity, EnumTemperature baseTemp, EnumTolerance tolTemp, EnumHumidity baseHumid, EnumTolerance tolHumid) {
+		return getToleratedTemperature(baseTemp, tolTemp).contains(temperature) && getToleratedHumidity(baseHumid, tolHumid).contains(humidity);
 	}
 
 	@Override

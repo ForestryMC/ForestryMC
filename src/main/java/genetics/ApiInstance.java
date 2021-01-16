@@ -2,6 +2,12 @@ package genetics;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import genetics.alleles.AlleleHelper;
 import genetics.alleles.AlleleRegistry;
 import genetics.api.IGeneticApiInstance;
@@ -21,12 +27,6 @@ import genetics.individual.GeneticSaveHandler;
 import genetics.individual.RootDefinition;
 import genetics.root.IndividualRootHelper;
 import genetics.root.RootComponentRegistry;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public enum ApiInstance implements IGeneticApiInstance {
 	INSTANCE;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,25 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology.gui.elements;
+
+import java.util.Optional;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 import forestry.api.climate.IClimateTransformer;
 import forestry.api.core.EnumHumidity;
@@ -21,20 +35,6 @@ import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
-
-import genetics.api.individual.IIndividual;
-import genetics.utils.RootUtils;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public class SpeciesSelectionElement extends GuiElement {
@@ -97,10 +97,7 @@ public class SpeciesSelectionElement extends GuiElement {
 	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawElement(transform, mouseY, mouseX);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(new ResourceLocation(
-				Constants.MOD_ID,
-				Constants.TEXTURE_PATH_GUI + "habitat_former.png"
-		));
+		textureManager.bindTexture(new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "habitat_former.png"));
 		RenderSystem.enableAlphaTest();
 		blit(transform, 0, 0, 224, 46, 22, 22);
 		RenderSystem.disableAlphaTest();

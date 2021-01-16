@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks;
+
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,16 +22,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
-
 public class BlockResourceOre extends Block {
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {
-		super(Block.Properties.create(Material.ROCK)
-				.hardnessAndResistance(3f, 5f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(1));
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(3f, 5f).harvestTool(ToolType.PICKAXE).harvestLevel(1));
 		this.type = type;
 	}
 

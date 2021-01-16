@@ -1,13 +1,16 @@
 package forestry.core.genetics.root;
 
-import com.mojang.authlib.GameProfile;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IResearchHandler;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
@@ -17,11 +20,12 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import java.util.*;
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.core.utils.ItemStackUtil;
 
 public class ResearchHandler<I extends IIndividual> implements IResearchHandler<I> {
 	private final Map<ItemStack, Float> catalysts = new LinkedHashMap<>();
@@ -80,13 +84,7 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
 	}
 
 	@Override
-	public NonNullList<ItemStack> getResearchBounty(
-			IAlleleSpecies species,
-			World world,
-			GameProfile gameProfile,
-			I individual,
-			int bountyLevel
-	) {
+	public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel) {
 		NonNullList<ItemStack> bounty = NonNullList.create();
 		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
 			IMutationContainer<I, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
@@ -107,21 +105,12 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
 					chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
 				}
 
-				ItemStack researchNote = AlleleManager.geneticRegistry.getMutationNoteStack(
-						gameProfile,
-						chosenMutation
-				);
+				ItemStack researchNote = AlleleManager.geneticRegistry.getMutationNoteStack(gameProfile, chosenMutation);
 				bounty.add(researchNote);
 			}
 		}
 
-		plugins.forEach(plugin -> bounty.addAll(plugin.getResearchBounty(
-				species,
-				world,
-				gameProfile,
-				individual,
-				bountyLevel
-		)));
+		plugins.forEach(plugin -> bounty.addAll(plugin.getResearchBounty(species, world, gameProfile, individual, bountyLevel)));
 		return bounty;
 	}
 

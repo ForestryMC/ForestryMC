@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.IFabricatorSmeltingManager;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -19,10 +21,8 @@ import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
 
 public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 	private final Set<Fluid> recipeFluids = new HashSet<>();

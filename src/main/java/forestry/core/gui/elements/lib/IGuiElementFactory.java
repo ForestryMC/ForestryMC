@@ -1,19 +1,11 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.core.gui.elements.lib;
 
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.genetics.gatgets.IGeneticAnalyzer;
-import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.mutation.IMutation;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -21,7 +13,15 @@ import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 
 /**
  * A helper interface to create gui elements.
@@ -29,13 +29,7 @@ import javax.annotation.Nullable;
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElementFactory {
 
-	IGeneticAnalyzer createAnalyzer(
-			IWindowElement window,
-			int xPos,
-			int yPos,
-			boolean rightBoarder,
-			IGeneticAnalyzerProvider provider
-	);
+	IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider);
 
 	/* GENETIC*/
 
@@ -53,36 +47,17 @@ public interface IGuiElementFactory {
 	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
 	 */
 	@Nullable
-	IGuiElement createMutation(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IAllele species,
-			IBreedingTracker breedingTracker
-	);
+	IGuiElement createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker);
 
 	/**
 	 * @return Null if the mutation is secret and undiscovered. {@link IMutation#isSecret()}
 	 */
 	@Nullable
-	IGuiElement createMutationResultant(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IBreedingTracker breedingTracker
-	);
+	IGuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
 
 	IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset);
 
-	IGuiElement createToleranceInfo(
-			IAlleleValue<EnumTolerance> toleranceAllele,
-			IAlleleForestrySpecies species,
-			ITextComponent text
-	);
+	IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, ITextComponent text);
 
 	IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele);
 

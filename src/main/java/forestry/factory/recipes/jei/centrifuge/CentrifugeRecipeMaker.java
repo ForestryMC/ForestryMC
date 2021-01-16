@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.centrifuge;
 
-import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.api.recipes.RecipeManagers;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.crafting.RecipeManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.RecipeManagers;
 
 public class CentrifugeRecipeMaker {
 	public static List<CentrifugeRecipeWrapper> getCentrifugeRecipe(RecipeManager manager) {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.items;
 
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.utils.ItemTooltipUtil;
-import forestry.farming.blocks.BlockFarm;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,8 +25,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.utils.ItemTooltipUtil;
+import forestry.farming.blocks.BlockFarm;
 
 public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
@@ -38,12 +38,7 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(
-			ItemStack stack,
-			@Nullable World world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
 			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip").mergeStyle(TextFormatting.GRAY));
 			/*BlockFarm block = getBlock();

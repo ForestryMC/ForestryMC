@@ -1,9 +1,12 @@
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +14,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 
-import java.util.*;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
 
 /**
  * This class manages all the multiblock controllers that exist in a given world,
@@ -184,10 +190,7 @@ public class MultiblockWorldRegistry {
 				}
 
 				if (newMaster == null) {
-					Log.error(
-							"Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.",
-							mergePool.size()
-					);
+					Log.error("Multiblock system checked a merge pool of size %d, found no master candidates. This should never happen.", mergePool.size());
 				} else {
 					// Merge all the other machines into the master machine, then unregister them
 					addDirtyController(newMaster);
@@ -238,9 +241,7 @@ public class MultiblockWorldRegistry {
 				// Go through any controllers which have marked themselves as potentially dead.
 				// Validate that they are empty/dead, then unregister them.
 				if (!controller.isEmpty()) {
-					Log.error(
-							"Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!"
-					);
+					Log.error("Found a non-empty controller. Forcing it to shed its blocks and die. This should never happen!");
 					detachedParts.addAll(controller.detachAllBlocks());
 				}
 
@@ -282,8 +283,7 @@ public class MultiblockWorldRegistry {
 					continue;
 				}
 
-				if (!controllers.contains(candidate) && (
-						bestController == null || candidate.shouldConsume(bestController))) {
+				if (!controllers.contains(candidate) && (bestController == null || candidate.shouldConsume(bestController))) {
 					bestController = candidate;
 				}
 

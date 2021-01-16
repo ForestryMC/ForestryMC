@@ -1,7 +1,8 @@
 package forestry.core.data;
 
-import forestry.core.config.Constants;
-import forestry.core.recipes.ModuleEnabledCondition;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.function.Consumer;
 
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -9,9 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.function.Consumer;
+import forestry.core.config.Constants;
+import forestry.core.recipes.ModuleEnabledCondition;
 
 //Useful when there is either a recipe, or it is disabled. Convenience from not having to provide an
 //ID when building
@@ -33,11 +33,7 @@ public class RecipeDataHelper {
 		simpleConditionalRecipe(recipe, null, conditions);
 	}
 
-	public void simpleConditionalRecipe(
-			Consumer<Consumer<IFinishedRecipe>> recipe,
-			@Nullable ResourceLocation id,
-			ICondition... conditions
-	) {
+	public void simpleConditionalRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, ICondition... conditions) {
 		ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
 		for (ICondition condition : conditions) {
 			builder.addCondition(condition);
@@ -51,18 +47,8 @@ public class RecipeDataHelper {
 		builder.build(consumer, id == null ? finishedRecipe.getID() : id);
 	}
 
-	public void moduleConditionRecipe(
-			Consumer<Consumer<IFinishedRecipe>> recipe,
-			@Nullable ResourceLocation id,
-			String... moduleUIDs
-	) {
-		simpleConditionalRecipe(
-				recipe,
-				id,
-				Arrays.stream(moduleUIDs)
-						.map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u))
-						.toArray(ICondition[]::new)
-		);
+	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, String... moduleUIDs) {
+		simpleConditionalRecipe(recipe, id, Arrays.stream(moduleUIDs).map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u)).toArray(ICondition[]::new));
 	}
 
 	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String... moduleUIDs) {

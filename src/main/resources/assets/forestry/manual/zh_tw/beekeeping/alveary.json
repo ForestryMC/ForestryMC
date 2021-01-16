@@ -1,0 +1,68 @@
+{
+	"title": "蜂箱組",
+	"icon": {
+		"item": "forestry:alveary.plain"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_plain"
+				]
+			},
+			{
+				"text": "許久後，你注意到原始的蜂箱無法令蜜蜂發揮所有潛能。是時候升級了。這蜂箱組的尺寸是普通蜂箱的三倍，但我的記錄顯示其蜂蜜的產量是蜂箱的十倍。"
+			}
+		],
+		[
+			{
+				"type": "image",
+				"u": 0,
+				"v": 0,
+				"uWidth": 300,
+				"vHeight": 169,
+				"textureLocation": "forestry:textures/gui/almanac/scraps/alveary.png",
+				"textureWidth": 300,
+				"textureHeight": 169,
+				"width": 108,
+				"height": 60
+			}
+		],
+		[
+			{
+				"text": "你需要二十七個蜂箱組方塊才能建出這樣一個新奇玩意。二十七個蜂箱組方塊應該能組成一個正方體，這便是蜂箱組的主體。同時你還需要九個充當頂部的方塊，這裡我推薦使用木質半磚。若一切準備得當，你應該會注意到它們會組成一個整體，並形成可供蜜蜂居住的孔穴結構。蜂箱組使用起來與普通蜂箱無異，但我至今也沒能往裡面塞進去任何框架。"
+			}
+		],
+		[
+			{
+				"type": "structure",
+				"structureFile": "structures/alveary.json"
+			}
+		],
+		[
+			{
+				"text": "每個蜂箱組方塊都十分昂貴，需要用大量蜂蜜打造飄香鑲板，還需要用種子油製造大量浸漬部件。"
+			},
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:crafting_material",
+					"data": 6
+				}
+			}
+		],
+		[
+			{
+				"text": "這意味著，一個蜂箱組可能需要很多天的努力才能造出來，但它的確物有所值。將鑲板固定在浸漬部件的周圍，得到的將會是蜜蜂們的堅固耐用的新家，鑲板獨有的香氣將會激勵蜜蜂們全力以赴地工作，而這是區區普通蜂房所做不到的。"
+			}
+		]
+	],
+	"subEntries": [
+		"beekeeping/alveary.heater",
+		"beekeeping/alveary.fan",
+		"beekeeping/alveary.sieve",
+		"beekeeping/alveary.stabiliser",
+		"beekeeping/alveary.swarmer"
+	]
+}

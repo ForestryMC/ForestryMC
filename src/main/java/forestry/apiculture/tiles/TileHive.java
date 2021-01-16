@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,35 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.tiles;
 
 import com.google.common.base.Predicate;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.apiculture.*;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.hives.IHiveRegistry;
-import forestry.api.apiculture.hives.IHiveTile;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorLogic;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.WorldgenBeekeepingLogic;
-import forestry.apiculture.blocks.BlockBeeHive;
-import forestry.apiculture.features.ApicultureTiles;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.core.config.Config;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.network.packets.PacketActiveUpdate;
-import forestry.core.tiles.IActivatable;
-import forestry.core.utils.*;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -60,13 +40,42 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeHousingInventory;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.WorldgenBeekeepingLogic;
+import forestry.apiculture.blocks.BlockBeeHive;
+import forestry.apiculture.features.ApicultureTiles;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
+import forestry.core.config.Config;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.network.packets.PacketActiveUpdate;
+import forestry.core.tiles.IActivatable;
+import forestry.core.utils.DamageSourceForestry;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
@@ -97,11 +106,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		int damage = (int) (attackAmount * maxDamage);
 		if (damage > 0) {
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(
-					entity,
-					new ResourceLocation(damageSourceBeeHive.damageType),
-					true
-			);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
 			if (entity.world.rand.nextInt(4) >= count) {
 				entity.attackEntityFrom(damageSourceBeeHive, damage);
 			}
@@ -127,20 +132,13 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if (angry && ModuleApiculture.hiveDamageOnAttack && (
-								world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL ||
-										ModuleApiculture.hivesDamageOnPeaceful)) {
+						if (angry && ModuleApiculture.hiveDamageOnAttack && (world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-							List<LivingEntity> entities = world.getEntitiesWithinAABB(
-									LivingEntity.class,
-									boundingBox,
-									beeTargetPredicate
-							);
+							List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								LivingEntity entity = entities.get(0);
-								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) &&
-										(!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
+								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
 									attack(entity, 2);
 								}
 							}

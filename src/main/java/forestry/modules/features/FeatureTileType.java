@@ -1,14 +1,14 @@
 package forestry.modules.features;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.Supplier;
+import forestry.core.config.Constants;
 
 public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T> {
 	protected final String moduleID;
@@ -18,12 +18,7 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
 	@Nullable
 	private TileEntityType<T> tileType;
 
-	public FeatureTileType(
-			String moduleID,
-			String identifier,
-			Supplier<T> constructorTileEntity,
-			Supplier<Collection<? extends Block>> validBlocks
-	) {
+	public FeatureTileType(String moduleID, String identifier, Supplier<T> constructorTileEntity, Supplier<Collection<? extends Block>> validBlocks) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.constructorTileEntity = constructorTileEntity;

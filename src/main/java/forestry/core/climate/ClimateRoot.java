@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.climate;
-
-import forestry.api.climate.*;
-import forestry.core.DefaultClimateProvider;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +18,14 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 
 import net.minecraftforge.common.util.LazyOptional;
+
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimateListener;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.climate.IClimateRoot;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IWorldClimateHolder;
+import forestry.core.DefaultClimateProvider;
 
 public class ClimateRoot implements IClimateRoot {
 
@@ -59,10 +64,7 @@ public class ClimateRoot implements IClimateRoot {
 	public IWorldClimateHolder getWorldClimate(World world) {
 		//TODO - need to make sure this is only called server side...
 		DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-		WorldClimateHolder holder = storage.getOrCreate(
-				() -> new WorldClimateHolder(WorldClimateHolder.NAME),
-				WorldClimateHolder.NAME
-		);
+		WorldClimateHolder holder = storage.getOrCreate(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}

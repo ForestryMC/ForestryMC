@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
@@ -19,11 +24,6 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileUtil;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-
 public class ContainerEscritoire extends ContainerTile<TileEscritoire> implements IGuiSelectable {
 	private long lastUpdate;
 
@@ -31,29 +31,15 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 		super(id, CoreContainers.ESCRITOIRE.containerType(), player.inventory, tile, 34, 153);
 
 		// Analyze slot
-		addSlot(
-				new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67)
-						.setPickupWatcher(this.tile)
-						.setStackLimit(1)
-		);
+		addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));
 
 		for (int i = 0; i < InventoryEscritoire.SLOTS_INPUT_COUNT; i++) {
-			addSlot(new SlotFiltered(
-					this.tile,
-					InventoryEscritoire.SLOT_INPUT_1 + i,
-					17,
-					49 + i * 18
-			).setBlockedTexture("slots/blocked_2"));
+			addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_INPUT_1 + i, 17, 49 + i * 18).setBlockedTexture("slots/blocked_2"));
 		}
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				addSlot(new SlotOutput(
-						this.tile,
-						InventoryEscritoire.SLOT_RESULTS_1 + i * 2 + j,
-						177 + j * 18,
-						85 + i * 18
-				));
+				addSlot(new SlotOutput(this.tile, InventoryEscritoire.SLOT_RESULTS_1 + i * 2 + j, 177 + j * 18, 85 + i * 18));
 			}
 		}
 	}

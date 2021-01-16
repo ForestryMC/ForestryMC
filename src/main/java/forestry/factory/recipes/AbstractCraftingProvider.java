@@ -1,16 +1,16 @@
 package forestry.factory.recipes;
 
-import forestry.api.recipes.ICraftingProvider;
-import forestry.api.recipes.IForestryRecipe;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.recipes.ICraftingProvider;
+import forestry.api.recipes.IForestryRecipe;
 
 public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
 	private final IRecipeType<T> type;

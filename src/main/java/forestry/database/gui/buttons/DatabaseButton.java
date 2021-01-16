@@ -1,19 +1,18 @@
 package forestry.database.gui.buttons;
 
+import java.util.Collections;
+import java.util.List;
+
 import forestry.core.gui.buttons.IButtonTextureSet;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.database.DatabaseHelper;
-
-import java.util.Collections;
-import java.util.List;
 
 public enum DatabaseButton {
 	SORT_DIRECTION_BUTTON {
 		@Override
 		public void onValueChange(GuiDatabaseButton button) {
 			boolean ascending = (boolean) button.getValue();
-			button.setTexture(ascending ? StandardButtonTextureSets.ARROW_UP_BUTTON
-					: StandardButtonTextureSets.ARROW_DOWN_BUTTON);
+			button.setTexture(ascending ? StandardButtonTextureSets.ARROW_UP_BUTTON : StandardButtonTextureSets.ARROW_DOWN_BUTTON);
 		}
 
 		@Override

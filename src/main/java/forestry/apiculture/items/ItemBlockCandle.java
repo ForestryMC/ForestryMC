@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
-
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.blocks.BlockCandle;
-import forestry.apiculture.blocks.BlockCandleWall;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemBlockWallForestry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +16,12 @@ import net.minecraft.nbt.CompoundNBT;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.blocks.BlockCandle;
+import forestry.apiculture.blocks.BlockCandleWall;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemBlockWallForestry;
 
 public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCandleWall> implements IColoredItem {
 

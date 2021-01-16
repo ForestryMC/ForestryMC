@@ -2,6 +2,11 @@ package genetics.root;
 
 import com.google.common.collect.Multimap;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
@@ -12,23 +17,13 @@ import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 public class RootContext<I extends IIndividual> implements IRootContext<I> {
 	private final IKaryotype karyotype;
 	private final Collection<IGeneticListener<I>> listeners;
 	private final Multimap<ComponentKey, Consumer> componentListeners;
 	private final Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory;
 
-	public RootContext(
-			IKaryotype karyotype,
-			Collection<IGeneticListener<I>> listeners,
-			Multimap<ComponentKey, Consumer> componentListeners,
-			Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory
-	) {
+	public RootContext(IKaryotype karyotype, Collection<IGeneticListener<I>> listeners, Multimap<ComponentKey, Consumer> componentListeners, Function<IIndividualRoot<I>, Map<ComponentKey, IRootComponent<I>>> componentFactory) {
 		this.karyotype = karyotype;
 		this.listeners = listeners;
 		this.componentListeners = componentListeners;

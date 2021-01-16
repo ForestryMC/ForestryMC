@@ -1,21 +1,7 @@
 package forestry.core.render;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.hives.IHiveTile;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.apiculture.genetics.alleles.AlleleEffect;
-import forestry.apiculture.particles.BeeParticleData;
-import forestry.core.config.Config;
-import forestry.core.particles.IgnitionParticle;
-import forestry.core.particles.SmokeParticle;
-import forestry.core.particles.SnowParticleData;
-import forestry.core.utils.ColourUtil;
-import forestry.core.utils.VectUtil;
-import forestry.core.utils.WorldUtils;
-
-import genetics.api.individual.IGenome;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -33,8 +19,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
-import java.util.Random;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
+import forestry.apiculture.particles.BeeParticleData;
+import forestry.core.config.Config;
+import forestry.core.particles.IgnitionParticle;
+import forestry.core.particles.SmokeParticle;
+import forestry.core.particles.SnowParticleData;
+import forestry.core.utils.ColourUtil;
+import forestry.core.utils.VectUtil;
+import forestry.core.utils.WorldUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleRender {
@@ -67,11 +67,7 @@ public class ParticleRender {
 		// Avoid rendering bee particles that are too far away, they're very small.
 		// At 32+ distance, have no bee particles. Make more particles up close.
 		BlockPos playerPosition = Minecraft.getInstance().player.getPosition();
-		double playerDistanceSq = playerPosition.distanceSq(new Vector3i(
-				particleStart.x,
-				particleStart.y,
-				particleStart.z
-		));
+		double playerDistanceSq = playerPosition.distanceSq(new Vector3i(particleStart.x, particleStart.y, particleStart.z));
 		if (world.rand.nextInt(1024) < playerDistanceSq) {
 			return;
 		}
@@ -82,28 +78,10 @@ public class ParticleRender {
 
 		if (housing instanceof IHiveTile) {
 			if (((IHiveTile) housing).isAngry() || randomInt >= 85) {
-				List<LivingEntity> entitiesInRange = AlleleEffect.getEntitiesInRange(
-						genome,
-						housing,
-						LivingEntity.class
-				);
+				List<LivingEntity> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, LivingEntity.class);
 				if (!entitiesInRange.isEmpty()) {
 					LivingEntity entity = entitiesInRange.get(world.rand.nextInt(entitiesInRange.size()));
-					world.addParticle(
-							new BeeParticleData(
-									particleStart.getX(),
-									particleStart.getY(),
-									particleStart.getZ(),
-									entity.getPosition().toLong(),
-									color
-							),
-							particleStart.getX(),
-							particleStart.getY(),
-							particleStart.getZ(),
-							0.0f,
-							0.0f,
-							0.0f
-					);
+					world.addParticle(new BeeParticleData(particleStart.getX(), particleStart.getY(), particleStart.getZ(), entity.getPosition().toLong(), color), particleStart.getX(), particleStart.getY(), particleStart.getZ(), 0.0f, 0.0f, 0.0f);
 					return;
 				}
 			}
@@ -111,40 +89,12 @@ public class ParticleRender {
 
 		if (randomInt < 75 && !flowerPositions.isEmpty()) {
 			BlockPos destination = flowerPositions.get(world.rand.nextInt(flowerPositions.size()));
-			world.addParticle(
-					new BeeParticleData(
-							particleStart.getX(),
-							particleStart.getY(),
-							particleStart.getZ(),
-							destination.toLong(),
-							color
-					),
-					particleStart.getX(),
-					particleStart.getY(),
-					particleStart.getZ(),
-					0.0f,
-					0.0f,
-					0.0f
-			);
+			world.addParticle(new BeeParticleData(particleStart.getX(), particleStart.getY(), particleStart.getZ(), destination.toLong(), color), particleStart.getX(), particleStart.getY(), particleStart.getZ(), 0.0f, 0.0f, 0.0f);
 		} else {
 			Vector3i area = AlleleEffect.getModifiedArea(genome, housing);
 			Vector3i offset = housing.getCoordinates().add(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 			BlockPos destination = VectUtil.getRandomPositionInArea(world.rand, area).add(offset);
-			world.addParticle(
-					new BeeParticleData(
-							particleStart.getX(),
-							particleStart.getY(),
-							particleStart.getZ(),
-							destination.toLong(),
-							color
-					),
-					particleStart.getX(),
-					particleStart.getY(),
-					particleStart.getZ(),
-					0.0f,
-					0.0f,
-					0.0f
-			);
+			world.addParticle(new BeeParticleData(particleStart.getX(), particleStart.getY(), particleStart.getZ(), destination.toLong(), color), particleStart.getX(), particleStart.getY(), particleStart.getZ(), 0.0f, 0.0f, 0.0f);
 		}
 	}
 
@@ -157,24 +107,10 @@ public class ParticleRender {
 		float particleGreen = 0.75F + world.rand.nextFloat() * 0.2F;
 		float particleBlue = 0F + world.rand.nextFloat() * 0.2F;
 
-		world.addParticle(
-				new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F),
-				x,
-				y,
-				z,
-				0,
-				0,
-				0
-		);
+		world.addParticle(new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F), x, y, z, 0, 0, 0);
 	}
 
-	public static void addClimateParticles(
-			World worldIn,
-			BlockPos pos,
-			Random rand,
-			EnumTemperature temperature,
-			EnumHumidity humidity
-	) {
+	public static void addClimateParticles(World worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity) {
 		if (!shouldSpawnParticle(worldIn)) {
 			return;
 		}
@@ -183,11 +119,9 @@ public class ParticleRender {
 				Direction facing = Direction.Plane.HORIZONTAL.random(rand);
 				int xOffset = facing.getXOffset();
 				int zOffset = facing.getZOffset();
-				double x = pos.getX() + 0.5 +
-						(xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
 				double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
-				double z = pos.getZ() + 0.5 +
-						(zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
 				if (rand.nextBoolean()) {
 					ParticleRender.addEntityClimateParticle(worldIn, x, y, z, temperature.color);
 				} else {
@@ -206,15 +140,7 @@ public class ParticleRender {
 		float particleGreen = ColourUtil.getGreenAsFloat(color);
 		float particleBlue = ColourUtil.getBlueAsFloat(color);
 
-		world.addParticle(
-				new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F),
-				x,
-				y,
-				z,
-				0,
-				0,
-				0
-		);
+		world.addParticle(new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F), x, y, z, 0, 0, 0);
 	}
 
 	public static void addTransformParticles(World worldIn, BlockPos pos, Random rand) {
@@ -226,11 +152,9 @@ public class ParticleRender {
 				Direction facing = Direction.Plane.HORIZONTAL.random(rand);
 				int xOffset = facing.getXOffset();
 				int zOffset = facing.getZOffset();
-				double x = pos.getX() + 0.5 +
-						(xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double x = pos.getX() + 0.5 + (xOffset * 8 + ((1 - MathHelper.abs(xOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
 				double y = pos.getY() + (0.75 + rand.nextFloat() * 14.5) / 16.0;
-				double z = pos.getZ() + 0.5 +
-						(zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
+				double z = pos.getZ() + 0.5 + (zOffset * 8 + ((1 - MathHelper.abs(zOffset)) * (0.5 - rand.nextFloat()) * 8)) / 16.0;
 				ParticleRender.addEntityTransformParticle(worldIn, x, y, z);
 			}
 		}
@@ -246,15 +170,7 @@ public class ParticleRender {
 		float particleGreen = ColourUtil.getGreenAsFloat(color);
 		float particleBlue = ColourUtil.getBlueAsFloat(color);
 
-		world.addParticle(
-				new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F),
-				x,
-				y,
-				z,
-				0,
-				0,
-				0
-		);
+		world.addParticle(new RedstoneParticleData(particleRed, particleGreen, particleBlue, 1.0F), x, y, z, 0, 0, 0);
 	}
 
 	public static void addEntityExplodeFX(World world, double x, double y, double z) {
@@ -270,19 +186,7 @@ public class ParticleRender {
 			return;
 		}
 
-		world.addParticle(
-				new SnowParticleData(
-						x + world.rand.nextGaussian(),
-						y,
-						z + world.rand.nextGaussian()
-				),
-				x + world.rand.nextGaussian(),
-				y,
-				z + world.rand.nextGaussian(),
-				0.0f,
-				0.0f,
-				0.0f
-		);
+		world.addParticle(new SnowParticleData(x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian()), x + world.rand.nextGaussian(), y, z + world.rand.nextGaussian(), 0.0f, 0.0f, 0.0f);
 	}
 
 	public static void addEntityIgnitionFX(ClientWorld world, double x, double y, double z) {
@@ -312,15 +216,7 @@ public class ParticleRender {
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
 
-		world.addParticle(
-				new RedstoneParticleData(red, green, blue, 1.0F),
-				x,
-				y,
-				z,
-				0,
-				0,
-				0
-		);
+		world.addParticle(new RedstoneParticleData(red, green, blue, 1.0F), x, y, z, 0, 0, 0);
 	}
 
 	public static void addPortalFx(World world, BlockPos pos, Random rand) {
@@ -337,14 +233,6 @@ public class ParticleRender {
 		double ySpeed = ((double) rand.nextFloat() - 0.5D) * 0.125D;
 		double zSpeed = rand.nextFloat() * (float) k;
 
-		world.addParticle(
-				RedstoneParticleData.REDSTONE_DUST,
-				xPos,
-				yPos,
-				zPos,
-				xSpeed,
-				ySpeed,
-				zSpeed
-		);
+		world.addParticle(RedstoneParticleData.REDSTONE_DUST, xPos, yPos, zPos, xSpeed, ySpeed, zSpeed);
 	}
 }

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.core.IItemSubtype;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.entities.MinecartEntityApiary;
-import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
-import forestry.apiculture.entities.MinecartEntityBeehouse;
+import java.util.Locale;
 
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.DispenserBlock;
@@ -28,7 +24,11 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Locale;
+import forestry.api.core.IItemSubtype;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.entities.MinecartEntityApiary;
+import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
+import forestry.apiculture.entities.MinecartEntityBeehouse;
 
 public class ItemMinecartBeehousing extends MinecartItem {
 

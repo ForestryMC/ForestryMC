@@ -1,17 +1,17 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.farming;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 /**
  * IFarmable describes a crop or other harvestable object and can be used to inspect item stacks and blocks for matches.

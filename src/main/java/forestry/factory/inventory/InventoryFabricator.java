@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.tiles.TileFabricator;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
 
 public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	public static final short SLOT_METAL = 0;
@@ -33,19 +33,13 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_METAL) {
-			return RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-					tile.getWorld().getRecipeManager(),
-					itemStack
-			) != null;
+			return RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(tile.getWorld().getRecipeManager(), itemStack) != null;
 		} else if (slotIndex == SLOT_PLAN) {
 			return RecipeManagers.fabricatorManager.isPlan(tile.getWorld().getRecipeManager(), itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_INVENTORY_1, SLOT_INVENTORY_COUNT)) {
 			if (RecipeManagers.fabricatorManager.isPlan(tile.getWorld().getRecipeManager(), itemStack)) {
 				return false;
-			} else if (RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-					tile.getWorld().getRecipeManager(),
-					itemStack
-			) != null) {
+			} else if (RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(tile.getWorld().getRecipeManager(), itemStack) != null) {
 				return false;
 			}
 		}

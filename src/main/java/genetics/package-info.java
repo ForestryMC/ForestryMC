@@ -3,6 +3,6 @@
 @MethodsReturnNonnullByDefault
 package genetics;
 
-import mcp.MethodsReturnNonnullByDefault;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;

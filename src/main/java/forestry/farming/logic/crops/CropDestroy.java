@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic.crops;
 
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,9 +22,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class CropDestroy extends Crop {
 
@@ -39,13 +39,7 @@ public class CropDestroy extends Crop {
 		this(world, blockState, position, replantState, ItemStack.EMPTY);
 	}
 
-	public CropDestroy(
-			World world,
-			BlockState blockState,
-			BlockPos position,
-			@Nullable BlockState replantState,
-			ItemStack germling
-	) {
+	public CropDestroy(World world, BlockState blockState, BlockPos position, @Nullable BlockState replantState, ItemStack germling) {
 		super(world, position);
 		this.blockState = blockState;
 		this.replantState = replantState;
@@ -60,16 +54,8 @@ public class CropDestroy extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvested = Block.getDrops(
-				blockState,
-				(ServerWorld) world,
-				pos,
-				world.getTileEntity(pos)
-		);    //TODO - method safety
-		NonNullList<ItemStack> nnHarvested = NonNullList.from(
-				ItemStack.EMPTY,
-				harvested.toArray(new ItemStack[0])
-		);    //TODO very messy
+		List<ItemStack> harvested = Block.getDrops(blockState, (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO - method safety
+		NonNullList<ItemStack> nnHarvested = NonNullList.from(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));    //TODO very messy
 		float chance = 1.0F;
 
 		boolean removedSeed = germling.isEmpty();
@@ -89,12 +75,7 @@ public class CropDestroy extends Crop {
 			}
 		}
 
-		PacketFXSignal packet = new PacketFXSignal(
-				PacketFXSignal.VisualFXType.BLOCK_BREAK,
-				PacketFXSignal.SoundFXType.BLOCK_BREAK,
-				pos,
-				blockState
-		);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		if (replantState != null) {

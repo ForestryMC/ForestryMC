@@ -1,18 +1,18 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import forestry.api.core.ISpriteRegister;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.genetics.products.IDynamicProductList;
+import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
-import java.util.Set;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.products.IDynamicProductList;
 
 public interface IAlleleButterflySpecies extends IAlleleForestrySpecies, ISpriteRegister {
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
+
+import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
@@ -20,11 +25,6 @@ import forestry.farming.features.FarmingContainers;
 import forestry.farming.multiblock.InventoryFarm;
 import forestry.farming.tiles.TileFarm;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.fluids.IFluidTank;
-
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
 	public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {
@@ -33,48 +33,28 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 		// Resources
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(
-						tile,
-						InventoryFarm.SLOT_RESOURCES_1 + j + i * 2,
-						123 + j * 18,
-						22 + i * 18
-				));
+				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Germlings
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(
-						tile,
-						InventoryFarm.SLOT_GERMLINGS_1 + j + i * 2,
-						164 + j * 18,
-						22 + i * 18
-				));
+				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Production 1
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(
-						tile,
-						InventoryFarm.SLOT_PRODUCTION_1 + j + i * 2,
-						123 + j * 18,
-						86 + i * 18
-				));
+				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Production 2
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(
-						tile,
-						InventoryFarm.SLOT_PRODUCTION_1 + 4 + j + i * 2,
-						164 + j * 18,
-						86 + i * 18
-				));
+				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
 			}
 		}
 

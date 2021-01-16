@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics;
 
 import javax.annotation.Nullable;
@@ -38,6 +38,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeMatcher;
+import genetics.api.individual.Individual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+import genetics.individual.Genome;
+
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -52,16 +62,6 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.core.config.Config;
 import forestry.core.genetics.TemplateMatcher;
-
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeMatcher;
-import genetics.api.individual.Individual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-import genetics.individual.Genome;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -83,13 +83,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Nullable
-	private static IChromosome[] mutateSpecies(
-			World world,
-			@Nullable GameProfile playerProfile,
-			BlockPos pos,
-			IGenome genomeOne,
-			IGenome genomeTwo
-	) {
+	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
@@ -188,10 +182,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		if (world.rand.nextFloat() <= chance) {
 			if (mate == null) {
-				prod.add(TreeManager.treeRoot.getTree(
-						world,
-						new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())
-				));
+				prod.add(TreeManager.treeRoot.getTree(world, new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())));
 			} else {
 				prod.add(createOffspring(world, mate, playerProfile, pos));
 			}
@@ -231,9 +222,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public int getResilience() {
-		int base = (int) (
-				getGenome().getActiveValue(TreeChromosomes.FERTILITY) *
-						getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 100);
+		int base = (int) (getGenome().getActiveValue(TreeChromosomes.FERTILITY) * getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 100);
 		return (Math.max(base, 1)) * 10;
 	}
 
@@ -257,8 +246,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	/* PRODUCTION */
 	@Override
 	public boolean canBearFruit() {
-		return genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit().contains(genome.getActiveAllele(
-				TreeChromosomes.FRUITS).getProvider().getFamily());
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit().contains(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFamily());
 	}
 
 	private IEffectData doEffect(IAlleleLeafEffect effect, IEffectData storedData, World world, BlockPos pos) {
@@ -283,13 +271,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(
-				genome,
-				world,
-				owner,
-				pos,
-				rand
-		);
+		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
 	@Override
@@ -312,8 +294,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	public boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
-		return suitable.contains(provider.getFamily()) &&
-				provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
+		return suitable.contains(provider.getFamily()) && provider.trySpawnFruitBlock(getGenome(), world, rand, pos);
 	}
 
 	/* INFORMATION */
@@ -324,8 +305,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public boolean isPureBred(IChromosomeType chromosome) {
-		return genome.getActiveAllele(chromosome).getRegistryName().equals(genome.getInactiveAllele(chromosome)
-				.getRegistryName());
+		return genome.getActiveAllele(chromosome).getRegistryName().equals(genome.getInactiveAllele(chromosome).getRegistryName());
 	}
 
 	@Override

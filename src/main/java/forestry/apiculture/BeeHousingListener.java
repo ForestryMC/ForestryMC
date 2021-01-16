@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture;
+
+import genetics.api.individual.IIndividual;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeListener;
-
-import genetics.api.individual.IIndividual;
 
 public class BeeHousingListener implements IBeeListener {
 	private final IBeeHousing beeHousing;

@@ -1,16 +1,16 @@
 package forestry.arboriculture.genetics;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+
+import genetics.api.alleles.IAllele;
+
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IItemProvider;
 import forestry.arboriculture.features.ArboricultureBlocks;
-
-import genetics.api.alleles.IAllele;
-
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 public class LeafProvider implements ILeafProvider {
 
@@ -30,9 +30,7 @@ public class LeafProvider implements ILeafProvider {
 		}
 
 		String alleleName = allele.getRegistryName().getPath().replace("tree_", "");
-		return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(alleleName)
-				.map(IItemProvider::stack)
-				.orElse(ItemStack.EMPTY);
+		return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(alleleName).map(IItemProvider::stack).orElse(ItemStack.EMPTY);
 	}
 
 }

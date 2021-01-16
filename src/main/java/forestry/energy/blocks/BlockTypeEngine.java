@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.blocks;
+
+import java.util.function.Supplier;
 
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;
@@ -20,8 +22,6 @@ import forestry.energy.ModuleEnergy;
 import forestry.energy.features.EnergyTiles;
 import forestry.energy.tiles.TileEngine;
 import forestry.modules.features.FeatureTileType;
-
-import java.util.function.Supplier;
 
 public enum BlockTypeEngine implements IBlockTypeTesr {
 	PEAT(createEngineProperties(() -> EnergyTiles.PEAT_ENGINE, "peat", "/engine_copper")),
@@ -38,36 +38,14 @@ public enum BlockTypeEngine implements IBlockTypeTesr {
 		this.machineProperties = machineProperties;
 	}
 
-	protected static IMachinePropertiesTesr<?> createEngineProperties(
-			Supplier<FeatureTileType<? extends TileEngine>> teClass,
-			String name,
-			String textureName
-	) {
-		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr.Builder<>(
-				teClass,
-				name
-		)
-				.setParticleTexture(textureName + ".0")
-				.setNotFullCube()
-				.create();
-		ModuleEnergy.proxy.setRenderDefaultEngine(
-				machinePropertiesEngine,
-				Constants.TEXTURE_PATH_BLOCK + textureName + "_"
-		);
+	protected static IMachinePropertiesTesr<?> createEngineProperties(Supplier<FeatureTileType<? extends TileEngine>> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileEngine> machinePropertiesEngine = new MachinePropertiesTesr.Builder<>(teClass, name).setParticleTexture(textureName + ".0").setNotFullCube().create();
+		ModuleEnergy.proxy.setRenderDefaultEngine(machinePropertiesEngine, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesEngine;
 	}
 
-	protected static IMachinePropertiesTesr<?> createMachineProperties(
-			Supplier<FeatureTileType<? extends TileBase>> teClass,
-			String name,
-			String textureName
-	) {
-		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr.Builder<>(
-				teClass,
-				name
-		)
-				.setParticleTexture(textureName + ".0")
-				.create();
+	protected static IMachinePropertiesTesr<?> createMachineProperties(Supplier<FeatureTileType<? extends TileBase>> teClass, String name, String textureName) {
+		MachinePropertiesTesr<? extends TileBase> machinePropertiesTesr = new MachinePropertiesTesr.Builder<>(teClass, name).setParticleTexture(textureName + ".0").create();
 		Proxies.render.setRenderDefaultMachine(machinePropertiesTesr, Constants.TEXTURE_PATH_BLOCK + textureName + "_");
 		return machinePropertiesTesr;
 	}

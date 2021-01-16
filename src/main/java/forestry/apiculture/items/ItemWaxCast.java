@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.items.ItemForestry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
 	public ItemWaxCast() {
-		super((new Item.Properties())
-				.group(ItemGroups.tabApiculture)
-				.maxDamage(16)
-				.setNoRepair());
+		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxDamage(16).setNoRepair());
 	}
 
 	@Override

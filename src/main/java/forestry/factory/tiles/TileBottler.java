@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,26 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.FluidHelper.FillStatus;
-import forestry.core.fluids.StandardTank;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.watchers.ISlotPickupWatcher;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerBottler;
-import forestry.factory.inventory.InventoryBottler;
-import forestry.factory.recipes.BottlerRecipe;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.EnumMap;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,9 +36,23 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.EnumMap;
+import forestry.api.core.IErrorLogic;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.FluidHelper.FillStatus;
+import forestry.core.fluids.StandardTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.TankRenderInfo;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerBottler;
+import forestry.factory.inventory.InventoryBottler;
+import forestry.factory.recipes.BottlerRecipe;
 //import forestry.factory.triggers.FactoryTriggers;
 
 //import buildcraft.api.statements.ITriggerExternal;
@@ -89,10 +89,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (fluid != null) {
 			if (canDump.isEmpty()) {
 				for (Direction facing : Direction.VALUES) {
-					canDump.put(
-							facing,
-							FluidHelper.canAcceptFluid(world, pos.offset(facing), facing.getOpposite(), fluid)
-					);
+					canDump.put(facing, FluidHelper.canAcceptFluid(world, pos.offset(facing), facing.getOpposite(), fluid));
 				}
 			}
 
@@ -111,19 +108,10 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (!resourceTank.isEmpty()) {
 			for (Direction facing : Direction.VALUES) {
 				if (canDump.get(facing)) {
-					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(
-							world,
-							pos.offset(facing),
-							facing.getOpposite()
-					);
+					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(world, pos.offset(facing), facing.getOpposite());
 
 					if (fluidDestination.isPresent()) {
-						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(
-								f,
-								tankManager,
-								FluidAttributes.BUCKET_VOLUME / 20,
-								true
-						));
+						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, FluidAttributes.BUCKET_VOLUME / 20, true));
 						return true;
 					}
 				}
@@ -236,13 +224,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		if (currentRecipe != null) {
 			IFluidTank tank = tankManager.getTank(0);
 			if (tank != null) {
-				emptyStatus = FluidHelper.drainContainers(
-						tankManager,
-						this,
-						InventoryBottler.SLOT_EMPTYING_PROCESSING,
-						InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER,
-						false
-				);
+				emptyStatus = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, false);
 			} else {
 				emptyStatus = FillStatus.SUCCESS;
 			}
@@ -254,14 +236,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 			if (currentRecipe == null) {
 				return false;
 			} else {
-				fillStatus = FluidHelper.fillContainers(
-						tankManager,
-						this,
-						InventoryBottler.SLOT_FILLING_PROCESSING,
-						InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER,
-						currentRecipe.fluid.getFluid(),
-						false
-				);
+				fillStatus = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), false);
 			}
 		} else {
 			return true;
@@ -274,8 +249,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		errorLogic.setCondition(fillStatus == FluidHelper.FillStatus.NO_FLUID, EnumErrorCode.NO_RESOURCE_LIQUID);
 		errorLogic.setCondition(fillStatus == FluidHelper.FillStatus.NO_SPACE, EnumErrorCode.NO_SPACE_INVENTORY);
 		errorLogic.setCondition(emptyStatus == FluidHelper.FillStatus.NO_SPACE_FLUID, EnumErrorCode.NO_SPACE_TANK);
-		if (emptyStatus == FillStatus.INVALID_INPUT || fillStatus == FillStatus.INVALID_INPUT ||
-				errorLogic.hasErrors()) {
+		if (emptyStatus == FillStatus.INVALID_INPUT || fillStatus == FillStatus.INVALID_INPUT || errorLogic.hasErrors()) {
 			currentRecipe = null;
 			return false;
 		}
@@ -340,22 +314,9 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		FluidHelper.FillStatus status;
 		if (currentRecipe != null) {
 			if (currentRecipe.fillRecipe) {
-				status = FluidHelper.fillContainers(
-						tankManager,
-						this,
-						InventoryBottler.SLOT_FILLING_PROCESSING,
-						InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER,
-						currentRecipe.fluid.getFluid(),
-						true
-				);
+				status = FluidHelper.fillContainers(tankManager, this, InventoryBottler.SLOT_FILLING_PROCESSING, InventoryBottler.SLOT_OUTPUT_FULL_CONTAINER, currentRecipe.fluid.getFluid(), true);
 			} else {
-				status = FluidHelper.drainContainers(
-						tankManager,
-						this,
-						InventoryBottler.SLOT_EMPTYING_PROCESSING,
-						InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER,
-						true
-				);
+				status = FluidHelper.drainContainers(tankManager, this, InventoryBottler.SLOT_EMPTYING_PROCESSING, InventoryBottler.SLOT_OUTPUT_EMPTY_CONTAINER, true);
 			}
 		} else {
 			return true;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ISpriteRegistry;
-import forestry.api.core.ITextureManager;
-import forestry.core.config.Constants;
-import forestry.core.errors.ErrorStateRegistry;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -27,16 +24,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.core.ITextureManager;
+import forestry.core.config.Constants;
+import forestry.core.errors.ErrorStateRegistry;
 
 @OnlyIn(Dist.CLIENT)
 public class TextureManagerForestry implements ITextureManager {
-	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			"textures/atlas/gui.png"
-	);
+	public static final ResourceLocation LOCATION_FORESTRY_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/atlas/gui.png");
 	private static final TextureManagerForestry INSTANCE = new TextureManagerForestry();
 
 	static {
@@ -53,56 +50,7 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	private static void initDefaultSprites(ISpriteRegistry registry) {
-		String[] defaultIconNames = new String[]{
-				"habitats/desert",
-				"habitats/end",
-				"habitats/forest",
-				"habitats/hills",
-				"habitats/jungle",
-				"habitats/mushroom",
-				"habitats/nether",
-				"habitats/ocean",
-				"habitats/plains",
-				"habitats/snow",
-				"habitats/swamp",
-				"habitats/taiga",
-				"misc/access.shared",
-				"misc/energy",
-				"misc/hint",
-				"analyzer/anything",
-				"analyzer/bee",
-				"analyzer/cave",
-				"analyzer/closed",
-				"analyzer/drone",
-				"analyzer/flyer",
-				"analyzer/item",
-				"analyzer/nocturnal",
-				"analyzer/princess",
-				"analyzer/pure_breed",
-				"analyzer/pure_cave",
-				"analyzer/pure_flyer",
-				"analyzer/pure_nocturnal",
-				"analyzer/queen",
-				"analyzer/tree",
-				"analyzer/sapling",
-				"analyzer/pollen",
-				"analyzer/flutter",
-				"analyzer/butterfly",
-				"analyzer/serum",
-				"analyzer/caterpillar",
-				"analyzer/cocoon",
-				"errors/errored",
-				"errors/unknown",
-				"slots/blocked",
-				"slots/blocked_2",
-				"slots/liquid",
-				"slots/container",
-				"slots/locked",
-				"slots/cocoon",
-				"slots/bee",
-				"mail/carrier.player",
-				"mail/carrier.trader"
-		};
+		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle", "habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga", "misc/access.shared", "misc/energy", "misc/hint", "analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer", "analyzer/item", "analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave", "analyzer/pure_flyer", "analyzer/pure_nocturnal", "analyzer/queen", "analyzer/tree", "analyzer/sapling", "analyzer/pollen", "analyzer/flutter", "analyzer/butterfly", "analyzer/serum", "analyzer/caterpillar", "analyzer/cocoon", "errors/errored", "errors/unknown", "slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked", "slots/cocoon", "slots/bee", "mail/carrier.player", "mail/carrier.trader"};
 		for (String identifier : defaultIconNames) {
 			registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
 		}

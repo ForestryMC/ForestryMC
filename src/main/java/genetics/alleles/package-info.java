@@ -3,7 +3,8 @@
 @MethodsReturnNonnullByDefault
 package genetics.alleles;
 
-import genetics.FieldsAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import genetics.FieldsAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;

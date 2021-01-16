@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology.gui.elements;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
@@ -20,15 +29,6 @@ import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.StringUtil;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ClimateBarElement extends GuiElement {
@@ -47,10 +47,7 @@ public class ClimateBarElement extends GuiElement {
 			if (Screen.hasControlDown()) {
 				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				IClimateState climateState = former.getClimate();
-				IClimateState newState = climateState.toImmutable().setClimate(
-						type,
-						transformer.getDefault().getTemperature()
-				);
+				IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
 				former.setClimate(newState);
 				former.sendClimateUpdate();
 				return;
@@ -69,18 +66,9 @@ public class ClimateBarElement extends GuiElement {
 			IClimateState targetedState = transformer.getTarget();
 			IClimateState state = transformer.getCurrent();
 			IClimateState defaultState = transformer.getDefault();
-			tooltip.add(new TranslationTextComponent(
-					"for.gui.habitat_former.climate.target",
-					StringUtil.floatAsPercent(targetedState.getClimate(type))
-			));
-			tooltip.add(new TranslationTextComponent(
-					"for.gui.habitat_former.climate.value",
-					StringUtil.floatAsPercent(state.getClimate(type))
-			));
-			tooltip.add(new TranslationTextComponent(
-					"for.gui.habitat_former.climate.default",
-					StringUtil.floatAsPercent(defaultState.getClimate(type))
-			));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
 	}
 

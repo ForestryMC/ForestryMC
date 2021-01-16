@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.inventory;
 
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.energy.tiles.TileEngineBiogas;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -19,7 +18,8 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import java.util.Optional;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.energy.tiles.TileEngineBiogas;
 
 public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas> {
 	public static final short SLOT_CAN = 0;

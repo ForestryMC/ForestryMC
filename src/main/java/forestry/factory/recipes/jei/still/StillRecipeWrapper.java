@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.still;
 
+import java.util.Collections;
+
 import forestry.api.recipes.IStillRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
-
-import java.util.Collections;
 
 public class StillRecipeWrapper extends ForestryRecipeWrapper<IStillRecipe> {
 

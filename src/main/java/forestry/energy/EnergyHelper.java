@@ -1,10 +1,6 @@
 package forestry.energy;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Config;
-import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.tesla.TeslaHelper;
-import forestry.energy.tiles.TileEngine;
+import javax.annotation.Nullable;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -13,7 +9,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ForestryAPI;
+import forestry.core.config.Config;
+import forestry.energy.compat.mj.MjHelper;
+import forestry.energy.compat.tesla.TeslaHelper;
+import forestry.energy.tiles.TileEngine;
 
 public class EnergyHelper {
 	public static int scaleForDifficulty(int energyValue) {
@@ -26,11 +26,7 @@ public class EnergyHelper {
 	 *
 	 * @return true if the energy to do work was consumed
 	 */
-	public static boolean consumeEnergyToDoWork(
-			EnergyManager energyManager,
-			int ticksPerWorkCycle,
-			int energyPerWorkCycle
-	) {
+	public static boolean consumeEnergyToDoWork(EnergyManager energyManager, int ticksPerWorkCycle, int energyPerWorkCycle) {
 		if (energyPerWorkCycle == 0) {
 			return true;
 		}
@@ -60,13 +56,7 @@ public class EnergyHelper {
 	 *
 	 * @return amount sent
 	 */
-	public static int sendEnergy(
-			EnergyManager energyManager,
-			Direction orientation,
-			@Nullable TileEntity tile,
-			int amount,
-			boolean simulate
-	) {
+	public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable TileEntity tile, int amount, boolean simulate) {
 		int extractable = energyManager.extractEnergy(amount, true);
 		if (extractable > 0) {
 			Direction side = orientation.getOpposite();
@@ -125,7 +115,6 @@ public class EnergyHelper {
 			return energyStorage.orElse(null).canReceive();
 		}
 
-		return TeslaHelper.isEnergyReceiver(tile, side) ||
-				MjHelper.isEnergyReceiver(tile, side);
+		return TeslaHelper.isEnergyReceiver(tile, side) || MjHelper.isEnergyReceiver(tile, side);
 	}
 }

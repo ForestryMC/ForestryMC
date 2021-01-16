@@ -11,9 +11,5 @@ import forestry.modules.features.ModFeatureRegistry;
 public class DatabaseTiles {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleDatabase.class);
 
-	public static final FeatureTileType<TileDatabase> DATABASE = REGISTRY.tile(
-			TileDatabase::new,
-			"database",
-			DatabaseBlocks.DATABASE::collect
-	);
+	public static final FeatureTileType<TileDatabase> DATABASE = REGISTRY.tile(TileDatabase::new, "database", DatabaseBlocks.DATABASE::collect);
 }

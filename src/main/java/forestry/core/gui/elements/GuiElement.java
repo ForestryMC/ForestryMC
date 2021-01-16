@@ -2,8 +2,24 @@ package forestry.core.gui.elements;
 
 import com.google.common.base.MoreObjects;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Consumer;
+
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
@@ -13,22 +29,6 @@ import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
-
-import net.minecraft.client.MainWindow;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiElement {
@@ -222,12 +222,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 			IGuiElement cropRelative = cropElement != null ? cropElement : this;
 			int posX = cropRelative.getAbsoluteX();
 			int posY = cropRelative.getAbsoluteY();
-			GL11.glScissor(
-					(int) ((posX + cropX) * scaleWidth),
-					(int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)),
-					(int) (cropWidth * scaleWidth),
-					(int) (cropHeight * scaleHeight)
-			);
+			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
 		drawElement(transform, mouseY, mouseX);
@@ -326,12 +321,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 	@Override
 	public ToolTip getTooltip(int mouseX, int mouseY) {
 		ToolTip toolTip = new ToolTip();
-		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(
-				toolTip,
-				this,
-				mouseX,
-				mouseY
-		));
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
 		return toolTip;
 	}
 
@@ -340,12 +330,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		int mouseX = getWindow().getRelativeMouseX(this);
 		int mouseY = getWindow().getRelativeMouseY(this);
 		ToolTip toolTip = new ToolTip();
-		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(
-				toolTip,
-				this,
-				mouseX,
-				mouseY
-		));
+		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
 		return toolTip;
 	}
 
@@ -407,15 +392,6 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("x", getX())
-				.add("y", getY())
-				.add("w", width)
-				.add("h", height)
-				.add("a", align)
-				.add("v", isVisible())
-				.add("xO", xOffset)
-				.add("yO", yOffset)
-				.toString();
+		return MoreObjects.toStringHelper(this).add("x", getX()).add("y", getY()).add("w", width).add("h", height).add("a", align).add("v", isVisible()).add("xO", xOffset).add("yO", yOffset).toString();
 	}
 }

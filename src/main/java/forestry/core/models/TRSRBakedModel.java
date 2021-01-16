@@ -14,6 +14,11 @@ package forestry.core.models;
 
 import com.google.common.collect.ImmutableList;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -24,7 +29,11 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.*;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.math.vector.Vector4f;
 
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -32,11 +41,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.pipeline.BakedQuadBuilder;
 import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TransformationHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
 public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
@@ -49,37 +53,12 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 		this(original, x, y, z, 0, 0, 0, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(
-			IBakedModel original,
-			float x,
-			float y,
-			float z,
-			float rotX,
-			float rotY,
-			float rotZ,
-			float scale
-	) {
+	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
 		this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(
-			IBakedModel original,
-			float x,
-			float y,
-			float z,
-			float rotX,
-			float rotY,
-			float rotZ,
-			float scaleX,
-			float scaleY,
-			float scaleZ
-	) {
-		this(original, new TransformationMatrix(
-				new Vector3f(x, y, z),
-				null,
-				new Vector3f(scaleX, scaleY, scaleZ),
-				TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)
-		));
+	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+		this(original, new TransformationMatrix(new Vector3f(x, y, z), null, new Vector3f(scaleX, scaleY, scaleZ), TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)));
 	}
 
 	public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
@@ -99,12 +78,7 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 		this.faceOffset = 4 + Direction.NORTH.getHorizontalIndex() - facing.getHorizontalIndex();
 
 		double r = Math.PI * (360 - facing.getOpposite().getHorizontalIndex() * 90) / 180d;
-		this.transformation = new TransformationMatrix(
-				null,
-				null,
-				null,
-				TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)
-		).blockCenterToCorner();
+		this.transformation = new TransformationMatrix(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
 	}
 
 	@Override
@@ -120,12 +94,7 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(
-			@Nullable BlockState state,
-			@Nullable Direction side,
-			Random rand,
-			IModelData data
-	) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData data) {
 		// transform quads obtained from parent
 		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 		if (!this.originalModel.isBuiltInRenderer()) {
@@ -156,14 +125,8 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
 		@Nonnull
 		@Override
-		public IBakedModel getOverrideModel(
-				IBakedModel originalModel,
-				ItemStack stack,
-				@Nullable ClientWorld world,
-				@Nullable LivingEntity entity
-		) {
-			IBakedModel baked = this.model.originalModel.getOverrides()
-					.getOverrideModel(originalModel, stack, world, entity);
+		public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+			IBakedModel baked = this.model.originalModel.getOverrides().getOverrideModel(originalModel, stack, world, entity);
 			if (baked == null) {
 				baked = originalModel;
 			}

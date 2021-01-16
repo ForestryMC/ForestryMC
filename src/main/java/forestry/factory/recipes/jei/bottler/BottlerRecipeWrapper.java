@@ -1,14 +1,14 @@
 package forestry.factory.recipes.jei.bottler;
 
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
 
 public class BottlerRecipeWrapper implements IRecipeCategoryExtension {
 	public final ItemStack inputStack;
@@ -17,12 +17,7 @@ public class BottlerRecipeWrapper implements IRecipeCategoryExtension {
 	public final ItemStack outputStack;
 	public final boolean fillRecipe;
 
-	public BottlerRecipeWrapper(
-			ItemStack inputStack,
-			FluidStack fluid,
-			@Nullable ItemStack outputStack,
-			boolean fillRecipe
-	) {
+	public BottlerRecipeWrapper(ItemStack inputStack, FluidStack fluid, @Nullable ItemStack outputStack, boolean fillRecipe) {
 		this.inputStack = inputStack;
 		this.fluid = fluid;
 		this.outputStack = outputStack;

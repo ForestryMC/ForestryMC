@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.tiles;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import forestry.api.farming.DefaultFarmListener;
 import forestry.api.farming.FarmDirection;
@@ -17,11 +22,6 @@ import forestry.api.farming.IFarmLogic;
 import forestry.api.multiblock.IFarmComponent;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.features.FarmingTiles;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class TileFarmControl extends TileFarm implements IFarmComponent.Listener {
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.worktable.recipes;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.worktable.inventory.CraftingInventoryForestry;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.CraftingInventory;
@@ -29,11 +27,13 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
 	private CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry();
@@ -158,12 +158,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 			String recipeKey = recipesNbt.getString(i);
 			ResourceLocation key = new ResourceLocation(recipeKey);
 			//TODO are we on server or client? Not sure how to access this on server...
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft
-					.getInstance()
-					.player
-					.connection
-					.getRecipeManager()
-					.getRecipes(IRecipeType.CRAFTING);
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
 			IRecipe recipe = recipeMap.get(key);
 			if (recipe != null) {
 				recipes.add(recipe);
@@ -217,12 +212,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		for (int i = 0; i < recipeCount; i++) {
 			String recipeId = data.readString();
 			//TODO sidedness issues
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft
-					.getInstance()
-					.player
-					.connection
-					.getRecipeManager()
-					.getRecipes(IRecipeType.CRAFTING);
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
 			IRecipe recipe = recipeMap.get(new ResourceLocation(recipeId));
 			if (recipe != null) {
 				recipes.add(recipe);

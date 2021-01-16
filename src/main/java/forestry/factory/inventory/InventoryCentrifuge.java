@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.tiles.TileCentrifuge;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
 
 public class InventoryCentrifuge extends InventoryAdapterTile<TileCentrifuge> {
 	public static final int SLOT_RESOURCE = 0;
@@ -29,10 +29,7 @@ public class InventoryCentrifuge extends InventoryAdapterTile<TileCentrifuge> {
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return slotIndex == SLOT_RESOURCE
-				&& RecipeManagers.centrifugeManager.findMatchingRecipe(
-				tile.getWorld().getRecipeManager(), itemStack
-		) != null;
+		return slotIndex == SLOT_RESOURCE && RecipeManagers.centrifugeManager.findMatchingRecipe(tile.getWorld().getRecipeManager(), itemStack) != null;
 	}
 
 	@Override

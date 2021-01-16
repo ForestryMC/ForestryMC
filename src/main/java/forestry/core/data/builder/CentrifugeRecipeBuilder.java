@@ -3,8 +3,7 @@ package forestry.core.data.builder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.factory.recipes.RecipeSerializers;
+import java.util.function.Consumer;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -17,7 +16,8 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.function.Consumer;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.factory.recipes.RecipeSerializers;
 
 public class CentrifugeRecipeBuilder {
 
@@ -57,21 +57,8 @@ public class CentrifugeRecipeBuilder {
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
 		validate(id);
 
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(
-				id,
-				processingTime,
-				input,
-				outputs,
-				advancementBuilder,
-				new ResourceLocation(
-						id.getNamespace(),
-						"recipes/" + input.getItem().getGroup().getPath() + "/" + id.getPath()
-				)
-		));
+		advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
+		consumer.accept(new Result(id, processingTime, input, outputs, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + input.getItem().getGroup().getPath() + "/" + id.getPath())));
 	}
 
 	private void validate(ResourceLocation id) {
@@ -96,14 +83,7 @@ public class CentrifugeRecipeBuilder {
 		private final Advancement.Builder advancementBuilder;
 		private final ResourceLocation advancementId;
 
-		public Result(
-				ResourceLocation id,
-				int processingTime,
-				ItemStack input,
-				NonNullList<ICentrifugeRecipe.Product> outputs,
-				Advancement.Builder advancementBuilder,
-				ResourceLocation advancementId
-		) {
+		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
 			this.id = id;
 			this.processingTime = processingTime;
 			this.input = input;

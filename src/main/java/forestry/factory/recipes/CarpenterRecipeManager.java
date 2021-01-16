@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.ICarpenterManager;
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
@@ -24,9 +27,10 @@ import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
+import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 	private final Set<Fluid> recipeFluids = new HashSet<>();
@@ -36,12 +40,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(
-			RecipeManager recipeManager,
-			FluidStack liquid,
-			ItemStack item,
-			IInventory inventory
-	) {
+	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
 		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, liquid, item, inventory)) {
 				return Optional.of(recipe);
@@ -52,12 +51,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public boolean matches(
-			@Nullable ICarpenterRecipe recipe,
-			FluidStack resource,
-			ItemStack item,
-			IInventory craftingInventory
-	) {
+	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 		if (recipe == null) {
 			return false;
 		}

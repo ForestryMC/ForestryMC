@@ -1,12 +1,8 @@
 package genetics.items;
 
-import genetics.ApiInstance;
-import genetics.Genetics;
-import genetics.api.IGeneTemplate;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.root.IIndividualRoot;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -15,9 +11,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
+import genetics.ApiInstance;
+import genetics.Genetics;
+import genetics.api.IGeneTemplate;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.root.IIndividualRoot;
+import genetics.utils.AlleleUtils;
 
 public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundNBT> {
 	public static final IGeneTemplate EMPTY = new Empty();

@@ -1,8 +1,6 @@
 package forestry.farming.logic.farmables;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.farming.logic.crops.CropBasicIC2Crop;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +9,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.farming.logic.crops.CropBasicIC2Crop;
 
 //import net.minecraftforge.fml.common.Optional;
 //import forestry.plugins.PluginIC2;

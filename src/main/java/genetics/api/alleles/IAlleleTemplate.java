@@ -1,9 +1,13 @@
 package genetics.api.alleles;
 
-import genetics.api.individual.*;
-import genetics.api.root.IIndividualRoot;
-
 import javax.annotation.Nullable;
+
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.individual.IKaryotype;
+import genetics.api.root.IIndividualRoot;
 
 /**
  * Can be used to create {@link IGenome}s, {@link IIndividual}s or {@link IChromosome}s or get a allele.

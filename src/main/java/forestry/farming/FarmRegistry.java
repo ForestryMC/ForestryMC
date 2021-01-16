@@ -4,20 +4,31 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
-import forestry.api.farming.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmPropertiesBuilder;
+import forestry.api.farming.IFarmRegistry;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.Map.Entry;
 
 public final class FarmRegistry implements IFarmRegistry {
 
@@ -87,12 +98,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		List<String> defaultFertilizers = new ArrayList<>(defaultEntries.values());
 		Collections.sort(defaultFertilizers);
 		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[0]);
-		Property property = config.get(
-				"fertilizers",
-				"items",
-				defaultSortedFertilizers,
-				new TranslationTextComponent("for.config.farm.fertilizers.items").getString()
-		);
+		Property property = config.get("fertilizers", "items", defaultSortedFertilizers, new TranslationTextComponent("for.config.farm.fertilizers.items").getString());
 
 		ImmutableMap<ItemStack, Integer> fertilizerMap = checkConfig(property, defaultEntries);
 		fertilizer = new FertilizerConfig(fertilizerMap);
@@ -119,10 +125,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		return fertilizerMap.build();
 	}
 
-	private Map<String, String> parseConfig(
-			String[] fertilizerList,
-			ImmutableMap.Builder<ItemStack, Integer> fertilizerMap
-	) {
+	private Map<String, String> parseConfig(String[] fertilizerList, ImmutableMap.Builder<ItemStack, Integer> fertilizerMap) {
 		Map<String, String> configEntries = new HashMap<>();
 		for (String entry : fertilizerList) {
 			String[] spited = entry.split(";");
@@ -131,10 +134,7 @@ public final class FarmRegistry implements IFarmRegistry {
 				continue;
 			}
 			String itemName = spited[0];
-			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(
-					itemName,
-					0
-			);//TODO oredict OreDictionary.WILDCARD_VALUE);
+			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, 0);//TODO oredict OreDictionary.WILDCARD_VALUE);
 			if (fertilizerItem == null || fertilizerItem.isEmpty()) {
 				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
 				continue;

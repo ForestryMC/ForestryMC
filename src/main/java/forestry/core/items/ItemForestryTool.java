@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
-
-import forestry.core.features.CoreItems;
-import forestry.core.utils.ItemStackUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,12 +19,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
+
+import forestry.core.features.CoreItems;
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
 	private final ItemStack remnants;
@@ -62,9 +66,7 @@ public class ItemForestryTool extends ItemForestry {
 				BlockState BlockState = world.getBlockState(pos);
 				Block block = BlockState.getBlock();
 
-				if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR &&
-						block == Blocks.GRASS
-				) {
+				if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
 					BlockState BlockState1 = Blocks.GRASS_PATH.getDefaultState();
 					world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
@@ -91,21 +93,14 @@ public class ItemForestryTool extends ItemForestry {
 		}
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
-			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK
-					? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
+			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
 		return super.getDestroySpeed(itemstack, state);
 	}
 
 	//TODO - check the consumer is called how I think it is
 	@Override
-	public boolean onBlockDestroyed(
-			ItemStack stack,
-			World worldIn,
-			BlockState state,
-			BlockPos pos,
-			LivingEntity entityLiving
-	) {
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 		if (state.getBlockHardness(worldIn, pos) != 0) {
 			stack.damageItem(1, entityLiving, this::onBroken);
 		}
@@ -139,13 +134,7 @@ public class ItemForestryTool extends ItemForestry {
 		World world = player.world;
 
 		if (!world.isRemote && !remnants.isEmpty()) {
-			ItemStackUtil.dropItemStackAsEntity(
-					remnants.copy(),
-					world,
-					player.getPosX(),
-					player.getPosY(),
-					player.getPosZ()
-			);
+			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getPosX(), player.getPosY(), player.getPosZ());
 		}
 	}
 

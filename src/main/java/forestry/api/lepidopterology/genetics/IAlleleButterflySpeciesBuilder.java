@@ -1,16 +1,16 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
+import java.awt.Color;
+import java.util.Collection;
 
 import net.minecraft.world.biome.Biome;
 
-import java.awt.*;
-import java.util.Collection;
+import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 
 public interface IAlleleButterflySpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleButterflySpeciesBuilder> {
 

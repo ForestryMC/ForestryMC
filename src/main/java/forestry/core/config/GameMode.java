@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.config;
-
-import forestry.Forestry;
-import forestry.api.core.IGameMode;
-import forestry.core.utils.Log;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import forestry.Forestry;
+import forestry.api.core.IGameMode;
+import forestry.core.utils.Log;
 
 public class GameMode implements IGameMode {
 	private static final String GAMEMODE_KEY = "gamemode";

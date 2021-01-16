@@ -1,9 +1,5 @@
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -14,10 +10,15 @@ import net.minecraft.world.IBlockReader;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
+
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
 	private final boolean fireproof;
 	private final IWoodType woodType;
+
 	public BlockForestryPlank(boolean fireproof, IWoodType woodType) {
 		super(createWoodProperties(woodType));
 		this.fireproof = fireproof;
@@ -25,11 +26,7 @@ public class BlockForestryPlank extends Block implements IWoodTyped {
 	}
 
 	public static Properties createWoodProperties(IWoodType woodType) {
-		return Block.Properties.create(Material.WOOD)
-				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-				.sound(SoundType.WOOD)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(0);
+		return Block.Properties.create(Material.WOOD).hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F).sound(SoundType.WOOD).harvestTool(ToolType.AXE).harvestLevel(0);
 	}
 
 	@Override

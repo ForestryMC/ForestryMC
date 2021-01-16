@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.render;
 
 import com.google.common.collect.ImmutableList;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import forestry.lepidopterology.entities.EntityButterfly;
 
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.lepidopterology.entities.EntityButterfly;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyModel extends SegmentedModel<EntityButterfly> {
@@ -85,16 +85,7 @@ public class ButterflyModel extends SegmentedModel<EntityButterfly> {
 	}
 
 	@Override
-	public void render(
-			MatrixStack transformation,
-			IVertexBuilder builder,
-			int packedLight,
-			int packetLight2,
-			float ageInTicks,
-			float netHeadYaw,
-			float headPitch,
-			float alpha
-	) {
+	public void render(MatrixStack transformation, IVertexBuilder builder, int packedLight, int packetLight2, float ageInTicks, float netHeadYaw, float headPitch, float alpha) {
 		transformation.scale(this.scale, this.scale, this.scale);
 		transformation.translate(0.0F, 1.45f / scale, 0.0F);
 
@@ -107,14 +98,7 @@ public class ButterflyModel extends SegmentedModel<EntityButterfly> {
 	}
 
 	@Override
-	public void setRotationAngles(
-			EntityButterfly entity,
-			float limbSwing,
-			float limbSwingAmount,
-			float ageInTicks,
-			float netHeadYaw,
-			float headPitch
-	) {
+	public void setRotationAngles(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
 		//body.rotateAngleY = 0.0F;
 		wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;

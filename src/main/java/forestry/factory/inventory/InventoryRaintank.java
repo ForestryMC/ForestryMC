@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
-
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.factory.tiles.TileRaintank;
 
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -22,6 +19,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.factory.tiles.TileRaintank;
 
 public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	public static final short SLOT_RESOURCE = 0;
@@ -35,9 +35,7 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
 			LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemStack);
-			return fluidHandler.map(handler ->
-					handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) >
-							0).orElse(false);
+			return fluidHandler.map(handler -> handler.fill(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE) > 0).orElse(false);
 		}
 		return false;
 	}

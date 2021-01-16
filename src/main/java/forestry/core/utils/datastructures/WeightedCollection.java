@@ -3,7 +3,12 @@ package forestry.core.utils.datastructures;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class WeightedCollection<T> {
 	private final NavigableMap<Double, T> map = new TreeMap<>();

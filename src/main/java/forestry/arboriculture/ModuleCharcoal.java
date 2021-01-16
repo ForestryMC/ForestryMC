@@ -1,5 +1,8 @@
 package forestry.arboriculture;
 
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemGroup;
+
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ItemGroups;
@@ -11,15 +14,11 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")
 public class ModuleCharcoal extends BlankForestryModule {
 
 	public static ItemGroup getGroup() {
-		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture
-				: ItemGroupForestry.tabForestry;
+		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
 	}
 
 	@Override

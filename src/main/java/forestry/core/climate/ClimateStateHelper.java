@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.climate;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.MathHelper;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateStateHelper;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
 
 public final class ClimateStateHelper implements IClimateStateHelper {
 
@@ -43,11 +43,7 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 	}
 
 	public static boolean isNearTarget(IClimateState state, IClimateState target) {
-		return isNearTarget(ClimateType.HUMIDITY, state, target) && isNearTarget(
-				ClimateType.TEMPERATURE,
-				state,
-				target
-		);
+		return isNearTarget(ClimateType.HUMIDITY, state, target) && isNearTarget(ClimateType.TEMPERATURE, state, target);
 	}
 
 	public static boolean isNearTarget(ClimateType type, IClimateState state, IClimateState target) {

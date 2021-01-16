@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -28,13 +35,6 @@ import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureProvider;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.registries.ForgeRegistries;
 
 //Provides no features but needs to be loaded
 @FeatureProvider
@@ -81,23 +81,13 @@ public class ItemGroupForestry extends ItemGroup {
 				}
 				break;
 			case 2:
-				return BeeManager.beeRoot.getTypes().createStack(
-						new Bee(BeeDefinition.FOREST.getGenome()),
-						EnumBeeType.DRONE
-				);
+				return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);
 			case 3:
-				return TreeManager.treeRoot.getTypes().createStack(
-						new Tree(TreeDefinition.Oak.getGenome()),
-						EnumGermlingType.SAPLING
-				);
+				return TreeManager.treeRoot.getTypes().createStack(new Tree(TreeDefinition.Oak.getGenome()), EnumGermlingType.SAPLING);
 			case 4:
-				return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone
-						.getGenome()), EnumFlutterType.BUTTERFLY);
+				return ButterflyManager.butterflyRoot.getTypes().createStack(new Butterfly(ButterflyDefinition.Brimstone.getGenome()), EnumFlutterType.BUTTERFLY);
 			default:
-				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(
-						Constants.MOD_ID,
-						"fertilizer_compound"
-				));
+				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "fertilizer_compound"));
 				break;
 		}
 		if (iconItem == null) {

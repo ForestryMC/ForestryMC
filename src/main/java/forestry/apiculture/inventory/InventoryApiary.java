@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.inventory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tuple;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -17,14 +25,6 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.core.utils.SlotUtil;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
 
 public class InventoryApiary extends InventoryBeeHousing implements IApiaryInventory {
 	public static final int SLOT_FRAMES_1 = 9;
@@ -46,8 +46,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 	// override for pipe automation
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return !SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT) &&
-				super.isItemValidForSlot(slotIndex, itemStack);
+		return !SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT) && super.isItemValidForSlot(slotIndex, itemStack);
 	}
 
 	public Collection<Tuple<IHiveFrame, ItemStack>> getFrames() {

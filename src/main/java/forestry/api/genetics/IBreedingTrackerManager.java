@@ -1,10 +1,10 @@
 package forestry.api.genetics;
 
-import com.mojang.authlib.GameProfile;
+import javax.annotation.Nullable;
 
 import net.minecraft.world.IWorld;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
 
 public interface IBreedingTrackerManager {
 

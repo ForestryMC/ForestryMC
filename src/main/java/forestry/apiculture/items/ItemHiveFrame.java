@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.DefaultBeeModifier;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeModifier;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.hives.IHiveFrame;
-import forestry.api.core.ItemGroups;
-import forestry.core.items.ItemForestry;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -30,17 +23,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.DefaultBeeModifier;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveFrame;
+import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemForestry;
 
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	private final HiveFrameBeeModifier beeModifier;
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
-		super((new Item.Properties())
-				.maxDamage(maxDamage)
-				.group(ItemGroups.tabApiculture));
+		super((new Item.Properties()).maxDamage(maxDamage).group(ItemGroups.tabApiculture));
 
 		this.beeModifier = new HiveFrameBeeModifier(geneticDecay);
 	}
@@ -62,12 +60,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack stack,
-			@Nullable World world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag advanced
-	) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, world, tooltip, advanced);
 		beeModifier.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
@@ -94,12 +87,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		public void addInformation(
-				ItemStack stack,
-				@Nullable World world,
-				List<ITextComponent> tooltip,
-				ITooltipFlag advanced
-		) {
+		public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 			tooltip.add(new TranslationTextComponent("item.forestry.bee.modifier.production", production));
 			tooltip.add(new TranslationTextComponent("item.forestry.bee.modifier.genetic.decay", geneticDecay));
 		}

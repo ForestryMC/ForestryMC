@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.blocks;
 
 import javax.annotation.Nullable;
@@ -57,11 +57,30 @@ import forestry.core.utils.NetworkUtil;
 
 public class BlockAlveary extends BlockStructure {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
-	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create(
-			"type",
-			AlvearyPlainType.class
-	);
+	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
 	private final BlockAlvearyType type;
+
+	private enum State implements IStringSerializable {
+		ON,
+		OFF;
+
+		@Override
+		public String getString() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
+	}
+
+	private enum AlvearyPlainType implements IStringSerializable {
+		NORMAL,
+		ENTRANCE,
+		ENTRANCE_LEFT,
+		ENTRANCE_RIGHT;
+
+		@Override
+		public String getString() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
+	}
 
 	public BlockAlveary(BlockAlvearyType type) {
 		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
@@ -86,21 +105,6 @@ public class BlockAlveary extends BlockStructure {
 		builder.add(PLAIN_TYPE, STATE);
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void addInformation(
-			ItemStack stack,
-			@Nullable IBlockReader world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag flag
-	) {
-		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
-		} else {
-			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
-		}
-	}
-
 	public BlockAlvearyType getType() {
 		return type;
 	}
@@ -109,11 +113,6 @@ public class BlockAlveary extends BlockStructure {
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return true;
 	}*/
-
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
 
 	@Nullable
 	@Override
@@ -138,10 +137,8 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	@Override
-	public BlockState getStateAtViewpoint(
-			BlockState state, IBlockReader world, BlockPos pos, Vector3d viewpoint
-	) {
-		return null;
+	public boolean hasTileEntity(BlockState state) {
+		return true;
 	}
 
 	public BlockState getNewState(TileAlveary tile) {
@@ -168,9 +165,7 @@ public class BlockAlveary extends BlockStructure {
 							state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
 							break;
 						case 2:
-							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
-									blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)
-							) {
+							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) || blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
 								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
 							} else {
 								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
@@ -200,14 +195,7 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	@Override
-	public void neighborChanged(
-			BlockState state,
-			World worldIn,
-			BlockPos pos,
-			Block blockIn,
-			BlockPos fromPos,
-			boolean isMoving
-	) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
 		TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
 			// We must check that the slabs on top were not removed
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
@@ -217,21 +205,13 @@ public class BlockAlveary extends BlockStructure {
 		});
 	}
 
-	private enum State implements IStringSerializable {
-		ON, OFF;
-
-		@Override
-		public String getString() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
-	}
-
-	private enum AlvearyPlainType implements IStringSerializable {
-		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
-
-		@Override
-		public String getString() {
-			return name().toLowerCase(Locale.ENGLISH);
+	@OnlyIn(Dist.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		if (Screen.hasShiftDown()) {
+			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
+		} else {
+			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}
 	}
 }

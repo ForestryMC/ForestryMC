@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.api.climate.IClimateControlled;
-import forestry.api.multiblock.IAlvearyComponent;
-import forestry.apiculture.blocks.BlockAlvearyType;
-import forestry.core.network.packets.PacketActiveUpdate;
-import forestry.core.tiles.IActivatable;
-import forestry.core.utils.NetworkUtil;
-import forestry.energy.EnergyHelper;
-import forestry.energy.EnergyManager;
-import forestry.energy.EnergyTransferMode;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -29,7 +21,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
+import forestry.api.climate.IClimateControlled;
+import forestry.api.multiblock.IAlvearyComponent;
+import forestry.apiculture.blocks.BlockAlvearyType;
+import forestry.core.network.packets.PacketActiveUpdate;
+import forestry.core.tiles.IActivatable;
+import forestry.core.utils.NetworkUtil;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
+import forestry.energy.EnergyTransferMode;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IActivatable, IAlvearyComponent.Climatiser {
 
@@ -59,11 +59,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 		if (workingTime > 0) {
 			workingTime--;
-			climateControlled.addTemperatureChange(
-					definition.getChangePerTransfer(),
-					definition.getBoundaryDown(),
-					definition.getBoundaryUp()
-			);
+			climateControlled.addTemperatureChange(definition.getChangePerTransfer(), definition.getBoundaryDown(), definition.getBoundaryUp());
 		}
 
 		setActive(workingTime > 0);

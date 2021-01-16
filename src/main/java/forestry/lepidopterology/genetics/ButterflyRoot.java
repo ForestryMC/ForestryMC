@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,34 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IBreedingTrackerHandler;
-import forestry.api.genetics.gatgets.IDatabasePlugin;
-import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.api.lepidopterology.genetics.*;
-import forestry.core.genetics.root.BreedingTrackerManager;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.EntityUtil;
-import forestry.core.utils.GeneticsUtil;
-import forestry.lepidopterology.entities.EntityButterfly;
-import forestry.lepidopterology.features.LepidopterologyBlocks;
-import forestry.lepidopterology.features.LepidopterologyEntities;
-import forestry.lepidopterology.tiles.TileCocoon;
-
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootContext;
-import genetics.api.root.IndividualRoot;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -45,12 +23,38 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
+import forestry.core.genetics.root.BreedingTrackerManager;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.GeneticsUtil;
+import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyBlocks;
+import forestry.lepidopterology.features.LepidopterologyEntities;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
 
@@ -91,8 +95,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	@Override
 	public int getSpeciesCount() {
 		if (butterflySpeciesCount < 0) {
-			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
-					.filter(IAlleleButterflySpecies::isCounted).count();
+			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES).filter(IAlleleButterflySpecies::isCounted).count();
 		}
 
 		return butterflySpeciesCount;
@@ -119,13 +122,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		return ButterflyPlugin.INSTANCE;
 	}
 
-	private BlockPos getValidCocoonPos(
-			IWorld world,
-			BlockPos pos,
-			IButterfly caterpillar,
-			GameProfile gameProfile,
-			boolean createNursery
-	) {
+	private BlockPos getValidCocoonPos(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
 			return pos.down();
 		}
@@ -141,13 +138,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		return BlockPos.ZERO;
 	}
 
-	public boolean isPositionValid(
-			IWorld world,
-			BlockPos pos,
-			IButterfly caterpillar,
-			GameProfile gameProfile,
-			boolean createNursery
-	) {
+	public boolean isPositionValid(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canReplace(blockState, world, pos)) {
 			BlockPos nurseryPos = pos.up();
@@ -162,11 +153,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		return false;
 	}
 
-	private boolean isNurseryValid(
-			@Nullable IButterflyNursery nursery,
-			IButterfly caterpillar,
-			GameProfile gameProfile
-	) {
+	private boolean isNurseryValid(@Nullable IButterflyNursery nursery, IButterfly caterpillar, GameProfile gameProfile) {
 		return nursery != null && nursery.canNurse(caterpillar);
 	}
 
@@ -178,29 +165,11 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return EntityUtil.spawnEntity(
-				world,
-				EntityButterfly.create(
-						LepidopterologyEntities.BUTTERFLY.entityType(),
-						world,
-						butterfly,
-						new BlockPos(x, y, z)
-				),
-				x,
-				y,
-				z
-		);
+		return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
 
 	@Override
-	public BlockPos plantCocoon(
-			IWorld world,
-			BlockPos coordinates,
-			@Nullable IButterfly caterpillar,
-			GameProfile owner,
-			int age,
-			boolean createNursery
-	) {
+	public BlockPos plantCocoon(IWorld world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
 		if (caterpillar == null) {
 			return BlockPos.ZERO;
 		}

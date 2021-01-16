@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import forestry.api.arboriculture.ITreekeepingMode;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.arboriculture.features.ArboricultureTiles;
-import forestry.arboriculture.worldgen.FeatureArboriculture;
-import forestry.core.worldgen.FeatureBase;
+import javax.annotation.Nonnull;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,8 +27,15 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 
-import javax.annotation.Nonnull;
-import java.util.Random;
+import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.arboriculture.features.ArboricultureTiles;
+import forestry.arboriculture.worldgen.FeatureArboriculture;
+import forestry.core.worldgen.FeatureBase;
 
 public class TileSapling extends TileTreeContainer {
 	public static final ModelProperty<IAlleleTreeSpecies> TREE_SPECIES = new ModelProperty<>();
@@ -116,20 +116,11 @@ public class TileSapling extends TileTreeContainer {
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
 		} else {
-			generated = generator.generate(
-					(ISeedReader) world,
-					((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
-					random,
-					getPos(),
-					IFeatureConfig.NO_FEATURE_CONFIG
-			);
+			generated = generator.generate((ISeedReader) world, ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 
 		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(
-					world,
-					getOwnerHandler().getOwner()
-			);
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
 			breedingTracker.registerBirth(tree);
 		}
 	}
@@ -141,9 +132,6 @@ public class TileSapling extends TileTreeContainer {
 		if (tree == null) {
 			return EmptyModelData.INSTANCE;
 		}
-		return new ModelDataMap.Builder().withInitial(
-				TREE_SPECIES,
-				tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)
-		).build();
+		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
 	}
 }

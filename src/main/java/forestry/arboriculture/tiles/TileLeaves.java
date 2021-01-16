@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,41 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import forestry.api.arboriculture.*;
+import javax.annotation.Nullable;
+import java.util.Random;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelProperty;
+import net.minecraftforge.common.PlantType;
+import net.minecraftforge.common.util.Constants;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.arboriculture.EnumFruitFamily;
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.ILeafTickHandler;
+import forestry.api.arboriculture.ITreekeepingMode;
+import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
@@ -36,32 +67,6 @@ import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.RenderUtil;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
-import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class TileLeaves extends TileTreeContainer implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
 	public static final ModelProperty<ILeafSpriteProvider> SPRITE_PROVIDER = new ModelProperty<>();
@@ -112,8 +117,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (leafSpriteProvider != null) {
 			return leafSpriteProvider;
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(
-					TreeChromosomes.SPECIES);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}
@@ -180,10 +184,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		data.writeByte(leafState);
 
 		if (hasFruit) {
-			String fruitAlleleUID = getTree().getGenome()
-					.getActiveAllele(TreeChromosomes.FRUITS)
-					.getRegistryName()
-					.toString();
+			String fruitAlleleUID = getTree().getGenome().getActiveAllele(TreeChromosomes.FRUITS).getRegistryName().toString();
 			int colourFruits = getFruitColour();
 
 			data.writeString(fruitAlleleUID);
@@ -209,11 +210,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
 		if (treeTemplate != null) {
 			if (fruitAlleleUID != null) {
-				AlleleUtils.actOn(
-						new ResourceLocation(fruitAlleleUID),
-						IAlleleFruit.class,
-						fruitAllele -> treeTemplate[TreeChromosomes.FRUITS.getIndex()] = fruitAllele
-				);
+				AlleleUtils.actOn(new ResourceLocation(fruitAlleleUID), IAlleleFruit.class, fruitAllele -> treeTemplate[TreeChromosomes.FRUITS.getIndex()] = fruitAllele);
 			}
 
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
@@ -348,8 +345,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (species != null) {
 			return species.getLeafSpriteProvider();
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(
-					TreeChromosomes.SPECIES);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}
@@ -392,9 +388,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public boolean canMateWith(IIndividual individual) {
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
-			return tree != null &&
-					!tree.getMate().isPresent() &&
-					(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
+			return tree != null && !tree.getMate().isPresent() && (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
 		}
 		return false;
 	}
@@ -522,20 +516,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		damage += caterpillar.getGenome().getActiveValue(ButterflyChromosomes.METABOLISM);
 
 		IGenome caterpillarGenome = caterpillar.getGenome();
-		int caterpillarMatureTime = Math.round(
-				(float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) /
-						(caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2)
-		);
+		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
-			ButterflyManager.butterflyRoot.plantCocoon(
-					world,
-					pos.down(),
-					getCaterpillar(),
-					getOwnerHandler().getOwner(),
-					0,
-					false
-			);
+			ButterflyManager.butterflyRoot.plantCocoon(world, pos.down(), getCaterpillar(), getOwnerHandler().getOwner(), 0, false);
 			setCaterpillar(null);
 		} else if (!wasDestroyed && isDestroyed(tree, damage)) {
 			sendNetworkUpdate();

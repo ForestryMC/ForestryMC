@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -16,9 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.render.EnumTankLevel;
 import forestry.energy.tiles.TileEngineElectric;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEngineElectric> {
 

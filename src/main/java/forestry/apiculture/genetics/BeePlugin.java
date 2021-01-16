@@ -1,5 +1,18 @@
 package forestry.apiculture.genetics;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
@@ -11,19 +24,6 @@ import forestry.core.genetics.analyzer.DatabasePlugin;
 import forestry.core.genetics.analyzer.MutationsTab;
 import forestry.core.genetics.analyzer.ProductsTab;
 
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @OnlyIn(Dist.CLIENT)
 public class BeePlugin extends DatabasePlugin<IBee> {
 	public static final BeePlugin INSTANCE = new BeePlugin();
@@ -31,12 +31,7 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private BeePlugin() {
-		super(
-				new BeeDatabaseTab(DatabaseMode.ACTIVE),
-				new BeeDatabaseTab(DatabaseMode.INACTIVE),
-				new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)),
-				new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack)
-		);
+		super(new BeeDatabaseTab(DatabaseMode.ACTIVE), new BeeDatabaseTab(DatabaseMode.INACTIVE), new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)), new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack));
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {

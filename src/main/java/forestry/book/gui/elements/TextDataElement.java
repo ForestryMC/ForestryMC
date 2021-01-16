@@ -1,9 +1,7 @@
 package forestry.book.gui.elements;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.book.data.TextData;
-import forestry.core.gui.elements.GuiElement;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,11 +9,13 @@ import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.book.data.TextData;
+import forestry.core.gui.elements.GuiElement;
 
 //TODO Move to component system
 @OnlyIn(Dist.CLIENT)
@@ -25,46 +25,6 @@ public class TextDataElement extends GuiElement {
 
 	public TextDataElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
-	}
-
-	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		boolean unicode = fontRenderer.getBidiFlag();
-		//fontRenderer.setBidiFlag(true);
-		int x = 0;
-		int y = 0;
-		for (TextData data : textElements) {
-			if (data.text.equals("\n")) {
-				x = 0;
-				y += fontRenderer.FONT_HEIGHT;
-				continue;
-			}
-
-			if (data.paragraph) {
-				x = 0;
-				y += fontRenderer.FONT_HEIGHT * 1.6D;
-			}
-
-			String text = getFormattedString(data);
-			List<IReorderingProcessor> split = fontRenderer.trimStringToWidth(new StringTextComponent(text), width);
-			for (int i = 0; i < split.size(); i++) {
-				IReorderingProcessor s = split.get(i);
-				int textLength;
-				if (data.shadow) {
-					textLength = fontRenderer.func_238407_a_(transform, s, x, y, 0);
-				} else {
-					textLength = fontRenderer.func_238422_b_(transform, s, x, y, 0);
-				}
-
-				if (i == split.size() - 1) {
-					x += textLength;
-				} else {
-					y += fontRenderer.FONT_HEIGHT;
-				}
-			}
-		}
-		//fontRenderer.setBidiFlag(unicode);
 	}
 
 	@Override
@@ -113,6 +73,46 @@ public class TextDataElement extends GuiElement {
 		}
 		//fontRenderer.setBidiFlag(unicode);
 		return height;
+	}
+
+	@Override
+	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		boolean unicode = fontRenderer.getBidiFlag();
+		//fontRenderer.setBidiFlag(true);
+		int x = 0;
+		int y = 0;
+		for (TextData data : textElements) {
+			if (data.text.equals("\n")) {
+				x = 0;
+				y += fontRenderer.FONT_HEIGHT;
+				continue;
+			}
+
+			if (data.paragraph) {
+				x = 0;
+				y += fontRenderer.FONT_HEIGHT * 1.6D;
+			}
+
+			String text = getFormattedString(data);
+			List<IReorderingProcessor> split = fontRenderer.trimStringToWidth(new StringTextComponent(text), width);
+			for (int i = 0; i < split.size(); i++) {
+				IReorderingProcessor s = split.get(i);
+				int textLength;
+				if (data.shadow) {
+					textLength = fontRenderer.func_238407_a_(transform, s, x, y, 0);
+				} else {
+					textLength = fontRenderer.func_238422_b_(transform, s, x, y, 0);
+				}
+
+				if (i == split.size() - 1) {
+					x += textLength;
+				} else {
+					y += fontRenderer.FONT_HEIGHT;
+				}
+			}
+		}
+		//fontRenderer.setBidiFlag(unicode);
 	}
 
 	private String getFormattedString(TextData data) {

@@ -1,5 +1,12 @@
 package forestry.sorting.gui.widgets;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -10,18 +17,8 @@ import forestry.core.gui.widgets.WidgetScrollBar;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
-
 public class SelectionWidget extends Widget {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "filter_selection.png"
-	);
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "filter_selection.png");
 	final WidgetScrollBar scrollBar;
 	final GuiGeneticFilter gui;
 	@Nullable
@@ -59,24 +56,10 @@ public class SelectionWidget extends Widget {
 		}
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindTexture(TEXTURE);
-		manager.gui.blit(
-				transform,
-				startX + xPos,
-				startY + yPos,
-				0,
-				0,
-				width,
-				height
-		);
+		manager.gui.blit(transform, startX + xPos, startY + yPos, 0, 0, width, height);
 		logic.draw(transform);
 
-		manager.minecraft.fontRenderer.func_243248_b(
-				transform,
-				new TranslationTextComponent("for.gui.filter.seletion"),
-				startX + xPos + 12,
-				startY + yPos + 4,
-				manager.gui.getFontColor().get("gui.title")
-		);
+		manager.minecraft.fontRenderer.func_243248_b(transform, new TranslationTextComponent("for.gui.filter.seletion"), startX + xPos + 12, startY + yPos + 4, manager.gui.getFontColor().get("gui.title"));
 	}
 
 	@Nullable

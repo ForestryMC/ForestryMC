@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -16,9 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.TileAnalyzer;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 	private final TileAnalyzer tile;
@@ -33,13 +33,7 @@ public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer> {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
-		drawAnalyzeMeter(
-				transform,
-				guiLeft + 64,
-				guiTop + 30,
-				tile.getProgressScaled(46),
-				EnumTankLevel.rateTankLevel(tile.getProgressScaled(100))
-		);
+		drawAnalyzeMeter(transform, guiLeft + 64, guiTop + 30, tile.getProgressScaled(46), EnumTankLevel.rateTankLevel(tile.getProgressScaled(100)));
 	}
 
 	private void drawAnalyzeMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

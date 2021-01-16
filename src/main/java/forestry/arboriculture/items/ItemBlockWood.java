@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.items;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {

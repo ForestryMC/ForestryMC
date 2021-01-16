@@ -1,15 +1,19 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import forestry.api.arboriculture.*;
+import net.minecraftforge.common.PlantType;
+
+import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.IGrowthProvider;
+import forestry.api.arboriculture.ILeafProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.ITreeGenerator;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
-
-import net.minecraftforge.common.PlantType;
 
 public interface IAlleleTreeSpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleTreeSpeciesBuilder> {
 

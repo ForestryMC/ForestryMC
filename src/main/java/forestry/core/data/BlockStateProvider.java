@@ -3,7 +3,35 @@ package forestry.core.data;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import javax.annotation.Nullable;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,19 +41,6 @@ import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.state.Property;
 import net.minecraft.util.ResourceLocation;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nullable;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 public abstract class BlockStateProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -74,8 +89,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 	public abstract void registerStates();
 
 	protected Path makePath(ResourceLocation location) {
-		return this.generator.getOutputFolder().resolve(
-				"assets/" + location.getNamespace() + "/blockstates/" + location.getPath() + ".json");
+		return this.generator.getOutputFolder().resolve("assets/" + location.getNamespace() + "/blockstates/" + location.getPath() + ".json");
 	}
 
 	public void addVariants(Block block, IBuilder builder) {
@@ -118,13 +132,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 			return condition((state) -> state.get(property) == value, consumer);
 		}
 
-		public <T extends Comparable<T>, V extends Comparable<V>> Builder property(
-				Property<T> property,
-				T value,
-				Property<V> propertyTwo,
-				V valueTwo,
-				Consumer<Variant> consumer
-		) {
+		public <T extends Comparable<T>, V extends Comparable<V>> Builder property(Property<T> property, T value, Property<V> propertyTwo, V valueTwo, Consumer<Variant> consumer) {
 			return condition((state) -> state.get(property) == value && state.get(propertyTwo) == valueTwo, consumer);
 		}
 
@@ -263,27 +271,17 @@ public abstract class BlockStateProvider implements IDataProvider {
 			return this;
 		}
 
-		public <V extends Comparable<V>> MultipartBuilder property(
-				UnaryOperator<Variant> builder,
-				Property<V> property,
-				V... values
-		) {
+		public <V extends Comparable<V>> MultipartBuilder property(UnaryOperator<Variant> builder, Property<V> property, V... values) {
 			return and(builder, new ConditionBuilder().property(property, values));
 		}
 
 		public MultipartBuilder or(UnaryOperator<Variant> builder, ConditionBuilder condition) {
-			selectors.add(new Selector(
-					new OrCondition(condition.conditions),
-					Collections.singletonList(builder.apply(new Variant()))
-			));
+			selectors.add(new Selector(new OrCondition(condition.conditions), Collections.singletonList(builder.apply(new Variant()))));
 			return this;
 		}
 
 		public MultipartBuilder and(UnaryOperator<Variant> builder, ConditionBuilder condition) {
-			selectors.add(new Selector(
-					new AndCondition(condition.conditions, false),
-					Collections.singletonList(builder.apply(new Variant()))
-			));
+			selectors.add(new Selector(new AndCondition(condition.conditions, false), Collections.singletonList(builder.apply(new Variant()))));
 			return this;
 		}
 

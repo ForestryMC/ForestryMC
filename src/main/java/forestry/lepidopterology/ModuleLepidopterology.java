@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,42 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.Feature;
+
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
@@ -41,31 +72,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -104,19 +110,13 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
 		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
 		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
-		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-				spawnButterflysFromLeaves
-		);
+		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves", spawnButterflysFromLeaves);
 
 		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
-		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-				0.0f, 10.0f
-		);
+		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount, 0.0f, 10.0f);
 
 		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
-		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-				100.0f
-		);
+		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f, 100.0f);
 
 		parseRarity(config);
 		parseCooconLoots(config);
@@ -168,11 +168,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		Collections.sort(lootList);
 		String[] defaultLoot = lootList.toArray(new String[0]);
 
-		Property lootConf = config.get(
-				"butterfly.cocoons.alleles.loot",
-				cocoon.getRegistryName().toString(),
-				defaultLoot
-		);
+		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getRegistryName().toString(), defaultLoot);
 		lootConf.setComment(new TranslationTextComponent("for.config.butterfly.alleles.loot").getString());
 
 		String[] configLoot = lootConf.getStringList();

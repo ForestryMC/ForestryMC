@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.ClimateHandlerClient;
-import forestry.core.TickHandlerCoreClient;
-import forestry.core.models.ClientManager;
-import forestry.core.multiblock.MultiblockClientTickHandler;
-import forestry.core.multiblock.MultiblockEventHandlerClient;
-import forestry.core.render.TextureManagerForestry;
+import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -27,7 +22,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.io.File;
+import forestry.core.ClimateHandlerClient;
+import forestry.core.TickHandlerCoreClient;
+import forestry.core.models.ClientManager;
+import forestry.core.multiblock.MultiblockClientTickHandler;
+import forestry.core.multiblock.MultiblockEventHandlerClient;
+import forestry.core.render.TextureManagerForestry;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)

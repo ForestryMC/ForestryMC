@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,26 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.List;
+
+import net.minecraft.block.BeetrootBlock;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
@@ -25,7 +43,13 @@ import forestry.core.features.CoreItems;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.logic.ForestryFarmIdentifier;
-import forestry.farming.logic.farmables.*;
+import forestry.farming.logic.farmables.FarmableAgingCrop;
+import forestry.farming.logic.farmables.FarmableChorus;
+import forestry.farming.logic.farmables.FarmableGE;
+import forestry.farming.logic.farmables.FarmableGourd;
+import forestry.farming.logic.farmables.FarmableStacked;
+import forestry.farming.logic.farmables.FarmableVanillaMushroom;
+import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.farming.triggers.FarmingTriggers;
@@ -33,24 +57,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-
-import net.minecraft.block.BeetrootBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-
-import net.minecraftforge.fml.DistExecutor;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.List;
 
 //import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
@@ -84,89 +90,22 @@ public class ModuleFarming extends BlankForestryModule {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		registry.registerFarmables(
-				ForestryFarmIdentifier.ARBOREAL,
-				new FarmableVanillaSapling(Blocks.OAK_SAPLING, new ItemStack[]{new ItemStack(Items.APPLE)}),
-				new FarmableVanillaSapling(Blocks.SPRUCE_SAPLING, new ItemStack[0]),
-				new FarmableVanillaSapling(Blocks.ACACIA_SAPLING, new ItemStack[0]),
-				new FarmableVanillaSapling(Blocks.BIRCH_SAPLING, new ItemStack[0]),
-				new FarmableVanillaSapling(Blocks.JUNGLE_SAPLING, new ItemStack[]{new ItemStack(Items.COCOA_BEANS)}),
-				new FarmableVanillaSapling(Blocks.DARK_OAK_SAPLING, new ItemStack[0])
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling(Blocks.OAK_SAPLING, new ItemStack[]{new ItemStack(Items.APPLE)}), new FarmableVanillaSapling(Blocks.SPRUCE_SAPLING, new ItemStack[0]), new FarmableVanillaSapling(Blocks.ACACIA_SAPLING, new ItemStack[0]), new FarmableVanillaSapling(Blocks.BIRCH_SAPLING, new ItemStack[0]), new FarmableVanillaSapling(Blocks.JUNGLE_SAPLING, new ItemStack[]{new ItemStack(Items.COCOA_BEANS)}), new FarmableVanillaSapling(Blocks.DARK_OAK_SAPLING, new ItemStack[0]));
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 		}
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.CROPS,
-				new FarmableAgingCrop(
-						new ItemStack(Items.WHEAT_SEEDS),
-						Blocks.WHEAT,
-						new ItemStack(Items.WHEAT),
-						CropsBlock.AGE,
-						7,
-						0
-				),
-				new FarmableAgingCrop(
-						new ItemStack(Items.POTATO),
-						Blocks.POTATOES,
-						new ItemStack(Items.POTATO),
-						CropsBlock.AGE,
-						7,
-						0
-				),
-				new FarmableAgingCrop(
-						new ItemStack(Items.CARROT),
-						Blocks.CARROTS,
-						new ItemStack(Items.CARROT),
-						CropsBlock.AGE,
-						7,
-						0
-				),
-				new FarmableAgingCrop(
-						new ItemStack(Items.BEETROOT_SEEDS),
-						Blocks.BEETROOTS,
-						new ItemStack(Items.BEETROOT),
-						BeetrootBlock.BEETROOT_AGE,
-						3,
-						0
-				)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.CROPS, new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0), new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0), new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0), new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.SHROOM,
-				new FarmableVanillaMushroom(
-						new ItemStack(Blocks.RED_MUSHROOM),
-						Blocks.RED_MUSHROOM_BLOCK.getDefaultState(),
-						Blocks.RED_MUSHROOM_BLOCK
-				),
-				new FarmableVanillaMushroom(
-						new ItemStack(Blocks.BROWN_MUSHROOM),
-						Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState(),
-						Blocks.BROWN_MUSHROOM_BLOCK
-				)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.RED_MUSHROOM), Blocks.RED_MUSHROOM_BLOCK.getDefaultState(), Blocks.RED_MUSHROOM_BLOCK), new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState(), Blocks.BROWN_MUSHROOM_BLOCK));
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.GOURD,
-				new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON),
-				new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.GOURD, new FarmableGourd(new ItemStack(Items.MELON_SEEDS), Blocks.MELON_STEM, Blocks.MELON), new FarmableGourd(new ItemStack(Items.PUMPKIN_SEEDS), Blocks.PUMPKIN_STEM, Blocks.PUMPKIN));
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.INFERNAL,
-				new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.INFERNAL, new FarmableAgingCrop(new ItemStack(Items.NETHER_WART), Blocks.NETHER_WART, NetherWartBlock.AGE, 3));
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.POALES,
-				new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.POALES, new FarmableStacked(new ItemStack(Items.SUGAR_CANE), Blocks.SUGAR_CANE, 3));
 
-		registry.registerFarmables(
-				ForestryFarmIdentifier.SUCCULENTES,
-				new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3)
-		);
+		registry.registerFarmables(ForestryFarmIdentifier.SUCCULENTES, new FarmableStacked(new ItemStack(Blocks.CACTUS), Blocks.CACTUS, 3));
 
 		registry.registerFarmables(ForestryFarmIdentifier.ENDER, FarmableChorus.INSTANCE);
 

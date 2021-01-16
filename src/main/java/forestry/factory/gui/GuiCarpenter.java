@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -16,9 +19,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileCarpenter;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	private final TileCarpenter tile;
@@ -35,15 +35,7 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 		int progressScaled = tile.getProgressScaled(16);
-		blit(
-				transform,
-				guiLeft + 98,
-				guiTop + 51 + 16 - progressScaled,
-				176,
-				60 + 16 - progressScaled,
-				4,
-				progressScaled
-		);
+		blit(transform, guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 
 	@Override

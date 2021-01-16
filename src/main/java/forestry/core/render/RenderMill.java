@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
-
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileMill;
 
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
+
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileMill;
 
 public class RenderMill implements IForestryRenderer<TileMill> {
 	private final ResourceLocation[] textures;
@@ -68,10 +68,7 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 		textures[Textures.BLADE_2.ordinal()] = new ResourceLocation(Constants.MOD_ID, baseTexture + "blade2.png");
 
 		for (int i = 0; i < 8; i++) {
-			textures[Textures.CHARGE.ordinal() + i] = new ResourceLocation(
-					Constants.MOD_ID,
-					baseTexture + "column_" + i + ".png"
-			);
+			textures[Textures.CHARGE.ordinal() + i] = new ResourceLocation(Constants.MOD_ID, baseTexture + "column_" + i + ".png");
 		}
 	}
 
@@ -160,5 +157,11 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 
 	}
 
-	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	private enum Textures {
+		PEDESTAL,
+		EXTENSION,
+		BLADE_1,
+		BLADE_2,
+		CHARGE
+	}
 }

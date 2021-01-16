@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.particles;
 
 import net.minecraft.block.BlockState;
@@ -27,15 +27,7 @@ public class ColoredDripParticle extends SpriteTexturedParticle {
 	 */
 	private int bobTimer;
 
-	public ColoredDripParticle(
-			World world,
-			double x,
-			double y,
-			double z,
-			float red,
-			float green,
-			float blue
-	) {
+	public ColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue) {
 		super((ClientWorld) world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 

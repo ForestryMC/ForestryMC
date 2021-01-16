@@ -1,20 +1,27 @@
 package genetics.plugins;
 
-import genetics.api.GeneticPlugin;
-import genetics.api.IGeneticPlugin;
-
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-
-import net.minecraftforge.forgespi.language.ModFileScanData;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import org.objectweb.asm.Type;
+import net.minecraftforge.forgespi.language.ModFileScanData;
 
-import java.util.*;
-import java.util.function.Function;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+
+import genetics.api.GeneticPlugin;
+import genetics.api.IGeneticPlugin;
+
+import org.objectweb.asm.Type;
 
 public class PluginUtil {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -26,8 +33,7 @@ public class PluginUtil {
 	public static Map<IGeneticPlugin, ModContainer> getPlugins() {
 		Type annotationType = Type.getType(GeneticPlugin.class);
 		List<ModFileScanData> allScanData = ModList.get().getAllScanData();
-		Function<String, Optional<? extends ModContainer>> getContainer = (modId) -> ModList.get().getModContainerById(
-				modId);
+		Function<String, Optional<? extends ModContainer>> getContainer = (modId) -> ModList.get().getModContainerById(modId);
 		List<String> pluginClassNames = new ArrayList<>();
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotations = scanData.getAnnotations();

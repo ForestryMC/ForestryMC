@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage.items;
 
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Constants;
-import forestry.storage.gui.ContainerNaturalistBackpack;
-import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,7 +25,12 @@ import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Constants;
+import forestry.storage.gui.ContainerNaturalistBackpack;
+import forestry.storage.inventory.ItemInventoryBackpackPaged;
 
 public class ItemBackpackNaturalist extends ItemBackpack {
 	private final String rootUid;
@@ -64,18 +64,8 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 
 	@Override
 	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(
-				player,
-				Constants.SLOTS_BACKPACK_APIARIST,
-				heldItem,
-				this
-		);
-		return new ContainerNaturalistBackpack(
-				windowId,
-				player.inventory,
-				inventory,
-				0
-		);    //TODO init on first page? Or is this server desync?
+		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
+		return new ContainerNaturalistBackpack(windowId, player.inventory, inventory, 0);    //TODO init on first page? Or is this server desync?
 	}
 
 	//TODO see if this can be deduped. Given we pass in the held item etc.

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.particles.ColoredDripParticle;
-import forestry.modules.features.FeatureFluid;
-import forestry.modules.features.FluidProperties;
+import java.awt.Color;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -34,8 +33,9 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.awt.*;
-import java.util.Random;
+import forestry.core.particles.ColoredDripParticle;
+import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FluidProperties;
 
 public class BlockForestryFluid extends FlowingFluidBlock {
 	private final boolean flammable;
@@ -43,14 +43,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	private final Color color;
 
 	public BlockForestryFluid(FeatureFluid feature) {
-		super(
-				feature.fluid(),
-				Block.Properties.create(feature.fluid()
-						.getAttributes()
-						.getTemperature() > 505 ? Material.LAVA : Material.WATER)
-						.doesNotBlockMovement()
-						.hardnessAndResistance(100.0F).noDrops()
-		);
+		super(feature.fluid(), Block.Properties.create(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops());
 
 		FluidProperties properties = feature.getProperties();
 		this.flammability = properties.flammability;
@@ -66,12 +59,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	private static boolean isNeighborFlammable(World world, int x, int y, int z) {
-		return isFlammable(world, new BlockPos(x - 1, y, z)) ||
-				isFlammable(world, new BlockPos(x + 1, y, z)) ||
-				isFlammable(world, new BlockPos(x, y, z - 1)) ||
-				isFlammable(world, new BlockPos(x, y, z + 1)) ||
-				isFlammable(world, new BlockPos(x, y - 1, z)) ||
-				isFlammable(world, new BlockPos(x, y + 1, z));
+		return isFlammable(world, new BlockPos(x - 1, y, z)) || isFlammable(world, new BlockPos(x + 1, y, z)) || isFlammable(world, new BlockPos(x, y, z - 1)) || isFlammable(world, new BlockPos(x, y, z + 1)) || isFlammable(world, new BlockPos(x, y - 1, z)) || isFlammable(world, new BlockPos(x, y + 1, z));
 	}
 
 	private static boolean isNearFire(World world, int x, int y, int z) {
@@ -94,62 +82,24 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
 			if (i > 0 && i < 8) {
 				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
-					world.playSound(
-							d0 + 0.5D,
-							d1 + 0.5D,
-							d2 + 0.5D,
-							SoundEvents.BLOCK_WATER_AMBIENT,
-							SoundCategory.BLOCKS,
-							rand.nextFloat() * 0.25F + 0.75F,
-							rand.nextFloat() + 0.5F,
-							false
-					);
+					world.playSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.BLOCK_WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
-				world.addParticle(
-						ParticleTypes.UNDERWATER,
-						d0 + rand.nextFloat(),
-						d1 + rand.nextFloat(),
-						d2 + rand.nextFloat(),
-						0.0D,
-						0.0D,
-						0.0D
-				);
+				world.addParticle(ParticleTypes.UNDERWATER, d0 + rand.nextFloat(), d1 + rand.nextFloat(), d2 + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 			}
 		}
 
-		if (this.material == Material.LAVA
-				&& world.getBlockState(pos.up()).getMaterial() == Material.AIR
-				&& !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())
-		) {
+		if (this.material == Material.LAVA && world.getBlockState(pos.up()).getMaterial() == Material.AIR && !world.getBlockState(pos.up()).isOpaqueCube(world, pos.up())) {
 			if (rand.nextInt(100) == 0) {
 				double d8 = d0 + rand.nextFloat();
 				double d4 = d1 + 1;
 				double d6 = d2 + rand.nextFloat();
 				world.addParticle(ParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
-				world.playSound(
-						d8,
-						d4,
-						d6,
-						SoundEvents.BLOCK_LAVA_POP,
-						SoundCategory.BLOCKS,
-						0.2F + rand.nextFloat() * 0.2F,
-						0.9F + rand.nextFloat() * 0.15F,
-						false
-				);
+				world.playSound(d8, d4, d6, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 
 			if (rand.nextInt(200) == 0) {
-				world.playSound(
-						d0,
-						d1,
-						d2,
-						SoundEvents.BLOCK_LAVA_AMBIENT,
-						SoundCategory.BLOCKS,
-						0.2F + rand.nextFloat() * 0.2F,
-						0.9F + rand.nextFloat() * 0.15F,
-						false
-				);
+				world.playSound(d0, d1, d2, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 		}
 
@@ -161,15 +111,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 				double py = d1 - 1.05D;
 				double pz = d2 + rand.nextFloat();
 
-				Particle fx = new ColoredDripParticle(
-						world,
-						px,
-						py,
-						pz,
-						color.getRed() / 255f,
-						color.getGreen() / 255f,
-						color.getBlue() / 255f
-				);
+				Particle fx = new ColoredDripParticle(world, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
 				Minecraft.getInstance().particles.addEffect(fx);
 			}
 		}
@@ -249,15 +191,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			float explosionSize = 4F * flammability / 300F;
 			if (explosionSize > 1.0 && isNearFire(world, pos.getX(), pos.getY(), pos.getZ())) {
 				world.setBlockState(pos, Blocks.FIRE.getDefaultState());
-				world.createExplosion(
-						null,
-						pos.getX(),
-						pos.getY(),
-						pos.getZ(),
-						explosionSize,
-						true,
-						Explosion.Mode.DESTROY
-				);
+				world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, Explosion.Mode.DESTROY);
 			}
 		}
 	}

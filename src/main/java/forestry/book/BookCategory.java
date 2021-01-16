@@ -1,8 +1,9 @@
 package forestry.book;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IBookEntry;
-import forestry.api.book.IBookEntryBuilder;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -10,10 +11,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IBookEntry;
+import forestry.api.book.IBookEntryBuilder;
 
 @OnlyIn(Dist.CLIENT)
 public class BookCategory implements IBookCategory {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology.blocks;
 
-import forestry.api.core.EnumTemperature;
-import forestry.climatology.tiles.TileHabitatFormer;
-import forestry.core.blocks.BlockBase;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,18 +24,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.Random;
+import forestry.api.core.EnumTemperature;
+import forestry.climatology.tiles.TileHabitatFormer;
+import forestry.core.blocks.BlockBase;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileUtil;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
 	public BlockHabitatFormer() {
-		super(
-				BlockTypeClimatology.HABITAT_FORMER,
-				Block.Properties.create(Material.IRON)
-						.hardnessAndResistance(1.0f)
-						.harvestTool(ToolType.AXE)
-						.harvestLevel(0)
-		);
+		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -52,12 +46,7 @@ public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implemen
 	}
 
 	@Override
-	public int colorMultiplier(
-			BlockState state,
-			@Nullable IBlockReader worldIn,
-			@Nullable BlockPos pos,
-			int tintIndex
-	) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn == null || pos == null) {
 			return 0x912237;
 		}

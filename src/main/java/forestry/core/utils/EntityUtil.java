@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -21,8 +23,6 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 
 import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
 
 public abstract class EntityUtil {
 	@Nullable
@@ -47,17 +47,7 @@ public abstract class EntityUtil {
 		return living;
 	}
 
-	public static void registerEntity(
-			ResourceLocation registryName,
-			EntityType type,
-			String ident,
-			int id,
-			int eggForeground,
-			int eggBackground,
-			int trackingRange,
-			int updateFrequency,
-			boolean sendVelocity
-	) {
+	public static void registerEntity(ResourceLocation registryName, EntityType type, String ident, int id, int eggForeground, int eggBackground, int trackingRange, int updateFrequency, boolean sendVelocity) {
 		ForgeRegistries.ENTITIES.register(type);    //TODO
 		//		EntityRegistry.registerModEntity(registryName, entityClass, ident, id, ForestryAPI.instance, trackingRange, updateFrequency, sendVelocity);
 		Log.debug("Registered entity {} ({}) with id {}.", ident, type.toString(), id);

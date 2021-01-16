@@ -1,0 +1,30 @@
+{
+	"title": "農場結構",
+	"icon": {
+		"item": "forestry:ffarm"
+	},
+	"content": [
+		[
+			{
+				"text": "農場方塊是多功能農場的主體結構方塊，有鑒於多功能農場是多方塊結構，視尺寸不同你需要數量不等的農場方塊。農場主體的第三層必須全部是這種方塊；然而其他位置上的任何方塊都可以換成其他功能的農場方塊。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_basic_brick"
+				]
+			},
+			{
+				"text": "配方中的磚塊可以換成任意種類的石磚、平滑/浮雕的砂岩或石英磚。不同的材料只決定不同的外觀。不同種類材料製成的農場方塊可以混搭，不影響使用。"
+			}
+		]
+	],
+	"subEntries": [
+		"farming/farm_structure.valve",
+		"farming/farm_structure.gearbox",
+		"farming/farm_structure.hatch",
+		"farming/farm_structure.control"
+	]
+}

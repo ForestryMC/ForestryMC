@@ -1,19 +1,19 @@
 package forestry.api.genetics;
 
-import com.mojang.authlib.GameProfile;
+import java.util.Map;
 
-import forestry.core.genetics.root.IResearchPlugin;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-
-import java.util.Map;
+import forestry.core.genetics.root.IResearchPlugin;
 
 public interface IResearchHandler<I extends IIndividual> extends IRootComponent<I> {
 
@@ -40,13 +40,7 @@ public interface IResearchHandler<I extends IIndividual> extends IRootComponent<
 	/**
 	 * @return ItemStacks representing the bounty for this research success.
 	 */
-	NonNullList<ItemStack> getResearchBounty(
-			IAlleleSpecies species,
-			World world,
-			GameProfile gameProfile,
-			I individual,
-			int bountyLevel
-	);
+	NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel);
 
 	@Override
 	ComponentKey<IResearchHandler> getKey();

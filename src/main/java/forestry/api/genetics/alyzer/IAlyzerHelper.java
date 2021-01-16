@@ -1,6 +1,8 @@
 package forestry.api.genetics.alyzer;
 
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
@@ -11,9 +13,7 @@ import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 /**
  * Helper for creating easily a multiline multicolumn gui like the forestry alyzer. Can be used to create custom gui
@@ -72,12 +72,7 @@ public interface IAlyzerHelper {
 
 	ItemStack getDisplayStack(IAlleleSpecies species);
 
-	void drawSpeciesRow(
-			String caption,
-			IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType,
-			ITextComponent primaryName,
-			ITextComponent secondaryName
-	);
+	void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, ITextComponent primaryName, ITextComponent secondaryName);
 
 	class Column {
 		public static final int FIRST = 12;

@@ -2,12 +2,10 @@ package forestry.core.gui.elements;
 
 import com.google.common.base.Preconditions;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.core.tooltips.ITextInstance;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.ILabelElement;
-import forestry.core.gui.elements.lib.ITextElement;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,10 +13,12 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Consumer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.api.core.tooltips.ITextInstance;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.ILabelElement;
+import forestry.core.gui.elements.lib.ITextElement;
 
 public class LabelElement extends GuiElement implements ILabelElement {
 	/* Constants */

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,26 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.climate;
-
-import forestry.api.climate.*;
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.config.Config;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import forestry.api.climate.ClimateManager;
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateHousing;
+import forestry.api.climate.IClimateManipulatorBuilder;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
+import forestry.api.climate.IWorldClimateHolder;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.config.Config;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 
 public class ClimateTransformer implements IClimateTransformer, IStreamable, INbtReadable, INbtWritable {
 
@@ -59,8 +65,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	}
 
 	private static int computeArea(int range, boolean circular) {
-		return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI)
-				: (range * 2 + 1) * (range * 2 + 1);
+		return circular ? Math.round((range + 0.5F) * (range + 0.5F) * 2.0F * (float) Math.PI) : (range * 2 + 1) * (range * 2 + 1);
 	}
 
 	private static float calculateSpeedModifier(float area) {
@@ -192,13 +197,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	@Override
 	public IClimateManipulatorBuilder createManipulator(ClimateType type) {
-		return new ClimateManipulator.Builder()
-				.setDefault(defaultState)
-				.setCurrent(currentState)
-				.setTarget(targetedState)
-				.setChangeSupplier(housing::getChangeForState)
-				.setType(type)
-				.setOnFinish(this::setCurrent);
+		return new ClimateManipulator.Builder().setDefault(defaultState).setCurrent(currentState).setTarget(targetedState).setChangeSupplier(housing::getChangeForState).setType(type).setOnFinish(this::setCurrent);
 	}
 
 	/* Save and Load */

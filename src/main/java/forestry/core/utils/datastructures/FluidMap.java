@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils.datastructures;
 
 import net.minecraft.fluid.Fluid;
@@ -38,8 +38,7 @@ public class FluidMap<T> extends StackMap<Fluid, T> {
 
 	@Override
 	protected boolean isValidKey(Object key) {
-		return key instanceof FluidStack || key instanceof Fluid || key instanceof String ||
-				key instanceof ResourceLocation;
+		return key instanceof FluidStack || key instanceof Fluid || key instanceof String || key instanceof ResourceLocation;
 	}
 
 	@Override

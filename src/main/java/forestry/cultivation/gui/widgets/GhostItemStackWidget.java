@@ -1,14 +1,7 @@
 package forestry.cultivation.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.core.tooltips.ToolTip;
-import forestry.api.farming.FarmDirection;
-import forestry.core.gui.widgets.ItemStackWidget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.render.ColourProperties;
-import forestry.cultivation.inventory.InventoryPlanter;
+import javax.annotation.Nullable;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -19,8 +12,15 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import forestry.api.core.tooltips.ToolTip;
+import forestry.api.farming.FarmDirection;
+import forestry.core.gui.widgets.ItemStackWidget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.render.ColourProperties;
+import forestry.cultivation.inventory.InventoryPlanter;
 
 public class GhostItemStackWidget extends ItemStackWidget {
 	private final Slot slot;
@@ -42,13 +42,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		ITextComponent directionString = getDirectionString();
 		if (!directionString.getString().isEmpty()) {
 			FontRenderer fontRenderer = manager.minecraft.fontRenderer;
-			fontRenderer.func_243246_a(
-					transform,
-					getDirectionString(),
-					xPos + startX + 5,
-					yPos + startY + 4,
-					ColourProperties.INSTANCE.get("gui.screen")
-			);
+			fontRenderer.func_243246_a(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
@@ -69,8 +63,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 	}
 
 	private ITextComponent getDirectionString() {
-		if (slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 ||
-				slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT) {
+		if (slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 || slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT) {
 			return new StringTextComponent("");
 		}
 

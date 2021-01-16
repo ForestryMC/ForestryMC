@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.api.core.IItemSubtype;
-import forestry.core.render.ColourProperties;
+import java.util.Locale;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Locale;
+import forestry.api.core.IItemSubtype;
+import forestry.core.render.ColourProperties;
 
 public enum EnumCircuitBoardType implements IItemSubtype {
 	BASIC(1),

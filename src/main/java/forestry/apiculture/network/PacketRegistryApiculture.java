@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.network;
-
-import forestry.apiculture.network.packets.*;
-import forestry.core.network.IPacketRegistry;
-import forestry.core.network.PacketIdClient;
-import forestry.core.network.PacketIdServer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.apiculture.network.packets.PacketAlvearyChange;
+import forestry.apiculture.network.packets.PacketBeeLogicActive;
+import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
+import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
+import forestry.apiculture.network.packets.PacketCandleUpdate;
+import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
+import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.network.PacketIdServer;
 
 public class PacketRegistryApiculture implements IPacketRegistry {
 	@Override

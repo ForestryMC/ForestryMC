@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.api.core.tooltips.ToolTip;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.fluid.Fluid;
@@ -28,10 +31,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.core.tooltips.ToolTip;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -88,9 +88,7 @@ public class FilteredTank extends StandardTank {
 			}
 		} else {
 			//TODO can this be simplified
-			ITextComponent tmiComponent = new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-					.append(new StringTextComponent(">"));
+			ITextComponent tmiComponent = new StringTextComponent("<").append(new TranslationTextComponent("for.gui.tooltip.tmi")).append(new StringTextComponent(">"));
 			toolTip.add(tmiComponent, TextFormatting.ITALIC);
 		}
 		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));

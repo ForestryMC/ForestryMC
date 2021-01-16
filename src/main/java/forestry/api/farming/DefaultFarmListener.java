@@ -1,15 +1,15 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.farming;
+
+import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Collection;
 
 /**
  * Easily extendable default farmListener.
@@ -38,13 +38,7 @@ public class DefaultFarmListener implements IFarmListener {
 	}
 
 	@Override
-	public void hasScheduledHarvest(
-			Collection<ICrop> harvested,
-			IFarmLogic logic,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	) {
+	public void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent) {
 
 	}
 

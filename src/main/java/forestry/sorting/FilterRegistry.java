@@ -1,16 +1,20 @@
 package forestry.sorting;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRegistry;
 import forestry.api.genetics.filter.IFilterRuleType;
 
-import javax.annotation.Nullable;
-import java.util.*;
-
 public class FilterRegistry implements IFilterRegistry {
-	private static final Comparator<IFilterRuleType> FILTER_COMPARATOR = (f, s) -> f.getUID()
-			.compareToIgnoreCase(s.getUID());
+	private static final Comparator<IFilterRuleType> FILTER_COMPARATOR = (f, s) -> f.getUID().compareToIgnoreCase(s.getUID());
 
 	private final HashMap<String, IFilterRuleType> filterByName = new LinkedHashMap<>();
 	private final HashMap<String, Integer> filterIDByName = new LinkedHashMap<>();

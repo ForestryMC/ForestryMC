@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.core.*;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.apiculture.gui.ContainerHabitatLocator;
-import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
-import forestry.core.items.ItemWithGui;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -33,8 +30,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.core.ItemGroups;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.apiculture.gui.ContainerHabitatLocator;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
+import forestry.core.items.ItemWithGui;
 
 public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private static final String iconName = "forestry:items/biomefinder";
@@ -68,12 +72,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		Minecraft minecraft = Minecraft.getInstance();
@@ -84,22 +83,11 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-			list.add(
-					new TranslationTextComponent("for.gui.currentBiome")
-							.append(new StringTextComponent(": "))
-							.append(new TranslationTextComponent(
-									"biome." + currentBiome.getRegistryName().getNamespace() + "." +
-											currentBiome.getRegistryName().getPath()
-							))
-			);
+			list.add(new TranslationTextComponent("for.gui.currentBiome").append(new StringTextComponent(": ")).append(new TranslationTextComponent("biome." + currentBiome.getRegistryName().getNamespace() + "." + currentBiome.getRegistryName().getPath())));
 
-			list.add(new TranslationTextComponent("for.gui.temperature")
-					.append(new StringTextComponent(": "))
-					.append(AlleleManager.climateHelper.toDisplay(temperature)));
+			list.add(new TranslationTextComponent("for.gui.temperature").append(new StringTextComponent(": ")).append(AlleleManager.climateHelper.toDisplay(temperature)));
 
-			list.add(new TranslationTextComponent("for.gui.humidity")
-					.append(new StringTextComponent(": "))
-					.append(AlleleManager.climateHelper.toDisplay(humidity)));
+			list.add(new TranslationTextComponent("for.gui.humidity").append(new StringTextComponent(": ")).append(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}
 

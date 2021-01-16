@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,26 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.tiles;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleFruit;
-import forestry.api.genetics.IFruitBearer;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.IProductList;
-import forestry.api.genetics.products.Product;
-import forestry.arboriculture.features.ArboricultureTiles;
-import forestry.core.config.Constants;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.BlockUtil;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.RenderUtil;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CocoaBlock;
@@ -42,16 +28,29 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.Random;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleFruit;
+import forestry.api.genetics.IFruitBearer;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
+import forestry.arboriculture.features.ArboricultureTiles;
+import forestry.core.config.Constants;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.BlockUtil;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.RenderUtil;
 
 public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamable {
 
 	private static final short MAX_MATURITY = 2;
 	private static final IGenome defaultGenome = TreeManager.treeRoot.getKaryotype().getDefaultGenome();
-	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(
-			Constants.MOD_ID + ".fruitCocoa").get();
+	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(Constants.MOD_ID + ".fruitCocoa").get();
 
 	private IGenome genome = defaultGenome;
 	private IAlleleFruit allele = defaultAllele;

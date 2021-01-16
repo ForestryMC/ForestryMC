@@ -1,9 +1,11 @@
 package forestry.core.worldgen;
 
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.arboriculture.worldgen.ITreeBlockType;
-import forestry.arboriculture.worldgen.TreeBlockType;
-import forestry.core.utils.VectUtil;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,8 +19,10 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.arboriculture.worldgen.ITreeBlockType;
+import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.core.utils.VectUtil;
 
 public class FeatureHelper {
 	public static boolean addBlock(IWorld world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode) {
@@ -37,29 +41,14 @@ public class FeatureHelper {
 	/**
 	 * Uses centerPos and girth of a tree to calculate the center
 	 */
-	public static void generateCylinderFromTreeStartPos(
-			IWorld world,
-			ITreeBlockType block,
-			BlockPos startPos,
-			int girth,
-			float radius,
-			int height,
-			EnumReplaceMode replace
-	) {
+	public static void generateCylinderFromTreeStartPos(IWorld world, ITreeBlockType block, BlockPos startPos, int girth, float radius, int height, EnumReplaceMode replace) {
 		generateCylinderFromPos(world, block, startPos.add(girth / 2, 0, girth / 2), radius, height, replace);
 	}
 
 	/**
 	 * Center is the bottom middle of the cylinder
 	 */
-	public static void generateCylinderFromPos(
-			IWorld world,
-			ITreeBlockType block,
-			BlockPos center,
-			float radius,
-			int height,
-			EnumReplaceMode replace
-	) {
+	public static void generateCylinderFromPos(IWorld world, ITreeBlockType block, BlockPos center, float radius, int height, EnumReplaceMode replace) {
 		BlockPos start = new BlockPos(center.getX() - radius, center.getY(), center.getZ() - radius);
 		for (int x = 0; x < radius * 2 + 1; x++) {
 			for (int y = height - 1; y >= 0; y--) { // generating top-down is faster for lighting calculations
@@ -76,50 +65,18 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generateCircleFromTreeStartPos(
-			IWorld world,
-			Random rand,
-			BlockPos startPos,
-			int girth,
-			float radius,
-			int width,
-			int height,
-			ITreeBlockType block,
-			float chance,
-			EnumReplaceMode replace
-	) {
-		generateCircle(
-				world,
-				rand,
-				startPos.add(girth / 2, 0, girth / 2),
-				radius,
-				width,
-				height,
-				block,
-				chance,
-				replace
-		);
+	public static void generateCircleFromTreeStartPos(IWorld world, Random rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
+		generateCircle(world, rand, startPos.add(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace);
 	}
 
-	public static void generateCircle(
-			IWorld world,
-			Random rand,
-			BlockPos center,
-			float radius,
-			int width,
-			int height,
-			ITreeBlockType block,
-			float chance,
-			EnumReplaceMode replace
-	) {
+	public static void generateCircle(IWorld world, Random rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
 		Vector3i start = new Vector3i(center.getX() - radius, center.getY(), center.getZ() - radius);
 		Vector3i area = new Vector3i(radius * 2 + 1, height, radius * 2 + 1);
 
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
 			for (
-					int y = start.getY() + area.getY() - 1;
-					y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
+					int y = start.getY() + area.getY() - 1; y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 
 					if (rand.nextFloat() > chance) {
@@ -127,8 +84,7 @@ public class FeatureHelper {
 					}
 
 					double distance = mutablePos.setPos(x, y, z).distanceSq(center.getX(), y, center.getZ(), false);
-					if ((radius - width - 0.01) * (radius - width - 0.01) < distance &&
-							distance <= (radius + 0.01) * (radius + 0.01)) {
+					if ((radius - width - 0.01) * (radius - width - 0.01) < distance && distance <= (radius + 0.01) * (radius + 0.01)) {
 						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
 				}
@@ -136,31 +92,17 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generateSphereFromTreeStartPos(
-			IWorld world,
-			BlockPos startPos,
-			int girth,
-			int radius,
-			ITreeBlockType block,
-			EnumReplaceMode replace
-	) {
+	public static void generateSphereFromTreeStartPos(IWorld world, BlockPos startPos, int girth, int radius, ITreeBlockType block, EnumReplaceMode replace) {
 		generateSphere(world, startPos.add(girth / 2, 0, girth / 2), radius, block, replace);
 	}
 
-	public static void generateSphere(
-			IWorld world,
-			BlockPos center,
-			int radius,
-			ITreeBlockType block,
-			EnumReplaceMode replace
-	) {
+	public static void generateSphere(IWorld world, BlockPos center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
 		Vector3i start = new Vector3i(center.getX() - radius, center.getY() - radius, center.getZ() - radius);
 		Vector3i area = new Vector3i(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		for (int x = start.getX(); x < start.getX() + area.getX(); x++) {
 			for (
-					int y = start.getY() + area.getY() - 1;
-					y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
+					int y = start.getY() + area.getY() - 1; y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 					//center.getDistance(x, y, z) <= radius + 0.01
 					if (center.withinDistance(mutablePos.setPos(x, y, z), radius + 0.01)) {
@@ -174,18 +116,7 @@ public class FeatureHelper {
 	/**
 	 * Returns a list of trunk top coordinates
 	 */
-	public static Set<BlockPos> generateTreeTrunk(
-			IWorld world,
-			Random rand,
-			ITreeBlockType wood,
-			BlockPos startPos,
-			int height,
-			int girth,
-			int yStart,
-			float vinesChance,
-			@Nullable Direction leanDirection,
-			float leanScale
-	) {
+	public static Set<BlockPos> generateTreeTrunk(IWorld world, Random rand, ITreeBlockType wood, BlockPos startPos, int height, int girth, int yStart, float vinesChance, @Nullable Direction leanDirection, float leanScale) {
 		Set<BlockPos> treeTops = new HashSet<>();
 
 		final int leanStartY = (int) Math.floor(height * 0.33f);
@@ -261,16 +192,7 @@ public class FeatureHelper {
 		}
 	}
 
-	public static void generatePods(
-			ITreeGenData tree,
-			IWorld world,
-			Random rand,
-			BlockPos startPos,
-			int height,
-			int minHeight,
-			int girth,
-			EnumReplaceMode replaceMode
-	) {
+	public static void generatePods(ITreeGenData tree, IWorld world, Random rand, BlockPos startPos, int height, int minHeight, int girth, EnumReplaceMode replaceMode) {
 		for (int y = height - 1; y >= minHeight; y--) { // generating top-down is faster for lighting calculations
 			for (int x = 0; x < girth; x++) {
 				for (int z = 0; z < girth; z++) {
@@ -288,29 +210,14 @@ public class FeatureHelper {
 		}
 	}
 
-	private static void trySpawnFruitBlock(
-			ITreeGenData tree,
-			IWorld world,
-			Random rand,
-			BlockPos pos,
-			EnumReplaceMode replaceMode
-	) {
+	private static void trySpawnFruitBlock(ITreeGenData tree, IWorld world, Random rand, BlockPos pos, EnumReplaceMode replaceMode) {
 		BlockState blockState = world.getBlockState(pos);
 		if (replaceMode.canReplace(blockState, world, pos)) {
 			tree.trySpawnFruitBlock(world, rand, pos);
 		}
 	}
 
-	public static void generateSupportStems(
-			ITreeBlockType wood,
-			IWorld world,
-			Random rand,
-			BlockPos startPos,
-			int height,
-			int girth,
-			float chance,
-			float maxHeight
-	) {
+	public static void generateSupportStems(ITreeBlockType wood, IWorld world, Random rand, BlockPos startPos, int height, int girth, float chance, float maxHeight) {
 
 		final int min = -1;
 
@@ -318,8 +225,7 @@ public class FeatureHelper {
 			for (int z = min; z <= girth; z++) {
 
 				// skip the corners, support stems should touch the body of the trunk
-				if ((x == min && z == min) || (x == girth && z == girth) || (x == min && z == girth) ||
-						(x == girth && z == min)) {
+				if ((x == min && z == min) || (x == girth && z == girth) || (x == min && z == girth) || (x == girth && z == min)) {
 					continue;
 				}
 
@@ -333,18 +239,7 @@ public class FeatureHelper {
 		}
 	}
 
-	public static Set<BlockPos> generateBranches(
-			final IWorld world,
-			final Random rand,
-			final ITreeBlockType wood,
-			final BlockPos startPos,
-			final int girth,
-			final float spreadY,
-			final float spreadXZ,
-			int radius,
-			final int count,
-			final float chance
-	) {
+	public static Set<BlockPos> generateBranches(final IWorld world, final Random rand, final ITreeBlockType wood, final BlockPos startPos, final int girth, final float spreadY, final float spreadXZ, int radius, final int count, final float chance) {
 		Set<BlockPos> branchEnds = new HashSet<>();
 		if (radius < 1) {
 			radius = 1;
@@ -436,13 +331,7 @@ public class FeatureHelper {
 			@Override
 			public boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
 				if (world instanceof World) {
-					BlockItemUseContext context = new DirectionalPlaceContext(
-							(World) world,
-							pos,
-							Direction.DOWN,
-							ItemStack.EMPTY,
-							Direction.UP
-					);
+					BlockItemUseContext context = new DirectionalPlaceContext((World) world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP);
 					return blockState.isReplaceable(context);
 				}
 				return blockState.getMaterial().isReplaceable();
@@ -454,12 +343,7 @@ public class FeatureHelper {
 
 	public static class DirectionHelper {
 
-		public static final Direction[] VALUES = new Direction[]{
-				Direction.NORTH,
-				Direction.SOUTH,
-				Direction.EAST,
-				Direction.WEST
-		};
+		public static final Direction[] VALUES = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
 		public static Direction getRandom(Random random) {
 			return VALUES[random.nextInt(VALUES.length)];

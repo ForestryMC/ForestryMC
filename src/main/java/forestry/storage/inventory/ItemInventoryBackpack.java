@@ -2,13 +2,13 @@ package forestry.storage.inventory;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.inventory.ItemInventory;
-import forestry.storage.items.ItemBackpack;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.inventory.ItemInventory;
+import forestry.storage.items.ItemBackpack;
 
 public class ItemInventoryBackpack extends ItemInventory {
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.multiblock;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -16,10 +20,6 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.cultivation.IFarmHousingInternal;
 import forestry.farming.gui.IFarmLedgerDelegate;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, INbtReadable, IStreamable {
 	private static final int DELAY_HYDRATION = 100;

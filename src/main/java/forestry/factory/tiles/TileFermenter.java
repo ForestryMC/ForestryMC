@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,27 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.fuels.FermenterFuel;
-import forestry.api.fuels.FuelManager;
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.api.recipes.IVariableFermentable;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerFermenter;
-import forestry.factory.inventory.InventoryFermenter;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,8 +34,24 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IVariableFermentable;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.TankRenderInfo;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerFermenter;
+import forestry.factory.inventory.InventoryFermenter;
 
 //import net.minecraftforge.fml.common.Optional;
 
@@ -121,11 +121,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		FluidStack fluid = resourceTank.getFluid();
 
 		if (!fluid.isEmpty()) {
-			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(
-					world.getRecipeManager(),
-					resource,
-					fluid
-			);
+			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(world.getRecipeManager(), resource, fluid);
 		}
 
 		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
@@ -189,8 +185,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
 			Fluid output = currentRecipe.getOutput();
 			FluidStack fluidStack = new FluidStack(output, productAmount);
-			hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) ==
-					fluidStack.getAmount();
+			hasFluidSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -212,14 +207,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (fluidStack != null) {
-				FluidHelper.fillContainers(
-						tankManager,
-						this,
-						InventoryFermenter.SLOT_CAN_INPUT,
-						InventoryFermenter.SLOT_CAN_OUTPUT,
-						fluidStack.getFluid(),
-						true
-				);
+				FluidHelper.fillContainers(tankManager, this, InventoryFermenter.SLOT_CAN_INPUT, InventoryFermenter.SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);
 			}
 		}
 	}
@@ -267,10 +255,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		int fermented = Math.min(fermentationTime, fuelCurrentFerment);
 		int productAmount = Math.round(fermented * currentRecipe.getModifier() * currentResourceModifier);
-		productTank.fillInternal(
-				new FluidStack(currentRecipe.getOutput(), productAmount),
-				IFluidHandler.FluidAction.EXECUTE
-		);
+		productTank.fillInternal(new FluidStack(currentRecipe.getOutput(), productAmount), IFluidHandler.FluidAction.EXECUTE);
 
 		fuelBurnTime--;
 		resourceTank.drain(fermented, IFluidHandler.FluidAction.EXECUTE);

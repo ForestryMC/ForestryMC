@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,27 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage.items;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.core.ItemGroups;
-import forestry.api.storage.BackpackStowEvent;
-import forestry.api.storage.EnumBackpackType;
-import forestry.api.storage.IBackpackDefinition;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.inventory.ItemHandlerInventoryManipulator;
-import forestry.core.inventory.ItemInventory;
-import forestry.core.inventory.StandardStackFilters;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.storage.BackpackMode;
-import forestry.storage.gui.ContainerBackpack;
-import forestry.storage.inventory.ItemInventoryBackpack;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,8 +39,22 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.core.ItemGroups;
+import forestry.api.storage.BackpackStowEvent;
+import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.inventory.ItemHandlerInventoryManipulator;
+import forestry.core.inventory.ItemInventory;
+import forestry.core.inventory.StandardStackFilters;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.storage.BackpackMode;
+import forestry.storage.gui.ContainerBackpack;
+import forestry.storage.inventory.ItemInventoryBackpack;
 
 public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	private final IBackpackDefinition definition;
@@ -166,10 +166,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-		buffer.writeEnum(
-				type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT,
-				ContainerBackpack.Size.values()
-		);
+		buffer.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
 		buffer.writeItemStack(stack);
 	}
 
@@ -210,8 +207,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		// We only do this when shift is clicked
 		if (player.isSneaking()) {
 			ItemStack heldItem = player.getHeldItem(context.getHand());
-			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace())
-					? ActionResultType.PASS : ActionResultType.FAIL;
+			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
 		}
 		return super.onItemUseFirst(stack, context);
 	}
@@ -265,12 +261,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -280,11 +271,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		if (infoKey != null) {
 			list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent(
-				"for.gui.slots",
-				String.valueOf(occupied),
-				String.valueOf(getBackpackSize())
-		).mergeStyle(TextFormatting.GRAY));
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).mergeStyle(TextFormatting.GRAY));
 	}
 
 	@Override

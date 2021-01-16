@@ -1,6 +1,8 @@
 package forestry.core.gui.elements.lib;
 
-import forestry.core.gui.elements.LabelElement;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -10,9 +12,7 @@ import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
+import forestry.core.gui.elements.LabelElement;
 
 @OnlyIn(Dist.CLIENT)
 public interface IElementGroup extends IGuiElement {
@@ -89,15 +89,7 @@ public interface IElementGroup extends IGuiElement {
 
 	ILabelElement label(ITextComponent text, int width, int height, GuiElementAlignment align, Style textStyle);
 
-	ILabelElement label(
-			ITextComponent text,
-			int x,
-			int y,
-			int width,
-			int height,
-			GuiElementAlignment align,
-			Style textStyle
-	);
+	ILabelElement label(ITextComponent text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle);
 
 	/**
 	 * Adds a text element that splits the text with wordwrap.
@@ -108,14 +100,7 @@ public interface IElementGroup extends IGuiElement {
 
 	ITextElement splitText(IFormattableTextComponent text, int width, GuiElementAlignment align, Style textStyle);
 
-	ITextElement splitText(
-			IFormattableTextComponent text,
-			int x,
-			int y,
-			int width,
-			GuiElementAlignment align,
-			Style textStyle
-	);
+	ITextElement splitText(IFormattableTextComponent text, int x, int y, int width, GuiElementAlignment align, Style textStyle);
 
 	default IElementLayout vertical(int width) {
 		return vertical(0, 0, width);

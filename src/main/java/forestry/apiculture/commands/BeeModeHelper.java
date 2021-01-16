@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.commands;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeekeepingMode;
-import forestry.core.commands.ICommandModeHelper;
-
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.world.World;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.core.commands.ICommandModeHelper;
 
 public class BeeModeHelper implements ICommandModeHelper {
 	@Override

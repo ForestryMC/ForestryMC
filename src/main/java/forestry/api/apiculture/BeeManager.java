@@ -1,24 +1,24 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture;
-
-import forestry.api.apiculture.genetics.IBeeFactory;
-import forestry.api.apiculture.genetics.IBeeMutationFactory;
-import forestry.api.apiculture.genetics.IBeeRoot;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IGenome;
-import genetics.api.root.IRootDefinition;
-
-import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IGenome;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.apiculture.genetics.IBeeFactory;
+import forestry.api.apiculture.genetics.IBeeMutationFactory;
+import forestry.api.apiculture.genetics.IBeeRoot;
 
 /**
  * Some miscellaneous lists and settings for bees.
@@ -28,11 +28,6 @@ import java.util.Map;
 public class BeeManager {
 
 	/**
-	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
-	 */
-	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
-	public static final IRootDefinition<IBeeRoot> beeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootBees");
-	/**
 	 * Common Village Bees
 	 */
 	public static List<IGenome> commonVillageBees;
@@ -40,6 +35,14 @@ public class BeeManager {
 	 * Uncommon Village Bees (20 % of spawns)
 	 */
 	public static List<IGenome> uncommonVillageBees;
+
+	/**
+	 * List of items that can induce swarming. Integer denotes x in 1000 chance.
+	 */
+	public static final Map<ItemStack, Integer> inducers = new HashMap<>();
+
+	public static final IRootDefinition<IBeeRoot> beeRootDefinition = GeneticsAPI.apiInstance.getRoot("rootBees");
+
 	/**
 	 * Convenient access to AlleleManager.alleleRegistry.getSpeciesRoot("rootBees")
 	 *

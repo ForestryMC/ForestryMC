@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,27 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.gui;
-
-import forestry.core.gui.ContainerLiquidTanks;
-import forestry.core.gui.IContainerCrafting;
-import forestry.core.gui.slots.*;
-import forestry.core.network.packets.PacketItemStackDisplay;
-import forestry.core.tiles.TileUtil;
-import forestry.factory.features.FactoryContainers;
-import forestry.factory.inventory.InventoryCarpenter;
-import forestry.factory.tiles.TileCarpenter;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+
+import forestry.core.gui.ContainerLiquidTanks;
+import forestry.core.gui.IContainerCrafting;
+import forestry.core.gui.slots.SlotCraftMatrix;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.gui.slots.SlotLiquidIn;
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.gui.slots.SlotOutput;
+import forestry.core.network.packets.PacketItemStackDisplay;
+import forestry.core.tiles.TileUtil;
+import forestry.factory.features.FactoryContainers;
+import forestry.factory.inventory.InventoryCarpenter;
+import forestry.factory.tiles.TileCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeModelProvider;
-import forestry.api.apiculture.genetics.EnumBeeType;
+import java.util.EnumMap;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.EnumMap;
+import forestry.api.apiculture.IBeeModelProvider;
+import forestry.api.apiculture.genetics.EnumBeeType;
 
 public class DefaultBeeModelProvider implements IBeeModelProvider {
 

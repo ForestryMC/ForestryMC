@@ -1,11 +1,15 @@
 package forestry.database;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 public class DatabaseHelper {
 	public static boolean ascending;
@@ -17,11 +21,9 @@ public class DatabaseHelper {
 			return -1;
 		}
 		if (ascending) {
-			return getItemName(firstStack.itemStack).getString()
-					.compareToIgnoreCase(getItemName(secondStack.itemStack).getString());
+			return getItemName(firstStack.itemStack).getString().compareToIgnoreCase(getItemName(secondStack.itemStack).getString());
 		}
-		return getItemName(secondStack.itemStack).getString()
-				.compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
+		return getItemName(secondStack.itemStack).getString().compareToIgnoreCase(getItemName(firstStack.itemStack).getString());
 	};
 
 	public static ITextComponent getItemName(ItemStack itemStack) {
@@ -37,10 +39,7 @@ public class DatabaseHelper {
 			pattern = Pattern.compile(searchText.toLowerCase(Locale.ENGLISH), Pattern.CASE_INSENSITIVE);
 		} catch (Throwable ignore) {
 			try {
-				pattern = Pattern.compile(
-						Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)),
-						Pattern.CASE_INSENSITIVE
-				);
+				pattern = Pattern.compile(Pattern.quote(searchText.toLowerCase(Locale.ENGLISH)), Pattern.CASE_INSENSITIVE);
 			} catch (Throwable e) {
 				return;
 			}

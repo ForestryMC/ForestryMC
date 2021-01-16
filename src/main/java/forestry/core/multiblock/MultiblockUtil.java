@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -21,9 +20,10 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.tiles.TileUtil;
 
 public class MultiblockUtil {
 	/**
@@ -60,20 +60,12 @@ public class MultiblockUtil {
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent> C getComponent(
-			IBlockReader world,
-			BlockPos pos,
-			Class<C> componentClass
-	) {
+	public static <C extends IMultiblockComponent> C getComponent(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		return TileUtil.getTile(world, pos, componentClass);
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(
-			IBlockReader world,
-			BlockPos pos,
-			Class<C> componentClass
-	) {
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic> L getLogic(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		C component = getComponent(world, pos, componentClass);
 		if (component == null) {
 			return null;
@@ -82,11 +74,7 @@ public class MultiblockUtil {
 	}
 
 	@Nullable
-	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(
-			IBlockReader world,
-			BlockPos pos,
-			Class<C> componentClass
-	) {
+	public static <C extends IMultiblockComponent, L extends IMultiblockLogic, M extends IMultiblockController> M getController(IBlockReader world, BlockPos pos, Class<C> componentClass) {
 		L logic = getLogic(world, pos, componentClass);
 		if (logic == null || !logic.isConnected()) {
 			return null;

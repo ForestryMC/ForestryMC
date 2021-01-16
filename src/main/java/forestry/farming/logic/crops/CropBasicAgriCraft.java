@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic.crops;
-
-import forestry.core.utils.BlockUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.core.utils.BlockUtil;
 
 public class CropBasicAgriCraft extends Crop {
 

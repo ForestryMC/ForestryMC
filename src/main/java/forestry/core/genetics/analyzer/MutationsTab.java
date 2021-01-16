@@ -1,12 +1,13 @@
 package forestry.core.genetics.analyzer;
 
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
-import forestry.core.gui.elements.lib.IElementLayoutHelper;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IGenome;
@@ -15,14 +16,13 @@ import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.components.ComponentKeys;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Supplier;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IDatabaseElement;
+import forestry.core.gui.elements.lib.IElementLayoutHelper;
 
 public class MutationsTab extends DatabaseTab {
 	public MutationsTab(Supplier<ItemStack> stackSupplier) {
@@ -41,36 +41,19 @@ public class MutationsTab extends DatabaseTab {
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
 
-		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) ->
-				GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
+		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
 		Collection<? extends IMutation> mutations = getValidMutations(mutationContainer.getCombinations(species));
 		if (!mutations.isEmpty()) {
-			container.label(
-					new TranslationTextComponent("for.gui.database.mutations.further"),
-					GuiElementAlignment.TOP_CENTER,
-					GuiConstants.UNDERLINED_STYLE
-			);
-			mutations.forEach(
-					mutation -> groupHelper.add(
-							GuiElementFactory.INSTANCE.createMutation(0, 0, 50, 16, mutation, species, breedingTracker)
-					)
-			);
+			container.label(new TranslationTextComponent("for.gui.database.mutations.further"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+			mutations.forEach(mutation -> groupHelper.add(GuiElementFactory.INSTANCE.createMutation(0, 0, 50, 16, mutation, species, breedingTracker)));
 			groupHelper.finish(true);
 		}
 		mutations = getValidMutations(mutationContainer.getResultantMutations(species));
 		if (mutations.isEmpty()) {
 			return;
 		}
-		container.label(
-				new TranslationTextComponent("for.gui.database.mutations.resultant"),
-				GuiElementAlignment.TOP_CENTER,
-				GuiConstants.UNDERLINED_STYLE
-		);
-		mutations.forEach(
-				mutation -> groupHelper.add(
-						GuiElementFactory.INSTANCE.createMutationResultant(0, 0, 50, 16, mutation, breedingTracker)
-				)
-		);
+		container.label(new TranslationTextComponent("for.gui.database.mutations.resultant"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+		mutations.forEach(mutation -> groupHelper.add(GuiElementFactory.INSTANCE.createMutationResultant(0, 0, 50, 16, mutation, breedingTracker)));
 		groupHelper.finish(true);
 	}
 

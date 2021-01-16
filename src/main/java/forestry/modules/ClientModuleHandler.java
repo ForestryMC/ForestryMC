@@ -1,9 +1,6 @@
 package forestry.modules;
 
-import forestry.api.modules.IForestryModule;
-import forestry.core.network.IPacketRegistry;
-import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.Log;
+import java.util.function.Consumer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,7 +11,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import java.util.function.Consumer;
+import forestry.api.modules.IForestryModule;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.utils.ForgeUtils;
+import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientModuleHandler extends CommonModuleHandler {

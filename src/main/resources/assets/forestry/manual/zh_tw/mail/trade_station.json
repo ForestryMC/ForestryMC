@@ -1,0 +1,19 @@
+{
+	"title": "貿易站",
+	"icon": {
+		"item": "forestry:trade_station"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:trade_station"
+				]
+			},
+			{
+				"text": "貿易站允許伺服器上的玩家之間利用郵政系統進行貿易。"
+			}
+		]
+	]
+}

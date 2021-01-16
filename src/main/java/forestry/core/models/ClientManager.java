@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.models;
 
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.items.IColoredItem;
-import forestry.core.utils.ResourceUtil;
-import forestry.modules.features.FeatureBlock;
-import forestry.modules.features.FeatureGroup;
-import forestry.modules.features.FeatureItem;
-import forestry.modules.features.FeatureTable;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,8 +40,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.items.IColoredItem;
+import forestry.core.utils.ResourceUtil;
+import forestry.modules.features.FeatureBlock;
+import forestry.modules.features.FeatureGroup;
+import forestry.modules.features.FeatureItem;
+import forestry.modules.features.FeatureTable;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientManager {
@@ -185,12 +190,7 @@ public class ClientManager {
 		}
 
 		@Override
-		public int getColor(
-				BlockState state,
-				@Nullable IBlockDisplayReader worldIn,
-				@Nullable BlockPos pos,
-				int tintIndex
-		) {
+		public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 			Block block = state.getBlock();
 			if (block instanceof IColoredBlock && worldIn != null && pos != null) {
 				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
@@ -205,12 +205,7 @@ public class ClientManager {
 		@Nullable
 		private final BlockItem item;
 
-		private BlockModelEntry(
-				IBakedModel model,
-				Block block,
-				@Nullable BlockItem item,
-				Collection<BlockState> states
-		) {
+		private BlockModelEntry(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
 			this.model = model;
 			this.item = item;
 			this.states = states;

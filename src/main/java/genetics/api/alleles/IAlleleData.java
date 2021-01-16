@@ -1,14 +1,14 @@
 package genetics.api.alleles;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IChromosomeType;
-import genetics.utils.AlleleUtils;
-
-import net.minecraftforge.fml.ModLoadingContext;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
+
+import net.minecraftforge.fml.ModLoadingContext;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IChromosomeType;
+import genetics.utils.AlleleUtils;
 
 /**
  * The IAlleleData is a help interface that provides all information that is required to register a allele at the
@@ -46,21 +46,14 @@ public interface IAlleleData<V> extends IAlleleProvider {
 	}
 
 	default IAlleleValue<V> createAllele() {
-		return new AlleleCategorizedValue<>(
-				ModLoadingContext.get().getActiveContainer().getModId(),
-				getCategory(),
-				getName(),
-				getValue(),
-				isDominant()
-		);
+		return new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), getCategory(), getName(), getValue(), isDominant());
 	}
 
 	@Override
 	default IAllele getAllele() {
 		Optional<IAlleleValue<V>> optionalAllele = getAlleleValue();
 		if (!optionalAllele.isPresent()) {
-			throw new IllegalStateException(
-					"Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
+			throw new IllegalStateException("Attempted to get the allele from an allele data that was not registered! Please register the allele data before you use it.");
 		}
 		return optionalAllele.get();
 	}

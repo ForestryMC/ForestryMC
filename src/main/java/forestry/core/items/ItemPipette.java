@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.IToolPipette;
-import forestry.core.ItemGroupForestry;
-import forestry.core.fluids.PipetteContents;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -29,8 +28,9 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.core.IToolPipette;
+import forestry.core.ItemGroupForestry;
+import forestry.core.fluids.PipetteContents;
 
 //import net.minecraft.client.renderer.ItemMeshDefinition;
 
@@ -39,9 +39,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 	public ModelResourceLocation[] models = new ModelResourceLocation[0];
 
 	public ItemPipette() {
-		super((new Item.Properties())
-				.maxStackSize(1)
-				.group(ItemGroupForestry.tabForestry));
+		super((new Item.Properties()).maxStackSize(1).group(ItemGroupForestry.tabForestry));
 		//addPropertyOverride(new ResourceLocation("state"), (itemStack, world, livingEntity) -> FluidUtil.getFluidContained(itemStack).isPresent() ? 1 : 0);
 		//		setFull3D();
 	}
@@ -54,12 +52,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {

@@ -1,10 +1,10 @@
 package forestry.apiculture.blocks;
 
+import java.util.Locale;
+
 import forestry.api.core.IBlockSubtype;
 import forestry.apiculture.features.ApicultureTiles;
 import forestry.modules.features.FeatureTileType;
-
-import java.util.Locale;
 
 public enum BlockAlvearyType implements IBlockSubtype {
 	PLAIN(false),

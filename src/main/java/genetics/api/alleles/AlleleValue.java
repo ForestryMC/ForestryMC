@@ -33,19 +33,11 @@ public class AlleleValue<V> extends Allele implements IAlleleValue<V> {
 			return false;
 		}
 		IAlleleValue otherAllele = (IAlleleValue) obj;
-		return getRegistryName() != null ?
-				getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-				Objects.equals(value, otherAllele.getValue()) && dominant == otherAllele.isDominant();
+		return getRegistryName() != null ? getRegistryName().equals(((IAllele) obj).getRegistryName()) : Objects.equals(value, otherAllele.getValue()) && dominant == otherAllele.isDominant();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects
-				.toStringHelper(this)
-				.add("name", getRegistryName())
-				.add("value", value)
-				.add("dominant", dominant)
-				.add("unloc", getLocalisationKey())
-				.toString();
+		return MoreObjects.toStringHelper(this).add("name", getRegistryName()).add("value", value).add("dominant", dominant).add("unloc", getLocalisationKey()).toString();
 	}
 }

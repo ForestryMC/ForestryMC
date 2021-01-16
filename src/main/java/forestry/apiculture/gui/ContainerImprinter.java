@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Hand;
 
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
@@ -18,12 +24,6 @@ import forestry.core.gui.IGuiSelectable;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.utils.NetworkUtil;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
 
 public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImprinter> implements IGuiSelectable {
 
@@ -60,10 +60,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 			}
 		}
 
-		PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(
-				inventory.getPrimaryIndex(),
-				inventory.getSecondaryIndex()
-		);
+		PacketImprintSelectionResponse packetResponse = new PacketImprintSelectionResponse(inventory.getPrimaryIndex(), inventory.getSecondaryIndex());
 		NetworkUtil.sendToPlayer(packetResponse, player);
 	}
 

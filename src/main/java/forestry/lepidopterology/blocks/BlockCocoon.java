@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.core.tiles.TileUtil;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
-import forestry.lepidopterology.items.ItemButterflyGE;
-import forestry.lepidopterology.tiles.TileCocoon;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,28 +29,23 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Random;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.core.tiles.TileUtil;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import forestry.lepidopterology.items.ItemButterflyGE;
+import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block {
-	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(
-			0.3125F,
-			0.3125F,
-			0.3125F,
-			0.6875F,
-			1F,
-			0.6875F
-	);
+	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
 	public BlockCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-				.tickRandomly()
-				.notSolid()
-				.sound(SoundType.GROUND));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE).tickRandomly().notSolid().sound(SoundType.GROUND));
 
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-				.with(AlleleButterflyCocoon.AGE, 0)
-		);
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault).with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -88,13 +76,7 @@ public class BlockCocoon extends Block {
 	}
 
 	@Override
-	public ItemStack getPickBlock(
-			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
-			BlockPos pos,
-			PlayerEntity player
-	) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;
@@ -111,14 +93,7 @@ public class BlockCocoon extends Block {
 	}
 
 	@Override
-	public BlockState updatePostPlacement(
-			BlockState state,
-			Direction facing,
-			BlockState facingState,
-			IWorld worldIn,
-			BlockPos currentPos,
-			BlockPos facingPos
-	) {
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
 			return state;
 		}

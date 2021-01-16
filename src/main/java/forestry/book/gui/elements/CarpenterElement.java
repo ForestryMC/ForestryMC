@@ -1,11 +1,7 @@
 package forestry.book.gui.elements;
 
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.IngredientElement;
-import forestry.core.gui.elements.TankElement;
+import java.util.Arrays;
+import java.util.Collection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -17,15 +13,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Arrays;
-import java.util.Collection;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.IngredientElement;
+import forestry.core.gui.elements.TankElement;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
-	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "almanac/crafting.png"
-	);
+	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "almanac/crafting.png");
 	private static final Drawable CARPENTER_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 0, 108, 60);
 	private static final Drawable CARPENTER_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 1, 16, 58);
 
@@ -34,17 +31,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	}
 
 	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(
-				0,
-				0,
-				Arrays.stream(stacks)
-						.map(x -> RecipeManagers.carpenterManager.getRecipes(
-								Minecraft.getInstance().world.getRecipeManager(),
-								x
-						))
-						.flatMap(Collection::stream)
-						.toArray(ICarpenterRecipe[]::new)
-		);
+		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.carpenterManager.getRecipes(Minecraft.getInstance().world.getRecipeManager(), x)).flatMap(Collection::stream).toArray(ICarpenterRecipe[]::new));
 	}
 
 	public CarpenterElement(int xPos, int yPos, ICarpenterRecipe[] recipes) {
@@ -57,14 +44,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 
 	@Override
 	protected void onIndexUpdate(int index, ICarpenterRecipe recipe) {
-		selectedElement.add(new TankElement(
-				91,
-				1,
-				null,
-				recipe.getFluidResource(),
-				Constants.PROCESSOR_TANK_CAPACITY,
-				CARPENTER_TANK_OVERLAY
-		));
+		selectedElement.add(new TankElement(91, 1, null, recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY, CARPENTER_TANK_OVERLAY));
 		ShapedRecipe gridRecipe = recipe.getCraftingGridRecipe();
 		NonNullList<Ingredient> ingredients = gridRecipe.getIngredients();
 		for (int x = 0; x < 3; x++) {

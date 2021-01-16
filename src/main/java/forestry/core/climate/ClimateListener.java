@@ -1,17 +1,6 @@
 package forestry.core.climate;
 
-import forestry.api.climate.*;
-import forestry.api.core.BiomeHelper;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.ILocatable;
-import forestry.core.network.packets.PacketClimateListenerUpdate;
-import forestry.core.network.packets.PacketClimateListenerUpdateEntity;
-import forestry.core.network.packets.PacketClimateListenerUpdateEntityRequest;
-import forestry.core.network.packets.PacketClimateListenerUpdateRequest;
-import forestry.core.render.ParticleRender;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -25,7 +14,22 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import javax.annotation.Nullable;
+import forestry.api.climate.ClimateManager;
+import forestry.api.climate.IClimateListener;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IWorldClimateHolder;
+import forestry.api.core.BiomeHelper;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ILocatable;
+import forestry.core.network.packets.PacketClimateListenerUpdate;
+import forestry.core.network.packets.PacketClimateListenerUpdateEntity;
+import forestry.core.network.packets.PacketClimateListenerUpdateEntityRequest;
+import forestry.core.network.packets.PacketClimateListenerUpdateRequest;
+import forestry.core.render.ParticleRender;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class ClimateListener implements IClimateListener {
 	public static final int SERVER_UPDATE = 250;
@@ -179,16 +183,9 @@ public class ClimateListener implements IClimateListener {
 			if (!worldObj.isRemote) {
 				BlockPos coordinates = getCoordinates();
 				if (locationProvider instanceof Entity) {
-					NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdateEntity(
-							(Entity) locationProvider,
-							cachedState
-					), coordinates, worldObj);
+					NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdateEntity((Entity) locationProvider, cachedState), coordinates, worldObj);
 				} else {
-					NetworkUtil.sendNetworkPacket(
-							new PacketClimateListenerUpdate(getCoordinates(), cachedState),
-							coordinates,
-							getWorldObj()
-					);
+					NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdate(getCoordinates(), cachedState), coordinates, getWorldObj());
 				}
 			}
 			cachedClientState = cachedState;
@@ -201,10 +198,7 @@ public class ClimateListener implements IClimateListener {
 		if (!worldObj.isRemote) {
 			IClimateState climateState = getState(true, false);
 			if (locationProvider instanceof Entity) {
-				NetworkUtil.sendToPlayer(
-						new PacketClimateListenerUpdateEntity((Entity) locationProvider, climateState),
-						player
-				);
+				NetworkUtil.sendToPlayer(new PacketClimateListenerUpdateEntity((Entity) locationProvider, climateState), player);
 			} else {
 				NetworkUtil.sendToPlayer(new PacketClimateListenerUpdate(getCoordinates(), climateState), player);
 			}

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.api.climate.IClimateControlled;
-import forestry.api.multiblock.IAlvearyComponent;
-import forestry.api.recipes.IHygroregulatorRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.blocks.BlockAlvearyType;
-import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
-import forestry.apiculture.inventory.InventoryHygroregulator;
-import forestry.core.config.Constants;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.ILiquidTankTile;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,7 +28,19 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
+import forestry.api.climate.IClimateControlled;
+import forestry.api.multiblock.IAlvearyComponent;
+import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.apiculture.blocks.BlockAlvearyType;
+import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
+import forestry.apiculture.inventory.InventoryHygroregulator;
+import forestry.core.config.Constants;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.ILiquidTankTile;
 
 public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
 	private final TankManager tankManager;
@@ -74,16 +74,10 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		if (transferTime <= 0) {
 			FluidStack fluid = liquidTank.getFluid();
 			if (!fluid.isEmpty()) {
-				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-						world.getRecipeManager(),
-						fluid
-				);
+				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), fluid);
 
 				if (currentRecipe != null) {
-					liquidTank.drainInternal(
-							currentRecipe.getResource().getAmount(),
-							IFluidHandler.FluidAction.EXECUTE
-					);
+					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
 					transferTime = currentRecipe.getTransferTime();
 				}
 			}
@@ -117,10 +111,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		if (compoundNBT.contains("CurrentLiquid")) {
 			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
 			if (world != null) {
-				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-						world.getRecipeManager(),
-						liquid
-				);
+				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), liquid);
 			}
 		}
 	}

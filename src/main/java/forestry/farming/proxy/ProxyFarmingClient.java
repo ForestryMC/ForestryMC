@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.proxy;
-
-import forestry.core.models.ClientManager;
-import forestry.farming.blocks.EnumFarmBlockType;
-import forestry.farming.features.FarmingBlocks;
-import forestry.farming.models.ModelFarmBlock;
-import forestry.modules.IClientModuleHandler;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -26,6 +20,12 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import forestry.core.models.ClientManager;
+import forestry.farming.blocks.EnumFarmBlockType;
+import forestry.farming.features.FarmingBlocks;
+import forestry.farming.models.ModelFarmBlock;
+import forestry.modules.IClientModuleHandler;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
@@ -54,9 +54,6 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(
-				block,
-				RenderType.getCutoutMipped()
-		));
+		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
 	}
 }

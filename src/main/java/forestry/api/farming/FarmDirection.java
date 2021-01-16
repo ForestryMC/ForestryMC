@@ -1,8 +1,8 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.farming;
 
 import net.minecraft.util.Direction;
@@ -19,6 +19,10 @@ public enum FarmDirection {
 		this.forgeDirection = forgeDirection;
 	}
 
+	public Direction getFacing() {
+		return forgeDirection;
+	}
+
 	public static FarmDirection getFarmDirection(Direction forgeDirection) {
 		switch (forgeDirection) {
 			case NORTH:
@@ -30,12 +34,7 @@ public enum FarmDirection {
 			case WEST:
 				return WEST;
 			default:
-				throw new IllegalArgumentException(
-						"Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
+				throw new IllegalArgumentException("Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
 		}
-	}
-
-	public Direction getFacing() {
-		return forgeDirection;
 	}
 }

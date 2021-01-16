@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import forestry.api.recipes.ICarpenterRecipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -27,6 +25,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import forestry.api.recipes.ICarpenterRecipe;
+
 public class CarpenterRecipe implements ICarpenterRecipe {
 	private final ResourceLocation id;
 	private final int packagingTime;
@@ -34,13 +34,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	private final Ingredient box;
 	private final ShapedRecipe recipe;
 
-	public CarpenterRecipe(
-			ResourceLocation id,
-			int packagingTime,
-			FluidStack liquid,
-			Ingredient box,
-			ShapedRecipe recipe
-	) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ShapedRecipe recipe) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(recipe);
@@ -94,10 +88,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 				box = Ingredient.deserialize(json.get("box"));
 			}
 
-			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(
-					recipeId,
-					JSONUtils.getJsonObject(json, "recipe")
-			);
+			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal);
 		}

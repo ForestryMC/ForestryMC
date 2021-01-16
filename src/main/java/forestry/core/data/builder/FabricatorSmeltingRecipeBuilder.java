@@ -2,8 +2,7 @@ package forestry.core.data.builder;
 
 import com.google.gson.JsonObject;
 
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.factory.recipes.RecipeSerializers;
+import java.util.function.Consumer;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -18,7 +17,8 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.function.Consumer;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.factory.recipes.RecipeSerializers;
 
 public class FabricatorSmeltingRecipeBuilder {
 
@@ -63,21 +63,8 @@ public class FabricatorSmeltingRecipeBuilder {
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
 		validate(id);
 
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(
-				id,
-				meltingPoint,
-				resource,
-				product,
-				advancementBuilder,
-				new ResourceLocation(
-						id.getNamespace(),
-						"recipes/" + resource.getItem().getGroup().getPath() + "/" + id.getPath()
-				)
-		));
+		advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
+		consumer.accept(new Result(id, meltingPoint, resource, product, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + resource.getItem().getGroup().getPath() + "/" + id.getPath())));
 	}
 
 	private void validate(ResourceLocation id) {
@@ -102,14 +89,7 @@ public class FabricatorSmeltingRecipeBuilder {
 		private final Advancement.Builder advancementBuilder;
 		private final ResourceLocation advancementId;
 
-		public Result(
-				ResourceLocation id,
-				int meltingPoint,
-				ItemStack resource,
-				FluidStack product,
-				Advancement.Builder advancementBuilder,
-				ResourceLocation advancementId
-		) {
+		public Result(ResourceLocation id, int meltingPoint, ItemStack resource, FluidStack product, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
 			this.id = id;
 			this.meltingPoint = meltingPoint;
 			this.resource = resource;

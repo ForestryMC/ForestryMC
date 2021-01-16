@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,32 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.features.CoreTiles;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.fluids.TankManager;
-import forestry.core.gui.ContainerAnalyzer;
-import forestry.core.inventory.InventoryAnalyzer;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.packets.PacketItemStackDisplay;
-import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
-
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-import genetics.utils.RootUtils;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -54,8 +33,29 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.features.CoreTiles;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.fluids.TankManager;
+import forestry.core.gui.ContainerAnalyzer;
+import forestry.core.inventory.InventoryAnalyzer;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.packets.PacketItemStackDisplay;
+import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ModuleHelper;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -76,16 +76,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
-		invInput = new InventoryMapper(
-				getInternalInventory(),
-				InventoryAnalyzer.SLOT_INPUT_1,
-				InventoryAnalyzer.SLOT_INPUT_COUNT
-		);
-		invOutput = new InventoryMapper(
-				getInternalInventory(),
-				InventoryAnalyzer.SLOT_OUTPUT_1,
-				InventoryAnalyzer.SLOT_OUTPUT_COUNT
-		);
+		invInput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_INPUT_1, InventoryAnalyzer.SLOT_INPUT_COUNT);
+		invOutput = new InventoryMapper(getInternalInventory(), InventoryAnalyzer.SLOT_OUTPUT_1, InventoryAnalyzer.SLOT_OUTPUT_COUNT);
 	}
 
 	/* SAVING & LOADING */

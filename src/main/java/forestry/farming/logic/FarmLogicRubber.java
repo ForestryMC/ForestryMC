@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,23 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.farming.logic.crops.CropRubber;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Stack;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.farming.logic.crops.CropRubber;
 //import forestry.plugins.PluginIC2;
 //import forestry.plugins.PluginTechReborn;
 
@@ -41,13 +41,7 @@ public class FarmLogicRubber extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(
-			World world,
-			IFarmHousing farmHousing,
-			FarmDirection direction,
-			int extent,
-			BlockPos pos
-	) {
+	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
 		if (!active) {
 			return Collections.emptyList();
 		}

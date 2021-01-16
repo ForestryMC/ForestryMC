@@ -1,11 +1,11 @@
 package genetics.api.root;
 
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IIndividual;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 
-import java.util.Optional;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IIndividual;
 
 public interface IIndividualRootHelper {
 	/**
@@ -26,10 +26,7 @@ public interface IIndividualRootHelper {
 	 */
 	IRootDefinition getSpeciesRoot(Class<? extends IIndividual> individualClass);
 
-	<R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(
-			Class<? extends IIndividual> individualClass,
-			Class<? extends R> rootClass
-	);
+	<R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(Class<? extends IIndividual> individualClass, Class<? extends R> rootClass);
 
 	/**
 	 * Retrieve a matching {@link IRootDefinition} for the given {@link IIndividual}

@@ -1,12 +1,12 @@
 package forestry.core.gui.elements.lib.events;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public final class GuiEventHandler<E extends GuiElementEvent> implements Consumer<E> {
@@ -23,12 +23,7 @@ public final class GuiEventHandler<E extends GuiElementEvent> implements Consume
 		this.handlerAction = handlerAction;
 	}
 
-	public GuiEventHandler(
-			Class<? super E> eventClass,
-			GuiEventOrigin origin,
-			IGuiElement relative,
-			Consumer<E> handlerAction
-	) {
+	public GuiEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> handlerAction) {
 		this.origin = origin;
 		this.relative = relative;
 		this.eventClass = eventClass;

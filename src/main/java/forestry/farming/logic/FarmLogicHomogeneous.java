@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
-
-import forestry.api.farming.*;
-import forestry.core.utils.BlockUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.Soil;
+import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 	public FarmLogicHomogeneous(IFarmProperties properties, boolean isManual) {
@@ -36,22 +40,10 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		return maintainSoil(world, farmHousing, pos, direction, extent) || maintainSeedlings(
-				world,
-				farmHousing,
-				pos.up(),
-				direction,
-				extent
-		);
+		return maintainSoil(world, farmHousing, pos, direction, extent) || maintainSeedlings(world, farmHousing, pos.up(), direction, extent);
 	}
 
-	private boolean maintainSoil(
-			World world,
-			IFarmHousing farmHousing,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	) {
+	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!farmHousing.canPlantSoil(isManual)) {
 			return false;
 		}
@@ -91,11 +83,5 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 		return false;
 	}
 
-	protected abstract boolean maintainSeedlings(
-			World world,
-			IFarmHousing farmHousing,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	);
+	protected abstract boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent);
 }

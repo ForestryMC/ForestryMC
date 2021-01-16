@@ -1,13 +1,13 @@
 package forestry.core.gui.elements.lib.events;
 
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public enum GuiEventOrigin {

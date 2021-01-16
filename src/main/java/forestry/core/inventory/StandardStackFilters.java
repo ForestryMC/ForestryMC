@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
+
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.FurnaceTileEntity;
-
-import java.util.function.Predicate;
 
 /**
  * This interface is used with several of the functions in IItemTransfer to
@@ -36,14 +36,12 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 		public boolean test(ItemStack stack) {
 			return FurnaceTileEntity.getBurnTimes().get(stack.getItem()) > 0;
 		}
-	},
-	//TODO - where is this used?
+	}, //TODO - where is this used?
 	FEED {
 		@Override
 		public boolean test(ItemStack stack) {
 			//TODO - tag on seeds?
-			return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT ||
-					stack.getItem() == Items.WHEAT_SEEDS;
+			return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
 		}
 	}
 }

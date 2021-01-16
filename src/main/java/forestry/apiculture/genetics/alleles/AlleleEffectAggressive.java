@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
+
+import java.util.List;
+
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.DamageSource;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
-
-import genetics.api.individual.IGenome;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-
-import java.util.List;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");

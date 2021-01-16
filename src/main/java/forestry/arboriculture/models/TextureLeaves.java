@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.models;
 
-import forestry.api.arboriculture.EnumLeafType;
-import forestry.core.config.Constants;
+import java.util.EnumMap;
+import java.util.Locale;
+import java.util.Map;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -19,9 +20,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import java.util.EnumMap;
-import java.util.Locale;
-import java.util.Map;
+import forestry.api.arboriculture.EnumLeafType;
+import forestry.core.config.Constants;
 
 public class TextureLeaves {
 	private static final Map<EnumLeafType, TextureLeaves> leafTextures = new EnumMap<>(EnumLeafType.class);
@@ -36,6 +36,7 @@ public class TextureLeaves {
 	private final ResourceLocation fancy;
 	private final ResourceLocation pollinatedPlain;
 	private final ResourceLocation pollinatedFancy;
+
 	private TextureLeaves(EnumLeafType enumLeafType) {
 		String ident = enumLeafType.toString().toLowerCase(Locale.ENGLISH);
 		this.plain = new ResourceLocation(Constants.MOD_ID, "block/leaves/" + ident + ".plain");

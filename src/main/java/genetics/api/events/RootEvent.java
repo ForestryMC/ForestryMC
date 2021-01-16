@@ -1,12 +1,12 @@
 package genetics.api.events;
 
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
+import java.lang.reflect.Type;
 
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IGenericEvent;
 
-import java.lang.reflect.Type;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 public class RootEvent<R extends IIndividualRoot> extends Event implements IGenericEvent<R> {
 	private final IRootDefinition<R> definition;

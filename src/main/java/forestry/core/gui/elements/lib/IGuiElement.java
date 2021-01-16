@@ -1,11 +1,21 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.core.gui.elements.lib;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Consumer;
+
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
@@ -13,16 +23,6 @@ import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.elements.lib.events.GuiEventHandler;
 import forestry.core.gui.elements.lib.events.GuiEventOrigin;
 import forestry.core.utils.Log;
-
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElement {
@@ -286,22 +286,14 @@ public interface IGuiElement {
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
-	default <E extends GuiElementEvent> void addEventHandler(
-			Class<? super E> eventClass,
-			GuiEventOrigin origin,
-			IGuiElement relative,
-			Consumer<E> eventHandler
-	) {
+	default <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> eventHandler) {
 		addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
 	}
 
 	/**
 	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
 	 */
-	default <E extends GuiElementEvent> void addSelfEventHandler(
-			Class<? super E> eventClass,
-			Consumer<E> eventHandler
-	) {
+	default <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
 		addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
 	}
 

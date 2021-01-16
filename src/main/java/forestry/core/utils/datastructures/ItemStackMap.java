@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils.datastructures;
-
-import forestry.core.utils.ItemStackUtil;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,6 +16,8 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.ITagCollection;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 	private static final long serialVersionUID = -8511966739130702305L;
@@ -58,8 +58,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 
 	@Override
 	protected boolean isValidKey(Object key) {
-		return key instanceof ItemStack || key instanceof Item || key instanceof String ||
-				key instanceof ResourceLocation;
+		return key instanceof ItemStack || key instanceof Item || key instanceof String || key instanceof ResourceLocation;
 	}
 
 	@Override

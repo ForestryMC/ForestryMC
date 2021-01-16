@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
 
 import com.google.common.collect.ImmutableList;
 
-import forestry.api.farming.*;
-import forestry.api.genetics.IFruitBearer;
-import forestry.core.tiles.TileUtil;
-import forestry.farming.logic.crops.CropFruit;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,8 +27,14 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
+import forestry.api.genetics.IFruitBearer;
+import forestry.core.tiles.TileUtil;
+import forestry.farming.logic.crops.CropFruit;
 
 public class FarmLogicOrchard extends FarmLogic {
 
@@ -64,13 +74,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(
-			World world,
-			IFarmHousing housing,
-			FarmDirection direction,
-			int extent,
-			BlockPos pos
-	) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		housing.increaseExtent(direction, pos, extent);
@@ -89,10 +93,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		// Determine what type we want to harvest.
 		BlockState blockState = world.getBlockState(position);
 		Block block = blockState.getBlock();
-		if (!block.isIn(BlockTags.LOGS) &&
-				!isBlockTraversable(blockState, traversalBlocks) &&
-				!isFruitBearer(world, position, blockState)
-		) {
+		if (!block.isIn(BlockTags.LOGS) && !isBlockTraversable(blockState, traversalBlocks) && !isFruitBearer(world, position, blockState)) {
 			return crops;
 		}
 
@@ -110,13 +111,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(
-			World world,
-			Stack<ICrop> crops,
-			Set<BlockPos> seen,
-			BlockPos start,
-			BlockPos position
-	) {
+	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return

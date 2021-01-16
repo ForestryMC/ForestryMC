@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -17,12 +23,6 @@ import forestry.api.arboriculture.genetics.ITreeMutationBuilder;
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.climate.ClimateManager;
 import forestry.core.genetics.mutations.Mutation;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutationBuilder {
 
@@ -41,23 +41,8 @@ public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutati
 	}
 
 	@Override
-	public float getChance(
-			World world,
-			BlockPos pos,
-			IAlleleTreeSpecies allele0,
-			IAlleleTreeSpecies allele1,
-			IGenome genome0,
-			IGenome genome1
-	) {
-		float processedChance = super.getChance(
-				world,
-				pos,
-				allele0,
-				allele1,
-				genome0,
-				genome1,
-				ClimateManager.climateRoot.getDefaultClimate(world, pos)
-		);
+	public float getChance(World world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IGenome genome0, IGenome genome1) {
+		float processedChance = super.getChance(world, pos, allele0, allele1, genome0, genome1, ClimateManager.climateRoot.getDefaultClimate(world, pos));
 		if (processedChance <= 0) {
 			return 0;
 		}

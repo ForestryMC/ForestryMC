@@ -2,15 +2,15 @@ package forestry.core.recipes.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 
-import mezz.jei.api.gui.ingredient.ITooltipCallback;
+import java.text.NumberFormat;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.text.NumberFormat;
-import java.util.List;
+import mezz.jei.api.gui.ingredient.ITooltipCallback;
 
 public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 	private final ArrayListMultimap<Integer, ITextComponent> tooltips = ArrayListMultimap.create();
@@ -38,9 +38,6 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		percentFormat.setMaximumFractionDigits(2);
 		String chanceString = String.valueOf(percentFormat.format(chance));
 
-		tooltips.get(index).add(new TranslationTextComponent(
-				"for.jei.chance",
-				chanceString
-		).mergeStyle(TextFormatting.GRAY));
+		tooltips.get(index).add(new TranslationTextComponent("for.jei.chance", chanceString).mergeStyle(TextFormatting.GRAY));
 	}
 }

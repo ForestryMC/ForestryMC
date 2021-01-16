@@ -1,18 +1,18 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.book;
 
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import javax.annotation.Nullable;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 /**
  * The deserialized content data of a book page. It creates a gui element at the moment the entry gets opened.
@@ -50,11 +50,5 @@ public abstract class BookContent<D> {
 	 * @param pageHeight      The max height of the current page.
 	 * @return True if you added an element.
 	 */
-	public abstract boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	);
+	public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
 }

@@ -1,11 +1,11 @@
 package genetics.api.individual;
 
-import genetics.api.GeneticsAPI;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.nbt.CompoundNBT;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import genetics.api.GeneticsAPI;
 
 /**
  * A simple abstract default implementation of {@link IIndividual}.
@@ -32,10 +32,7 @@ public abstract class Individual implements IIndividual {
 	public Individual(CompoundNBT compound) {
 		IKaryotype karyotype = getRoot().getKaryotype();
 		if (compound.contains(NBT_GENOME)) {
-			genome = GeneticsAPI.apiInstance.getGeneticFactory().createGenome(
-					karyotype,
-					compound.getCompound(NBT_GENOME)
-			);
+			genome = GeneticsAPI.apiInstance.getGeneticFactory().createGenome(karyotype, compound.getCompound(NBT_GENOME));
 		} else {
 			genome = karyotype.getDefaultGenome();
 		}

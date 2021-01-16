@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,37 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory;
 
 import com.google.common.collect.Maps;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
-import forestry.api.fuels.*;
+import forestry.api.fuels.EngineBronzeFuel;
+import forestry.api.fuels.EngineCopperFuel;
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.MoistenerFuel;
+import forestry.api.fuels.RainSubstrate;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.CircuitLayout;
@@ -36,28 +56,26 @@ import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.features.FactoryContainers;
-import forestry.factory.gui.*;
+import forestry.factory.gui.GuiBottler;
+import forestry.factory.gui.GuiCarpenter;
+import forestry.factory.gui.GuiCentrifuge;
+import forestry.factory.gui.GuiFabricator;
+import forestry.factory.gui.GuiFermenter;
+import forestry.factory.gui.GuiMoistener;
+import forestry.factory.gui.GuiRaintank;
+import forestry.factory.gui.GuiSqueezer;
+import forestry.factory.gui.GuiStill;
 import forestry.factory.network.PacketRegistryFactory;
-import forestry.factory.recipes.*;
+import forestry.factory.recipes.CarpenterRecipeManager;
+import forestry.factory.recipes.CentrifugeRecipeManager;
+import forestry.factory.recipes.FabricatorRecipeManager;
+import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
+import forestry.factory.recipes.FermenterRecipeManager;
+import forestry.factory.recipes.MoistenerRecipeManager;
+import forestry.factory.recipes.SqueezerRecipeManager;
+import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
-import forestry.storage.ModuleCrates;
-
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
@@ -78,12 +96,7 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	public static void loadMachineConfig(LocalizedConfiguration config) {
-		List<String> enabled = Arrays.asList(config.getStringListLocalized(
-				"machines",
-				"enabled",
-				MachineUIDs.ALL.toArray(new String[0]),
-				MachineUIDs.ALL.toArray(new String[0])
-		));
+		List<String> enabled = Arrays.asList(config.getStringListLocalized("machines", "enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0])));
 		for (String machineID : MachineUIDs.ALL) {
 			MACHINE_ENABLED.put(machineID, enabled.contains(machineID));
 		}
@@ -96,23 +109,14 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager()
-				: new DummyManagers.DummyCarpenterManager();
-		RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager()
-				: new DummyManagers.DummyCentrifugeManager();
-		RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager()
-				: new DummyManagers.DummyFabricatorManager();
-		RecipeManagers.fabricatorSmeltingManager =
-				machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager()
-						: new DummyManagers.DummyFabricatorSmeltingManager();
-		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager()
-				: new DummyManagers.DummyFermenterManager();
-		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager()
-				: new DummyManagers.DummyMoistenerManager();
-		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager()
-				: new DummyManagers.DummySqueezerManager();
-		RecipeManagers.stillManager =
-				machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
+		RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}
@@ -149,11 +153,7 @@ public class ModuleFactory extends BlankForestryModule {
 	public void preInit() {
 		// Set fuels and resources for the fermenter
 		ItemStack fertilizerCompound = CoreItems.FERTILIZER_COMPOUND.stack();
-		FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(
-				fertilizerCompound,
-				ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"),
-				ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")
-		));
+		FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(fertilizerCompound, ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
 
 		int cyclesCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost");
 		int valueCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost");
@@ -167,77 +167,37 @@ public class ModuleFactory extends BlankForestryModule {
 		ItemStack mouldyWheat = CoreItems.MOULDY_WHEAT.stack();
 		ItemStack decayingWheat = CoreItems.DECAYING_WHEAT.stack();
 		FuelManager.moistenerResource.put(wheat, new MoistenerFuel(Ingredient.fromStacks(wheat), mouldyWheat, 0, 300));
-		FuelManager.moistenerResource.put(
-				mouldyWheat,
-				new MoistenerFuel(Ingredient.fromStacks(mouldyWheat), decayingWheat, 1, 600)
-		);
-		FuelManager.moistenerResource.put(
-				decayingWheat,
-				new MoistenerFuel(Ingredient.fromStacks(decayingWheat), mulch, 2, 900)
-		);
+		FuelManager.moistenerResource.put(mouldyWheat, new MoistenerFuel(Ingredient.fromStacks(mouldyWheat), decayingWheat, 1, 600));
+		FuelManager.moistenerResource.put(decayingWheat, new MoistenerFuel(Ingredient.fromStacks(decayingWheat), mulch, 2, 900));
 
 		// Set fuels for our own engines
 		ItemStack peat = CoreItems.PEAT.stack();
-		FuelManager.copperEngineFuel.put(
-				peat,
-				new EngineCopperFuel(
-						peat,
-						Constants.ENGINE_COPPER_FUEL_VALUE_PEAT,
-						Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT
-				)
-		);
+		FuelManager.copperEngineFuel.put(peat, new EngineCopperFuel(peat, Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
 
 		ItemStack bituminousPeat = CoreItems.BITUMINOUS_PEAT.stack();
-		FuelManager.copperEngineFuel.put(
-				bituminousPeat,
-				new EngineCopperFuel(
-						bituminousPeat,
-						Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT,
-						Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT
-				)
-		);
+		FuelManager.copperEngineFuel.put(bituminousPeat, new EngineCopperFuel(bituminousPeat, Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
 
 		Fluid biomass = ForestryFluids.BIOMASS.getFluid();
-		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(
-				biomass,
-				Constants.ENGINE_FUEL_VALUE_BIOMASS,
-				(int) (
-						Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting(
-								"fuel.biomass.biogas")),
-				1
-		));
+		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass, Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
 
-		FuelManager.bronzeEngineFuel.put(Fluids.WATER, new EngineBronzeFuel(Fluids.WATER,
-				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3
-		));
+		FuelManager.bronzeEngineFuel.put(Fluids.WATER, new EngineBronzeFuel(Fluids.WATER, Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
 
 		Fluid milk = ForestryFluids.MILK.getFluid();
-		FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk,
-				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3
-		));
+		FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk, Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
 
 		Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();
-		FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil,
-				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1
-		));
+		FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil, Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
 
 		Fluid honey = ForestryFluids.HONEY.getFluid();
-		FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey,
-				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1
-		));
+		FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey, Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
 
 		Fluid juice = ForestryFluids.JUICE.getFluid();
-		FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice,
-				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1
-		));
+		FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice, Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates
 		ItemStack iodineCharge = CoreItems.IODINE_CHARGE.stack();
 		ItemStack dissipationCharge = CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.DISSIPATION_CHARGE, 1);
-		FuelManager.rainSubstrate.put(
-				iodineCharge,
-				new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f)
-		);
+		FuelManager.rainSubstrate.put(iodineCharge, new RainSubstrate(iodineCharge, Constants.RAINMAKER_RAIN_DURATION_IODINE, 0.01f));
 		FuelManager.rainSubstrate.put(dissipationCharge, new RainSubstrate(dissipationCharge, 0.075f));
 
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
@@ -260,26 +220,10 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		// CHIPSETS
-		ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(
-				EnumCircuitBoardType.BASIC,
-				null,
-				new ICircuit[]{}
-		);
-		ItemStack enhancedCircuitboard = ItemCircuitBoard.createCircuitboard(
-				EnumCircuitBoardType.ENHANCED,
-				null,
-				new ICircuit[]{}
-		);
-		ItemStack refinedCircuitboard = ItemCircuitBoard.createCircuitboard(
-				EnumCircuitBoardType.REFINED,
-				null,
-				new ICircuit[]{}
-		);
-		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(
-				EnumCircuitBoardType.INTRICATE,
-				null,
-				new ICircuit[]{}
-		);
+		ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{});
+		ItemStack enhancedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{});
+		ItemStack refinedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{});
+		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
 	}
 
 	@Override

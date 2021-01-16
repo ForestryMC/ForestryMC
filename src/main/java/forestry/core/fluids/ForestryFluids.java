@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
+
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
@@ -16,19 +28,6 @@ import forestry.core.items.DrinkProperties;
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;
-
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.List;
-import java.util.*;
 
 @FeatureProvider
 public enum ForestryFluids {
@@ -67,10 +66,7 @@ public enum ForestryFluids {
 
 	static {
 		for (ForestryFluids fluidDefinition : ForestryFluids.values()) {
-			tagToFluid.put(
-					new ResourceLocation(Constants.MOD_ID, fluidDefinition.feature.getIdentifier()),
-					fluidDefinition
-			);
+			tagToFluid.put(new ResourceLocation(Constants.MOD_ID, fluidDefinition.feature.getIdentifier()), fluidDefinition);
 		}
 	}
 
@@ -86,14 +82,7 @@ public enum ForestryFluids {
 	}
 
 	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
-		this.feature = ModFeatureRegistry.get(ModuleFluids.class)
-				.fluid(name().toLowerCase(Locale.ENGLISH))
-				.flammability(flammability)
-				.viscosity(viscosity)
-				.density(density)
-				.temperature(getTemperature())
-				.particleColor(particleColor)
-				.create();
+		this.feature = ModFeatureRegistry.get(ModuleFluids.class).fluid(name().toLowerCase(Locale.ENGLISH)).flammability(flammability).viscosity(viscosity).density(density).temperature(getTemperature()).particleColor(particleColor).create();
 		this.tag = new ResourceLocation(Constants.MOD_ID, feature.getIdentifier());
 	}
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.worktable.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.IContainerCrafting;
@@ -30,16 +40,6 @@ import forestry.worktable.recipes.MemorizedRecipe;
 import forestry.worktable.recipes.RecipeMemory;
 import forestry.worktable.tiles.TileWorktable;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
 	private final CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry(this);
 	private long lastMemoryUpdate;
@@ -54,12 +54,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				addSlot(new Slot(
-						internalInventory,
-						InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9,
-						8 + k * 18,
-						90 + i * 18
-				));
+				addSlot(new Slot(internalInventory, InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
 			}
 		}
 
@@ -71,15 +66,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		}
 
 		// CraftResult display
-		addSlot(new SlotCrafter(
-				inv.player,
-				craftMatrix,
-				craftingDisplay,
-				tile,
-				InventoryGhostCrafting.SLOT_CRAFTING_RESULT,
-				77,
-				38
-		));
+		addSlot(new SlotCrafter(inv.player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
 		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
 			onCraftMatrixChanged(tile.getCraftingDisplay(), i);
@@ -87,11 +74,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	}
 
 	public static ContainerWorktable fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		TileWorktable worktable = TileUtil.getTile(
-				playerInv.player.world,
-				extraData.readBlockPos(),
-				TileWorktable.class
-		);
+		TileWorktable worktable = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileWorktable.class);
 		return new ContainerWorktable(windowId, playerInv, worktable);    //TODO what to do if Worktable null
 	}
 

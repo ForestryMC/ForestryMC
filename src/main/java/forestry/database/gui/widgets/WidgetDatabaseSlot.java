@@ -1,7 +1,20 @@
 package forestry.database.gui.widgets;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
@@ -16,25 +29,9 @@ import forestry.database.gui.GuiDatabase;
 import forestry.database.network.packets.PacketExtractItem;
 import forestry.database.network.packets.PacketInsertItem;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-
 @OnlyIn(Dist.CLIENT)
 public class WidgetDatabaseSlot extends Widget {
-	public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "database_inventory.png"
-	);
+	public static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "database_inventory.png");
 
 	public static final Drawable SLOT = new Drawable(TEXTURE_LOCATION, 218, 0, 22, 22);
 	public static final Drawable SLOT_SELECTED = new Drawable(TEXTURE_LOCATION, 218, 22, 22, 22);
@@ -109,8 +106,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 ||
-				!manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
 			return;
 		}
 		GuiDatabase gui = (GuiDatabase) manager.gui;
@@ -139,10 +135,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
-		if (!isMouseOver(mouseX, mouseY)
-				|| ignoreMouseUp
-				|| eventType != 0 && eventType != 1
-				|| manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+		if (!isMouseOver(mouseX, mouseY) || ignoreMouseUp || eventType != 0 && eventType != 1 || manager.minecraft.player.inventory.getItemStack().isEmpty()) {
 			ignoreMouseUp = false;
 			return false;
 		}

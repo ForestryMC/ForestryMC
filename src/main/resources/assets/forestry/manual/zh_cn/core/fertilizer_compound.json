@@ -1,0 +1,20 @@
+{
+	"title": "肥料",
+	"icon":{
+		"item": "forestry:fertilizer_compound"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:sand_to_fertilizer",
+					"forestry:ash_to_fertilizer"
+				]
+			},
+			{
+				"text": "强效肥料。可充当骨粉，用于催熟作物和树苗。运行林业的农场也需要它。"
+			}
+		]
+	]
+}

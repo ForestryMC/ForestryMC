@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import com.mojang.authlib.GameProfile;
 
@@ -17,9 +20,6 @@ import forestry.api.mail.EnumTradeStationState;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.ITradeStationInfo;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-
 public class TradeStationInfo implements ITradeStationInfo {
 	private final IMailAddress address;
 	private final GameProfile owner;
@@ -27,13 +27,7 @@ public class TradeStationInfo implements ITradeStationInfo {
 	private final NonNullList<ItemStack> required;
 	private final EnumTradeStationState state;
 
-	public TradeStationInfo(
-			IMailAddress address,
-			GameProfile owner,
-			ItemStack tradegood,
-			NonNullList<ItemStack> required,
-			EnumTradeStationState state
-	) {
+	public TradeStationInfo(IMailAddress address, GameProfile owner, ItemStack tradegood, NonNullList<ItemStack> required, EnumTradeStationState state) {
 		if (address.getType() != EnumAddressee.TRADER) {
 			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}

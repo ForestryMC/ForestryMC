@@ -1,17 +1,17 @@
 package forestry.core.gui.elements;
 
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IWindowElement;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.event.EventValueChanged;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+
+import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.event.EventValueChanged;
 
 /**
  * A element list with selectable elements.
@@ -27,13 +27,7 @@ public class ElementList<V> extends VerticalLayout {
 	@Nullable
 	private Predicate<V> validator;
 
-	public ElementList(
-			int xPos,
-			int yPos,
-			int width,
-			BiFunction<V, ElementList, IGuiElement> optionFactory,
-			@Nullable V defaultValue
-	) {
+	public ElementList(int xPos, int yPos, int width, BiFunction<V, ElementList, IGuiElement> optionFactory, @Nullable V defaultValue) {
 		super(xPos, yPos, width);
 		this.optionFactory = optionFactory;
 		this.defaultValue = defaultValue;

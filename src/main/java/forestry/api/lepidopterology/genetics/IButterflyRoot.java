@@ -1,14 +1,11 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.lepidopterology.ILepidopteristTracker;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
@@ -16,7 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.lepidopterology.ILepidopteristTracker;
 
 public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 
@@ -31,14 +31,7 @@ public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 	 */
 	MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
 
-	BlockPos plantCocoon(
-			IWorld world,
-			BlockPos pos,
-			IButterfly caterpillar,
-			GameProfile owner,
-			int age,
-			boolean createNursery
-	);
+	BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
 
 	/**
 	 * @return true if passed item is mated.

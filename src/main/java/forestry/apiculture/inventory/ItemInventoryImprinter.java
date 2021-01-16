@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.inventory;
+
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -17,16 +27,6 @@ import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
-
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
-import java.util.Map;
 
 public class ItemInventoryImprinter extends ItemInventory {
 	private static final short specimenSlot = 0;
@@ -72,15 +72,11 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	public IAlleleBeeSpecies getPrimary() {
-		return BeeManager.beeRoot.getIndividualTemplates()
-				.get(primaryIndex)
-				.getGenome()
-				.getActiveAllele(BeeChromosomes.SPECIES);
+		return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IAlleleBeeSpecies getSecondary() {
-		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getActiveAllele(
-				BeeChromosomes.SPECIES);
+		return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public IBee getSelectedBee() {

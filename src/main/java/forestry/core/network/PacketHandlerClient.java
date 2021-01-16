@@ -1,5 +1,11 @@
 package forestry.core.network;
 
+import java.io.IOException;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,12 +19,6 @@ import net.minecraftforge.fml.network.ICustomPacket;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerClient {
 
@@ -29,10 +29,7 @@ public class PacketHandlerClient {
 		ClientPlayNetHandler netHandler = minecraft.getConnection();
 		if (netHandler != null) {
 			Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-			ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(
-					packetData,
-					PacketHandlerServer.CHANNEL_ID
-			);
+			ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
 			netHandler.sendPacket(payload.getThis());
 		}
 	}

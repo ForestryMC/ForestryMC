@@ -1,24 +1,24 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.world.IWorld;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.genetics.gatgets.IDatabasePlugin;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 
-import net.minecraft.world.IWorld;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
 
 /**
  * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.

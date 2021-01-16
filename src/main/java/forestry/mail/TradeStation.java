@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.*;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.mail.features.MailItems;
-import forestry.mail.inventory.InventoryTradeStation;
-import forestry.mail.items.EnumStampDefinition;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -32,7 +23,24 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.EnumPostage;
+import forestry.api.mail.EnumTradeStationState;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.IStamps;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.mail.features.MailItems;
+import forestry.mail.inventory.InventoryTradeStation;
+import forestry.mail.items.EnumStampDefinition;
 
 public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "trade_po_";
@@ -48,9 +56,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_RECEIVE_BUFFER_COUNT = 15;
 	public static final short SLOT_SEND_BUFFER = 30;
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
-	public static final int SLOT_SIZE =
-			SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT +
-					SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
+	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 	private final InventoryAdapter inventory = new InventoryTradeStation();
 	@Nullable
 	private GameProfile owner;
@@ -103,11 +109,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	@Override
 	public TradeStationInfo getTradeInfo() {
-		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(
-				inventory,
-				SLOT_EXCHANGE_1,
-				SLOT_EXCHANGE_COUNT
-		));
+		NonNullList<ItemStack> condensedRequired = ItemStackUtil.condenseStacks(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 		// Set current state
 		EnumTradeStationState state = EnumTradeStationState.OK;
@@ -176,12 +178,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* ILETTERHANDLER */
 	//TODO this method is long. Shorten it.
 	@Override
-	public IPostalState handleLetter(
-			ServerWorld world,
-			IMailAddress recipient,
-			ItemStack letterstack,
-			boolean doLodge
-	) {
+	public IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		boolean sendOwnerNotice = doLodge && owner != null;
 
@@ -191,11 +188,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			return EnumTradeStationState.INSUFFICIENT_PAPER;
 		}
 
-		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(
-				inventory,
-				SLOT_EXCHANGE_1,
-				SLOT_EXCHANGE_COUNT
-		), letter.getAttachments());
+		int ordersToFillCount = ItemStackUtil.containsSets(InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT), letter.getAttachments());
 
 		// Not a single match.
 		if (ordersToFillCount <= 0) {
@@ -215,10 +208,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			}
 
 			// Check for sufficient output buffer
-			int storable = countStorablePayment(
-					ordersToFillCount,
-					InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT)
-			);
+			int storable = countStorablePayment(ordersToFillCount, InventoryUtil.getStacks(inventory, SLOT_EXCHANGE_1, SLOT_EXCHANGE_COUNT));
 
 			if (storable <= 0) {
 				return EnumTradeStationState.INSUFFICIENT_BUFFER;
@@ -263,11 +253,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
 		mailstack.setTag(compoundNBT);
 
-		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(
-				world,
-				mailstack,
-				doLodge
-		);
+		IPostalState responseState = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, mailstack, doLodge);
 
 		if (!responseState.isOk()) {
 			return new ResponseNotMailable(responseState);
@@ -280,13 +266,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 					continue;
 				}
 
-				InventoryUtil.tryAddStack(
-						inventory,
-						stack.copy(),
-						SLOT_RECEIVE_BUFFER,
-						SLOT_RECEIVE_BUFFER_COUNT,
-						false
-				);
+				InventoryUtil.tryAddStack(inventory, stack.copy(), SLOT_RECEIVE_BUFFER, SLOT_RECEIVE_BUFFER_COUNT, false);
 			}
 		}
 
@@ -381,9 +361,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 			for (int i = SLOT_SEND_BUFFER; i < SLOT_SEND_BUFFER + SLOT_SEND_BUFFER_COUNT; i++) {
 				ItemStack buffer = inventory.getStackInSlot(i);
 
-				if (!buffer.isEmpty() &&
-						buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) &&
-						ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
+				if (!buffer.isEmpty() && buffer.isItemEqual(inventory.getStackInSlot(SLOT_TRADEGOOD)) && ItemStack.areItemStackTagsEqual(buffer, inventory.getStackInSlot(SLOT_TRADEGOOD))) {
 
 					ItemStack decrease = inventory.decrStackSize(i, toRemove);
 					toRemove -= decrease.getCount();

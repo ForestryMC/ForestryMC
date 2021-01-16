@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.genetics.alleles.IAlleleFlowers;
-import forestry.api.genetics.flowers.IFlowerProvider;
+import net.minecraft.util.text.ITextComponent;
 
 import genetics.api.alleles.AlleleCategorizedValue;
 
-import net.minecraft.util.text.ITextComponent;
+import forestry.api.genetics.alleles.IAlleleFlowers;
+import forestry.api.genetics.flowers.IFlowerProvider;
 
 public class AlleleFlowers<P extends IFlowerProvider> extends AlleleCategorizedValue<P> implements IAlleleFlowers {
 

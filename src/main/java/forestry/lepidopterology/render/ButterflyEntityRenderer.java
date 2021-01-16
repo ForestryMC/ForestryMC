@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.render;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.lepidopterology.entities.EntityButterfly;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
 	public ButterflyEntityRenderer(EntityRendererManager manager) {
@@ -25,14 +25,7 @@ public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, Butter
 	}
 
 	@Override
-	public void render(
-			EntityButterfly entity,
-			float entityYaw,
-			float partialTickTime,
-			MatrixStack transform,
-			IRenderTypeBuffer buffer,
-			int packedLight
-	) {
+	public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
 		if (!entity.isRenderable()) {
 			return;
 		}

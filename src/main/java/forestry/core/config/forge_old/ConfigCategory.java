@@ -26,9 +26,16 @@ import com.google.common.collect.ImmutableSet;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
-import static forestry.core.config.forge_old.Configuration.*;
+import static forestry.core.config.forge_old.Configuration.COMMENT_SEPARATOR;
+import static forestry.core.config.forge_old.Configuration.NEW_LINE;
+import static forestry.core.config.forge_old.Configuration.allowedProperties;
 
 public class ConfigCategory implements Map<String, Property> {
 	public final ConfigCategory parent;
@@ -228,11 +235,7 @@ public class ConfigCategory implements Map<String, Property> {
 		if (comment != null && !comment.isEmpty()) {
 			write(out, pad0, COMMENT_SEPARATOR);
 			write(out, pad0, "# ", name);
-			write(
-					out,
-					pad0,
-					"#--------------------------------------------------------------------------------------------------------#"
-			);
+			write(out, pad0, "#--------------------------------------------------------------------------------------------------------#");
 			Splitter splitter = Splitter.onPattern("\r?\n");
 
 			for (String line : splitter.split(comment)) {

@@ -5,8 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import forestry.book.BookCategory;
-import forestry.core.utils.JsonUtil;
+import java.lang.reflect.Type;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JSONUtils;
@@ -14,7 +13,8 @@ import net.minecraft.util.JSONUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.lang.reflect.Type;
+import forestry.book.BookCategory;
+import forestry.core.utils.JsonUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class BookCategoryDeserializer implements JsonDeserializer<BookCategory> {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
@@ -17,9 +20,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.mail.features.MailContainers;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 
@@ -32,12 +32,7 @@ public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 		// Collected Stamps
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlot(new SlotOutput(
-						tile,
-						j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1,
-						8 + j * 18,
-						46 + i * 18
-				));
+				addSlot(new SlotOutput(tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
 			}
 		}
 	}

@@ -1,0 +1,74 @@
+{
+	"title": "真空管",
+	"icon": {
+		"item": "forestry:thermionic_tubes"
+	},
+	"content": [
+		[
+			{
+				"type": "fabricator",
+				"stacks": [
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 0
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 1
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 2
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 3
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 4
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 5
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 6
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 7
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 8
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 9
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 10
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 11
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 12
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 13
+					}
+				]
+			},
+			{
+				"text": "使用電烙鐵可將真空管焊在電路板上。真空管的諸多作用均有在其工具提示中註明，但具體是哪一個作用會生效則取決於電路板的類型配置。焊在電路板上的真空管無法拆除。"
+			}
+		]
+	]
+}

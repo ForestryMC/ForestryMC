@@ -1,5 +1,8 @@
 package forestry.factory.recipes.jei.moistener;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.config.Constants;
@@ -17,9 +20,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRecipeWrapper> {
 	private static final int resourceSlot = 0;
 	private static final int productSlot = 1;
@@ -28,10 +28,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
 
 	private static final int inputTank = 0;
 
-	private static final ResourceLocation guiTexture = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "moistener.png"
-	);
+	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "moistener.png");
 
 	private final IDrawableAnimated arrow;
 	private final IDrawableAnimated progressBar;
@@ -42,22 +39,11 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
 		super(guiHelper.createDrawable(guiTexture, 15, 15, 145, 60), "block.forestry.moistener");
 
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 91, 29, 55);
-		this.arrow = guiHelper.createAnimatedDrawable(
-				arrowDrawable,
-				80,
-				IDrawableAnimated.StartDirection.BOTTOM,
-				false
-		);
+		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		IDrawableStatic progressBar = guiHelper.createDrawable(guiTexture, 176, 74, 16, 15);
-		this.progressBar = guiHelper.createAnimatedDrawable(
-				progressBar,
-				160,
-				IDrawableAnimated.StartDirection.LEFT,
-				false
-		);
+		this.progressBar = guiHelper.createAnimatedDrawable(progressBar, 160, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER)
-				.block()));
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER).block()));
 	}
 
 	@Override

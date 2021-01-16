@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.tiles.*;
-import forestry.modules.ISidedModuleHandler;
-
 import net.minecraftforge.client.event.ModelBakeEvent;
+
+import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileEscritoire;
+import forestry.core.tiles.TileMill;
+import forestry.core.tiles.TileNaturalistChest;
+import forestry.modules.ISidedModuleHandler;
 
 public class ProxyRender implements ISidedModuleHandler {
 
@@ -25,10 +29,7 @@ public class ProxyRender implements ISidedModuleHandler {
 	public void initRendering() {
 	}
 
-	public void setRenderDefaultMachine(
-			MachinePropertiesTesr<? extends TileBase> machineProperties,
-			String baseTexture
-	) {
+	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
 	}
 
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
@@ -40,10 +41,7 @@ public class ProxyRender implements ISidedModuleHandler {
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
 	}
 
-	public void setRenderChest(
-			MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties,
-			String textureName
-	) {
+	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
 	}
 
 	public void registerModels(ModelBakeEvent event) {

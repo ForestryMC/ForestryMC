@@ -1,18 +1,18 @@
 package forestry.core.genetics;
 
-import forestry.api.genetics.products.IDynamicProductList;
-import forestry.api.genetics.products.IMutableProductList;
-import forestry.api.genetics.products.Product;
+import java.util.Collection;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import java.util.Collection;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import forestry.api.genetics.products.IDynamicProductList;
+import forestry.api.genetics.products.IMutableProductList;
+import forestry.api.genetics.products.Product;
 
 public abstract class ProductListWrapper implements IDynamicProductList, IMutableProductList {
 	private ProductListWrapper() {
@@ -43,13 +43,7 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
 		}
 
 		@Override
-		public void addProducts(
-				IBlockReader reader,
-				BlockPos pos,
-				NonNullList<ItemStack> stacks,
-				Function<Product, Float> modifier,
-				Random rand
-		) {
+		public void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
 			list.addProducts(reader, pos, stacks, modifier, rand);
 		}
 
@@ -98,20 +92,17 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
 
 		@Override
 		public Collection<Product> getPossibleProducts() {
-			throw new IllegalStateException(
-					"This product list is not baked yet, you can not get any product information from it.");
+			throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
 		}
 
 		@Override
 		public Collection<Product> getConstantProducts() {
-			throw new IllegalStateException(
-					"This product list is not baked yet, you can not get any product information from it.");
+			throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
 		}
 
 		@Override
 		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
-			throw new IllegalStateException(
-					"This product list is not baked yet, you can not get any product information from it.");
+			throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
 		}
 
 		@Override

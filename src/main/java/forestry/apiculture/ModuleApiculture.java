@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,59 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture;
 
 import com.google.common.base.Preconditions;
 
-import forestry.Forestry;
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.FlowerManager;
-import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.apiculture.IBeekeepingMode;
-import forestry.api.apiculture.hives.HiveManager;
-import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.genetics.flowers.IFlowerAcceptableRule;
-import forestry.api.modules.ForestryModule;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
-import forestry.apiculture.capabilities.ArmorApiarist;
-import forestry.apiculture.commands.CommandBee;
-import forestry.apiculture.features.ApicultureContainers;
-import forestry.apiculture.features.ApicultureFeatures;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.apiculture.flowers.FlowerRegistry;
-import forestry.apiculture.genetics.*;
-import forestry.apiculture.gui.*;
-import forestry.apiculture.items.EnumHoneyComb;
-import forestry.apiculture.items.EnumPollenCluster;
-import forestry.apiculture.items.EnumPropolis;
-import forestry.apiculture.network.PacketRegistryApiculture;
-import forestry.apiculture.particles.ApicultureParticles;
-import forestry.apiculture.proxy.ProxyApiculture;
-import forestry.apiculture.proxy.ProxyApicultureClient;
-import forestry.apiculture.trigger.ApicultureTriggers;
-import forestry.apiculture.villagers.RegisterVillager;
-import forestry.apiculture.worldgen.HiveDescription;
-import forestry.apiculture.worldgen.HiveGenHelper;
-import forestry.apiculture.worldgen.HiveRegistry;
-import forestry.core.ISaveEventHandler;
-import forestry.core.ModuleCore;
-import forestry.core.capabilities.NullStorage;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
-import forestry.core.features.CoreItems;
-import forestry.core.network.IPacketRegistry;
-import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.IMCUtil;
-import forestry.core.utils.Log;
-import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
-
-import genetics.api.GeneticsAPI;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -88,12 +46,66 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import genetics.api.GeneticsAPI;
+
+import forestry.Forestry;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.FlowerManager;
+import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.apiculture.hives.HiveManager;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.genetics.flowers.IFlowerAcceptableRule;
+import forestry.api.modules.ForestryModule;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
+import forestry.apiculture.capabilities.ArmorApiarist;
+import forestry.apiculture.commands.CommandBee;
+import forestry.apiculture.features.ApicultureContainers;
+import forestry.apiculture.features.ApicultureFeatures;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.apiculture.flowers.FlowerRegistry;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.genetics.BeeFactory;
+import forestry.apiculture.genetics.BeeMutationFactory;
+import forestry.apiculture.genetics.HiveDrop;
+import forestry.apiculture.genetics.JubilanceFactory;
+import forestry.apiculture.gui.ContainerBeeHousing;
+import forestry.apiculture.gui.ContainerMinecartBeehouse;
+import forestry.apiculture.gui.GuiAlveary;
+import forestry.apiculture.gui.GuiAlvearyHygroregulator;
+import forestry.apiculture.gui.GuiAlvearySieve;
+import forestry.apiculture.gui.GuiAlvearySwarmer;
+import forestry.apiculture.gui.GuiBeeHousing;
+import forestry.apiculture.gui.GuiHabitatLocator;
+import forestry.apiculture.gui.GuiImprinter;
+import forestry.apiculture.items.EnumHoneyComb;
+import forestry.apiculture.items.EnumPollenCluster;
+import forestry.apiculture.items.EnumPropolis;
+import forestry.apiculture.network.PacketRegistryApiculture;
+import forestry.apiculture.particles.ApicultureParticles;
+import forestry.apiculture.proxy.ProxyApiculture;
+import forestry.apiculture.proxy.ProxyApicultureClient;
+import forestry.apiculture.trigger.ApicultureTriggers;
+import forestry.apiculture.villagers.RegisterVillager;
+import forestry.apiculture.worldgen.HiveDescription;
+import forestry.apiculture.worldgen.HiveGenHelper;
+import forestry.apiculture.worldgen.HiveRegistry;
+import forestry.core.ISaveEventHandler;
+import forestry.core.ModuleCore;
+import forestry.core.capabilities.NullStorage;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
+import forestry.core.features.CoreItems;
+import forestry.core.network.IPacketRegistry;
+import forestry.core.utils.ForgeUtils;
+import forestry.core.utils.IMCUtil;
+import forestry.core.utils.Log;
+import forestry.modules.BlankForestryModule;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
+import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
@@ -139,52 +151,24 @@ public class ModuleApiculture extends BlankForestryModule {
 		ItemStack honeyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1);
 		HiveRegistry hiveRegistry = getHiveRegistry();
 
-		hiveRegistry.addDrops(
-				HiveType.FOREST.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
-				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
-		);
+		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(), new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7), new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb), new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb));
 
-		hiveRegistry.addDrops(
-				HiveType.MEADOWS.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
-		);
+		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveUid(), new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7), new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb));
 
 		ItemStack parchedComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1);
-		hiveRegistry.addDrops(
-				HiveType.DESERT.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
-		);
+		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(), new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7), new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb));
 
 		ItemStack silkyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1);
-		hiveRegistry.addDrops(
-				HiveType.JUNGLE.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
-		);
+		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(), new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7), new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb));
 
 		ItemStack mysteriousComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1);
-		hiveRegistry.addDrops(
-				HiveType.END.getHiveUid(),
-				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
-		);
+		hiveRegistry.addDrops(HiveType.END.getHiveUid(), new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb));
 
 		ItemStack frozenComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1);
-		hiveRegistry.addDrops(
-				HiveType.SNOW.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
-		);
+		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(), new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5), new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb));
 
 		ItemStack mossyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1);
-		hiveRegistry.addDrops(
-				HiveType.SWAMP.getHiveUid(),
-				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
-				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
-		);
+		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(), new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4), new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb));
 	}
 
 	private static void createHives() {
@@ -233,22 +217,13 @@ public class ModuleApiculture extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
 		ScreenManager.registerFactory(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
-		ScreenManager.registerFactory(
-				ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(),
-				GuiAlvearyHygroregulator::new
-		);
+		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
 		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
 		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
-		ScreenManager.registerFactory(
-				ApicultureContainers.BEE_HOUSING.containerType(),
-				GuiBeeHousing<ContainerBeeHousing>::new
-		);
+		ScreenManager.registerFactory(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
 		ScreenManager.registerFactory(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
 		ScreenManager.registerFactory(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
-		ScreenManager.registerFactory(
-				ApicultureContainers.BEEHOUSE_MINECART.containerType(),
-				GuiBeeHousing<ContainerMinecartBeehouse>::new
-		);
+		ScreenManager.registerFactory(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
 	}
 
 	@Override
@@ -301,13 +276,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		beekeepingMode = config.getStringLocalized("beekeeping", "mode", "NORMAL", validBeekeepingModeNames);
 		Log.debug("Beekeeping mode read from config: " + beekeepingMode);
 
-		secondPrincessChance = config.getFloatLocalized(
-				"beekeeping",
-				"second.princess",
-				secondPrincessChance,
-				0.0f,
-				100.0f
-		);
+		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
 
 		maxFlowersSpawnedPerHive = config.getIntLocalized("beekeeping", "flowers.spawn", 20, 0, 1000);
 
@@ -318,17 +287,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping.hivedamage", "peaceful", hivesDamageOnPeaceful);
 
-		hivesDamageUnderwater = config.getBooleanLocalized(
-				"beekeeping.hivedamage",
-				"underwater",
-				hivesDamageUnderwater
-		);
+		hivesDamageUnderwater = config.getBooleanLocalized("beekeeping.hivedamage", "underwater", hivesDamageUnderwater);
 
-		hivesDamageOnlyPlayers = config.getBooleanLocalized(
-				"beekeeping.hivedamage",
-				"onlyPlayers",
-				hivesDamageOnlyPlayers
-		);
+		hivesDamageOnlyPlayers = config.getBooleanLocalized("beekeeping.hivedamage", "onlyPlayers", hivesDamageOnlyPlayers);
 
 		hiveDamageOnAttack = config.getBooleanLocalized("beekeeping.hivedamage", "onlyAfterAttack", hiveDamageOnAttack);
 
@@ -361,16 +322,8 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		// BREWING RECIPES
-		BrewingRecipeRegistry.addRecipe(
-				Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-				Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1)),
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING)
-		);
-		BrewingRecipeRegistry.addRecipe(
-				Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-				Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)),
-				PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION)
-		);
+		BrewingRecipeRegistry.addRecipe(Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)), Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1)), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
+		BrewingRecipeRegistry.addRecipe(Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)), Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
 	}
 
 	@Override
@@ -431,16 +384,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		for (Block standardFlower : standardFlowers) {
 			flowerRegistry.registerPlantableFlower(standardFlower.getDefaultState(), 1.0, standardTypes);
 		}
-		flowerRegistry.registerPlantableFlower(
-				Blocks.BROWN_MUSHROOM.getDefaultState(),
-				1.0,
-				FlowerManager.FlowerTypeMushrooms
-		);
-		flowerRegistry.registerPlantableFlower(
-				Blocks.RED_MUSHROOM.getDefaultState(),
-				1.0,
-				FlowerManager.FlowerTypeMushrooms
-		);
+		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
 		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
 
 		//Flower Pots

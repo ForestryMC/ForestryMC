@@ -1,10 +1,8 @@
 package forestry.sorting;
 
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.api.genetics.filter.IFilterData;
-import forestry.api.genetics.filter.IFilterRule;
-import forestry.api.genetics.filter.IFilterRuleType;
-import forestry.core.render.TextureManagerForestry;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -13,9 +11,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
+import forestry.core.render.TextureManagerForestry;
 
 public enum DefaultFilterRuleType implements IFilterRuleType {
 	CLOSED(false) {
@@ -23,26 +23,17 @@ public enum DefaultFilterRuleType implements IFilterRuleType {
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return false;
 		}
-	},
-	ANYTHING(false) {
+	}, ANYTHING(false) {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return true;
 		}
-	},
-	ITEM(false) {
+	}, ITEM(false) {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return !data.isPresent();
 		}
-	},
-	PURE_BREED,
-	NOCTURNAL,
-	PURE_NOCTURNAL,
-	FLYER,
-	PURE_FLYER,
-	CAVE,
-	PURE_CAVE,
+	}, PURE_BREED, NOCTURNAL, PURE_NOCTURNAL, FLYER, PURE_FLYER, CAVE, PURE_CAVE,
 	/*FIREPROOF,
 	PURE_FIREPROOF*/;
 

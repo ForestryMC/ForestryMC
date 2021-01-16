@@ -2,19 +2,19 @@ package forestry.modules.features;
 
 import com.google.common.collect.ImmutableTable;
 
-import forestry.api.core.IFeatureSubtype;
-import forestry.api.core.IItemProvider;
-import forestry.modules.features.FeatureGroup.IdentifierType;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+import forestry.api.core.IFeatureSubtype;
+import forestry.api.core.IItemProvider;
+import forestry.modules.features.FeatureGroup.IdentifierType;
 
 public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extends FeatureTable<B, F, R, C>>, F extends IModFeature, R extends IFeatureSubtype, C extends IFeatureSubtype> {
 
@@ -57,17 +57,11 @@ public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extend
 	}
 
 	public boolean itemEqual(ItemStack stack) {
-		return getFeatures().stream()
-				.filter(f -> f instanceof IItemProvider)
-				.map(f -> (IItemProvider) f)
-				.anyMatch(f -> f.itemEqual(stack));
+		return getFeatures().stream().filter(f -> f instanceof IItemProvider).map(f -> (IItemProvider) f).anyMatch(f -> f.itemEqual(stack));
 	}
 
 	public boolean itemEqual(Item item) {
-		return getFeatures().stream()
-				.filter(f -> f instanceof IItemProvider)
-				.map(f -> (IItemProvider) f)
-				.anyMatch(f -> f.itemEqual(item));
+		return getFeatures().stream().filter(f -> f instanceof IItemProvider).map(f -> (IItemProvider) f).anyMatch(f -> f.itemEqual(item));
 	}
 
 	public ItemStack stack(R rowType, C columnType) {
@@ -77,8 +71,7 @@ public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extend
 	public ItemStack stack(R rowType, C columnType, int amount) {
 		F featureBlock = featureByTypes.get(rowType, columnType);
 		if (!(featureBlock instanceof IItemProvider)) {
-			throw new IllegalStateException(
-					"This feature group has no item registered for the given sub type to create a stack for.");
+			throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
 		}
 		return ((IItemProvider) featureBlock).stack(amount);
 	}
@@ -86,8 +79,7 @@ public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extend
 	public ItemStack stack(R rowType, C columnType, StackOption... options) {
 		F featureBlock = featureByTypes.get(rowType, columnType);
 		if (!(featureBlock instanceof IItemProvider)) {
-			throw new IllegalStateException(
-					"This feature group has no item registered for the given sub type to create a stack for.");
+			throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
 		}
 		return ((IItemProvider) featureBlock).stack(options);
 	}

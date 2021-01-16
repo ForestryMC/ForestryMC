@@ -3,14 +3,14 @@ package forestry.core.genetics;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.ISpeciesDisplayHelper;
+import net.minecraft.item.ItemStack;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 
-import net.minecraft.item.ItemStack;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.ISpeciesDisplayHelper;
 
 
 public class SpeciesDisplayHelper implements ISpeciesDisplayHelper {
@@ -30,9 +30,7 @@ public class SpeciesDisplayHelper implements ISpeciesDisplayHelper {
 	public ItemStack getDisplayStack(IAlleleSpecies species, IOrganismType type) {
 		ItemStack stack = iconStacks.get(type, species.getRegistryName().toString());
 		if (stack == null) {
-			stack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates()
-					.getTemplate(species.getRegistryName()
-							.toString())), type);
+			stack = root.getTypes().createStack(root.templateAsIndividual(root.getTemplates().getTemplate(species.getRegistryName().toString())), type);
 			iconStacks.put(type, species.getRegistryName().toString(), stack);
 		}
 		return stack;

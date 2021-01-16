@@ -1,5 +1,10 @@
 package genetics.utils;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
+
+import net.minecraft.util.ResourceLocation;
+
 import genetics.ApiInstance;
 import genetics.alleles.AlleleRegistry;
 import genetics.api.alleles.IAllele;
@@ -8,11 +13,6 @@ import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
 import genetics.individual.Chromosome;
 import genetics.individual.ChromosomeInfo;
-
-import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
 
 /**
  * A byte buffer that can be used to encode and decode chromosomes and alleles into a byte array.
@@ -152,11 +152,7 @@ public class SimpleByteBuf {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Chromosome readChromosome(
-			IChromosomeType type,
-			@Nullable ResourceLocation activeSpeciesUid,
-			@Nullable ResourceLocation inactiveSpeciesUid
-	) {
+	private Chromosome readChromosome(IChromosomeType type, @Nullable ResourceLocation activeSpeciesUid, @Nullable ResourceLocation inactiveSpeciesUid) {
 		IAllele firstAllele = readAllele();
 		IAllele secondAllele = readAllele();
 		return Chromosome.create(activeSpeciesUid, inactiveSpeciesUid, type, firstAllele, secondAllele);
@@ -224,10 +220,7 @@ public class SimpleByteBuf {
 			} else if (karyotype.getSpeciesType().equals(key)) {
 				Chromosome chromosome = readChromosome(key, info);
 
-				info.setSpeciesInfo(
-						chromosome.getActiveAllele().getRegistryName(),
-						chromosome.getInactiveAllele().getRegistryName()
-				);
+				info.setSpeciesInfo(chromosome.getActiveAllele().getRegistryName(), chromosome.getInactiveAllele().getRegistryName());
 			} else {
 				readVarInt();
 				readVarInt();

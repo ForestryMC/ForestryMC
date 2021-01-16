@@ -1,8 +1,8 @@
 package forestry.core.circuits;
 
-import forestry.api.circuits.ICircuit;
-
 import javax.annotation.Nullable;
+
+import forestry.api.circuits.ICircuit;
 
 @SuppressWarnings({"unused"})
 public class Circuits {

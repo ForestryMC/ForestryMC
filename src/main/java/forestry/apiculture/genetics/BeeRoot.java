@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,24 +7,26 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.apiculture.*;
-import forestry.api.apiculture.genetics.*;
-import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IBreedingTrackerHandler;
-import forestry.api.genetics.gatgets.IDatabasePlugin;
-import forestry.apiculture.BeeHousingListener;
-import forestry.apiculture.BeeHousingModifier;
-import forestry.apiculture.BeekeepingLogic;
-import forestry.core.genetics.root.BreedingTrackerManager;
-import forestry.core.utils.Log;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
@@ -34,19 +36,26 @@ import genetics.api.root.IRootContext;
 import genetics.api.root.IndividualRoot;
 import genetics.utils.AlleleUtils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
+import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IBreedingTrackerHandler;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.apiculture.BeeHousingListener;
+import forestry.apiculture.BeeHousingModifier;
+import forestry.apiculture.BeekeepingLogic;
+import forestry.core.genetics.root.BreedingTrackerManager;
+import forestry.core.utils.Log;
 
 public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
@@ -64,8 +73,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	@Override
 	public int getSpeciesCount() {
 		if (beeSpeciesCount < 0) {
-			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES)
-					.filter(IAlleleBeeSpecies::isCounted).count();
+			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES).filter(IAlleleBeeSpecies::isCounted).count();
 		}
 
 		return beeSpeciesCount;

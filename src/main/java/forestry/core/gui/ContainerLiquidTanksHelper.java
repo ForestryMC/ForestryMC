@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
-
-import forestry.api.core.IToolPipette;
-import forestry.core.fluids.StandardTank;
-import forestry.core.network.packets.PacketPipetteClick;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.utils.NetworkUtil;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -32,6 +26,12 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import forestry.api.core.IToolPipette;
+import forestry.core.fluids.StandardTank;
+import forestry.core.network.packets.PacketPipetteClick;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.utils.NetworkUtil;
 
 public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
@@ -67,17 +67,11 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 				FluidStack fillAmount;
 				if (tank instanceof StandardTank) {
-					fillAmount = ((StandardTank) tank).drainInternal(
-							FluidAttributes.BUCKET_VOLUME,
-							IFluidHandler.FluidAction.EXECUTE
-					);
+					fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 				} else {//TODO: Test if this works
-					fillAmount = tank.drain(
-							FluidAttributes.BUCKET_VOLUME,
-							IFluidHandler.FluidAction.EXECUTE
-					);
+					fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 				}

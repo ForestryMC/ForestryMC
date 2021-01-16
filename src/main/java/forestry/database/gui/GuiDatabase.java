@@ -1,5 +1,18 @@
 package forestry.database.gui;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -17,24 +30,9 @@ import forestry.database.gui.buttons.GuiDatabaseButton;
 import forestry.database.gui.widgets.WidgetDatabaseSlot;
 import forestry.database.tiles.TileDatabase;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implements IScrollable {
 	/* Attributes - Constants */
-	private static final ResourceLocation CREATIVE_TABS = new ResourceLocation(
-			Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"
-	);
+	private static final ResourceLocation CREATIVE_TABS = new ResourceLocation(Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png");
 	private static final Drawable SCROLLBAR_SLIDER = new Drawable(CREATIVE_TABS, 232, 0, 12, 15);
 	/*  Attributes - Final */
 	public final TileDatabase tile;
@@ -51,18 +49,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Constructors */
 	public GuiDatabase(ContainerDatabase container, PlayerInventory inv, ITextComponent title) {
-		super(
-				Constants.TEXTURE_PATH_GUI + "database_inventory.png",
-				container,
-				inv,
-				container.getTile(),
-				7,
-				140,
-				20,
-				true,
-				container.getTile().getInternalInventory().getSizeInventory(),
-				0
-		);
+		super(Constants.TEXTURE_PATH_GUI + "database_inventory.png", container, inv, container.getTile(), 7, 140, 20, true, container.getTile().getInternalInventory().getSizeInventory(), 0);
 		this.tile = container.getTile();
 
 		slots = new ArrayList<>();
@@ -269,27 +256,13 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	public void init() {
 		super.init();
 
-		this.searchField = new TextFieldWidget(
-				this.minecraft.fontRenderer,
-				this.guiLeft + 101,
-				this.guiTop + 6,
-				80,
-				this.minecraft.fontRenderer.FONT_HEIGHT,
-				null
-		);
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
 		this.searchField.setEnabled(true);
 
-		addButton(new GuiDatabaseButton<>(
-				guiLeft - 18,
-				guiTop,
-				DatabaseHelper.ascending,
-				this,
-				DatabaseButton.SORT_DIRECTION_BUTTON,
-				b -> ((GuiDatabaseButton) b).onPressed()
-		));    //TODO cast should be safe?
+		addButton(new GuiDatabaseButton<>(guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
 		updateViewedItems();
 	}

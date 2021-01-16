@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.tiles;
 
-import forestry.api.multiblock.IFarmComponent;
-import forestry.core.inventory.AdjacentInventoryCache;
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.core.utils.InventoryUtil;
-import forestry.farming.features.FarmingTiles;
+import javax.annotation.Nullable;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,7 +23,11 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import javax.annotation.Nullable;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.core.utils.InventoryUtil;
+import forestry.farming.features.FarmingTiles;
 
 //import net.minecraftforge.fml.common.Optional;
 
@@ -48,11 +48,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	public TileFarmHatch() {
 		super(FarmingTiles.HATCH.tileType());
 		this.tileCache = new AdjacentTileCache(this);
-		this.inventoryCache = new AdjacentInventoryCache(
-				this,
-				tileCache,
-				tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY()
-		);
+		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
 	}
 
 	@Override

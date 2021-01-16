@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory;
 
-import forestry.api.recipes.*;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IInventory;
@@ -20,11 +24,24 @@ import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import forestry.api.recipes.ICarpenterManager;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.ICentrifugeManager;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.ICraftingProvider;
+import forestry.api.recipes.IFabricatorManager;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.IFermenterManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IForestryRecipe;
+import forestry.api.recipes.IMoistenerManager;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.ISqueezerManager;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.IStillManager;
+import forestry.api.recipes.IStillRecipe;
 
 public class DummyManagers {
 
@@ -42,22 +59,12 @@ public class DummyManagers {
 
 	public static class DummyCarpenterManager extends DummyCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 		@Override
-		public Optional<ICarpenterRecipe> findMatchingRecipe(
-				RecipeManager recipeManager,
-				FluidStack liquid,
-				ItemStack item,
-				IInventory inventory
-		) {
+		public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
 			return Optional.empty();
 		}
 
 		@Override
-		public boolean matches(
-				@Nullable ICarpenterRecipe recipe,
-				FluidStack resource,
-				ItemStack item,
-				IInventory craftingInventory
-		) {
+		public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
 			return false;
 		}
 
@@ -86,9 +93,7 @@ public class DummyManagers {
 
 	public static class DummyFabricatorManager extends DummyCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
 		@Override
-		public Optional<IFabricatorRecipe> findMatchingRecipe(
-				RecipeManager manager, ItemStack plan, IInventory resources
-		) {
+		public Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, ItemStack plan, IInventory resources) {
 			return Optional.empty();
 		}
 

@@ -1,15 +1,12 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics.flowers;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.core.IBlockPosPredicate;
-
-import genetics.api.individual.IIndividual;
+import java.util.Collection;
+import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,8 +14,11 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.Iterator;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.core.IBlockPosPredicate;
 
 // See {@link forestry.api.apiculture.FlowerManager}.FlowerType___ for basic Forestry flower types.
 // Each IFlowerProvider has one flower type, and multiple IFlowerProviders may share one type.
@@ -71,13 +71,7 @@ public interface IFlowerRegistry {
 	 *
 	 * @since Forestry 5.5.4
 	 */
-	boolean growFlower(
-			String flowerType,
-			World world,
-			IIndividual individual,
-			BlockPos pos,
-			Collection<BlockState> potentialFlowers
-	);
+	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers);
 
 	/**
 	 * Gets an iterator over the area a bee can travel from its beeHousing.

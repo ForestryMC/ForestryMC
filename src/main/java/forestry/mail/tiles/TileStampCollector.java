@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.tiles;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
@@ -18,13 +25,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.mail.features.MailTiles;
 import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
 
 public class TileStampCollector extends TileBase implements IInventory {
 	public TileStampCollector() {
@@ -46,8 +46,7 @@ public class TileStampCollector extends TileBase implements IInventory {
 		} else {
 			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world)
-						.getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
 		}
 
@@ -56,13 +55,7 @@ public class TileStampCollector extends TileBase implements IInventory {
 		}
 
 		// Store it.
-		InventoryUtil.stowInInventory(
-				stamp,
-				inventory,
-				true,
-				InventoryStampCollector.SLOT_BUFFER_1,
-				InventoryStampCollector.SLOT_BUFFER_COUNT
-		);
+		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
 	}
 
 	@Override

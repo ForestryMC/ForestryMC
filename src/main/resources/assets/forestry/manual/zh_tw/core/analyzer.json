@@ -1,0 +1,19 @@
+{
+	"title": "分析儀",
+	"icon": {
+		"item": "forestry:analyzer"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:analyzer"
+				]
+			},
+			{
+				"text": "可攜式分析儀的固定版本。將蜜蜂、樹苗、蝴蝶等放入左邊的格子中，機器會開始分析並將分析完成的物種放入右邊的格子中。"
+			}
+		]
+	]
+}

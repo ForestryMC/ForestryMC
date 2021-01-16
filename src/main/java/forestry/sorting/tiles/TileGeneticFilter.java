@@ -1,26 +1,9 @@
 package forestry.sorting.tiles;
 
-import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.filter.IFilterData;
-import forestry.api.genetics.filter.IFilterLogic;
-import forestry.core.inventory.AdjacentInventoryCache;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.sorting.FilterData;
-import forestry.sorting.FilterLogic;
-import forestry.sorting.features.SortingTiles;
-import forestry.sorting.gui.ContainerGeneticFilter;
-import forestry.sorting.inventory.InventoryFilter;
-import forestry.sorting.inventory.ItemHandlerFilter;
-
-import genetics.api.individual.IIndividual;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IRootDefinition;
-import genetics.utils.RootUtils;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,10 +24,27 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
+
+import forestry.api.genetics.GeneticCapabilities;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.core.inventory.AdjacentInventoryCache;
+import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.sorting.FilterData;
+import forestry.sorting.FilterLogic;
+import forestry.sorting.features.SortingTiles;
+import forestry.sorting.gui.ContainerGeneticFilter;
+import forestry.sorting.inventory.InventoryFilter;
+import forestry.sorting.inventory.ItemHandlerFilter;
 
 public class TileGeneticFilter extends TileForestry implements IStreamableGui, IFilterContainer {
 	private static final int TRANSFER_DELAY = 5;

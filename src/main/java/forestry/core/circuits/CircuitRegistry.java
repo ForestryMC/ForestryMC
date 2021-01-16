@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.api.circuits.*;
-import forestry.core.features.CoreItems;
+import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import forestry.api.circuits.CircuitSocketType;
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.api.circuits.ICircuitLibrary;
+import forestry.api.circuits.ICircuitRegistry;
+import forestry.core.features.CoreItems;
 
 public class CircuitRegistry implements ICircuitRegistry {
 

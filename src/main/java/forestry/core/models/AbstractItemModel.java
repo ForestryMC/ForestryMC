@@ -1,12 +1,12 @@
 package forestry.core.models;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
 
 public abstract class AbstractItemModel extends AbstractBakedModel {
 
@@ -24,12 +24,7 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
 
 	protected abstract IBakedModel getOverride(IBakedModel model, ItemStack stack);
 
-	protected IBakedModel getOverride(
-			IBakedModel model,
-			ItemStack stack,
-			@Nullable ClientWorld world,
-			@Nullable LivingEntity entity
-	) {
+	protected IBakedModel getOverride(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 		return getOverride(model, stack);
 	}
 
@@ -39,16 +34,9 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public IBakedModel getOverrideModel(
-				IBakedModel model,
-				ItemStack stack,
-				@Nullable ClientWorld world,
-				@Nullable LivingEntity entity
-		) {
+		public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 			IBakedModel overrideModel = getOverride(model, stack, world, entity);
-			return complexOverride() ? overrideModel.getOverrides()
-					.getOverrideModel(overrideModel, stack, world, entity)
-					: overrideModel;
+			return complexOverride() ? overrideModel.getOverrides().getOverrideModel(overrideModel, stack, world, entity) : overrideModel;
 		}
 	}
 }

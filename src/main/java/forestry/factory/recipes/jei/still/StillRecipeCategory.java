@@ -1,5 +1,8 @@
 package forestry.factory.recipes.jei.still;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.config.Constants;
@@ -16,17 +19,11 @@ import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 public class StillRecipeCategory extends ForestryRecipeCategory {
 	private static final int inputTank = 0;
 	private static final int outputTank = 1;
 
-	private static final ResourceLocation guiTexture = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "still.png"
-	);
+	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "still.png");
 
 	private final IDrawable tankOverlay;
 	private final IDrawable icon;
@@ -37,15 +34,8 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
-		this.progressBar = guiHelper.createAnimatedDrawable(
-				progressBarDrawable0,
-				20,
-				IDrawableAnimated.StartDirection.BOTTOM,
-				false
-		);
-		this.icon = guiHelper.createDrawableIngredient(
-				new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block())
-		);
+		this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()));
 	}
 
 	@Override

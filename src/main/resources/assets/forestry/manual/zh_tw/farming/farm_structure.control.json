@@ -1,0 +1,22 @@
+{
+	"title": "農場控制盒",
+	"icon": {
+		"item": "forestry:ffarm",
+		"data": 5
+	},
+	"content": [
+		[
+			{
+				"text": "你可以透過它來控制農場的哪個部分可以工作。直接在其正上方或正下方提供紅石訊號將會關閉整個農場；而在對應的方向上提供紅石訊號則會停止對應側農場的運轉。"
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_control_brick"
+				]
+			}
+		]
+	]
+}

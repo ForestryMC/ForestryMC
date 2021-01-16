@@ -1,9 +1,11 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.recipes;
+
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -12,8 +14,6 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.registries.ObjectHolder;
-
-import java.util.Random;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 	IRecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");

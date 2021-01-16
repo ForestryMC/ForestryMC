@@ -1,11 +1,9 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.mail;
-
-import forestry.api.core.ITextureManager;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -13,6 +11,8 @@ import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.core.ITextureManager;
 
 /**
  * Postal Carriers are systems which can be hooked into Forestry's mail system to handle mail delivery.
@@ -50,12 +50,6 @@ public interface IPostalCarrier {
 	 * @param doDeliver   Whether or not the letter is supposed to actually be delivered or if delivery is only to be simulated.
 	 * @return {link IPostalState} holding information on success or failure for delivery.
 	 */
-	IPostalState deliverLetter(
-			ServerWorld world,
-			IPostOffice office,
-			IMailAddress recipient,
-			ItemStack letterstack,
-			boolean doDeliver
-	);
+	IPostalState deliverLetter(ServerWorld world, IPostOffice office, IMailAddress recipient, ItemStack letterstack, boolean doDeliver);
 
 }

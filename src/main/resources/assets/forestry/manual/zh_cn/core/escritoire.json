@@ -1,0 +1,19 @@
+{
+	"title": "写字台",
+	"icon":{
+		"item": "forestry:escritoire"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:escritoire"
+				}
+			},
+			{
+				"text": "一个关于蜜蜂、树木和蝴蝶的突变路线的配对小游戏。游戏胜利时会奖励提高突变概率的研究笔记以及其他奖励。"
+			}
+		]
+	]
+}

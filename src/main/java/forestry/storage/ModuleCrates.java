@@ -3,19 +3,10 @@ package forestry.storage;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import forestry.Forestry;
-import forestry.api.modules.ForestryModule;
-import forestry.api.storage.StorageManager;
-import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
-import forestry.core.utils.IMCUtil;
-import forestry.modules.BlankForestryModule;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ISidedModuleHandler;
-import forestry.modules.features.FeatureItem;
-import forestry.storage.items.ItemCrated;
-import forestry.storage.proxy.ProxyCrates;
-import forestry.storage.proxy.ProxyCratesClient;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,10 +16,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.Forestry;
+import forestry.api.modules.ForestryModule;
+import forestry.api.storage.StorageManager;
+import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
+import forestry.modules.BlankForestryModule;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
+import forestry.modules.features.FeatureItem;
+import forestry.storage.items.ItemCrated;
+import forestry.storage.proxy.ProxyCrates;
+import forestry.storage.proxy.ProxyCratesClient;
 
 @ForestryModule(moduleID = ForestryModuleUids.CRATE, containerID = Constants.MOD_ID, name = "Crate", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.crates.description")
 public class ModuleCrates extends BlankForestryModule {

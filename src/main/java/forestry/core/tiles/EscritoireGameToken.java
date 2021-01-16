@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.utils.AlleleUtils;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -16,19 +29,6 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IIndividualRoot;
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
@@ -72,11 +72,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
 			IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 			this.tokenIndividual = root.templateAsIndividual(template);
-			this.tokenStack = root.getTypes()
-					.createStack(
-							this.tokenIndividual,
-							((IForestrySpeciesRoot<IIndividual>) root).getIconType()
-					);
+			this.tokenStack = root.getTypes().createStack(this.tokenIndividual, ((IForestrySpeciesRoot<IIndividual>) root).getIconType());
 		}
 	}
 
@@ -158,10 +154,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		CompoundNBT.putInt("state", state.ordinal());
 
 		if (tokenIndividual != null) {
-			CompoundNBT.putString(
-					"tokenSpecies",
-					tokenIndividual.getGenome().getPrimary().getRegistryName().toString()
-			);
+			CompoundNBT.putString("tokenSpecies", tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
 		}
 		return CompoundNBT;
 	}

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import forestry.api.climate.IClimateProvider;
-import forestry.api.genetics.IMutationCondition;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -22,9 +20,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
+import forestry.api.climate.IClimateProvider;
+import forestry.api.genetics.IMutationCondition;
 
 public class MutationConditionBiome implements IMutationCondition {
 
@@ -35,15 +35,7 @@ public class MutationConditionBiome implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(
-			World world,
-			BlockPos pos,
-			IAllele allele0,
-			IAllele allele1,
-			IGenome genome0,
-			IGenome genome1,
-			IClimateProvider climate
-	) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		Biome biome = climate.getBiome();
 		for (Biome.Category category : validBiomeTypes) {
 			if (biome.getCategory() == category) {

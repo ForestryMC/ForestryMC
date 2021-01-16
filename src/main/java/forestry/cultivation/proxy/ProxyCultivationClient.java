@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.cultivation.proxy;
-
-import forestry.cultivation.features.CultivationBlocks;
-import forestry.modules.IClientModuleHandler;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -21,14 +18,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import forestry.cultivation.features.CultivationBlocks;
+import forestry.modules.IClientModuleHandler;
+
 @OnlyIn(Dist.CLIENT)
 public class ProxyCultivationClient extends ProxyCultivation implements IClientModuleHandler {
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(
-				block,
-				RenderType.getCutout()
-		));
+		CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
 	}
 }

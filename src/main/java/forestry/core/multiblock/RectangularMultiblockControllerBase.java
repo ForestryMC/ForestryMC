@@ -1,12 +1,12 @@
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.tiles.TileUtil;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.tiles.TileUtil;
 
 public abstract class RectangularMultiblockControllerBase extends MultiblockControllerForestry {
 
@@ -24,14 +24,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		int minZ = sizeLimits.getMinimumZSize();
 
 		if (connectedParts.size() < sizeLimits.getMinimumNumberOfBlocksForAssembledMachine()) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent(
-							"for.multiblock.error.small",
-							minX,
-							minY,
-							minZ
-					).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.small", minX, minY, minZ).getString());
 		}
 
 		BlockPos maximumCoord = getMaximumCoord();
@@ -47,34 +40,22 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		int maxZ = sizeLimits.getMaximumZSize();
 
 		if (maxX > 0 && deltaX > maxX) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.large.x", maxX).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.large.x", maxX).getString());
 		}
 		if (maxY > 0 && deltaY > maxY) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.large.y", maxY).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.large.y", maxY).getString());
 		}
 		if (maxZ > 0 && deltaZ > maxZ) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.large.z", maxZ).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.large.z", maxZ).getString());
 		}
 		if (deltaX < minX) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.small.x", minX).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.small.x", minX).getString());
 		}
 		if (deltaY < minY) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.small.y", minY).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.small.y", minY).getString());
 		}
 		if (deltaZ < minZ) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.error.small.z", minZ).getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.small.z", minZ).getString());
 		}
 
 		// Now we run a simple check on each block within that volume.
@@ -94,12 +75,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 
 						// Ensure this part should actually be allowed within a cube of this controller's type
 						if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
-							throw new MultiblockValidationException(
-									new TranslationTextComponent(
-											"for.multiblock.error.invalid.part",
-											new TranslationTextComponent(getUnlocalizedType())
-									).getString()
-							);
+							throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.error.invalid.part", new TranslationTextComponent(getUnlocalizedType())).getString());
 						}
 					} else {
 						// This is permitted so that we can incorporate certain non-multiblock parts inside interiors
@@ -153,10 +129,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 		return sizeLimits;
 	}
 
-	protected abstract void isGoodForExteriorLevel(
-			IMultiblockComponent part,
-			int level
-	) throws MultiblockValidationException;
+	protected abstract void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException;
 
 	protected abstract void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException;
 }

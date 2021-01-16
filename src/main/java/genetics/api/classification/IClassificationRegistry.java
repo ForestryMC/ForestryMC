@@ -1,9 +1,9 @@
 package genetics.api.classification;
 
-import genetics.api.classification.IClassification.EnumClassLevel;
-
 import java.util.Collection;
 import java.util.Map;
+
+import genetics.api.classification.IClassification.EnumClassLevel;
 
 /**
  * Main interface for the registration of {@link IClassification}s.
@@ -31,12 +31,7 @@ public interface IClassificationRegistry {
 	 */
 	IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific);
 
-	IClassification createAndRegisterClassification(
-			EnumClassLevel level,
-			String uid,
-			String scientific,
-			IClassification... members
-	);
+	IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members);
 
 	/**
 	 * Gets a classification.

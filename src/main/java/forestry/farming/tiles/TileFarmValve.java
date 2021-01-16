@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.tiles;
 
-import forestry.core.fluids.ITankManager;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.farming.features.FarmingTiles;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.Direction;
 
@@ -20,7 +18,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-import javax.annotation.Nullable;
+import forestry.core.fluids.ITankManager;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmValve extends TileFarm implements ILiquidTankTile {
 	public TileFarmValve() {

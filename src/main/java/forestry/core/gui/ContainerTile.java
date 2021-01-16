@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
 
 import com.google.common.collect.ImmutableSet;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.tileentity.TileEntity;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
@@ -22,16 +32,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-
 //TODO: Add needsGuiUpdate() method, so we only send one gui update packet.
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 	protected final T tile;
@@ -41,14 +41,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	private int previousWorkCounter = 0;
 	private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(
-			int windowId,
-			ContainerType<?> type,
-			PlayerInventory playerInventory,
-			T tile,
-			int xInv,
-			int yInv
-	) {
+	protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
 		super(windowId, type);
 		addPlayerInventory(playerInventory, xInv, yInv);
 		this.tile = tile;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
-
-import forestry.core.utils.StringUtil;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import forestry.core.utils.StringUtil;
 
 public class GenericRatings {
 
@@ -37,17 +37,9 @@ public class GenericRatings {
 	}
 
 	public static ITextComponent rateActivityTime(boolean neverSleeps, boolean naturalNocturnal) {
-		ITextComponent active = naturalNocturnal
-				? new TranslationTextComponent("for.gui.nocturnal")
-				: new TranslationTextComponent("for.gui.diurnal");
+		ITextComponent active = naturalNocturnal ? new TranslationTextComponent("for.gui.nocturnal") : new TranslationTextComponent("for.gui.diurnal");
 		if (neverSleeps) {
-			active = new StringTextComponent(StringUtil.append(
-					", ",
-					active.getString(),
-					naturalNocturnal
-							? new TranslationTextComponent("for.gui.diurnal").getString()
-							: new TranslationTextComponent("for.gui.nocturnal").getString()
-			));
+			active = new StringTextComponent(StringUtil.append(", ", active.getString(), naturalNocturnal ? new TranslationTextComponent("for.gui.diurnal").getString() : new TranslationTextComponent("for.gui.nocturnal").getString()));
 		}
 
 		return active;

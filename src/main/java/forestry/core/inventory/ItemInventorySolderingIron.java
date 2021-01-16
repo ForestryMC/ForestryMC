@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -24,20 +29,13 @@ import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
 	private static final short inputCircuitBoardSlot = 0;
 	private static final short finishedCircuitBoardSlot = 1;
 	private static final short ingredientSlot1 = 2;
 	private static final short ingredientSlotCount = 4;
-	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(
-			ChipsetManager.circuitRegistry.getRegisteredLayouts().values()
-	);
+	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
 
 	public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
 		super(player, 6, itemStack);
@@ -68,11 +66,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
-				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
-						Minecraft.getInstance().world.getRecipeManager(),
-						layouts.getCurrent(),
-						ingredient
-				);
+				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(Minecraft.getInstance().world.getRecipeManager(), layouts.getCurrent(), ingredient);
 				if (recipe != null) {
 					if (doConsume) {
 						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
@@ -140,11 +134,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(
-					Minecraft.getInstance().world.getRecipeManager(),
-					layouts.getCurrent(),
-					itemStack
-			);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(Minecraft.getInstance().world.getRecipeManager(), layouts.getCurrent(), itemStack);
 			return recipe != null;
 		}
 		return false;

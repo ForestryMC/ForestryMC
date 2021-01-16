@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Random;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -17,18 +29,6 @@ import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
-
-import genetics.api.individual.IIndividual;
-import genetics.utils.RootUtils;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Random;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	public static final int BOUNTY_MAX = 16;
@@ -172,7 +172,10 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	public enum Status {
-		EMPTY, PLAYING, FAILURE, SUCCESS;
+		EMPTY,
+		PLAYING,
+		FAILURE,
+		SUCCESS;
 		public static final Status[] VALUES = values();
 	}
 }

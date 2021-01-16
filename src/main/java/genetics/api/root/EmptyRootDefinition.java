@@ -15,8 +15,7 @@ public final class EmptyRootDefinition implements IRootDefinition {
 	}
 
 	public static <R extends IIndividualRoot> IRootDefinition<R> empty() {
-		@SuppressWarnings("unchecked")
-		IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
+		@SuppressWarnings("unchecked") IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
 		return t;
 	}
 

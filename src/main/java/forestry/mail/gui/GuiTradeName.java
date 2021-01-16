@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import org.lwjgl.glfw.GLFW;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -18,17 +29,6 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
-
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import org.apache.commons.lang3.StringUtils;
-
-import org.lwjgl.glfw.GLFW;
-
-import javax.annotation.Nullable;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	private final TileTrader tile;
@@ -58,12 +58,7 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 
 		textLayout.startPage();
 		textLayout.newLine();
-		textLayout.drawCenteredLine(
-				transform,
-				new TranslationTextComponent("for.gui.mail.nametrader"),
-				0,
-				ColourProperties.INSTANCE.get("gui.mail.text")
-		);
+		textLayout.drawCenteredLine(transform, new TranslationTextComponent("for.gui.mail.nametrader"), 0, ColourProperties.INSTANCE.get("gui.mail.text"));
 		textLayout.endPage();
 		addressNameField.render(transform, mouseX, mouseY, partialTicks);
 	}

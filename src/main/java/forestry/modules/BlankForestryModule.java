@@ -2,13 +2,9 @@ package forestry.modules;
 
 import com.google.common.collect.ImmutableSet;
 
-import forestry.api.modules.ForestryModule;
-import forestry.api.modules.IForestryModule;
-import forestry.core.IPickupHandler;
-import forestry.core.IResupplyHandler;
-import forestry.core.ISaveEventHandler;
-import forestry.core.config.Constants;
-import forestry.core.network.IPacketRegistry;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -16,9 +12,13 @@ import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.fml.InterModComms;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Set;
+import forestry.api.modules.ForestryModule;
+import forestry.api.modules.IForestryModule;
+import forestry.core.IPickupHandler;
+import forestry.core.IResupplyHandler;
+import forestry.core.ISaveEventHandler;
+import forestry.core.config.Constants;
+import forestry.core.network.IPacketRegistry;
 
 public class BlankForestryModule implements IForestryModule {
 	/**

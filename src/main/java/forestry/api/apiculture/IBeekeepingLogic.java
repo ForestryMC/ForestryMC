@@ -1,12 +1,12 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
+import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -17,8 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
-import java.util.List;
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 
 /**
  * Stores beekeeping logic for bee housings.
@@ -46,6 +46,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 * Call this when a player opens the gui so that all errors are up to date.
 	 */
 	void clearCachedValues();
+
 
 	/* CLIENT */
 

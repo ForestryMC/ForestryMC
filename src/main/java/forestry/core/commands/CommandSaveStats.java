@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.commands;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.commands.CommandHelpers;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -32,12 +28,20 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.commands.CommandHelpers;
+
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
 
 public final class CommandSaveStats implements Command<CommandSource> {
 
@@ -59,13 +63,8 @@ public final class CommandSaveStats implements Command<CommandSource> {
 		this.modeHelper = modeHelper;
 	}
 
-	public static ArgumentBuilder<CommandSource, ?> register(
-			IStatsSaveHelper saveHelper,
-			ICommandModeHelper modeHelper
-	) {
-		return Commands.literal("save")
-				.then(Commands.argument("player", EntityArgument.player())
-						.executes(new CommandSaveStats(saveHelper, modeHelper)));
+	public static ArgumentBuilder<CommandSource, ?> register(IStatsSaveHelper saveHelper, ICommandModeHelper modeHelper) {
+		return Commands.literal("save").then(Commands.argument("player", EntityArgument.player()).executes(new CommandSaveStats(saveHelper, modeHelper)));
 
 	}
 
@@ -91,33 +90,11 @@ public final class CommandSaveStats implements Command<CommandSource> {
 			notCounted = notCountedSymbol;
 		}
 
-		return speciesListEntry(
-				discovered,
-				blacklisted,
-				notCounted,
-				species.getRegistryName().toString(),
-				species.getDisplayName().getString(),
-				species.getAuthority()
-		);
+		return speciesListEntry(discovered, blacklisted, notCounted, species.getRegistryName().toString(), species.getDisplayName().getString(), species.getAuthority());
 	}
 
-	private static String speciesListEntry(
-			String discovered,
-			String blacklisted,
-			String notCounted,
-			String UID,
-			String speciesName,
-			String authority
-	) {
-		return String.format(
-				"[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s",
-				discovered,
-				blacklisted,
-				notCounted,
-				UID,
-				speciesName,
-				authority
-		);
+	private static String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID, String speciesName, String authority) {
+		return String.format("[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s", discovered, blacklisted, notCounted, UID, speciesName, authority);
 	}
 
 	public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
@@ -130,16 +107,9 @@ public final class CommandSaveStats implements Command<CommandSource> {
 		Collection<String> statistics = new ArrayList<>();
 
 		String date = DateFormat.getInstance().format(new Date());
-		statistics.add(new TranslationTextComponent(
-				saveHelper.getUnlocalizedSaveStatsString(),
-				player.getDisplayName(),
-				date
-		).getString());
+		statistics.add(new TranslationTextComponent(saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date).getString());
 		statistics.add("");
-		statistics.add(new TranslationTextComponent(
-				"for.chat.command.forestry.stats.save.mode",
-				modeHelper.getModeName(world)
-		).getString());
+		statistics.add(new TranslationTextComponent("for.chat.command.forestry.stats.save.mode", modeHelper.getModeName(world)).getString());
 		statistics.add("");
 
 		IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
@@ -152,15 +122,9 @@ public final class CommandSaveStats implements Command<CommandSource> {
 		statistics.add(speciesCountLine);
 		statistics.add(StringUtil.line(speciesCountLine.length()));
 
-		statistics.add(discoveredSymbol + ": " + new TranslationTextComponent(
-				"for.chat.command.forestry.stats.save.key.discovered").getString()
-		);
-		statistics.add(blacklistedSymbol + ": " + new TranslationTextComponent(
-				"for.chat.command.forestry.stats.save.key.blacklisted").getString()
-		);
-		statistics.add(notCountedSymbol + ": " + new TranslationTextComponent(
-				"for.chat.command.forestry.stats.save.key.notCounted").getString()
-		);
+		statistics.add(discoveredSymbol + ": " + new TranslationTextComponent("for.chat.command.forestry.stats.save.key.discovered").getString());
+		statistics.add(blacklistedSymbol + ": " + new TranslationTextComponent("for.chat.command.forestry.stats.save.key.blacklisted").getString());
+		statistics.add(notCountedSymbol + ": " + new TranslationTextComponent("for.chat.command.forestry.stats.save.key.notCounted").getString());
 		statistics.add("");
 
 		String header = generateSpeciesListHeader();
@@ -173,21 +137,13 @@ public final class CommandSaveStats implements Command<CommandSource> {
 			statistics.add(generateSpeciesListEntry(allele, tracker));
 		}
 
-		File file = new File(
-				Proxies.common.getForestryRoot(),
-				"config/" + Constants.MOD_ID + "/stats/" + player.getDisplayName()
-						.getString() + '-' + saveHelper.getFileSuffix() +
-						".log"
-		);
+		File file = new File(Proxies.common.getForestryRoot(), "config/" + Constants.MOD_ID + "/stats/" + player.getDisplayName().getString() + '-' + saveHelper.getFileSuffix() + ".log");
 		try {
 			File folder = file.getParentFile();
 			if (folder != null && !folder.exists()) {
 				boolean success = file.getParentFile().mkdirs();
 				if (!success) {
-					CommandHelpers.sendLocalizedChatMessage(
-							ctx.getSource(),
-							"for.chat.command.forestry.stats.save.error1"
-					);
+					CommandHelpers.sendLocalizedChatMessage(ctx.getSource(), "for.chat.command.forestry.stats.save.error1");
 					return 0;
 				}
 			}
@@ -219,11 +175,7 @@ public final class CommandSaveStats implements Command<CommandSource> {
 			return 0;
 		}
 
-		CommandHelpers.sendLocalizedChatMessage(
-				ctx.getSource(),
-				"for.chat.command.forestry.stats.save.saved",
-				player.getDisplayName()
-		);
+		CommandHelpers.sendLocalizedChatMessage(ctx.getSource(), "for.chat.command.forestry.stats.save.saved", player.getDisplayName());
 
 		return 1;
 	}

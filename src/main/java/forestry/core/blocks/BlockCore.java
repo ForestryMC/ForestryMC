@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks;
 
 import net.minecraft.block.Block;
@@ -17,12 +17,6 @@ import net.minecraftforge.common.ToolType;
 
 public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
 	public BlockCore(BlockTypeCoreTesr blockType) {
-		super(
-				blockType,
-				Block.Properties.create(Material.WOOD)
-						.harvestTool(ToolType.AXE)
-						.harvestLevel(0)
-						.hardnessAndResistance(1.5f)
-		);
+		super(blockType, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0).hardnessAndResistance(1.5f));
 	}
 }

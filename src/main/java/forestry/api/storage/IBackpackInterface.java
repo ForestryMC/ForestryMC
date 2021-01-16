@@ -1,22 +1,22 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.storage;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
+import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import javax.annotation.Nullable;
-import java.util.function.Predicate;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import forestry.api.genetics.IForestrySpeciesRoot;
 
 /**
  * The Backpack Interface allows you to add items to Forestry backpacks or create your own backpacks.

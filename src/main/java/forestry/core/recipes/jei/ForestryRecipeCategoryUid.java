@@ -1,9 +1,9 @@
 package forestry.core.recipes.jei;
 
+import net.minecraft.util.ResourceLocation;
+
 import forestry.core.config.Constants;
 import forestry.factory.MachineUIDs;
-
-import net.minecraft.util.ResourceLocation;
 
 public class ForestryRecipeCategoryUid {
 	public static final ResourceLocation BOTTLER = new ResourceLocation(Constants.MOD_ID, MachineUIDs.BOTTLER);

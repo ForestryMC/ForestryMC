@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.hives.IHiveDrop;
+import java.util.Collections;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
-import java.util.Collections;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveDrop;
 
 public class HiveDrop implements IHiveDrop {
 

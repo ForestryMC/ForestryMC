@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core;
 
 import com.google.common.collect.LinkedListMultimap;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.utils.WorldUtils;
-import forestry.modules.ModuleManager;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -30,7 +31,10 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.*;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.WorldUtils;
+import forestry.modules.ModuleManager;
 
 public class TickHandlerCoreServer {
 

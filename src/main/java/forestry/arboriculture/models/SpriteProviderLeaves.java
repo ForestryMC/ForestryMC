@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.models;
 
-import forestry.api.arboriculture.EnumLeafType;
-import forestry.api.arboriculture.ILeafSpriteProvider;
+import java.awt.Color;
 
 import net.minecraft.util.ResourceLocation;
 
-import java.awt.*;
+import forestry.api.arboriculture.EnumLeafType;
+import forestry.api.arboriculture.ILeafSpriteProvider;
 
 public class SpriteProviderLeaves implements ILeafSpriteProvider {
 

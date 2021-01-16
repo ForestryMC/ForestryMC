@@ -1,5 +1,15 @@
 package genetics.organism;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import net.minecraft.item.ItemStack;
+
 import genetics.GeneticFactory;
 import genetics.Genetics;
 import genetics.Log;
@@ -12,12 +22,6 @@ import genetics.api.organism.IOrganismTypes;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
-
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Supplier;
 
 public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 	private final Map<IOrganismType, IOrganismHandler<I>> types = new LinkedHashMap<>();
@@ -45,11 +49,7 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 
 	@Override
 	public IOrganismTypes<I> registerType(IOrganismType type, Supplier<ItemStack> stack, boolean defaultType) {
-		return registerType(
-				type,
-				GeneticFactory.INSTANCE.createOrganismHandler(root.getDefinition(), stack),
-				defaultType
-		);
+		return registerType(type, GeneticFactory.INSTANCE.createOrganismHandler(root.getDefinition(), stack), defaultType);
 	}
 
 	@Override
@@ -103,10 +103,7 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 				throw new IllegalStateException(message);
 			}
 			defaultType = organismTypes.next();
-			Log.debug(
-					"No default type was registered for individual root '{}' used first registered type.",
-					root.getUID()
-			);
+			Log.debug("No default type was registered for individual root '{}' used first registered type.", root.getUID());
 		}
 		return defaultType;
 	}

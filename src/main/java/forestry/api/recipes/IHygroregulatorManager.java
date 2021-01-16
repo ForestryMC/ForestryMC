@@ -1,17 +1,17 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.recipes;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 /**
  * Provides an interface to the recipe manager of the hygroregulator and habitatformer.

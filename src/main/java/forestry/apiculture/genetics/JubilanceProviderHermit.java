@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.List;
+
+import net.minecraft.entity.MobEntity;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
-
-import genetics.api.individual.IGenome;
-
-import net.minecraft.entity.MobEntity;
-
-import java.util.List;
 
 /**
  * Hermits will not produce if there are any other living creatures nearby.

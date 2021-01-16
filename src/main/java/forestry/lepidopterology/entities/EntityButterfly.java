@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,32 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.core.IToolScoop;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.api.lepidopterology.genetics.*;
-import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.ModuleLepidopterology;
-import forestry.lepidopterology.genetics.Butterfly;
-import forestry.lepidopterology.genetics.ButterflyHelper;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.EmptyRootDefinition;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,8 +51,29 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.EmptyRootDefinition;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.core.IToolScoop;
+import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyRoot;
+import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.ModuleLepidopterology;
+import forestry.lepidopterology.genetics.Butterfly;
+import forestry.lepidopterology.genetics.ButterflyHelper;
 
 //TODO minecraft has flying entities (bat, parrot). Can some of their logic be reused here?
 //TODO getMaxSpawnedInChunk?
@@ -77,18 +90,9 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	private static final String NBT_STATE = "STATE";
 	private static final String NBT_EXHAUSTION = "EXH";
 	private static final String NBT_HOME = "HOME";
-	private static final DataParameter<String> DATAWATCHER_ID_SPECIES = EntityDataManager.createKey(
-			EntityButterfly.class,
-			DataSerializers.STRING
-	);
-	private static final DataParameter<Integer> DATAWATCHER_ID_SIZE = EntityDataManager.createKey(
-			EntityButterfly.class,
-			DataSerializers.VARINT
-	);
-	private static final DataParameter<Byte> DATAWATCHER_ID_STATE = EntityDataManager.createKey(
-			EntityButterfly.class,
-			DataSerializers.BYTE
-	);
+	private static final DataParameter<String> DATAWATCHER_ID_SPECIES = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.STRING);
+	private static final DataParameter<Integer> DATAWATCHER_ID_SIZE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.VARINT);
+	private static final DataParameter<Byte> DATAWATCHER_ID_STATE = EntityDataManager.createKey(EntityButterfly.class, DataSerializers.BYTE);
 	private static final float DEFAULT_BUTTERFLY_SIZE = 0.75f;
 	private static final EnumButterflyState DEFAULT_STATE = EnumButterflyState.FLYING;
 	public int cooldownPollination = 0;
@@ -97,9 +101,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	@Nullable
 	private Vector3d flightTarget;
 	private int exhaustion;
-	private IButterfly contained = ButterflyHelper.getKaryotype()
-			.getDefaultTemplate()
-			.toIndividual(ButterflyHelper.getRoot());
+	private IButterfly contained = ButterflyHelper.getKaryotype().getDefaultTemplate().toIndividual(ButterflyHelper.getRoot());
 	@Nullable
 	private IIndividual pollen;
 	// Client Rendering
@@ -125,12 +127,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 	//		setHomePosAndDistance(homePos, ModuleLepidopterology.maxDistance);
 	//	}
 
-	public static EntityButterfly create(
-			EntityType<EntityButterfly> type,
-			World world,
-			IButterfly butterfly,
-			BlockPos homePos
-	) {
+	public static EntityButterfly create(EntityType<EntityButterfly> type, World world, IButterfly butterfly, BlockPos homePos) {
 		EntityButterfly bf = new EntityButterfly(type, world);
 		bf.setDefaults();
 		bf.setIndividual(butterfly);
@@ -283,9 +280,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		// Drop pollen if any
 		IIndividual pollen = getPollen();
 		if (pollen != null) {
-			IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper()
-					.getSpeciesRoot(
-							pollen);
+			IRootDefinition<? extends IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRootHelper().getSpeciesRoot(pollen);
 			if (!definition.isPresent()) {
 				return;
 			}
@@ -405,10 +400,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 			weight -= 15.0f;
 		}
 
-		if (!world.getEntitiesWithinAABB(
-				EntityButterfly.class,
-				new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)
-		).isEmpty()) {
+		if (!world.getEntitiesWithinAABB(EntityButterfly.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).isEmpty()) {
 			weight -= 1.0f;
 		}
 
@@ -546,13 +538,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 
 	/* INTERACTION */
 
-	public ILivingEntityData onInitialSpawn(
-			IWorld worldIn,
-			DifficultyInstance difficultyIn,
-			SpawnReason reason,
-			@Nullable ILivingEntityData spawnDataIn,
-			@Nullable CompoundNBT dataTag
-	) {
+	public ILivingEntityData onInitialSpawn(IWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag) {
 		if (!world.isRemote) {
 			setIndividual(contained);
 		}

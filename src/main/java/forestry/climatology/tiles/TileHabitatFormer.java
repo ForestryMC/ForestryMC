@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,30 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology.tiles;
 
-import forestry.api.climate.*;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.IHygroregulatorRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.climatology.features.ClimatologyTiles;
-import forestry.climatology.gui.ContainerHabitatFormer;
-import forestry.climatology.inventory.InventoryHabitatFormer;
-import forestry.core.climate.ClimateTransformer;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.ITankManager;
-import forestry.core.fluids.TankManager;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.IClimatised;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.energy.EnergyManager;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,8 +32,32 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.ClimateType;
+import forestry.api.climate.IClimateHousing;
+import forestry.api.climate.IClimateManipulator;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.IErrorLogic;
+import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.climatology.features.ClimatologyTiles;
+import forestry.climatology.gui.ContainerHabitatFormer;
+import forestry.climatology.inventory.InventoryHabitatFormer;
+import forestry.core.climate.ClimateTransformer;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.ITankManager;
+import forestry.core.fluids.TankManager;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.IClimatised;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.energy.EnergyManager;
 
 public class TileHabitatFormer extends TilePowered implements IClimateHousing, IClimatised, ILiquidTankTile {
 	private static final String TRANSFORMER_KEY = "Transformer";
@@ -202,9 +207,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	private void updateTemperature(IErrorLogic errorLogic, IClimateState changedState) {
-		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE)
-				.setAllowBackwards()
-				.build();
+		IClimateManipulator manipulator = transformer.createManipulator(ClimateType.TEMPERATURE).setAllowBackwards().build();
 		EnergyManager energyManager = getEnergyManager();
 		int currentCost = getEnergyCost(changedState);
 		if (energyManager.extractEnergy(currentCost, true) > 0) {
@@ -229,15 +232,11 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (fluid == null) {
 			return 0;
 		}
-		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-				world.getRecipeManager(),
-				fluid
-		);
+		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), fluid);
 		if (recipe == null) {
 			return 0;
 		}
-		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() *
-				recipe.getResource().getAmount());
+		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
 	}
 
 	private int getEnergyCost(IClimateState state) {
@@ -286,10 +285,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
 			if (fluid != null) {
-				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-						world.getRecipeManager(),
-						fluid
-				);
+				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), fluid);
 				if (recipe != null) {
 					return recipe.getHumidChange() / transformer.getSpeedModifier();
 				}
@@ -298,10 +294,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 		float fluidChange = 0.0F;
 		if (cachedStack != null) {
-			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(
-					world.getRecipeManager(),
-					cachedStack
-			);
+			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), cachedStack);
 			if (recipe != null) {
 				fluidChange = Math.abs(recipe.getTempChange());
 			}

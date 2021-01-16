@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
-
-import forestry.core.ItemGroupForestry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,6 +24,8 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.core.ItemGroupForestry;
+
 //import net.minecraftforge.fml.common.Optional;
 
 //import buildcraft.api.tools.IToolWrench;
@@ -34,8 +34,7 @@ import net.minecraftforge.common.ToolType;
 public class ItemWrench extends ItemForestry {//implements IToolWrench {
 
 	public ItemWrench() {
-		super((new Item.Properties())
-				.addToolType(ToolType.get("wrench"), 0).group(ItemGroupForestry.tabForestry));
+		super((new Item.Properties()).addToolType(ToolType.get("wrench"), 0).group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

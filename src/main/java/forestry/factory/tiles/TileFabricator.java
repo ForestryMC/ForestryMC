@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,30 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.IFabricatorRecipe;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.inventory.InventoryGhostCrafting;
-import forestry.core.inventory.watchers.ISlotPickupWatcher;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.items.ICraftingPlan;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.core.utils.InventoryUtil;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerFabricator;
-import forestry.factory.inventory.InventoryFabricator;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,9 +38,27 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Optional;
+import forestry.api.core.IErrorLogic;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.InventoryGhostCrafting;
+import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.items.ICraftingPlan;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.core.utils.InventoryUtil;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerFabricator;
+import forestry.factory.inventory.InventoryFabricator;
 
 public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
 	private static final int MAX_HEAT = 5000;
@@ -109,10 +109,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-				world.getRecipeManager(),
-				smeltResource
-		);
+		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(world.getRecipeManager(), smeltResource);
 		if (smelt == null || smelt.getMeltingPoint() > heat) {
 			return;
 		}
@@ -129,11 +126,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		Optional<IFabricatorRecipe> recipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
-				world.getRecipeManager(),
-				plan,
-				craftingInventory
-		);
+		Optional<IFabricatorRecipe> recipe = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
 
 		if (!liquid.isEmpty() && recipe.isPresent() && !liquid.containsFluid(recipe.get().getLiquid())) {
 			return Optional.empty();
@@ -167,11 +160,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			FluidStack liquid = myRecipe.getLiquid();
 
 			// Remove resources
-			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
-					craftingInventory,
-					InventoryGhostCrafting.SLOT_CRAFTING_1,
-					InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-			);
+			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			if (removeFromInventory(crafting, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
@@ -182,10 +171,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 					if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
 						Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
 						if (planItem instanceof ICraftingPlan) {
-							ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(
-									getStackInSlot(InventoryFabricator.SLOT_PLAN),
-									craftResult
-							);
+							ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(getStackInSlot(InventoryFabricator.SLOT_PLAN), craftResult);
 							setInventorySlotContents(InventoryFabricator.SLOT_PLAN, planUsed);
 						}
 					}
@@ -196,15 +182,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(
-			NonNullList<ItemStack> set,
-			boolean doRemove
-	) {
-		IInventory inventory = new InventoryMapper(
-				this,
-				InventoryFabricator.SLOT_INVENTORY_1,
-				InventoryFabricator.SLOT_INVENTORY_COUNT
-		);
+	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
+		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.removeSets(inventory, 1, set, null, true, false, doRemove);
 	}
 
@@ -215,21 +194,13 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasResources = true;
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		Optional<IFabricatorRecipe> optionalRecipe = RecipeManagers.fabricatorManager.findMatchingRecipe(
-				world.getRecipeManager(),
-				plan,
-				craftingInventory
-		);
+		Optional<IFabricatorRecipe> optionalRecipe = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
 		if (optionalRecipe.isPresent()) {
 			IFabricatorRecipe recipe = optionalRecipe.get();
 			if (recipe == null) {
 				return false;
 			}
-			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(
-					craftingInventory,
-					InventoryGhostCrafting.SLOT_CRAFTING_1,
-					InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-			);
+			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 			hasResources = removeFromInventory(crafting, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
@@ -314,10 +285,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private int getMeltingPoint() {
 		if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
-			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(
-					world.getRecipeManager(),
-					this.getStackInSlot(InventoryFabricator.SLOT_METAL)
-			);
+			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(world.getRecipeManager(), this.getStackInSlot(InventoryFabricator.SLOT_METAL));
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.utils.BlockUtil;
-import forestry.core.worldgen.FeatureBase;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-import genetics.commands.SpeciesNotFoundException;
-import genetics.utils.AlleleUtils;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,27 +24,27 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.server.ServerChunkProvider;
 
-import java.util.Optional;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+import genetics.commands.SpeciesNotFoundException;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.core.utils.BlockUtil;
+import forestry.core.worldgen.FeatureBase;
 
 public final class TreeGenHelper {
 
-	public static Feature<NoFeatureConfig> getWorldGen(
-			ResourceLocation treeName,
-			PlayerEntity player,
-			BlockPos pos
-	) throws SpeciesNotFoundException {
+	public static Feature<NoFeatureConfig> getWorldGen(ResourceLocation treeName, PlayerEntity player, BlockPos pos) throws SpeciesNotFoundException {
 		IGenome treeGenome = getTreeGenome(treeName);
 		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
 		return tree.getTreeGenerator((ISeedReader) player.world, pos, true);
 	}
 
-	public static <FC extends IFeatureConfig> boolean generateTree(
-			Feature<FC> feature,
-			ChunkGenerator generator,
-			World world,
-			BlockPos pos,
-			FC config
-	) {
+	public static <FC extends IFeatureConfig> boolean generateTree(Feature<FC> feature, ChunkGenerator generator, World world, BlockPos pos, FC config) {
 		if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
 		} else {
@@ -70,13 +60,7 @@ public final class TreeGenHelper {
 			if (feature instanceof FeatureBase) {
 				return ((FeatureBase) feature).place(world, world.rand, pos, true);
 			} else {
-				return feature.generate(
-						(ISeedReader) world,
-						generator,
-						world.rand,
-						pos,
-						config
-				);
+				return feature.generate((ISeedReader) world, generator, world.rand, pos, config);
 			}
 		}
 
@@ -92,13 +76,7 @@ public final class TreeGenHelper {
 			if (gen instanceof FeatureBase) {
 				return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
 			} else {
-				return gen.generate(
-						world,
-						((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(),
-						world.getRandom(),
-						pos,
-						IFeatureConfig.NO_FEATURE_CONFIG
-				);
+				return gen.generate(world, ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), world.getRandom(), pos, IFeatureConfig.NO_FEATURE_CONFIG);
 			}
 		}
 
@@ -125,13 +103,10 @@ public final class TreeGenHelper {
 		}
 
 		if (species == null) {
-			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-					.filter(allele -> {
-						String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
-						return displayName.equals(speciesName.toString());
-					})
-					.findFirst()
-					.orElse(null);
+			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES).filter(allele -> {
+				String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
+				return displayName.equals(speciesName.toString());
+			}).findFirst().orElse(null);
 		}
 
 		if (species == null) {

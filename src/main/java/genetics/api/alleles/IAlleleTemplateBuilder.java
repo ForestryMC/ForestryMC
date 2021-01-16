@@ -1,13 +1,13 @@
 package genetics.api.alleles;
 
+import java.util.Optional;
+
+import net.minecraft.util.ResourceLocation;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticFactory;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
-
-import net.minecraft.util.ResourceLocation;
-
-import java.util.Optional;
 
 /**
  * Can be used to create allele templates.
@@ -30,14 +30,9 @@ public interface IAlleleTemplateBuilder {
 	}
 
 	default IAlleleTemplateBuilder set(IChromosomeType chromosomeType, Object value) {
-		Optional<IAlleleValue<Object>> optionalAllele = GeneticsAPI.apiInstance.getAlleleHelper().getAllele(
-				chromosomeType,
-				value
-		);
+		Optional<IAlleleValue<Object>> optionalAllele = GeneticsAPI.apiInstance.getAlleleHelper().getAllele(chromosomeType, value);
 		if (!optionalAllele.isPresent()) {
-			throw new IllegalArgumentException("Attempted to set the allele at the position '" + chromosomeType +
-					"' to the allele with the value '" + value +
-					"'.But no allele was registered with that value for that chromosome type.");
+			throw new IllegalArgumentException("Attempted to set the allele at the position '" + chromosomeType + "' to the allele with the value '" + value + "'.But no allele was registered with that value for that chromosome type.");
 		}
 		return set(chromosomeType, optionalAllele.get());
 	}

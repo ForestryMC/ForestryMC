@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture;
 
-import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.genetics.IEffectData;
-import forestry.apiculture.network.packets.PacketBeeLogicActive;
-import forestry.apiculture.tiles.TileHive;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -29,7 +22,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.genetics.IEffectData;
+import forestry.apiculture.network.packets.PacketBeeLogicActive;
+import forestry.apiculture.tiles.TileHive;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	private final TileHive housing;
@@ -59,6 +59,23 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 		return CompoundNBT;
 	}
 
+	@Override
+	public void readData(PacketBuffer data) {
+		boolean active = data.readBoolean();
+		setActive(active);
+		if (active) {
+			hasFlowersCache.readData(data);
+		}
+	}
+
+	@Override
+	public void writeData(PacketBuffer data) {
+		data.writeBoolean(active);
+		if (active) {
+			hasFlowersCache.writeData(data);
+		}
+	}
+
 	/* Activatable */
 	private void setActive(boolean active) {
 		if (this.active == active) {
@@ -77,8 +94,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 			IBee queen = housing.getContainedBee();
 			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
-			boolean canWork = (world.isDaytime() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
-					(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
+			boolean canWork = (world.isDaytime() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) && (!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 
 			if (active != canWork) {
@@ -103,6 +119,8 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	}
 
+	/* CLIENT */
+
 	@Override
 	public void syncToClient() {
 		World world = housing.getWorldObj();
@@ -118,8 +136,6 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 			NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
 		}
 	}
-
-	/* CLIENT */
 
 	@Override
 	public int getBeeProgressPercent() {
@@ -142,23 +158,6 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public List<BlockPos> getFlowerPositions() {
 		return hasFlowersCache.getFlowerCoords();
-	}
-
-	@Override
-	public void readData(PacketBuffer data) {
-		boolean active = data.readBoolean();
-		setActive(active);
-		if (active) {
-			hasFlowersCache.readData(data);
-		}
-	}
-
-	@Override
-	public void writeData(PacketBuffer data) {
-		data.writeBoolean(active);
-		if (active) {
-			hasFlowersCache.writeData(data);
-		}
 	}
 
 }

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.particles;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
+
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,23 +55,7 @@ public class SnowParticle extends SpriteTexturedParticle {
 		//		}
 
 		for (int i = 0; i < 5; i++) {
-			renderParticle(
-					iVertexBuilder,
-					this.posX,
-					this.posY,
-					this.posZ,
-					activeRenderInfo.getRotation().getX(),
-					activeRenderInfo.getRotation().getX() + activeRenderInfo.getRotation().getZ(),
-					activeRenderInfo.getRotation().getZ(),
-					activeRenderInfo.getRotation().getY() + activeRenderInfo.getRotation().getZ(),
-					activeRenderInfo.getRotation().getX() + activeRenderInfo.getRotation().getY(),
-					minU,
-					maxU,
-					minV,
-					maxV,
-					this.particleScale,
-					partialTicks
-			);
+			renderParticle(iVertexBuilder, this.posX, this.posY, this.posZ, activeRenderInfo.getRotation().getX(), activeRenderInfo.getRotation().getX() + activeRenderInfo.getRotation().getZ(), activeRenderInfo.getRotation().getZ(), activeRenderInfo.getRotation().getY() + activeRenderInfo.getRotation().getZ(), activeRenderInfo.getRotation().getX() + activeRenderInfo.getRotation().getY(), minU, maxU, minV, maxV, this.particleScale, partialTicks);
 		}
 	}
 
@@ -76,58 +64,14 @@ public class SnowParticle extends SpriteTexturedParticle {
 		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
-	private void renderParticle(
-			IVertexBuilder buffer,
-			double x,
-			double y,
-			double z,
-			float rotationX,
-			float rotationXZ,
-			float rotationZ,
-			float rotationYZ,
-			float rotationXY,
-			float minU,
-			float maxU,
-			float minV,
-			float maxV,
-			float scale,
-			float partialTicks
-	) {
+	private void renderParticle(IVertexBuilder buffer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float partialTicks) {
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
-		buffer.pos(
-				x - rotationX * scale - rotationYZ * scale,
-				y - rotationXZ * scale,
-				z - rotationZ * scale - rotationXY * scale
-		).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
-				j,
-				k
-		).endVertex();
-		buffer.pos(
-				x - rotationX * scale + rotationYZ * scale,
-				y + rotationXZ * scale,
-				z - rotationZ * scale + rotationXY * scale
-		).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
-				j,
-				k
-		).endVertex();
-		buffer.pos(
-				x + rotationX * scale + rotationYZ * scale,
-				y + rotationXZ * scale,
-				z + rotationZ * scale + rotationXY * scale
-		).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
-				j,
-				k
-		).endVertex();
-		buffer.pos(
-				x + rotationX * scale - rotationYZ * scale,
-				y - rotationXZ * scale,
-				z + rotationZ * scale - rotationXY * scale
-		).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(
-				j,
-				k
-		).endVertex();
+		buffer.pos(x - rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z - rotationZ * scale - rotationXY * scale).tex(maxU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		buffer.pos(x - rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z - rotationZ * scale + rotationXY * scale).tex(maxU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		buffer.pos(x + rotationX * scale + rotationYZ * scale, y + rotationXZ * scale, z + rotationZ * scale + rotationXY * scale).tex(minU, minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		buffer.pos(x + rotationX * scale - rotationYZ * scale, y - rotationXZ * scale, z + rotationZ * scale - rotationXY * scale).tex(minU, maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -139,22 +83,8 @@ public class SnowParticle extends SpriteTexturedParticle {
 		}
 
 		@Override
-		public Particle makeParticle(
-				SnowParticleData typeIn,
-				ClientWorld worldIn,
-				double x,
-				double y,
-				double z,
-				double xSpeed,
-				double ySpeed,
-				double zSpeed
-		) {
-			SnowParticle particle = new SnowParticle(
-					worldIn,
-					typeIn.particleStart.getX(),
-					typeIn.particleStart.getY(),
-					typeIn.particleStart.getZ()
-			);
+		public Particle makeParticle(SnowParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+			SnowParticle particle = new SnowParticle(worldIn, typeIn.particleStart.getX(), typeIn.particleStart.getY(), typeIn.particleStart.getZ());
 			particle.selectSpriteRandomly(spriteSet);
 			return particle;
 		}

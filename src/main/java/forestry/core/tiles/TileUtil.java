@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowerPotBlock;
@@ -18,7 +20,11 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.*;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.Region;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -27,17 +33,13 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import javax.annotation.Nullable;
-
 public abstract class TileUtil {
 
 	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
 		BlockPos pos = tile.getPos();
 		World world = tile.getWorld();
 
-		return !tile.isRemoved() &&
-				getTile(world, pos) == tile &&
-				player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+		return !tile.isRemoved() && getTile(world, pos) == tile && player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	/**
@@ -74,12 +76,7 @@ public abstract class TileUtil {
 	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
 	 */
 	@Nullable
-	public static <T, R> R getResultFromTile(
-			IWorldReader world,
-			BlockPos pos,
-			Class<T> tileClass,
-			ITileGetResult<T, R> tileGetResult
-	) {
+	public static <T, R> R getResultFromTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
 		T tile = getTile(world, pos, tileClass);
 		if (tile != null) {
 			return tileGetResult.getResult(tile);
@@ -119,12 +116,7 @@ public abstract class TileUtil {
 		return null;
 	}
 
-	public static <T> LazyOptional<T> getInterface(
-			World world,
-			BlockPos pos,
-			Capability<T> capability,
-			@Nullable Direction facing
-	) {
+	public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity == null) {
 			return LazyOptional.empty();

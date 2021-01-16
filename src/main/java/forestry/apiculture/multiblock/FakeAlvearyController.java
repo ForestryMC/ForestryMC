@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.multiblock;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
 import com.mojang.authlib.GameProfile;
 
@@ -23,15 +32,6 @@ import forestry.core.climate.FakeClimateListener;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
 	public static final FakeAlvearyController instance = new FakeAlvearyController();

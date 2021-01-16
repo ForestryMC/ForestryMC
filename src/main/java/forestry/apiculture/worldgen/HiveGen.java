@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.worldgen;
-
-import forestry.api.apiculture.hives.IHiveGen;
-import forestry.core.utils.BlockUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
+
+import forestry.api.apiculture.hives.IHiveGen;
+import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 	public static boolean isTreeBlock(BlockState blockState, ISeedReader world, BlockPos pos) {

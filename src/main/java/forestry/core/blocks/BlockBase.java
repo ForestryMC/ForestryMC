@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.ISpriteRegister;
-import forestry.api.core.ISpriteRegistry;
-import forestry.core.circuits.ISocketable;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.ParticleHelper;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -51,34 +39,36 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidUtil;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ISpriteRegister;
+import forestry.api.core.ISpriteRegistry;
+import forestry.core.circuits.ISocketable;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.render.MachineParticleCallback;
+import forestry.core.render.ParticleHelper;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
 	/**
 	 * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
-	public static final EnumProperty<Direction> FACING = EnumProperty.create(
-			"facing",
-			Direction.class,
-			Direction.NORTH,
-			Direction.EAST,
-			Direction.SOUTH,
-			Direction.WEST,
-			Direction.DOWN,
-			Direction.UP
-	);
+	public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
 	public final P blockType;
 	private final boolean hasTESR;
 	private final boolean hasCustom;
 	private final ParticleHelper.Callback particleCallback;
 
 	public BlockBase(P blockType, Block.Properties properties) {
-		super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) &&
-				!(blockType instanceof IBlockTypeCustom)));
+		super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
 		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 
 		this.blockType = blockType;
@@ -122,13 +112,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			if (target.getType() == RayTraceResult.Type.BLOCK) {
 				BlockRayTraceResult result = (BlockRayTraceResult) target;
-				return ParticleHelper.addBlockHitEffects(
-						world,
-						result.getPos(),
-						result.getFace(),
-						effectRenderer,
-						particleCallback
-				);
+				return ParticleHelper.addBlockHitEffects(world, result.getPos(), result.getFace(), effectRenderer, particleCallback);
 			}
 		}
 		return false;
@@ -150,14 +134,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 	/* INTERACTION */
 	@Override
-	public ActionResultType onBlockActivated(
-			BlockState state,
-			World worldIn,
-			BlockPos pos,
-			PlayerEntity playerIn,
-			Hand hand,
-			BlockRayTraceResult hit
-	) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile == null) {
 			return ActionResultType.FAIL;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks.properties;
 
-import forestry.api.genetics.alleles.IAlleleProperty;
+import java.util.Optional;
+
+import net.minecraft.state.Property;
 
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
 
-import net.minecraft.state.Property;
-
-import java.util.Optional;
+import forestry.api.genetics.alleles.IAlleleProperty;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Property<A> {
 

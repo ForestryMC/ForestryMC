@@ -1,19 +1,19 @@
 {
-  "title": "Farm Hatch (Pipe Connectivity)",
-  "icon": {
-    "item": "forestry:farm_hatch_brick"
-  },
-  "content": [
-    [
-      {
-        "text": "You can supply and extract item from the Farm by using Farm Hatches that are connected to Pipe systems."
-      },
-      {
-        "type": "crafting",
-        "locations": [
-          "forestry:farm_hatch_brick"
-        ]
-      }
-    ]
-  ]
+	"title": "Farm Hatch (Pipe Connectivity)",
+	"icon": {
+		"item": "forestry:farm_hatch_brick"
+	},
+	"content": [
+		[
+			{
+				"text": "You can supply and extract item from the Farm by using Farm Hatches that are connected to Pipe systems."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:farm_hatch_brick"
+				]
+			}
+		]
+	]
 }

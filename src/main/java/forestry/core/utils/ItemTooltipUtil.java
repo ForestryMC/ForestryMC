@@ -1,6 +1,7 @@
 package forestry.core.utils;
 
-import forestry.api.core.tooltips.ToolTip;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -17,17 +18,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.core.tooltips.ToolTip;
 
 public class ItemTooltipUtil {
 	@OnlyIn(Dist.CLIENT)
-	public static void addInformation(
-			ItemStack stack,
-			@Nullable World world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag flag
-	) {
+	public static void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		String unlocalizedName = stack.getTranslationKey();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (I18n.hasKey(tooltipKey)) {
@@ -46,16 +41,8 @@ public class ItemTooltipUtil {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void addShiftInformation(
-			ItemStack stack,
-			@Nullable IBlockReader world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag flag
-	) {
-		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(
-				TextFormatting.ITALIC,
-				TextFormatting.GRAY
-		));
+	public static void addShiftInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		tooltip.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY));
 	}
 
 	@Nullable
@@ -63,11 +50,7 @@ public class ItemTooltipUtil {
 	public static ToolTip getInformation(ItemStack stack) {
 		Minecraft minecraft = Minecraft.getInstance();
 		boolean advancedTooltips = minecraft.gameSettings.advancedItemTooltips;
-		return getInformation(
-				stack,
-				minecraft.player,
-				advancedTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL
-		);
+		return getInformation(stack, minecraft.player, advancedTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
 	}
 
 	@Nullable

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.flowers;
 
 import com.google.common.base.MoreObjects;
@@ -30,11 +30,6 @@ public final class Flower {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hashCode(blockState);
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Flower)) {
 			return false;
@@ -46,8 +41,8 @@ public final class Flower {
 	}
 
 	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
+	public int hashCode() {
+		return Objects.hashCode(blockState);
 	}
 
 	public BlockState getBlockState() {
@@ -60,6 +55,11 @@ public final class Flower {
 
 	public void setWeight(double weight) {
 		this.weight = weight;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("blockState", blockState).add("weight", weight).toString();
 	}
 
 }

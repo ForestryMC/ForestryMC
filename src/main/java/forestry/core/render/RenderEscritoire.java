@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileEscritoire;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -22,14 +20,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEscritoire;
 
 public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_BLOCK + "escritoire.png"
-	);
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "escritoire.png");
 
 	//renderers
 	private final ModelRenderer desk;
@@ -153,9 +150,7 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 			}
 			helper.setRotation(rotation);
 			helper.renderModel(TEXTURE, new Vector3f(0.0872665F, 0, 0), desk);
-			helper.renderModel(TEXTURE,
-					standRB, standRF, standLB, standLF, drawers, standLowLF, standLowRB, standLowRF, standLowLB
-			);
+			helper.renderModel(TEXTURE, standRB, standRF, standLB, standLF, drawers, standLowLF, standLowRB, standLowRF, standLowLB);
 		}
 		helper.pop();
 

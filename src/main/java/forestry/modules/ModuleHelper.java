@@ -1,18 +1,18 @@
 package forestry.modules;
 
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.IBackpackInterface;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 
-import javax.annotation.Nullable;
-import java.util.stream.Stream;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackInterface;
+import forestry.api.storage.ICrateRegistry;
+import forestry.api.storage.StorageManager;
+import forestry.core.config.Constants;
 
 public final class ModuleHelper {
 

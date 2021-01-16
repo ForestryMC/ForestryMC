@@ -1,0 +1,19 @@
+{
+	"title": "滴管",
+	"icon": {
+		"item": "forestry:pipette"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:pipette"
+				]
+			},
+			{
+				"text": "可提取數量小的液體。在林業設備的GUI中，只需手持滴管點擊儲存槽，即可取放液體。"
+			}
+		]
+	]
+}

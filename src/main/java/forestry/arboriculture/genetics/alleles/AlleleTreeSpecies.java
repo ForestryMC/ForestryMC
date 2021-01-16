@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-import forestry.api.arboriculture.*;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
-import forestry.api.arboriculture.genetics.ITreeRoot;
-import forestry.api.genetics.IFruitFamily;
-import forestry.arboriculture.genetics.ClimateGrowthProvider;
-import forestry.arboriculture.genetics.LeafProvider;
-import forestry.core.genetics.alleles.AlleleForestrySpecies;
+import java.util.List;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +22,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 
-import java.util.List;
+import forestry.api.arboriculture.IGermlingModelProvider;
+import forestry.api.arboriculture.IGrowthProvider;
+import forestry.api.arboriculture.ILeafProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.ITreeGenerator;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
+import forestry.api.arboriculture.genetics.ITreeRoot;
+import forestry.api.genetics.IFruitFamily;
+import forestry.arboriculture.genetics.ClimateGrowthProvider;
+import forestry.arboriculture.genetics.LeafProvider;
+import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
 public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpecies {
 	private final ITreeGenerator generator;

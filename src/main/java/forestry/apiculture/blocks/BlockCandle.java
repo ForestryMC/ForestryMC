@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.RenderUtil;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.TorchBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
@@ -44,8 +50,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class BlockCandle extends TorchBlock implements IColoredBlock {
 	public static final Set<Item> lightingItems;
@@ -54,20 +62,26 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
 	static {
-		lightingItems = new HashSet<>(Arrays.asList(
-				Items.FLINT_AND_STEEL,
-				Items.FLINT,
-				Item.BLOCK_TO_ITEM.get(Blocks.TORCH)
-		));
+		lightingItems = new HashSet<>(Arrays.asList(Items.FLINT_AND_STEEL, Items.FLINT, Item.BLOCK_TO_ITEM.get(Blocks.TORCH)));
+	}
+
+	enum State implements IStringSerializable {
+		ON("on"), OFF("off");
+
+		private final String name;
+
+		State(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String getString() {
+			return name;
+		}
 	}
 
 	public BlockCandle() {
-		super(
-				Block.Properties.from(Blocks.TORCH)
-						.hardnessAndResistance(0.0f)
-						.sound(SoundType.WOOD),
-				ParticleTypes.FLAME
-		);
+		super(Block.Properties.from(Blocks.TORCH).hardnessAndResistance(0.0f).sound(SoundType.WOOD), ParticleTypes.FLAME);
 		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.OFF));
 	}
 
@@ -108,14 +122,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	}
 
 	@Override
-	public BlockState updatePostPlacement(
-			BlockState state,
-			Direction facing,
-			BlockState facingState,
-			IWorld world,
-			BlockPos pos,
-			BlockPos facingPos
-	) {
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
 		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (tileCandle != null && tileCandle.isLit()) {
 			state = state.with(STATE, State.ON);
@@ -154,25 +161,12 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(
-			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
-			BlockPos pos,
-			PlayerEntity player
-	) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		return getCandleDrop(world, pos);
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(
-			BlockState state,
-			World worldIn,
-			BlockPos pos,
-			PlayerEntity playerIn,
-			Hand hand,
-			BlockRayTraceResult rayTraceResult
-	) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 		if (tileCandle == null) {
 			return ActionResultType.FAIL;
@@ -284,12 +278,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public int colorMultiplier(
-			BlockState state,
-			@Nullable IBlockReader worldIn,
-			@Nullable BlockPos pos,
-			int tintIndex
-	) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileCandle tileCandle = TileUtil.getTile(worldIn, pos, TileCandle.class);
 			if (tileCandle != null) {
@@ -298,20 +287,5 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		}
 
 		return DyeColor.WHITE.getColorValue();
-	}
-
-	enum State implements IStringSerializable {
-		ON("on"), OFF("off");
-
-		private final String name;
-
-		State(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String getString() {
-			return name;
-		}
 	}
 }

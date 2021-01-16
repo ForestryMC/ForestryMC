@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.network.packets;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.network.*;
-import forestry.core.tiles.IActivatable;
-import forestry.core.tiles.TileUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
@@ -23,6 +18,15 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.IActivatable;
+import forestry.core.tiles.TileUtil;
 
 public class PacketActiveUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -57,8 +61,7 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 				((IActivatable) tile).setActive(active);
 			} else if (tile instanceof IMultiblockComponent) {
 				IMultiblockComponent component = (IMultiblockComponent) tile;
-				if (component.getMultiblockLogic().isConnected() &&
-						component.getMultiblockLogic().getController() instanceof IActivatable) {
+				if (component.getMultiblockLogic().isConnected() && component.getMultiblockLogic().getController() instanceof IActivatable) {
 					((IActivatable) component.getMultiblockLogic().getController()).setActive(active);
 				}
 			}

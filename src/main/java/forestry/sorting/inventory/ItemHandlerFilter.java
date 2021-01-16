@@ -1,6 +1,6 @@
 package forestry.sorting.inventory;
 
-import forestry.sorting.tiles.TileGeneticFilter;
+import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -8,7 +8,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import javax.annotation.Nonnull;
+import forestry.sorting.tiles.TileGeneticFilter;
 
 public class ItemHandlerFilter implements IItemHandler {
 	private final TileGeneticFilter filter;

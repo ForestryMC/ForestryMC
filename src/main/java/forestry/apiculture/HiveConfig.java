@@ -1,37 +1,32 @@
 package forestry.apiculture;
 
-import forestry.api.apiculture.hives.IHiveRegistry;
-import forestry.core.config.LocalizedConfiguration;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.core.config.LocalizedConfiguration;
 
 public class HiveConfig {
 	private static final Map<IHiveRegistry.HiveType, HiveConfig> configs = new EnumMap<>(IHiveRegistry.HiveType.class);
 	private static final String CATEGORY = "world.generate.beehives.blacklist";
-	private static final Set<ResourceLocation> blacklistedDims = new HashSet<>();
-	private static final Set<ResourceLocation> whitelistedDims = new HashSet<>();
-	@Nullable
-	private static HiveConfig GLOBAL;
+
 	private final Set<Biome.Category> blacklistedTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 
-	public HiveConfig(String[] entries) {
-		for (String entry : entries) {
-			Biome.Category category = Biome.Category.valueOf(entry);
-			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (category != null) {
-				blacklistedTypes.add(category);
-			} else if (biome != null) {
-				blacklistedBiomes.add(biome);
-			}
-		}
-	}
+	private static final Set<ResourceLocation> blacklistedDims = new HashSet<>();
+	private static final Set<ResourceLocation> whitelistedDims = new HashSet<>();
+
+	@Nullable
+	private static HiveConfig GLOBAL;
 
 	public static void parse(LocalizedConfiguration config) {
 		config.addCategoryCommentLocalized(CATEGORY);
@@ -52,6 +47,18 @@ public class HiveConfig {
 		GLOBAL = new HiveConfig(globalEntries);
 	}
 
+	public HiveConfig(String[] entries) {
+		for (String entry : entries) {
+			Biome.Category category = Biome.Category.valueOf(entry);
+			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
+			if (category != null) {
+				blacklistedTypes.add(category);
+			} else if (biome != null) {
+				blacklistedBiomes.add(biome);
+			}
+		}
+	}
+
 	public static boolean isBlacklisted(IHiveRegistry.HiveType type, Biome biome) {
 		if (GLOBAL != null && GLOBAL.isBlacklisted(biome)) {
 			return true;
@@ -63,6 +70,18 @@ public class HiveConfig {
 		}
 
 		return config.isBlacklisted(biome);
+	}
+
+	private boolean isBlacklisted(Biome biome) {
+		if (GLOBAL != null && this != GLOBAL && GLOBAL.isBlacklisted(biome)) {
+			return true;
+		}
+
+		if (blacklistedBiomes.contains(biome)) {
+			return true;
+		}
+
+		return Arrays.stream(Biome.Category.values()).anyMatch(blacklistedTypes::contains);
 	}
 
 	public static boolean isDimAllowed(ResourceLocation dimId) {        //blacklist has priority
@@ -79,17 +98,5 @@ public class HiveConfig {
 
 	public static void addWhitelistedDim(ResourceLocation dimId) {
 		whitelistedDims.add(dimId);
-	}
-
-	private boolean isBlacklisted(Biome biome) {
-		if (GLOBAL != null && this != GLOBAL && GLOBAL.isBlacklisted(biome)) {
-			return true;
-		}
-
-		if (blacklistedBiomes.contains(biome)) {
-			return true;
-		}
-
-		return Arrays.stream(Biome.Category.values()).anyMatch(blacklistedTypes::contains);
 	}
 }

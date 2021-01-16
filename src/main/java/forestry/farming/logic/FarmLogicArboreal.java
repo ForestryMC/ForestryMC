@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -18,8 +25,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
@@ -54,13 +64,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(
-			World world,
-			IFarmHousing farmHousing,
-			FarmDirection direction,
-			int extent,
-			BlockPos pos
-	) {
+	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
 		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
 		Collection<ICrop> crops = harvestBlocks(world, position);
 		farmHousing.increaseExtent(direction, pos, extent);
@@ -89,10 +93,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
-			for (BlockPos mutable : BlockPos.getAllInBoxMutable(
-					knownCropPos.add(-1, -1, -1),
-					knownCropPos.add(1, 1, 1)
-			)) {
+			for (BlockPos mutable : BlockPos.getAllInBoxMutable(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
 				if (!world.isBlockLoaded(mutable)) {
 					return crops;
 				}
@@ -115,13 +116,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainSeedlings(
-			World world,
-			IFarmHousing farmHousing,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	) {
+	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 

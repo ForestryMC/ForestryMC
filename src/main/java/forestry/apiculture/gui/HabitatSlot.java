@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,28 +7,28 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.render.TextureManagerForestry;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
 
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.render.TextureManagerForestry;
 
 public class HabitatSlot extends Widget {
 	private final Collection<Biome.Category> biomes;
@@ -36,13 +36,7 @@ public class HabitatSlot extends Widget {
 	private final String iconIndex;
 	public boolean isActive = false;
 
-	public HabitatSlot(
-			WidgetManager widgetManager,
-			int xPos,
-			int yPos,
-			String name,
-			Collection<Biome.Category> biomes
-	) {
+	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<Biome.Category> biomes) {
 		super(widgetManager, xPos, yPos);
 		this.biomes = biomes;
 		this.name = name;

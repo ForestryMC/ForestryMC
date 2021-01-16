@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.flowers;
-
-import forestry.api.apiculture.FlowerManager;
-import forestry.api.genetics.ICheckPollinatable;
-import forestry.api.genetics.flowers.IFlowerProvider;
-
-import genetics.api.individual.IIndividual;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -25,6 +19,12 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.PlantType;
 
+import genetics.api.individual.IIndividual;
+
+import forestry.api.apiculture.FlowerManager;
+import forestry.api.genetics.ICheckPollinatable;
+import forestry.api.genetics.flowers.IFlowerProvider;
+
 public class FlowerProvider implements IFlowerProvider {
 
 	private final String flowerType;
@@ -33,6 +33,11 @@ public class FlowerProvider implements IFlowerProvider {
 	public FlowerProvider(String flowerType, String unlocalizedDescription) {
 		this.flowerType = flowerType;
 		this.unlocalizedDescription = unlocalizedDescription;
+	}
+
+	@Override
+	public String getFlowerType() {
+		return flowerType;
 	}
 
 	@Override
@@ -51,22 +56,12 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public String getFlowerType() {
-		return flowerType;
-	}
-
-	@Override
 	public ITextComponent getDescription() {
 		return new TranslationTextComponent(this.unlocalizedDescription);
 	}
 
 	@Override
-	public NonNullList<ItemStack> affectProducts(
-			World world,
-			IIndividual individual,
-			BlockPos pos,
-			NonNullList<ItemStack> products
-	) {
+	public NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products) {
 		return products;
 	}
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.items;
 
-import forestry.api.mail.EnumPostage;
-import forestry.core.data.ForestryTags;
-import forestry.core.items.ItemOverlay;
+import java.awt.Color;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -21,10 +22,9 @@ import net.minecraft.tags.ITag;
 
 import net.minecraftforge.common.Tags;
 
-import java.awt.*;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.function.Supplier;
+import forestry.api.mail.EnumPostage;
+import forestry.core.data.ForestryTags;
+import forestry.core.items.ItemOverlay;
 
 public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	P_1("1n", EnumPostage.P_1, ForestryTags.Items.GEMS_APATITE, new Color(0x4a8ca7), new Color(0xffffff)),
@@ -52,13 +52,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	private final Supplier<Ingredient> craftingIngredient;
 	private final EnumPostage postage;
 
-	EnumStampDefinition(
-			String name,
-			EnumPostage postage,
-			ITag<Item> crafting,
-			Color primaryColor,
-			Color secondaryColor
-	) {
+	EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
 		this(name, postage, () -> Ingredient.fromTag(crafting), primaryColor, secondaryColor);
 	}
 
@@ -66,13 +60,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 		this(name, postage, () -> Ingredient.fromItems(crafting), primaryColor, secondaryColor);
 	}
 
-	EnumStampDefinition(
-			String name,
-			EnumPostage postage,
-			Supplier<Ingredient> crafting,
-			Color primaryColor,
-			Color secondaryColor
-	) {
+	EnumStampDefinition(String name, EnumPostage postage, Supplier<Ingredient> crafting, Color primaryColor, Color secondaryColor) {
 		this.name = name;
 		this.primaryColor = primaryColor.getRGB();
 		this.secondaryColor = secondaryColor.getRGB();

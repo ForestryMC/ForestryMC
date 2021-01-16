@@ -1,8 +1,8 @@
 package forestry.arboriculture.genetics.alleles;
 
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-
 import genetics.api.alleles.IAlleleRegistry;
+
+import forestry.api.arboriculture.genetics.TreeChromosomes;
 
 public class AlleleLeafEffects {
 	public static final AlleleLeafEffectNone leavesNone = new AlleleLeafEffectNone();

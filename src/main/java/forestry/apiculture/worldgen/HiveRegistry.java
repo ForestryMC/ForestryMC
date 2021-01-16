@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.worldgen;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.apiculture.hives.IHiveRegistry;
-
-import java.util.*;
 
 public class HiveRegistry implements IHiveRegistry {
 

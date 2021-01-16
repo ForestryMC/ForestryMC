@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.config;
 
-import forestry.core.config.forge_old.Configuration;
-import forestry.core.config.forge_old.Property;
+import java.io.File;
+import java.util.Arrays;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import org.apache.commons.lang3.text.WordUtils;
-
-import java.io.File;
-import java.util.Arrays;
+import forestry.core.config.forge_old.Configuration;
+import forestry.core.config.forge_old.Property;
 
 public class LocalizedConfiguration extends Configuration {
 
@@ -59,13 +59,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getStringLocalizedFormatted(category, name, defaultValue, validValues, "");
 	}
 
-	public String getStringLocalizedFormatted(
-			String category,
-			String name,
-			String defaultValue,
-			String[] validValues,
-			Object... args
-	) {
+	public String getStringLocalizedFormatted(String category, String name, String defaultValue, String[] validValues, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = new TranslationTextComponent(commentKey, args).getString();
@@ -95,8 +89,7 @@ public class LocalizedConfiguration extends Configuration {
 
 		prop.setValidValues(validValues);
 		prop.setLanguageKey(langKey);
-		prop.setComment(
-				comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
+		prop.setComment(comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]");
 		String stringValue = prop.getString();
 
 		T enumValue = defaultValue;
@@ -124,13 +117,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getStringListLocalizedFormatted(category, name, defaultValue, validValues, "");
 	}
 
-	public String[] getStringListLocalizedFormatted(
-			String category,
-			String name,
-			String[] defaultValue,
-			String[] validValues,
-			Object... args
-	) {
+	public String[] getStringListLocalizedFormatted(String category, String name, String[] defaultValue, String[] validValues, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = new TranslationTextComponent(commentKey, args).getString();
@@ -155,14 +142,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getFloatLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
 	}
 
-	public float getFloatLocalizedFormatted(
-			String category,
-			String name,
-			float defaultValue,
-			float minValue,
-			float maxValue,
-			Object... args
-	) {
+	public float getFloatLocalizedFormatted(String category, String name, float defaultValue, float minValue, float maxValue, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = new TranslationTextComponent(commentKey, args).getString();
@@ -173,14 +153,7 @@ public class LocalizedConfiguration extends Configuration {
 		return getIntLocalizedFormatted(category, name, defaultValue, minValue, maxValue, "");
 	}
 
-	public int getIntLocalizedFormatted(
-			String category,
-			String name,
-			int defaultValue,
-			int minValue,
-			int maxValue,
-			Object... args
-	) {
+	public int getIntLocalizedFormatted(String category, String name, int defaultValue, int minValue, int maxValue, Object... args) {
 		String langKey = "for.config." + category + '.' + name;
 		String commentKey = langKey + '.' + "comment";
 		String comment = new TranslationTextComponent(commentKey, args).getString();

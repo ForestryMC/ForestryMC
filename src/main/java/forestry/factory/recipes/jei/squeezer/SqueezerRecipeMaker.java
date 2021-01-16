@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.api.recipes.RecipeManagers;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.crafting.RecipeManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 
 public class SqueezerRecipeMaker {
 	public static List<SqueezerRecipeWrapper> getSqueezerRecipes(RecipeManager manager) {

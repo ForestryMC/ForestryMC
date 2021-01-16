@@ -2,15 +2,15 @@ package forestry.core.multiblock;
 
 import com.google.common.collect.ImmutableSet;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.utils.Log;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.utils.Log;
 
 /**
  * This is a very static singleton registry class which directs incoming events to sub-objects, which
@@ -95,8 +95,7 @@ public class MultiblockRegistry {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDirtyController(controller);
 		} else {
-			throw new IllegalArgumentException(
-					"Adding a dirty controller to a world that has no registered controllers!");
+			throw new IllegalArgumentException("Adding a dirty controller to a world that has no registered controllers!");
 		}
 	}
 
@@ -111,11 +110,7 @@ public class MultiblockRegistry {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
-			Log.warning(
-					"Controller {} in world {} marked as dead, but that world is not tracked! Controller is being ignored.",
-					controller.hashCode(),
-					world
-			);
+			Log.warning("Controller {} in world {} marked as dead, but that world is not tracked! Controller is being ignored.", controller.hashCode(), world);
 		}
 	}
 

@@ -1,12 +1,6 @@
 package forestry.lepidopterology;
 
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.api.genetics.filter.IFilterData;
-import forestry.api.genetics.filter.IFilterRule;
-import forestry.api.genetics.filter.IFilterRuleType;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.core.render.TextureManagerForestry;
+import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -15,7 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Locale;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.core.render.TextureManagerForestry;
 
 public enum LepidopterologyFilterRuleType implements IFilterRuleType {
 	FLUTTER {
@@ -23,26 +23,22 @@ public enum LepidopterologyFilterRuleType implements IFilterRuleType {
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent();
 		}
-	},
-	BUTTERFLY {
+	}, BUTTERFLY {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.BUTTERFLY;
 		}
-	},
-	SERUM {
+	}, SERUM {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.SERUM;
 		}
-	},
-	CATERPILLAR {
+	}, CATERPILLAR {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.CATERPILLAR;
 		}
-	},
-	COCOON {
+	}, COCOON {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumFlutterType.COCOON;

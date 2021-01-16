@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
+
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.world.World;
+
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
@@ -17,15 +26,6 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
-
-import genetics.api.individual.IIndividual;
-import genetics.utils.RootUtils;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public static final short SLOT_ANALYZE = 0;
@@ -70,18 +70,12 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 			}
 			Optional<IIndividual> optional = RootUtils.getIndividual(specimen);
 			return optional.filter(individual -> {
-				IResearchHandler handler = (
-						(IResearchHandler) individual.getRoot()
-								.getComponent(ForestryComponentKeys.RESEARCH));
-				return handler.getResearchSuitability(
-						individual.getGenome().getPrimary(IAlleleForestrySpecies.class),
-						itemStack
-				) > 0;
+				IResearchHandler handler = ((IResearchHandler) individual.getRoot().getComponent(ForestryComponentKeys.RESEARCH));
+				return handler.getResearchSuitability(individual.getGenome().getPrimary(IAlleleForestrySpecies.class), itemStack) > 0;
 			}).isPresent();
 		}
 
-		return slotIndex == SLOT_ANALYZE &&
-				(RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
+		return slotIndex == SLOT_ANALYZE && (RootUtils.isIndividual(itemStack) || GeneticsUtil.getGeneticEquivalent(itemStack).isPresent());
 
 	}
 

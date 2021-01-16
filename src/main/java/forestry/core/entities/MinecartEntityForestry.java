@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.entities;
-
-import forestry.core.tiles.ITitled;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,6 +19,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import forestry.core.tiles.ITitled;
 
 //TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
 public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {

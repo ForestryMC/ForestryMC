@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core;
-
-import forestry.core.utils.GeneticsUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -20,6 +18,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import forestry.core.utils.GeneticsUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
@@ -40,14 +40,7 @@ public class TickHandlerCoreClient {
 						//TODO - I think this is the correct field
 						WorldRenderer renderGlobal = minecraft.worldRenderer;
 						if (renderGlobal != null) {
-							renderGlobal.markBlockRangeForRenderUpdate(
-									(int) player.getPosX() - 32,
-									(int) player.getPosY() - 32,
-									(int) player.getPosZ() - 32,
-									(int) player.getPosX() + 32,
-									(int) player.getPosY() + 32,
-									(int) player.getPosZ() + 32
-							);
+							renderGlobal.markBlockRangeForRenderUpdate((int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32, (int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
 						}
 					}
 				}

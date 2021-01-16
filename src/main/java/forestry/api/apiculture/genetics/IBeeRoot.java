@@ -1,23 +1,28 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.apiculture.*;
-import forestry.api.genetics.IForestrySpeciesRoot;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import com.mojang.authlib.GameProfile;
+
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IApiaristTracker;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeeListener;
+import forestry.api.apiculture.IBeeModifier;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.apiculture.IBeekeepingMode;
+import forestry.api.genetics.IForestrySpeciesRoot;
 
 public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 

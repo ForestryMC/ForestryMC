@@ -1,11 +1,7 @@
 package forestry.book.gui;
 
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IBookEntry;
-import forestry.api.book.IForesterBook;
-import forestry.book.gui.buttons.GuiButtonBack;
-import forestry.book.gui.buttons.GuiButtonEntry;
-import forestry.book.gui.buttons.GuiButtonPage;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -14,8 +10,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IBookEntry;
+import forestry.api.book.IForesterBook;
+import forestry.book.gui.buttons.GuiButtonBack;
+import forestry.book.gui.buttons.GuiButtonEntry;
+import forestry.book.gui.buttons.GuiButtonPage;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookEntries extends GuiForesterBook {

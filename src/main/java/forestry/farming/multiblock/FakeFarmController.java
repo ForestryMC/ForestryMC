@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.multiblock;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitSocketType;
@@ -24,19 +37,6 @@ import forestry.farming.FarmRegistry;
 import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.ForestryFarmIdentifier;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
 
 public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
 	public static final FakeFarmController instance = new FakeFarmController();

@@ -2,8 +2,8 @@ package forestry.factory.recipes;
 
 import com.google.gson.JsonObject;
 
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -14,11 +14,11 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class RecipeSerializers {
 
@@ -47,8 +47,7 @@ public class RecipeSerializers {
 		FluidStack stack = new FluidStack(fluid, JSONUtils.getInt(object, "amount", 0));
 
 		if (object.has("tag")) {
-			stack.setTag((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object.get("tag"))
-					.copy());
+			stack.setTag((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object.get("tag")).copy());
 		}
 
 		return stack;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileAnalyzer;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -22,7 +20,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
@@ -37,11 +37,7 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 		int textureWidth = 64;
 		int textureHeight = 32;
 
-		textures = new ResourceLocation[]{
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_pedestal.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower1.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower2.png"),
-		};
+		textures = new ResourceLocation[]{new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_pedestal.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower1.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "analyzer_tower2.png"),};
 
 		pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);

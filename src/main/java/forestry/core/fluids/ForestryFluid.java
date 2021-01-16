@@ -1,7 +1,6 @@
 package forestry.core.fluids;
 
-import forestry.core.config.Constants;
-import forestry.modules.features.FeatureFluid;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +21,8 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
+import forestry.core.config.Constants;
+import forestry.modules.features.FeatureFluid;
 
 public abstract class ForestryFluid extends FlowingFluid {
 	public final boolean flowing;
@@ -73,19 +73,11 @@ public abstract class ForestryFluid extends FlowingFluid {
 	@Override
 	@Nullable
 	public Item getFilledBucket() {
-		return ForgeRegistries.ITEMS.getValue(
-				new ResourceLocation(Constants.MOD_ID, this.definition.getIdentifier() + "_bucket")
-		);
+		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, this.definition.getIdentifier() + "_bucket"));
 	}
 
 	@Override
-	protected boolean canDisplace(
-			FluidState fluidState,
-			IBlockReader blockReader,
-			BlockPos pos,
-			Fluid fluid,
-			Direction direction
-	) {
+	protected boolean canDisplace(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
 		return false;
 	}
 
@@ -107,11 +99,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	@Override
 	protected FluidAttributes createAttributes() {
 		ResourceLocation[] resources = definition.getProperties().resources;
-		return FluidAttributes.builder(resources[0], resources[1])
-				.density(definition.getProperties().density)
-				.viscosity(definition.getProperties().viscosity)
-				.temperature(definition.getProperties().temperature)
-				.build(this);
+		return FluidAttributes.builder(resources[0], resources[1]).density(definition.getProperties().density).viscosity(definition.getProperties().viscosity).temperature(definition.getProperties().temperature).build(this);
 	}
 
 	public Block getBlock() {

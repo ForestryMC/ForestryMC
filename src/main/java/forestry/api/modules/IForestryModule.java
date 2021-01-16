@@ -1,23 +1,23 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.modules;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Set;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Set;
 
 /**
  * Defines a Forestry module.

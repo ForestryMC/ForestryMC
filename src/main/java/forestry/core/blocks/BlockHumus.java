@@ -1,10 +1,12 @@
 package forestry.core.blocks;
 
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.utils.RenderUtil;
+import java.util.Random;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -19,23 +21,16 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Random;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.RenderUtil;
 
 public class BlockHumus extends Block {
 	private static final int degradeDelimiter = Config.humusDegradeDelimiter;
-	public static final IntegerProperty DEGRADE = IntegerProperty.create(
-			"degrade",
-			0,
-			degradeDelimiter
-	); // degradation level of humus
+	public static final IntegerProperty DEGRADE = IntegerProperty.create("degrade", 0, degradeDelimiter); // degradation level of humus
 
 	public BlockHumus() {
-		super(Block.Properties.create(Material.EARTH)
-				.tickRandomly()
-				.hardnessAndResistance(0.5f)
-				.sound(SoundType.GROUND)
-				.harvestTool(ToolType.SHOVEL)
-				.harvestLevel(0));
+		super(Block.Properties.create(Material.EARTH).tickRandomly().hardnessAndResistance(0.5f).sound(SoundType.GROUND).harvestTool(ToolType.SHOVEL).harvestLevel(0));
 
 		setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
 	}
@@ -83,13 +78,7 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-	public boolean canSustainPlant(
-			BlockState state,
-			IBlockReader world,
-			BlockPos pos,
-			Direction direction,
-			IPlantable plantable
-	) {
+	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
 		PlantType plantType = plantable.getPlantType(world, pos);
 		return plantType == PlantType.CROP || plantType == PlantType.PLAINS;
 	}

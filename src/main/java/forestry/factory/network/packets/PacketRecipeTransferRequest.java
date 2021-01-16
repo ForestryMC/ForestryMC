@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.network.packets;
 
-import forestry.core.network.*;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.factory.tiles.TileCarpenter;
-import forestry.factory.tiles.TileFabricator;
+import java.io.IOException;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,7 +18,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
-import java.io.IOException;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.factory.tiles.TileCarpenter;
+import forestry.factory.tiles.TileFabricator;
 
 public class PacketRecipeTransferRequest extends ForestryPacket implements IForestryPacketServer {
 	private final BlockPos pos;
@@ -60,11 +64,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 					index++;
 				}
 
-				NetworkUtil.sendNetworkPacket(
-						new PacketRecipeTransferUpdate(carpenter, craftingInventory),
-						pos,
-						player.world
-				);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
 			} else if (tile instanceof TileFabricator) {
 				TileFabricator fabricator = (TileFabricator) tile;
 				int index = 0;
@@ -73,11 +73,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 					index++;
 				}
 
-				NetworkUtil.sendNetworkPacket(
-						new PacketRecipeTransferUpdate(fabricator, craftingInventory),
-						pos,
-						player.world
-				);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
 			}
 		}
 	}

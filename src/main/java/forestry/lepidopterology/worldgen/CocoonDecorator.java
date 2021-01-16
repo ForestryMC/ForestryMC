@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.worldgen;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -22,39 +38,19 @@ import forestry.lepidopterology.ModuleLepidopterology;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.Set;
-
 public class CocoonDecorator extends Feature<NoFeatureConfig> {
 	public CocoonDecorator() {
 		super(NoFeatureConfig.field_236558_a_);
 	}
 
 	public static boolean genCocoon(ISeedReader world, Random rand, BlockPos pos, IButterfly butterfly) {
-		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity()
-				* ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f
-		) {
+		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity() * ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
 			return false;
 		}
 
 		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ()));
 
-		Set<Biome.Category> speciesCategories = butterfly.getGenome()
-				.getActiveAllele(ButterflyChromosomes.SPECIES)
-				.getSpawnBiomes();
+		Set<Biome.Category> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getSpawnBiomes();
 
 		boolean biomeTypesGood = false;
 		for (Biome.Category category : speciesCategories) {
@@ -151,13 +147,7 @@ public class CocoonDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(
-			ISeedReader seedReader,
-			ChunkGenerator generator,
-			Random rand,
-			BlockPos pos,
-			NoFeatureConfig config
-	) {
+	public boolean generate(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot.getIndividualTemplates());
 
 		Collections.shuffle(butterflys, rand);

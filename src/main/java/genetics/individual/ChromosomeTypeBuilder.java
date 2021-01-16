@@ -2,16 +2,20 @@ package genetics.individual;
 
 import com.google.common.base.Preconditions;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.*;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import javax.annotation.Nullable;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeList;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeTypeBuilder;
+import genetics.api.individual.IChromosomeValue;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 

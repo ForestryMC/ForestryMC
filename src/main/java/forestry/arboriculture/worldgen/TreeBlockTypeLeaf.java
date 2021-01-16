@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.ITreeGenData;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
-import javax.annotation.Nullable;
-import java.util.Random;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.arboriculture.ITreeGenData;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
 	private final ITreeGenData tree;

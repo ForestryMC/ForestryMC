@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.render.ColourProperties;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.core.render.ColourProperties;
 
 public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
 	protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture;
-
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.apiculture.IArmorApiaristHelper;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.util.LazyOptional;
+
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.apiculture.IArmorApiarist;
+import forestry.api.apiculture.IArmorApiaristHelper;
 
 public class ArmorApiaristHelper implements IArmorApiaristHelper {
 

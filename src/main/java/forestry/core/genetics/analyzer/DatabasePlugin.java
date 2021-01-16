@@ -1,12 +1,12 @@
 package forestry.core.genetics.analyzer;
 
-import forestry.api.genetics.gatgets.IDatabasePlugin;
-import forestry.api.genetics.gatgets.IDatabaseTab;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.individual.IIndividual;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IDatabaseTab;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class DatabasePlugin<I extends IIndividual> implements IDatabasePlugin<I> {
@@ -15,12 +15,7 @@ public abstract class DatabasePlugin<I extends IIndividual> implements IDatabase
 	private final IDatabaseTab productsTab;
 	private final IDatabaseTab mutationsTab;
 
-	public DatabasePlugin(
-			IDatabaseTab<I> activeTab,
-			IDatabaseTab<I> inactiveTab,
-			IDatabaseTab productsTab,
-			IDatabaseTab mutationsTab
-	) {
+	public DatabasePlugin(IDatabaseTab<I> activeTab, IDatabaseTab<I> inactiveTab, IDatabaseTab productsTab, IDatabaseTab mutationsTab) {
 		this.activeTab = activeTab;
 		this.inactiveTab = inactiveTab;
 		this.productsTab = productsTab;
@@ -29,11 +24,6 @@ public abstract class DatabasePlugin<I extends IIndividual> implements IDatabase
 
 	@Override
 	public IDatabaseTab[] getTabs() {
-		return new IDatabaseTab[]{
-				activeTab,
-				inactiveTab,
-				productsTab,
-				mutationsTab
-		};
+		return new IDatabaseTab[]{activeTab, inactiveTab, productsTab, mutationsTab};
 	}
 }

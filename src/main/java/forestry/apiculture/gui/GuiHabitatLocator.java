@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
 
 import com.google.common.collect.LinkedListMultimap;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -19,13 +31,6 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
-
-import java.util.*;
 
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	private static final LinkedListMultimap<String, Biome.Category> habitats = LinkedListMultimap.create();
@@ -91,13 +96,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		ITextComponent str = new TranslationTextComponent("item.forestry.habitat_locator");
-		getFontRenderer().func_243248_b(
-				transform,
-				str,
-				startX + 8 + textLayout.getCenteredOffset(str, 138),
-				startY + 16,
-				ColourProperties.INSTANCE.get("gui.screen")
-		);
+		getFontRenderer().func_243248_b(transform, str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		// Set active according to valid biomes.
 		Set<Biome.Category> activeBiomeTypes = new HashSet<>();

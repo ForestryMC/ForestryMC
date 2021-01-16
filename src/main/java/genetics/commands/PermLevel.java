@@ -1,8 +1,8 @@
 package genetics.commands;
 
-import net.minecraft.command.CommandSource;
-
 import java.util.function.Predicate;
+
+import net.minecraft.command.CommandSource;
 
 public enum PermLevel implements Predicate<CommandSource> {
 	EVERYONE(0), ADMIN(2);

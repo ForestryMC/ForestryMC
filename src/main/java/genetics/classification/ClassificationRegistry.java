@@ -1,11 +1,16 @@
 package genetics.classification;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
 import genetics.api.classification.IClassification;
 import genetics.api.classification.IClassification.EnumClassLevel;
 import genetics.api.classification.IClassificationHandler;
 import genetics.api.classification.IClassificationRegistry;
-
-import java.util.*;
 
 public class ClassificationRegistry implements IClassificationRegistry {
 	private final LinkedHashMap<String, IClassification> classificationMap = new LinkedHashMap<>(128);
@@ -22,10 +27,7 @@ public class ClassificationRegistry implements IClassificationRegistry {
 	@Override
 	public void registerClassification(IClassification branch) {
 		if (classificationMap.containsKey(branch.getUID())) {
-			throw new IllegalArgumentException(String.format("Could not add new classification '%s', because the key is already taken by %s.",
-					branch.getUID(),
-					classificationMap.get(branch.getUID())
-			));
+			throw new IllegalArgumentException(String.format("Could not add new classification '%s', because the key is already taken by %s.", branch.getUID(), classificationMap.get(branch.getUID())));
 		}
 
 		classificationMap.put(branch.getUID(), branch);
@@ -40,12 +42,7 @@ public class ClassificationRegistry implements IClassificationRegistry {
 	}
 
 	@Override
-	public IClassification createAndRegisterClassification(
-			EnumClassLevel level,
-			String uid,
-			String scientific,
-			IClassification... members
-	) {
+	public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific, IClassification... members) {
 		IClassification classification = new Classification(level, uid, scientific);
 		for (IClassification member : members) {
 			classification.addMemberGroup(member);

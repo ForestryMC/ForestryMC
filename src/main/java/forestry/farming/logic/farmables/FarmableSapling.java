@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic.farmables;
-
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
-import forestry.farming.logic.crops.CropDestroy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,6 +27,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableSapling implements IFarmable {
 	protected final ItemStack germling;
@@ -107,20 +107,11 @@ public class FarmableSapling implements IFarmable {
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ItemStack copy = germling.copy();
 		player.setHeldItem(Hand.MAIN_HAND, copy);
-		BlockRayTraceResult result = new BlockRayTraceResult(
-				Vector3d.ZERO,
-				Direction.UP,
-				pos.down(),
-				true
-		);
+		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.down(), true);
 		ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
 		player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
 		if (actionResult == ActionResultType.SUCCESS) {
-			PacketFXSignal packet = new PacketFXSignal(
-					PacketFXSignal.SoundFXType.BLOCK_PLACE,
-					pos,
-					Blocks.OAK_SAPLING.getDefaultState()
-			);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.getDefaultState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}

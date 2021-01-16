@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
@@ -19,9 +22,6 @@ import forestry.core.inventory.InventoryAnalyzer;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileUtil;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-
 public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 
 	public ContainerAnalyzer(int windowId, PlayerInventory player, TileAnalyzer tile) {
@@ -30,12 +30,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 		// Input buffer
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 2; k++) {
-				this.addSlot(new SlotFiltered(
-						tile,
-						InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k,
-						8 + k * 18,
-						28 + i * 18
-				));
+				this.addSlot(new SlotFiltered(tile, InventoryAnalyzer.SLOT_INPUT_1 + i * 2 + k, 8 + k * 18, 28 + i * 18));
 			}
 		}
 
@@ -48,12 +43,7 @@ public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 		// Output buffer
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 2; k++) {
-				this.addSlot(new SlotOutput(
-						tile,
-						InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k,
-						134 + k * 18,
-						48 + i * 18
-				));
+				this.addSlot(new SlotOutput(tile, InventoryAnalyzer.SLOT_OUTPUT_1 + i * 2 + k, 134 + k * 18, 48 + i * 18));
 			}
 		}
 	}

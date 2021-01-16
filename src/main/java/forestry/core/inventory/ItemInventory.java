@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.tiles.IFilterSlotDelegate;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -30,8 +31,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-import javax.annotation.Nullable;
-import java.util.Random;
+import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";

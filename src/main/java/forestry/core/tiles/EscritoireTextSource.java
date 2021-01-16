@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
-import net.minecraft.util.text.TranslationTextComponent;
-
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
+
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class EscritoireTextSource {
 
@@ -27,14 +27,7 @@ public class EscritoireTextSource {
 
 	static {
 		researchNotes = ArrayListMultimap.create();
-		EnumSet<Notes> multipleTranslationNoteLevels = EnumSet.of(
-				Notes.level1,
-				Notes.level2,
-				Notes.level3,
-				Notes.level4,
-				Notes.success,
-				Notes.failure
-		);
+		EnumSet<Notes> multipleTranslationNoteLevels = EnumSet.of(Notes.level1, Notes.level2, Notes.level3, Notes.level4, Notes.success, Notes.failure);
 		for (Notes notesLevel : multipleTranslationNoteLevels) {
 			for (int i = 1; i <= 10; i++) {
 				String key = "for.gui.escritoire.notes." + notesLevel + '.' + i;
@@ -97,6 +90,12 @@ public class EscritoireTextSource {
 	}
 
 	private enum Notes {
-		level1, level2, level3, level4, success, failure, empty
+		level1,
+		level2,
+		level3,
+		level4,
+		success,
+		failure,
+		empty
 	}
 }

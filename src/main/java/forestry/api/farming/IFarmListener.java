@@ -1,15 +1,15 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.farming;
+
+import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Collection;
 
 public interface IFarmListener {
 
@@ -44,13 +44,7 @@ public interface IFarmListener {
 	/**
 	 * Called after the stack of harvested crops has been returned by the farm logic, but before it is added to the farm's pending queue.
 	 */
-	void hasScheduledHarvest(
-			Collection<ICrop> harvested,
-			IFarmLogic logic,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	);
+	void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, BlockPos pos, FarmDirection direction, int extent);
 
 	/**
 	 * Can be used to cancel farm task on a per side/{@link IFarmLogic} basis.

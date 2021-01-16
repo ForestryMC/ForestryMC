@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,38 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.items;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+
+import genetics.api.GeneticHelper;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -29,32 +59,6 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.ResourceUtil;
 
-import genetics.api.GeneticHelper;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
-import javax.annotation.Nullable;
-import java.util.Optional;
-
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IColoredItem {
 
 	private final EnumGermlingType type;
@@ -64,13 +68,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		this.type = type;
 	}
 
-	private static ActionResult<ItemStack> onItemRightClickPollen(
-			ItemStack itemStackIn,
-			World worldIn,
-			PlayerEntity player,
-			BlockPos pos,
-			ITree tree
-	) {
+	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
 		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
 		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
 			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
@@ -85,12 +83,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			pollinatable.mateWith(tree);
 
 			BlockState blockState = worldIn.getBlockState(pos);
-			PacketFXSignal packet = new PacketFXSignal(
-					PacketFXSignal.VisualFXType.BLOCK_BREAK,
-					PacketFXSignal.SoundFXType.BLOCK_BREAK,
-					pos,
-					blockState
-			);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
 
 			if (!player.isCreative()) {
@@ -101,14 +94,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 	}
 
-	private static ActionResult<ItemStack> onItemRightClickSapling(
-			ItemStack itemStackIn,
-			World worldIn,
-			PlayerEntity player,
-			BlockPos pos,
-			ITree tree,
-			BlockItemUseContext context
-	) {
+	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
 		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 		BlockState hitBlock = worldIn.getBlockState(pos);
 		if (!hitBlock.isReplaceable(context)) {
@@ -216,16 +202,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		}
 		IAlleleForestrySpecies species = getSpecies(itemStack);
 
-		String customTreeKey = "for.trees.custom." + type.getName() + "."
-				+ species.getLocalisationKey().replace("trees.species.", "");
+		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
 		return ResourceUtil.tryTranslate(customTreeKey, () -> {
-			ITextComponent typeComponent = new TranslationTextComponent(
-					"for.trees.grammar." + type.getName() + ".type");
-			return new TranslationTextComponent(
-					"for.trees.grammar." + type.getName(),
-					species.getDisplayName(),
-					typeComponent
-			);
+			ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
 		});
 	}
 
@@ -240,8 +220,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	public float getFermentationModifier(ItemStack itemstack) {
 		itemstack = GeneticsUtil.convertToGeneticEquivalent(itemstack);
 		Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemstack);
-		return treeOptional.map(tree -> tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10)
-				.orElse(1.0f);
+		return treeOptional.map(tree -> tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * 10).orElse(1.0f);
 	}
 
 	@Override

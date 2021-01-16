@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,24 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.core.tiles.TileUtil;
-
-import genetics.api.individual.IGenome;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IJubilanceProvider;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.core.tiles.TileUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 

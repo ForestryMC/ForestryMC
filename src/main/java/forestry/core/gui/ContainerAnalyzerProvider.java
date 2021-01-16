@@ -1,6 +1,6 @@
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotLockable;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -8,20 +8,13 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nullable;
+import forestry.core.gui.slots.SlotLockable;
 
 public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTile<T> implements IContainerAnalyzerProvider {
 	private final ContainerAnalyzerProviderHelper providerHelper;
 
 	//TODO maybe this is the constructor I need?
-	public ContainerAnalyzerProvider(
-			int windowId,
-			ContainerType<?> type,
-			PlayerInventory playerInventory,
-			T tile,
-			int xInv,
-			int yInv
-	) {
+	public ContainerAnalyzerProvider(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
 		super(windowId, type, playerInventory, tile, xInv, yInv);
 		//TODO maybe analyzer container type can be reused?
 

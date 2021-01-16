@@ -1,10 +1,10 @@
 package forestry.sorting.inventory;
 
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.sorting.tiles.TileGeneticFilter;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.sorting.tiles.TileGeneticFilter;
 
 public class InventoryFilter extends InventoryAdapterTile<TileGeneticFilter> {
 	public InventoryFilter(TileGeneticFilter tile) {

@@ -1,13 +1,6 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import forestry.core.utils.NetworkUtil;
-import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.network.packets.PacketRecipeTransferRequest;
-
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredient;
-import mezz.jei.api.recipe.transfer.IRecipeTransferError;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -17,7 +10,14 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Map.Entry;
+import forestry.core.utils.NetworkUtil;
+import forestry.factory.gui.ContainerCarpenter;
+import forestry.factory.network.packets.PacketRecipeTransferRequest;
+
+import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.ingredient.IGuiIngredient;
+import mezz.jei.api.recipe.transfer.IRecipeTransferError;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<ContainerCarpenter> {
@@ -27,19 +27,11 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 	}
 
 	@Override
-	public IRecipeTransferError transferRecipe(
-			ContainerCarpenter container,
-			IRecipeLayout recipeLayout,
-			PlayerEntity player,
-			boolean maxTransfer,
-			boolean doTransfer
-	) {
+	public IRecipeTransferError transferRecipe(ContainerCarpenter container, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			IInventory craftingInventory = container.getCarpenter().getCraftingInventory();
 			NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
-			for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks()
-					.getGuiIngredients()
-					.entrySet()) {
+			for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
 				IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();
 				if (guiIngredient != null && guiIngredient.getDisplayedIngredient() != null) {
 					int index = guiIngredientEntry.getKey();

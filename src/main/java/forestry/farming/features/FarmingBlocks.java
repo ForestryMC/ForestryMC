@@ -14,9 +14,5 @@ import forestry.modules.features.ModFeatureRegistry;
 public class FarmingBlocks {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFarming.class);
 
-	public static final FeatureBlockTable<BlockFarm, EnumFarmBlockType, EnumFarmMaterial> FARM = REGISTRY.blockTable(
-			BlockFarm::new,
-			EnumFarmBlockType.VALUES,
-			EnumFarmMaterial.values()
-	).item(ItemBlockFarm::new).identifier("farm").create();
+	public static final FeatureBlockTable<BlockFarm, EnumFarmBlockType, EnumFarmMaterial> FARM = REGISTRY.blockTable(BlockFarm::new, EnumFarmBlockType.VALUES, EnumFarmMaterial.values()).item(ItemBlockFarm::new).identifier("farm").create();
 }

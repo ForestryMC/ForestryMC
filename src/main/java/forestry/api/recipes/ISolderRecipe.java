@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.api.recipes;
-
-import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitLayout;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 
 import net.minecraftforge.registries.ObjectHolder;
+
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitLayout;
 
 public interface ISolderRecipe extends IForestryRecipe {
 

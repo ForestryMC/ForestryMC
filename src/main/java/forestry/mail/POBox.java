@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.mail.EnumAddressee;
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.PostManager;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -25,7 +20,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.WorldSavedData;
 
-import javax.annotation.Nullable;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.PostManager;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 
 public class POBox extends WorldSavedData implements IInventory {
 

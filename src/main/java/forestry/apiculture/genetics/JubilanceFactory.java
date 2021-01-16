@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import net.minecraft.block.BlockState;
 
 import forestry.api.apiculture.IJubilanceFactory;
 import forestry.api.apiculture.IJubilanceProvider;
-
-import net.minecraft.block.BlockState;
 
 public class JubilanceFactory implements IJubilanceFactory {
 	@Override

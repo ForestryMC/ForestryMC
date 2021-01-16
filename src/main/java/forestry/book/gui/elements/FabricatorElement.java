@@ -1,12 +1,11 @@
 package forestry.book.gui.elements;
 
-import forestry.api.recipes.IFabricatorRecipe;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.IngredientElement;
-import forestry.core.gui.elements.TankElement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.fluid.Fluid;
@@ -20,14 +19,17 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 
-import java.util.*;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.IngredientElement;
+import forestry.core.gui.elements.TankElement;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
-	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "almanac/crafting.png"
-	);
+	private static final ResourceLocation BOOK_CRAFTING_TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "almanac/crafting.png");
 	private static final Drawable FABRICATOR_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 60, 108, 56);
 	private static final Drawable FABRICATOR_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 61, 16, 16);
 
@@ -36,17 +38,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	}
 
 	public FabricatorElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(
-				0,
-				0,
-				Arrays.stream(stacks)
-						.map(x -> RecipeManagers.fabricatorManager.getRecipes(
-								Minecraft.getInstance().world.getRecipeManager(),
-								x
-						))
-						.flatMap(Collection::stream)
-						.toArray(IFabricatorRecipe[]::new)
-		);
+		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.fabricatorManager.getRecipes(Minecraft.getInstance().world.getRecipeManager(), x)).flatMap(Collection::stream).toArray(IFabricatorRecipe[]::new));
 	}
 
 	public FabricatorElement(int xPos, int yPos, IFabricatorRecipe[] recipes) {

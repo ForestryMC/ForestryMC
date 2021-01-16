@@ -1,5 +1,24 @@
 package forestry.modules;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import net.minecraftforge.fml.InterModComms;
+
 import forestry.api.modules.IForestryModule;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
@@ -11,22 +30,6 @@ import forestry.core.utils.Log;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IModFeature;
 import forestry.modules.features.ModFeatureRegistry;
-
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.event.RegistryEvent;
-
-import net.minecraftforge.fml.InterModComms;
-
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import java.util.*;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 //import forestry.plugins.ForestryCompatPlugins;
 
 //TODO - most of this needs tearing up and replacing
@@ -36,6 +39,7 @@ public class CommonModuleHandler {
 	protected final Set<BlankForestryModule> modules = new LinkedHashSet<>();
 	protected final Set<IForestryModule> disabledModules = new LinkedHashSet<>();
 	protected Stage stage = Stage.SETUP;
+
 	public CommonModuleHandler() {
 		this.registry = ModFeatureRegistry.get(Constants.MOD_ID);
 	}

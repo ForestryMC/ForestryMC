@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.core.ILocatable;
-import forestry.core.errors.ErrorLogic;
-import forestry.core.inventory.FakeInventoryAdapter;
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.network.packets.PacketTileStream;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,8 +39,18 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.ILocatable;
+import forestry.core.errors.ErrorLogic;
+import forestry.core.inventory.FakeInventoryAdapter;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.packets.PacketTileStream;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.TickHelper;
 
 //import net.minecraftforge.fml.common.Optional;
 

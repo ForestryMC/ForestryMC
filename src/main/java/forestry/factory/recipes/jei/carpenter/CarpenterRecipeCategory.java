@@ -1,6 +1,16 @@
 package forestry.factory.recipes.jei.carpenter;
 
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.config.Constants;
@@ -20,26 +30,13 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Arrays;
-import java.util.List;
-
 public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRecipeWrapper> {
 	private static final int boxSlot = 0;
 	private static final int craftOutputSlot = 1;
 	private static final int craftInputSlot = 2;
 	private static final int inputTank = 0;
 
-	private final static ResourceLocation guiTexture = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "carpenter.png"
-	);
+	private final static ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "carpenter.png");
 	private final ICraftingGridHelper craftingGridHelper;
 	private final IDrawableAnimated arrow;
 	private final IDrawable tankOverlay;
@@ -50,16 +47,9 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
-		this.arrow = guiHelper.createAnimatedDrawable(
-				arrowDrawable,
-				200,
-				IDrawableAnimated.StartDirection.BOTTOM,
-				false
-		);
+		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(
-				new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block())
-		);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block()));
 	}
 
 	@Override
@@ -108,12 +98,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		List<List<ItemStack>> craftingInputs = ingredients.getInputs(VanillaTypes.ITEM);
 
-		craftingGridHelper.setInputs(
-				guiItemStacks,
-				craftingInputs,
-				craftingGridRecipe.getWidth(),
-				craftingGridRecipe.getHeight()
-		);
+		craftingGridHelper.setInputs(guiItemStacks, craftingInputs, craftingGridRecipe.getWidth(), craftingGridRecipe.getHeight());
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 		if (!fluidInputs.isEmpty()) {

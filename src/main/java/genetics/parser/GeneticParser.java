@@ -8,14 +8,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
-import genetics.api.GeneticsResourceType;
-import genetics.api.alleles.AlleleInfo;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleType;
-import genetics.utils.NBTUtils;
-import io.netty.util.internal.StringUtil;
+import org.apache.commons.io.IOUtils;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
@@ -24,15 +27,18 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
-import org.apache.commons.io.IOUtils;
+import genetics.api.GeneticsResourceType;
+import genetics.api.alleles.AlleleInfo;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleType;
+import genetics.utils.NBTUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.function.Predicate;
+import io.netty.util.internal.StringUtil;
 
 public class GeneticParser implements ISelectiveResourceReloadListener {
 	public static final int PATH_PREFIX_LENGTH = "genetics/alleles/".length();
@@ -49,15 +55,9 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 
 		Multimap<ResourceLocation, CompoundNBT> alleleData = HashMultimap.create();
 
-		for (ResourceLocation location : manager.getAllResourceLocations(
-				"genetics/alleles",
-				filename -> filename.endsWith(".json")
-		)) {
+		for (ResourceLocation location : manager.getAllResourceLocations("genetics/alleles", filename -> filename.endsWith(".json"))) {
 			String path = location.getPath();
-			ResourceLocation readableLocation = new ResourceLocation(
-					location.getNamespace(),
-					path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH)
-			);
+			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
 			try (IResource resource = manager.getResource(location)) {
 				for (ResourceLocation loading : loadingAlleles) {
 					if (location.getClass() == loading.getClass() && location.equals(loading)) {
@@ -65,11 +65,7 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 					}
 				}
 				loadingAlleles.addLast(location);
-				JsonObject object = JSONUtils.fromJson(
-						GSON,
-						IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8),
-						JsonObject.class
-				);
+				JsonObject object = JSONUtils.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 				if (object == null) {
 					//LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
 				} else {
@@ -94,8 +90,7 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 			CompoundNBT compound = new CompoundNBT();
 			List<CompoundNBT> compounds = new LinkedList<>(alleleData.get(location));
 			if (compounds.size() > 1) {
-				compounds.stream().filter(tag -> tag.getBoolean("replace")).max(Comparator.comparingInt(a -> a.getInt(
-						"weight"))).ifPresent(compound::merge);
+				compounds.stream().filter(tag -> tag.getBoolean("replace")).max(Comparator.comparingInt(a -> a.getInt("weight"))).ifPresent(compound::merge);
 			}
 			if (compounds.size() > 1) {
 				compounds.stream().sorted(Comparator.comparingInt(a -> -a.getInt("weight"))).forEach(compound::merge);

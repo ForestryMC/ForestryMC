@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,25 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-
 public class GuiAlvearyHygroregulator extends GuiForestryTitled<ContainerAlvearyHygroregulator> {
 	private final TileAlvearyHygroregulator tile;
 
-	public GuiAlvearyHygroregulator(
-			ContainerAlvearyHygroregulator container,
-			PlayerInventory inventory,
-			ITextComponent title
-	) {
+	public GuiAlvearyHygroregulator(ContainerAlvearyHygroregulator container, PlayerInventory inventory, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + "hygroregulator.png", container, inventory, title);
 		this.tile = container.getTile();
 

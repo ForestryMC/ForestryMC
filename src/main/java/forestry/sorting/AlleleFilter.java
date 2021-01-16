@@ -1,8 +1,8 @@
 package forestry.sorting;
 
-import genetics.api.alleles.IAllele;
-
 import javax.annotation.Nullable;
+
+import genetics.api.alleles.IAllele;
 
 public class AlleleFilter {
 	@Nullable
@@ -12,8 +12,7 @@ public class AlleleFilter {
 	public IAllele inactiveAllele;
 
 	public boolean isValid(String activeUID, String inactiveUID) {
-		return (this.activeAllele == null || activeUID.equals(this.activeAllele.getRegistryName().toString()))
-				&& (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getRegistryName().toString()));
+		return (this.activeAllele == null || activeUID.equals(this.activeAllele.getRegistryName().toString())) && (this.inactiveAllele == null || inactiveUID.equals(this.inactiveAllele.getRegistryName().toString()));
 	}
 
 	public boolean isEmpty() {

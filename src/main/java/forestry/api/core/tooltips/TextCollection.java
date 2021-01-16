@@ -1,28 +1,29 @@
 package forestry.api.core.tooltips;
 
-import net.minecraft.util.text.ITextComponent;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.util.text.ITextComponent;
 
 public class TextCollection implements ITextInstance<TextCollection, TextCompound, TextCollection> {
 	private final List<ITextComponent> lines = new ArrayList<>();
 	@Nullable
 	private ITextComponent last;
 
-	public TextCollection addAll(@Nullable TextCollection lines) {
-		if (lines == null) {
-			return this;
-		}
-		addAll(lines.getLines());
+	public TextCompound singleLine() {
+		return new TextCompound(this);
+	}
+
+	@Override
+	public TextCollection create() {
 		return this;
 	}
 
 	@Override
-	public TextCollection cast() {
-		return this;
+	public boolean isEmpty() {
+		return lines.isEmpty();
 	}
 
 	@Nullable
@@ -38,18 +39,17 @@ public class TextCollection implements ITextInstance<TextCollection, TextCompoun
 		return this;
 	}
 
-	public TextCompound singleLine() {
-		return new TextCompound(this);
-	}
-
-	@Override
-	public TextCollection create() {
+	public TextCollection addAll(@Nullable TextCollection lines) {
+		if (lines == null) {
+			return this;
+		}
+		addAll(lines.getLines());
 		return this;
 	}
 
 	@Override
-	public boolean isEmpty() {
-		return lines.isEmpty();
+	public TextCollection cast() {
+		return this;
 	}
 
 	public void clear() {

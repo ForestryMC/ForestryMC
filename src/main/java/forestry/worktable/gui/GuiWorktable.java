@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.worktable.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -21,9 +24,6 @@ import forestry.worktable.gui.widgets.ClearWorktable;
 import forestry.worktable.gui.widgets.MemorizedRecipeSlot;
 import forestry.worktable.recipes.RecipeMemory;
 import forestry.worktable.tiles.TileWorktable;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private static final int SPACING = 18;
@@ -44,13 +44,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 			int yPos = 20 + y * SPACING;
 			for (int x = 0; x < 3; x++) {
 				int xPos = 110 + x * SPACING;
-				MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(
-						widgetManager,
-						xPos,
-						yPos,
-						recipeMemory,
-						slot++
-				);
+				MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(widgetManager, xPos, yPos, recipeMemory, slot++);
 				widgetManager.add(memorizedRecipeSlot);
 			}
 		}

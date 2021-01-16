@@ -1,16 +1,16 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.book;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import java.util.Collection;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
+import forestry.core.gui.elements.lib.IGuiElement;
 
 /**
  * A factory that creates book pages for a book entry.

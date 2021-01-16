@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -18,7 +18,7 @@ import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-import java.util.List;
+import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class GuiTextBox extends TextFieldWidget {
 	private static final int enabledColor = 14737632;
@@ -55,8 +55,7 @@ public class GuiTextBox extends TextFieldWidget {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRenderer.trimStringToWidth(new StringTextComponent(getCursoredText()), width)
-				.size() * fontRenderer.FONT_HEIGHT < height;
+		return fontRenderer.trimStringToWidth(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.FONT_HEIGHT < height;
 	}
 
 	private String getCursoredText() {
@@ -75,14 +74,7 @@ public class GuiTextBox extends TextFieldWidget {
 		return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
 	}
 
-	private void drawScrolledSplitString(
-			MatrixStack transform,
-			ITextComponent text,
-			int startX,
-			int startY,
-			int width,
-			int textColour
-	) {
+	private void drawScrolledSplitString(MatrixStack transform, ITextComponent text, int startX, int startY, int width, int textColour) {
 		List<IReorderingProcessor> lines = fontRenderer.trimStringToWidth(text, width);
 		maxLines = lines.size();
 

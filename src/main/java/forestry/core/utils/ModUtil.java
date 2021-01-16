@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
 
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.VersionRange;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
 
 public abstract class ModUtil {
 	public static boolean isModLoaded(String modname) {

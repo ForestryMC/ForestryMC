@@ -1,13 +1,13 @@
 package forestry.core.genetics.analyzer;
 
-import forestry.api.genetics.gatgets.IDatabaseTab;
-
-import genetics.api.individual.IIndividual;
+import java.util.function.Supplier;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
-import java.util.function.Supplier;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.genetics.gatgets.IDatabaseTab;
 
 //TODO: Rework the database and the analyser
 public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab<I> {

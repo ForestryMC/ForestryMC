@@ -1,16 +1,16 @@
 package forestry.modules.features;
 
-import forestry.core.config.Constants;
-import forestry.core.fluids.BlockForestryFluid;
-import forestry.core.fluids.ForestryFluid;
-import forestry.core.items.DrinkProperties;
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.util.function.Supplier;
 
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.function.Supplier;
+import forestry.core.config.Constants;
+import forestry.core.fluids.BlockForestryFluid;
+import forestry.core.fluids.ForestryFluid;
+import forestry.core.items.DrinkProperties;
 
 public class FeatureFluid implements IFluidFeature {
 	private final FeatureBlock<BlockForestryFluid, BlockItem> block;
@@ -35,36 +35,65 @@ public class FeatureFluid implements IFluidFeature {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return identifier;
-	}	@Override
+	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
+		return () -> flowing ? new ForestryFluid.Flowing(this) : new ForestryFluid.Source(this);
+	}
+
+	@Nullable
+	@Override
+	public FlowingFluid getFluid() {
+		return fluid;
+	}
+
+	@Override
 	public void setFluid(FlowingFluid fluid) {
 		this.fluid = fluid;
 	}
 
+	@Nullable
 	@Override
-	public FeatureType getType() {
-		return FeatureType.FLUID;
-	}	@Override
+	public FlowingFluid getFlowing() {
+		return flowing;
+	}
+
+	@Override
 	public void setFlowing(@Nullable FlowingFluid flowing) {
 		this.flowing = flowing;
 	}
 
 	@Override
+	public FluidProperties getProperties() {
+		return properties;
+	}
+
+	@Override
+	public boolean hasFluid() {
+		return fluid != null;
+	}
+
+	@Override
+	public boolean hasFlowing() {
+		return flowing != null;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	@Override
+	public FeatureType getType() {
+		return FeatureType.FLUID;
+	}
+
+	@Override
 	public String getModId() {
 		return Constants.MOD_ID;
-	}	@Override
-	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
-		return () -> flowing ? new ForestryFluid.Flowing(this) : new ForestryFluid.Source(this);
 	}
 
 	@Override
 	public String getModuleId() {
 		return moduleID;
-	}	@Nullable
-	@Override
-	public FlowingFluid getFluid() {
-		return fluid;
 	}
 
 	public static class Builder {
@@ -129,34 +158,7 @@ public class FeatureFluid implements IFluidFeature {
 		public FeatureFluid create() {
 			return registry.register(new FeatureFluid(this));
 		}
-	}	@Nullable
-	@Override
-	public FlowingFluid getFlowing() {
-		return flowing;
 	}
-
-	@Override
-	public FluidProperties getProperties() {
-		return properties;
-	}
-
-	@Override
-	public boolean hasFlowing() {
-		return flowing != null;
-	}
-
-	@Override
-	public boolean hasFluid() {
-		return fluid != null;
-	}
-
-
-
-
-
-
-
-
 
 
 }

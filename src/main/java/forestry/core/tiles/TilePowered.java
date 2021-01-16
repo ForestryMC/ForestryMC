@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.core.circuits.ISpeedUpgradable;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.network.IStreamableGui;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.energy.EnergyHelper;
-import forestry.energy.EnergyManager;
-import forestry.energy.EnergyTransferMode;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -30,8 +23,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.core.circuits.ISpeedUpgradable;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.network.IStreamableGui;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.TankRenderInfo;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
+import forestry.energy.EnergyTransferMode;
 
 //import forestry.core.capabilities.HasWorkWrapper;
 
@@ -121,11 +121,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 
 		if (workCounter < ticksPerWorkCycle) {
 			int energyPerWorkCycle = getEnergyPerWorkCycle();
-			boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(
-					energyManager,
-					ticksPerWorkCycle,
-					energyPerWorkCycle
-			);
+			boolean consumedEnergy = EnergyHelper.consumeEnergyToDoWork(energyManager, ticksPerWorkCycle, energyPerWorkCycle);
 			if (consumedEnergy) {
 				errorLogic.setCondition(false, EnumErrorCode.NO_POWER);
 				workCounter++;

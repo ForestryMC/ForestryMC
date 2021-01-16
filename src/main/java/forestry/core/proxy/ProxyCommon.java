@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.TickHandlerCoreServer;
-import forestry.core.multiblock.MultiblockServerTickHandler;
+import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +18,8 @@ import net.minecraft.item.Item;
 
 import net.minecraftforge.common.MinecraftForge;
 
-import java.io.File;
+import forestry.core.TickHandlerCoreServer;
+import forestry.core.multiblock.MultiblockServerTickHandler;
 
 public class ProxyCommon {
 	public void registerItem(Item item) {

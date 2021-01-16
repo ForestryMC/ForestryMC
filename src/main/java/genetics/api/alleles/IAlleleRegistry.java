@@ -1,13 +1,13 @@
 package genetics.api.alleles;
 
-import genetics.api.IGeneticApiInstance;
-import genetics.api.IGeneticPlugin;
-import genetics.api.individual.IChromosomeType;
+import java.util.Collection;
+import java.util.Optional;
 
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Collection;
-import java.util.Optional;
+import genetics.api.IGeneticApiInstance;
+import genetics.api.IGeneticPlugin;
+import genetics.api.individual.IChromosomeType;
 
 /**
  * The {@link IAlleleRegistry} offers several functions for registering and retrieving alleles.
@@ -47,13 +47,7 @@ public interface IAlleleRegistry {
 	 * @param dominant  if true the allele is dominant, otherwise the allele is recessive.
 	 * @param types     chromosome types for this allele.
 	 */
-	<V> IAlleleValue<V> registerAllele(
-			String category,
-			String valueName,
-			V value,
-			boolean dominant,
-			IChromosomeType... types
-	);
+	<V> IAlleleValue<V> registerAllele(String category, String valueName, V value, boolean dominant, IChromosomeType... types);
 
 	/**
 	 * Registers an allele.

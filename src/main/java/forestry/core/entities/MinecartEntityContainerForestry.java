@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.entities;
 
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -30,7 +28,9 @@ import net.minecraft.world.server.ServerWorld;
 
 import net.minecraftforge.common.util.ITeleporter;
 
-import javax.annotation.Nullable;
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.utils.InventoryUtil;
 
 //TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
 public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements ISidedInventory, IFilterSlotDelegate, INamedContainerProvider {

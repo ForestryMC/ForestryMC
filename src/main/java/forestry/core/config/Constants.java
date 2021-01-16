@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.config;
-
-import forestry.api.core.IForestryConstants;
 
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidAttributes;
+
+import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
 	// System
@@ -49,10 +49,7 @@ public class Constants implements IForestryConstants {
 	public static final String TEXTURE_NATURALIST_ARMOR_PRIMARY = TEXTURE_PATH_ITEM + "naturalist_armor_1.png";
 
 	// Village Loot Key
-	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(
-			Constants.MOD_ID,
-			"chests/village_naturalist"
-	);
+	public static final ResourceLocation VILLAGE_NATURALIST_LOOT_KEY = new ResourceLocation(Constants.MOD_ID, "chests/village_naturalist");
 
 	// Item Ids
 	public static final int SLOTS_BACKPACK_DEFAULT = 15;

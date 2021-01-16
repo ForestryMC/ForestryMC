@@ -4,6 +4,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
@@ -11,11 +16,6 @@ import genetics.api.root.IGeneticListener;
 import genetics.api.root.IGeneticListenerRegistry;
 import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootManager;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class RootManager implements IRootManager, IGeneticListenerRegistry {
 	private final HashMap<String, IndividualRootBuilder> rootBuilders = new HashMap<>();
@@ -30,10 +30,7 @@ public class RootManager implements IRootManager, IGeneticListenerRegistry {
 	}
 
 	@Override
-	public <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(
-			String uid,
-			Class<? extends T> enumClass
-	) {
+	public <I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(String uid, Class<? extends T> enumClass) {
 		T[] types = enumClass.getEnumConstants();
 		if (types.length <= 0) {
 			throw new IllegalArgumentException("The given enum class must contain at least one enum constant.");

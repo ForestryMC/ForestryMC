@@ -1,17 +1,12 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
-import forestry.api.arboriculture.IGrowthProvider;
-import forestry.api.arboriculture.ILeafProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.ITreeGenerator;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.genetics.alleles.IAlleleProperty;
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
@@ -20,8 +15,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.PlantType;
 
-import javax.annotation.Nonnull;
-import java.util.Collection;
+import forestry.api.arboriculture.IGrowthProvider;
+import forestry.api.arboriculture.ILeafProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.ITreeGenerator;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.alleles.IAlleleProperty;
 
 public interface IAlleleTreeSpecies extends IAlleleForestrySpecies, IAlleleProperty<IAlleleTreeSpecies> {
 

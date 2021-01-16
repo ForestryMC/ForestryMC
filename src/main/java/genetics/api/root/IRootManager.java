@@ -1,11 +1,11 @@
 package genetics.api.root;
 
+import java.util.Optional;
+
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticPlugin;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IIndividual;
-
-import java.util.Optional;
 
 public interface IRootManager {
 
@@ -20,10 +20,7 @@ public interface IRootManager {
 	 */
 	<I extends IIndividual> IIndividualRootBuilder<I> createRoot(String uid);
 
-	<I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(
-			String uid,
-			Class<? extends T> enumClass
-	);
+	<I extends IIndividual, T extends Enum<T> & IChromosomeType> IIndividualRootBuilder<I> createRoot(String uid, Class<? extends T> enumClass);
 
 	/**
 	 * Gets an IGeneticDefinitionBuilder

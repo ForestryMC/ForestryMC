@@ -1,11 +1,9 @@
 package forestry.book.data.content;
 
-import forestry.api.book.BookContent;
-import forestry.book.data.CraftingData;
-import forestry.book.gui.elements.CraftingElement;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.CraftingInventory;
@@ -16,10 +14,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import forestry.api.book.BookContent;
+import forestry.book.data.CraftingData;
+import forestry.book.gui.elements.CraftingElement;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 /**
  * A book content that displays one ore more crafting recipes.
@@ -32,13 +32,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null || data.locations.length == 0) {
 			return false;
 		}
@@ -46,8 +40,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 		List<IRecipe> recipes = new LinkedList<>();
 		for (ResourceLocation location : data.locations) {
 			//TODO sides
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap =
-					Minecraft.getInstance().world.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().world.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
 			IRecipe recipe = recipeMap.get(location);
 			if (recipe != null) {
 				recipes.add(recipe);

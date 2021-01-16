@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.utils.NetworkUtil;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.root.IRootDefinition;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -29,11 +23,21 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.core.ForestryEvent;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.network.packets.PacketGenomeTrackerSync;
+import forestry.core.utils.NetworkUtil;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
@@ -76,12 +80,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		}
 	}
 
-	private static void writeValuesToNBT(
-			CompoundNBT CompoundNBT,
-			Collection<String> values,
-			String countKey,
-			String key
-	) {
+	private static void writeValuesToNBT(CompoundNBT CompoundNBT, Collection<String> values, String countKey, String key) {
 		final int count = values.size();
 		CompoundNBT.putInt(countKey, count);
 		Iterator<String> iterator = values.iterator();
@@ -232,11 +231,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	 */
 	protected abstract String speciesRootUID();
 
-	private void syncToPlayer(
-			Collection<String> discoveredSpecies,
-			Collection<String> discoveredMutations,
-			Collection<String> researchedMutations
-	) {
+	private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
 		if (world != null && username != null && username.getName() != null) {
 			PlayerEntity player = world.getPlayerByUuid(username.getId());
 			if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
@@ -270,12 +265,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		return CompoundNBT;
 	}
 
-	private void writeToNBT(
-			CompoundNBT CompoundNBT,
-			Collection<String> discoveredSpecies,
-			Collection<String> discoveredMutations,
-			Collection<String> researchedMutations
-	) {
+	private void writeToNBT(CompoundNBT CompoundNBT, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
 		if (modeName != null && !modeName.isEmpty()) {
 			CompoundNBT.putString(MODE_NAME_KEY, modeName);
 		}

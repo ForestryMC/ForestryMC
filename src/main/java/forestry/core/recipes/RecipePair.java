@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.recipes;
 
-import forestry.api.recipes.IForestryRecipe;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.NonNullList;
 
-import javax.annotation.Nullable;
+import forestry.api.recipes.IForestryRecipe;
+import forestry.core.utils.InventoryUtil;
 
 public class RecipePair<R extends IForestryRecipe> {
 

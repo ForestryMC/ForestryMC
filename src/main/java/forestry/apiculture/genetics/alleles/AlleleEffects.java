@@ -1,14 +1,14 @@
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.IAlleleBeeEffect;
-
-import genetics.api.alleles.IAlleleRegistry;
+import java.util.Arrays;
+import java.util.List;
 
 import net.minecraft.potion.Effects;
 
-import java.util.Arrays;
-import java.util.List;
+import genetics.api.alleles.IAlleleRegistry;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.IAlleleBeeEffect;
 
 public class AlleleEffects {
 	public static final IAlleleBeeEffect effectNone;
@@ -48,14 +48,8 @@ public class AlleleEffects {
 				effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
 				effectSnowing = new AlleleEffectSnowing(),
 				effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
-				effectReanimation = new AlleleEffectResurrection(
-						"reanimation",
-						AlleleEffectResurrection.getReanimationList()
-				),
-				effectResurrection = new AlleleEffectResurrection(
-						"resurrection",
-						AlleleEffectResurrection.getResurrectionList()
-				),
+				effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
+				effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
 				effectRepulsion = new AlleleEffectRepulsion(),
 				effectFertile = new AlleleEffectFertile(),
 				effectMycophilic = new AlleleEffectFungification()

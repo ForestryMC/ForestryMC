@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,30 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -31,28 +53,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
 	private final FilteredTank resourceTank;
@@ -246,10 +246,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	public void checkRecipe() {
 		if (this.hasWorld()) {
-			IMoistenerRecipe sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(
-					this.getWorld().getRecipeManager(),
-					getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-			);
+			IMoistenerRecipe sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(this.getWorld().getRecipeManager(), getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
 			if (currentRecipe != sameRec) {
 				currentRecipe = sameRec;
 				resetRecipe();
@@ -304,12 +301,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	private int getFreeReservoirSlot(ItemStack deposit) {
-		return getFreeSlot(
-				deposit,
-				InventoryMoistener.SLOT_RESERVOIR_1,
-				InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT,
-				false
-		);
+		return getFreeSlot(deposit, InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT, false);
 
 	}
 
@@ -373,10 +365,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 
 		// Let's look for a new resource to put into the working slot.
-		int resourceSlot = getNextResourceSlot(
-				InventoryMoistener.SLOT_RESERVOIR_1,
-				InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT
-		);
+		int resourceSlot = getNextResourceSlot(InventoryMoistener.SLOT_RESERVOIR_1, InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT);
 		// Nothing found, stop.
 		if (errorLogic.setCondition(resourceSlot < 0, EnumErrorCode.NO_RESOURCE)) {
 			return false;
@@ -389,8 +378,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	private void rotateReservoir() {
 		ArrayList<Integer> slotsToShift = new ArrayList<>();
 		for (
-				int i = InventoryMoistener.SLOT_RESERVOIR_1;
-				i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
+				int i = InventoryMoistener.SLOT_RESERVOIR_1; i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
 			if (getStackInSlot(i).isEmpty()) {
 				continue;
 			}
@@ -471,9 +459,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			return false;
 		}
 
-		return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-				.getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-				.getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	public boolean isProducing() {

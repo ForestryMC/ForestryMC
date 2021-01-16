@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.utils.Log;
 
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
 	private final Class<T> controllerClass;
@@ -62,12 +62,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	public final void assertDetached(IMultiblockComponent part) {
 		if (this.controller != null) {
 			BlockPos coords = part.getCoordinates();
-			Log.info(
-					"[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.",
-					coords.getX(),
-					coords.getY(),
-					coords.getZ()
-			);
+			Log.info("[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.", coords.getX(), coords.getY(), coords.getZ());
 			this.controller = null;
 		}
 	}

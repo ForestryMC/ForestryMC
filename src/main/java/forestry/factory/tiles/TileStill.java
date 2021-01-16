@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,26 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.IStillRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerStill;
-import forestry.factory.inventory.InventoryStill;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,8 +33,21 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.api.recipes.IStillRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.TankRenderInfo;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerStill;
+import forestry.factory.inventory.InventoryStill;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
@@ -115,10 +115,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 		if (hasRecipe) {
 			FluidStack fluidStack = currentRecipe.getOutput();
-			hasTankSpace = productTank.fillInternal(
-					fluidStack,
-					IFluidHandler.FluidAction.SIMULATE
-			) == fluidStack.getAmount();
+			hasTankSpace = productTank.fillInternal(fluidStack, IFluidHandler.FluidAction.SIMULATE) == fluidStack.getAmount();
 			if (bufferedLiquid.isEmpty()) {
 				int cycles = currentRecipe.getCyclesPerUnit();
 				FluidStack input = currentRecipe.getInput();
@@ -149,14 +146,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 
 			FluidStack fluidStack = productTank.getFluid();
 			if (!fluidStack.isEmpty()) {
-				FluidHelper.fillContainers(
-						tankManager,
-						this,
-						InventoryStill.SLOT_RESOURCE,
-						InventoryStill.SLOT_PRODUCT,
-						fluidStack.getFluid(),
-						true
-				);
+				FluidHelper.fillContainers(tankManager, this, InventoryStill.SLOT_RESOURCE, InventoryStill.SLOT_PRODUCT, fluidStack.getFluid(), true);
 			}
 		}
 	}
@@ -188,8 +178,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return LazyOptional.of(() -> tankManager)
-					.cast();    //TODO - still unsure if this is the correct pattern for caps
+			return LazyOptional.of(() -> tankManager).cast();    //TODO - still unsure if this is the correct pattern for caps
 		}
 		return super.getCapability(capability, facing);
 	}

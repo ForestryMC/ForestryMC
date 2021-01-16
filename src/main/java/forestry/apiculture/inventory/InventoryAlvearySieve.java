@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.inventory;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.features.CoreItems;
@@ -16,9 +19,6 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.utils.ItemStackUtil;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 
 public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve> implements ISlotPickupWatcher {
 	public static final int SLOT_POLLEN_1 = 0;
@@ -31,10 +31,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.isIdenticalItem(
-				CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1),
-				itemStack
-		);
+		return ItemStackUtil.isIdenticalItem(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1), itemStack);
 	}
 
 	public boolean canStorePollen() {

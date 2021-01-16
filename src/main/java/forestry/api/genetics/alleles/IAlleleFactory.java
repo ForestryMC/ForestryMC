@@ -1,13 +1,13 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import forestry.api.genetics.flowers.IFlowerProvider;
-
 import genetics.api.individual.IChromosomeType;
+
+import forestry.api.genetics.flowers.IFlowerProvider;
 
 /**
  * Creates new alleles with smart localization.
@@ -45,12 +45,5 @@ public interface IAlleleFactory {
 	 * IAlleleFlowers localization is handled by the IFlowerProvider.getDescription(), unlike the other alleles.
 	 * @since Forestry 4.2
 	 */
-	IAlleleFlowers createFlowers(
-			String modId,
-			String category,
-			String valueName,
-			IFlowerProvider value,
-			boolean isDominant,
-			IChromosomeType... types
-	);
+	IAlleleFlowers createFlowers(String modId, String category, String valueName, IFlowerProvider value, boolean isDominant, IChromosomeType... types);
 }

@@ -1,17 +1,17 @@
 package forestry.modules.features;
 
-import forestry.api.core.IBlockSubtype;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItem;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.BlockItem;
+
+import forestry.api.core.IBlockSubtype;
 
 public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends FeatureGroup<FeatureBlockGroup.Builder<B, S>, FeatureBlock<B, BlockItem>, S> {
 
@@ -21,11 +21,7 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 
 	@Override
 	protected FeatureBlock<B, BlockItem> createFeature(Builder<B, S> builder, S type) {
-		return builder.registry.block(
-				() -> builder.constructor.apply(type),
-				builder.itemConstructor != null ? (block) -> builder.itemConstructor.apply(block, type) : null,
-				builder.getIdentifier(type)
-		);
+		return builder.registry.block(() -> builder.constructor.apply(type), builder.itemConstructor != null ? (block) -> builder.itemConstructor.apply(block, type) : null, builder.getIdentifier(type));
 	}
 
 	public Collection<B> getBlocks() {
@@ -33,16 +29,12 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 	}
 
 	public Collection<BlockItem> getItems() {
-		return featureByType.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(
-				Collectors.toList());
+		return featureByType.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(Collectors.toList());
 	}
 
 	@Nullable
 	public BlockState findState(String typeName) {
-		Optional<FeatureBlock> block = featureByType.entrySet().stream()
-				.filter(e -> e.getKey().getString().equals(typeName))
-				.findFirst()
-				.flatMap(e -> Optional.of(e.getValue()));
+		Optional<FeatureBlock> block = featureByType.entrySet().stream().filter(e -> e.getKey().getString().equals(typeName)).findFirst().flatMap(e -> Optional.of(e.getValue()));
 		return block.map(FeatureBlock::defaultState).orElse(null);
 	}
 

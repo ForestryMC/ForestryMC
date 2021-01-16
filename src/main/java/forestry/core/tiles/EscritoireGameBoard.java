@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
-import forestry.api.core.INbtWritable;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -22,13 +29,10 @@ import genetics.api.individual.IKaryotype;
 import genetics.api.root.IIndividualRoot;
 import genetics.utils.RootUtils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.*;
+import forestry.api.core.INbtWritable;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 
 public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	private static final Random rand = new Random();

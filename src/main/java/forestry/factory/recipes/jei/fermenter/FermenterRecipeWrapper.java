@@ -1,5 +1,14 @@
 package forestry.factory.recipes.jei.fermenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
@@ -8,15 +17,6 @@ import forestry.core.recipes.jei.ForestryRecipeWrapper;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterRecipe> {
 	private final ItemStack fermentable;
@@ -33,10 +33,7 @@ public class FermenterRecipeWrapper extends ForestryRecipeWrapper<IFermenterReci
 			fuelInputs.add(fuel.getItem());
 		}
 
-		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(
-				Collections.singletonList(fermentable),
-				fuelInputs
-		));
+		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Collections.singletonList(fermentable), fuelInputs));
 
 		FluidStack fluidInput = getRecipe().getFluidResource().copy();
 		fluidInput.setAmount(getRecipe().getFermentationValue());

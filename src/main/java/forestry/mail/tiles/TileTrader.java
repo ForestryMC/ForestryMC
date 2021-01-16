@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,25 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.tiles;
 
 import com.google.common.base.Preconditions;
+
+import java.io.IOException;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.server.ServerWorld;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.mail.IMailAddress;
@@ -32,21 +47,6 @@ import forestry.mail.gui.ContainerTradeName;
 import forestry.mail.gui.ContainerTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.server.ServerWorld;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.io.IOException;
 
 public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -83,21 +83,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		ItemStack tradeGood = inventory.getStackInSlot(TradeStation.SLOT_TRADEGOOD);
 		errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
 
-		boolean hasRequest = hasItemCount(
-				TradeStation.SLOT_EXCHANGE_1,
-				TradeStation.SLOT_EXCHANGE_COUNT,
-				ItemStack.EMPTY,
-				1
-		);
+		boolean hasRequest = hasItemCount(TradeStation.SLOT_EXCHANGE_1, TradeStation.SLOT_EXCHANGE_COUNT, ItemStack.EMPTY, 1);
 		errorLogic.setCondition(!hasRequest, EnumErrorCode.NO_TRADE);
 
 		if (!tradeGood.isEmpty()) {
-			boolean hasSupplies = hasItemCount(
-					TradeStation.SLOT_SEND_BUFFER,
-					TradeStation.SLOT_SEND_BUFFER_COUNT,
-					tradeGood,
-					tradeGood.getCount()
-			);
+			boolean hasSupplies = hasItemCount(TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.getCount());
 			errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
 		}
 
@@ -167,11 +157,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(
-				(ServerWorld) world,
-				getOwnerHandler().getOwner(),
-				address
-		);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerWorld) world, getOwnerHandler().getOwner(), address);
 	}
 
 	/* STATE INFORMATION */
@@ -247,12 +233,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	//	}
 
 	public boolean hasPaperMin(int count) {
-		return hasItemCount(
-				TradeStation.SLOT_LETTERS_1,
-				TradeStation.SLOT_LETTERS_COUNT,
-				new ItemStack(Items.PAPER),
-				count
-		);
+		return hasItemCount(TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.PAPER), count);
 	}
 
 	public boolean hasPostageMin(int postage) {

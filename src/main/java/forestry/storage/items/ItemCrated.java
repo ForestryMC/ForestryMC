@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage.items;
-
-import forestry.api.core.ItemGroups;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.ItemStackUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
@@ -28,7 +23,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ItemGroups;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.ItemStackUtil;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
@@ -54,14 +52,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 
 			ItemStack dropStack = contained.copy();
 			dropStack.setCount(9);
-			ItemStackUtil.dropItemStackAsEntity(
-					dropStack,
-					worldIn,
-					playerIn.getPosX(),
-					playerIn.getPosY(),
-					playerIn.getPosZ(),
-					40
-			);
+			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
 		}
 		return ActionResult.resultSuccess(heldItem);
 	}

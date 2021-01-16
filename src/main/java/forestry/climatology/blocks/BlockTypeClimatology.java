@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology.blocks;
+
+import java.util.function.Supplier;
 
 import forestry.climatology.features.ClimatologyTiles;
 import forestry.core.blocks.IBlockTypeCustom;
@@ -16,8 +18,6 @@ import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.MachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
-
-import java.util.function.Supplier;
 
 public enum BlockTypeClimatology implements IBlockTypeCustom {
 	HABITAT_FORMER(() -> ClimatologyTiles.HABITAT_FORMER, "habitat_former");

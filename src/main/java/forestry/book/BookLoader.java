@@ -1,17 +1,23 @@
 package forestry.book;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-import forestry.api.book.*;
-import forestry.book.data.EntryData;
-import forestry.book.data.content.*;
-import forestry.book.data.deserializer.BookCategoryDeserializer;
-import forestry.book.data.deserializer.BookContentDeserializer;
-import forestry.book.pages.JsonPageFactory;
-import forestry.core.utils.JsonUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.ResourceUtil;
-import forestry.modules.ModuleHelper;
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Language;
@@ -25,36 +31,32 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import org.apache.commons.io.IOUtils;
-
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.*;
+import forestry.api.book.BookContent;
+import forestry.api.book.IBookEntryBuilder;
+import forestry.api.book.IBookLoader;
+import forestry.api.book.IBookPageFactory;
+import forestry.api.book.IForesterBook;
+import forestry.book.data.EntryData;
+import forestry.book.data.content.CarpenterContent;
+import forestry.book.data.content.CraftingContent;
+import forestry.book.data.content.FabricatorContent;
+import forestry.book.data.content.ImageContent;
+import forestry.book.data.content.IndexContent;
+import forestry.book.data.content.MutationContent;
+import forestry.book.data.content.StructureContent;
+import forestry.book.data.content.TextContent;
+import forestry.book.data.deserializer.BookCategoryDeserializer;
+import forestry.book.data.deserializer.BookContentDeserializer;
+import forestry.book.pages.JsonPageFactory;
+import forestry.core.utils.JsonUtil;
+import forestry.core.utils.Log;
+import forestry.core.utils.ResourceUtil;
+import forestry.modules.ModuleHelper;
 
 //TODO use selective resource reloader
 @OnlyIn(Dist.CLIENT)
 public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
-	public static final Gson GSON = new GsonBuilder()
-			.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
-			.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
-			.registerTypeAdapter(
-					ResourceLocation.class,
-					(JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(
-							json,
-							"location"
-					))
-			)
-			.registerTypeAdapter(
-					ItemStack.class,
-					(JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(
-							json.getAsJsonObject(),
-							ItemStack.EMPTY
-					)
-			)
-			.registerTypeAdapter(Entries.class, new EntriesDeserializer())
-			.create();
+	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(BookContent.class, new BookContentDeserializer()).registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer()).registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location"))).registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY)).registerTypeAdapter(Entries.class, new EntriesDeserializer()).create();
 	public static final BookLoader INSTANCE = new BookLoader();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
@@ -124,11 +126,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 			return book;
 		}
 		book = new ForesterBook();
-		BookCategory[] categories = fromJson(
-				BOOK_LOCATION + "categories.json",
-				BookCategory[].class,
-				new BookCategory[0]
-		);
+		BookCategory[] categories = fromJson(BOOK_LOCATION + "categories.json", BookCategory[].class, new BookCategory[0]);
 		if (categories != null) {
 			book.addCategories(categories);
 			for (BookCategory category : categories) {
@@ -149,8 +147,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	}
 
 	private void loadCategory(BookCategory category) {
-		ResourceLocation entriesLocation = new ResourceLocation(
-				BOOK_LOCATION + "entries/" + category.getName() + ".json");
+		ResourceLocation entriesLocation = new ResourceLocation(BOOK_LOCATION + "entries/" + category.getName() + ".json");
 		List<String> entryNames = new LinkedList<>();
 		for (IResource entryResource : ResourceUtil.getResources(entriesLocation)) {
 			try (BufferedReader reader = ResourceUtil.createReader(entryResource)) {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.utils.datastructures.Stack;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,10 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import forestry.core.utils.datastructures.Stack;
 
 public abstract class ItemStackUtil {
 
@@ -166,11 +166,7 @@ public abstract class ItemStackUtil {
 	/**
 	 * Counts how many full sets are contained in the passed stock
 	 */
-	public static int containsSets(
-			NonNullList<ItemStack> set,
-			NonNullList<ItemStack> stock,
-			boolean craftingTools
-	) {
+	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, boolean craftingTools) {
 		int totalSets = 0;
 
 		NonNullList<ItemStack> condensedRequiredStacks = ItemStackUtil.condenseStacks(set);
@@ -282,14 +278,7 @@ public abstract class ItemStackUtil {
 		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
 	}
 
-	public static void dropItemStackAsEntity(
-			ItemStack items,
-			World world,
-			double x,
-			double y,
-			double z,
-			int delayForPickup
-	) {
+	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
 		if (items.isEmpty() || world.isRemote) {
 			return;
 		}
@@ -325,8 +314,7 @@ public abstract class ItemStackUtil {
 	}
 
 	public static boolean equals(BlockState state, ItemStack stack) {
-		return state.getBlock() ==
-				getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
+		return state.getBlock() == getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {

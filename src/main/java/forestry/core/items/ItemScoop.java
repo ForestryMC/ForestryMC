@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,25 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
-
-import forestry.api.core.IToolScoop;
-import forestry.api.core.ItemGroups;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.common.ToolType;
 
+import forestry.api.core.IToolScoop;
+import forestry.api.core.ItemGroups;
+
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public final static ToolType SCOOP = ToolType.get("scoop");
 
 	public ItemScoop() {
-		super(ItemStack.EMPTY, (new Item.Properties())
-				.maxDamage(10)
-				.group(ItemGroups.tabApiculture)
-				.addToolType(SCOOP, 3));
+		super(ItemStack.EMPTY, (new Item.Properties()).maxDamage(10).group(ItemGroups.tabApiculture).addToolType(SCOOP, 3));
 		setEfficiencyOnProperMaterial(2.0f);
 	}
 }

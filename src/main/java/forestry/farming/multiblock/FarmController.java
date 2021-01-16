@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,30 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.multiblock;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -43,25 +62,6 @@ import forestry.farming.FarmTarget;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class FarmController extends RectangularMultiblockControllerBase implements IFarmControllerInternal, ILiquidTankTile {
 	// active components are stored with a tick offset so they do not all tick together
@@ -195,27 +195,21 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		if (!hasGearbox) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.farm.error.needGearbox").getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.farm.error.needGearbox").getString());
 		}
 	}
 
 	@Override
 	public void isGoodForExteriorLevel(IMultiblockComponent part, int level) throws MultiblockValidationException {
 		if (level == 2 && !(part instanceof TileFarmPlain)) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.farm.error.needPlainBand").getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.farm.error.needPlainBand").getString());
 		}
 	}
 
 	@Override
 	public void isGoodForInterior(IMultiblockComponent part) throws MultiblockValidationException {
 		if (!(part instanceof TileFarmPlain)) {
-			throw new MultiblockValidationException(
-					new TranslationTextComponent("for.multiblock.farm.error.needPlainInterior").getString()
-			);
+			throw new MultiblockValidationException(new TranslationTextComponent("for.multiblock.farm.error.needPlainInterior").getString());
 		}
 	}
 
@@ -439,17 +433,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		// Set the maximum allowed extent.
 		allowedExtent = Math.max(sizeNorthSouth, sizeEastWest) * Config.farmSize + 1;
 
-		FarmHelper.createTargets(
-				world,
-				this,
-				targets,
-				targetStart,
-				allowedExtent,
-				sizeNorthSouth,
-				sizeEastWest,
-				min,
-				max
-		);
+		FarmHelper.createTargets(world, this, targets, targetStart, allowedExtent, sizeNorthSouth, sizeEastWest, min, max);
 		FarmHelper.setExtents(world, this, targets);
 	}
 

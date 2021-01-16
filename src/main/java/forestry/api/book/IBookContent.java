@@ -1,13 +1,13 @@
 package forestry.api.book;
 
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import javax.annotation.Nullable;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 @OnlyIn(Dist.CLIENT)
 public interface IBookContent {
@@ -26,11 +26,5 @@ public interface IBookContent {
 	 * @param pageHeight      The max height of the current page.
 	 * @return True if you added an element.
 	 */
-	boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	);
+	boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
 }

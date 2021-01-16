@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
-import forestry.api.mail.ILetter;
-import forestry.api.mail.IMailAddress;
-import forestry.api.mail.IStamps;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,11 +24,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import org.apache.commons.lang3.StringUtils;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IStamps;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.InventoryUtil;
 
 public class Letter implements ILetter {
 	public static final short SLOT_ATTACHMENT_1 = 0;
@@ -150,14 +150,10 @@ public class Letter implements ILetter {
 	@Override
 	public void addTooltip(List<ITextComponent> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(new TranslationTextComponent("for.gui.mail.from")
-					.appendString(": " + this.sender.getName())
-					.mergeStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent("for.gui.mail.from").appendString(": " + this.sender.getName()).mergeStyle(TextFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(new TranslationTextComponent("for.gui.mail.to")
-					.appendString(": " + this.getRecipientString())
-					.mergeStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent("for.gui.mail.to").appendString(": " + this.getRecipientString()).mergeStyle(TextFormatting.GRAY));
 		}
 	}
 

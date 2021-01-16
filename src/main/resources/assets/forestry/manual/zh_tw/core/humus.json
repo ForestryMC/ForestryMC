@@ -1,0 +1,28 @@
+{
+	"title": "腐殖土",
+	"icon": {
+		"item": "forestry:humus"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:compost_humus",
+					"forestry:fertilizer_humus"
+				]
+			},
+			{
+				"text": "富饒的土壤，不需要水即可栽種作物。隨著肥力下降，會逐漸降解成沙子。"
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:humus"
+				}
+			}
+		]
+	]
+}

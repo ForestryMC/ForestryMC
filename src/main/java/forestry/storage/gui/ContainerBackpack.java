@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage.gui;
-
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.storage.features.BackpackContainers;
-import forestry.storage.inventory.ItemInventoryBackpack;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.storage.features.BackpackContainers;
+import forestry.storage.inventory.ItemInventoryBackpack;
 
 //TODO it may be simpler to split this up into two containerTypes. One for normal size and one for t2
 public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackpack> {
@@ -26,14 +26,7 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 	private final Size size;
 
 	public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
-		super(
-				windowID,
-				new ItemInventoryBackpack(player, size.getSize(), parent),
-				player.inventory,
-				8,
-				11 + size.startY + size.rows * 18,
-				BackpackContainers.BACKPACK.containerType()
-		);
+		super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, BackpackContainers.BACKPACK.containerType());
 		this.size = size;
 		// Inventory
 		for (int j = 0; j < size.rows; j++) {
@@ -55,8 +48,7 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 	}
 
 	public enum Size {
-		DEFAULT(3, 5, 44, 19),
-		T2(5, 9, 8, 8);
+		DEFAULT(3, 5, 44, 19), T2(5, 9, 8, 8);
 
 		final int rows;
 		final int columns;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
+
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -30,16 +40,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelTransform;
 
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Supplier;
-
 /**
  * Util methods used at the installation of the game or at the reloading or baking of resources like models or
  * textures.
@@ -51,10 +51,7 @@ public class ResourceUtil {
 	}
 
 	public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(
-				() -> new TranslationTextComponent(optionalKey),
-				() -> new TranslationTextComponent(defaultKey)
-		);
+		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
 	}
 
 	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
@@ -70,10 +67,7 @@ public class ResourceUtil {
 	 *
 	 * @return The optional component if it can be translated the other component otherwise.
 	 */
-	public static ITextComponent tryTranslate(
-			Supplier<TranslationTextComponent> optionalKey,
-			Supplier<ITextComponent> defaultKey
-	) {
+	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
 		TranslationTextComponent component = optionalKey.get();
 		if (canTranslate(component)) {
 			return component;
@@ -167,10 +161,7 @@ public class ResourceUtil {
 	}
 
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
-		ResourceLocation file = new ResourceLocation(
-				location.getNamespace(),
-				"models/" + location.getPath() + ".json"
-		);
+		ResourceLocation file = new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json");
 		IResource iresource = resourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
 	}

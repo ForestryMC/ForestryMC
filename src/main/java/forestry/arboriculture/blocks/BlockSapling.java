@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -33,19 +35,18 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
 	public BlockSapling() {
-		super(Block.Properties.create(Material.PLANTS)
-				.doesNotBlockMovement()
-				.hardnessAndResistance(0.0F)
-				.sound(SoundType.PLANT));
+		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
 	}
 
 	/* PLANTING */
@@ -93,14 +94,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public void neighborChanged(
-			BlockState state,
-			World worldIn,
-			BlockPos pos,
-			Block blockIn,
-			BlockPos fromPos,
-			boolean p_220069_6_
-	) {
+	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
 		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
 			dropAsSapling(worldIn, pos);
@@ -118,24 +112,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public VoxelShape getShape(
-			BlockState blockState,
-			IBlockReader blockReader,
-			BlockPos pos,
-			ISelectionContext context
-	) {
+	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
 		return SHAPE;
 	}
 
 	@Override
-	public boolean removedByPlayer(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			PlayerEntity player,
-			boolean willHarvest,
-			FluidState fluid
-	) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
 		if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
 			if (!player.isCreative()) {
 				dropAsSapling(world, pos);
@@ -146,13 +128,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public ItemStack getPickBlock(
-			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
-			BlockPos pos,
-			PlayerEntity player
-	) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null || sapling.getTree() == null) {
 			return ItemStack.EMPTY;

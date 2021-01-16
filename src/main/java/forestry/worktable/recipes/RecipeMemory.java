@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.worktable.recipes;
 
-import forestry.api.core.INbtWritable;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.LinkedList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -22,9 +22,9 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.LinkedList;
+import forestry.api.core.INbtWritable;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 

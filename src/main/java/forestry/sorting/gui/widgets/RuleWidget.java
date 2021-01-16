@@ -2,6 +2,16 @@ package forestry.sorting.gui.widgets;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Collection;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -14,16 +24,6 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.Collection;
 
 public class RuleWidget extends Widget implements ISelectableProvider<IFilterRuleType> {
 	private static final ImmutableSet<IFilterRuleType> ENTRIES = createEntries();

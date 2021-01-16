@@ -1,13 +1,13 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics;
 
-import genetics.api.individual.IIndividual;
-
 import net.minecraftforge.common.PlantType;
+
+import genetics.api.individual.IIndividual;
 
 /**
  * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.

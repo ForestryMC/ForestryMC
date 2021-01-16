@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -23,6 +17,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 
@@ -59,13 +59,7 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 		render(Direction.SOUTH, 0, 0, helper, helper.partialTicks);
 	}
 
-	public void render(
-			Direction orientation,
-			float prevLidAngle,
-			float lidAngle,
-			RenderHelper helper,
-			float partialTick
-	) {
+	public void render(Direction orientation, float prevLidAngle, float lidAngle, RenderHelper helper, float partialTick) {
 		helper.push();
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		helper.translate(0.5D, 0.5D, 0.5D);

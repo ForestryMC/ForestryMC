@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
 
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.items.ItemForestry;
-
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,9 +26,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.items.ItemForestry;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(Item.Properties properties) {
@@ -55,26 +55,18 @@ public abstract class ItemGE extends ItemForestry {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
 
-		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack)
-				.filter(IIndividual::isAnalyzed);
+		Optional<IIndividual> optionalIndividual = GeneticHelper.getIndividual(itemstack).filter(IIndividual::isAnalyzed);
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (Screen.hasShiftDown()) {
 				individual.addTooltip(list);
 			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >")
-						.mergeStyle(TextFormatting.GRAY)
-						.mergeStyle(TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
 			}
 		} else {
 			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));

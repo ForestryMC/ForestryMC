@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.entities;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -17,9 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.vector.Vector3d;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 public class AIAvoidPlayers extends Goal {
 
@@ -58,9 +58,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-				player.getPositionVec()
-		);
+		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7, player.getPositionVec());
 
 		if (randomTarget == null) {
 			return false;
@@ -70,12 +68,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		path = pathNavigator.getPathToPos(
-				randomTarget.x,
-				randomTarget.y,
-				randomTarget.z,
-				0
-		);
+		path = pathNavigator.getPathToPos(randomTarget.x, randomTarget.y, randomTarget.z, 0);
 		return path != null;
 	}
 

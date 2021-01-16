@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,24 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.tiles;
+
+import java.io.IOException;
+import java.util.Collection;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.blocks.BlockBase;
@@ -24,22 +40,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-
-import java.io.IOException;
-import java.util.Collection;
 
 //import net.minecraftforge.fml.common.Optional;
 
@@ -251,8 +251,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 
 		IInventoryAdapter inventory = getInternalInventory();
-		return (float) inventory.getStackInSlot(fuelSlot).getCount() /
-				(float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(fuelSlot).getCount() / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
 	}
 
 	@Override

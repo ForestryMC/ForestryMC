@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -19,13 +21,12 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import javax.annotation.Nullable;
-
 public class BottlerRecipe {
 	public final FluidStack fluid;
 	public final ItemStack inputStack;
 	public final ItemStack outputStack;
 	public final boolean fillRecipe;
+
 	public BottlerRecipe(ItemStack inputStack, FluidStack fluid, ItemStack outputStack, boolean fillRecipe) {
 		this.fluid = fluid;
 		this.inputStack = inputStack;

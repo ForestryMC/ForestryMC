@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.ScreenManager;
+
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
@@ -22,12 +28,6 @@ import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-
-import net.minecraft.client.gui.ScreenManager;
-
-import net.minecraftforge.fml.DistExecutor;
-
-import javax.annotation.Nullable;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.energy.description")
 public class ModuleEnergy extends BlankForestryModule {

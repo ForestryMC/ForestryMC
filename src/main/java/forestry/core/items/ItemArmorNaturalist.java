@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Constants;
-import forestry.core.utils.ItemTooltipUtil;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -33,15 +31,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Constants;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemArmorNaturalist extends ArmorItem {
 
 	public ItemArmorNaturalist() {
-		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties())
-				.maxDamage(100)
-				.group(ItemGroupForestry.tabForestry));
+		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties()).maxDamage(100).group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override
@@ -55,8 +53,7 @@ public class ItemArmorNaturalist extends ArmorItem {
 
 			@Override
 			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-						slot == EquipmentSlotType.HEAD) {
+				if (capability == ArboricultureCapabilities.ARMOR_NATURALIST && slot == EquipmentSlotType.HEAD) {
 					return LazyOptional.of(capability::getDefaultInstance);
 				}
 				return LazyOptional.empty();
@@ -66,12 +63,7 @@ public class ItemArmorNaturalist extends ArmorItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack stack,
-			@Nullable World world,
-			List<ITextComponent> tooltip,
-			ITooltipFlag advanced
-	) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 

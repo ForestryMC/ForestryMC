@@ -1,10 +1,8 @@
 package forestry.core.network;
 
-import forestry.api.climate.IClimateState;
-import forestry.core.climate.AbsentClimateState;
-import forestry.core.climate.ClimateStateHelper;
-
-import io.netty.buffer.ByteBuf;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
@@ -15,9 +13,11 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.List;
+import forestry.api.climate.IClimateState;
+import forestry.core.climate.AbsentClimateState;
+import forestry.core.climate.ClimateStateHelper;
+
+import io.netty.buffer.ByteBuf;
 
 public class PacketBufferForestry extends PacketBuffer {
 	public PacketBufferForestry(ByteBuf wrapped) {
@@ -127,8 +127,7 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 	}
 
-	public <T extends IStreamable> void readStreamables(List<T> outputList, IStreamableFactory<T> factory) throws
-			IOException {
+	public <T extends IStreamable> void readStreamables(List<T> outputList, IStreamableFactory<T> factory) throws IOException {
 		outputList.clear();
 		int length = readVarInt();
 		if (length > 0) {

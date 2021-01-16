@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import forestry.api.circuits.ChipsetManager;
-import forestry.api.circuits.ICircuit;
-import forestry.api.circuits.ICircuitLayout;
-import forestry.core.ItemGroupForestry;
-import forestry.core.config.Config;
-import forestry.core.utils.ItemTooltipUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -35,9 +32,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.core.ItemGroupForestry;
+import forestry.core.config.Config;
+import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemElectronTube extends ItemOverlay {
 	private final EnumElectronTube type;
@@ -53,11 +53,7 @@ public class ItemElectronTube extends ItemOverlay {
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			World world = Minecraft.getInstance().world;
 			if (world != null) {
-				ICircuit circuit = ChipsetManager.solderManager.getCircuit(
-						world.getRecipeManager(),
-						circuitLayout,
-						itemStack
-				);
+				ICircuit circuit = ChipsetManager.solderManager.getCircuit(world.getRecipeManager(), circuitLayout, itemStack);
 				if (circuit != null) {
 					circuits.put(circuitLayout, circuit);
 				}
@@ -72,12 +68,7 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
@@ -92,9 +83,7 @@ public class ItemElectronTube extends ItemOverlay {
 				ItemTooltipUtil.addShiftInformation(itemstack, world, list, flag);
 			}
 		} else {
-			list.add(new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.noeffect")
-							.appendString(">").mergeStyle(TextFormatting.GRAY)));
+			list.add(new StringTextComponent("<").append(new TranslationTextComponent("for.gui.noeffect").appendString(">").mergeStyle(TextFormatting.GRAY)));
 		}
 	}
 

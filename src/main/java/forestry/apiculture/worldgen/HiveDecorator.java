@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.apiculture.ModuleApiculture;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.utils.Log;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,9 +23,12 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.apiculture.ModuleApiculture;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.Log;
 
 public class HiveDecorator extends Feature<NoFeatureConfig> {
 	public HiveDecorator() {
@@ -96,13 +96,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 			return false;
 		}
 
-		hiveBlock.onBlockAdded(
-				state,
-				world.getWorld(),
-				pos,
-				hiveState,
-				false
-		);
+		hiveBlock.onBlockAdded(state, world.getWorld(), pos, hiveState, false);
 
 		if (!Config.generateBeehivesDebug) {
 			hive.postGen(world, rand, pos);
@@ -116,13 +110,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean generate(
-			ISeedReader seedReader,
-			ChunkGenerator generator,
-			Random rand,
-			BlockPos pos,
-			NoFeatureConfig config
-	) {
+	public boolean generate(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {

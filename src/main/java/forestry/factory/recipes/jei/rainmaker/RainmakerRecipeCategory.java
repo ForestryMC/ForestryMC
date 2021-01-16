@@ -1,5 +1,8 @@
 package forestry.factory.recipes.jei.rainmaker;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
@@ -13,9 +16,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRecipeWrapper> {
 	private static final int SLOT_INPUT_INDEX = 0;
 	private final IDrawable slot;
@@ -24,9 +24,7 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
 	public RainmakerRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker");
 		this.slot = guiHelper.getSlotDrawable();
-		this.icon = guiHelper.createDrawableIngredient(
-				new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block())
-		);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block()));
 	}
 
 	@Override

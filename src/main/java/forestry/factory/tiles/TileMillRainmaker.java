@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.fuels.RainSubstrate;
-import forestry.core.render.ParticleRender;
-import forestry.core.tiles.TileMill;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.inventory.InventoryRainmaker;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +21,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.storage.IServerWorldInfo;
 
-import javax.annotation.Nullable;
+import forestry.api.fuels.RainSubstrate;
+import forestry.core.render.ParticleRender;
+import forestry.core.tiles.TileMill;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.inventory.InventoryRainmaker;
 
 public class TileMillRainmaker extends TileMill {
 	private int duration;
@@ -86,14 +86,7 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (world.isRemote) {
-			world.playSound(
-					null,
-					getPos(),
-					SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
-					SoundCategory.WEATHER,
-					10000.0F,
-					0.8F + world.rand.nextFloat() * 0.2F
-			);
+			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
 
 			float f = getPos().getX() + 0.5F;
 			float f1 = getPos().getY() + 0.0F + world.rand.nextFloat() * 6F / 16F;

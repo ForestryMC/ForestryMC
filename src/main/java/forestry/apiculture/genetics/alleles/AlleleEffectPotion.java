@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.render.ParticleRender;
-
-import genetics.api.individual.IGenome;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
@@ -29,9 +26,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.render.ParticleRender;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
@@ -40,14 +40,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	private final int duration;
 	private final float chance;
 
-	public AlleleEffectPotion(
-			String name,
-			boolean isDominant,
-			Effect potion,
-			int duration,
-			int throttle,
-			float chance
-	) {
+	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration, int throttle, float chance) {
 		super(name, isDominant, throttle, true, false);
 		this.potion = potion;
 		this.duration = duration;
@@ -104,13 +97,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
-			ParticleRender.addEntityPotionFX(
-					world,
-					beeFXCoordinates.x,
-					beeFXCoordinates.y + 0.5,
-					beeFXCoordinates.z,
-					potionFXColor
-			);
+			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
 		}
 		return storedData;
 	}

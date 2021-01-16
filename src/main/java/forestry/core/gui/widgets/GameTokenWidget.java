@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,23 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.widgets;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiUtil;
@@ -21,18 +33,6 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.EscritoireGameToken;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.SoundUtil;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 public class GameTokenWidget extends Widget {
 	private final ItemStack HIDDEN_TOKEN = new ItemStack(Items.BOOK);
@@ -84,15 +84,7 @@ public class GameTokenWidget extends Widget {
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			AbstractGui.blit(
-					transform,
-					startX + xPos + 3,
-					startY + yPos + 3,
-					manager.gui.getBlitOffset(),
-					16,
-					16,
-					icon
-			);
+			AbstractGui.blit(transform, startX + xPos + 3, startY + yPos + 3, manager.gui.getBlitOffset(), 16, 16, icon);
 		}
 
 		RenderSystem.enableDepthTest();

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic.crops;
 
 import com.google.common.collect.ImmutableCollection;
 
-import forestry.core.config.Constants;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,9 +25,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Optional;
+import forestry.core.config.Constants;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 //import forestry.plugins.PluginIC2;
 //import forestry.plugins.PluginTechReborn;
 
@@ -79,11 +79,7 @@ public class CropRubber extends CropDestroy {
 	}
 
 	@Nullable
-	private static <T extends Comparable<T>> BlockState getStateWithValue(
-			BlockState baseState,
-			Property<T> property,
-			String valueString
-	) {
+	private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, Property<T> property, String valueString) {
 		Optional<T> value = property.parseValue(valueString);
 		return value.map(t -> baseState.with(property, t)).orElse(null);
 	}
@@ -98,12 +94,7 @@ public class CropRubber extends CropDestroy {
 		//		} else if (PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(harvestBlock, PluginTechReborn.RUBBER_WOOD)) {
 		//			harvested.add(PluginTechReborn.sap.copy());
 		//		}
-		PacketFXSignal packet = new PacketFXSignal(
-				PacketFXSignal.VisualFXType.BLOCK_BREAK,
-				PacketFXSignal.SoundFXType.BLOCK_BREAK,
-				pos,
-				blockState
-		);
+		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);

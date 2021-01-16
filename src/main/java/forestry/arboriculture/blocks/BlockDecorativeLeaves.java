@@ -1,14 +1,6 @@
 package forestry.arboriculture.blocks;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.BlockUtil;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -28,21 +20,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
-import javax.annotation.Nullable;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.BlockUtil;
 
 //TODO shearing
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForgeShearable {
 	private final TreeDefinition definition;
 
 	public BlockDecorativeLeaves(TreeDefinition definition) {
-		super(Properties.create(Material.LEAVES)
-				.hardnessAndResistance(0.2f)
-				.sound(SoundType.PLANT)
-				.notSolid()
-				.setSuffocates(BlockUtil::alwaysTrue)
-				.setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() &&
-						!TreeDefinition.Willow.equals(definition))
-		);
+		super(Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).notSolid().setSuffocates(BlockUtil::alwaysTrue).setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition)));
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
 		this.definition = definition;
@@ -53,12 +46,7 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(
-			BlockState state,
-			IBlockReader worldIn,
-			BlockPos pos,
-			ISelectionContext context
-	) {
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		if (TreeDefinition.Willow.equals(definition)) {
 			return VoxelShapes.empty();
 		}
@@ -96,12 +84,7 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(
-			BlockState state,
-			@Nullable IBlockReader worldIn,
-			@Nullable BlockPos pos,
-			int tintIndex
-	) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		IGenome genome = definition.getGenome();
 
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {

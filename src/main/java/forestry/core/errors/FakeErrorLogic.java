@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
 
+import net.minecraft.network.PacketBuffer;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
-
-import net.minecraft.network.PacketBuffer;
 
 public class FakeErrorLogic implements IErrorLogic {
 

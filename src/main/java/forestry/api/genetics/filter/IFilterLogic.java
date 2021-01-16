@@ -1,9 +1,7 @@
 package forestry.api.genetics.filter;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-
-import genetics.api.alleles.IAllele;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -14,8 +12,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
+import genetics.api.alleles.IAllele;
+
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
 
 public interface IFilterLogic extends INbtWritable, INbtReadable {
 	void writeGuiData(PacketBuffer data);

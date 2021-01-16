@@ -2,6 +2,29 @@ package forestry.core.data;
 
 import com.google.common.collect.Sets;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.loot.BlockLootTables;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.BlockItem;
+import net.minecraft.loot.ConstantRange;
+import net.minecraft.loot.ItemLootEntry;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.conditions.TableBonus;
+import net.minecraft.loot.functions.SetCount;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
+
+import genetics.Log;
+
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
@@ -22,82 +45,33 @@ import forestry.modules.features.FeatureBlockGroup;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IModFeature;
 
-import genetics.Log;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.BlockItem;
-import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.TableBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
 public class ForestryBlockLootTables extends BlockLootTables {
 	private final Set<Block> knownBlocks = new HashSet<>();
 
 	public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
-		return droppingWithSilkTouchOrShears(
-				block,
-				withSurvivesExplosion(
-						block,
-						ItemLootEntry.builder(ArboricultureItems.SAPLING)
-								.acceptFunction(OrganismFunction.fromDefinition(definition))
-				).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances))
-		);
+		return droppingWithSilkTouchOrShears(block, withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING).acceptFunction(OrganismFunction.fromDefinition(definition))).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)));
 	}
 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			for (BlockDecorativeLeaves leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks()) {
-				this.registerLootTable(
-						leaves,
-						(block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES)
-				);
+				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES));
 			}
 
 			for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
-				this.registerLootTable(
-						leaves,
-						(block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES)
-				);
+				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES));
 			}
 
-			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT
-					.getFeatureByType()
-					.entrySet()) {
-				FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry
-						.getKey());
+			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
+				FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry.getKey());
 				Block defaultLeavesBlock = defaultLeaves.block();
 				Block fruitLeavesBlock = entry.getValue().block();
-				this.registerLootTable(
-						fruitLeavesBlock,
-						(block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES)
-				);
+				this.registerLootTable(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES));
 			}
 		}
 
-		registerLootTable(
-				CoreBlocks.PEAT,
-				(block) -> new LootTable.Builder()
-						.addLootPool(
-								new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))
-						)
-						.addLootPool(
-								new LootPool.Builder().acceptFunction(
-										SetCount.builder(ConstantRange.of(2))
-								).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))
-						)
-		);
+		registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))).addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2))).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))));
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
 		registerDropSelfLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());

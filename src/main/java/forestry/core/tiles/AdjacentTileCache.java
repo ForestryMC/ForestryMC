@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -92,9 +92,7 @@ public final class AdjacentTileCache {
 	}
 
 	private boolean areCoordinatesOnSide(Direction side, TileEntity target) {
-		return source.getPos().getX() + side.getXOffset() == target.getPos().getX() &&
-				source.getPos().getY() + side.getYOffset() == target.getPos().getY() &&
-				source.getPos().getZ() + side.getZOffset() == target.getPos().getZ();
+		return source.getPos().getX() + side.getXOffset() == target.getPos().getX() && source.getPos().getY() + side.getYOffset() == target.getPos().getY() && source.getPos().getZ() + side.getZOffset() == target.getPos().getZ();
 	}
 
 	@Nullable

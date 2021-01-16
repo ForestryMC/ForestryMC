@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.blocks;
-
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
-import forestry.core.blocks.properties.PropertyAllele;
-
-import genetics.utils.AlleleUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import genetics.utils.AlleleUtils;
+
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
+import forestry.core.blocks.properties.PropertyAllele;
 
 public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	private static final Map<String, IAlleleButterflyCocoon> namesMap = new HashMap<>();

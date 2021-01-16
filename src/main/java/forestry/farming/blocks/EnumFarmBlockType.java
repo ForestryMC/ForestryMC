@@ -19,11 +19,7 @@ import forestry.core.config.Constants;
 import forestry.core.utils.ResourceUtil;
 
 public enum EnumFarmBlockType implements IBlockSubtype {
-	PLAIN,
-	GEARBOX,
-	HATCH,
-	VALVE,
-	CONTROL;
+	PLAIN, GEARBOX, HATCH, VALVE, CONTROL;
 
 	public static final EnumFarmBlockType[] VALUES = values();
 
@@ -55,16 +51,7 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 	@OnlyIn(Dist.CLIENT)
 	public static void fillSprites(TextureStitchEvent.Post event) {
 		AtlasTexture map = event.getMap();
-		sprites = ImmutableList.of(
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")),
-				map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control"))
-		);
+		sprites = ImmutableList.of(map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/top")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/band")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/gears")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/hatch")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/valve")), map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/control")));
 	}
 
 	/**
@@ -98,19 +85,19 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 	}
 
 	@OnlyIn(Dist.CLIENT)
+	public static TextureAtlasSprite[] getBandSprites() {
+		TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
+		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
+		Arrays.fill(textures, band);
+		return textures;
+	}
+
+	@OnlyIn(Dist.CLIENT)
 	public TextureAtlasSprite[] getSprites() {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
 		for (int side = 0; side < textures.length; side++) {
 			textures[side] = getSprite(this, side);
 		}
-		return textures;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite[] getBandSprites() {
-		TextureAtlasSprite band = sprites == null ? ResourceUtil.getMissingTexture() : sprites.get(TYPE_BAND);
-		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
-		Arrays.fill(textures, band);
 		return textures;
 	}
 

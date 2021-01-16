@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.entities;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 import forestry.api.lepidopterology.IButterflyNursery;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.core.utils.GeneticsUtil;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class AIButterflyMate extends AIButterflyInteract {
 	@Nullable
@@ -40,8 +40,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 					if (nursery.canNurse(entity.getButterfly())) {
 						nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.world, nursery));
 						//Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
-						if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(
-								ButterflyChromosomes.FERTILITY)) {
+						if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(ButterflyChromosomes.FERTILITY)) {
 							entity.setHealth(0);
 						}
 					}
@@ -69,6 +68,24 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
+	public boolean shouldContinueExecuting() {
+		if (!super.shouldContinueExecuting()) {
+			return false;
+		}
+		if (entity.getButterfly().getMate() == null) {
+			return targetMate != null && targetMate.isAlive() && targetMate.canMate();
+		}
+		return true;
+	}
+
+	@Override
+	public void resetTask() {
+		super.resetTask();
+
+		targetMate = null;
+	}
+
+	@Override
 	protected boolean canInteract() {
 		if (entity.getButterfly().getMate() == null && entity.canMate()) {
 			return true;
@@ -89,31 +106,10 @@ public class AIButterflyMate extends AIButterflyInteract {
 		return rest != null && GeneticsUtil.canNurse(entity.getButterfly(), entity.world, rest);
 	}
 
-	@Override
-	public boolean shouldContinueExecuting() {
-		if (!super.shouldContinueExecuting()) {
-			return false;
-		}
-		if (entity.getButterfly().getMate() == null) {
-			return targetMate != null && targetMate.isAlive() && targetMate.canMate();
-		}
-		return true;
-	}
-
-	@Override
-	public void resetTask() {
-		super.resetTask();
-
-		targetMate = null;
-	}
-
 	@Nullable
 	private EntityButterfly getNearbyMate() {
 		float f = 8.0F;
-		List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(
-				EntityButterfly.class,
-				this.entity.getBoundingBox().expand(f, f, f)
-		);
+		List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(EntityButterfly.class, this.entity.getBoundingBox().expand(f, f, f));
 		double d0 = Double.MAX_VALUE;
 		EntityButterfly nextButterfly = null;
 

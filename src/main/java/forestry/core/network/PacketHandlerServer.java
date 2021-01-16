@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.network;
 
-import forestry.core.config.Constants;
+import java.io.IOException;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
@@ -21,11 +25,7 @@ import net.minecraftforge.fml.network.ICustomPacket;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
+import forestry.core.config.Constants;
 
 //import net.minecraft.util.IThreadListener;
 //import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -59,10 +59,7 @@ public class PacketHandlerServer {
 
 	public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
 		Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-		ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(
-				packetData,
-				PacketHandlerServer.CHANNEL_ID
-		);
+		ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
 		player.connection.sendPacket(payload.getThis());
 	}
 

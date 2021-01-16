@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
@@ -17,13 +24,6 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.utils.InventoryUtil;
 import forestry.factory.tiles.TileSqueezer;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.fluids.FluidStack;
 
 public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	public static final short SLOT_RESOURCE_1 = 0;

@@ -1,16 +1,16 @@
 package forestry.book.data.content;
 
+import javax.annotation.Nullable;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CarpenterElement;
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 /**
  * A book content that displays a carpenter recipe.
@@ -25,13 +25,7 @@ public class CarpenterContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
 			return false;
 		}

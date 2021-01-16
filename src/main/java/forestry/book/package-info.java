@@ -3,8 +3,8 @@
 @MethodsReturnNonnullByDefault
 package forestry.book;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import mcp.MethodsReturnNonnullByDefault;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import forestry.core.utils.FieldsAreNonnullByDefault;

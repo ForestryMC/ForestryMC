@@ -2,11 +2,8 @@ package forestry.arboriculture.blocks;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.arboriculture.ICharcoalManager;
-import forestry.api.arboriculture.ICharcoalPileWall;
-import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.core.config.Config;
+import java.util.Collection;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,8 +28,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 
-import java.util.Collection;
-import java.util.Random;
+import forestry.api.arboriculture.ICharcoalManager;
+import forestry.api.arboriculture.ICharcoalPileWall;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.core.config.Config;
 
 public class BlockWoodPile extends Block {
 
@@ -42,23 +42,12 @@ public class BlockWoodPile extends Block {
 	public static final int TICK_RATE = 960;
 
 	public BlockWoodPile() {
-		super(Block.Properties.create(Material.WOOD)
-				.hardnessAndResistance(1.5f)
-				.sound(SoundType.WOOD)
-				.harvestLevel(0)
-				.harvestTool(ToolType.AXE));
+		super(Block.Properties.create(Material.WOOD).hardnessAndResistance(1.5f).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
 		setDefaultState(getStateContainer().getBaseState().with(AGE, 0).with(IS_ACTIVE, false));
 	}
 
 	@Override
-	public void neighborChanged(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			Block blockIn,
-			BlockPos fromPos,
-			boolean p_220069_6_
-	) {
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		boolean isActive = state.get(IS_ACTIVE);
 		if (world.getBlockState(fromPos).getBlock() == Blocks.FIRE) {
 			if (!isActive) {
@@ -114,11 +103,7 @@ public class BlockWoodPile extends Block {
 					} else if (!blockState.get(IS_ACTIVE) && state.get(IS_ACTIVE)) {
 						activatePile(blockState, world, position, true);
 					}
-				} else if (world.isAirBlock(position) || !Block.hasEnoughSolidSide(
-						world,
-						position,
-						facing.getOpposite()
-				) || block.isFlammable(state, world, position, facing.getOpposite())) {
+				} else if (world.isAirBlock(position) || !Block.hasEnoughSolidSide(world, position, facing.getOpposite()) || block.isFlammable(state, world, position, facing.getOpposite())) {
 					world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 					return;
 				}
@@ -127,10 +112,7 @@ public class BlockWoodPile extends Block {
 				if (state.get(AGE) < 7) {
 					world.setBlockState(pos, state.with(AGE, state.get(AGE) + 1), 2);
 				} else {
-					BlockState ashState = CharcoalBlocks.ASH.with(
-							BlockAsh.AMOUNT,
-							Math.min(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)), 63)
-					);
+					BlockState ashState = CharcoalBlocks.ASH.with(BlockAsh.AMOUNT, Math.min(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)), 63));
 					world.setBlockState(pos, ashState, 2);
 				}
 			}
@@ -173,16 +155,7 @@ public class BlockWoodPile extends Block {
 	public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (state.get(IS_ACTIVE)) {
 			if (rand.nextDouble() < 0.1D) {
-				world.playSound(
-						pos.getX() + 0.5F,
-						pos.getY() + 0.5F,
-						pos.getZ() + 0.5F,
-						SoundEvents.BLOCK_FIRE_AMBIENT,
-						SoundCategory.BLOCKS,
-						1.0F + rand.nextFloat(),
-						rand.nextFloat() * 0.7F + 0.3F,
-						false
-				);
+				world.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F, false);
 			}
 			float f = pos.getX() + 0.5F;
 			float f1 = pos.getY() + 0.0F + rand.nextFloat() * 6.0F / 16.0F;

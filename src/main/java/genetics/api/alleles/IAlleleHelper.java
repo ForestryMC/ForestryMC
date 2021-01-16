@@ -1,8 +1,8 @@
 package genetics.api.alleles;
 
-import genetics.api.individual.IChromosomeType;
-
 import java.util.Optional;
+
+import genetics.api.individual.IChromosomeType;
 
 public interface IAlleleHelper {
 	<V> Optional<IAlleleValue<V>> getAllele(IChromosomeType chromosomeType, V value);

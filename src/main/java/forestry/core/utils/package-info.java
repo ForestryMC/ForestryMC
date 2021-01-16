@@ -3,6 +3,6 @@
 @MethodsReturnNonnullByDefault
 package forestry.core.utils;
 
-import mcp.MethodsReturnNonnullByDefault;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import mcp.MethodsReturnNonnullByDefault;

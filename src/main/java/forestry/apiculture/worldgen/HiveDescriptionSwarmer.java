@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.worldgen;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
@@ -18,17 +29,6 @@ import forestry.api.core.EnumTemperature;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class HiveDescriptionSwarmer implements IHiveDescription {
 

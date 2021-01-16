@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology;
+
+import java.util.Random;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.genetics.ITree;
@@ -17,12 +23,6 @@ import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterfly;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-
-import java.util.Random;
-
 public class ButterflySpawner implements ILeafTickHandler {
 	@Override
 	public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
@@ -30,19 +30,13 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 
-		if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) *
-				tree.getGenome().getActiveValue(TreeChromosomes.YIELD)
-		) {
+		if (rand.nextFloat() >= tree.getGenome().getActiveValue(TreeChromosomes.SAPPINESS) * tree.getGenome().getActiveValue(TreeChromosomes.YIELD)) {
 			return false;
 		}
 
-		IButterfly spawn = ButterflyManager.butterflyRoot
-				.getIndividualTemplates()
-				.get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
 		float rarity;
-		if (!ModuleLepidopterology.spawnRaritys
-				.containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())
-		) {
+		if (!ModuleLepidopterology.spawnRaritys.containsKey(spawn.getGenome().getPrimary().getRegistryName().getPath())) {
 			rarity = spawn.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity();
 		} else {
 			rarity = ModuleLepidopterology.spawnRaritys.get(spawn.getGenome().getPrimary().getRegistryName().getPath());

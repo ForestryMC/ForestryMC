@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,29 +7,37 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.network.packets;
 
 import com.google.common.base.Preconditions;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.*;
-import forestry.core.network.*;
-import forestry.mail.TradeStationInfo;
-import forestry.mail.gui.ILetterInfoReceiver;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.UUID;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.UUID;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.EnumTradeStationState;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.mail.TradeStationInfo;
+import forestry.mail.gui.ILetterInfoReceiver;
 
 // TODO: split this into two different packets
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
@@ -39,11 +47,7 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 	@Nullable
 	public final IMailAddress address;
 
-	public PacketLetterInfoResponse(
-			EnumAddressee type,
-			@Nullable ITradeStationInfo info,
-			@Nullable IMailAddress address
-	) {
+	public PacketLetterInfoResponse(EnumAddressee type, @Nullable ITradeStationInfo info, @Nullable IMailAddress address) {
 		this.type = type;
 		if (type == EnumAddressee.TRADER) {
 			this.tradeInfo = info;
@@ -103,18 +107,12 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 				IMailAddress address = null;
 
 				if (type == EnumAddressee.PLAYER) {
-					GameProfile profile = new GameProfile(
-							new UUID(data.readLong(), data.readLong()),
-							data.readString()
-					);
+					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 					address = PostManager.postRegistry.getMailAddress(profile);
 				} else if (type == EnumAddressee.TRADER) {
 					if (data.readBoolean()) {
 						address = PostManager.postRegistry.getMailAddress(data.readString());
-						GameProfile owner = new GameProfile(
-								new UUID(data.readLong(), data.readLong()),
-								data.readString()
-						);
+						GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
 
 						ItemStack tradegood = data.readItemStack();
 						NonNullList<ItemStack> required = data.readItemStacks();

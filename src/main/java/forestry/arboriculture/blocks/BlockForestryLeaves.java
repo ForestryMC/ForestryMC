@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,24 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.core.IToolScoop;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.EnumFlutterType;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -44,22 +32,30 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.core.IToolScoop;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.NetworkUtil;
 
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
 	public BlockForestryLeaves() {
-		super(Block.Properties.create(Material.LEAVES)
-				.hardnessAndResistance(0.2f)
-				.sound(SoundType.PLANT)
-				.tickRandomly()
-				.notSolid());
+		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly().notSolid());
 	}
 
 	@Override
@@ -73,14 +69,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	protected void getLeafDrop(
-			NonNullList<ItemStack> drops,
-			World world,
-			@Nullable GameProfile playerProfile,
-			BlockPos pos,
-			float saplingModifier,
-			int fortune
-	) {
+	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
 			return;
@@ -130,14 +119,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			PlayerEntity player,
-			Hand hand,
-			BlockRayTraceResult hit
-	) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
@@ -145,12 +127,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 			ItemStack otherHand = player.getHeldItem(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
 			if (heldItem.isEmpty() && otherHand.isEmpty()) {
 				if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
-					PacketFXSignal packet = new PacketFXSignal(
-							PacketFXSignal.VisualFXType.BLOCK_BREAK,
-							PacketFXSignal.SoundFXType.BLOCK_BREAK,
-							pos,
-							state
-					);
+					PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
 					NetworkUtil.sendNetworkPacket(packet, pos, world);
 					for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
 						ItemHandlerHelper.giveItemToPlayer(player, fruit);
@@ -158,10 +135,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					return ActionResultType.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(
-						caterpillar,
-						EnumFlutterType.CATERPILLAR
-				);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return ActionResultType.SUCCESS;
@@ -194,12 +168,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(
-			BlockState state,
-			@Nullable IBlockReader worldIn,
-			@Nullable BlockPos pos,
-			int tintIndex
-	) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 			if (leaves != null) {

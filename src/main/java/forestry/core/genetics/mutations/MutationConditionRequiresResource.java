@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.climate.IClimateProvider;
-import forestry.api.genetics.IMutationCondition;
-import forestry.core.tiles.TileUtil;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,9 +25,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.genetics.IMutationCondition;
+import forestry.core.tiles.TileUtil;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -58,15 +58,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(
-			World world,
-			BlockPos pos,
-			IAllele allele0,
-			IAllele allele1,
-			IGenome genome0,
-			IGenome genome1,
-			IClimateProvider climate
-	) {
+	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		TileEntity tile;
 		do {
 			pos = pos.down();

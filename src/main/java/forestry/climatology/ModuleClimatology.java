@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology;
+
+import net.minecraft.client.gui.ScreenManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateTransformer;
@@ -26,14 +34,6 @@ import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-
-import net.minecraft.client.gui.ScreenManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-
-import net.minecraftforge.fml.DistExecutor;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Climatology", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleClimatology extends BlankForestryModule {
@@ -56,16 +56,8 @@ public class ModuleClimatology extends BlankForestryModule {
 		proxy.preInit();
 
 		// Capabilities
-		CapabilityManager.INSTANCE.register(
-				IClimateListener.class,
-				new NullStorage<>(),
-				() -> FakeClimateListener.INSTANCE
-		);
-		CapabilityManager.INSTANCE.register(
-				IClimateTransformer.class,
-				new NullStorage<>(),
-				() -> FakeClimateTransformer.INSTANCE
-		);
+		CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
+		CapabilityManager.INSTANCE.register(IClimateTransformer.class, new NullStorage<>(), () -> FakeClimateTransformer.INSTANCE);
 	}
 
 	@Override

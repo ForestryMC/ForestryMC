@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.arboriculture.ArboricultureCapabilities;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.core.config.Constants;
-import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -34,7 +28,13 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
+import forestry.api.apiculture.ApicultureCapabilities;
+import forestry.api.arboriculture.ArboricultureCapabilities;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
+import forestry.core.items.EnumCraftingMaterial;
 
 public class ItemArmorApiarist extends ArmorItem {
 
@@ -61,8 +61,7 @@ public class ItemArmorApiarist extends ArmorItem {
 			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
 					return LazyOptional.of(capability::getDefaultInstance);
-				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-						slot == EquipmentSlotType.HEAD) {
+				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST && slot == EquipmentSlotType.HEAD) {
 					return LazyOptional.of(capability::getDefaultInstance);
 				}
 				return LazyOptional.empty();

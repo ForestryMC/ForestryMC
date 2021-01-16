@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
-
-import forestry.api.recipes.IFermenterRecipe;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -26,6 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import forestry.api.recipes.IFermenterRecipe;
+
 public class FermenterRecipe implements IFermenterRecipe {
 	private final ResourceLocation id;
 	private final Ingredient resource;
@@ -34,14 +34,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 	private final Fluid output;
 	private final FluidStack fluidResource;
 
-	public FermenterRecipe(
-			ResourceLocation id,
-			Ingredient resource,
-			int fermentationValue,
-			float modifier,
-			Fluid output,
-			FluidStack fluidResource
-	) {
+	public FermenterRecipe(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
 		Preconditions.checkArgument(!resource.hasNoMatchingItems(), "Fermenter Resource item cannot be empty!");
@@ -98,10 +91,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 			int fermentationValue = JSONUtils.getInt(json, "fermentationValue");
 			float modifier = JSONUtils.getFloat(json, "modifier");
 			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getString(json, "output")));
-			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(
-					json,
-					"fluidResource"
-			));
+			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "fluidResource"));
 
 			return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
 		}

@@ -1,12 +1,6 @@
 package forestry.apiculture;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.api.genetics.filter.IFilterData;
-import forestry.api.genetics.filter.IFilterRule;
-import forestry.api.genetics.filter.IFilterRuleType;
-import forestry.core.render.TextureManagerForestry;
+import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
@@ -15,7 +9,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Locale;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterRule;
+import forestry.api.genetics.filter.IFilterRuleType;
+import forestry.core.render.TextureManagerForestry;
 
 public enum ApicultureFilterRuleType implements IFilterRuleType {
 	BEE {
@@ -64,11 +64,6 @@ public enum ApicultureFilterRuleType implements IFilterRuleType {
 		return false;
 	}
 
-	@Override
-	public String getUID() {
-		return uid;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public TextureAtlasSprite getSprite() {
@@ -84,5 +79,10 @@ public enum ApicultureFilterRuleType implements IFilterRuleType {
 	@Override
 	public String getRootUID() {
 		return BeeManager.beeRoot.getUID();
+	}
+
+	@Override
+	public String getUID() {
+		return uid;
 	}
 }

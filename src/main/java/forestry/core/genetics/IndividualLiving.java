@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
 
-import forestry.api.genetics.IIndividualLiving;
-
-import genetics.api.individual.IGenome;
-import genetics.api.individual.Individual;
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.Individual;
+
+import forestry.api.genetics.IIndividualLiving;
 
 public abstract class IndividualLiving extends Individual implements IIndividualLiving {
 	private static final String NBT_HEALTH = "Health";

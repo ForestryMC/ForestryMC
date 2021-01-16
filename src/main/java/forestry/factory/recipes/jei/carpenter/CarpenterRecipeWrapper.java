@@ -1,10 +1,8 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.ingredients.IIngredients;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -13,9 +11,11 @@ import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.ingredients.IIngredients;
 
 public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterRecipe> {
 	public CarpenterRecipeWrapper(ICarpenterRecipe recipe) {

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,23 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.core.tiles.TileUtil;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.core.tiles.TileUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -43,12 +47,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 		this(tile, cache, filter, null);
 	}
 
-	public AdjacentInventoryCache(
-			TileEntity tile,
-			AdjacentTileCache cache,
-			@Nullable ITileFilter filter,
-			@Nullable Comparator<IItemHandler> sorter
-	) {
+	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter, @Nullable Comparator<IItemHandler> sorter) {
 		this.cache = cache;
 		this.filter = filter;
 		this.sorter = sorter;

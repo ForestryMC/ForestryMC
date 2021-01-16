@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.core.IToolPipette;
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.fluids.StandardTank;
-import forestry.core.gui.IContainerLiquidTanks;
-import forestry.core.utils.ResourceUtil;
-import forestry.farming.gui.ContainerFarm;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -35,12 +27,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import javax.annotation.Nullable;
+import forestry.api.core.IToolPipette;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.fluids.StandardTank;
+import forestry.core.gui.IContainerLiquidTanks;
+import forestry.core.utils.ResourceUtil;
+import forestry.farming.gui.ContainerFarm;
 
 /**
  * Slot for liquid tanks
@@ -67,14 +67,7 @@ public class TankWidget extends Widget {
 		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
-	private static void drawFluidTexture(
-			double xCoord,
-			double yCoord,
-			TextureAtlasSprite textureSprite,
-			int maskTop,
-			int maskRight,
-			double zLevel
-	) {
+	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
 		float uMin = textureSprite.getMinU();
 		float uMax = textureSprite.getMaxU();
 		float vMin = textureSprite.getMinV();
@@ -126,9 +119,7 @@ public class TankWidget extends Widget {
 				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
-					fluidStillSprite = Minecraft.getInstance()
-							.getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
-							.apply(fluidStill);
+					fluidStillSprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 				}
 				if (fluidStillSprite == null) {
 					fluidStillSprite = ResourceUtil.getMissingTexture();

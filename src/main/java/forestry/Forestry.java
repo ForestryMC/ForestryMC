@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,45 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.climate.ClimateManager;
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.ISetupListener;
-import forestry.api.recipes.*;
-import forestry.core.EventHandlerCore;
-import forestry.core.circuits.CircuitRecipe;
-import forestry.core.climate.ClimateFactory;
-import forestry.core.climate.ClimateRoot;
-import forestry.core.climate.ClimateStateHelper;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
-import forestry.core.data.*;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.errors.ErrorStateRegistry;
-import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.multiblock.MultiblockEventHandler;
-import forestry.core.network.NetworkHandler;
-import forestry.core.network.PacketHandlerServer;
-import forestry.core.proxy.*;
-import forestry.core.recipes.FallbackIngredient;
-import forestry.core.recipes.HygroregulatorRecipe;
-import forestry.core.recipes.ModuleEnabledCondition;
-import forestry.core.render.ColourProperties;
-import forestry.core.render.ForestrySpriteUploader;
-import forestry.core.render.TextureManagerForestry;
-import forestry.core.utils.ForgeUtils;
-import forestry.factory.recipes.*;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ForestryModules;
-import forestry.modules.ModuleManager;
+import javax.annotation.Nullable;
+import java.io.File;
 
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -68,19 +39,79 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
-import net.minecraftforge.registries.IForgeRegistry;
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nullable;
-import java.io.File;
+import forestry.api.climate.ClimateManager;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.ISetupListener;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.ISolderRecipe;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.IStillRecipe;
+import forestry.core.EventHandlerCore;
+import forestry.core.circuits.CircuitRecipe;
+import forestry.core.climate.ClimateFactory;
+import forestry.core.climate.ClimateRoot;
+import forestry.core.climate.ClimateStateHelper;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
+import forestry.core.data.ForestryBlockModelProvider;
+import forestry.core.data.ForestryBlockStateProvider;
+import forestry.core.data.ForestryBlockTagsProvider;
+import forestry.core.data.ForestryItemModelProvider;
+import forestry.core.data.ForestryItemTagsProvider;
+import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.WoodBlockModelProvider;
+import forestry.core.data.WoodBlockStateProvider;
+import forestry.core.data.WoodItemModelProvider;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.errors.ErrorStateRegistry;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.multiblock.MultiblockEventHandler;
+import forestry.core.network.NetworkHandler;
+import forestry.core.network.PacketHandlerServer;
+import forestry.core.proxy.Proxies;
+import forestry.core.proxy.ProxyClient;
+import forestry.core.proxy.ProxyCommon;
+import forestry.core.proxy.ProxyRender;
+import forestry.core.proxy.ProxyRenderClient;
+import forestry.core.recipes.FallbackIngredient;
+import forestry.core.recipes.HygroregulatorRecipe;
+import forestry.core.recipes.ModuleEnabledCondition;
+import forestry.core.render.ColourProperties;
+import forestry.core.render.ForestrySpriteUploader;
+import forestry.core.render.TextureManagerForestry;
+import forestry.core.utils.ForgeUtils;
+import forestry.factory.recipes.CarpenterRecipe;
+import forestry.factory.recipes.CentrifugeRecipe;
+import forestry.factory.recipes.FabricatorRecipe;
+import forestry.factory.recipes.FabricatorSmeltingRecipe;
+import forestry.factory.recipes.FermenterRecipe;
+import forestry.factory.recipes.MoistenerRecipe;
+import forestry.factory.recipes.SqueezerRecipe;
+import forestry.factory.recipes.StillRecipe;
+import forestry.modules.ForestryModuleUids;
+import forestry.modules.ForestryModules;
+import forestry.modules.ModuleManager;
 //import forestry.plugins.ForestryCompatPlugins;
 //import forestry.plugins.PluginBuildCraftFuels;
 //import forestry.plugins.PluginIC2;
@@ -155,21 +186,16 @@ public class Forestry {
 		ModuleManager.getModuleHandler().runSetup();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
-		modEventBus.addListener(
-				EventPriority.NORMAL,
-				false,
-				FMLCommonSetupEvent.class,
-				evt -> networkHandler.serverPacketHandler()
-		);
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
+	}
+
+	public void clientStuff(FMLClientSetupEvent e) {
+		ModuleManager.getModuleHandler().registerGuiFactories();
 	}
 
 	public static PacketHandlerServer getPacketHandler() {
 		Preconditions.checkNotNull(packetHandler);
 		return packetHandler;
-	}
-
-	public void clientStuff(FMLClientSetupEvent e) {
-		ModuleManager.getModuleHandler().registerGuiFactories();
 	}
 
 	private void setup(FMLCommonSetupEvent event) {
@@ -240,11 +266,7 @@ public class Forestry {
 	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
 		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
 			Minecraft minecraft = Minecraft.getInstance();
-			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(
-					minecraft.textureManager,
-					TextureManagerForestry.LOCATION_FORESTRY_TEXTURE,
-					"gui"
-			);
+			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 			TextureManagerForestry.getInstance().init(spriteUploader);
 			IResourceManager resourceManager = minecraft.getResourceManager();
 			if (resourceManager instanceof IReloadableResourceManager) {
@@ -257,17 +279,56 @@ public class Forestry {
 			ModuleManager.getModuleHandler().runClientInit();
 
 		});
-		modEventBus.addListener(
-				EventPriority.NORMAL,
-				false,
-				FMLLoadCompleteEvent.class,
-				fmlLoadCompleteEvent -> networkHandler.clientPacketHandler()
-		);
+		modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
 	}
 
-	@SubscribeEvent
-	public void serverStarting(FMLServerStartingEvent event) {
-		ModuleManager.serverStarting(event.getServer());
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
+	public static class RegistryEvents {
+		@SubscribeEvent(priority = EventPriority.HIGH)
+		public static void createFeatures(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler().createFeatures();
+		}
+
+		@SubscribeEvent(priority = EventPriority.LOW)
+		public static void createObjects(RegistryEvent.Register<Block> event) {
+			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
+			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
+			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
+		}
+
+		@SubscribeEvent(priority = EventPriority.LOWEST)
+		public static void registerObjects(RegistryEvent.Register event) {
+			//noinspection unchecked
+			ModuleManager.getModuleHandler().registerObjects(event);
+		}
+
+		@SubscribeEvent
+		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
+			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
+		}
+
+		@SubscribeEvent
+		public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+			IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
+			CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
+
+			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
+			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
+			register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
+			register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
+			register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
+			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
+			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
+			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
+			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
+			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
+		}
+
+		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
+			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+		}
 	}
 
 	//split
@@ -294,6 +355,11 @@ public class Forestry {
 	//		Proxies.common.registerTickHandlers(worldGenerator);
 	//	}
 
+	@SubscribeEvent
+	public void serverStarting(FMLServerStartingEvent event) {
+		ModuleManager.serverStarting(event.getServer());
+	}
+
 	@Nullable
 	public File getConfigFolder() {
 		return configFolder;
@@ -301,63 +367,5 @@ public class Forestry {
 
 	public void processIMCMessages(InterModProcessEvent event) {
 		ModuleManager.getModuleHandler().processIMCMessages(event.getIMCStream());
-	}
-
-	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)
-	public static class RegistryEvents {
-		@SubscribeEvent(priority = EventPriority.HIGH)
-		public static void createFeatures(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler().createFeatures();
-		}
-
-		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void createObjects(RegistryEvent.Register<Block> event) {
-			ModuleManager.getModuleHandler()
-					.createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
-			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
-			ModuleManager.getModuleHandler()
-					.createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
-		}
-
-		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerObjects(RegistryEvent.Register event) {
-			//noinspection unchecked
-			ModuleManager.getModuleHandler().registerObjects(event);
-		}
-
-		@SubscribeEvent
-		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
-			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
-		}
-
-		@SubscribeEvent
-		public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-			IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
-			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
-			CraftingHelper.register(
-					new ResourceLocation(Constants.MOD_ID, "fallback"),
-					FallbackIngredient.Serializer.INSTANCE
-			);
-
-			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
-			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
-			register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
-			register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
-			register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
-			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
-			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
-			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
-			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
-			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
-		}
-
-		private static void register(
-				IForgeRegistry<IRecipeSerializer<?>> registry,
-				IRecipeType<?> type,
-				IRecipeSerializer<?> serializer
-		) {
-			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
-		}
 	}
 }

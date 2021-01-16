@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.recipes;
 
-import forestry.api.arboriculture.IWoodAccess;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.WoodBlockKind;
+import javax.annotation.Nullable;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +18,9 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.api.arboriculture.IWoodAccess;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 
 public abstract class WoodTypeRecipeBase implements IRecipe {
 	@Nullable
@@ -32,13 +32,7 @@ public abstract class WoodTypeRecipeBase implements IRecipe {
 	protected boolean inputFireproof;
 	protected boolean outputFireproof;
 
-	protected WoodTypeRecipeBase(
-			int outputCount,
-			WoodBlockKind inputKind,
-			WoodBlockKind outputKind,
-			boolean inputFireproof,
-			boolean outputFireproof
-	) {
+	protected WoodTypeRecipeBase(int outputCount, WoodBlockKind inputKind, WoodBlockKind outputKind, boolean inputFireproof, boolean outputFireproof) {
 		if (access == null) {
 			access = TreeManager.woodAccess;
 		}

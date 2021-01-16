@@ -1,23 +1,23 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import forestry.api.core.IErrorState;
-import forestry.api.genetics.IIndividualLiving;
-import forestry.api.lepidopterology.IButterflyCocoon;
-import forestry.api.lepidopterology.IButterflyNursery;
-import forestry.api.lepidopterology.IEntityButterfly;
+import javax.annotation.Nullable;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.Set;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.IIndividualLiving;
+import forestry.api.lepidopterology.IButterflyCocoon;
+import forestry.api.lepidopterology.IButterflyNursery;
+import forestry.api.lepidopterology.IEntityButterfly;
 
 public interface IButterfly extends IIndividualLiving {
 

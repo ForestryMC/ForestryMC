@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.inventory;
 
-import forestry.api.mail.IStamps;
-import forestry.core.inventory.InventoryAdapter;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.SlotUtil;
-import forestry.mail.TradeStation;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.mail.IStamps;
+import forestry.core.inventory.InventoryAdapter;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.SlotUtil;
+import forestry.mail.TradeStation;
 
 public class InventoryTradeStation extends InventoryAdapter {
 
@@ -61,21 +61,18 @@ public class InventoryTradeStation extends InventoryAdapter {
 		List<Integer> slots = new ArrayList<>();
 
 		for (
-				int i = TradeStation.SLOT_LETTERS_1;
-				i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
+				int i = TradeStation.SLOT_LETTERS_1; i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
 			slots.add(i);
 		}
 		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
 			slots.add(i);
 		}
 		for (
-				int i = TradeStation.SLOT_RECEIVE_BUFFER;
-				i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
+				int i = TradeStation.SLOT_RECEIVE_BUFFER; i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
 			slots.add(i);
 		}
 		for (
-				int i = TradeStation.SLOT_SEND_BUFFER;
-				i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
+				int i = TradeStation.SLOT_SEND_BUFFER; i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
 			slots.add(i);
 		}
 

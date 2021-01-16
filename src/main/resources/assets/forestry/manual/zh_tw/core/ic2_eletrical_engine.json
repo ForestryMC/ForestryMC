@@ -1,0 +1,19 @@
+{
+	"title": "電動引擎",
+	"icon": {
+		"item": "forestry:engine_electrical"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_eletrical_engine"
+				]
+			},
+			{
+				"text": "電動引擎可將 IndustrialCraft2 的EU能量轉換為RF能量（之前是轉換為MJ能量）。在沒有安裝升級的情況下，引擎消耗6EU/t，並輸出20RF/t，沒有電壓限制。"
+			}
+		]
+	]
+}

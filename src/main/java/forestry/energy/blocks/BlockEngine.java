@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.blocks;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.blocks.BlockBase;
-import forestry.core.tiles.TileUtil;
-import forestry.energy.EnergyHelper;
-import forestry.energy.EnergyManager;
-import forestry.energy.tiles.TileEngine;
+import javax.annotation.Nullable;
+import java.util.EnumMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,71 +33,27 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
-import javax.annotation.Nullable;
-import java.util.EnumMap;
+import forestry.api.core.ForestryAPI;
+import forestry.core.blocks.BlockBase;
+import forestry.core.tiles.TileUtil;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
+import forestry.energy.tiles.TileEngine;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);
 
 	static {
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.EAST,
-				VoxelShapes.or(
-						Block.makeCuboidShape(0, 0, 0, 6, 16, 16),
-						Block.makeCuboidShape(6, 2, 2, 10, 14, 14),
-						Block.makeCuboidShape(10, 4, 4, 16, 12, 12)
-				)
-		);
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.WEST,
-				VoxelShapes.or(
-						Block.makeCuboidShape(0, 4, 4, 6, 12, 12),
-						Block.makeCuboidShape(6, 2, 2, 10, 14, 14),
-						Block.makeCuboidShape(10, 0, 0, 16, 16, 16)
-				)
-		);
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.SOUTH,
-				VoxelShapes.or(
-						Block.makeCuboidShape(0, 0, 0, 16, 16, 6),
-						Block.makeCuboidShape(2, 2, 6, 14, 14, 10),
-						Block.makeCuboidShape(4, 4, 10, 12, 12, 16)
-				)
-		);
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.NORTH,
-				VoxelShapes.or(
-						Block.makeCuboidShape(4, 4, 0, 12, 12, 6),
-						Block.makeCuboidShape(2, 2, 6, 14, 14, 10),
-						Block.makeCuboidShape(0, 0, 10, 16, 16, 16)
-				)
-		);
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.UP,
-				VoxelShapes.or(
-						Block.makeCuboidShape(0, 0, 0, 16, 6, 16),
-						Block.makeCuboidShape(2, 6, 2, 14, 10, 14),
-						Block.makeCuboidShape(4, 10, 4, 12, 16, 12)
-				)
-		);
-		SHAPE_FOR_DIRECTIONS.put(
-				Direction.DOWN,
-				VoxelShapes.or(
-						Block.makeCuboidShape(0, 10, 0, 16, 16, 16),
-						Block.makeCuboidShape(2, 6, 2, 14, 10, 14),
-						Block.makeCuboidShape(4, 0, 4, 12, 6, 12)
-				)
-		);
+		SHAPE_FOR_DIRECTIONS.put(Direction.EAST, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 6, 16, 16), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 4, 4, 16, 12, 12)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.WEST, VoxelShapes.or(Block.makeCuboidShape(0, 4, 4, 6, 12, 12), Block.makeCuboidShape(6, 2, 2, 10, 14, 14), Block.makeCuboidShape(10, 0, 0, 16, 16, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.SOUTH, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 16, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(4, 4, 10, 12, 12, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.NORTH, VoxelShapes.or(Block.makeCuboidShape(4, 4, 0, 12, 12, 6), Block.makeCuboidShape(2, 2, 6, 14, 14, 10), Block.makeCuboidShape(0, 0, 10, 16, 16, 16)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.UP, VoxelShapes.or(Block.makeCuboidShape(0, 0, 0, 16, 6, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 10, 4, 12, 16, 12)));
+		SHAPE_FOR_DIRECTIONS.put(Direction.DOWN, VoxelShapes.or(Block.makeCuboidShape(0, 10, 0, 16, 16, 16), Block.makeCuboidShape(2, 6, 2, 14, 10, 14), Block.makeCuboidShape(4, 0, 4, 12, 6, 12)));
 	}
 
 	public BlockEngine(BlockTypeEngine blockType) {
-		super(
-				blockType,
-				Properties.create(Material.IRON)
-						.harvestTool(ToolType.PICKAXE)
-						.harvestLevel(0)
-						.hardnessAndResistance(1.5f)
-		);
+		super(blockType, Properties.create(Material.IRON).harvestTool(ToolType.PICKAXE).harvestLevel(0).hardnessAndResistance(1.5f));
 	}
 
 	private static boolean isOrientedAtEnergyReciever(IWorld world, BlockPos pos, Direction orientation) {
@@ -172,8 +124,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
-		if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null &&
-				!ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+		if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null && !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
 			return;
 		}
 		super.fillItemGroup(group, stacks);

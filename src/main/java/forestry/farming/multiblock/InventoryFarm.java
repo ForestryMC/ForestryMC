@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.multiblock;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmLogic;
-import forestry.api.farming.IFarmable;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InventoryAdapterRestricted;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.SlotUtil;
+import java.util.Optional;
+import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -31,8 +23,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import java.util.Optional;
-import java.util.Stack;
+import forestry.api.core.ForestryAPI;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmable;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.InventoryAdapterRestricted;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.SlotUtil;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventoryInternal {
 	public static final int SLOT_RESOURCES_1 = 0;
@@ -47,9 +47,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	public static final int SLOT_CAN = 21;
 	public static final int SLOT_CAN_COUNT = 1;
 
-	public static final int SLOT_COUNT =
-			SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT +
-					SLOT_CAN_COUNT;
+	public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
 
 	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 

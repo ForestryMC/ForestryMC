@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
-
-import genetics.api.individual.IGenome;
 
 public abstract class AlleleEffectThrottled extends AlleleEffect {
 
@@ -22,13 +22,7 @@ public abstract class AlleleEffectThrottled extends AlleleEffect {
 	private boolean isCombinable = false;
 	private boolean requiresWorkingQueen = false;
 
-	protected AlleleEffectThrottled(
-			String name,
-			boolean isDominant,
-			int throttle,
-			boolean requiresWorking,
-			boolean isCombinable
-	) {
+	protected AlleleEffectThrottled(String name, boolean isDominant, int throttle, boolean requiresWorking, boolean isCombinable) {
 		super(name, isDominant);
 		this.throttle = throttle;
 		this.isCombinable = isCombinable;

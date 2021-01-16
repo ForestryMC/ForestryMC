@@ -1,0 +1,19 @@
+{
+	"title": "裝瓶機",
+	"icon": {
+		"item": "forestry:bottler"
+	},
+	"content": [
+		[
+			{
+				"text": "裝瓶機可用於從膠囊、錫罐或鐵桶這樣的的流體容器中提取液體，或者將液體灌入這些容器中。灌裝的過程需要能量，但它不需要能量就可以將液體自動輸出到鄰近的容器中。"
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bottler"
+				]
+			}
+		]
+	]
+}

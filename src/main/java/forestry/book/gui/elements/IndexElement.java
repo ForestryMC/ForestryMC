@@ -1,6 +1,15 @@
 package forestry.book.gui.elements;
 
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.data.IndexEntry;
 import forestry.book.gui.GuiForesterBook;
@@ -8,11 +17,6 @@ import forestry.book.gui.GuiForestryBookPages;
 import forestry.core.gui.elements.LabelElement;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.gui.elements.lib.events.GuiEvent;
-
-import net.minecraft.util.text.*;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexElement extends VerticalLayout {
@@ -42,9 +46,7 @@ public class IndexElement extends VerticalLayout {
 		@Override
 		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 			boolean mouseOver = isMouseOver();
-			IFormattableTextComponent preFix =
-					mouseOver ? new StringTextComponent(" > ").mergeStyle(TextFormatting.GOLD)
-							: new StringTextComponent("- ").mergeStyle(TextFormatting.DARK_GRAY);
+			IFormattableTextComponent preFix = mouseOver ? new StringTextComponent(" > ").mergeStyle(TextFormatting.GOLD) : new StringTextComponent("- ").mergeStyle(TextFormatting.DARK_GRAY);
 			FONT_RENDERER.func_243248_b(transform, preFix.append(component), 0, 0, 0);
 		}
 

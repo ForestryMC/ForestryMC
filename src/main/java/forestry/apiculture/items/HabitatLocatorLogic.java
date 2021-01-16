@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.genetics.IBee;
-import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
-import forestry.core.utils.NetworkUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,10 +24,9 @@ import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
+import forestry.core.utils.NetworkUtil;
 
 public class HabitatLocatorLogic {
 	private static final int maxChecksPerTick = 100;
@@ -40,10 +40,7 @@ public class HabitatLocatorLogic {
 
 	static {
 		for (Biome biome : ForgeRegistries.BIOMES) {
-			if (biome.getCategory() == Biome.Category.BEACH ||
-					biome.getCategory() == Biome.Category.OCEAN ||
-					biome.getCategory() == Biome.Category.RIVER
-			) {
+			if (biome.getCategory() == Biome.Category.BEACH || biome.getCategory() == Biome.Category.OCEAN || biome.getCategory() == Biome.Category.RIVER) {
 				waterBiomes.add(biome);
 			}
 

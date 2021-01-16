@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
 import genetics.api.alleles.IAlleleTemplate;
@@ -50,78 +50,26 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
 	}
 
 	public static void createClassifications(IClassificationRegistry registry) {
-		registry.getClassification("class.insecta").addMemberGroup(
-				registry.createAndRegisterClassification(
-						IClassification.EnumClassLevel.ORDER,
-						"lepidoptera",
-						"Lepidoptera",
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"geometridae",
-								"Geometridae",
-								OPISTHOGRAPTIS.getBranch(),
-								CHIASMIA.getBranch()
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"saturniidae",
-								"Saturniidae",
-								ATTACUS.getBranch()
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"pieridae",
-								"Pieridae",
-								PIERIS.getBranch(),
-								GONEPTERYX.getBranch(),
-								ANTHOCHARIS.getBranch(),
-								COLIAS.getBranch(),
-								PONTIA.getBranch(),
-								CELASTRINA.getBranch()
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"nymphalidae",
-								"Nymphalidae",
-								PARARGE.getBranch(),
-								POLYGONIA.getBranch(),
-								MORPHO.getBranch(),
-								GRETA.getBranch(),
-								BATESIA.getBranch(),
-								MYSCELIA.getBranch(),
-								DANAUS.getBranch(),
-								BASSARONA.getBranch(),
-								PARANTICA.getBranch(),
-								HELICONIUS.getBranch(),
-								SIPROETA.getBranch(),
-								CETHOSIA.getBranch(),
-								SPEYERIA.getBranch()
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"lycaenidae",
-								"Lycaenidae"
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"papilionidae",
-								"Papilionidae",
-								PAPILIO.getBranch(),
-								PROTOGRAPHIUM.getBranch()
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"notchidae",
-								"Notchidae"
-						),
-						registry.createAndRegisterClassification(
-								IClassification.EnumClassLevel.FAMILY,
-								"bombycidae",
-								"Bombycidae",
-								BOMBYX.getBranch()
-						)
-				)
-		);
+		registry.getClassification("class.insecta").addMemberGroup(registry
+				.createAndRegisterClassification(IClassification.EnumClassLevel.ORDER, "lepidoptera", "Lepidoptera", registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "geometridae", "Geometridae", OPISTHOGRAPTIS
+								.getBranch(), CHIASMIA.getBranch()), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "saturniidae", "Saturniidae", ATTACUS
+								.getBranch()), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "pieridae", "Pieridae", PIERIS
+								.getBranch(), GONEPTERYX.getBranch(), ANTHOCHARIS.getBranch(), COLIAS
+								.getBranch(), PONTIA.getBranch(), CELASTRINA.getBranch()), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "nymphalidae", "Nymphalidae", PARARGE
+								.getBranch(), POLYGONIA.getBranch(), MORPHO.getBranch(), GRETA.getBranch(), BATESIA
+								.getBranch(), MYSCELIA.getBranch(), DANAUS.getBranch(), BASSARONA.getBranch(), PARANTICA
+								.getBranch(), HELICONIUS.getBranch(), SIPROETA.getBranch(), CETHOSIA
+								.getBranch(), SPEYERIA.getBranch()), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "papilionidae", "Papilionidae", PAPILIO
+								.getBranch(), PROTOGRAPHIUM.getBranch()), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae"), registry
+						.createAndRegisterClassification(IClassification.EnumClassLevel.FAMILY, "bombycidae", "Bombycidae", BOMBYX
+								.getBranch())));
 	}
 
 	@Override

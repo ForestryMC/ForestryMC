@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,26 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import org.lwjgl.glfw.GLFW;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -24,22 +40,6 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import org.apache.commons.lang3.StringUtils;
-
-import org.lwjgl.glfw.GLFW;
-
-import java.util.ArrayList;
 
 public class GuiLetter extends GuiForestry<ContainerLetter> {
 	private final ItemInventoryLetter itemInventory;
@@ -114,20 +114,8 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
 
 		if (this.isProcessedLetter) {
-			minecraft.fontRenderer.drawString(
-					transform,
-					address.getText(),
-					guiLeft + 49,
-					guiTop + 16,
-					ColourProperties.INSTANCE.get("gui.mail.lettertext")
-			);
-			minecraft.fontRenderer.func_238418_a_(
-					new StringTextComponent(text.getText()),
-					guiLeft + 20,
-					guiTop + 34,
-					119,
-					ColourProperties.INSTANCE.get("gui.mail.lettertext")
-			);
+			minecraft.fontRenderer.drawString(transform, address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.fontRenderer.func_238418_a_(new StringTextComponent(text.getText()), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		} else {
 			clearTradeInfoWidgets();
 			address.render(transform, mouseX, mouseY, partialTicks);
@@ -186,11 +174,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 				text.advanceLine();
 			} else if (keyCode == GLFW.GLFW_KEY_UP) {
 				text.regressLine();
-			} else if (
-					text.moreLinesAllowed() ||
-							keyCode == GLFW.GLFW_KEY_DELETE ||
-							keyCode == GLFW.GLFW_KEY_BACKSLASH
-			) {
+			} else if (text.moreLinesAllowed() || keyCode == GLFW.GLFW_KEY_DELETE || keyCode == GLFW.GLFW_KEY_BACKSLASH) {
 				this.text.keyPressed(keyCode, scanCode, modifiers);
 			}
 			return true;
@@ -226,41 +210,18 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 
 		if (infoString != null) {
-			minecraft.fontRenderer.func_238418_a_(
-					infoString,
-					guiLeft + x,
-					guiTop + y,
-					119,
-					ColourProperties.INSTANCE.get("gui.mail.lettertext")
-			);
+			minecraft.fontRenderer.func_238418_a_(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			return;
 		}
 
-		minecraft.fontRenderer.func_243248_b(
-				transform,
-				new TranslationTextComponent("for.gui.mail.pleasesend"),
-				guiLeft + x,
-				guiTop + y,
-				ColourProperties.INSTANCE.get("gui.mail.lettertext")
-		);
+		minecraft.fontRenderer.func_243248_b(transform, new TranslationTextComponent("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
-		minecraft.fontRenderer.func_243248_b(
-				transform,
-				new TranslationTextComponent("for.gui.mail.foreveryattached"),
-				guiLeft + x,
-				guiTop + y + 28,
-				ColourProperties.INSTANCE.get("gui.mail.lettertext")
-		);
+		minecraft.fontRenderer.func_243248_b(transform, new TranslationTextComponent("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {
-			addTradeInfoWidget(new ItemStackWidget(
-					widgetManager,
-					x + i * 18,
-					y + 38,
-					container.getTradeInfo().getRequired().get(i)
-			));
+			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired().get(i)));
 		}
 	}
 

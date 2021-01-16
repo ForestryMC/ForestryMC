@@ -1,16 +1,13 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.core.IErrorState;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividualLiving;
-
-import genetics.api.individual.IIndividual;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -21,9 +18,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import genetics.api.individual.IIndividual;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IErrorState;
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividualLiving;
 
 /**
  * Other implementations than Forestry's default one are not supported.

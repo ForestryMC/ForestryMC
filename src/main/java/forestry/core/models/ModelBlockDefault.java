@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.models;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.models.baker.ModelBaker;
-import forestry.core.models.baker.ModelBakerModel;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,10 +36,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+import forestry.core.models.baker.ModelBaker;
+import forestry.core.models.baker.ModelBakerModel;
+import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
@@ -88,12 +88,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(
-			@Nullable BlockState state,
-			@Nullable Direction side,
-			@Nonnull Random rand,
-			@Nonnull IModelData extraData
-	) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 		Preconditions.checkNotNull(state);
 		IBakedModel model = getModel(state, extraData);
 		return model.getQuads(state, side, rand, extraData);
@@ -106,8 +101,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return (itemModel != null || blockModel != null) &&
-				(blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
+		return (itemModel != null || blockModel != null) && (blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
 	}
 
 	@Override
@@ -117,8 +111,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		return (itemModel != null || blockModel != null) &&
-				(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
+		return (itemModel != null || blockModel != null) && (blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
 	}
 
 	@Override
@@ -166,12 +159,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 		@Nullable
 		@Override
-		public IBakedModel getOverrideModel(
-				IBakedModel originalModel,
-				ItemStack stack,
-				@Nullable ClientWorld world,
-				@Nullable LivingEntity entity
-		) {
+		public IBakedModel getOverrideModel(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 			if (world == null) {
 				world = Minecraft.getInstance().world;
 			}

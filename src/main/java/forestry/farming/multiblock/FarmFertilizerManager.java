@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.multiblock;
+
+import net.minecraft.nbt.CompoundNBT;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.cultivation.IFarmHousingInternal;
-
-import net.minecraft.nbt.CompoundNBT;
 
 public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStreamable {
 	private static final int BUFFER_FERTILIZER = 200;

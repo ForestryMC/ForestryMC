@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.gui;
 
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,12 +40,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
 			for (int k = 0; k < 9; k++) {
-				this.addSlot(new Slot(
-						this.tile,
-						InventoryFabricator.SLOT_INVENTORY_1 + k + i * 9,
-						8 + k * 18,
-						84 + i * 18
-				));
+				this.addSlot(new Slot(this.tile, InventoryFabricator.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 84 + i * 18));
 			}
 		}
 
@@ -61,13 +56,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 		// Crafting matrix
 		for (int l = 0; l < 3; l++) {
 			for (int k = 0; k < 3; k++) {
-				this.addSlot(new SlotCraftMatrix(
-						this,
-						this.tile.getCraftingInventory(),
-						InventoryGhostCrafting.SLOT_CRAFTING_1 + k + l * 3,
-						67 + k * 18,
-						17 + l * 18
-				));
+				this.addSlot(new SlotCraftMatrix(this, this.tile.getCraftingInventory(), InventoryGhostCrafting.SLOT_CRAFTING_1 + k + l * 3, 67 + k * 18, 17 + l * 18));
 			}
 		}
 	}

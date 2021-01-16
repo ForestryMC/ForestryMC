@@ -1,7 +1,11 @@
 package forestry.core.gui.elements.lib;
 
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.gatgets.DatabaseMode;
+import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosomeType;
@@ -9,12 +13,8 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-
-import javax.annotation.Nullable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.gatgets.DatabaseMode;
 
 public interface IDatabaseElement extends IElementLayout {
 
@@ -26,18 +26,9 @@ public interface IDatabaseElement extends IElementLayout {
 	/**
 	 * Adds the chromosomeName and the result of toString with {@link #label}.
 	 */
-	<A extends IAllele> void addLine(
-			ITextComponent chromosomeName,
-			BiFunction<A, Boolean, ITextComponent> toText,
-			IChromosomeType chromosome
-	);
+	<A extends IAllele> void addLine(ITextComponent chromosomeName, BiFunction<A, Boolean, ITextComponent> toText, IChromosomeType chromosome);
 
-	<A extends IAllele> void addLine(
-			ITextComponent chromosomeName,
-			BiFunction<A, Boolean, ITextComponent> toText,
-			IChromosomeType chromosome,
-			boolean dominant
-	);
+	<A extends IAllele> void addLine(ITextComponent chromosomeName, BiFunction<A, Boolean, ITextComponent> toText, IChromosomeType chromosome, boolean dominant);
 
 	void addLine(ITextComponent leftText, Function<Boolean, ITextComponent> toText, IChromosomeType chromosome);
 
@@ -51,24 +42,9 @@ public interface IDatabaseElement extends IElementLayout {
 
 	void addToleranceLine(IChromosomeType chromosome);
 
-	void addMutation(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IAllele species,
-			IBreedingTracker breedingTracker
-	);
+	void addMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker);
 
-	void addMutationResultant(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IBreedingTracker breedingTracker
-	);
+	void addMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker);
 
 	//void addRow(String firstText, String secondText, String thirdText, ITextStyle firstStyle, ITextStyle secondStyle, ITextStyle thirdStyle);
 

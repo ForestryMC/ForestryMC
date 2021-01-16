@@ -1,5 +1,18 @@
 package forestry.cultivation.inventory;
 
+import java.util.Optional;
+import java.util.Stack;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
@@ -14,19 +27,6 @@ import forestry.cultivation.tiles.TilePlanter;
 import forestry.farming.FarmHelper;
 import forestry.farming.multiblock.IFarmInventoryInternal;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
-import java.util.Optional;
-import java.util.Stack;
-
 public class InventoryPlanter extends InventoryAdapterRestricted implements IFarmInventoryInternal {
 	public static final int SLOT_RESOURCES_1 = 0;
 	public static final int SLOT_RESOURCES_COUNT = 4;
@@ -40,9 +40,7 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 	public static final int SLOT_CAN = 13;
 	public static final int SLOT_CAN_COUNT = 1;
 
-	public static final int SLOT_COUNT =
-			SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT +
-					SLOT_CAN_COUNT;
+	public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
 
 	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
 

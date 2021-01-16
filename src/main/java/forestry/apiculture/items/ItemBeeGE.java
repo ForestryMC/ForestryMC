@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.genetics.*;
-import forestry.api.core.ItemGroups;
-import forestry.apiculture.genetics.BeeHelper;
-import forestry.core.config.Config;
-import forestry.core.genetics.ItemGE;
-import forestry.core.items.IColoredItem;
-import forestry.core.utils.ResourceUtil;
-
-import genetics.api.GeneticHelper;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -35,18 +29,26 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
+import genetics.api.GeneticHelper;
+
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.genetics.IBeeRoot;
+import forestry.api.core.ItemGroups;
+import forestry.apiculture.genetics.BeeHelper;
+import forestry.core.config.Config;
+import forestry.core.genetics.ItemGE;
+import forestry.core.items.IColoredItem;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super(type != EnumBeeType.DRONE
-				? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1)
-				: new Item.Properties().group(ItemGroups.tabApiculture));
+		super(type != EnumBeeType.DRONE ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1) : new Item.Properties().group(ItemGroups.tabApiculture));
 		this.type = type;
 	}
 
@@ -63,12 +65,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
@@ -81,10 +78,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
-				list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(
-						TextFormatting.YELLOW,
-						TextFormatting.ITALIC
-				));
+				list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
 			} else {
 				list.add(new TranslationTextComponent("for.bees.stock.ignoble").mergeStyle(TextFormatting.YELLOW));
 			}
@@ -105,8 +99,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 		}
 
 		IBee individual = optionalIndividual.get();
-		String customBeeKey = "for.bees.custom." + type.getName() + "." +
-				individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
+		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
 
 		return ResourceUtil.tryTranslate(customBeeKey, () -> {
 			ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.tiles;
-
-import forestry.apiculture.features.ApicultureTiles;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,6 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.apiculture.features.ApicultureTiles;
 
 public class TileCandle extends TileEntity {
 	private int colour;
@@ -105,10 +105,6 @@ public class TileCandle extends TileEntity {
 	public void addColour(int colour2) {
 		int[] myColour = fromIntColour(this.colour);
 		int[] addColour = fromIntColour(colour2);
-		this.colour = toIntColour(
-				(addColour[0] + myColour[0]) / 2,
-				(addColour[0] + myColour[0]) / 2,
-				(addColour[2] + myColour[2]) / 2
-		);
+		this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
 	}
 }

@@ -2,21 +2,32 @@ package genetics.alleles;
 
 import com.google.common.collect.HashMultimap;
 
-import genetics.Genetics;
-import genetics.api.alleles.Allele;
-import genetics.api.alleles.*;
-import genetics.api.classification.IClassification;
-import genetics.api.individual.IChromosomeType;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.ModLoadingContext;
 
 import net.minecraftforge.registries.ForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import net.minecraftforge.fml.ModLoadingContext;
+
+import genetics.Genetics;
+import genetics.api.alleles.Allele;
+import genetics.api.alleles.AlleleCategorizedValue;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleData;
+import genetics.api.alleles.IAlleleHandler;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.classification.IClassification;
+import genetics.api.individual.IChromosomeType;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
@@ -36,12 +47,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	private final ArrayList<ResourceLocation> blacklist = new ArrayList<>();
 
 	public AlleleRegistry() {
-		@SuppressWarnings("unchecked")
-		RegistryBuilder<IAllele> builder = new RegistryBuilder()
-				.setMaxID(ALLELE_ARRAY_SIZE)
-				.setName(new ResourceLocation(Genetics.MOD_ID, "alleles"))
-				.setDefaultKey(DEFAULT_NAME)
-				.setType(IAllele.class);
+		@SuppressWarnings("unchecked") RegistryBuilder<IAllele> builder = new RegistryBuilder().setMaxID(ALLELE_ARRAY_SIZE).setName(new ResourceLocation(Genetics.MOD_ID, "alleles")).setDefaultKey(DEFAULT_NAME).setType(IAllele.class);
 		//Cast the registry to the class type so we can get the ids of the alleles
 		this.registry = (ForgeRegistry<IAllele>) builder.create();
 		registerHandler(AlleleHelper.INSTANCE);
@@ -65,20 +71,8 @@ public class AlleleRegistry implements IAlleleRegistry {
 	}
 
 	@Override
-	public <V> IAlleleValue<V> registerAllele(
-			String category,
-			String valueName,
-			V value,
-			boolean dominant,
-			IChromosomeType... types
-	) {
-		return registerAllele(new AlleleCategorizedValue<>(
-				ModLoadingContext.get().getActiveContainer().getModId(),
-				category,
-				valueName,
-				value,
-				dominant
-		), types);
+	public <V> IAlleleValue<V> registerAllele(String category, String valueName, V value, boolean dominant, IChromosomeType... types) {
+		return registerAllele(new AlleleCategorizedValue<>(ModLoadingContext.get().getActiveContainer().getModId(), category, valueName, value, dominant), types);
 	}
 
 	@Override
@@ -107,9 +101,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 		handlers.forEach(h -> h.onAddTypes(allele, types));
 		for (IChromosomeType chromosomeType : types) {
 			if (!isValidAllele(allele, chromosomeType)) {
-				throw new IllegalArgumentException(
-						"Allele (" + allele + ") is not a valid allele for the chromosome type (" + chromosomeType +
-								").");
+				throw new IllegalArgumentException("Allele (" + allele + ") is not a valid allele for the chromosome type (" + chromosomeType + ").");
 			}
 			allelesByType.put(chromosomeType, allele);
 			typesByAllele.put(allele, chromosomeType);

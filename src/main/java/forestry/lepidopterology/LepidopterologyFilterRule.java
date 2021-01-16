@@ -1,5 +1,9 @@
 package forestry.lepidopterology;
 
+import net.minecraft.item.ItemStack;
+
+import genetics.api.individual.IIndividual;
+
 import forestry.api.genetics.filter.IFilterData;
 import forestry.api.genetics.filter.IFilterRule;
 import forestry.api.genetics.filter.IFilterRuleType;
@@ -8,41 +12,31 @@ import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.sorting.DefaultFilterRuleType;
 
-import genetics.api.individual.IIndividual;
-
-import net.minecraft.item.ItemStack;
-
 public enum LepidopterologyFilterRule implements IFilterRule {
 	PURE_BREED(DefaultFilterRuleType.PURE_BREED) {
 		@Override
 		protected boolean isValid(IButterfly butterfly) {
 			return butterfly.isPureBred(ButterflyChromosomes.SPECIES);
 		}
-	},
-	NOCTURNAL(DefaultFilterRuleType.NOCTURNAL) {
+	}, NOCTURNAL(DefaultFilterRuleType.NOCTURNAL) {
 		@Override
 		protected boolean isValid(IButterfly butterfly) {
 			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL);
 		}
-	},
-	PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL) {
+	}, PURE_NOCTURNAL(DefaultFilterRuleType.PURE_NOCTURNAL) {
 		@Override
 		protected boolean isValid(IButterfly butterfly) {
-			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL) && butterfly.isPureBred(
-					ButterflyChromosomes.NOCTURNAL);
+			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.NOCTURNAL) && butterfly.isPureBred(ButterflyChromosomes.NOCTURNAL);
 		}
-	},
-	FLYER(DefaultFilterRuleType.FLYER) {
+	}, FLYER(DefaultFilterRuleType.FLYER) {
 		@Override
 		protected boolean isValid(IButterfly butterfly) {
 			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER);
 		}
-	},
-	PURE_FLYER(DefaultFilterRuleType.PURE_FLYER) {
+	}, PURE_FLYER(DefaultFilterRuleType.PURE_FLYER) {
 		@Override
 		protected boolean isValid(IButterfly butterfly) {
-			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) && butterfly.isPureBred(
-					ButterflyChromosomes.TOLERANT_FLYER);
+			return butterfly.getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER) && butterfly.isPureBred(ButterflyChromosomes.TOLERANT_FLYER);
 		}
 	};
 

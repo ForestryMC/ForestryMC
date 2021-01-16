@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics;
-
-import forestry.api.arboriculture.ITreekeepingMode;
-
-import genetics.api.individual.IGenome;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.ITreekeepingMode;
 
 public class TreekeepingMode implements ITreekeepingMode {
 
@@ -33,13 +33,7 @@ public class TreekeepingMode implements ITreekeepingMode {
 	private final float maturationModifier;
 	private final float mutationModifier;
 
-	public TreekeepingMode(
-			String name,
-			float yieldModifier,
-			float sappinessModifier,
-			float maturationModifier,
-			float mutationModifier
-	) {
+	public TreekeepingMode(String name, float yieldModifier, float sappinessModifier, float maturationModifier, float mutationModifier) {
 		this.name = name;
 		this.yieldModifier = yieldModifier;
 		this.sappinessModifier = sappinessModifier;

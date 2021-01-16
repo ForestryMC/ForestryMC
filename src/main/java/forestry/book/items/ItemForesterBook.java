@@ -1,12 +1,6 @@
 package forestry.book.items;
 
-import forestry.api.book.IForesterBook;
-import forestry.book.BookLoader;
-import forestry.book.gui.GuiForesterBook;
-import forestry.book.gui.GuiForestryBookCategories;
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.api.book.IForesterBook;
+import forestry.book.BookLoader;
+import forestry.book.gui.GuiForesterBook;
+import forestry.book.gui.GuiForestryBookCategories;
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.core.network.PacketBufferForestry;
 
 public class ItemForesterBook extends ItemWithGui {
 

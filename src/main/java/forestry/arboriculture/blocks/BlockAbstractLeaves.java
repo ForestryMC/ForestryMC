@@ -1,12 +1,9 @@
 package forestry.arboriculture.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.IToolGrafter;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.blocks.IColoredBlock;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -29,10 +26,13 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.arboriculture.IToolGrafter;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.blocks.IColoredBlock;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
@@ -89,13 +89,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
-	public ItemStack getPickBlock(
-			BlockState state,
-			RayTraceResult target,
-			IBlockReader world,
-			BlockPos pos,
-			PlayerEntity player
-	) {
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			return ItemStack.EMPTY;
@@ -143,22 +137,13 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	//TODO since loot done in loot table I don't know if this works
 	@Nonnull
 	@Override
-	public List<ItemStack> onSheared(
-			@Nullable PlayerEntity player,
-			@Nonnull ItemStack item,
-			World world,
-			BlockPos pos,
-			int fortune
-	) {
+	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			tree = TreeDefinition.Oak.createIndividual();
 		}
 
-		ItemStack decorativeLeaves = tree.getGenome()
-				.getActiveAllele(TreeChromosomes.SPECIES)
-				.getLeafProvider()
-				.getDecorativeLeaves();
+		ItemStack decorativeLeaves = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider().getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {
@@ -167,12 +152,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(
-			BlockState state,
-			IBlockReader worldIn,
-			BlockPos pos,
-			ISelectionContext context
-	) {
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		ITree tree = getTree(worldIn, pos);
 		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdentifier())) {
 			return VoxelShapes.empty();
@@ -214,12 +194,5 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	//        }
 	//    }
 
-	protected abstract void getLeafDrop(
-			NonNullList<ItemStack> drops,
-			World world,
-			@Nullable GameProfile playerProfile,
-			BlockPos pos,
-			float saplingModifier,
-			int fortune
-	);
+	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
 }

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,28 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.core.IErrorLogicSource;
-import forestry.api.core.IErrorSource;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.gui.elements.Window;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.ledgers.*;
-import forestry.core.gui.widgets.TankWidget;
-import forestry.core.gui.widgets.Widget;
-import forestry.core.gui.widgets.WidgetManager;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.render.ColourProperties;
-import forestry.core.tiles.IClimatised;
-import forestry.energy.EnergyManager;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -41,11 +24,32 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import forestry.api.core.IErrorLogicSource;
+import forestry.api.core.IErrorSource;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.gui.elements.Window;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.ledgers.ClimateLedger;
+import forestry.core.gui.ledgers.HintLedger;
+import forestry.core.gui.ledgers.LedgerManager;
+import forestry.core.gui.ledgers.OwnerLedger;
+import forestry.core.gui.ledgers.PowerLedger;
+import forestry.core.gui.widgets.TankWidget;
+import forestry.core.gui.widgets.Widget;
+import forestry.core.gui.widgets.WidgetManager;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.render.ColourProperties;
+import forestry.core.tiles.IClimatised;
+import forestry.energy.EnergyManager;
 
 public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
 	public final ResourceLocation textureFile;
@@ -150,13 +154,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 	@Override
 	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
-		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(
-				mouseX,
-				mouseY,
-				guiLeft,
-				guiTop,
-				0
-		);    //TODO - I have no idea what the last param actually does
+		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);    //TODO - I have no idea what the last param actually does
 	}
 
 	@Override

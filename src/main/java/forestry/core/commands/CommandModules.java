@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.commands;
+
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -20,29 +29,18 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
+import genetics.commands.CommandHelpers;
+
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.modules.ModuleManager;
-
-import genetics.commands.CommandHelpers;
-
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandModules {
 	public static ArgumentBuilder<CommandSource, ?> register() {
-		return LiteralArgumentBuilder.<CommandSource>literal("module")
-				.then(CommandPluginsInfo.register())
-				.executes(CommandModules::listModulesForSender);
+		return LiteralArgumentBuilder.<CommandSource>literal("module").then(CommandPluginsInfo.register()).executes(CommandModules::listModulesForSender);
 	}
 
 	private static int listModulesForSender(CommandContext<CommandSource> context) {
@@ -78,9 +76,7 @@ public class CommandModules {
 
 	public static class CommandPluginsInfo {
 		public static ArgumentBuilder<CommandSource, ?> register() {
-			return Commands.literal("info")
-					.then(Commands.argument("module", ModuleArgument.modules())
-							.executes(CommandPluginsInfo::listModuleInfoForSender));
+			return Commands.literal("info").then(Commands.argument("module", ModuleArgument.modules()).executes(CommandPluginsInfo::listModuleInfoForSender));
 		}
 
 		private static int listModuleInfoForSender(CommandContext<CommandSource> context) throws CommandException {
@@ -106,10 +102,7 @@ public class CommandModules {
 				}
 
 				if (!info.unlocalizedDescription().isEmpty()) {
-					CommandHelpers.sendChatMessage(
-							sender,
-							new TranslationTextComponent(info.unlocalizedDescription()).getString()
-					);
+					CommandHelpers.sendChatMessage(sender, new TranslationTextComponent(info.unlocalizedDescription()).getString());
 				}
 
 				return 1;
@@ -145,23 +138,14 @@ public class CommandModules {
 				if (found != null) {
 					return found;
 				} else {
-					throw new SimpleCommandExceptionType(new TranslationTextComponent(
-							"for.chat.modules.error",
-							pluginUid
-					)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(new TranslationTextComponent("for.chat.modules.error", pluginUid)).createWithContext(reader);
 				}
 
 			}
 
 			@Override
-			public <S> CompletableFuture<Suggestions> listSuggestions(
-					CommandContext<S> context,
-					SuggestionsBuilder builder
-			) {
-				ModuleManager.getLoadedModules().stream()
-						.map(module -> module.getClass().getAnnotation(ForestryModule.class))
-						.filter(Objects::nonNull)
-						.forEach(info -> builder.suggest(info.moduleID()));
+			public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+				ModuleManager.getLoadedModules().stream().map(module -> module.getClass().getAnnotation(ForestryModule.class)).filter(Objects::nonNull).forEach(info -> builder.suggest(info.moduleID()));
 
 				return builder.buildFuture();
 			}

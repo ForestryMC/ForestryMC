@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics.mutations;
 
 import com.google.common.base.MoreObjects;
 
-import forestry.api.climate.IClimateProvider;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.api.genetics.IMutationBuilder;
-import forestry.api.genetics.IMutationCondition;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IGenome;
-import genetics.api.mutation.IMutation;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -30,9 +22,17 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.climate.IClimateProvider;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.genetics.IMutationBuilder;
+import forestry.api.genetics.IMutationCondition;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 
@@ -47,12 +47,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	private boolean isSecret = false;
 
-	protected Mutation(
-			IAlleleForestrySpecies firstParent,
-			IAlleleForestrySpecies secondParent,
-			IAllele[] template,
-			int chance
-	) {
+	protected Mutation(IAlleleForestrySpecies firstParent, IAlleleForestrySpecies secondParent, IAllele[] template, int chance) {
 		this.firstParent = firstParent;
 		this.secondParent = secondParent;
 		this.template = template;
@@ -130,26 +125,10 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		return this;
 	}
 
-	protected float getChance(
-			World world,
-			BlockPos pos,
-			IAllele firstParent,
-			IAllele secondParent,
-			IGenome firstGenome,
-			IGenome secondGenome,
-			IClimateProvider climate
-	) {
+	protected float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
-			mutationChance *= mutationCondition.getChance(
-					world,
-					pos,
-					firstParent,
-					secondParent,
-					firstGenome,
-					secondGenome,
-					climate
-			);
+			mutationChance *= mutationCondition.getChance(world, pos, firstParent, secondParent, firstGenome, secondGenome, climate);
 			if (mutationChance == 0) {
 				return 0;
 			}
@@ -189,8 +168,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	@Override
 	public boolean isPartner(IAllele allele) {
-		return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName()
-				.equals(allele.getRegistryName());
+		return firstParent.getRegistryName().equals(allele.getRegistryName()) || secondParent.getRegistryName().equals(allele.getRegistryName());
 	}
 
 	@Override
@@ -211,10 +189,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 
 	@Override
 	public String toString() {
-		MoreObjects.ToStringHelper stringHelper = MoreObjects.toStringHelper(this)
-				.add("first", firstParent)
-				.add("second", secondParent)
-				.add("result", template[0]);
+		MoreObjects.ToStringHelper stringHelper = MoreObjects.toStringHelper(this).add("first", firstParent).add("second", secondParent).add("result", template[0]);
 		if (!specialConditions.isEmpty()) {
 			stringHelper.add("conditions", getSpecialConditions());
 		}

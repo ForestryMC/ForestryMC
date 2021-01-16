@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.entities;
+
+import java.util.Optional;
+
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -34,22 +45,8 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
-import java.util.Optional;
-
 public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
-	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(
-			MinecartEntityBeeHousingBase.class,
-			GameProfileDataSerializer.INSTANCE
-	);
+	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final int beeFXInterval = 4;
 	private static final int pollenFXInterval = 50;
@@ -60,15 +57,15 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	private final IErrorLogic errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();
 	private final OwnerHandler ownerHandler = new OwnerHandler() {
 		@Override
-		public GameProfile getOwner() {
-			Optional<GameProfile> gameProfileOptional = dataManager.get(OWNER);
-			return gameProfileOptional.orElse(null);
-		}
-
-		@Override
 		public void setOwner(GameProfile owner) {
 			super.setOwner(owner);
 			dataManager.set(OWNER, Optional.of(owner));
+		}
+
+		@Override
+		public GameProfile getOwner() {
+			Optional<GameProfile> gameProfileOptional = dataManager.get(OWNER);
+			return gameProfileOptional.orElse(null);
 		}
 	};
 
@@ -88,6 +85,99 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	protected void registerData() {
 		super.registerData();
 		this.dataManager.register(OWNER, Optional.empty());
+	}
+
+	/* IOwnedTile */
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
+	}
+
+	/* IBeeHousing */
+	@Override
+	public IBeekeepingLogic getBeekeepingLogic() {
+		return beeLogic;
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), getPosition());
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(getBiome().getDownfall());
+	}
+
+	@Override
+	public float getExactTemperature() {
+		return getBiome().getTemperature(getPosition());
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return getBiome().getDownfall();
+	}
+
+	@Override
+	public int getBlockLightValue() {
+		return world.getLight(getPosition().up());
+	}
+
+	@Override
+	public boolean canBlockSeeTheSky() {
+		return world.canBlockSeeSky(getPosition().up());
+	}
+
+	@Override
+	public boolean isRaining() {
+		return world.isRainingAt(getPosition().up());
+	}
+
+	@Override
+	public GameProfile getOwner() {
+		return getOwnerHandler().getOwner();
+	}
+
+	@Override
+	public World getWorldObj() {
+		return world;
+	}
+
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(getPosition());
+	}
+
+	@Override
+	public IErrorLogic getErrorLogic() {
+		return errorLogic;
+	}
+
+	@Override
+	public BlockPos getCoordinates() {
+		return getPosition();
+	}
+
+	@Override
+	public Vector3d getBeeFXCoordinates() {
+		BlockPos pos = getPosition();
+		return new Vector3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
+	}
+
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		data.writeVarInt(beeLogic.getBeeProgressPercent());
+	}
+
+	@Override
+	public void readGuiData(PacketBufferForestry data) {
+		breedingProgressPercent = data.readVarInt();
+	}
+
+	@Override
+	public int getHealthScaled(int i) {
+		return breedingProgressPercent * i / 100;
 	}
 
 	@Override
@@ -116,100 +206,6 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 				}
 			}
 		}
-	}
-
-	/* IOwnedTile */
-	@Override
-	public IOwnerHandler getOwnerHandler() {
-		return ownerHandler;
-	}
-
-	/* IBeeHousing */
-	@Override
-	public IBeekeepingLogic getBeekeepingLogic() {
-		return beeLogic;
-	}
-
-	//TODO getLight
-	@Override
-	public int getBlockLightValue() {
-		return world.getLight(getPosition().up());
-	}
-
-	@Override
-	public boolean canBlockSeeTheSky() {
-		return world.canBlockSeeSky(getPosition().up());
-	}
-
-	@Override
-	public boolean isRaining() {
-		return world.isRainingAt(getPosition().up());
-	}
-
-	@Override
-	public GameProfile getOwner() {
-		return getOwnerHandler().getOwner();
-	}
-
-	@Override
-	public Vector3d getBeeFXCoordinates() {
-		BlockPos pos = getPosition();
-		return new Vector3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
-	}
-
-	@Override
-	public float getExactTemperature() {
-		return getBiome().getTemperature(getPosition());
-	}
-
-	@Override
-	public float getExactHumidity() {
-		return getBiome().getDownfall();
-	}
-
-	@Override
-	public World getWorldObj() {
-		return world;
-	}
-
-	@Override
-	public Biome getBiome() {
-		return world.getBiome(getPosition());
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPosition());
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getBiome().getDownfall());
-	}
-
-	@Override
-	public IErrorLogic getErrorLogic() {
-		return errorLogic;
-	}
-
-	@Override
-	public BlockPos getCoordinates() {
-		return getPosition();
-	}
-
-	@Override
-	public void writeGuiData(PacketBufferForestry data) {
-		data.writeVarInt(beeLogic.getBeeProgressPercent());
-	}
-
-	@Override
-	public void readGuiData(PacketBufferForestry data) {
-		breedingProgressPercent = data.readVarInt();
-	}
-
-	@Override
-	public int getHealthScaled(int i) {
-		return breedingProgressPercent * i / 100;
 	}
 
 	@Override

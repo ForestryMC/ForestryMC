@@ -1,18 +1,18 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.mail;
 
-import com.mojang.authlib.GameProfile;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-import java.util.Map;
+import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 

@@ -1,10 +1,6 @@
 package forestry.farming.logic.farmables;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.api.farming.IFarmableInfo;
-import forestry.core.utils.BlockUtil;
-import forestry.farming.logic.crops.CropChorusFlower;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +11,11 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableInfo;
+import forestry.core.utils.BlockUtil;
+import forestry.farming.logic.crops.CropChorusFlower;
 
 public class FarmableChorus implements IFarmable {
 	public static final IFarmable INSTANCE = new FarmableChorus();

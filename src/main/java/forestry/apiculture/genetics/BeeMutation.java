@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -18,12 +24,6 @@ import forestry.api.apiculture.genetics.IBeeMutation;
 import forestry.api.apiculture.genetics.IBeeMutationBuilder;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.core.genetics.mutations.Mutation;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationBuilder {
 
@@ -42,13 +42,7 @@ public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationB
 	}
 
 	@Override
-	public float getChance(
-			IBeeHousing housing,
-			IAlleleBeeSpecies allele0,
-			IAlleleBeeSpecies allele1,
-			IGenome genome0,
-			IGenome genome1
-	) {
+	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IGenome genome0, IGenome genome1) {
 		World world = housing.getWorldObj();
 		BlockPos housingPos = housing.getCoordinates();
 

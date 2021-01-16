@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.modules;
 
 import com.google.common.base.Preconditions;
@@ -15,7 +15,27 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import net.minecraft.command.CommandSource;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.brigadier.CommandDispatcher;
+
+import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
@@ -27,16 +47,6 @@ import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
-
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.DistExecutor;
-
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class ModuleManager implements IModuleManager {
 	public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
@@ -79,10 +89,7 @@ public class ModuleManager implements IModuleManager {
 		Set<ResourceLocation> toLoad = new HashSet<>();
 		Set<IForestryModule> modulesToLoad = new HashSet<>();
 
-		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values()
-				.stream()
-				.flatMap(Collection::stream)
-				.collect(Collectors.toList()));
+		ImmutableList<IForestryModule> allModules = ImmutableList.copyOf(modules.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
 
 		for (IModuleContainer container : moduleContainers.values()) {
 			String containerID = container.getID();
@@ -90,11 +97,7 @@ public class ModuleManager implements IModuleManager {
 			Configuration config = container.getModulesConfig();
 
 			config.load();
-			config.addCustomCategoryComment(
-					CONFIG_CATEGORY,
-					"Disabling these modules can greatly change how the mod functions.\n"
-							+ "Your mileage may vary, please report any issues."
-			);
+			config.addCustomCategoryComment(CONFIG_CATEGORY, "Disabling these modules can greatly change how the mod functions.\n" + "Your mileage may vary, please report any issues.");
 			IForestryModule coreModule = getModuleCore(containerModules);
 			if (coreModule != null) {
 				containerModules.remove(coreModule);
@@ -181,15 +184,13 @@ public class ModuleManager implements IModuleManager {
 
 		for (IModuleContainer container : moduleContainers.values()) {
 			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
-						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-						return info.containerID().equals(container.getID());
-					}
-			).collect(Collectors.toList());
+				ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+				return info.containerID().equals(container.getID());
+			}).collect(Collectors.toList());
 			Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
-						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-						return info.containerID().equals(container.getID());
-					}
-			).collect(Collectors.toList());
+				ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+				return info.containerID().equals(container.getID());
+			}).collect(Collectors.toList());
 			container.onConfiguredModules(loadedModules, unloadedModules);
 		}
 
@@ -217,10 +218,7 @@ public class ModuleManager implements IModuleManager {
 	public static void serverStarting(MinecraftServer server) {
 		CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
 
-		loadedModules.stream()
-				.map(IForestryModule::register)
-				.filter(Objects::nonNull)
-				.forEach(dispatcher::register);
+		loadedModules.stream().map(IForestryModule::register).filter(Objects::nonNull).forEach(dispatcher::register);
 	}
 
 	public static Set<String> getLootPoolNames() {

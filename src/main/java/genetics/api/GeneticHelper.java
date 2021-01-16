@@ -1,5 +1,16 @@
 package genetics.api;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.util.LazyOptional;
+
 import genetics.api.alleles.Allele;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -15,17 +26,6 @@ import genetics.api.root.EmptyRootDefinition;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-
 /**
  * A helper class that contains some help methods.
  */
@@ -38,11 +38,7 @@ public class GeneticHelper {
 	private GeneticHelper() {
 	}
 
-	public static <I extends IIndividual> IOrganism<I> createOrganism(
-			ItemStack itemStack,
-			IOrganismType type,
-			IRootDefinition<? extends IIndividualRoot<I>> root
-	) {
+	public static <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> root) {
 		IGeneticFactory geneticFactory = GeneticsAPI.apiInstance.getGeneticFactory();
 		return geneticFactory.createOrganism(itemStack, type, root);
 	}
@@ -65,10 +61,7 @@ public class GeneticHelper {
 	public static IOrganismHandler getOrganismHandler(IIndividualRoot<IIndividual> root, IOrganismType type) {
 		Optional<IOrganismHandler<IIndividual>> optionalHandler = root.getTypes().getHandler(type);
 		if (!optionalHandler.isPresent()) {
-			throw new IllegalArgumentException(String.format(
-					"No organism handler was registered for the organism type '%s'",
-					type.getName()
-			));
+			throw new IllegalArgumentException(String.format("No organism handler was registered for the organism type '%s'", type.getName()));
 		}
 		return optionalHandler.get();
 	}

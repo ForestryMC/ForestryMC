@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.circuits;
 
-import forestry.api.circuits.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,9 +24,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.circuits.ChipsetManager;
+import forestry.api.circuits.CircuitSocketType;
+import forestry.api.circuits.ICircuit;
+import forestry.api.circuits.ICircuitBoard;
+import forestry.api.circuits.ICircuitLayout;
+import forestry.api.circuits.ICircuitSocketType;
 
 public class CircuitBoard implements ICircuitBoard {
 
@@ -92,16 +97,11 @@ public class CircuitBoard implements ICircuitBoard {
 			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(
-						new StringTextComponent("<").mergeStyle(TextFormatting.UNDERLINE, TextFormatting.GRAY)
-								.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-								.append(new StringTextComponent(">"))
-				);
+				list.add(new StringTextComponent("<").mergeStyle(TextFormatting.UNDERLINE, TextFormatting.GRAY).append(new TranslationTextComponent("for.gui.tooltip.tmi")).append(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
-			String localizationKey =
-					"item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
+			String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
 			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).mergeStyle(TextFormatting.GRAY));
 		}
 	}

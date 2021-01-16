@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.tiles.IRenderableTile;
-import forestry.core.tiles.TileBase;
+import java.awt.Color;
+import java.util.EnumMap;
+import java.util.Locale;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -26,9 +22,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import java.awt.*;
-import java.util.EnumMap;
-import java.util.Locale;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.tiles.IRenderableTile;
+import forestry.core.tiles.TileBase;
 
 public class RenderMachine implements IForestryRenderer<TileBase> {
 
@@ -80,13 +80,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 				continue;
 			}
 			String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-			texturesTankLevels.put(
-					tankLevel,
-					new ResourceLocation(
-							Constants.MOD_ID,
-							Constants.TEXTURE_PATH_BLOCK + "machine_tank_" + tankLevelString + ".png"
-					)
-			);
+			texturesTankLevels.put(tankLevel, new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "machine_tank_" + tankLevelString + ".png"));
 		}
 	}
 
@@ -106,12 +100,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		render(TankRenderInfo.EMPTY, TankRenderInfo.EMPTY, Direction.SOUTH, helper);
 	}
 
-	private void render(
-			TankRenderInfo resourceTankInfo,
-			TankRenderInfo productTankInfo,
-			Direction orientation,
-			RenderHelper helper
-	) {
+	private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, Direction orientation, RenderHelper helper) {
 		Vector3f rotation = new Vector3f(0, 0, 0);
 
 		switch (orientation) {
@@ -144,12 +133,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderTank(
-			ModelRenderer tankModel,
-			ResourceLocation textureBase,
-			TankRenderInfo renderInfo,
-			RenderHelper helper
-	) {
+	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {
 		helper.renderModel(textureBase, tankModel);
 
 		ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());

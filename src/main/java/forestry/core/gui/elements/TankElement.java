@@ -1,11 +1,6 @@
 package forestry.core.gui.elements;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.Drawable;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -19,10 +14,15 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.Rarity;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.gui.Drawable;
+import forestry.core.utils.ResourceUtil;
 
 public class TankElement extends GuiElement {
 	/* Attributes - Final */
@@ -37,45 +37,28 @@ public class TankElement extends GuiElement {
 		this(xPos, yPos, background, contents, capacity, null);
 	}
 
-	public TankElement(
-			int xPos,
-			int yPos,
-			@Nullable Drawable background,
-			FluidStack contents,
-			int capacity,
-			@Nullable Drawable overlay
-	) {
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, FluidStack contents, int capacity, @Nullable Drawable overlay) {
 		this(xPos, yPos, background, contents, capacity, overlay, 16, 58);
 	}
 
-	public TankElement(
-			int xPos,
-			int yPos,
-			@Nullable Drawable background,
-			FluidStack contents,
-			int capacity,
-			@Nullable Drawable overlay,
-			int width,
-			int height
-	) {
+	public TankElement(int xPos, int yPos, @Nullable Drawable background, FluidStack contents, int capacity, @Nullable Drawable overlay, int width, int height) {
 		super(xPos, yPos, width, height);
 		this.background = background;
 		this.contents = contents;
 		this.capacity = capacity;
 		this.overlay = overlay;
-		addTooltip((
-				(tooltip, element, mouseX, mouseY) -> {
-					ToolTip toolTip = new ToolTip();
-					int amount = contents.getAmount();
-					Fluid fluidType = contents.getFluid();
-					FluidAttributes attributes = fluidType.getAttributes();
-					Rarity rarity = attributes.getRarity(contents);
-					if (rarity == null) {
-						rarity = Rarity.COMMON;
-					}
-					toolTip.translated(attributes.getTranslationKey(contents)).style(rarity.color);
-					toolTip.translated("for.gui.tooltip.liquid.amount", amount, capacity);
-				}));
+		addTooltip(((tooltip, element, mouseX, mouseY) -> {
+			ToolTip toolTip = new ToolTip();
+			int amount = contents.getAmount();
+			Fluid fluidType = contents.getFluid();
+			FluidAttributes attributes = fluidType.getAttributes();
+			Rarity rarity = attributes.getRarity(contents);
+			if (rarity == null) {
+				rarity = Rarity.COMMON;
+			}
+			toolTip.translated(attributes.getTranslationKey(contents)).style(rarity.color);
+			toolTip.translated("for.gui.tooltip.liquid.amount", amount, capacity);
+		}));
 	}
 
 	private static void setGLColorFromInt(int color) {
@@ -86,14 +69,7 @@ public class TankElement extends GuiElement {
 		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
-	private static void drawFluidTexture(
-			double xCoord,
-			double yCoord,
-			TextureAtlasSprite textureSprite,
-			int maskTop,
-			int maskRight,
-			double zLevel
-	) {
+	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
 		float uMin = textureSprite.getMinU();
 		float uMax = textureSprite.getMaxU();
 		float vMin = textureSprite.getMinV();
@@ -131,9 +107,7 @@ public class TankElement extends GuiElement {
 			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-				fluidStillSprite = Minecraft.getInstance()
-						.getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE)
-						.apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
 				fluidStillSprite = ResourceUtil.getMissingTexture();

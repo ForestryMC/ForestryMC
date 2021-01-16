@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
 
-import forestry.api.genetics.IEffectData;
-
 import net.minecraft.nbt.CompoundNBT;
+
+import forestry.api.genetics.IEffectData;
 
 public class EffectData implements IEffectData {
 

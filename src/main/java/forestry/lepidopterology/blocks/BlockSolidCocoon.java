@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.blocks;
-
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.core.items.ItemScoop;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
-import forestry.lepidopterology.tiles.TileCocoon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,18 +28,20 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.core.items.ItemScoop;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import forestry.lepidopterology.tiles.TileCocoon;
+
 public class BlockSolidCocoon extends Block {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-				.harvestTool(ItemScoop.SCOOP)
-				.harvestLevel(0)
-				.hardnessAndResistance(0.5F)
-				.tickRandomly()
-				.sound(SoundType.GROUND));
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-				.with(AlleleButterflyCocoon.AGE, 0));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE).harvestTool(ItemScoop.SCOOP).harvestLevel(0).hardnessAndResistance(0.5F).tickRandomly().sound(SoundType.GROUND));
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault).with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -56,22 +50,14 @@ public class BlockSolidCocoon extends Block {
 	}
 
 	@Override
-	public BlockState updatePostPlacement(
-			BlockState state,
-			Direction facing,
-			BlockState facingState,
-			IWorld world,
-			BlockPos pos,
-			BlockPos facingPos
-	) {
+	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
 		if (facing != Direction.UP || !facingState.isAir(world, facingPos)) {
 			return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
 		}
 
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
-			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON))
-					.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON)).with(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 
 		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
@@ -131,14 +117,7 @@ public class BlockSolidCocoon extends Block {
 	//    }
 
 	@Override
-	public boolean removedByPlayer(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			PlayerEntity player,
-			boolean willHarvest,
-			FluidState fluid
-	) {
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
 		if (canHarvestBlock(state, world, pos, player)) {
 			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
 				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();

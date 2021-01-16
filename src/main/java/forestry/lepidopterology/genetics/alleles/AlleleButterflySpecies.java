@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+
+import java.awt.Color;
+import java.util.Collection;
+import java.util.Set;
+
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ISetupListener;
 import forestry.api.core.ISpriteRegistry;
@@ -24,18 +34,7 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.awt.*;
-import java.util.Collection;
-import java.util.Set;
-
-public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAlleleButterflySpecies,
-		ISetupListener {
+public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAlleleButterflySpecies, ISetupListener {
 	private final String texture;
 	private final Color serumColour;
 	private final float rarity;
@@ -143,8 +142,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 		registry.addSprite(getItemTexture());
 	}
 
-	public static class Builder extends AbstractBuilder<IAlleleButterflySpeciesBuilder>
-			implements IAlleleButterflySpeciesBuilder {
+	public static class Builder extends AbstractBuilder<IAlleleButterflySpeciesBuilder> implements IAlleleButterflySpeciesBuilder {
 
 		private final ImmutableSet.Builder<Biome.Category> spawnBiomes = new ImmutableSet.Builder<>();
 		private final ProductListWrapper butterflyLoot = ProductListWrapper.create();

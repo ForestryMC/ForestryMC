@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.models.baker;
 
-import forestry.core.config.Constants;
-import forestry.core.models.ClientManager;
-import forestry.core.utils.ResourceUtil;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.BlockFaceUV;
+import net.minecraft.client.renderer.model.BlockPartFace;
+import net.minecraft.client.renderer.model.FaceBakery;
+import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +26,9 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.core.config.Constants;
+import forestry.core.models.ClientManager;
+import forestry.core.utils.ResourceUtil;
 
 /**
  * A model baker to make custom block models with more than one texture layer.
@@ -41,8 +45,7 @@ public final class ModelBaker {
 
 	private final List<ModelBakerFace> faces = new ArrayList<>();
 
-	private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance()
-			.getDefaultBlockState());
+	private final ModelBakerModel currentModel = new ModelBakerModel(ClientManager.getInstance().getDefaultBlockState());
 
 	private int colorIndex = -1;
 
@@ -56,10 +59,7 @@ public final class ModelBaker {
 	}
 
 	public ModelBaker addBlockModel(TextureAtlasSprite texture, int colorIndex) {
-		return addBlockModel(
-				new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture},
-				colorIndex
-		);
+		return addBlockModel(new TextureAtlasSprite[]{texture, texture, texture, texture, texture, texture}, colorIndex);
 	}
 
 	public ModelBaker addFace(Direction facing, TextureAtlasSprite sprite) {
@@ -80,17 +80,7 @@ public final class ModelBaker {
 			Direction facing = face.face;
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
 			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
-			BakedQuad quad = FACE_BAKERY.bakeQuad(
-					POS_FROM,
-					POS_TO,
-					partFace,
-					face.spite,
-					facing,
-					modelRotation,
-					null,
-					true,
-					FACE_LOCATION
-			);
+			BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
 
 			currentModel.addQuad(facing, quad);
 		}

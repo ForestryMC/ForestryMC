@@ -1,8 +1,5 @@
 package forestry.apiculture.blocks;
 
-import forestry.apiculture.items.EnumHoneyComb;
-import forestry.core.blocks.IColoredBlock;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -11,6 +8,9 @@ import net.minecraft.world.IBlockReader;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.apiculture.items.EnumHoneyComb;
+import forestry.core.blocks.IColoredBlock;
 
 public class BlockHoneyComb extends Block implements IColoredBlock {
 	public final EnumHoneyComb type;

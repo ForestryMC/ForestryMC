@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.*;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TileBase;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerRaintank;
-import forestry.factory.inventory.InventoryRaintank;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,15 +36,24 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.api.core.IErrorLogic;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.ContainerFiller;
+import forestry.core.fluids.DrainOnlyFluidHandlerWrapper;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TileBase;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerRaintank;
+import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
-	private static final FluidStack WATER_PER_UPDATE = new FluidStack(
-			Fluids.WATER,
-			Constants.RAINTANK_AMOUNT_PER_UPDATE
-	);
+	private static final FluidStack WATER_PER_UPDATE = new FluidStack(Fluids.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
@@ -73,25 +74,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 		tankManager = new TankManager(this, resourceTank);
 
-		containerFiller = new ContainerFiller(
-				resourceTank,
-				Constants.RAINTANK_FILLING_TIME,
-				this,
-				InventoryRaintank.SLOT_RESOURCE,
-				InventoryRaintank.SLOT_PRODUCT
-		);
+		containerFiller = new ContainerFiller(resourceTank, Constants.RAINTANK_FILLING_TIME, this, InventoryRaintank.SLOT_RESOURCE, InventoryRaintank.SLOT_PRODUCT);
 	}
 
 	private boolean dumpFluidBelow() {
 		if (!resourceTank.isEmpty()) {
 			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
 			if (fluidCap.isPresent()) {
-				return !FluidUtil.tryFluidTransfer(
-						fluidCap.orElse(null),
-						tankManager,
-						FluidAttributes.BUCKET_VOLUME / 20,
-						true
-				).isEmpty();
+				return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidAttributes.BUCKET_VOLUME / 20, true).isEmpty();
 			}
 		}
 		return false;
@@ -198,8 +188,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 			} else {
 				fluidHandler = tankManager;
 			}
-			return LazyOptional.of(() -> fluidHandler)
-					.cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
+			return LazyOptional.of(() -> fluidHandler).cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
 		}
 		return super.getCapability(capability, facing);
 	}

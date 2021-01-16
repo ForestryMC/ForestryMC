@@ -1,5 +1,9 @@
 package genetics.api.root;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.IAllele;
@@ -12,10 +16,6 @@ import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentFactory;
 import genetics.api.root.components.IRootComponentRegistry;
-
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * The IIndividualRootBuilder offers several functions to register templates, types or something similar that can be
@@ -87,10 +87,7 @@ public interface IIndividualRootBuilder<I extends IIndividual> {
 	 * @param <C>     The type of the component of the key.
 	 * @param <B>     the type of the component builder that the is associated with the key and created by the factory.
 	 */
-	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(
-			ComponentKey key,
-			IRootComponentFactory<I, C> factory
-	);
+	<C extends IRootComponent<I>> IIndividualRootBuilder<I> addComponent(ComponentKey key, IRootComponentFactory<I, C> factory);
 
 	/**
 	 * Adds a component listener.

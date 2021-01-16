@@ -1,5 +1,9 @@
 package forestry.modules;
 
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.Collection;
+
 import forestry.Forestry;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -7,10 +11,6 @@ import forestry.api.modules.IModuleContainer;
 import forestry.core.config.Constants;
 import forestry.core.config.forge_old.Configuration;
 import forestry.core.config.forge_old.Property;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.Collection;
 
 public class ForestryModules implements IModuleContainer {
 	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
@@ -50,10 +50,7 @@ public class ForestryModules implements IModuleContainer {
 	}
 
 	@Override
-	public void onConfiguredModules(
-			Collection<IForestryModule> activeModules,
-			Collection<IForestryModule> unloadedModules
-	) {
+	public void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
 		ModuleManager.getModuleHandler().addModules(activeModules, unloadedModules);
 	}
 }

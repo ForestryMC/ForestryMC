@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
 
-import forestry.core.fluids.FluidHelper;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.factory.tiles.TileBottler;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -21,7 +19,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Optional;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.factory.tiles.TileBottler;
 
 public class InventoryBottler extends InventoryAdapterTile<TileBottler> {
 	public static final short SLOT_INPUT_FULL_CONTAINER = 0;

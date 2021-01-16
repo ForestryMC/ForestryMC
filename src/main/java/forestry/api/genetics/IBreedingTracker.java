@@ -1,22 +1,22 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.apiculture.IBeekeepingMode;
+import java.util.Collection;
+import java.util.Collections;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-
-import java.util.Collection;
-import java.util.Collections;
+import forestry.api.apiculture.IBeekeepingMode;
 
 /**
  * Keeps track of who bred, discovered, and researched which species in a world.

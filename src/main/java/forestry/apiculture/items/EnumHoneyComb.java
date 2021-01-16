@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.api.core.IItemSubtype;
+import java.awt.Color;
+import java.util.Locale;
 
 import net.minecraft.util.IStringSerializable;
 
-import java.awt.*;
-import java.util.Locale;
+import forestry.api.core.IBlockSubtype;
+import forestry.api.core.IItemSubtype;
 
 public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSubtype {
 	HONEY(new Color(0xe8d56a), new Color(0xffa12b)),

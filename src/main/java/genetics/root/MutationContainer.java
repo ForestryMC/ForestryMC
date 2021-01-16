@@ -1,5 +1,13 @@
 package genetics.root;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.util.ResourceLocation;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;
@@ -11,10 +19,6 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.utils.AlleleUtils;
-
-import net.minecraft.util.ResourceLocation;
-
-import java.util.*;
 
 public class MutationContainer<I extends IIndividual, M extends IMutation> implements IMutationContainer<I, M> {
 
@@ -36,9 +40,7 @@ public class MutationContainer<I extends IIndividual, M extends IMutation> imple
 		IAllele firstParent = mutation.getFirstParent();
 		IAllele secondParent = mutation.getSecondParent();
 		IAllele resultSpecies = mutation.getTemplate()[speciesType.getIndex()];
-		if (AlleleUtils.isBlacklisted(resultSpecies)
-				|| AlleleUtils.isBlacklisted(firstParent)
-				|| AlleleUtils.isBlacklisted(secondParent)) {
+		if (AlleleUtils.isBlacklisted(resultSpecies) || AlleleUtils.isBlacklisted(firstParent) || AlleleUtils.isBlacklisted(secondParent)) {
 			return false;
 		}
 		mutations.add(mutation);

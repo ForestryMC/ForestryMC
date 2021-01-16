@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import forestry.api.recipes.IForestryRecipe;
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.utils.ItemStackUtil;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -30,8 +29,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerRecipe implements ISqueezerRecipe {
 	private final ResourceLocation id;
@@ -41,14 +40,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerRecipe(
-			ResourceLocation id,
-			int processingTime,
-			NonNullList<ItemStack> resources,
-			FluidStack fluidOutput,
-			ItemStack remnants,
-			float remnantsChance
-	) {
+	public SqueezerRecipe(ResourceLocation id, int processingTime, NonNullList<ItemStack> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resources);
 		Preconditions.checkArgument(!resources.isEmpty());

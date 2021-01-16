@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.tiles;
 
-import forestry.api.multiblock.IFarmComponent;
-import forestry.api.multiblock.IFarmController;
-import forestry.energy.EnergyHelper;
-import forestry.energy.EnergyManager;
-import forestry.farming.features.FarmingTiles;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,7 +19,11 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-import javax.annotation.Nullable;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.api.multiblock.IFarmController;
+import forestry.energy.EnergyHelper;
+import forestry.energy.EnergyManager;
+import forestry.farming.features.FarmingTiles;
 
 public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
@@ -73,11 +73,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 		}
 
 		// Hard limit to 4 cycles / second.
-		if (workCounter < WORK_CYCLES && EnergyHelper.consumeEnergyToDoWork(
-				energyManager,
-				WORK_CYCLES,
-				ENERGY_PER_OPERATION
-		)) {
+		if (workCounter < WORK_CYCLES && EnergyHelper.consumeEnergyToDoWork(energyManager, WORK_CYCLES, ENERGY_PER_OPERATION)) {
 			workCounter++;
 		}
 

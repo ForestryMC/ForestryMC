@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,28 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.genetics;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.NetworkUtil;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.ComponentKeys;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,12 +29,28 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.NetworkUtil;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -69,12 +69,7 @@ public class ItemResearchNote extends ItemForestry {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTag());
 		note.addTooltip(list);
@@ -110,7 +105,9 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	public enum EnumNoteType {
-		NONE, MUTATION, SPECIES;
+		NONE,
+		MUTATION,
+		SPECIES;
 
 		public static final EnumNoteType[] VALUES = values();
 
@@ -131,8 +128,7 @@ public class ItemResearchNote extends ItemForestry {
 			IMutationContainer<IIndividual, IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
 			for (IMutation mutation : container.getCombinations(allele0)) {
 				if (mutation.isPartner(allele1)) {
-					if (result == null
-							|| mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
+					if (result == null || mutation.getTemplate()[0].getRegistryName().equals(result.getRegistryName())) {
 						encoded = mutation;
 						break;
 					}
@@ -167,11 +163,7 @@ public class ItemResearchNote extends ItemForestry {
 			return new ResearchNote(researcher, SPECIES, compound);
 		}
 
-		public static ItemStack createSpeciesNoteStack(
-				Item item,
-				GameProfile researcher,
-				IAlleleForestrySpecies species
-		) {
+		public static ItemStack createSpeciesNoteStack(Item item, GameProfile researcher, IAlleleForestrySpecies species) {
 			ResearchNote note = createSpeciesNote(researcher, species);
 			CompoundNBT compound = new CompoundNBT();
 			note.writeToNBT(compound);
@@ -188,8 +180,7 @@ public class ItemResearchNote extends ItemForestry {
 			}
 
 			if (this == MUTATION) {
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
-						"ROT"));
+				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
 				if (!definition.isPresent()) {
 					return tooltips;
 				}
@@ -200,24 +191,11 @@ public class ItemResearchNote extends ItemForestry {
 					return tooltips;
 				}
 
-				ITextComponent species1 = encoded.getFirstParent()
-						.getDisplayName()
-						.deepCopy()
-						.mergeStyle(TextFormatting.YELLOW);
-				ITextComponent species2 = encoded.getSecondParent()
-						.getDisplayName()
-						.deepCopy()
-						.mergeStyle(TextFormatting.YELLOW);
-				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance())
-						.toString()
-						.toLowerCase();
-				ITextComponent mutationChance = new TranslationTextComponent(
-						"for.researchNote.chance." + mutationChanceKey)
-						.mergeStyle(TextFormatting.DARK_BLUE);
-				ITextComponent speciesResult = encoded.getResultingSpecies()
-						.getDisplayName()
-						.deepCopy()
-						.mergeStyle(TextFormatting.LIGHT_PURPLE);
+				ITextComponent species1 = encoded.getFirstParent().getDisplayName().deepCopy().mergeStyle(TextFormatting.YELLOW);
+				ITextComponent species2 = encoded.getSecondParent().getDisplayName().deepCopy().mergeStyle(TextFormatting.YELLOW);
+				String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString().toLowerCase();
+				ITextComponent mutationChance = new TranslationTextComponent("for.researchNote.chance." + mutationChanceKey).mergeStyle(TextFormatting.DARK_BLUE);
+				ITextComponent speciesResult = encoded.getResultingSpecies().getDisplayName().deepCopy().mergeStyle(TextFormatting.LIGHT_PURPLE);
 
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.0"));
 				tooltips.add(new TranslationTextComponent("for.researchNote.discovery.1", species1, species2));
@@ -234,15 +212,10 @@ public class ItemResearchNote extends ItemForestry {
 				if (alleleFirst == null) {
 					return tooltips;
 				}
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
-						NBT_ROOT));
+				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(NBT_ROOT));
 				definition.ifPresent(root -> {
 					tooltips.add(new TranslationTextComponent("researchNote.discovered.0"));
-					tooltips.add(new TranslationTextComponent(
-							"for.researchNote.discovered.1",
-							alleleFirst.getDisplayName(),
-							alleleFirst.getBinomial()
-					));
+					tooltips.add(new TranslationTextComponent("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
 				});
 			}
 
@@ -255,8 +228,7 @@ public class ItemResearchNote extends ItemForestry {
 			}
 
 			if (this == MUTATION) {
-				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(
-						"ROT"));
+				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString("ROT"));
 				if (!definition.isPresent()) {
 					return false;
 				}
@@ -267,10 +239,7 @@ public class ItemResearchNote extends ItemForestry {
 					return false;
 				}
 
-				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(
-						world,
-						player.getGameProfile()
-				);
+				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
 					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
 					return false;
@@ -287,12 +256,7 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.researchMutation(encoded);
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
 
-				player.sendMessage(new TranslationTextComponent(
-						"for.chat.memorizednote2",
-						((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-						((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-						((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)
-				), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2", ((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY), ((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY), ((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
 
 				return true;
 			}
@@ -345,10 +309,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<ITextComponent> list) {
 			List<ITextComponent> tooltips = type.getTooltip(inner);
 			if (tooltips.isEmpty()) {
-				list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(
-						TextFormatting.RED,
-						TextFormatting.ITALIC
-				));
+				list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
 				list.add(new TranslationTextComponent("for.researchNote.error.1"));
 				return;
 			}

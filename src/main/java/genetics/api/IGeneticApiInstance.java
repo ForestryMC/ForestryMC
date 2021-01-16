@@ -1,5 +1,8 @@
 package genetics.api;
 
+import java.util.Map;
+import java.util.Optional;
+
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleHelper;
 import genetics.api.alleles.IAlleleRegistry;
@@ -11,9 +14,6 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IIndividualRootHelper;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.IRootComponentRegistry;
-
-import java.util.Map;
-import java.util.Optional;
 
 public interface IGeneticApiInstance {
 	/**

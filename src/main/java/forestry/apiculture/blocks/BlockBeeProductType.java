@@ -1,8 +1,8 @@
 package forestry.apiculture.blocks;
 
-import net.minecraft.util.IStringSerializable;
-
 import java.util.Locale;
+
+import net.minecraft.util.IStringSerializable;
 
 public enum BlockBeeProductType implements IStringSerializable {
 	BEE_COMBS,

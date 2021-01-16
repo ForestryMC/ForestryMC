@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.ICentrifugeManager;
-import forestry.api.recipes.ICentrifugeRecipe;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 
-import javax.annotation.Nullable;
+import forestry.api.recipes.ICentrifugeManager;
+import forestry.api.recipes.ICentrifugeRecipe;
 
 public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifugeRecipe> implements ICentrifugeManager {
 	public CentrifugeRecipeManager() {

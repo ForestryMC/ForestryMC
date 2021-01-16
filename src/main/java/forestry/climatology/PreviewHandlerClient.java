@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.climatology;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.climate.ClimateCapabilities;
-import forestry.api.climate.IClimateTransformer;
-import forestry.climatology.features.ClimatologyItems;
-import forestry.climatology.items.ItemHabitatScreen;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.TickHelper;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,6 +23,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -38,9 +35,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimateTransformer;
+import forestry.climatology.features.ClimatologyItems;
+import forestry.climatology.items.ItemHabitatScreen;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.TickHelper;
 
 @OnlyIn(Dist.CLIENT)
 public class PreviewHandlerClient {
@@ -58,32 +58,21 @@ public class PreviewHandlerClient {
 		tickHelper.onTick();
 		if (tickHelper.updateOnInterval(100)) {
 			ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
-			if (stack.isEmpty()
-					|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
-					|| !ItemHabitatScreen.isValid(stack, player.world)
-					|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
+			if (stack.isEmpty() || !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack) || !ItemHabitatScreen.isValid(stack, player.world) || !ItemHabitatScreen.isPreviewModeActive(stack)) {
 				renderer.clearPreview();
 				return;
 			}
 			BlockPos currentPos = ItemHabitatScreen.getPosition(stack);
-			if (currentPos == null
-					|| player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
+			if (currentPos == null || player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
 				renderer.clearPreview();
 				return;
 			}
-			LazyOptional<IClimateTransformer> transformer = TileUtil.getInterface(
-					world,
-					currentPos,
-					ClimateCapabilities.CLIMATE_TRANSFORMER,
-					null
-			);
+			LazyOptional<IClimateTransformer> transformer = TileUtil.getInterface(world, currentPos, ClimateCapabilities.CLIMATE_TRANSFORMER, null);
 			if (!transformer.isPresent()) {
 				renderer.clearPreview();
 				return;
 			}
-			transformer.ifPresent(t ->
-					renderer.updatePreview(currentPos, t.getRange(), t.isCircular())
-			);
+			transformer.ifPresent(t -> renderer.updatePreview(currentPos, t.getRange(), t.isCircular()));
 		}
 	}
 
@@ -165,12 +154,7 @@ public class PreviewHandlerClient {
 			RenderSystem.pushMatrix();
 			RenderSystem.translated(-playerX, -playerY, -playerZ);
 			RenderSystem.enableBlend();
-			RenderSystem.blendFuncSeparate(
-					GlStateManager.SourceFactor.SRC_ALPHA,
-					GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-					GlStateManager.SourceFactor.ONE,
-					GlStateManager.DestFactor.ZERO
-			);
+			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			RenderSystem.lineWidth(6.0F);
 			RenderSystem.disableDepthTest();
 

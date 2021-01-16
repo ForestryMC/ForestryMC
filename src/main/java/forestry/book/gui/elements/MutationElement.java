@@ -1,12 +1,6 @@
 package forestry.book.gui.elements;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
-
-import genetics.api.mutation.IMutation;
+import java.util.Collection;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -14,7 +8,13 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collection;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.book.gui.GuiForesterBook;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
 
 @OnlyIn(Dist.CLIENT)
 public class MutationElement extends SelectionElement<IMutation> {
@@ -46,11 +46,7 @@ public class MutationElement extends SelectionElement<IMutation> {
 			conditionText = String.format("%.0f%%", mutation.getBaseChance());
 		}
 
-		selectedElement.label(new StringTextComponent(conditionText))
-				.setStyle(GuiConstants.BLACK_STYLE)
-				.setFitText(true)
-				.addTooltip(conditions)
-				.setXPosition(58);
+		selectedElement.label(new StringTextComponent(conditionText)).setStyle(GuiConstants.BLACK_STYLE).setFitText(true).addTooltip(conditions).setXPosition(58);
 		selectedElement.drawable(62, 6, MUTATION_ARROW).addTooltip(conditions);
 		//
 		selectedElement.item(1, 1, root.createStack(mutation.getFirstParent(), root.getTypeForMutation(0)));

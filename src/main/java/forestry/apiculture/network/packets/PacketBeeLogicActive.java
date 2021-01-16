@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeekeepingLogic;
-import forestry.core.network.*;
-import forestry.core.tiles.TileUtil;
+import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +18,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 
 public class PacketBeeLogicActive extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos tilePos;

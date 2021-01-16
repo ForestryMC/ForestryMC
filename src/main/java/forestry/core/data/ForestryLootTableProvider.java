@@ -6,19 +6,6 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import com.mojang.datafixers.util.Pair;
-
-import genetics.Log;
-
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.loot.*;
-import net.minecraft.util.ResourceLocation;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -27,13 +14,29 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DirectoryCache;
+import net.minecraft.data.IDataProvider;
+import net.minecraft.loot.LootParameterSet;
+import net.minecraft.loot.LootParameterSets;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTableManager;
+import net.minecraft.loot.ValidationTracker;
+import net.minecraft.util.ResourceLocation;
+
+import com.mojang.datafixers.util.Pair;
+
+import genetics.Log;
+
 public class ForestryLootTableProvider implements IDataProvider {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private final DataGenerator dataGenerator;
-	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList
-			.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK));
+	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK));
 
 	public ForestryLootTableProvider(DataGenerator dataGeneratorIn) {
 		this.dataGenerator = dataGeneratorIn;
@@ -55,18 +58,13 @@ public class ForestryLootTableProvider implements IDataProvider {
 				throw new IllegalStateException("Duplicate loot table " + location);
 			}
 		}));
-		ValidationTracker validationtracker = new ValidationTracker(
-				LootParameterSets.GENERIC,
-				(location) -> null,
-				map::get
-		);
+		ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, (location) -> null, map::get);
 
 		validate(map, validationtracker);
 
 		Multimap<String, String> multimap = validationtracker.getProblems();
 		if (!multimap.isEmpty()) {
-			multimap.forEach((location, message) -> Log.warning(
-					"Found validation problem in " + location + ": " + message));
+			multimap.forEach((location, message) -> Log.warning("Found validation problem in " + location + ": " + message));
 			throw new IllegalStateException("Failed to validate loot tables, see logs");
 		} else {
 			map.forEach((location, table) -> {

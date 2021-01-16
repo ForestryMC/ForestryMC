@@ -1,5 +1,14 @@
 package forestry.core.gui;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -12,15 +21,6 @@ import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.ITitled;
-
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import javax.annotation.Nullable;
 
 public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForestryTitled<C> implements IGeneticAnalyzerProvider, ISlotChangeWatcher {
 	/* Attributes - Constants */
@@ -52,31 +52,11 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	private boolean dirty = true;
 
 	/* Constructors */
-	public GuiAnalyzerProvider(
-			String texture,
-			C container,
-			PlayerInventory inv,
-			ITitled titled,
-			int buttonX,
-			int buttonY,
-			int slots,
-			int firstSlot
-	) {
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
 		this(texture, container, inv, titled, buttonX, buttonY, 0, false, slots, firstSlot);
 	}
 
-	public GuiAnalyzerProvider(
-			String texture,
-			C container,
-			PlayerInventory inv,
-			ITitled titled,
-			int buttonX,
-			int buttonY,
-			int screenDistance,
-			boolean hasBorder,
-			int slots,
-			int firstSlot
-	) {
+	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
 		super(texture, container, inv, new TranslationTextComponent(titled.getUnlocalizedTitle()));
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
@@ -130,14 +110,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		}
 		window.init(guiLeft, guiTop + (ySize - 166) / 2);
 
-		addButton(new GuiToggleButton(
-				guiLeft + buttonX,
-				guiTop + buttonY,
-				18,
-				20,
-				TOGGLE_BUTTON,
-				new Handler()
-		)).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
+		addButton(new GuiToggleButton(guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
 		dirty = true;
 
 		if (slotAnalyzer != null) {

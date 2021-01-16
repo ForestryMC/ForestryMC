@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,23 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.entities;
+
+import java.util.Collections;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -25,21 +40,6 @@ import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.items.ItemMinecartBeehousing;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.network.PacketBufferForestry;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.network.NetworkHooks;
-
-import java.util.Collections;
 
 public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	private static final IBeeModifier beeModifier = new BeehouseBeeModifier();
@@ -62,13 +62,13 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	}
 
 	@Override
-	public ItemStack getCartItem() {
-		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.BEE_HOUSE).stack();
+	public BlockState getDisplayTile() {
+		return ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).defaultState();
 	}
 
 	@Override
-	public BlockState getDisplayTile() {
-		return ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).defaultState();
+	public ItemStack getCartItem() {
+		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.BEE_HOUSE).stack();
 	}
 
 	/* IBeeHousing */

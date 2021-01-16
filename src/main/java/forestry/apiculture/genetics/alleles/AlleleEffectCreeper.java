@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
-
-import genetics.api.individual.IGenome;
+import java.util.List;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
@@ -25,7 +20,12 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
@@ -49,15 +49,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		}
 
 		if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-			world.createExplosion(
-					null,
-					pos.getX(),
-					pos.getY(),
-					pos.getZ(),
-					storedData.getInteger(indexExplosionForce),
-					false,
-					Explosion.Mode.NONE
-			);
+			world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
 		}
 	}
 
@@ -111,16 +103,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 			}
 
 			float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-			world.playSound(
-					null,
-					housingCoords.getX(),
-					housingCoords.getY(),
-					housingCoords.getZ(),
-					SoundEvents.ENTITY_GENERIC_EXPLODE,
-					SoundCategory.BLOCKS,
-					4.0F,
-					pitch
-			);
+			world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
 		}
 

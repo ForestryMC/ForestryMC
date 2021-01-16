@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,7 +7,7 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.blocks;
 
 import javax.annotation.Nullable;
@@ -41,20 +41,8 @@ public class BlockFarm extends BlockStructure {
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
 
-	public enum State implements IStringSerializable {
-		PLAIN, BAND;
-
-		@Override
-		public String getString() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
-	}
-
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-		super(Block.Properties.create(Material.ROCK)
-				.hardnessAndResistance(1.0f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0f).harvestTool(ToolType.PICKAXE).harvestLevel(0));
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
@@ -103,5 +91,14 @@ public class BlockFarm extends BlockStructure {
 	@Override
 	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
 		return getType() == EnumFarmBlockType.CONTROL;
+	}
+
+	public enum State implements IStringSerializable {
+		PLAIN, BAND;
+
+		@Override
+		public String getString() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 }

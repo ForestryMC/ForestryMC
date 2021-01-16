@@ -1,8 +1,8 @@
 package forestry.core.gui.elements.lib;
 
-import net.minecraft.util.text.ITextComponent;
-
 import java.util.Collection;
+
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * A element that displays or contains one ore more lines of text.

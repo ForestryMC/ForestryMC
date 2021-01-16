@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
@@ -19,22 +28,11 @@ import forestry.core.utils.WorldUtils;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoResponse;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 public class EventHandlerMailAlert {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase == TickEvent.Phase.END &&
-				Minecraft.getInstance().world != null &&
-				GuiMailboxInfo.instance.hasPOBoxInfo()) {
+		if (event.phase == TickEvent.Phase.END && Minecraft.getInstance().world != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			//TODO: Test / Find a valid matrix stack
 			GuiMailboxInfo.instance.render(new MatrixStack());
 		}

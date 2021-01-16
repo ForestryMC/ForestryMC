@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
-
-import forestry.core.circuits.ISocketable;
-import forestry.core.tiles.ILiquidTankTile;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -25,19 +22,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidTank;
 
+import forestry.core.circuits.ISocketable;
+import forestry.core.tiles.ILiquidTankTile;
+
 public abstract class ContainerLiquidTanksSocketed<T extends TileEntity & ILiquidTankTile & ISocketable> extends ContainerTile<T> implements IContainerSocketed, IContainerLiquidTanks {
 
 	private final ContainerSocketedHelper<T> socketedHelper;
 	private final ContainerLiquidTanksHelper<T> tanksHelper;
 
-	protected ContainerLiquidTanksSocketed(
-			int windowId,
-			ContainerType<?> type,
-			PlayerInventory playerInventory,
-			T tile,
-			int xInv,
-			int yInv
-	) {
+	protected ContainerLiquidTanksSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
 		super(windowId, type, playerInventory, tile, xInv, yInv);
 		this.socketedHelper = new ContainerSocketedHelper<>(this.tile);
 		this.tanksHelper = new ContainerLiquidTanksHelper<>(this.tile);

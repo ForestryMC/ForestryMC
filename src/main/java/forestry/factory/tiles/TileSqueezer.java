@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,29 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.NonNullList;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -32,27 +53,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -95,11 +95,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		if (inventory.hasResources()) {
 			NonNullList<ItemStack> resources = inventory.getResources();
 
-			if (currentRecipe != null && ItemStackUtil.containsSets(
-					currentRecipe.getResources(),
-					resources,
-					false
-			) > 0) {
+			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, false) > 0) {
 				matchingRecipe = currentRecipe;
 			} else {
 				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(world.getRecipeManager(), resources);
@@ -132,8 +128,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			hasRecipe = currentRecipe != null;
 			if (hasRecipe) {
 				FluidStack resultFluid = currentRecipe.getFluidOutput();
-				canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) ==
-						resultFluid.getAmount();
+				canFill = productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.SIMULATE) == resultFluid.getAmount();
 
 				if (!currentRecipe.getRemnants().isEmpty()) {
 					canAdd = inventory.addRemnant(currentRecipe.getRemnants(), false);

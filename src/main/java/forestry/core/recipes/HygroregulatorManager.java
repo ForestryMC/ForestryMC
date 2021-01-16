@@ -1,18 +1,18 @@
 package forestry.core.recipes;
 
-import forestry.api.recipes.IHygroregulatorManager;
-import forestry.api.recipes.IHygroregulatorRecipe;
-import forestry.factory.recipes.AbstractCraftingProvider;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.RecipeManager;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.recipes.IHygroregulatorManager;
+import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.factory.recipes.AbstractCraftingProvider;
 
 public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregulatorRecipe> implements IHygroregulatorManager {
 	private final Set<Fluid> recipeFluids = new HashSet<>();

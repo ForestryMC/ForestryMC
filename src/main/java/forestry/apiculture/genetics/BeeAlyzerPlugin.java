@@ -1,6 +1,29 @@
 package forestry.apiculture.genetics;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IGenome;
+import genetics.api.organism.IOrganism;
+import genetics.api.organism.IOrganismType;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -17,29 +40,6 @@ import forestry.core.gui.TextLayoutHelper;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.StringUtil;
-
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IGenome;
-import genetics.api.organism.IOrganism;
-import genetics.api.organism.IOrganismType;
-
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	public static final BeeAlyzerPlugin INSTANCE = new BeeAlyzerPlugin();
@@ -86,90 +86,33 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 
 			{
-				String customPrimaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." +
-						bee.getGenome().getPrimary().getLocalisationKey().replace(
-								"bees.species.",
-								""
-						);
-				String customSecondaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." +
-						bee.getGenome().getSecondary().getLocalisationKey().replace(
-								"bees.species.",
-								""
-						);
+				String customPrimaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
+				String customSecondaryBeeKey = "for.bees.custom.beealyzer." + type.getName() + "." + bee.getGenome().getSecondary().getLocalisationKey().replace("bees.species.", "");
 
-				guiAlyzer.drawSpeciesRow(
-						transform,
-						new TranslationTextComponent("for.gui.species"),
-						bee,
-						BeeChromosomes.SPECIES,
-						I18n.hasKey(customPrimaryBeeKey) ? new TranslationTextComponent(customPrimaryBeeKey) : null,
-						I18n.hasKey(customSecondaryBeeKey) ? new TranslationTextComponent(customSecondaryBeeKey) : null
-				);
+				guiAlyzer.drawSpeciesRow(transform, new TranslationTextComponent("for.gui.species"), bee, BeeChromosomes.SPECIES, I18n.hasKey(customPrimaryBeeKey) ? new TranslationTextComponent(customPrimaryBeeKey) : null, I18n.hasKey(customSecondaryBeeKey) ? new TranslationTextComponent(customSecondaryBeeKey) : null);
 				textLayout.newLine();
 			}
 
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.lifespan"),
-					bee,
-					BeeChromosomes.LIFESPAN
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.lifespan"), bee, BeeChromosomes.LIFESPAN);
 			textLayout.newLine();
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.speed"),
-					bee,
-					BeeChromosomes.SPEED
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.speed"), bee, BeeChromosomes.SPEED);
 			textLayout.newLine();
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.pollination"),
-					bee,
-					BeeChromosomes.FLOWERING
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.pollination"), bee, BeeChromosomes.FLOWERING);
 			textLayout.newLine();
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.flowers"),
-					bee,
-					BeeChromosomes.FLOWER_PROVIDER
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.flowers"), bee, BeeChromosomes.FLOWER_PROVIDER);
 			textLayout.newLine();
 
 			textLayout.drawLine(transform, new TranslationTextComponent("for.gui.fertility"), GuiAlyzer.COLUMN_0);
 			IAlleleValue<Integer> primaryFertility = bee.getGenome().getActiveAllele(BeeChromosomes.FERTILITY);
 			IAlleleValue<Integer> secondaryFertility = bee.getGenome().getInactiveAllele(BeeChromosomes.FERTILITY);
-			guiAlyzer.drawFertilityInfo(
-					transform,
-					primaryFertility.getValue(),
-					GuiAlyzer.COLUMN_1,
-					guiAlyzer.getColorCoding(primaryFertility.isDominant()),
-					0
-			);
-			guiAlyzer.drawFertilityInfo(
-					transform,
-					secondaryFertility.getValue(),
-					GuiAlyzer.COLUMN_2,
-					guiAlyzer.getColorCoding(secondaryFertility.isDominant()),
-					0
-			);
+			guiAlyzer.drawFertilityInfo(transform, primaryFertility.getValue(), GuiAlyzer.COLUMN_1, guiAlyzer.getColorCoding(primaryFertility.isDominant()), 0);
+			guiAlyzer.drawFertilityInfo(transform, secondaryFertility.getValue(), GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(secondaryFertility.isDominant()), 0);
 			textLayout.newLine();
 
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.area"),
-					bee,
-					BeeChromosomes.TERRITORY
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.area"), bee, BeeChromosomes.TERRITORY);
 			textLayout.newLine();
 
-			guiAlyzer.drawChromosomeRow(
-					transform,
-					new TranslationTextComponent("for.gui.effect"),
-					bee,
-					BeeChromosomes.EFFECT
-			);
+			guiAlyzer.drawChromosomeRow(transform, new TranslationTextComponent("for.gui.effect"), bee, BeeChromosomes.EFFECT);
 			textLayout.newLine();
 
 			textLayout.endPage();
@@ -206,51 +149,25 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.newLine();
 
-			guiAlyzer.drawRow(
-					transform,
-					new TranslationTextComponent("for.gui.climate"),
-					AlleleManager.climateHelper.toDisplay(primaryAllele.getTemperature()),
-					AlleleManager.climateHelper.toDisplay(secondaryAllele.getTemperature()),
-					bee,
-					BeeChromosomes.SPECIES
-			);
+			guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.climate"), AlleleManager.climateHelper.toDisplay(primaryAllele.getTemperature()), AlleleManager.climateHelper.toDisplay(secondaryAllele.getTemperature()), bee, BeeChromosomes.SPECIES);
 
 			textLayout.newLine();
 
-			IAlleleValue<EnumTolerance> tempToleranceActive = bee.getGenome()
-					.getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
-			IAlleleValue<EnumTolerance> tempToleranceInactive = bee.getGenome()
-					.getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
-			textLayout.drawLine(
-					transform,
-					new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
-					GuiAlyzer.COLUMN_0
-			);
+			IAlleleValue<EnumTolerance> tempToleranceActive = bee.getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+			IAlleleValue<EnumTolerance> tempToleranceInactive = bee.getGenome().getInactiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+			textLayout.drawLine(transform, new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")), GuiAlyzer.COLUMN_0);
 			guiAlyzer.drawToleranceInfo(transform, tempToleranceActive, GuiAlyzer.COLUMN_1);
 			guiAlyzer.drawToleranceInfo(transform, tempToleranceInactive, GuiAlyzer.COLUMN_2);
 
 			textLayout.newLine(16);
 
-			guiAlyzer.drawRow(
-					transform,
-					new TranslationTextComponent("for.gui.humidity"),
-					AlleleManager.climateHelper.toDisplay(primaryAllele.getHumidity()),
-					AlleleManager.climateHelper.toDisplay(secondaryAllele.getHumidity()),
-					bee,
-					BeeChromosomes.SPECIES
-			);
+			guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.humidity"), AlleleManager.climateHelper.toDisplay(primaryAllele.getHumidity()), AlleleManager.climateHelper.toDisplay(secondaryAllele.getHumidity()), bee, BeeChromosomes.SPECIES);
 
 			textLayout.newLine();
 
-			IAlleleValue<EnumTolerance> humidToleranceActive = bee.getGenome()
-					.getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
-			IAlleleValue<EnumTolerance> humidToleranceInactive = bee.getGenome()
-					.getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
-			textLayout.drawLine(
-					transform,
-					new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")),
-					GuiAlyzer.COLUMN_0
-			);
+			IAlleleValue<EnumTolerance> humidToleranceActive = bee.getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+			IAlleleValue<EnumTolerance> humidToleranceInactive = bee.getGenome().getInactiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+			textLayout.drawLine(transform, new StringTextComponent("  ").append(new TranslationTextComponent("for.gui.tolerance")), GuiAlyzer.COLUMN_0);
 			guiAlyzer.drawToleranceInfo(transform, humidToleranceActive, GuiAlyzer.COLUMN_1);
 			guiAlyzer.drawToleranceInfo(transform, humidToleranceInactive, GuiAlyzer.COLUMN_2);
 
@@ -283,39 +200,17 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.drawLine(transform, nocturnal1, GuiAlyzer.COLUMN_2, guiAlyzer.getColorCoding(false));
 			textLayout.newLineCompressed();
 
-			ITextComponent primary = StringUtil.readableBoolean(
-					genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN),
-					yes,
-					no
-			);
-			ITextComponent secondary = StringUtil.readableBoolean(
-					genome.getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
-					yes,
-					no
-			);
+			ITextComponent primary = StringUtil.readableBoolean(genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
+			ITextComponent secondary = StringUtil.readableBoolean(genome.getInactiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
 
-			guiAlyzer.drawRow(
-					transform,
-					new TranslationTextComponent("for.gui.flyer"),
-					primary,
-					secondary,
-					bee,
-					BeeChromosomes.TOLERATES_RAIN
-			);
+			guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.flyer"), primary, secondary, bee, BeeChromosomes.TOLERATES_RAIN);
 
 			textLayout.newLineCompressed();
 
 			primary = StringUtil.readableBoolean(genome.getActiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
 			secondary = StringUtil.readableBoolean(genome.getInactiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
 
-			guiAlyzer.drawRow(
-					transform,
-					new TranslationTextComponent("for.gui.cave"),
-					primary,
-					secondary,
-					bee,
-					BeeChromosomes.CAVE_DWELLING
-			);
+			guiAlyzer.drawRow(transform, new TranslationTextComponent("for.gui.cave"), primary, secondary, bee, BeeChromosomes.CAVE_DWELLING);
 
 			textLayout.newLine();
 
@@ -325,24 +220,12 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 					displayTextKey = "for.bees.stock.ignoble";
 				}
 
-				textLayout.drawCenteredLine(
-						transform,
-						new TranslationTextComponent(displayTextKey),
-						8,
-						208,
-						guiAlyzer.getFontColor().get("gui.beealyzer.binomial")
-				);
+				textLayout.drawCenteredLine(transform, new TranslationTextComponent(displayTextKey), 8, 208, guiAlyzer.getFontColor().get("gui.beealyzer.binomial"));
 			}
 
 			if (bee.getGeneration() >= 0) {
 				textLayout.newLineCompressed();
-				textLayout.drawCenteredLine(
-						transform,
-						new TranslationTextComponent("for.gui.beealyzer.generations", bee.getGeneration()),
-						8,
-						208,
-						guiAlyzer.getFontColor().get("gui.beealyzer.binomial")
-				);
+				textLayout.drawCenteredLine(transform, new TranslationTextComponent("for.gui.beealyzer.generations", bee.getGeneration()), 8, 208, guiAlyzer.getFontColor().get("gui.beealyzer.binomial"));
 			}
 
 			textLayout.endPage();
@@ -365,11 +248,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
-			textLayout.drawLine(
-					transform,
-					new TranslationTextComponent("for.gui.beealyzer.produce").appendString(":"),
-					GuiAlyzer.COLUMN_0
-			);
+			textLayout.drawLine(transform, new TranslationTextComponent("for.gui.beealyzer.produce").appendString(":"), GuiAlyzer.COLUMN_0);
 
 			textLayout.newLine();
 
@@ -389,11 +268,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			textLayout.newLine();
 			textLayout.newLine();
 
-			textLayout.drawLine(
-					transform,
-					new TranslationTextComponent("for.gui.beealyzer.specialty").appendString(":"),
-					GuiAlyzer.COLUMN_0
-			);
+			textLayout.drawLine(transform, new TranslationTextComponent("for.gui.beealyzer.specialty").appendString(":"), GuiAlyzer.COLUMN_0);
 			textLayout.newLine();
 
 			x = GuiAlyzer.COLUMN_0;

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.commands;
 
+import java.util.Collection;
+
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
@@ -19,13 +26,6 @@ import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
 import forestry.core.utils.StringUtil;
-
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-
-import java.util.Collection;
 
 public class BeeStatsSaveHelper implements IStatsSaveHelper {
 
@@ -37,8 +37,7 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 	@Override
 	public void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker) {
 		IApiaristTracker tracker = (IApiaristTracker) breedingTracker;
-		String discoveredLine = new TranslationTextComponent("for.chat.command.forestry.stats.save.key.discovered")
-				.appendString(":").getString();
+		String discoveredLine = new TranslationTextComponent("for.chat.command.forestry.stats.save.key.discovered").appendString(":").getString();
 		statistics.add(discoveredLine);
 		statistics.add(StringUtil.line(discoveredLine.length()));
 

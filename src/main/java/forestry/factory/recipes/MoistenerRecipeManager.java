@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
-
-import forestry.api.recipes.IMoistenerManager;
-import forestry.api.recipes.IMoistenerRecipe;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+
+import forestry.api.recipes.IMoistenerManager;
+import forestry.api.recipes.IMoistenerRecipe;
 
 public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
 	private final Set<IMoistenerRecipe> recipes = new HashSet<>();

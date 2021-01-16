@@ -4,24 +4,29 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
-import com.mojang.datafixers.util.Pair;
+import java.util.Collection;
+import java.util.Set;
+import java.util.function.Function;
 
-import net.minecraft.client.renderer.model.*;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IModelTransform;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.datafixers.util.Pair;
+
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.Function;
 
 public class FluidContainerModel extends AbstractItemModel {
 	private final IBakedModel emptyModel;
@@ -58,26 +63,12 @@ public class FluidContainerModel extends AbstractItemModel {
 		}
 
 		@Override
-		public IBakedModel bake(
-				IModelConfiguration owner,
-				ModelBakery bakery,
-				Function<RenderMaterial, TextureAtlasSprite> spriteGetter,
-				IModelTransform modelTransform,
-				ItemOverrideList overrides,
-				ResourceLocation modelLocation
-		) {
-			return new FluidContainerModel(
-					bakery.getBakedModel(empty, modelTransform, spriteGetter),
-					bakery.getBakedModel(filled, modelTransform, spriteGetter)
-			);
+		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+			return new FluidContainerModel(bakery.getBakedModel(empty, modelTransform, spriteGetter), bakery.getBakedModel(filled, modelTransform, spriteGetter));
 		}
 
 		@Override
-		public Collection<RenderMaterial> getTextures(
-				IModelConfiguration owner,
-				Function<ResourceLocation, IUnbakedModel> modelGetter,
-				Set<Pair<String, String>> missingTextureErrors
-		) {
+		public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
@@ -88,10 +79,7 @@ public class FluidContainerModel extends AbstractItemModel {
 		}
 
 		@Override
-		public FluidContainerModel.Geometry read(
-				JsonDeserializationContext deserializationContext,
-				JsonObject modelContents
-		) {
+		public FluidContainerModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
 			String empty = JSONUtils.getString(modelContents, "empty");
 			String filled = JSONUtils.getString(modelContents, "filled");
 			String type = JSONUtils.getString(modelContents, "type");

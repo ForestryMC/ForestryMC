@@ -16,7 +16,5 @@ public class MachineUIDs {
 	public static final String SQUEEZER = "squeezer";
 	public static final String STILL = "still";
 
-	public static final Set<String> ALL = Sets.newHashSet(BOTTLER, CARPENTER, CENTRIFUGE, FABRICATOR,
-			FERMENTER, MOISTENER, RAINMAKER, RAINTANK, SQUEEZER, STILL
-	);
+	public static final Set<String> ALL = Sets.newHashSet(BOTTLER, CARPENTER, CENTRIFUGE, FABRICATOR, FERMENTER, MOISTENER, RAINMAKER, RAINTANK, SQUEEZER, STILL);
 }

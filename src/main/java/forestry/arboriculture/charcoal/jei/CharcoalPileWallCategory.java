@@ -1,5 +1,8 @@
 package forestry.arboriculture.charcoal.jei;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.arboriculture.features.CharcoalBlocks;
@@ -16,9 +19,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
 public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPileWallWrapper> {
 	private final IDrawableStatic slot;
 	private final IDrawableStatic arrow;
@@ -29,26 +29,13 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 
 	public CharcoalPileWallCategory(IGuiHelper helper) {
 		super(helper.createBlankDrawable(120, 38), "for.jei.charcoal.pile");
-		ResourceLocation resourceLocation = new ResourceLocation(
-				Constants.MOD_ID,
-				Constants.TEXTURE_PATH_GUI + "jei/recipes.png"
-		);
+		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "jei/recipes.png");
 		arrow = helper.createDrawable(resourceLocation, 0, 14, 22, 16);
 		IDrawableStatic arrowAnimated = helper.createDrawable(resourceLocation, 22, 14, 22, 16);
-		this.arrowAnimated = helper.createAnimatedDrawable(
-				arrowAnimated,
-				160,
-				IDrawableAnimated.StartDirection.LEFT,
-				false
-		);
+		this.arrowAnimated = helper.createAnimatedDrawable(arrowAnimated, 160, IDrawableAnimated.StartDirection.LEFT, false);
 		flame = helper.createDrawable(resourceLocation, 0, 0, 14, 14);
 		IDrawableStatic flameAnimated = helper.createDrawable(resourceLocation, 14, 0, 14, 14);
-		this.flameAnimated = helper.createAnimatedDrawable(
-				flameAnimated,
-				260,
-				IDrawableAnimated.StartDirection.TOP,
-				true
-		);
+		this.flameAnimated = helper.createAnimatedDrawable(flameAnimated, 260, IDrawableAnimated.StartDirection.TOP, true);
 		this.slot = helper.getSlotDrawable();
 		this.icon = helper.createDrawableIngredient(new ItemStack(CharcoalBlocks.CHARCOAL.getBlock()));
 	}

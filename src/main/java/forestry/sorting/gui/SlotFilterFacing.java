@@ -1,9 +1,6 @@
 package forestry.sorting.gui;
 
-import com.mojang.datafixers.util.Pair;
-
-import forestry.core.config.Constants;
-import forestry.core.gui.slots.ISlotTextured;
+import javax.annotation.Nullable;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.PlayerContainer;
@@ -11,7 +8,10 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import com.mojang.datafixers.util.Pair;
+
+import forestry.core.config.Constants;
+import forestry.core.gui.slots.ISlotTextured;
 
 public class SlotFilterFacing extends Slot implements ISlotTextured {
 	public SlotFilterFacing(IInventory inventoryIn, int index, int xPosition, int yPosition) {
@@ -26,9 +26,6 @@ public class SlotFilterFacing extends Slot implements ISlotTextured {
 	@Nullable
 	@Override
 	public Pair<ResourceLocation, ResourceLocation> getBackground() {
-		return Pair.of(
-				PlayerContainer.LOCATION_BLOCKS_TEXTURE,
-				new ResourceLocation(Constants.MOD_ID, "slots/bee")
-		);
+		return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(Constants.MOD_ID, "slots/bee"));
 	}
 }

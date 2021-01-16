@@ -1,19 +1,7 @@
 package forestry.arboriculture.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.arboriculture.ILeafSpriteProvider;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.features.ArboricultureBlocks;
-import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.network.packets.PacketFXSignal;
-import forestry.core.utils.NetworkUtil;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,12 +17,24 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.arboriculture.ILeafSpriteProvider;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.EnumGermlingType;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.arboriculture.features.ArboricultureBlocks;
+import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.network.packets.PacketFXSignal;
+import forestry.core.utils.NetworkUtil;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -44,32 +44,16 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeavesFruit(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES)
-				.hardnessAndResistance(0.2f)
-				.sound(SoundType.PLANT)
-				.tickRandomly()
-				.notSolid());
+		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly().notSolid());
 		this.definition = definition;
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(
-			BlockState state,
-			World world,
-			BlockPos pos,
-			PlayerEntity player,
-			Hand hand,
-			BlockRayTraceResult traceResult
-	) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
 		ItemStack mainHand = player.getHeldItem(Hand.MAIN_HAND);
 		ItemStack offHand = player.getHeldItem(Hand.OFF_HAND);
 		if (mainHand.isEmpty() && offHand.isEmpty()) {
-			PacketFXSignal packet = new PacketFXSignal(
-					PacketFXSignal.VisualFXType.BLOCK_BREAK,
-					PacketFXSignal.SoundFXType.BLOCK_BREAK,
-					pos,
-					state
-			);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			ITree tree = getTree(world, pos);
 			if (tree == null) {
@@ -97,14 +81,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	}
 
 	@Override
-	protected void getLeafDrop(
-			NonNullList<ItemStack> drops,
-			World world,
-			@Nullable GameProfile playerProfile,
-			BlockPos pos,
-			float saplingModifier,
-			int fortune
-	) {
+	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			return;
@@ -150,12 +127,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(
-			BlockState state,
-			@Nullable IBlockReader worldIn,
-			@Nullable BlockPos pos,
-			int tintIndex
-	) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
 		IGenome genome = definition.getGenome();
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();

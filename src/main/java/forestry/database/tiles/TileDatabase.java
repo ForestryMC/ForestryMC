@@ -1,15 +1,15 @@
 package forestry.database.tiles;
 
-import forestry.core.tiles.TileBase;
-import forestry.database.features.DatabaseTiles;
-import forestry.database.gui.ContainerDatabase;
-import forestry.database.inventory.InventoryDatabase;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 
-import javax.annotation.Nullable;
+import forestry.core.tiles.TileBase;
+import forestry.database.features.DatabaseTiles;
+import forestry.database.gui.ContainerDatabase;
+import forestry.database.inventory.InventoryDatabase;
 
 public class TileDatabase extends TileBase {
 

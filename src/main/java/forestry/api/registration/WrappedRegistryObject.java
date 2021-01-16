@@ -1,14 +1,14 @@
 package forestry.api.registration;
 
-import forestry.core.utils.FieldsAreNonnullByDefault;
-
-import net.minecraftforge.fml.RegistryObject;
-
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
+
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+import net.minecraftforge.fml.RegistryObject;
+
+import forestry.core.utils.FieldsAreNonnullByDefault;
 
 @FieldsAreNonnullByDefault
 @ParametersAreNonnullByDefault

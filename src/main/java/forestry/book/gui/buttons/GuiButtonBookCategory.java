@@ -1,20 +1,20 @@
 package forestry.book.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.api.book.IBookCategory;
-import forestry.api.core.tooltips.IToolTipProvider;
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.GuiUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.book.IBookCategory;
+import forestry.api.core.tooltips.IToolTipProvider;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.gui.GuiUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonBookCategory extends Button implements IToolTipProvider {
@@ -28,10 +28,7 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (visible) {
-			this.isHovered = mouseX >= this.x
-					&& mouseY >= this.y
-					&& mouseX < this.x + this.width
-					&& mouseY < this.y + this.height;
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 			GlStateManager.pushMatrix();
 			GlStateManager.translatef(x, y, getBlitOffset());    //TODO correct?
@@ -47,10 +44,7 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= this.x
-				&& mouseY >= this.y
-				&& mouseX < this.x + this.width
-				&& mouseY < this.y + this.height;
+		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 	}
 
 	@Override

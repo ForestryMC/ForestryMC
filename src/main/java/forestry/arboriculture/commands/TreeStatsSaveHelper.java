@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.commands;
 
+import java.util.Collection;
+
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
-
-import genetics.utils.AlleleUtils;
-
-import net.minecraft.world.World;
-
-import java.util.Collection;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {
 

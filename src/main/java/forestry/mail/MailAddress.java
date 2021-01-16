@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
 import com.google.common.base.Preconditions;
+
+import java.util.Locale;
+import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
 
 import com.mojang.authlib.GameProfile;
 
@@ -18,14 +26,6 @@ import forestry.api.core.INbtWritable;
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.utils.PlayerUtil;
-
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Locale;
-import java.util.UUID;
 
 public class MailAddress implements INbtWritable, IMailAddress {
 

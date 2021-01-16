@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.proxy;
-
-import forestry.core.blocks.MachinePropertiesTesr;
-import forestry.core.config.Constants;
-import forestry.core.features.CoreBlocks;
-import forestry.core.items.EnumContainerType;
-import forestry.core.models.ClientManager;
-import forestry.core.models.FluidContainerModel;
-import forestry.core.render.*;
-import forestry.core.tiles.*;
-import forestry.modules.IClientModuleHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -33,6 +23,24 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
+import forestry.core.blocks.MachinePropertiesTesr;
+import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.items.EnumContainerType;
+import forestry.core.models.ClientManager;
+import forestry.core.models.FluidContainerModel;
+import forestry.core.render.RenderAnalyzer;
+import forestry.core.render.RenderEscritoire;
+import forestry.core.render.RenderMachine;
+import forestry.core.render.RenderMill;
+import forestry.core.render.RenderNaturalistChest;
+import forestry.core.tiles.TileAnalyzer;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileEscritoire;
+import forestry.core.tiles.TileMill;
+import forestry.core.tiles.TileNaturalistChest;
+import forestry.modules.IClientModuleHandler;
+
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
@@ -43,10 +51,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
-	public void setRenderDefaultMachine(
-			MachinePropertiesTesr<? extends TileBase> machineProperties,
-			String baseTexture
-	) {
+	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
 		machineProperties.setRenderer(new RenderMachine(baseTexture));
 	}
 
@@ -67,10 +72,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
-	public void setRenderChest(
-			MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties,
-			String textureName
-	) {
+	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
 		machineProperties.setRenderer(new RenderNaturalistChest(textureName));
 	}
 
@@ -82,20 +84,10 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
 		for (EnumContainerType type : EnumContainerType.values()) {
-			ModelLoader.addSpecialModel(new ModelResourceLocation(
-					"forestry:" + type.getString() + "_empty",
-					"inventory"
-			));
-			ModelLoader.addSpecialModel(new ModelResourceLocation(
-					"forestry:" + type.getString() + "_filled",
-					"inventory"
-			));
+			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
+			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));
 		}
-		CoreBlocks.BASE.getBlocks()
-				.forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		ModelLoaderRegistry.registerLoader(
-				new ResourceLocation(Constants.MOD_ID, "fluid_container"),
-				new FluidContainerModel.Loader()
-		);
+		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
 	}
 }

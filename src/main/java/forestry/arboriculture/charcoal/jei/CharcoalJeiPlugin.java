@@ -1,5 +1,11 @@
 package forestry.arboriculture.charcoal.jei;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ForestryAPI;
@@ -14,12 +20,6 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 @JeiPlugin
 @OnlyIn(Dist.CLIENT)
@@ -52,8 +52,7 @@ public class CharcoalJeiPlugin implements IModPlugin {
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
 		ICharcoalManager charcoalManager = TreeManager.charcoalManager;
-		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL)) ||
-				charcoalManager == null) {
+		if (!ForestryAPI.enabledModules.contains(new ResourceLocation(Constants.MOD_ID, ForestryModuleUids.CHARCOAL)) || charcoalManager == null) {
 			return;
 		}
 

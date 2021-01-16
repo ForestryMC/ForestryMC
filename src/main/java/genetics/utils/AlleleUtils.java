@@ -1,13 +1,5 @@
 package genetics.utils;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeAllele;
-import genetics.api.individual.IChromosomeType;
-
-import net.minecraft.util.ResourceLocation;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
@@ -15,6 +7,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.util.ResourceLocation;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeType;
 
 public class AlleleUtils {
 
@@ -71,11 +71,7 @@ public class AlleleUtils {
 		return callOn(location, IAllele.class, alleleAction, fallback);
 	}
 
-	public static <A extends IAllele> void actOn(
-			ResourceLocation location,
-			Class<? extends A> alleleClass,
-			Consumer<A> alleleAction
-	) {
+	public static <A extends IAllele> void actOn(ResourceLocation location, Class<? extends A> alleleClass, Consumer<A> alleleAction) {
 		IAllele allele = getAlleleOrNull(location);
 		if (!alleleClass.isInstance(allele)) {
 			return;
@@ -85,12 +81,7 @@ public class AlleleUtils {
 		alleleAction.accept(castedAllele);
 	}
 
-	public static <A extends IAllele, R> R callOn(
-			ResourceLocation location,
-			Class<? extends A> alleleClass,
-			Function<A, R> alleleAction,
-			R fallback
-	) {
+	public static <A extends IAllele, R> R callOn(ResourceLocation location, Class<? extends A> alleleClass, Function<A, R> alleleAction, R fallback) {
 		IAllele allele = getAlleleOrNull(location);
 		if (!alleleClass.isInstance(allele)) {
 			return fallback;
@@ -125,9 +116,7 @@ public class AlleleUtils {
 	}
 
 	public static <A extends IAllele> Stream<A> filteredStream(IChromosomeAllele<A> type) {
-		return getAllelesByType(type).stream()
-				.filter(allele -> type.getAlleleClass().isInstance(allele))
-				.map(type::castAllele);
+		return getAllelesByType(type).stream().filter(allele -> type.getAlleleClass().isInstance(allele)).map(type::castAllele);
 	}
 
 	/**

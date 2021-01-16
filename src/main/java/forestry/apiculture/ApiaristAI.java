@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,9 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 
 package forestry.apiculture;
-
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.apiculture.blocks.BlockApiculture;
-import forestry.apiculture.items.ItemBeeGE;
-import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.goal.MoveToBlockGoal;
@@ -27,15 +20,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.apiculture.blocks.BlockApiculture;
+import forestry.apiculture.items.ItemBeeGE;
+import forestry.apiculture.tiles.TileBeeHouse;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
+
 public class ApiaristAI extends MoveToBlockGoal {
-	private static final int SLOT_PRODUCT_1 = InventoryBeeHousing.SLOT_PRODUCT_1;
-	private static final int SLOT_PRODUCT_COUNT = InventoryBeeHousing.SLOT_PRODUCT_COUNT;
-	private static final int SLOT_QUEEN = InventoryBeeHousing.SLOT_QUEEN;
-	private static final int SLOT_DRONE = InventoryBeeHousing.SLOT_DRONE;
 	private final VillagerEntity villager;
 	private final Inventory villagerInventory;
 	private boolean hasDrone;
 	private boolean hasPrincess;
+
+	private static final int SLOT_PRODUCT_1 = InventoryBeeHousing.SLOT_PRODUCT_1;
+	private static final int SLOT_PRODUCT_COUNT = InventoryBeeHousing.SLOT_PRODUCT_COUNT;
+	private static final int SLOT_QUEEN = InventoryBeeHousing.SLOT_QUEEN;
+	private static final int SLOT_DRONE = InventoryBeeHousing.SLOT_DRONE;
 
 	public ApiaristAI(VillagerEntity villager, double speed) {
 		super(villager, speed, 16);
@@ -113,6 +114,20 @@ public class ApiaristAI extends MoveToBlockGoal {
 		this.runDelay = 20;
 	}
 
+	public boolean hasBeeType(EnumBeeType type) {
+		if (villagerInventory.isEmpty()) {
+			return false;
+		}
+		for (ItemStack stack : InventoryUtil.getStacks(villagerInventory)) {
+			if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
+				if (((ItemBeeGE) stack.getItem()).getType() == type) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	@Override
 	protected boolean shouldMoveTo(IWorldReader world, BlockPos pos) {
 		pos = pos.north().up();
@@ -153,20 +168,6 @@ public class ApiaristAI extends MoveToBlockGoal {
 			}
 			return false;
 			//maybe use error states instead?
-		}
-		return false;
-	}
-
-	public boolean hasBeeType(EnumBeeType type) {
-		if (villagerInventory.isEmpty()) {
-			return false;
-		}
-		for (ItemStack stack : InventoryUtil.getStacks(villagerInventory)) {
-			if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
-				if (((ItemBeeGE) stack.getItem()).getType() == type) {
-					return true;
-				}
-			}
 		}
 		return false;
 	}

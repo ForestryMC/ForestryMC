@@ -1,31 +1,19 @@
 package forestry.lepidopterology;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.IButterfly;
-import forestry.core.utils.Log;
-import forestry.lepidopterology.entities.EntityButterfly;
-
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.core.utils.Log;
+import forestry.lepidopterology.entities.EntityButterfly;
+
 public class ButterflyUtils {
 	static boolean attemptButterflySpawn(World world, IButterfly butterfly, BlockPos pos) {
-		MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(
-				world,
-				butterfly.copy(),
-				pos.getX(),
-				pos.getY() + 0.1f,
-				pos.getZ()
-		);
-		Log.trace(
-				"Spawned a butterfly '{}' at {}/{}/{}.",
-				butterfly.getDisplayName(),
-				pos.getX(),
-				pos.getY(),
-				pos.getZ()
-		);
+		MobEntity entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), pos.getX(), pos.getY() + 0.1f, pos.getZ());
+		Log.trace("Spawned a butterfly '{}' at {}/{}/{}.", butterfly.getDisplayName(), pos.getX(), pos.getY(), pos.getZ());
 		return entityLiving != null;
 	}
 
@@ -57,9 +45,7 @@ public class ButterflyUtils {
 	}
 
 	public static int countButterfly(World world) {
-		int number = (int) ((ServerWorld) world).getEntities()
-				.filter(entity -> entity instanceof EntityButterfly)
-				.count();
+		int number = (int) ((ServerWorld) world).getEntities().filter(entity -> entity instanceof EntityButterfly).count();
 
 		return number;
 	}

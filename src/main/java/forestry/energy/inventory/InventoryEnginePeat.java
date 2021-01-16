@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.energy.tiles.TileEnginePeat;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
 
 public class InventoryEnginePeat extends InventoryAdapterTile<TileEnginePeat> {
 	public static final short SLOT_FUEL = 0;

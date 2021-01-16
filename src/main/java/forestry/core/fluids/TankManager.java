@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,28 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -25,19 +42,6 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NBTUtilForestry.NBTList;
 import forestry.core.utils.NetworkUtil;
-
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -64,8 +68,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	private static boolean tankAcceptsFluid(StandardTank tank, FluidStack fluidStack) {
-		return tank.canFill() &&
-				tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
+		return tank.canFill() && tank.fill(fluidStack, FluidAction.SIMULATE) > 0;
 	}
 
 	private static boolean tankCanDrain(StandardTank tank) {
@@ -77,8 +80,7 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 	}
 
 	private static boolean tankCanDrainFluid(StandardTank tank, FluidStack fluidStack) {
-		return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) &&
-				tankCanDrain(tank);
+		return ForestryFluids.areEqual(tank.getFluidType(), fluidStack) && tankCanDrain(tank);
 	}
 
 	public final boolean addAll(Collection<? extends StandardTank> collection) {

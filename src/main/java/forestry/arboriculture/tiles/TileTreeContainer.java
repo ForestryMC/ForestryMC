@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,23 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.arboriculture.genetics.Tree;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.owner.OwnerHandler;
-import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.RenderUtil;
-
-import genetics.api.alleles.IAllele;
+import javax.annotation.Nullable;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -37,8 +27,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Random;
+import genetics.api.alleles.IAllele;
+
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.arboriculture.genetics.Tree;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.owner.OwnerHandler;
+import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.RenderUtil;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.

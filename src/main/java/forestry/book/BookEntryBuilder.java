@@ -1,16 +1,20 @@
 package forestry.book;
 
-import forestry.api.book.*;
-import forestry.book.pages.JsonPageFactory;
+import javax.annotation.Nullable;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
+import forestry.api.book.BookContent;
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IBookEntry;
+import forestry.api.book.IBookEntryBuilder;
+import forestry.api.book.IBookPageFactory;
+import forestry.book.pages.JsonPageFactory;
 
 @OnlyIn(Dist.CLIENT)
 public class BookEntryBuilder implements IBookEntryBuilder {
@@ -60,15 +64,7 @@ public class BookEntryBuilder implements IBookEntryBuilder {
 
 	@Override
 	public IBookEntry build(@Nullable IBookEntry parent) {
-		return new BookEntry(
-				name,
-				stack,
-				loader,
-				entry -> subEntries.stream().map(builder -> builder.build(entry)).toArray(IBookEntry[]::new),
-				content,
-				title,
-				parent
-		);
+		return new BookEntry(name, stack, loader, entry -> subEntries.stream().map(builder -> builder.build(entry)).toArray(IBookEntry[]::new), content, title, parent);
 	}
 
 	@Override

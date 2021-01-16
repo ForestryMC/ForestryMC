@@ -12,6 +12,19 @@
  */
 package forestry.book.data.content;
 
+import javax.annotation.Nullable;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+
+import net.minecraft.resources.IResource;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.book.BookLoader;
 import forestry.book.data.structure.BlockData;
@@ -21,19 +34,6 @@ import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
 import forestry.core.utils.Log;
-
-import net.minecraft.resources.IResource;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import org.apache.commons.io.IOUtils;
-
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 
 /**
  * A book content that displays a multiblock structure.
@@ -60,10 +60,7 @@ public class StructureContent extends BookContent {
 		if (resource == null) {
 			return;
 		}
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-				resource.getInputStream(),
-				StandardCharsets.UTF_8
-		))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
 			structureData = BookLoader.GSON.fromJson(reader, StructureData.class);
 		} catch (IOException e) {
 			Log.error("Failed to load structure file {}.{}", structureFile, e);
@@ -73,13 +70,7 @@ public class StructureContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (structureFile == null) {
 			return false;
 		}
@@ -92,14 +83,7 @@ public class StructureContent extends BookContent {
 		BlockData[] structure = structureData.structure;
 
 		if (size.length == 3 && structure.length > 0) {
-			MultiblockElement elementStructure = new MultiblockElement(
-					offset,
-					0,
-					structureSizeX,
-					structureSizeY,
-					size,
-					structure
-			);
+			MultiblockElement elementStructure = new MultiblockElement(offset, 0, structureSizeX, structureSizeY, size, structure);
 			page.add(elementStructure);
 		}
 		return true;

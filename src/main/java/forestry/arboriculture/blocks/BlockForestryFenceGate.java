@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.blocks;
-
-import forestry.api.arboriculture.IWoodType;
-import forestry.api.arboriculture.WoodBlockKind;
-import forestry.arboriculture.IWoodTyped;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,15 +19,17 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.WoodBlockKind;
+import forestry.arboriculture.IWoodTyped;
+
 public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped {
 
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
 	public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD)
-				.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-				.sound(SoundType.WOOD));
+		super(Block.Properties.create(Material.WOOD).hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F).sound(SoundType.WOOD));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 

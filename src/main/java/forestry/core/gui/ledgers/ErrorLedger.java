@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.core.IErrorState;
-import forestry.core.utils.StringUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import javax.annotation.Nullable;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.api.core.IErrorState;
+import forestry.core.utils.StringUtil;
 
 /**
  * A ledger displaying error messages and help text.
@@ -38,11 +38,7 @@ public class ErrorLedger extends Ledger {
 		this.state = state;
 		if (state != null) {
 			//TODO - textcomponent
-			int lineHeight = StringUtil.getLineHeight(
-					maxTextWidth,
-					getTooltip(),
-					new TranslationTextComponent(state.getUnlocalizedHelp())
-			);
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
 			maxHeight = lineHeight + 20;
 		}
 	}

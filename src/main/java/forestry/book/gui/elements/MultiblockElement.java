@@ -12,15 +12,8 @@
  */
 package forestry.book.gui.elements;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.book.data.structure.BlockData;
-import forestry.book.data.structure.StructureBlockAccess;
-import forestry.book.data.structure.StructureInfo;
-import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import javax.annotation.Nullable;
+import java.util.stream.IntStream;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -33,13 +26,20 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
-import java.util.stream.IntStream;
+import forestry.book.data.structure.BlockData;
+import forestry.book.data.structure.StructureBlockAccess;
+import forestry.book.data.structure.StructureInfo;
+import forestry.book.gui.GuiForesterBook;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.lib.events.GuiEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {
@@ -122,20 +122,12 @@ public class MultiblockElement extends GuiElement {
 		final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRendererDispatcher();
 		final TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
-		GlStateManager.translatef(
-				xTranslate,
-				yTranslate,
-				Math.max(structureHeight, Math.max(structureWidth, structureLength))
-		);
+		GlStateManager.translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
 		GlStateManager.scalef(scale, -scale, 1);
 		GlStateManager.rotatef(rotX, 1, 0, 0);
 		GlStateManager.rotatef(rotY, 0, 1, 0);
 
-		GlStateManager.translatef(
-				(float) structureLength / -2f,
-				(float) structureHeight / -2f,
-				(float) structureWidth / -2f
-		);
+		GlStateManager.translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
 
 		GlStateManager.disableLighting();
 

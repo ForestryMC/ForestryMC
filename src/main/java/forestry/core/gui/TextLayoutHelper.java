@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
+
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import forestry.core.render.ColourProperties;
-
-import net.minecraft.util.text.ITextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.core.render.ColourProperties;
 
 @OnlyIn(Dist.CLIENT)
 public class TextLayoutHelper {
@@ -74,15 +74,7 @@ public class TextLayoutHelper {
 		RenderSystem.popMatrix();
 	}
 
-	public void drawRow(
-			MatrixStack transform,
-			ITextComponent text0,
-			ITextComponent text1,
-			ITextComponent text2,
-			int colour0,
-			int colour1,
-			int colour2
-	) {
+	public void drawRow(MatrixStack transform, ITextComponent text0, ITextComponent text1, ITextComponent text2, int colour0, int colour1, int colour2) {
 		drawLine(transform, text0, column0, colour0);
 		drawLine(transform, text1, column1, colour1);
 		drawLine(transform, text2, column2, colour2);
@@ -105,13 +97,7 @@ public class TextLayoutHelper {
 	}
 
 	public void drawCenteredLine(MatrixStack transform, ITextComponent text, int x, int y, int width, int color) {
-		guiForestry.getFontRenderer().func_243248_b(
-				transform,
-				text,
-				guiForestry.getGuiLeft() + x + getCenteredOffset(text, width),
-				guiForestry.getGuiTop() + y + line,
-				color
-		);
+		guiForestry.getFontRenderer().func_243248_b(transform, text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawLine(MatrixStack transform, ITextComponent text, int x, int color) {
@@ -119,23 +105,11 @@ public class TextLayoutHelper {
 	}
 
 	public void drawLine(MatrixStack transform, ITextComponent text, int x, int y, int color) {
-		guiForestry.getFontRenderer().func_243248_b(
-				transform,
-				text,
-				guiForestry.getGuiLeft() + x,
-				guiForestry.getGuiTop() + y + line,
-				color
-		);
+		guiForestry.getFontRenderer().func_243248_b(transform, text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawSplitLine(ITextComponent text, int x, int maxWidth, int color) {
-		guiForestry.getFontRenderer().func_238418_a_(
-				text,
-				guiForestry.getGuiLeft() + x,
-				guiForestry.getGuiTop() + line,
-				maxWidth,
-				color
-		);
+		guiForestry.getFontRenderer().func_238418_a_(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
 	}
 
 	public int getCenteredOffset(ITextComponent string) {

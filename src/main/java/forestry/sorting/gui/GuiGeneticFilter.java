@@ -1,5 +1,14 @@
 package forestry.sorting.gui;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -13,15 +22,6 @@ import forestry.sorting.gui.widgets.RuleWidget;
 import forestry.sorting.gui.widgets.SelectionWidget;
 import forestry.sorting.gui.widgets.SpeciesWidget;
 import forestry.sorting.tiles.IFilterContainer;
-
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nullable;
 
 public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> {
 
@@ -45,33 +45,12 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 3; j++) {
 				for (int k = 0; k < 2; k++) {
-					widgetManager.add(new SpeciesWidget(
-							widgetManager,
-							44 + 36 + j * 45 + k * 18,
-							18 + i * 18,
-							Direction.byIndex(i),
-							j,
-							k == 0,
-							this
-					));
+					widgetManager.add(new SpeciesWidget(widgetManager, 44 + 36 + j * 45 + k * 18, 18 + i * 18, Direction.byIndex(i), j, k == 0, this));
 				}
 			}
 		}
 
-		this.scrollBar = new WidgetScrollBar(
-				widgetManager,
-				157 + 36,
-				150,
-				12,
-				64,
-				new Drawable(
-						new ResourceLocation(Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"),
-						232,
-						0,
-						12,
-						15
-				)
-		);
+		this.scrollBar = new WidgetScrollBar(widgetManager, 157 + 36, 150, 12, 64, new Drawable(new ResourceLocation(Constants.TEXTURE_PATH_GUI + "container/creative_inventory/tabs.png"), 232, 0, 12, 15));
 		widgetManager.add(this.selection = new SelectionWidget(widgetManager, 0, 134, scrollBar, this));
 		widgetManager.add(scrollBar);
 		scrollBar.setVisible(false);
@@ -124,14 +103,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
 		String oldString = searchField != null ? searchField.getText() : "";
 
-		this.searchField = new TextFieldWidget(
-				this.minecraft.fontRenderer,
-				this.guiLeft + selection.getX() + 89 + 36,
-				selection.getY() + this.guiTop + 4,
-				80,
-				minecraft.fontRenderer.FONT_HEIGHT,
-				null
-		);
+		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + selection.getX() + 89 + 36, selection.getY() + this.guiTop + 4, 80, minecraft.fontRenderer.FONT_HEIGHT, null);
 		this.searchField.setMaxStringLength(50);
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);

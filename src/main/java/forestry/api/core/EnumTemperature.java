@@ -1,8 +1,8 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.core;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,16 +18,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * This enum concerns temperature.
  */
 public enum EnumTemperature {
-	NONE("None", "habitats/ocean", 0x808080), ICY("Icy", "habitats/snow", 0xaafff0), COLD(
-			"Cold",
-			"habitats/taiga",
-			0x72ddf7
-	),
-	NORMAL("Normal", "habitats/plains", 0xffd013), WARM("Warm", "habitats/jungle", 0xfb8a24), HOT(
-			"Hot",
-			"habitats/desert",
-			0xd61439
-	), HELLISH("Hellish", "habitats/nether", 0x81032d);
+	NONE("None", "habitats/ocean", 0x808080), ICY("Icy", "habitats/snow", 0xaafff0), COLD("Cold", "habitats/taiga", 0x72ddf7),
+	NORMAL("Normal", "habitats/plains", 0xffd013), WARM("Warm", "habitats/jungle", 0xfb8a24), HOT("Hot", "habitats/desert", 0xd61439), HELLISH("Hellish", "habitats/nether", 0x81032d);
 
 	public static EnumTemperature[] VALUES = values();
 
@@ -39,6 +31,15 @@ public enum EnumTemperature {
 		this.name = name;
 		this.iconIndex = iconIndex;
 		this.color = color;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public TextureAtlasSprite getSprite() {
+		return ForestryAPI.textureManager.getDefault(iconIndex);
 	}
 
 	/**
@@ -78,14 +79,5 @@ public enum EnumTemperature {
 
 		float temperature = biome.getTemperature(pos);
 		return getFromValue(temperature);
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public TextureAtlasSprite getSprite() {
-		return ForestryAPI.textureManager.getDefault(iconIndex);
 	}
 }

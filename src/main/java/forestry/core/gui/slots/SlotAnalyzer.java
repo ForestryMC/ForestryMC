@@ -1,17 +1,13 @@
 package forestry.core.gui.slots;
 
-import forestry.core.gui.GuiAnalyzerProvider;
-import forestry.core.inventory.ItemInventoryAlyzer;
-
-import net.minecraft.inventory.container.Slot;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
+import forestry.core.gui.GuiAnalyzerProvider;
+import forestry.core.inventory.ItemInventoryAlyzer;
 
 public class SlotAnalyzer extends SlotFiltered {
 	@Nullable

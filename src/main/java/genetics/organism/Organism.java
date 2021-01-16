@@ -1,5 +1,16 @@
 package genetics.organism;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+
 import genetics.Genetics;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -13,28 +24,13 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.individual.GeneticSaveHandler;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.function.Supplier;
-
 public class Organism<I extends IIndividual> implements IOrganism<I> {
 	private final LazyOptional<IOrganism> holder = LazyOptional.of(() -> this);
 	private final ItemStack container;
 	private final IRootDefinition<? extends IIndividualRoot<I>> definition;
 	private final Supplier<IOrganismType> typeSupplier;
 
-	public Organism(
-			ItemStack container,
-			IRootDefinition<? extends IIndividualRoot<I>> geneticDefinitionSupplier,
-			Supplier<IOrganismType> typeSupplier
-	) {
+	public Organism(ItemStack container, IRootDefinition<? extends IIndividualRoot<I>> geneticDefinitionSupplier, Supplier<IOrganismType> typeSupplier) {
 		this.container = container;
 		this.definition = geneticDefinitionSupplier;
 		this.typeSupplier = typeSupplier;

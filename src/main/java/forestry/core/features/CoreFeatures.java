@@ -1,7 +1,6 @@
 package forestry.core.features;
 
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.config.Constants;
+import java.util.ArrayList;
 
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -19,51 +18,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
+import forestry.core.blocks.EnumResourceType;
+import forestry.core.config.Constants;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreFeatures {
 	private static final ArrayList<ConfiguredFeature<?, ?>> overworldOres = new ArrayList<ConfiguredFeature<?, ?>>();
 
 	public static void registerOres() {
-		overworldOres.add(
-				register(
-						"apatite_ore",
-						Feature.ORE.withConfiguration(
-								new OreFeatureConfig(
-										OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-										CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(),
-										36
-								)
-						).range(4).square().func_242731_b(56)
-				)
-		);
+		overworldOres.add(register("apatite_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36)).range(4).square().func_242731_b(56)));
 
-		overworldOres.add(
-				register(
-						"copper_ore",
-						Feature.ORE.withConfiguration(
-								new OreFeatureConfig(
-										OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-										CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(),
-										6
-								)
-						).range(20).square().func_242731_b(32)
-				)
-		);
+		overworldOres.add(register("copper_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6)).range(20).square().func_242731_b(32)));
 
-		overworldOres.add(
-				register(
-						"tin_ore",
-						Feature.ORE.withConfiguration(
-								new OreFeatureConfig(
-										OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD,
-										CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(),
-										6
-								)
-						).range(20).square().func_242731_b(16)
-				)
-		);
+		overworldOres.add(register("tin_ore", Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6)).range(20).square().func_242731_b(16)));
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -80,14 +47,7 @@ public class CoreFeatures {
 		}
 	}
 
-	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(
-			String name,
-			ConfiguredFeature<FC, ?> configuredFeature
-	) {
-		return Registry.register(
-				WorldGenRegistries.CONFIGURED_FEATURE,
-				Constants.MOD_ID + ":" + name,
-				configuredFeature
-		);
+	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String name, ConfiguredFeature<FC, ?> configuredFeature) {
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, Constants.MOD_ID + ":" + name, configuredFeature);
 	}
 }

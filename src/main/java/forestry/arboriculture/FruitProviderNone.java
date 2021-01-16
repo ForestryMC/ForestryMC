@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture;
 
-import forestry.api.arboriculture.IFruitProvider;
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.EmptyProductList;
-import forestry.api.genetics.products.IProductList;
-import forestry.core.config.Constants;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -32,9 +28,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Random;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.IFruitProvider;
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.EmptyProductList;
+import forestry.api.genetics.products.IProductList;
+import forestry.core.config.Constants;
 
 public class FruitProviderNone implements IFruitProvider {
 

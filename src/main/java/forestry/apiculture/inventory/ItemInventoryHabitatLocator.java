@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.inventory;
 
 import com.google.common.collect.ImmutableSet;
+
+import java.util.Optional;
+import java.util.Set;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.IBee;
@@ -21,13 +28,6 @@ import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
-
-import java.util.Optional;
-import java.util.Set;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 

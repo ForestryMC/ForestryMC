@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.network;
-
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.network.*;
-import forestry.core.tiles.TileUtil;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 
 public class PacketRipeningUpdate extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos pos;
@@ -47,12 +51,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 			BlockPos pos = data.readBlockPos();
 			int value = data.readVarInt();
 
-			TileUtil.actOnTile(
-					player.world,
-					pos,
-					IRipeningPacketReceiver.class,
-					tile -> tile.fromRipeningPacket(value)
-			);
+			TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
 		}
 	}
 }

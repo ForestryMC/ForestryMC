@@ -1,13 +1,5 @@
 package forestry.storage.proxy;
 
-import forestry.api.storage.EnumBackpackType;
-import forestry.core.config.Constants;
-import forestry.core.utils.ForgeUtils;
-import forestry.modules.IClientModuleHandler;
-import forestry.storage.BackpackMode;
-import forestry.storage.models.BackpackItemModel;
-import forestry.storage.models.CrateModel;
-
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,6 +7,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+
+import forestry.api.storage.EnumBackpackType;
+import forestry.core.config.Constants;
+import forestry.core.utils.ForgeUtils;
+import forestry.modules.IClientModuleHandler;
+import forestry.storage.BackpackMode;
+import forestry.storage.models.BackpackItemModel;
+import forestry.storage.models.CrateModel;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)

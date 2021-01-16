@@ -1,9 +1,9 @@
 package forestry.database.gui.buttons;
 
+import javax.annotation.Nullable;
+
 import forestry.core.gui.buttons.GuiBetterButton;
 import forestry.database.gui.GuiDatabase;
-
-import javax.annotation.Nullable;
 
 public class GuiDatabaseButton<V> extends GuiBetterButton {
 

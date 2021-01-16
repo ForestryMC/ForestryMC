@@ -1,13 +1,8 @@
 package forestry.book.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.book.IForesterBook;
-import forestry.book.gui.buttons.GuiButtonBack;
-import forestry.book.gui.buttons.GuiButtonPage;
-import forestry.core.config.Constants;
-import forestry.core.gui.GuiWindow;
-import forestry.core.gui.IGuiSizable;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.gui.widget.button.Button;
@@ -17,21 +12,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.List;
+import forestry.api.book.IForesterBook;
+import forestry.book.gui.buttons.GuiButtonBack;
+import forestry.book.gui.buttons.GuiButtonPage;
+import forestry.core.config.Constants;
+import forestry.core.gui.GuiWindow;
+import forestry.core.gui.IGuiSizable;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "almanac/almanac.png"
-	);
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "almanac/almanac.png");
 	public static final int PAGE_WIDTH = 108;
 	public static final int PAGE_HEIGHT = 155;
 	static final int LEFT_PAGE_START_X = 16;
@@ -72,11 +69,6 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		TextureManager manager = this.minecraft.textureManager;
 
@@ -97,6 +89,23 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
+	public void init() {
+		super.init();
+		this.buttons.clear();
+		if (hasButtons()) {
+			GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
+			GuiButtonPage rightButton = addButton(new GuiButtonPage(guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false, this::actionPerformed));
+			GuiButtonBack backButton = addButton(new GuiButtonBack(guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20, this::actionPerformed));
+			initButtons(leftButton, rightButton, backButton);
+		}
+	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
+
+	@Override
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawTooltips(transform, mouseY, mouseX);
 		PlayerInventory playerInv = minecraft.player.inventory;
@@ -105,43 +114,8 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 			List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
 				MainWindow mainWindow = getMC().getMainWindow();
-				GuiUtils.drawHoveringText(
-						transform,
-						tooltip,
-						mouseX,
-						mouseY,
-						mainWindow.getScaledWidth(),
-						mainWindow.getScaledHeight(),
-						-1,
-						getMC().fontRenderer
-				);
+				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
 			}
-		}
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		this.buttons.clear();
-		if (hasButtons()) {
-			GuiButtonPage leftButton = addButton(new GuiButtonPage(
-					guiLeft + 24,
-					guiTop + Y_SIZE - 20,
-					true,
-					this::actionPerformed
-			));
-			GuiButtonPage rightButton = addButton(new GuiButtonPage(
-					guiLeft + X_SIZE - 44,
-					guiTop + Y_SIZE - 20,
-					false,
-					this::actionPerformed
-			));
-			GuiButtonBack backButton = addButton(new GuiButtonBack(
-					guiLeft + X_SIZE / 2 - 12,
-					guiTop + Y_SIZE - 20,
-					this::actionPerformed
-			));
-			initButtons(leftButton, rightButton, backButton);
 		}
 	}
 

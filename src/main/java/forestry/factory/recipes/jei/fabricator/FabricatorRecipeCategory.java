@@ -1,5 +1,19 @@
 package forestry.factory.recipes.jei.fabricator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.recipes.IFabricatorRecipe;
 import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.RecipeManagers;
@@ -18,15 +32,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.*;
-
 public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorRecipeWrapper> {
 	private static final int planSlot = 0;
 	private static final int smeltingInputSlot = 1;
@@ -35,10 +40,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
 	private static final int inputTank = 0;
 
-	private final static ResourceLocation guiTexture = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "fabricator.png"
-	);
+	private final static ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "fabricator.png");
 	private final ICraftingGridHelper craftingGridHelper;
 	private final IDrawable icon;
 	private final RecipeManager manager;
@@ -47,9 +49,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 		super(guiHelper.createDrawable(guiTexture, 20, 16, 136, 54), "block.forestry.fabricator");
 
 		craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot);
-		this.icon = guiHelper.createDrawableIngredient(
-				new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block())
-		);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR).block()));
 		this.manager = manager;
 	}
 
@@ -124,12 +124,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 		guiItemStacks.set(craftOutputSlot, itemOutputs.get(0));
 
 		List<List<ItemStack>> itemStackInputs = ingredients.getInputs(VanillaTypes.ITEM);
-		craftingGridHelper.setInputs(
-				guiItemStacks,
-				itemStackInputs,
-				recipe.getCraftingGridRecipe().getWidth(),
-				recipe.getCraftingGridRecipe().getHeight()
-		);
+		craftingGridHelper.setInputs(guiItemStacks, itemStackInputs, recipe.getCraftingGridRecipe().getWidth(), recipe.getCraftingGridRecipe().getHeight());
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 		if (!fluidInputs.isEmpty()) {

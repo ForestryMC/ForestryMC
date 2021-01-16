@@ -1,11 +1,11 @@
 package genetics.individual;
 
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
 
 public class ChromosomeInfo {
 	public final IChromosomeType chromosomeType;
@@ -25,10 +25,7 @@ public class ChromosomeInfo {
 		return this;
 	}
 
-	public void setSpeciesInfo(
-			@Nullable ResourceLocation activeSpeciesUid,
-			@Nullable ResourceLocation inactiveSpeciesUid
-	) {
+	public void setSpeciesInfo(@Nullable ResourceLocation activeSpeciesUid, @Nullable ResourceLocation inactiveSpeciesUid) {
 		this.activeSpeciesUid = activeSpeciesUid;
 		this.inactiveSpeciesUid = inactiveSpeciesUid;
 	}

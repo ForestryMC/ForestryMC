@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.circuits;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
 import forestry.factory.recipes.AbstractCraftingProvider;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-
-import javax.annotation.Nullable;
 
 public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> implements ISolderManager {
 	public SolderManager() {
@@ -37,11 +37,7 @@ public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> imple
 	}
 
 	@Nullable
-	public ISolderRecipe getMatchingRecipe(
-			RecipeManager manager,
-			@Nullable ICircuitLayout layout,
-			ItemStack resource
-	) {
+	public ISolderRecipe getMatchingRecipe(RecipeManager manager, @Nullable ICircuitLayout layout, ItemStack resource) {
 		if (layout != null) {
 			for (ISolderRecipe recipe : getRecipes(manager)) {
 				if (recipe.matches(layout, resource)) {

@@ -2,20 +2,26 @@ package genetics.individual;
 
 import com.google.common.base.MoreObjects;
 
+import java.util.Arrays;
+
+import net.minecraft.nbt.CompoundNBT;
+
 import genetics.ApiInstance;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.*;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeValue;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IKaryotype;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.utils.AlleleUtils;
-
-import net.minecraft.nbt.CompoundNBT;
-
-import java.util.Arrays;
 
 public final class Genome implements IGenome {
 	private final IChromosome[] chromosomes;
@@ -35,11 +41,7 @@ public final class Genome implements IGenome {
 	@SuppressWarnings("all")
 	private void checkChromosomes(IChromosome[] chromosomes) {
 		if (chromosomes.length != karyotype.getChromosomeTypes().length) {
-			String message = String.format(
-					"Tried to create a genome for '%s' from an invalid chromosome template.\n%s",
-					karyotype.getUID(),
-					chromosomesToString(chromosomes)
-			);
+			String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template.\n%s", karyotype.getUID(), chromosomesToString(chromosomes));
 			throw new IllegalArgumentException(message);
 		}
 
@@ -49,59 +51,29 @@ public final class Genome implements IGenome {
 			IChromosomeType chromosomeType = chromosomeTypes[i];
 			IChromosome chromosome = chromosomes[i];
 			if (chromosome == null) {
-				String message = String.format(
-						"Tried to create a genome for '%s' from an invalid chromosome template. " +
-								"Missing chromosome '%s'.\n%s",
-						karyotype.getUID(),
-						chromosomeType.getName(),
-						chromosomesToString(chromosomes)
-				);
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " + "Missing chromosome '%s'.\n%s", karyotype.getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			IAllele primary = chromosome.getActiveAllele();
 			if (primary == null) {
-				String message = String.format(
-						"Tried to create a genome for '%s' from an invalid chromosome template. " +
-								"Missing active allele for '%s'.\n%s",
-						karyotype.getUID(),
-						chromosomeType.getName(),
-						chromosomesToString(chromosomes)
-				);
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " + "Missing active allele for '%s'.\n%s", karyotype.getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			IAllele secondary = chromosome.getInactiveAllele();
 			if (secondary == null) {
-				String message = String.format(
-						"Tried to create a genome for '%s' from an invalid chromosome template. " +
-								"Missing inactive allele for '%s'.\n%s",
-						karyotype.getUID(),
-						chromosomeType.getName(),
-						chromosomesToString(chromosomes)
-				);
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " + "Missing inactive allele for '%s'.\n%s", karyotype.getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			if (!registry.isValidAllele(primary, chromosomeType)) {
-				String message = String.format(
-						"Tried to create a genome for '%s' from an invalid chromosome template. " +
-								"Incorrect type for active allele '%s'.\n%s.",
-						karyotype.getUID(),
-						chromosomeType.getName(),
-						chromosomesToString(chromosomes)
-				);
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " + "Incorrect type for active allele '%s'.\n%s.", karyotype.getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 
 			if (!registry.isValidAllele(secondary, chromosomeType)) {
-				String message = String.format(
-						"Tried to create a genome for '%s' from an invalid chromosome template. " +
-								"Incorrect type for inaktive allele '%s'.\n%s.",
-						karyotype.getUID(),
-						chromosomeType.getName(),
-						chromosomesToString(chromosomes)
-				);
+				String message = String.format("Tried to create a genome for '%s' from an invalid chromosome template. " + "Incorrect type for inaktive allele '%s'.\n%s.", karyotype.getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
 				throw new IllegalArgumentException(message);
 			}
 		}
@@ -152,12 +124,7 @@ public final class Genome implements IGenome {
 		Class<? extends A> alleleClass = chromosomeType.getAlleleClass();
 		IAllele allele = getActiveAllele((IChromosomeType) chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.",
-					allele,
-					chromosomeType,
-					alleleClass
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.", allele, chromosomeType, alleleClass));
 		}
 		return alleleClass.cast(allele);
 	}
@@ -176,22 +143,13 @@ public final class Genome implements IGenome {
 	public <A extends IAllele> A getActiveAllele(IChromosomeType chromosomeType, Class<? extends A> alleleClass) {
 		IAllele allele = getActiveAllele(chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.",
-					allele,
-					chromosomeType,
-					alleleClass
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.", allele, chromosomeType, alleleClass));
 		}
 		return alleleClass.cast(allele);
 	}
 
 	@Override
-	public <A extends IAllele> A getActiveAllele(
-			IChromosomeType chromosomeType,
-			Class<? extends A> alleleClass,
-			A fallback
-	) {
+	public <A extends IAllele> A getActiveAllele(IChromosomeType chromosomeType, Class<? extends A> alleleClass, A fallback) {
 		IAllele allele = getActiveAllele(chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
 			return fallback;
@@ -204,11 +162,7 @@ public final class Genome implements IGenome {
 		IAllele allele = getActiveAllele(chromosomeType);
 		V value = AlleleUtils.getAlleleValue(allele, valueClass);
 		if (value == null) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' has no value.",
-					allele,
-					chromosomeType
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' has no value.", allele, chromosomeType));
 		}
 		return value;
 	}
@@ -224,11 +178,7 @@ public final class Genome implements IGenome {
 		IAllele allele = getActiveAllele(chromosomeType);
 		V value = AlleleUtils.getAlleleValue(allele, chromosomeType.getValueClass());
 		if (value == null) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' has no value.",
-					allele,
-					chromosomeType
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' has no value.", allele, chromosomeType));
 		}
 		return value;
 	}
@@ -256,12 +206,7 @@ public final class Genome implements IGenome {
 		Class<? extends A> alleleClass = chromosomeType.getAlleleClass();
 		IAllele allele = getInactiveAllele((IChromosomeType) chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.",
-					allele,
-					chromosomeType,
-					alleleClass
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' is not an instance of the class '%s'.", allele, chromosomeType, alleleClass));
 		}
 		return alleleClass.cast(allele);
 	}
@@ -280,22 +225,13 @@ public final class Genome implements IGenome {
 	public <A extends IAllele> A getInactiveAllele(IChromosomeType chromosomeType, Class<? extends A> alleleClass) {
 		IAllele allele = getInactiveAllele(chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the inactive position of the chromosome type '%s' is not an instance of the class '%s'.",
-					allele,
-					chromosomeType,
-					alleleClass
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the inactive position of the chromosome type '%s' is not an instance of the class '%s'.", allele, chromosomeType, alleleClass));
 		}
 		return alleleClass.cast(allele);
 	}
 
 	@Override
-	public <A extends IAllele> A getInactiveAllele(
-			IChromosomeType chromosomeType,
-			Class<? extends A> alleleClass,
-			A fallback
-	) {
+	public <A extends IAllele> A getInactiveAllele(IChromosomeType chromosomeType, Class<? extends A> alleleClass, A fallback) {
 		IAllele allele = getInactiveAllele(chromosomeType);
 		if (!alleleClass.isInstance(allele)) {
 			return fallback;
@@ -308,11 +244,7 @@ public final class Genome implements IGenome {
 		IAllele allele = getInactiveAllele(chromosomeType);
 		V value = AlleleUtils.getAlleleValue(allele, valueClass);
 		if (value == null) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the inactive position of the chromosome type '%s' has no value.",
-					allele,
-					chromosomeType
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the inactive position of the chromosome type '%s' has no value.", allele, chromosomeType));
 		}
 		return value;
 	}
@@ -328,11 +260,7 @@ public final class Genome implements IGenome {
 		IAllele allele = getInactiveAllele(chromosomeType);
 		V value = AlleleUtils.getAlleleValue(allele, chromosomeType.getValueClass());
 		if (value == null) {
-			throw new IllegalArgumentException(String.format(
-					"The allele '%s' at the active position of the chromosome type '%s' has no value.",
-					allele,
-					chromosomeType
-			));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' has no value.", allele, chromosomeType));
 		}
 		return value;
 	}

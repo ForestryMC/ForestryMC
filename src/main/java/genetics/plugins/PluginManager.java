@@ -2,6 +2,17 @@ package genetics.plugins;
 
 import com.google.common.collect.ImmutableSortedMap;
 
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import net.minecraftforge.eventbus.api.EventPriority;
+
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import genetics.ApiInstance;
 import genetics.GeneticFactory;
 import genetics.alleles.AlleleRegistry;
@@ -12,17 +23,6 @@ import genetics.api.alleles.Allele;
 import genetics.classification.ClassificationRegistry;
 import genetics.root.IndividualRootBuilder;
 import genetics.root.RootManager;
-
-import net.minecraftforge.eventbus.api.EventPriority;
-
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
-import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.function.Consumer;
 
 public class PluginManager {
 	private static final Comparator<IGeneticPlugin> PLUGIN_COMPARATOR = (firstPlugin, secondPlugin) -> {
@@ -40,8 +40,7 @@ public class PluginManager {
 	}
 
 	public static void create() {
-		ImmutableSortedMap.Builder<IGeneticPlugin, ModContainer> builder = new ImmutableSortedMap.Builder<>(
-				PLUGIN_COMPARATOR);
+		ImmutableSortedMap.Builder<IGeneticPlugin, ModContainer> builder = new ImmutableSortedMap.Builder<>(PLUGIN_COMPARATOR);
 		builder.putAll(PluginUtil.getPlugins());
 		plugins = builder.build();
 		for (IGeneticPlugin plugin : plugins.keySet()) {

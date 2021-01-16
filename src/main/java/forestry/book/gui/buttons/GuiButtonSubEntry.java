@@ -1,11 +1,7 @@
 package forestry.book.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-
-import forestry.api.book.IBookEntry;
-import forestry.book.gui.GuiForesterBook;
-import forestry.core.gui.GuiUtil;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -13,11 +9,15 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.ITextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collections;
-import java.util.List;
+import forestry.api.book.IBookEntry;
+import forestry.book.gui.GuiForesterBook;
+import forestry.core.gui.GuiUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonSubEntry extends Button {
@@ -59,9 +59,6 @@ public class GuiButtonSubEntry extends Button {
 	}
 
 	public boolean isMouseOver(int mouseX, int mouseY) {
-		return mouseX >= this.x
-				&& mouseY >= this.y
-				&& mouseX < this.x + this.width
-				&& mouseY < this.y + this.height;
+		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 	}
 }

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
-
-import forestry.core.ItemGroupForestry;
 
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+
+import forestry.core.ItemGroupForestry;
 
 public class ItemForestryFood extends Item {
 
@@ -34,12 +34,7 @@ public class ItemForestryFood extends Item {
 	}
 
 	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
-		super(properties
-				.group(ItemGroupForestry.tabForestry)
-				.food((new Food.Builder())
-						.hunger(heal)
-						.saturation(saturation)
-						.build()));
+		super(properties.group(ItemGroupForestry.tabForestry).food((new Food.Builder()).hunger(heal).saturation(saturation).build()));
 	}
 
 	@Override

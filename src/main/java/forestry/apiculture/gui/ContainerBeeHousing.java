@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+
+import net.minecraftforge.common.util.LazyOptional;
 
 import forestry.api.climate.IClimateListener;
 import forestry.apiculture.features.ApicultureContainers;
@@ -20,12 +26,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketGuiUpdate;
 import forestry.core.tiles.TileUtil;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-
-import net.minecraftforge.common.util.LazyOptional;
-
 public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousingBase> implements IContainerBeeHousing {
 
 	private final IGuiBeeHousingDelegate delegate;
@@ -33,13 +33,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 	private int beeProgress = -1;
 
 	//TODO hack icon in GUI by checking title. Then it isn't needed here.
-	public ContainerBeeHousing(
-			int windowId,
-			PlayerInventory player,
-			TileBeeHousingBase tile,
-			boolean hasFrames,
-			GuiBeeHousing.Icon icon
-	) {
+	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 

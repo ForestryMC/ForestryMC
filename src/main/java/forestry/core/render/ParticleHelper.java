@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.render;
-
-import forestry.core.utils.WorldUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -28,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.core.utils.WorldUtils;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -35,13 +35,7 @@ public class ParticleHelper {
 
 	//TODO see ParticleManager.addBlockHitEffects which is almost the same (or maybe should replace this...)
 	@OnlyIn(Dist.CLIENT)
-	public static boolean addBlockHitEffects(
-			World world,
-			BlockPos pos,
-			Direction side,
-			ParticleManager effectRenderer,
-			Callback callback
-	) {
+	public static boolean addBlockHitEffects(World world, BlockPos pos, Direction side, ParticleManager effectRenderer, Callback callback) {
 		BlockState blockState = world.getBlockState(pos);
 		if (blockState.getRenderType() != BlockRenderType.INVISIBLE) {
 			int x = pos.getX();
@@ -49,12 +43,9 @@ public class ParticleHelper {
 			int z = pos.getZ();
 			float f = 0.1F;
 			AxisAlignedBB axisalignedbb = blockState.getShape(world, pos).getBoundingBox();
-			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f +
-					axisalignedbb.minX;
-			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f +
-					axisalignedbb.minY;
-			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f +
-					axisalignedbb.minZ;
+			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
+			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
+			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
 			if (side == Direction.DOWN) {
 				py = y + axisalignedbb.minY - f;
 			}
@@ -83,16 +74,7 @@ public class ParticleHelper {
 			//         this.addEffect((new DiggingParticle(this.world, d0, d1, d2, 0.0D, 0.0D, 0.0D, blockstate)).setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
-			DiggingParticle fx = new DiggingParticle(
-					WorldUtils.asClient(world),
-					px,
-					py,
-					pz,
-					0.0D,
-					0.0D,
-					0.0D,
-					blockState
-			);
+			DiggingParticle fx = new DiggingParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
 			effectRenderer.addEffect(fx);
 			callback.addHitEffects(fx, world, pos, blockState);
 			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multiplyParticleScaleBy(0.6F);
@@ -109,14 +91,7 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static boolean addDestroyEffects(
-			World world,
-			Block block,
-			BlockState state,
-			BlockPos pos,
-			ParticleManager effectRenderer,
-			Callback callback
-	) {
+	public static boolean addDestroyEffects(World world, Block block, BlockState state, BlockPos pos, ParticleManager effectRenderer, Callback callback) {
 		if (block != state.getBlock()) {
 			return false;
 		}

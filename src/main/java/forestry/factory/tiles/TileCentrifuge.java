@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,27 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Stack;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.CraftResultInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -29,25 +48,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Stack;
 
 //import forestry.factory.triggers.FactoryTriggers;
 //
@@ -74,10 +74,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	private void checkRecipe() {
 		ItemStack resource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE);
-		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(
-				world.getRecipeManager(),
-				resource
-		);
+		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(world.getRecipeManager(), resource);
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
@@ -96,13 +93,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		ItemStack next = pendingProducts.peek();
 
-		boolean added = InventoryUtil.tryAddStack(
-				this,
-				next,
-				InventoryCentrifuge.SLOT_PRODUCT_1,
-				InventoryCentrifuge.SLOT_PRODUCT_COUNT,
-				true
-		);
+		boolean added = InventoryUtil.tryAddStack(this, next, InventoryCentrifuge.SLOT_PRODUCT_1, InventoryCentrifuge.SLOT_PRODUCT_COUNT, true);
 
 		if (added) {
 			pendingProducts.pop();
@@ -122,9 +113,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 			return false;
 		}
 
-		return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
-				.getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
-				.getMaxStackSize() > percentage;
+		return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	@Override

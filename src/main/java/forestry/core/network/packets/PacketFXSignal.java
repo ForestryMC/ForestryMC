@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.network.packets;
 
-import forestry.core.network.*;
+import java.io.IOException;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +26,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.io.IOException;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 
 public class PacketFXSignal extends ForestryPacket implements IForestryPacketClient {
 
@@ -65,11 +69,15 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	}
 
 	public enum VisualFXType {
-		NONE, BLOCK_BREAK, SAPLING_PLACE
+		NONE,
+		BLOCK_BREAK,
+		SAPLING_PLACE
 	}
 
 	public enum SoundFXType {
-		NONE, BLOCK_BREAK, BLOCK_PLACE
+		NONE,
+		BLOCK_BREAK,
+		BLOCK_PLACE
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -91,27 +99,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 				SoundType soundType = block.getSoundType(blockState, world, pos, null);
 
 				if (soundFX == SoundFXType.BLOCK_BREAK) {
-					world.playSound(
-							pos.getX() + 0.5,
-							pos.getY() + 0.5,
-							pos.getZ() + 0.5,
-							soundType.getBreakSound(),
-							SoundCategory.BLOCKS,
-							(soundType.getVolume() + 1.0F) / 2.0F,
-							soundType.getPitch() * 0.8F,
-							false
-					);
+					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-					world.playSound(
-							pos.getX() + 0.5,
-							pos.getY() + 0.5,
-							pos.getZ() + 0.5,
-							soundType.getPlaceSound(),
-							SoundCategory.BLOCKS,
-							(soundType.getVolume() + 1.0F) / 2.0F,
-							soundType.getPitch() * 0.8F,
-							false
-					);
+					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				}
 			}
 		}

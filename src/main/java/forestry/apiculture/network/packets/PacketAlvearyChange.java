@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.network.packets;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.network.*;
-import forestry.core.tiles.TileUtil;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
+import forestry.core.tiles.TileUtil;
 
 public class PacketAlvearyChange extends ForestryPacket implements IForestryPacketClient {
 	private final BlockPos controllerPos;
@@ -42,12 +46,7 @@ public class PacketAlvearyChange extends ForestryPacket implements IForestryPack
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			TileUtil.actOnTile(
-					player.world,
-					pos,
-					IMultiblockComponent.class,
-					tile -> tile.getMultiblockLogic().getController().reassemble()
-			);
+			TileUtil.actOnTile(player.world, pos, IMultiblockComponent.class, tile -> tile.getMultiblockLogic().getController().reassemble());
 		}
 	}
 }

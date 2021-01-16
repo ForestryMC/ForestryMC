@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
+
+import net.minecraft.client.gui.ScreenManager;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
@@ -20,17 +26,16 @@ import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.mail.commands.CommandMail;
 import forestry.mail.features.MailContainers;
-import forestry.mail.gui.*;
+import forestry.mail.gui.GuiCatalogue;
+import forestry.mail.gui.GuiLetter;
+import forestry.mail.gui.GuiMailbox;
+import forestry.mail.gui.GuiStampCollector;
+import forestry.mail.gui.GuiTradeName;
+import forestry.mail.gui.GuiTrader;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-
-import net.minecraft.client.gui.ScreenManager;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.MAIL, name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.mail.description")
 public class ModuleMail extends BlankForestryModule {

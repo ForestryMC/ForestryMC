@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -22,18 +34,6 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
-
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	private final ItemInventoryImprinter itemInventory;
@@ -103,43 +103,19 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		ITextComponent title = new TranslationTextComponent("for.gui.imprinter");
 
 		int offset = (138 - getFontRenderer().getStringWidth(title.getString())) / 2;
-		getFontRenderer().func_243248_b(
-				transform,
-				title,
-				startX + 8 + offset,
-				startY + 16,
-				ColourProperties.INSTANCE.get("gui.screen")
-		);
+		getFontRenderer().func_243248_b(transform, title, startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().func_243248_b(
-				transform,
-				primary.getDisplayName(),
-				startX + 32,
-				startY + 36,
-				ColourProperties.INSTANCE.get("gui.screen")
-		);
+		getFontRenderer().func_243248_b(transform, primary.getDisplayName(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().func_243248_b(
-				transform,
-				secondary.getDisplayName(),
-				startX + 32,
-				startY + 56,
-				ColourProperties.INSTANCE.get("gui.screen")
-		);
+		getFontRenderer().func_243248_b(transform, secondary.getDisplayName(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		ITextComponent youCheater = new TranslationTextComponent("for.gui.imprinter.cheater");
 		offset = (138 - getFontRenderer().getStringWidth(youCheater.getString())) / 2;
-		getFontRenderer().func_243248_b(
-				transform,
-				youCheater,
-				startX + 8 + offset,
-				startY + 76,
-				ColourProperties.INSTANCE.get("gui.screen")
-		);
+		getFontRenderer().func_243248_b(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
 	}
 

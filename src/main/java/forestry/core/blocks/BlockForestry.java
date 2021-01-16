@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.core.owner.IOwnedTile;
-import forestry.core.owner.IOwnerHandler;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.Log;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -27,7 +21,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+
+import forestry.core.owner.IOwnedTile;
+import forestry.core.owner.IOwnerHandler;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.Log;
 
 public abstract class BlockForestry extends Block {
 
@@ -36,13 +36,7 @@ public abstract class BlockForestry extends Block {
 	}
 
 	@Override
-	public void onBlockPlacedBy(
-			World world,
-			BlockPos pos,
-			BlockState state,
-			@Nullable LivingEntity placer,
-			ItemStack stack
-	) {
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}
@@ -63,12 +57,7 @@ public abstract class BlockForestry extends Block {
 
 		if (world instanceof World) {
 			try {
-				TileUtil.actOnTile(
-						world,
-						pos,
-						TileForestry.class,
-						tile -> tile.onNeighborTileChange((World) world, pos, neighbor)
-				);
+				TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((World) world, pos, neighbor));
 			} catch (StackOverflowError error) {
 				Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
 				throw error;

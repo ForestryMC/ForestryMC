@@ -1,21 +1,21 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.core;
 
-import forestry.api.farming.IFarmRegistry;
-import forestry.api.farming.IFarmable;
-import forestry.api.modules.IModuleContainer;
-import forestry.api.modules.IModuleManager;
+import java.util.Set;
 
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Set;
+import forestry.api.farming.IFarmRegistry;
+import forestry.api.farming.IFarmable;
+import forestry.api.modules.IModuleContainer;
+import forestry.api.modules.IModuleManager;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.

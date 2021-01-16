@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
+
+import net.minecraft.client.gui.AbstractGui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -20,8 +22,6 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.SoundUtil;
-
-import net.minecraft.client.gui.AbstractGui;
 
 public class AddresseeSlot extends Widget {
 
@@ -40,15 +40,7 @@ public class AddresseeSlot extends Widget {
 		if (carrier != null) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
-			AbstractGui.blit(
-					transform,
-					startX + xPos,
-					startY + yPos,
-					manager.gui.getBlitOffset(),
-					32,
-					32,
-					carrier.getSprite()
-			);
+			AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 32, 32, carrier.getSprite());
 		}
 	}
 

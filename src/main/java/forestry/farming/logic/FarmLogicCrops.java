@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,20 +7,20 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
-
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.BlockUtil;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.BlockUtil;
 
 public class FarmLogicCrops extends FarmLogicWatered {
 
@@ -34,13 +34,7 @@ public class FarmLogicCrops extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(
-			World world,
-			IFarmHousing farmHousing,
-			BlockPos pos,
-			FarmDirection direction,
-			int extent
-	) {
+	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			if (!world.isBlockLoaded(position)) {

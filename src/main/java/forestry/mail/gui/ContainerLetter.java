@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.mail.*;
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.slots.SlotFiltered;
-import forestry.core.utils.Log;
-import forestry.core.utils.NetworkUtil;
-import forestry.mail.Letter;
-import forestry.mail.features.MailContainers;
-import forestry.mail.inventory.ItemInventoryLetter;
-import forestry.mail.network.packets.PacketLetterInfoResponse;
-import forestry.mail.network.packets.PacketLetterTextSet;
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,11 +21,27 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import com.mojang.authlib.GameProfile;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.Iterator;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.slots.SlotFiltered;
+import forestry.core.utils.Log;
+import forestry.core.utils.NetworkUtil;
+import forestry.mail.Letter;
+import forestry.mail.features.MailContainers;
+import forestry.mail.inventory.ItemInventoryLetter;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
+import forestry.mail.network.packets.PacketLetterTextSet;
 
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
@@ -83,15 +89,10 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Nullable
-	private static IMailAddress getRecipient(
-			MinecraftServer minecraftServer,
-			String recipientName,
-			EnumAddressee type
-	) {
+	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
 		switch (type) {
 			case PLAYER: {
-				GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(
-						recipientName);
+				GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(recipientName);
 				if (gameProfile == null) {
 					return null;
 				}
@@ -212,11 +213,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Override
-	public void handleLetterInfoUpdate(
-			EnumAddressee type,
-			@Nullable IMailAddress address,
-			@Nullable ITradeStationInfo tradeInfo
-	) {
+	public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
 		carrierType = type;
 		if (type == EnumAddressee.PLAYER) {
 			getLetter().setRecipient(address);

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.utils.SoundUtil;
-import forestry.mail.POBoxInfo;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -27,10 +21,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.utils.SoundUtil;
+import forestry.mail.POBoxInfo;
 
 public class GuiMailboxInfo extends AbstractGui {
 
@@ -39,10 +39,7 @@ public class GuiMailboxInfo extends AbstractGui {
 	private static final int HEIGHT = 17;
 	private final FontRenderer fontRenderer;
 	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
-	private final ResourceLocation textureAlert = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "mailalert.png"
-	);
+	private final ResourceLocation textureAlert = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "mailalert.png");
 	@Nullable
 	private POBoxInfo poInfo;
 
@@ -74,20 +71,8 @@ public class GuiMailboxInfo extends AbstractGui {
 
 		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-		fontRenderer.drawString(
-				transform,
-				Integer.toString(poInfo.playerLetters),
-				x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22),
-				y + 5,
-				0xffffff
-		);
-		fontRenderer.drawString(
-				transform,
-				Integer.toString(poInfo.tradeLetters),
-				x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22),
-				y + 5,
-				0xffffff
-		);
+		fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {
@@ -105,8 +90,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		if (info.hasMail()) {
 			if (this.poInfo == null) {
 				playJingle = true;
-			} else if (this.poInfo.playerLetters != info.playerLetters ||
-					this.poInfo.tradeLetters != info.tradeLetters) {
+			} else if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
 				playJingle = true;
 			}
 		}
@@ -119,10 +103,12 @@ public class GuiMailboxInfo extends AbstractGui {
 	}
 
 	public enum XPosition {
-		LEFT, RIGHT
+		LEFT,
+		RIGHT
 	}
 
 	public enum YPosition {
-		TOP, BOTTOM
+		TOP,
+		BOTTOM
 	}
 }

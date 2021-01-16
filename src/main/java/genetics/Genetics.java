@@ -1,25 +1,15 @@
 package genetics;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.IGeneTemplate;
-import genetics.api.organism.IOrganism;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.DefaultStage;
-import genetics.commands.CommandListAlleles;
-import genetics.individual.GeneticSaveHandler;
-import genetics.individual.SaveFormat;
-import genetics.items.GeneTemplate;
-import genetics.plugins.PluginManager;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
+
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -36,7 +26,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import javax.annotation.Nullable;
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.IGeneTemplate;
+import genetics.api.organism.IOrganism;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.DefaultStage;
+import genetics.commands.CommandListAlleles;
+import genetics.individual.GeneticSaveHandler;
+import genetics.individual.SaveFormat;
+import genetics.items.GeneTemplate;
+import genetics.plugins.PluginManager;
 
 @Mod(Genetics.MOD_ID)
 public class Genetics {

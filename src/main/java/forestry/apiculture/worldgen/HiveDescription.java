@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,22 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.worldgen;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.biome.Biome;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
@@ -25,20 +39,6 @@ import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
 
-import genetics.api.individual.IGenome;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-
 public enum HiveDescription implements IHiveDescription {
 	FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
 		@Override
@@ -47,24 +47,14 @@ public enum HiveDescription implements IHiveDescription {
 			postGenFlowers(world, rand, pos, flowerStates);
 		}
 	},
-	MEADOWS(
-			IHiveRegistry.HiveType.MEADOWS,
-			1.0f,
-			BeeDefinition.MEADOWS,
-			HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)
-	) {
+	MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)) {
 		@Override
 		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
 			postGenFlowers(world, rand, pos, flowerStates);
 		}
 	},
-	DESERT(
-			IHiveRegistry.HiveType.DESERT,
-			1.0f,
-			BeeDefinition.MODEST,
-			HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.SANDSTONE)
-	) {
+	DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.SANDSTONE)) {
 		@Override
 		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
@@ -72,23 +62,13 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	},
 	JUNGLE(IHiveRegistry.HiveType.JUNGLE, 6.0f, BeeDefinition.TROPICAL, HiveManager.genHelper.tree()),
-	END(
-			IHiveRegistry.HiveType.END,
-			2.0f,
-			BeeDefinition.ENDED,
-			HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)
-	) {
+	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
 			return Biome.Category.THEEND == biome.getCategory();
 		}
 	},
-	SNOW(
-			IHiveRegistry.HiveType.SNOW,
-			2.0f,
-			BeeDefinition.WINTRY,
-			HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SNOW)
-	) {
+	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SNOW)) {
 		@Override
 		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
 			BlockPos posAbove = pos.up();
@@ -99,12 +79,7 @@ public enum HiveDescription implements IHiveDescription {
 			postGenFlowers(world, rand, pos, flowerStates);
 		}
 	},
-	SWAMP(
-			IHiveRegistry.HiveType.SWAMP,
-			2.0f,
-			BeeDefinition.MARSHY,
-			HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)
-	) {
+	SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)) {
 		@Override
 		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
@@ -113,13 +88,7 @@ public enum HiveDescription implements IHiveDescription {
 		}
 	};
 
-	private static final IHiveGen groundGen = HiveManager.genHelper.ground(
-			Blocks.DIRT,
-			Blocks.GRASS_BLOCK,
-			Blocks.SNOW,
-			Blocks.SAND,
-			Blocks.SANDSTONE
-	);
+	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
 	private static final List<BlockState> flowerStates = new ArrayList<>();
 	private static final List<BlockState> mushroomStates = new ArrayList<>();
 	private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
@@ -145,12 +114,7 @@ public enum HiveDescription implements IHiveDescription {
 		this.hiveType = hiveType;
 	}
 
-	protected static void postGenFlowers(
-			ISeedReader world,
-			Random rand,
-			BlockPos hivePos,
-			List<BlockState> flowerStates
-	) {
+	protected static void postGenFlowers(ISeedReader world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
 		int plantedCount = 0;
 		for (int i = 0; i < 10; i++) {
 			int xOffset = rand.nextInt(8) - 4;

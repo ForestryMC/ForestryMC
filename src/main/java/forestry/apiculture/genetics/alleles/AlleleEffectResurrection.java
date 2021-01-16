@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.utils.EntityUtil;
-import forestry.core.utils.ItemStackUtil;
-
-import genetics.api.individual.IGenome;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -25,10 +23,12 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
+import genetics.api.individual.IGenome;
+
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.ItemStackUtil;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
@@ -57,11 +57,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.CAVE_SPIDER));
 		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.CAVE_SPIDER));
 		list.add(new Resurrectable<>(new ItemStack(Items.GHAST_TEAR), EntityType.GHAST));
-		list.add(new Resurrectable<>(
-				new ItemStack(Blocks.DRAGON_EGG),
-				EntityType.ENDER_DRAGON,
-				dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)
-		));
+		list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
 		return list;
 	}
 
@@ -123,13 +119,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 
 		private boolean spawnAndTransform(ItemEntity entity) {
-			T spawnedEntity = EntityUtil.spawnEntity(
-					entity.world,
-					this.risen,
-					entity.getPosX(),
-					entity.getPosY(),
-					entity.getPosZ()
-			);
+			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.getPosX(), entity.getPosY(), entity.getPosZ());
 			if (spawnedEntity != null) {
 				this.risenTransformer.accept(spawnedEntity);
 				return true;

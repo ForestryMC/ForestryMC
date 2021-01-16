@@ -1,11 +1,11 @@
 package forestry.core.recipes.jei;
 
+import net.minecraft.util.text.TranslationTextComponent;
+
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.category.extensions.IRecipeCategoryExtension;
-
-import net.minecraft.util.text.TranslationTextComponent;
 
 public abstract class ForestryRecipeCategory<T extends IRecipeCategoryExtension> implements IRecipeCategory<T> {
 	private final IDrawable background;

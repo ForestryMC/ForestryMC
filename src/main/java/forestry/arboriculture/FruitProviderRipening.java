@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture;
 
-import forestry.api.genetics.IFruitFamily;
-import forestry.api.genetics.products.IProductList;
-import forestry.api.genetics.products.Product;
-import forestry.core.genetics.ProductListWrapper;
-
-import genetics.api.individual.IGenome;
+import java.awt.Color;
+import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -24,8 +20,12 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import java.awt.*;
-import java.util.function.Supplier;
+import genetics.api.individual.IGenome;
+
+import forestry.api.genetics.IFruitFamily;
+import forestry.api.genetics.products.IProductList;
+import forestry.api.genetics.products.Product;
+import forestry.core.genetics.ProductListWrapper;
 
 public class FruitProviderRipening extends FruitProviderNone {
 	private int colourCallow = 0xffffff;
@@ -34,12 +34,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 	private int diffB;
 	private ProductListWrapper products;
 
-	public FruitProviderRipening(
-			String unlocalizedDescription,
-			IFruitFamily family,
-			Supplier<ItemStack> product,
-			float modifier
-	) {
+	public FruitProviderRipening(String unlocalizedDescription, IFruitFamily family, Supplier<ItemStack> product, float modifier) {
 		super(unlocalizedDescription, family);
 		this.products = ProductListWrapper.create();
 		this.products.addProduct(product, modifier);

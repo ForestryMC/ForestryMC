@@ -1,5 +1,17 @@
 package forestry.apiculture.genetics;
 
+import java.util.Optional;
+import java.util.function.Function;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.organism.IOrganismType;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -14,18 +26,6 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
-
-import genetics.api.organism.IOrganismType;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Optional;
-import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeDatabaseTab implements IDatabaseTab<IBee> {
@@ -46,35 +46,18 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 		IAlleleBeeSpecies primarySpecies = bee.getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
-		container.label(
-				new TranslationTextComponent(
-						"for.gui.database.tab."
-								+ (mode == DatabaseMode.ACTIVE ? "active" : "inactive")
-								+ "_species.name"
-				),
-				GuiElementAlignment.TOP_CENTER,
-				GuiElementFactory.INSTANCE.databaseTitle
-		);
+		container.label(new TranslationTextComponent("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
 
-		container.addLine(
-				new TranslationTextComponent("for.gui.species"), BeeChromosomes.SPECIES);
+		container.addLine(new TranslationTextComponent("for.gui.species"), BeeChromosomes.SPECIES);
 
 		Function<Boolean, ITextComponent> toleranceText = a -> {
 			IAlleleForestrySpecies species = a ? primarySpecies : secondarySpecies;
 			return AlleleManager.climateHelper.toDisplay(species.getTemperature());
 		};
-		container.addLine(
-				new TranslationTextComponent("for.gui.climate"),
-				toleranceText,
-				BeeChromosomes.TEMPERATURE_TOLERANCE
-		);
+		container.addLine(new TranslationTextComponent("for.gui.climate"), toleranceText, BeeChromosomes.TEMPERATURE_TOLERANCE);
 		container.addToleranceLine(BeeChromosomes.TEMPERATURE_TOLERANCE);
 
-		container.addLine(
-				new TranslationTextComponent("for.gui.humidity"),
-				toleranceText,
-				BeeChromosomes.HUMIDITY_TOLERANCE
-		);
+		container.addLine(new TranslationTextComponent("for.gui.humidity"), toleranceText, BeeChromosomes.HUMIDITY_TOLERANCE);
 		container.addToleranceLine(BeeChromosomes.HUMIDITY_TOLERANCE);
 
 		container.addLine(new TranslationTextComponent("for.gui.lifespan"), BeeChromosomes.LIFESPAN);
@@ -112,24 +95,10 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 
 		container.addLine(new TranslationTextComponent("for.gui.nocturnal"), nocturnal, false);
 
-		Function<Boolean, ITextComponent> flyer = active ->
-				StringUtil.readableBoolean(
-						active
-								? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN)
-								: bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN),
-						yes,
-						no
-				);
+		Function<Boolean, ITextComponent> flyer = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN) : bee.getGenome().getInactiveValue(BeeChromosomes.TOLERATES_RAIN), yes, no);
 		container.addLine(new TranslationTextComponent("for.gui.flyer"), flyer, BeeChromosomes.TOLERATES_RAIN);
 
-		Function<Boolean, ITextComponent> cave = active ->
-				StringUtil.readableBoolean(
-						active
-								? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING)
-								: bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING),
-						yes,
-						no
-				);
+		Function<Boolean, ITextComponent> cave = active -> StringUtil.readableBoolean(active ? bee.getGenome().getActiveValue(BeeChromosomes.CAVE_DWELLING) : bee.getGenome().getInactiveValue(BeeChromosomes.CAVE_DWELLING), yes, no);
 		container.addLine(new TranslationTextComponent("for.gui.cave"), cave, BeeChromosomes.CAVE_DWELLING);
 
 		if (type == EnumBeeType.PRINCESS || type == EnumBeeType.QUEEN) {
@@ -138,18 +107,13 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 				displayTextKey = "for.bees.stock.ignoble";
 			}
 
-			container.label(
-					new TranslationTextComponent(displayTextKey),
-					GuiElementAlignment.TOP_CENTER,
-					GuiElementFactory.INSTANCE.binomial
-			);
+			container.label(new TranslationTextComponent(displayTextKey), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.binomial);
 		}
 	}
 
 	@Override
 	public ItemStack getIconStack() {
-		return BeeDefinition.MEADOWS.getMemberStack(
-				mode == DatabaseMode.ACTIVE ? EnumBeeType.PRINCESS : EnumBeeType.DRONE);
+		return BeeDefinition.MEADOWS.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumBeeType.PRINCESS : EnumBeeType.DRONE);
 	}
 
 	@Override

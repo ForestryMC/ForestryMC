@@ -1,14 +1,5 @@
 package forestry.energy;
 
-import forestry.api.core.INbtReadable;
-import forestry.api.core.INbtWritable;
-import forestry.core.config.Config;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.energy.compat.EnergyStorageWrapper;
-import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.tesla.TeslaHelper;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 
@@ -17,6 +8,15 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import forestry.api.core.INbtReadable;
+import forestry.api.core.INbtWritable;
+import forestry.core.config.Config;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.energy.compat.EnergyStorageWrapper;
+import forestry.energy.compat.mj.MjHelper;
+import forestry.energy.compat.tesla.TeslaHelper;
 
 //import buildcraft.api.mj.IMjConnector;
 //import buildcraft.api.mj.IMjPassiveProvider;
@@ -31,11 +31,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
 
 	public EnergyManager(int maxTransfer, int capacity) {
-		super(
-				EnergyHelper.scaleForDifficulty(capacity),
-				EnergyHelper.scaleForDifficulty(maxTransfer),
-				EnergyHelper.scaleForDifficulty(maxTransfer)
-		);
+		super(EnergyHelper.scaleForDifficulty(capacity), EnergyHelper.scaleForDifficulty(maxTransfer), EnergyHelper.scaleForDifficulty(maxTransfer));
 	}
 
 	public EnergyTransferMode getExternalMode() {
@@ -105,9 +101,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	public boolean hasCapability(Capability<?> capability) {
-		return Config.enableRF && capability == CapabilityEnergy.ENERGY ||
-				Config.enableTesla && hasTeslaCapability(capability) ||
-				Config.enableMJ && hasMjCapability(capability);
+		return Config.enableRF && capability == CapabilityEnergy.ENERGY || Config.enableTesla && hasTeslaCapability(capability) || Config.enableMJ && hasMjCapability(capability);
 	}
 
 	private boolean hasTeslaCapability(Capability<?> capability) {

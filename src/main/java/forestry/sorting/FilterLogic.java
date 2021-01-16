@@ -1,13 +1,17 @@
 package forestry.sorting;
 
-import forestry.api.core.ILocatable;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.api.genetics.filter.IFilterData;
-import forestry.api.genetics.filter.IFilterLogic;
-import forestry.api.genetics.filter.IFilterRuleType;
-import forestry.core.utils.NetworkUtil;
-import forestry.sorting.network.packets.PacketFilterChangeGenome;
-import forestry.sorting.network.packets.PacketFilterChangeRule;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Direction;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
@@ -20,18 +24,14 @@ import genetics.api.root.IRootDefinition;
 import genetics.utils.AlleleUtils;
 import genetics.utils.RootUtils;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import forestry.api.core.ILocatable;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterData;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
+import forestry.core.utils.NetworkUtil;
+import forestry.sorting.network.packets.PacketFilterChangeGenome;
+import forestry.sorting.network.packets.PacketFilterChangeRule;
 
 public class FilterLogic implements IFilterLogic {
 	private final ILocatable locatable;
@@ -60,16 +60,10 @@ public class FilterLogic implements IFilterLogic {
 					continue;
 				}
 				if (filter.activeAllele != null) {
-					data.putString(
-							"GenomeFilterS" + i + "-" + j + "-" + 0,
-							filter.activeAllele.getRegistryName().toString()
-					);
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 0, filter.activeAllele.getRegistryName().toString());
 				}
 				if (filter.inactiveAllele != null) {
-					data.putString(
-							"GenomeFilterS" + i + "-" + j + "-" + 1,
-							filter.inactiveAllele.getRegistryName().toString()
-					);
+					data.putString("GenomeFilterS" + i + "-" + j + "-" + 1, filter.inactiveAllele.getRegistryName().toString());
 				}
 			}
 		}
@@ -86,12 +80,10 @@ public class FilterLogic implements IFilterLogic {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 0)) {
-					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.getString(
-							"GenomeFilterS" + i + "-" + j + "-" + 0));
+					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 0));
 				}
 				if (data.contains("GenomeFilterS" + i + "-" + j + "-" + 1)) {
-					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.getString(
-							"GenomeFilterS" + i + "-" + j + "-" + 1));
+					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.getString("GenomeFilterS" + i + "-" + j + "-" + 1));
 				}
 				genomeFilter[i][j] = filter;
 			}
@@ -203,11 +195,7 @@ public class FilterLogic implements IFilterLogic {
 				IGenome genome = ind.getGenome();
 				IAllele active = genome.getPrimary();
 				IAllele inactive = genome.getSecondary();
-				return isValidAllelePair(
-						facing,
-						active.getRegistryName().toString(),
-						inactive.getRegistryName().toString()
-				);
+				return isValidAllelePair(facing, active.getRegistryName().toString(), inactive.getRegistryName().toString());
 			}
 			return true;
 		}
@@ -273,13 +261,7 @@ public class FilterLogic implements IFilterLogic {
 
 	@Override
 	public void sendToServer(Direction facing, int index, boolean active, @Nullable IAllele allele) {
-		NetworkUtil.sendToServer(new PacketFilterChangeGenome(
-				locatable.getCoordinates(),
-				facing,
-				(short) index,
-				active,
-				allele
-		));
+		NetworkUtil.sendToServer(new PacketFilterChangeGenome(locatable.getCoordinates(), facing, (short) index, active, allele));
 	}
 
 	@Override

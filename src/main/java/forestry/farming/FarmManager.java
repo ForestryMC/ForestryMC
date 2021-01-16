@@ -3,10 +3,36 @@ package forestry.farming;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
-import forestry.api.farming.*;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IExtentCache;
+import forestry.api.farming.IFarmListener;
+import forestry.api.farming.IFarmLogic;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
@@ -20,19 +46,6 @@ import forestry.farming.FarmHelper.FarmWorkStatus;
 import forestry.farming.FarmHelper.Stage;
 import forestry.farming.multiblock.FarmFertilizerManager;
 import forestry.farming.multiblock.FarmHydrationManager;
-
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.*;
 
 public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IExtentCache {
 	private final Map<FarmDirection, List<FarmTarget>> targets = new EnumMap<>(FarmDirection.class);
@@ -144,13 +157,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 			}
 
 			if (stage == Stage.HARVEST) {
-				Collection<ICrop> harvested = FarmHelper.harvestTargets(
-						world,
-						housing,
-						farmTargets,
-						logic,
-						farmListeners
-				);
+				Collection<ICrop> harvested = FarmHelper.harvestTargets(world, housing, farmTargets, logic, farmListeners);
 				farmWorkStatus.didWork = !harvested.isEmpty();
 				if (!harvested.isEmpty()) {
 					pendingCrops.addAll(harvested);
@@ -178,17 +185,11 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 		return farmWorkStatus.didWork;
 	}
 
-	private void cultivateTargets(
-			FarmWorkStatus farmWorkStatus,
-			List<FarmTarget> farmTargets,
-			IFarmLogic logic,
-			FarmDirection farmSide
-	) {
+	private void cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
 		World world = housing.getWorldObj();
 		if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
-			final int fertilizerConsumption = Math.round(
-					logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+			final int fertilizerConsumption = Math.round(logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
 			final int liquidConsumption = logic.getProperties().getWaterConsumption(housing, hydrationModifier);
 			final FluidStack liquid = new FluidStack(Fluids.WATER, liquidConsumption);
 
@@ -240,8 +241,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 			}
 		}
 
-		final int fertilizerConsumption = Math.round(
-				provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
+		final int fertilizerConsumption = Math.round(provider.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
 
 		IErrorLogic errorLogic = housing.getErrorLogic();
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.blocks;
 
-import com.mojang.authlib.GameProfile;
-
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockController;
-import forestry.core.circuits.ISocketable;
-import forestry.core.multiblock.MultiblockTileEntityForestry;
-import forestry.core.multiblock.MultiblockUtil;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,7 +29,15 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockController;
+import forestry.core.circuits.ISocketable;
+import forestry.core.multiblock.MultiblockTileEntityForestry;
+import forestry.core.multiblock.MultiblockUtil;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
 
 public abstract class BlockStructure extends BlockForestry {
 
@@ -48,14 +48,7 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(
-			BlockState state,
-			World worldIn,
-			BlockPos pos,
-			PlayerEntity playerIn,
-			Hand hand,
-			BlockRayTraceResult hit
-	) {
+	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		if (playerIn.isSneaking()) { //isSneaking
 			return ActionResultType.PASS;
 		}
@@ -83,10 +76,7 @@ public abstract class BlockStructure extends BlockForestry {
 					}
 				}
 			} else {
-				playerIn.sendMessage(
-						new TranslationTextComponent("for.multiblock.error.notConnected"),
-						Util.DUMMY_UUID
-				);
+				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.DUMMY_UUID);
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -118,14 +108,7 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void harvestBlock(
-			World world,
-			PlayerEntity player,
-			BlockPos pos,
-			BlockState state,
-			@Nullable TileEntity te,
-			ItemStack stack
-	) {
+	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if (world.isRemote) {
 			return;
 		}

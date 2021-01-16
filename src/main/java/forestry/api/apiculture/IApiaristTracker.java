@@ -1,14 +1,14 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture;
+
+import genetics.api.individual.IIndividual;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
-
-import genetics.api.individual.IIndividual;
 
 /**
  * Can be used to garner information on bee breeding. See {@link IForestrySpeciesRoot} for retrieval functions.

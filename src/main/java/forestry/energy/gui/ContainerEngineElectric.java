@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
@@ -17,9 +20,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryEngineElectric;
 import forestry.energy.tiles.TileEngineElectric;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
 
 public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectric> {
 
@@ -31,11 +31,7 @@ public class ContainerEngineElectric extends ContainerSocketed<TileEngineElectri
 
 	//TODO dedupe
 	public static ContainerEngineElectric fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEngineElectric tile = TileUtil.getTile(
-				inv.player.world,
-				extraData.readBlockPos(),
-				TileEngineElectric.class
-		);
+		TileEngineElectric tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineElectric.class);
 		return new ContainerEngineElectric(windowId, inv, tile);
 	}
 

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui.slots;
 
 import com.google.common.collect.Lists;
-
-import forestry.worktable.inventory.CraftingInventoryForestry;
-import forestry.worktable.tiles.ICrafterWorktable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -23,6 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 
 import net.minecraftforge.fml.hooks.BasicEventHooks;
+
+import forestry.worktable.inventory.CraftingInventoryForestry;
+import forestry.worktable.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends Slot {
 
@@ -41,15 +41,7 @@ public class SlotCrafter extends Slot {
 	 */
 	private int amountCrafted;
 
-	public SlotCrafter(
-			PlayerEntity player,
-			CraftingInventoryForestry craftMatrix,
-			IInventory craftingDisplay,
-			ICrafterWorktable crafter,
-			int slot,
-			int xPos,
-			int yPos
-	) {
+	public SlotCrafter(PlayerEntity player, CraftingInventoryForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;

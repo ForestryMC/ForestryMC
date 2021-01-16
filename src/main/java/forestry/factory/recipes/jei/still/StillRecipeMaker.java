@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.still;
 
-import forestry.api.recipes.IStillRecipe;
-import forestry.api.recipes.RecipeManagers;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.crafting.RecipeManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.recipes.IStillRecipe;
+import forestry.api.recipes.RecipeManagers;
 
 public class StillRecipeMaker {
 	public static List<StillRecipeWrapper> getStillRecipes(RecipeManager manager) {

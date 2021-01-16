@@ -1,0 +1,25 @@
+{
+	"title": "榨汁機",
+	"icon": {
+		"item": "forestry:squeezer"
+	},
+	"content": [
+		[
+			{
+				"text": "榨汁機用於將物品擠壓成液體。比如，它可以蜂蜜滴擠壓成液態蜂蜜。"
+			},
+			{
+				"text": "它還可以回收罐、瓶、膠囊等容器中的流體，同時有低機率回收出容器的材料（比如製造錫罐用的錫）。",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:squeezer"
+				]
+			}
+		]
+	]
+}

@@ -1,15 +1,9 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.core.errors;
-
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorState;
-import forestry.api.core.ISpriteRegistry;
-import forestry.core.config.Constants;
-import forestry.core.render.TextureManagerForestry;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
@@ -17,16 +11,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorState;
+import forestry.api.core.ISpriteRegistry;
+import forestry.core.config.Constants;
+import forestry.core.render.TextureManagerForestry;
+
 public enum EnumErrorCode implements IErrorState {
 
 	// Bees
 	TOO_HOT("too_hot"), // The bees are melting in the heat here and unable to work. Use the habitat locator to find a cooler climate.
 	TOO_COLD("too_cold"), // The bees are huddled together to survive the freezing cold here. Use the  habitat locator to find a warmer climate.
 	TOO_HUMID("too_humid"), // The damp climate here has made the bees' wings too damp to fly. Use the  habitat locator to find a dryer climate.
-	TOO_ARID(
-			"too_arid",
-			"invalid_biome"
-	), // The dry climate here has made the bees parched and unable do work. Use the  habitat locator to find a wetter climate.
+	TOO_ARID("too_arid", "invalid_biome"), // The dry climate here has made the bees parched and unable do work. Use the  habitat locator to find a wetter climate.
 	IS_RAINING("is_raining"), // Only tolerant fliers can work in the rain.
 	NOT_GLOOMY("not_gloomy"), // The bees can only work in darkness.
 	NOT_BRIGHT("not_lucid"), // The bees have trouble navigating in the dark.
@@ -39,10 +36,7 @@ public enum EnumErrorCode implements IErrorState {
 
 	// Machines
 	NO_RESOURCE("no_resource"), // More resources need to be supplied for operation.
-	NO_RESOURCE_INVENTORY(
-			"no_resource_inventory",
-			"no_resource"
-	), // Resources need to be added to the machine's inventory to craft this recipe.
+	NO_RESOURCE_INVENTORY("no_resource_inventory", "no_resource"), // Resources need to be added to the machine's inventory to craft this recipe.
 	NO_RESOURCE_LIQUID("no_resource_liquid", "no_liquid"), // More liquid resources need to be supplied for operation.
 	NO_RECIPE("no_recipe"), // No matching recipe was found for the supplied resources.
 	NO_SPACE_INVENTORY("no_space"), // Empty this machine's inventory.
@@ -92,10 +86,7 @@ public enum EnumErrorCode implements IErrorState {
 	NO_LIQUID_FARM("no_liquid"), // Depending on rainfall, temperature and humidity farms need to be supplied with varying amounts of water.
 
 	// Habitatformer
-	WRONG_RESOURCE(
-			"wrong_resource",
-			"no_recipe"
-	) // The habitatformer can not reach the targeted humidity wit the inserted fluid.
+	WRONG_RESOURCE("wrong_resource", "no_recipe") // The habitatformer can not reach the targeted humidity wit the inserted fluid.
 	;
 
 	private final String name;

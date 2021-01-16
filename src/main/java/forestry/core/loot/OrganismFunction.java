@@ -4,13 +4,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IIndividual;
-import genetics.api.individual.ISpeciesDefinition;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.utils.RootUtils;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -20,8 +15,13 @@ import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.individual.ISpeciesDefinition;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
 
 public class OrganismFunction extends LootFunction {
 	@Nullable
@@ -71,11 +71,7 @@ public class OrganismFunction extends LootFunction {
 		}
 
 		@Override
-		public OrganismFunction deserialize(
-				JsonObject object,
-				JsonDeserializationContext jsonDeserializationContext,
-				ILootCondition[] conditions
-		) {
+		public OrganismFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] conditions) {
 			String speciesUid = JSONUtils.getString(object, "speciesUid");
 			return new OrganismFunction(conditions, new ResourceLocation(speciesUid));
 		}

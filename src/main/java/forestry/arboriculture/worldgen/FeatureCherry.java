@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.arboriculture.ITreeGenData;
-import forestry.core.worldgen.FeatureHelper;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
@@ -19,10 +21,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import forestry.api.arboriculture.ITreeGenData;
+import forestry.core.worldgen.FeatureHelper;
 
 public class FeatureCherry extends FeatureTree {
 	public FeatureCherry(ITreeGenData tree) {
@@ -30,13 +30,7 @@ public class FeatureCherry extends FeatureTree {
 	}
 
 	@Override
-	public boolean generate(
-			ISeedReader world,
-			ChunkGenerator generator,
-			Random rand,
-			BlockPos pos,
-			NoFeatureConfig config
-	) {
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		return place(world, rand, pos, false);
 	}
 
@@ -49,18 +43,7 @@ public class FeatureCherry extends FeatureTree {
 		int branchHeight = height - 1;
 		int branchWidth = height / 2;
 		while (branchHeight > 2) {
-			branchCoords.addAll(FeatureHelper.generateBranches(
-					world,
-					rand,
-					wood,
-					startPos.add(0, branchHeight, 0),
-					girth,
-					0.2f,
-					0.5f,
-					branchWidth,
-					1,
-					1.0f
-			));
+			branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, branchHeight, 0), girth, 0.2f, 0.5f, branchWidth, 1, 1.0f));
 			branchHeight -= 2;
 			branchWidth++;
 		}
@@ -68,56 +51,14 @@ public class FeatureCherry extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(
-			IWorld world,
-			Random rand,
-			TreeBlockTypeLeaf leaf,
-			List<BlockPos> branchEnds,
-			BlockPos startPos
-	) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafSpawn = height + 2;
-		FeatureHelper.generateCylinderFromTreeStartPos(
-				world,
-				leaf,
-				startPos.add(0, leafSpawn--, 0),
-				girth,
-				girth,
-				1,
-				FeatureHelper.EnumReplaceMode.SOFT
-		);
-		FeatureHelper.generateCylinderFromTreeStartPos(
-				world,
-				leaf,
-				startPos.add(0, leafSpawn, 0),
-				girth,
-				1 + girth,
-				1,
-				FeatureHelper.EnumReplaceMode.SOFT
-		);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		for (BlockPos branchEnd : branchEnds) {
-			FeatureHelper.generateCircle(
-					world,
-					rand,
-					branchEnd.up(),
-					3,
-					3,
-					1,
-					leaf,
-					1.0f,
-					FeatureHelper.EnumReplaceMode.AIR
-			);
-			FeatureHelper.generateCircle(
-					world,
-					rand,
-					branchEnd,
-					4,
-					3,
-					1,
-					leaf,
-					1.0f,
-					FeatureHelper.EnumReplaceMode.AIR
-			);
+			FeatureHelper.generateCircle(world, rand, branchEnd.up(), 3, 3, 1, leaf, 1.0f, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateCircle(world, rand, branchEnd, 4, 3, 1, leaf, 1.0f, FeatureHelper.EnumReplaceMode.AIR);
 		}
 	}
 }

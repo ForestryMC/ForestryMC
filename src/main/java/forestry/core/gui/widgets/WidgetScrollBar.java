@@ -1,14 +1,14 @@
 package forestry.core.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.core.gui.Drawable;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 
-import javax.annotation.Nullable;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import forestry.core.gui.Drawable;
 
 public class WidgetScrollBar extends Widget {
 	@Nullable
@@ -42,14 +42,7 @@ public class WidgetScrollBar extends Widget {
 		slider = new WidgetSlider(manager, xPos, yPos, sliderTexture);
 	}
 
-	public WidgetScrollBar(
-			WidgetManager manager,
-			int xPos,
-			int yPos,
-			Drawable backgroundTexture,
-			boolean hasBorder,
-			Drawable sliderTexture
-	) {
+	public WidgetScrollBar(WidgetManager manager, int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
 		super(manager, xPos, yPos);
 
 		int offset = hasBorder ? 1 : 0;
@@ -96,8 +89,7 @@ public class WidgetScrollBar extends Widget {
 		} else if (value <= minValue) {
 			offset = 0;
 		} else {
-			offset = (int) (
-					((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
+			offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (height - slider.height));
 		}
 		slider.setOffset(0, offset);
 		return currentValue;

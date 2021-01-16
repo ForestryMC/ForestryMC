@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.util.text.ITextComponent;
+
+import genetics.api.alleles.AlleleCategorized;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.core.ISetupListener;
-
-import genetics.api.alleles.AlleleCategorized;
-
-import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nullable;
 
 public class AlleleFruit extends AlleleCategorized implements IAlleleFruit, ISetupListener {
 	private final IFruitProvider provider;

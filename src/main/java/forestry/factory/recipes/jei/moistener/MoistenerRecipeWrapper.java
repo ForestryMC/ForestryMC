@@ -1,11 +1,7 @@
 package forestry.factory.recipes.jei.moistener;
 
-import forestry.api.fuels.MoistenerFuel;
-import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.recipes.jei.ForestryRecipeWrapper;
-
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.ingredients.IIngredients;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
@@ -13,8 +9,12 @@ import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import forestry.api.fuels.MoistenerFuel;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.core.recipes.jei.ForestryRecipeWrapper;
+
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.ingredients.IIngredients;
 
 public class MoistenerRecipeWrapper extends ForestryRecipeWrapper<IMoistenerRecipe> {
 	private final MoistenerFuel fuel;

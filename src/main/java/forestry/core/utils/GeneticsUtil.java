@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,42 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.common.util.LazyOptional;
+
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
 
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.arboriculture.ArboricultureCapabilities;
@@ -28,38 +60,6 @@ import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
 
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.ComponentKeys;
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.LazyOptional;
-
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 public class GeneticsUtil {
 
 	private static String getKeyPrefix(IAllele allele) {
@@ -74,11 +74,7 @@ public class GeneticsUtil {
 	}
 
 	public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
-		String customKey = getKeyPrefix(allele) +
-				'.' +
-				type.getName() +
-				'.' +
-				allele.getSpeciesIdentifier();
+		String customKey = getKeyPrefix(allele) + '.' + type.getName() + '.' + allele.getSpeciesIdentifier();
 		return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
 	}
 
@@ -131,12 +127,7 @@ public class GeneticsUtil {
 	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
 	 */
 	@Nullable
-	public static IPollinatable getOrCreatePollinatable(
-			@Nullable GameProfile owner,
-			World world,
-			final BlockPos pos,
-			boolean convertVanilla
-	) {
+	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
 		IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
 		if (pollinatable == null && convertVanilla) {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
@@ -153,12 +144,7 @@ public class GeneticsUtil {
 	}
 
 	@Nullable
-	public static IButterflyNursery getOrCreateNursery(
-			@Nullable GameProfile gameProfile,
-			IWorld world,
-			BlockPos pos,
-			boolean convertVanilla
-	) {
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, IWorld world, BlockPos pos, boolean convertVanilla) {
 		IButterflyNursery nursery = getNursery(world, pos);
 		if (nursery == null && convertVanilla) {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
@@ -254,11 +240,7 @@ public class GeneticsUtil {
 		return 1 + getGeneticAdvancement(species, new HashSet<>(), speciesChromosome);
 	}
 
-	private static int getGeneticAdvancement(
-			IAlleleSpecies species,
-			Set<IAlleleSpecies> exclude,
-			IChromosomeType speciesChromosome
-	) {
+	private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
 		int highest = 0;
 		exclude.add(species);
 
@@ -272,14 +254,8 @@ public class GeneticsUtil {
 		return 1 + highest;
 	}
 
-	private static int getHighestAdvancement(
-			IAlleleSpecies mutationSpecies,
-			int highest,
-			Set<IAlleleSpecies> exclude,
-			IChromosomeType speciesChromosome
-	) {
-		if (exclude.contains(mutationSpecies) || AlleleUtils.isBlacklisted(mutationSpecies.getRegistryName()
-				.toString())) {
+	private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+		if (exclude.contains(mutationSpecies) || AlleleUtils.isBlacklisted(mutationSpecies.getRegistryName().toString())) {
 			return highest;
 		}
 

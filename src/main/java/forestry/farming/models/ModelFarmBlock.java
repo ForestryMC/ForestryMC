@@ -32,10 +32,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 			return Pair.of((BlockFarm) block, State.PLAIN);
 		}
 
-		return Pair.of(
-				FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block(),
-				State.PLAIN
-		);
+		return Pair.of(FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block(), State.PLAIN);
 	}
 
 	@Override
@@ -45,20 +42,11 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 			return Pair.of((BlockFarm) block, state.get(BlockFarm.STATE));
 		}
 
-		return Pair.of(
-				FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block(),
-				State.PLAIN
-		);
+		return Pair.of(FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block(), State.PLAIN);
 	}
 
 	@Override
-	protected void bakeBlock(
-			BlockFarm blockFarm,
-			IModelData extraData,
-			Pair<BlockFarm, State> key,
-			ModelBaker baker,
-			boolean inventory
-	) {
+	protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, Pair<BlockFarm, State> key, ModelBaker baker, boolean inventory) {
 		EnumFarmBlockType type = key.getLeft().getType();
 		EnumFarmMaterial material = key.getLeft().getFarmMaterial();
 		TextureAtlasSprite[] textures = material.getSprites();

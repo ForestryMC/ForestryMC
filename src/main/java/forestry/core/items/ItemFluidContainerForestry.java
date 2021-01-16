@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.items;
 
-import forestry.api.core.ItemGroups;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.FoodStats;
+import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -46,7 +48,11 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
+import forestry.api.core.ItemGroups;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.core.fluids.ForestryFluids;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -103,13 +109,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);
 
-				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(
-						singleBucket,
-						player,
-						world,
-						blockTarget.getPos(),
-						blockTarget.getFace()
-				);
+				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getPos(), blockTarget.getFace());
 				if (filledResult.isSuccess()) {
 					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 
@@ -141,16 +141,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				if (!worldIn.isRemote) {
 					FoodStats foodStats = player.getFoodStats();
 					foodStats.addStats(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
-					worldIn.playSound(
-							null,
-							player.getPosX(),
-							player.getPosY(),
-							player.getPosZ(),
-							SoundEvents.ENTITY_PLAYER_BURP,
-							SoundCategory.PLAYERS,
-							0.5F,
-							worldIn.rand.nextFloat() * 0.1F + 0.9F
-					);
+					worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 				}
 
 				player.addStat(Stats.ITEM_USED.get(this));
@@ -185,8 +176,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
-				String exactTranslationKey =
-						Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
+				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
 				return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
 					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".grammar";
 					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
@@ -213,10 +203,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				}
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-				if (fluidHandler.fill(
-						new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME),
-						IFluidHandler.FluidAction.EXECUTE
-				) == FluidAttributes.BUCKET_VOLUME) {
+				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
 					ItemStack filled = fluidHandler.getContainer();
 					subItems.add(filled);
 				}

@@ -1,16 +1,16 @@
 package forestry.modules.features;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.utils.datastructures.TriFunction;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
+
+import forestry.api.core.IBlockSubtype;
+import forestry.core.utils.datastructures.TriFunction;
 
 public class FeatureBlockTable<B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> extends FeatureTable<FeatureBlockTable.Builder<B, R, C>, FeatureBlock<B, BlockItem>, R, C> {
 
@@ -20,12 +20,7 @@ public class FeatureBlockTable<B extends Block, R extends IBlockSubtype, C exten
 
 	@Override
 	protected FeatureBlock<B, BlockItem> createFeature(Builder<B, R, C> builder, R rowType, C columnType) {
-		return builder.registry.block(
-				() -> builder.constructor.apply(rowType, columnType),
-				(block) -> builder.itemConstructor != null ? builder.itemConstructor.apply(block, rowType, columnType)
-						: null,
-				builder.getIdentifier(rowType, columnType)
-		);
+		return builder.registry.block(() -> builder.constructor.apply(rowType, columnType), (block) -> builder.itemConstructor != null ? builder.itemConstructor.apply(block, rowType, columnType) : null, builder.getIdentifier(rowType, columnType));
 	}
 
 	public Collection<B> getBlocks() {
@@ -33,8 +28,7 @@ public class FeatureBlockTable<B extends Block, R extends IBlockSubtype, C exten
 	}
 
 	public Collection<BlockItem> getItems() {
-		return featureByTypes.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(
-				Collectors.toList());
+		return featureByTypes.values().stream().filter(IBlockFeature::hasItem).map(IBlockFeature::item).collect(Collectors.toList());
 	}
 
 	public Collection<B> getRowBlocks(R rowType) {

@@ -1,8 +1,8 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
 import genetics.api.alleles.IAllele;
@@ -19,10 +19,5 @@ public interface ITreeMutationFactory {
 	 * @param chance      The chance that breeding the two parent trees will result in this mutation
 	 * @return a new tree mutation.
 	 */
-	ITreeMutationBuilder createMutation(
-			IAlleleTreeSpecies parentTree0,
-			IAlleleTreeSpecies parentTree1,
-			IAllele[] result,
-			int chance
-	);
+	ITreeMutationBuilder createMutation(IAlleleTreeSpecies parentTree0, IAlleleTreeSpecies parentTree1, IAllele[] result, int chance);
 }

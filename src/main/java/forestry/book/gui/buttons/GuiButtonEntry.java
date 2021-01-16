@@ -1,12 +1,5 @@
 package forestry.book.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import forestry.api.book.IBookEntry;
-import forestry.core.gui.GuiUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
@@ -16,22 +9,22 @@ import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.api.book.IBookEntry;
+import forestry.core.gui.GuiUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiButtonEntry extends Button {
 	public final IBookEntry entry;
 
 	public GuiButtonEntry(int x, int y, IBookEntry entry, IPressable action) {
-		super(
-				x,
-				y,
-				Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9,
-				11,
-				entry.getTitle(),
-				action
-		);
+		super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9, 11, entry.getTitle(), action);
 		this.entry = entry;
 	}
 
@@ -40,10 +33,7 @@ public class GuiButtonEntry extends Button {
 		if (this.visible) {
 			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.isHovered = mouseX >= this.x
-					&& mouseY >= this.y
-					&& mouseX < this.x + this.width
-					&& mouseY < this.y + this.height;
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			ITextComponent text = getMessage();
 			if (isHovered) {

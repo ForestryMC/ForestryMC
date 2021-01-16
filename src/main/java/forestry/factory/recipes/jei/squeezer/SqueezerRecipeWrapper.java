@@ -1,12 +1,12 @@
 package forestry.factory.recipes.jei.squeezer;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+
 import forestry.api.recipes.ISqueezerRecipe;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.IIngredients;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueezerRecipe> {
 	public SqueezerRecipeWrapper(ISqueezerRecipe recipe) {

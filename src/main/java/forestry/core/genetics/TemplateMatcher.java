@@ -1,5 +1,9 @@
 package forestry.core.genetics;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.util.ResourceLocation;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -7,10 +11,6 @@ import genetics.api.individual.IChromosome;
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeMatcher;
 import genetics.api.root.IIndividualRoot;
-
-import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public class TemplateMatcher implements IGenomeMatcher {
 	private final IGenome genome;

@@ -1,12 +1,12 @@
 package genetics.api.individual;
 
-import genetics.api.IGeneticFactory;
-import genetics.api.IGeneticSaveHandler;
-import genetics.api.alleles.IAllele;
+import java.util.Random;
 
 import net.minecraft.nbt.CompoundNBT;
 
-import java.util.Random;
+import genetics.api.IGeneticFactory;
+import genetics.api.IGeneticSaveHandler;
+import genetics.api.alleles.IAllele;
 
 /**
  * Contains two alleles. One is active and the other is inactive.

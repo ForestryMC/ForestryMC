@@ -1,15 +1,10 @@
 package forestry.core.climate;
 
-import forestry.api.climate.IClimateState;
-import forestry.api.climate.IClimateTransformer;
-import forestry.api.climate.IWorldClimateHolder;
-import forestry.api.climate.Position2D;
-import forestry.api.core.INbtWritable;
-
-import it.unimi.dsi.fastutil.longs.Long2LongArrayMap;
-import it.unimi.dsi.fastutil.longs.Long2LongMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -22,21 +17,20 @@ import net.minecraft.world.storage.WorldSavedData;
 
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import forestry.api.climate.IClimateState;
+import forestry.api.climate.IClimateTransformer;
+import forestry.api.climate.IWorldClimateHolder;
+import forestry.api.climate.Position2D;
+import forestry.api.core.INbtWritable;
+
+import it.unimi.dsi.fastutil.longs.Long2LongArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 public class WorldClimateHolder extends WorldSavedData implements IWorldClimateHolder {
 	static final String NAME = "forestry_climate";
-	private static final TransformerData DEFAULT_DATA = new TransformerData(
-			0L,
-			ClimateStateHelper.INSTANCE.absent(),
-			0,
-			false,
-			new long[0]
-	);
+	private static final TransformerData DEFAULT_DATA = new TransformerData(0L, ClimateStateHelper.INSTANCE.absent(), 0, false, new long[0]);
 	private static final String TRANSFORMERS_KEY = "Transformers";
 	private static final String CHUNK_KEY = "Chunk";
 	private static final String TRANSFORMERS_DATA_KEY = "Data";
@@ -161,9 +155,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 		long longPos = position.toLong();
 		TransformerData data = transformers.get(longPos);
 		if (data != null) {
-			boolean needChunkUpdate =
-					data.range != transformer.getRange() || data.circular != transformer.isCircular() ||
-							data.chunks.length == 0;
+			boolean needChunkUpdate = data.range != transformer.getRange() || data.circular != transformer.isCircular() || data.chunks.length == 0;
 			boolean needClimateUpdate = !data.climateState.equals(transformer.getCurrent());
 			data.climateState = transformer.getCurrent().toImmutable();
 			if (needChunkUpdate) {
@@ -177,16 +169,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 			}
 		} else {
 			long[] transformerChunks = updateTransformerChunks(transformer, false);
-			transformers.put(
-					longPos,
-					new TransformerData(
-							longPos,
-							transformer.getCurrent().toImmutable(),
-							transformer.getRange(),
-							transformer.isCircular(),
-							transformerChunks
-					)
-			);
+			transformers.put(longPos, new TransformerData(longPos, transformer.getCurrent().toImmutable(), transformer.getRange(), transformer.isCircular(), transformerChunks));
 		}
 		setDirty(true);
 	}
@@ -212,8 +195,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 				transformerCount++;
 			}
 		}
-		return transformerCount > 0 ? state.multiply(1.0D / transformerCount).toImmutable()
-				: ClimateStateHelper.INSTANCE.absent();
+		return transformerCount > 0 ? state.multiply(1.0D / transformerCount).toImmutable() : ClimateStateHelper.INSTANCE.absent();
 	}
 
 	@Override
@@ -234,8 +216,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 			double distance = Math.round(blockPos.getDistance(pos));
 			return range > 0.0F && distance <= range;
 		}
-		return MathHelper.abs(blockPos.getX() - pos.getX()) <= range && MathHelper.abs(blockPos.getZ() - pos.getZ()) <=
-				range;
+		return MathHelper.abs(blockPos.getX() - pos.getX()) <= range && MathHelper.abs(blockPos.getZ() - pos.getZ()) <= range;
 	}
 
 	@Override

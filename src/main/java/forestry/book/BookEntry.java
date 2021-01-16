@@ -1,8 +1,7 @@
 package forestry.book;
 
-import forestry.api.book.BookContent;
-import forestry.api.book.IBookEntry;
-import forestry.api.book.IBookPageFactory;
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -11,8 +10,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.function.Function;
+import forestry.api.book.BookContent;
+import forestry.api.book.IBookEntry;
+import forestry.api.book.IBookPageFactory;
 
 @OnlyIn(Dist.CLIENT)
 public class BookEntry implements IBookEntry {
@@ -25,15 +25,7 @@ public class BookEntry implements IBookEntry {
 	private final BookContent[][] content;
 	private final String title;
 
-	BookEntry(
-			String name,
-			ItemStack stack,
-			IBookPageFactory loader,
-			Function<IBookEntry, IBookEntry[]> subEntryFactory,
-			BookContent[][] content,
-			String title,
-			@Nullable IBookEntry parent
-	) {
+	BookEntry(String name, ItemStack stack, IBookPageFactory loader, Function<IBookEntry, IBookEntry[]> subEntryFactory, BookContent[][] content, String title, @Nullable IBookEntry parent) {
 		this.name = name;
 		this.stack = stack;
 		this.loader = loader;

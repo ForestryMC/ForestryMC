@@ -1,15 +1,15 @@
 package forestry.modules.features;
 
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
+import forestry.core.config.Constants;
 
 public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T> {
 	protected final String moduleID;
@@ -21,14 +21,7 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 	@Nullable
 	private EntityType<T> entityType;
 
-	public FeatureEntityType(
-			String moduleID,
-			String identifier,
-			UnaryOperator<EntityType.Builder<T>> consumer,
-			EntityType.IFactory<T> factory,
-			EntityClassification classification,
-			Supplier<AttributeModifierMap.MutableAttribute> attributes
-	) {
+	public FeatureEntityType(String moduleID, String identifier, UnaryOperator<EntityType.Builder<T>> consumer, EntityType.IFactory<T> factory, EntityClassification classification, Supplier<AttributeModifierMap.MutableAttribute> attributes) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.consumer = consumer;
@@ -40,7 +33,25 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 	@Override
 	public AttributeModifierMap.MutableAttribute createAttributes() {
 		return attributes.get();
-	}	@Override
+	}
+
+	@Override
+	public EntityType.Builder<T> getEntityTypeConstructor() {
+		return consumer.apply(EntityType.Builder.create(factory, classification));
+	}
+
+	@Override
+	public boolean hasEntityType() {
+		return entityType != null;
+	}
+
+	@Nullable
+	@Override
+	public EntityType<T> getEntityType() {
+		return entityType;
+	}
+
+	@Override
 	public void setEntityType(EntityType<T> entityType) {
 		this.entityType = entityType;
 	}
@@ -53,33 +64,17 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 	@Override
 	public FeatureType getType() {
 		return FeatureType.ENTITY;
-	}	@Override
-	public EntityType.Builder<T> getEntityTypeConstructor() {
-		return consumer.apply(EntityType.Builder.create(factory, classification));
 	}
 
 	@Override
 	public String getModId() {
 		return Constants.MOD_ID;
-	}	@Override
-	public boolean hasEntityType() {
-		return entityType != null;
 	}
 
 	@Override
 	public String getModuleId() {
 		return moduleID;
-	}	@Nullable
-	@Override
-	public EntityType<T> getEntityType() {
-		return entityType;
 	}
-
-
-
-
-
-
 
 
 }

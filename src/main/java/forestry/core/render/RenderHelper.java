@@ -1,7 +1,6 @@
 package forestry.core.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -15,7 +14,8 @@ import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 public class RenderHelper {
 	public static final Vector3f ORIGIN = new Vector3f(0.0F, 0.0F, 0.0F);
@@ -36,13 +36,7 @@ public class RenderHelper {
 
 	private Vector3f baseRotation = ORIGIN;
 
-	public void update(
-			float partialTicks,
-			MatrixStack transformation,
-			IRenderTypeBuffer buffer,
-			int combinedLight,
-			int packetLight
-	) {
+	public void update(float partialTicks, MatrixStack transformation, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
 		this.packetLight = packetLight;
 		this.combinedLight = combinedLight;
 		this.partialTicks = partialTicks;
@@ -69,17 +63,7 @@ public class RenderHelper {
 		}
 
 		EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
-		renderManager.renderEntityStatic(
-				dummyItem,
-				0.0D,
-				0.0D,
-				0.0D,
-				0.0F,
-				0.0F,
-				transformation,
-				buffer,
-				combinedLight
-		);
+		renderManager.renderEntityStatic(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
 
 		dummyItem.world = null;
 	}

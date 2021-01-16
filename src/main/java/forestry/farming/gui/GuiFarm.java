@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -19,9 +22,6 @@ import forestry.core.gui.widgets.SocketWidget;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	private final TileFarm tile;
@@ -62,15 +62,7 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 		// Fuel remaining
 		int fertilizerRemain = tile.getMultiblockLogic().getController().getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
-			blit(
-					transform,
-					guiLeft + 81,
-					guiTop + 94 + 17 - fertilizerRemain,
-					xSize,
-					17 - fertilizerRemain,
-					4,
-					fertilizerRemain
-			);
+			blit(transform, guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 }

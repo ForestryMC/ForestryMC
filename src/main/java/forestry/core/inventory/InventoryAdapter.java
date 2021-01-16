@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,21 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.core.config.Constants;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.utils.InventoryUtil;
+import javax.annotation.Nullable;
+import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
+import forestry.core.config.Constants;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.InventoryUtil;
 
 /**
  * With permission from Krapht.
@@ -55,11 +55,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(
-				inventory.getSizeInventory(),
-				"TEST_TITLE_PLEASE_IGNORE",
-				inventory.getInventoryStackLimit()
-		);
+		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
 
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			if (!inventory.getStackInSlot(i).isEmpty()) {

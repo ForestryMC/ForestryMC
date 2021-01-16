@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail;
 
-import forestry.api.mail.*;
-import forestry.mail.features.MailItems;
-import forestry.mail.items.EnumStampDefinition;
+import java.util.LinkedHashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,7 +19,17 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 
-import java.util.LinkedHashMap;
+import forestry.api.mail.EnumPostage;
+import forestry.api.mail.ILetter;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostOffice;
+import forestry.api.mail.IPostalCarrier;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.IStamps;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.PostManager;
+import forestry.mail.features.MailItems;
+import forestry.mail.items.EnumStampDefinition;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 

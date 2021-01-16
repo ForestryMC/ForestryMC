@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.items;
-
-import forestry.arboriculture.ModuleArboriculture;
-import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.items.IColoredItem;
-import forestry.core.items.ItemBlockForestry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -25,6 +19,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import forestry.arboriculture.ModuleArboriculture;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.items.IColoredItem;
+import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 

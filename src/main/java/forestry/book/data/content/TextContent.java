@@ -1,16 +1,16 @@
 package forestry.book.data.content;
 
+import javax.annotation.Nullable;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.api.book.BookContent;
 import forestry.book.data.TextData;
 import forestry.book.gui.elements.TextDataElement;
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
 
 /**
  * A book content that displays one or more texts.
@@ -23,13 +23,7 @@ public class TextContent extends BookContent<TextData> {
 	}
 
 	@Override
-	public boolean addElements(
-			IElementGroup page,
-			IGuiElementFactory factory,
-			@Nullable BookContent previous,
-			@Nullable IGuiElement previousElement,
-			int pageHeight
-	) {
+	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
 		if (data == null) {
 			return false;
 		}

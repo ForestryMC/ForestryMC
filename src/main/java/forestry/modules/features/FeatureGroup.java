@@ -2,16 +2,20 @@ package forestry.modules.features;
 
 import com.google.common.collect.ImmutableMap;
 
-import forestry.api.core.IFeatureSubtype;
-import forestry.api.core.IItemProvider;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiFunction;
+
+import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.*;
-import java.util.function.BiFunction;
+import forestry.api.core.IFeatureSubtype;
+import forestry.api.core.IItemProvider;
 
 public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends FeatureGroup<B, F, S>>, F extends IModFeature, S extends IFeatureSubtype> {
 
@@ -42,24 +46,15 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 	}
 
 	public Optional<F> findFeature(String typeName) {
-		return featureByType.entrySet().stream()
-				.filter(e -> e.getKey().getString().equals(typeName))
-				.findFirst()
-				.flatMap(e -> Optional.of(e.getValue()));
+		return featureByType.entrySet().stream().filter(e -> e.getKey().getString().equals(typeName)).findFirst().flatMap(e -> Optional.of(e.getValue()));
 	}
 
 	public boolean itemEqual(ItemStack stack) {
-		return getFeatures().stream()
-				.filter(f -> f instanceof IItemProvider)
-				.map(f -> (IItemProvider) f)
-				.anyMatch(f -> f.itemEqual(stack));
+		return getFeatures().stream().filter(f -> f instanceof IItemProvider).map(f -> (IItemProvider) f).anyMatch(f -> f.itemEqual(stack));
 	}
 
 	public boolean itemEqual(Item item) {
-		return getFeatures().stream()
-				.filter(f -> f instanceof IItemProvider)
-				.map(f -> (IItemProvider) f)
-				.anyMatch(f -> f.itemEqual(item));
+		return getFeatures().stream().filter(f -> f instanceof IItemProvider).map(f -> (IItemProvider) f).anyMatch(f -> f.itemEqual(item));
 	}
 
 	public ItemStack stack(S subType) {
@@ -69,8 +64,7 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 	public ItemStack stack(S subType, int amount) {
 		F featureBlock = featureByType.get(subType);
 		if (!(featureBlock instanceof IItemProvider)) {
-			throw new IllegalStateException(
-					"This feature group has no item registered for the given sub type to create a stack for.");
+			throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
 		}
 		return ((IItemProvider) featureBlock).stack(amount);
 	}
@@ -78,8 +72,7 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 	public ItemStack stack(S subType, StackOption... options) {
 		F featureBlock = featureByType.get(subType);
 		if (!(featureBlock instanceof IItemProvider)) {
-			throw new IllegalStateException(
-					"This feature group has no item registered for the given sub type to create a stack for.");
+			throw new IllegalStateException("This feature group has no item registered for the given sub type to create a stack for.");
 		}
 		return ((IItemProvider) featureBlock).stack(options);
 	}
@@ -90,14 +83,12 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 			public String apply(String feature, String type) {
 				return type;
 			}
-		},
-		PREFIX {
+		}, PREFIX {
 			@Override
 			public String apply(String feature, String type) {
 				return feature + '_' + type;
 			}
-		},
-		AFFIX {
+		}, AFFIX {
 			@Override
 			public String apply(String feature, String type) {
 				return type + '_' + feature;

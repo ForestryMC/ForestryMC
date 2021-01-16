@@ -2,8 +2,8 @@ package forestry.core.blocks;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.tiles.TileForestry;
-import forestry.modules.features.FeatureTileType;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,8 +15,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
+import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
 	private static final ISimpleShapeProvider FULL_CUBE = VoxelShapes::fullCube;

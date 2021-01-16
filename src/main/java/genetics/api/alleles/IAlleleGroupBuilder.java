@@ -1,10 +1,10 @@
 package genetics.api.alleles;
 
-import genetics.api.individual.IChromosomeType;
-
 import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import genetics.api.individual.IChromosomeType;
 
 public interface IAlleleGroupBuilder<V> {
 
@@ -16,10 +16,5 @@ public interface IAlleleGroupBuilder<V> {
 
 	IAlleleGroupBuilder<V> addChromosome(IChromosomeType type, Predicate<V> validator);
 
-	IAlleleGroupBuilder<V> addChromosome(
-			IChromosomeType type,
-			V defaultValue,
-			Predicate<V> validator,
-			Function<V, String> nameSupplier
-	);
+	IAlleleGroupBuilder<V> addChromosome(IChromosomeType type, V defaultValue, Predicate<V> validator, Function<V, String> nameSupplier);
 }

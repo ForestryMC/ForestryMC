@@ -1,8 +1,8 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
 import genetics.api.alleles.IAllele;
@@ -19,10 +19,5 @@ public interface IBeeMutationFactory {
 	 * @param chance     The chance that breeding the two parent bees will result in this mutation
 	 * @return a new bee mutation.
 	 */
-	IBeeMutationBuilder createMutation(
-			IAlleleBeeSpecies parentBee0,
-			IAlleleBeeSpecies parentBee1,
-			IAllele[] result,
-			int chance
-	);
+	IBeeMutationBuilder createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance);
 }

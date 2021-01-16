@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
 import com.google.common.base.CaseFormat;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.*;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.EnumAllele;
-import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+import javax.annotation.Nullable;
+import java.awt.Color;
+import java.util.Locale;
+
+import net.minecraft.item.ItemStack;
 
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;
@@ -28,27 +28,29 @@ import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
 
-import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Locale;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.api.lepidopterology.genetics.EnumFlutterType;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.genetics.IAlleleButterflySpeciesBuilder;
+import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.api.lepidopterology.genetics.IButterflyMutationBuilder;
+import forestry.core.config.Constants;
+import forestry.core.genetics.alleles.EnumAllele;
+import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 
 public enum MothDefinition implements IButterflyDefinition {
-	Brimstone(ButterflyBranchDefinition.OPISTHOGRAPTIS, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
-	LatticedHeath(ButterflyBranchDefinition.CHIASMIA, "latticedHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
+	Brimstone(ButterflyBranchDefinition.OPISTHOGRAPTIS, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f), LatticedHeath(ButterflyBranchDefinition.CHIASMIA, "latticedHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
 		@Override
 		protected void setAlleles(IAlleleTemplateBuilder template) {
 			template.set(ButterflyChromosomes.SIZE, EnumAllele.Size.SMALLEST);
 		}
-	},
-	Atlas(ButterflyBranchDefinition.ATTACUS, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f) {
+	}, Atlas(ButterflyBranchDefinition.ATTACUS, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f) {
 		@Override
 		protected void setAlleles(IAlleleTemplateBuilder template) {
 			template.set(ButterflyChromosomes.SIZE, EnumAllele.Size.LARGEST);
 		}
-	},
-	BombyxMori(ButterflyBranchDefinition.BOMBYX, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0.0f) {
+	}, BombyxMori(ButterflyBranchDefinition.BOMBYX, "bombyxMori", "bombyxMori", new Color(0xDADADA), false, 0.0f) {
 		@Override
 		protected void setAlleles(IAlleleTemplateBuilder template) {
 			template.set(ButterflyChromosomes.SIZE, EnumAllele.Size.SMALLEST);
@@ -71,36 +73,18 @@ public enum MothDefinition implements IButterflyDefinition {
 	@Nullable
 	private IGenome genome;
 
-	MothDefinition(
-			ButterflyBranchDefinition branchDefinition,
-			String speciesName,
-			String binomial,
-			Color serumColor,
-			boolean dominant,
-			float rarity
-	) {
+	MothDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor, boolean dominant, float rarity) {
 		branch = branchDefinition;
 
 		String uid = "moth_" + CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name());
 
 		IClassification parent = branch.getBranch().getParent();
-		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(
-				parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
+		String unlocalizedName = "for.butterflies.species." + parent.getUID().substring(parent.getLevel().name().toLowerCase(Locale.ENGLISH).length() + 1) + '.' + speciesName;
 		String unlocalizedDescription = "for.description." + uid;
 
 		String texture = "butterflies/" + uid;
 
-		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory
-				.createSpecies(Constants.MOD_ID, uid, speciesName)
-				.setDescriptionKey(unlocalizedDescription)
-				.setTranslationKey(unlocalizedName)
-				.setTexture(texture)
-				.setDominant(dominant)
-				.setBranch(branchDefinition.getBranch())
-				.setBinomial(binomial)
-				.setSerumColour(serumColor)
-				.setRarity(rarity)
-				.setNocturnal();
+		IAlleleButterflySpeciesBuilder speciesBuilder = ButterflyManager.butterflyFactory.createSpecies(Constants.MOD_ID, uid, speciesName).setDescriptionKey(unlocalizedDescription).setTranslationKey(unlocalizedName).setTexture(texture).setDominant(dominant).setBranch(branchDefinition.getBranch()).setBinomial(binomial).setSerumColour(serumColor).setRarity(rarity).setNocturnal();
 		setSpeciesProperties(speciesBuilder);
 		species = speciesBuilder.build();
 	}
@@ -146,11 +130,7 @@ public enum MothDefinition implements IButterflyDefinition {
 
 	}
 
-	protected final IButterflyMutationBuilder registerMutation(
-			IButterflyDefinition parent1,
-			IButterflyDefinition parent2,
-			int chance
-	) {
+	protected final IButterflyMutationBuilder registerMutation(IButterflyDefinition parent1, IButterflyDefinition parent2, int chance) {
 		IAlleleButterflySpecies species1;
 		IAlleleButterflySpecies species2;
 
@@ -170,12 +150,7 @@ public enum MothDefinition implements IButterflyDefinition {
 			throw new IllegalArgumentException("Unknown parent2: " + parent2);
 		}
 
-		return ButterflyManager.butterflyMutationFactory.createMutation(
-				species1,
-				species2,
-				getTemplate().alleles(),
-				chance
-		);
+		return ButterflyManager.butterflyMutationFactory.createMutation(species1, species2, getTemplate().alleles(), chance);
 	}
 
 	@Override

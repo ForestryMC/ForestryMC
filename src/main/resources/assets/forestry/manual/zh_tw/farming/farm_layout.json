@@ -1,0 +1,280 @@
+{
+	"title": "農場佈局",
+	"icon": {
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "小型",
+						"page": 1
+					},
+					{
+						"title": "中型",
+						"page": 2
+					},
+					{
+						"title": "較大型",
+						"page": 3
+					},
+					{
+						"title": "大型",
+						"page": 4
+					},
+					{
+						"title": "特大型",
+						"page": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "小型",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "寬×長×高：3×3×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "半徑：7 方塊"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "佔地：17×17"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "農場方塊數量：36"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "耕地數量：126"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 171,
+					"vHeight": 171,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x3.png",
+					"textureWidth": 171,
+					"textureHeight": 171,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "中型",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "寬×長×高：3×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "半徑：9 方塊"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "佔地：21×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "農場方塊數量：48"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "耕地數量：270"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 211,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x4.png",
+					"textureWidth": 211,
+					"textureHeight": 221,
+					"width": 85,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "較大型",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "寬×長×高：4×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "半徑：9 方塊"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "佔地：22×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "農場方塊數量：64"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "耕地數量：288"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 221,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/4x4.png",
+					"textureWidth": 221,
+					"textureHeight": 221,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "大型",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "寬×長×高：3×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "半徑：11 方塊"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "佔地：25×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "農場方塊數量：60"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "耕地數量：396"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 250,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 250,
+					"textureHeight": 271,
+					"width": 82,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "特大型",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "寬×長×高：5×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "半徑：11 方塊"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "佔地：27×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "農場方塊數量：100"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "耕地數量：440"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 271,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 271,
+					"textureHeight": 271,
+					"width": 89,
+					"height": 89
+			}
+		]
+	]
+}

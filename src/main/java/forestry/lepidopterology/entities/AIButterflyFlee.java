@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import java.util.EnumSet;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.EnumSet;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 
@@ -27,10 +27,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 	@Override
 	public boolean shouldExecute() {
 
-		PlayerEntity player = entity.world.getClosestPlayer(
-				entity,
-				entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance()
-		);
+		PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
 		if (player == null || player.isSneaking()) {
 			return false;

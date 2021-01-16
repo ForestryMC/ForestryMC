@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,8 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.gui;
-
-import forestry.core.gui.slots.SlotLocked;
-import forestry.core.inventory.ItemInventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,18 +17,14 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
+import forestry.core.gui.slots.SlotLocked;
+import forestry.core.inventory.ItemInventory;
+
 public abstract class ContainerItemInventory<I extends ItemInventory> extends ContainerForestry {
 
 	protected final I inventory;
 
-	protected ContainerItemInventory(
-			int windowId,
-			I inventory,
-			PlayerInventory playerInventory,
-			int xInv,
-			int yInv,
-			ContainerType<?> type
-	) {
+	protected ContainerItemInventory(int windowId, I inventory, PlayerInventory playerInventory, int xInv, int yInv, ContainerType<?> type) {
 		super(windowId, type);
 		this.inventory = inventory;
 

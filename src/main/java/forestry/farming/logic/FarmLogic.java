@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
 
 import com.google.common.base.Predicate;
 
-import forestry.api.farming.*;
-import forestry.core.utils.VectUtil;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,10 +28,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmable;
+import forestry.api.farming.Soil;
+import forestry.core.utils.VectUtil;
 
 public abstract class FarmLogic implements IFarmLogic {
 	protected final IFarmProperties properties;
@@ -67,13 +73,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(
-			World world,
-			IFarmHousing housing,
-			FarmDirection direction,
-			int extent,
-			BlockPos pos
-	) {
+	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.up(), direction, i);

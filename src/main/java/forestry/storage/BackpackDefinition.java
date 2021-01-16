@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage;
 
-import forestry.api.storage.BackpackManager;
-import forestry.api.storage.IBackpackDefinition;
+import java.awt.Color;
+import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,8 +20,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.awt.*;
-import java.util.function.Predicate;
+import forestry.api.storage.BackpackManager;
+import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;

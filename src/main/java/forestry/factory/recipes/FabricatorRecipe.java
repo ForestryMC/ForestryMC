@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import forestry.api.recipes.IFabricatorRecipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -26,18 +24,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import forestry.api.recipes.IFabricatorRecipe;
+
 public class FabricatorRecipe implements IFabricatorRecipe {
 	private final ResourceLocation id;
 	private final ItemStack plan;
 	private final FluidStack molten;
 	private final ShapedRecipe ingredients;
 
-	public FabricatorRecipe(
-			ResourceLocation id,
-			ItemStack plan,
-			FluidStack molten,
-			ShapedRecipe ingredients
-	) {
+	public FabricatorRecipe(ResourceLocation id, ItemStack plan, FluidStack molten, ShapedRecipe ingredients) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
@@ -80,10 +75,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "molten"));
 
-			ShapedRecipe ingredients = IRecipeSerializer.CRAFTING_SHAPED.read(
-					recipeId,
-					JSONUtils.getJsonObject(json, "ingredients")
-			);
+			ShapedRecipe ingredients = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "ingredients"));
 
 			return new FabricatorRecipe(recipeId, plan, molten, ingredients);
 		}

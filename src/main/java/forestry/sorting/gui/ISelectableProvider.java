@@ -1,12 +1,12 @@
 package forestry.sorting.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.core.gui.GuiForestry;
+import java.util.Collection;
 
 import net.minecraft.util.text.ITextComponent;
 
-import java.util.Collection;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import forestry.core.gui.GuiForestry;
 
 public interface ISelectableProvider<S> {
 	Collection<S> getEntries();

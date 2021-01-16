@@ -1,14 +1,18 @@
 package genetics.api;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.*;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import javax.annotation.Nullable;
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.individual.IKaryotype;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
 
 /**
  * This handler provides some functions to save and load {@link IAllele}s, {@link IChromosome}s and {@link IGenome}s.
@@ -89,10 +93,5 @@ public interface IGeneticSaveHandler {
 
 	CompoundNBT getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
 
-	void setIndividualData(
-			ItemStack itemStack,
-			IOrganismType type,
-			IIndividualRoot<IIndividual> root,
-			CompoundNBT compound
-	);
+	void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundNBT compound);
 }

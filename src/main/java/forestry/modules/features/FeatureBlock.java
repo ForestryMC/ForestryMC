@@ -1,7 +1,8 @@
 package forestry.modules.features;
 
-import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
+import javax.annotation.Nullable;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,9 +12,8 @@ import net.minecraft.state.Property;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import forestry.core.blocks.BlockBase;
+import forestry.core.config.Constants;
 
 public class FeatureBlock<B extends Block, I extends BlockItem> implements IBlockFeature<B, I> {
 	protected final String moduleID;
@@ -26,12 +26,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 	@Nullable
 	private I item;
 
-	public FeatureBlock(
-			String moduleID,
-			String identifier,
-			Supplier<B> constructorBlock,
-			@Nullable Function<B, I> constructorItem
-	) {
+	public FeatureBlock(String moduleID, String identifier, Supplier<B> constructorBlock, @Nullable Function<B, I> constructorItem) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.constructorBlock = constructorBlock;

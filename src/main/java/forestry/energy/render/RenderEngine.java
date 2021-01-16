@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.render;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.World;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -18,14 +26,6 @@ import forestry.core.render.IForestryRenderer;
 import forestry.core.render.RenderHelper;
 import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
 	private static final float[] angleMap = new float[6];
@@ -72,16 +72,7 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		extension.rotationPointY = 8F;
 		extension.rotationPointZ = 8F;
 
-		textures = new ResourceLocation[]{
-				new ResourceLocation(Constants.MOD_ID, baseTexture + "base.png"),
-				new ResourceLocation(Constants.MOD_ID, baseTexture + "piston.png"),
-				new ResourceLocation(Constants.MOD_ID, baseTexture + "extension.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_highest.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_higher.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_high.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_medium.png"),
-				new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_low.png"),
-		};
+		textures = new ResourceLocation[]{new ResourceLocation(Constants.MOD_ID, baseTexture + "base.png"), new ResourceLocation(Constants.MOD_ID, baseTexture + "piston.png"), new ResourceLocation(Constants.MOD_ID, baseTexture + "extension.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_highest.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_higher.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_high.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_medium.png"), new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_BLOCK + "engine_trunk_low.png"),};
 	}
 
 	@Override
@@ -173,6 +164,13 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 
 	private enum Textures {
 
-		BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
+		BASE,
+		PISTON,
+		EXTENSION,
+		TRUNK_HIGHEST,
+		TRUNK_HIGHER,
+		TRUNK_HIGH,
+		TRUNK_MEDIUM,
+		TRUNK_LOW
 	}
 }

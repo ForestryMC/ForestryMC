@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.blocks;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.utils.ResourceUtil;
+import java.util.Locale;
+import java.util.function.Function;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,41 +21,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.Locale;
-import java.util.function.Function;
+import forestry.api.core.IBlockSubtype;
+import forestry.core.utils.ResourceUtil;
 
 public enum EnumFarmMaterial implements IBlockSubtype {
-	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY, "stone_bricks"),
-	BRICK_MOSSY(new ItemStack(Blocks.MOSSY_STONE_BRICKS), TextFormatting.DARK_GRAY, "mossy_stone_bricks"),
-	BRICK_CRACKED(new ItemStack(Blocks.CRACKED_STONE_BRICKS), TextFormatting.DARK_GRAY, "cracked_stone_bricks"),
-	BRICK(new ItemStack(Blocks.BRICKS), TextFormatting.GOLD, "bricks"),
-	SANDSTONE_SMOOTH(
-			new ItemStack(Blocks.SMOOTH_SANDSTONE),
-			TextFormatting.YELLOW,
-			pillarTexture("cut_sandstone", "sandstone_bottom", "sandstone_top")
-	),
-	SANDSTONE_CHISELED(
-			new ItemStack(Blocks.CHISELED_SANDSTONE),
-			TextFormatting.YELLOW,
-			pillarTexture("chiseled_sandstone", "sandstone_bottom", "sandstone_top")
-	),
-	BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICKS), TextFormatting.DARK_RED, "nether_bricks"),
-	BRICK_CHISELED(new ItemStack(Blocks.CHISELED_STONE_BRICKS), TextFormatting.GOLD, "chiseled_stone_bricks"),
-	QUARTZ(
-			new ItemStack(Blocks.QUARTZ_BLOCK),
-			TextFormatting.WHITE,
-			pillarTexture("quartz_block_side", "quartz_block_bottom", "quartz_block_top")
-	),
-	QUARTZ_CHISELED(
-			new ItemStack(Blocks.CHISELED_QUARTZ_BLOCK),
-			TextFormatting.WHITE,
-			pillarTexture("chiseled_quartz_block", "chiseled_quartz_block_top", "chiseled_quartz_block_top")
-	),
-	QUARTZ_LINES(
-			new ItemStack(Blocks.QUARTZ_PILLAR),
-			TextFormatting.WHITE,
-			pillarTexture("quartz_pillar", "chiseled_quartz_block_top", "chiseled_quartz_block_top")
-	);
+	BRICK_STONE(new ItemStack(Blocks.STONE_BRICKS), TextFormatting.DARK_GRAY, "stone_bricks"), BRICK_MOSSY(new ItemStack(Blocks.MOSSY_STONE_BRICKS), TextFormatting.DARK_GRAY, "mossy_stone_bricks"), BRICK_CRACKED(new ItemStack(Blocks.CRACKED_STONE_BRICKS), TextFormatting.DARK_GRAY, "cracked_stone_bricks"), BRICK(new ItemStack(Blocks.BRICKS), TextFormatting.GOLD, "bricks"), SANDSTONE_SMOOTH(new ItemStack(Blocks.SMOOTH_SANDSTONE), TextFormatting.YELLOW, pillarTexture("cut_sandstone", "sandstone_bottom", "sandstone_top")), SANDSTONE_CHISELED(new ItemStack(Blocks.CHISELED_SANDSTONE), TextFormatting.YELLOW, pillarTexture("chiseled_sandstone", "sandstone_bottom", "sandstone_top")), BRICK_NETHER(new ItemStack(Blocks.NETHER_BRICKS), TextFormatting.DARK_RED, "nether_bricks"), BRICK_CHISELED(new ItemStack(Blocks.CHISELED_STONE_BRICKS), TextFormatting.GOLD, "chiseled_stone_bricks"), QUARTZ(new ItemStack(Blocks.QUARTZ_BLOCK), TextFormatting.WHITE, pillarTexture("quartz_block_side", "quartz_block_bottom", "quartz_block_top")), QUARTZ_CHISELED(new ItemStack(Blocks.CHISELED_QUARTZ_BLOCK), TextFormatting.WHITE, pillarTexture("chiseled_quartz_block", "chiseled_quartz_block_top", "chiseled_quartz_block_top")), QUARTZ_LINES(new ItemStack(Blocks.QUARTZ_PILLAR), TextFormatting.WHITE, pillarTexture("quartz_pillar", "chiseled_quartz_block_top", "chiseled_quartz_block_top"));
 
 	private final ItemStack base;
 	private final TextFormatting formatting;

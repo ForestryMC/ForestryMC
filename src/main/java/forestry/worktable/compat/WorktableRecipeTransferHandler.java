@@ -1,5 +1,16 @@
 package forestry.worktable.compat;
 
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
 import forestry.core.recipes.RecipeUtil;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.inventory.CraftingInventoryForestry;
@@ -10,17 +21,6 @@ import mezz.jei.api.gui.ingredient.IGuiIngredient;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-
 @OnlyIn(Dist.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable> {
 	@Override
@@ -30,16 +30,9 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(
-			ContainerWorktable container,
-			IRecipeLayout recipeLayout,
-			PlayerEntity player,
-			boolean maxTransfer,
-			boolean doTransfer
-	) {
+	public IRecipeTransferError transferRecipe(ContainerWorktable container, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
-			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks()
-					.getGuiIngredients();
+			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 
 			CraftingInventoryForestry inventory = new CraftingInventoryForestry(container);
 

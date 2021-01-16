@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,13 +7,13 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils;
-
-import forestry.core.config.Constants;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+
+import forestry.core.config.Constants;
 
 public class Log {
 

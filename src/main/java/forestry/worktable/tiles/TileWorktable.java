@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,25 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.worktable.tiles;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.inventory.InventoryGhostCrafting;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.RecipeUtil;
-import forestry.core.tiles.TileBase;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.features.WorktableTiles;
-import forestry.worktable.gui.ContainerWorktable;
-import forestry.worktable.inventory.CraftingInventoryForestry;
-import forestry.worktable.inventory.InventoryWorktable;
-import forestry.worktable.recipes.MemorizedRecipe;
-import forestry.worktable.recipes.RecipeMemory;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,9 +33,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.List;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.InventoryGhostCrafting;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.recipes.RecipeUtil;
+import forestry.core.tiles.TileBase;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.worktable.features.WorktableTiles;
+import forestry.worktable.gui.ContainerWorktable;
+import forestry.worktable.inventory.CraftingInventoryForestry;
+import forestry.worktable.inventory.InventoryWorktable;
+import forestry.worktable.recipes.MemorizedRecipe;
+import forestry.worktable.recipes.RecipeMemory;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 	private final InventoryAdapterTile craftingDisplay;
@@ -127,8 +127,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	/* ICrafterWorktable */
 	@Override
 	public boolean canTakeStack(int craftingSlotIndex) {
-		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT ||
-				canCraftCurrentRecipe();
+		return craftingSlotIndex != InventoryGhostCrafting.SLOT_CRAFTING_RESULT || canCraftCurrentRecipe();
 	}
 
 	@Override
@@ -185,12 +184,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		}
 
 		NonNullList<ItemStack> inventoryStacks = InventoryUtil.getStacks(this);
-		CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(
-				currentRecipe.getCraftMatrix(),
-				inventoryStacks,
-				world,
-				selectedRecipe
-		);
+		CraftingInventoryForestry crafting = RecipeUtil.getCraftRecipe(currentRecipe.getCraftMatrix(), inventoryStacks, world, selectedRecipe);
 		if (crafting == null) {
 			return false;
 		}
@@ -229,11 +223,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	public IInventory getCraftingDisplay() {
-		return new InventoryMapper(
-				craftingDisplay,
-				InventoryGhostCrafting.SLOT_CRAFTING_1,
-				InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-		);
+		return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 	}
 
 	private void setCraftingDisplay(IInventory craftMatrix) {

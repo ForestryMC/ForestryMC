@@ -1,20 +1,20 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.climate;
 
 import com.google.common.base.MoreObjects;
 
-import forestry.api.core.INbtWritable;
+import javax.annotation.concurrent.Immutable;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3i;
 
-import javax.annotation.concurrent.Immutable;
+import forestry.api.core.INbtWritable;
 
 @Immutable
 public class Position2D implements Comparable<Position2D>, INbtWritable {
@@ -46,20 +46,6 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 		this.z = CompoundNBT.getInt("zPosition");
 	}
 
-	public Position2D clamp(Position2D min, Position2D max) {
-		int x = MathHelper.clamp(this.x, min.getX(), max.getX());
-		int z = MathHelper.clamp(this.z, min.getZ(), max.getZ());
-		return new Position2D(x, z);
-	}
-
-	public Position2D add(int x, int z) {
-		return x == 0 && z == 0 ? this : new Position2D(this.getX() + x, this.getZ() + z);
-	}
-
-	public int hashCode() {
-		return (this.getZ() + this.getX() * 31);
-	}
-
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -74,8 +60,18 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 		}
 	}
 
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
+	public Position2D clamp(Position2D min, Position2D max) {
+		int x = MathHelper.clamp(this.x, min.getX(), max.getX());
+		int z = MathHelper.clamp(this.z, min.getZ(), max.getZ());
+		return new Position2D(x, z);
+	}
+
+	public Position2D add(int x, int z) {
+		return x == 0 && z == 0 ? this : new Position2D(this.getX() + x, this.getZ() + z);
+	}
+
+	public int hashCode() {
+		return (this.getZ() + this.getX() * 31);
 	}
 
 	public int compareTo(Position2D o) {
@@ -135,5 +131,9 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 
 	public double distanceSq(BlockPos to) {
 		return distanceSq(to.getX(), to.getZ());
+	}
+
+	public String toString() {
+		return MoreObjects.toStringHelper(this).add("x", this.getX()).add("z", this.getZ()).toString();
 	}
 }

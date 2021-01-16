@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,11 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.recipes;
 
-import forestry.core.utils.ItemStackUtil;
-import forestry.worktable.inventory.CraftingInventoryForestry;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
@@ -23,18 +24,12 @@ import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.stream.Collectors;
+import forestry.core.utils.ItemStackUtil;
+import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public abstract class RecipeUtil {
 	@Nullable
-	public static CraftingInventoryForestry getCraftRecipe(
-			CraftingInventory originalCrafting,
-			NonNullList<ItemStack> availableItems,
-			World world,
-			IRecipe recipe
-	) {
+	public static CraftingInventoryForestry getCraftRecipe(CraftingInventory originalCrafting, NonNullList<ItemStack> availableItems, World world, IRecipe recipe) {
 		if (!recipe.matches(originalCrafting, world)) {
 			return null;
 		}
@@ -50,14 +45,7 @@ public abstract class RecipeUtil {
 		for (int slot = 0; slot < originalCrafting.getSizeInventory(); slot++) {
 			ItemStack stackInSlot = originalCrafting.getStackInSlot(slot);
 			if (!stackInSlot.isEmpty()) {
-				ItemStack equivalent = getCraftingEquivalent(
-						stockCopy,
-						originalCrafting,
-						slot,
-						world,
-						recipe,
-						expectedOutput
-				);
+				ItemStack equivalent = getCraftingEquivalent(stockCopy, originalCrafting, slot, world, recipe, expectedOutput);
 				if (equivalent.isEmpty()) {
 					return null;
 				} else {
@@ -76,14 +64,7 @@ public abstract class RecipeUtil {
 		return null;
 	}
 
-	private static ItemStack getCraftingEquivalent(
-			NonNullList<ItemStack> stockCopy,
-			CraftingInventory crafting,
-			int slot,
-			World world,
-			IRecipe recipe,
-			ItemStack expectedOutput
-	) {
+	private static ItemStack getCraftingEquivalent(NonNullList<ItemStack> stockCopy, CraftingInventory crafting, int slot, World world, IRecipe recipe, ItemStack expectedOutput) {
 		ItemStack originalStack = crafting.getStackInSlot(slot);
 		for (ItemStack stockStack : stockCopy) {
 			if (!stockStack.isEmpty()) {
@@ -103,15 +84,8 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static List<IRecipe> findMatchingRecipes(
-			CraftingInventory inventory,
-			World world
-	) {    //TODO - is the stream() needed anymore?
-		return world.getRecipeManager()
-				.getRecipes(IRecipeType.CRAFTING, inventory, world)
-				.stream()
-				.filter(recipe -> recipe.matches(inventory, world))
-				.collect(Collectors.toList());
+	public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {    //TODO - is the stream() needed anymore?
+		return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 
 	@Nullable
@@ -123,12 +97,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static Ingredient[][] matches(
-			NonNullList<Ingredient> recipeIngredients,
-			int width,
-			int height,
-			IInventory inventory
-	) {
+	public static Ingredient[][] matches(NonNullList<Ingredient> recipeIngredients, int width, int height, IInventory inventory) {
 		ItemStack[][] resources = getResources(inventory);
 		return matches(recipeIngredients, width, height, resources);
 	}
@@ -146,23 +115,10 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	public static Ingredient[][] matches(
-			NonNullList<Ingredient> recipeIngredients,
-			int width,
-			int height,
-			ItemStack[][] resources
-	) {
+	public static Ingredient[][] matches(NonNullList<Ingredient> recipeIngredients, int width, int height, ItemStack[][] resources) {
 		for (int i = 0; i <= 3 - width; i++) {
 			for (int j = 0; j <= 3 - height; j++) {
-				Ingredient[][] resourceDicts = checkMatch(
-						recipeIngredients,
-						width,
-						height,
-						resources,
-						i,
-						j,
-						true
-				);
+				Ingredient[][] resourceDicts = checkMatch(recipeIngredients, width, height, resources, i, j, true);
 				if (resourceDicts != null) {
 					return resourceDicts;
 				}
@@ -178,15 +134,7 @@ public abstract class RecipeUtil {
 	}
 
 	@Nullable
-	private static Ingredient[][] checkMatch(
-			NonNullList<Ingredient> recipeIngredients,
-			int width,
-			int height,
-			ItemStack[][] resources,
-			int xInGrid,
-			int yInGrid,
-			boolean mirror
-	) {
+	private static Ingredient[][] checkMatch(NonNullList<Ingredient> recipeIngredients, int width, int height, ItemStack[][] resources, int xInGrid, int yInGrid, boolean mirror) {
 		Ingredient[][] resourceDicts = new Ingredient[3][3];
 		for (int k = 0; k < 3; k++) {
 			for (int l = 0; l < 3; l++) {

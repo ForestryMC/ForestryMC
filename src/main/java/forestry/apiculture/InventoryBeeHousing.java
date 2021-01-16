@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture;
+
+import java.util.Optional;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+
+import genetics.api.organism.IOrganismType;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -16,13 +23,6 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.core.inventory.InventoryAdapterRestricted;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.SlotUtil;
-
-import genetics.api.organism.IOrganismType;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-
-import java.util.Optional;
 
 public class InventoryBeeHousing extends InventoryAdapterRestricted implements IBeeHousingInventory {
 	public static final int SLOT_QUEEN = 0;
@@ -64,13 +64,13 @@ public class InventoryBeeHousing extends InventoryAdapterRestricted implements I
 	}
 
 	@Override
-	public final void setQueen(ItemStack itemstack) {
-		setInventorySlotContents(SLOT_QUEEN, itemstack);
+	public final ItemStack getDrone() {
+		return getStackInSlot(SLOT_DRONE);
 	}
 
 	@Override
-	public final ItemStack getDrone() {
-		return getStackInSlot(SLOT_DRONE);
+	public final void setQueen(ItemStack itemstack) {
+		setInventorySlotContents(SLOT_QUEEN, itemstack);
 	}
 
 	@Override

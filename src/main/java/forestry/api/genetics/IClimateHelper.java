@@ -1,16 +1,16 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
+import java.util.Collection;
 
 import net.minecraft.util.text.ITextComponent;
 
-import java.util.Collection;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 
 public interface IClimateHelper {
 	/**
@@ -24,11 +24,7 @@ public interface IClimateHelper {
 	 * @param tolHumid    Humidity tolerance to apply.
 	 * @return true if both temperature and humidity fit the given constraints.
 	 */
-	boolean isWithinLimits(
-			EnumTemperature temperature, EnumHumidity humidity,
-			EnumTemperature baseTemp, EnumTolerance tolTemp,
-			EnumHumidity baseHumid, EnumTolerance tolHumid
-	);
+	boolean isWithinLimits(EnumTemperature temperature, EnumHumidity humidity, EnumTemperature baseTemp, EnumTolerance tolTemp, EnumHumidity baseHumid, EnumTolerance tolHumid);
 
 	boolean isWithinLimits(EnumTemperature temperature, EnumTemperature baseTemp, EnumTolerance tolTemp);
 

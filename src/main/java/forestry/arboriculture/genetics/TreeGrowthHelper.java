@@ -1,19 +1,19 @@
 package forestry.arboriculture.genetics;
 
-import forestry.api.arboriculture.genetics.ITree;
-import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.tiles.TileUtil;
-
-import genetics.api.individual.IGenome;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
+import genetics.api.individual.IGenome;
+
+import forestry.api.arboriculture.genetics.ITree;
+import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.tiles.TileUtil;
 
 public class TreeGrowthHelper {
 	@Nullable
@@ -59,12 +59,7 @@ public class TreeGrowthHelper {
 	 * Uses a knownSaplings cache to avoid checking the same saplings multiple times.
 	 */
 	@Nullable
-	private static BlockPos hasSufficientSaplingsAroundSapling(
-			IGenome genome,
-			IWorld world,
-			BlockPos saplingPos,
-			int expectedGirth
-	) {
+	private static BlockPos hasSufficientSaplingsAroundSapling(IGenome genome, IWorld world, BlockPos saplingPos, int expectedGirth) {
 		final int checkSize = (expectedGirth * 2) - 1;
 		final int offset = expectedGirth - 1;
 		final Map<BlockPos, Boolean> knownSaplings = new HashMap<>(checkSize * checkSize);
@@ -81,13 +76,7 @@ public class TreeGrowthHelper {
 		return null;
 	}
 
-	private static boolean checkForSaplings(
-			IGenome genome,
-			IWorld world,
-			BlockPos startPos,
-			int girth,
-			Map<BlockPos, Boolean> knownSaplings
-	) {
+	private static boolean checkForSaplings(IGenome genome, IWorld world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
 				BlockPos checkPos = startPos.add(x, 0, z);
@@ -115,7 +104,6 @@ public class TreeGrowthHelper {
 		}
 
 		ITree tree = sapling.getTree();
-		return tree != null && tree.getGenome().getPrimary().getRegistryName().equals(genome.getPrimary()
-				.getRegistryName());
+		return tree != null && tree.getGenome().getPrimary().getRegistryName().equals(genome.getPrimary().getRegistryName());
 	}
 }

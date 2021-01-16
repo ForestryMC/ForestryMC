@@ -15,13 +15,13 @@ package forestry.core.recipes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import forestry.api.core.ForestryAPI;
-import forestry.core.config.Constants;
-
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+
+import forestry.api.core.ForestryAPI;
+import forestry.core.config.Constants;
 
 public class ModuleEnabledCondition implements ICondition {
 	private final String container;

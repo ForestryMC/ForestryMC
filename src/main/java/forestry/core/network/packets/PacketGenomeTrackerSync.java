@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.network.packets;
 
-import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.core.genetics.BreedingTracker;
-import forestry.core.network.*;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
+import java.io.IOException;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,7 +19,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.io.IOException;
+import genetics.api.GeneticsAPI;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.core.ForestryEvent;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.core.genetics.BreedingTracker;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketClient;
+import forestry.core.network.IForestryPacketHandlerClient;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdClient;
 
 public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
 	private final CompoundNBT nbt;
@@ -56,10 +60,7 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 
 				IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(type);
 				definition.ifPresent(root -> {
-					IBreedingTracker tracker = root.getBreedingTracker(
-							player.getEntityWorld(),
-							player.getGameProfile()
-					);
+					IBreedingTracker tracker = root.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 					tracker.decodeFromNBT(nbt);
 					MinecraftForge.EVENT_BUS.post(new ForestryEvent.SyncedBreedingTracker(tracker, player));
 				});

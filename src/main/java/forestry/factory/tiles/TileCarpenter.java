@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,29 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.tiles;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Constants;
-import forestry.core.errors.EnumErrorCode;
-import forestry.core.fluids.FilteredTank;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.inventory.InventoryGhostCrafting;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.network.PacketBufferForestry;
-import forestry.core.render.TankRenderInfo;
-import forestry.core.tiles.IItemStackDisplay;
-import forestry.core.tiles.ILiquidTankTile;
-import forestry.core.tiles.TilePowered;
-import forestry.core.utils.InventoryUtil;
-import forestry.factory.features.FactoryTiles;
-import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.inventory.InventoryCarpenter;
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,9 +36,26 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Optional;
+import forestry.api.core.IErrorLogic;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Constants;
+import forestry.core.errors.EnumErrorCode;
+import forestry.core.fluids.FilteredTank;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.fluids.TankManager;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.inventory.InventoryGhostCrafting;
+import forestry.core.inventory.wrappers.InventoryMapper;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.render.TankRenderInfo;
+import forestry.core.tiles.IItemStackDisplay;
+import forestry.core.tiles.ILiquidTankTile;
+import forestry.core.tiles.TilePowered;
+import forestry.core.utils.InventoryUtil;
+import forestry.factory.features.FactoryTiles;
+import forestry.factory.gui.ContainerCarpenter;
+import forestry.factory.inventory.InventoryCarpenter;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -114,18 +114,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		//TODO optional could work quite well here
-		if (!RecipeManagers.carpenterManager.matches(
-				currentRecipe,
-				resourceTank.getFluid(),
-				getBoxStack(),
-				craftingInventory
-		)) {
-			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(
-					world.getRecipeManager(),
-					resourceTank.getFluid(),
-					getBoxStack(),
-					craftingInventory
-			);
+		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory);
 			currentRecipe = optional.orElse(null);
 
 			if (optional.isPresent()) {
@@ -176,16 +166,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 		}
 
-		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(
-				craftingInventory,
-				InventoryGhostCrafting.SLOT_CRAFTING_1,
-				InventoryGhostCrafting.SLOT_CRAFTING_COUNT
-		);
-		IInventory inventory = new InventoryMapper(
-				getInternalInventory(),
-				InventoryCarpenter.SLOT_INVENTORY_1,
-				InventoryCarpenter.SLOT_INVENTORY_COUNT
-		);
+		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.removeSets(inventory, 1, craftingSets, null, true, false, doRemove);
 	}
 
@@ -206,14 +188,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			hasItemResources = removeItemResources(false);
 
 			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-			canAdd = InventoryUtil.tryAddStack(
-					this,
-					pendingProduct,
-					InventoryCarpenter.SLOT_PRODUCT,
-					InventoryCarpenter.SLOT_PRODUCT_COUNT,
-					true,
-					false
-			);
+			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true, false);
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -269,13 +244,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 		if (currentRecipe != null) {
 			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
-			InventoryUtil.tryAddStack(
-					this,
-					pendingProduct,
-					InventoryCarpenter.SLOT_PRODUCT,
-					InventoryCarpenter.SLOT_PRODUCT_COUNT,
-					true
-			);
+			InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true);
 		}
 		return true;
 	}

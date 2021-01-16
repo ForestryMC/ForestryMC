@@ -11,9 +11,6 @@ import forestry.modules.features.ModFeatureRegistry;
 public class FarmingContainers {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleFarming.class);
 
-	public static final FeatureContainerType<ContainerFarm> FARM = REGISTRY.container(
-			ContainerFarm::fromNetwork,
-			"farm"
-	);
+	public static final FeatureContainerType<ContainerFarm> FARM = REGISTRY.container(ContainerFarm::fromNetwork, "farm");
 
 }

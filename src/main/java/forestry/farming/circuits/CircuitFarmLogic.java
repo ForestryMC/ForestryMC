@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.circuits;
 
-import forestry.api.farming.*;
-import forestry.core.circuits.Circuit;
+import javax.annotation.Nullable;
 
 import net.minecraft.util.text.ITextComponent;
 
-import javax.annotation.Nullable;
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmCircuit;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.api.farming.IFarmProperties;
+import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 

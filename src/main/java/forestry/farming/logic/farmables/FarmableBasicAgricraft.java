@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,24 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic.farmables;
-
-import forestry.api.farming.ICrop;
-import forestry.farming.logic.crops.CropBasicAgriCraft;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.farming.ICrop;
+import forestry.farming.logic.crops.CropBasicAgriCraft;
+
 public class FarmableBasicAgricraft extends FarmableBase {
-	public FarmableBasicAgricraft(
-			ItemStack germling,
-			BlockState plantedState,
-			BlockState matureState,
-			boolean replant
-	) {
+	public FarmableBasicAgricraft(ItemStack germling, BlockState plantedState, BlockState matureState, boolean replant) {
 		super(germling, plantedState, matureState, replant);
 	}
 

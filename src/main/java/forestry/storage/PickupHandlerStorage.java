@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,18 +7,18 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.storage;
+
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.IPickupHandler;
 import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.ContainerNaturalistBackpack;
 import forestry.storage.items.ItemBackpack;
-
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 
 public class PickupHandlerStorage implements IPickupHandler {
 
@@ -68,8 +68,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 		}
 
 		// Do not pick up if a backpack is open
-		if (player.openContainer instanceof ContainerBackpack ||
-				player.openContainer instanceof ContainerNaturalistBackpack) {
+		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack) {
 			return false;
 		}
 

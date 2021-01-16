@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,21 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.apiculture.hives.IHiveDrop;
-import forestry.api.apiculture.hives.IHiveRegistry;
-import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
-import forestry.api.apiculture.hives.IHiveTile;
-import forestry.apiculture.MaterialBeehive;
-import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.tiles.TileHive;
-import forestry.core.items.ItemScoop;
-import forestry.core.tiles.TileUtil;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -40,9 +31,18 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.apiculture.hives.IHiveDrop;
+import forestry.api.apiculture.hives.IHiveRegistry;
+import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
+import forestry.api.apiculture.hives.IHiveTile;
+import forestry.apiculture.MaterialBeehive;
+import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.tiles.TileHive;
+import forestry.core.items.ItemScoop;
+import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {
 	private final HiveType type;
@@ -52,13 +52,19 @@ public class BlockBeeHive extends ContainerBlock {
 				.setLightLevel((state) -> (int) (0.4f * 15))
 				.hardnessAndResistance(2.5f)
 				.harvestLevel(0)
-				.harvestTool(ItemScoop.SCOOP));
+				.harvestTool(ItemScoop.SCOOP)
+		);
 		this.type = type;
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader world) {
 		return new TileHive();
+	}
+
+	@Override
+	public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
@@ -84,11 +90,6 @@ public class BlockBeeHive extends ContainerBlock {
 		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
 		ServerWorld world = builder.getWorld();
 		return getDrops(world, pos, fortune);
-	}
-
-	@Override
-	public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	private NonNullList<ItemStack> getDrops(IBlockReader world, BlockPos pos, int fortune) {

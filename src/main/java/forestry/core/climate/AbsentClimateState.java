@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.climate;
 
 import com.google.common.base.MoreObjects;
 
-import forestry.api.climate.IClimateState;
-
 import javax.annotation.concurrent.Immutable;
 import java.util.function.UnaryOperator;
+
+import forestry.api.climate.IClimateState;
 
 @Immutable
 public final class AbsentClimateState implements IClimateState {

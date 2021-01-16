@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,15 +7,15 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.farming.logic;
-
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmProperties;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmProperties;
 
 public class FarmLogicMushroom extends FarmLogicArboreal {
 

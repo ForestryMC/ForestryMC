@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,10 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.inventory;
 
-import forestry.api.fuels.FuelManager;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.inventory.InventoryAdapterTile;
-import forestry.core.utils.SlotUtil;
-import forestry.factory.tiles.TileMoistener;
+import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -22,7 +18,11 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
-import java.util.Optional;
+import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.inventory.InventoryAdapterTile;
+import forestry.core.utils.SlotUtil;
+import forestry.factory.tiles.TileMoistener;
 
 public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 	public static final short SLOT_STASH_1 = 0;
@@ -49,8 +49,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 
 		if (slotIndex == SLOT_PRODUCT) {
 			Optional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
-			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f))
-					.orElse(false);    //TODO very common pattern. Create Helper?
+			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);    //TODO very common pattern. Create Helper?
 		}
 
 		return false;

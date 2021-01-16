@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.gui;
 
-import forestry.api.mail.*;
-import forestry.core.gui.IGuiSelectable;
-import forestry.core.utils.NetworkUtil;
-import forestry.mail.features.MailContainers;
-import forestry.mail.network.packets.PacketLetterInfoResponse;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -24,8 +26,18 @@ import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import forestry.api.mail.EnumAddressee;
+import forestry.api.mail.EnumTradeStationState;
+import forestry.api.mail.IMailAddress;
+import forestry.api.mail.IPostOffice;
+import forestry.api.mail.IPostalState;
+import forestry.api.mail.ITradeStation;
+import forestry.api.mail.ITradeStationInfo;
+import forestry.api.mail.PostManager;
+import forestry.core.gui.IGuiSelectable;
+import forestry.core.utils.NetworkUtil;
+import forestry.mail.features.MailContainers;
+import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
@@ -137,11 +149,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void handleLetterInfoUpdate(
-			EnumAddressee type,
-			@Nullable IMailAddress address,
-			@Nullable ITradeStationInfo tradeInfo
-	) {
+	public void handleLetterInfoUpdate(EnumAddressee type, @Nullable IMailAddress address, @Nullable ITradeStationInfo tradeInfo) {
 		setTradeInfo(tradeInfo);
 	}
 

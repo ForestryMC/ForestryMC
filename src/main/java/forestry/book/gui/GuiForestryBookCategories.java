@@ -1,13 +1,5 @@
 package forestry.book.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import forestry.api.book.IBookCategory;
-import forestry.api.book.IForesterBook;
-import forestry.book.gui.buttons.GuiButtonBookCategory;
-import forestry.core.config.Constants;
-import forestry.core.gui.Drawable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
@@ -16,15 +8,20 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.book.IBookCategory;
+import forestry.api.book.IForesterBook;
+import forestry.book.gui.buttons.GuiButtonBookCategory;
+import forestry.core.config.Constants;
+import forestry.core.gui.Drawable;
+
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {
-	public static final Drawable LOGO = new Drawable(new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "almanac/logo.png"
-	), 0, 0, 256, 58, 256, 58);
+	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "almanac/logo.png"), 0, 0, 256, 58, 256, 58);
 
 	public GuiForestryBookCategories(IForesterBook book) {
 		super(book);
@@ -44,12 +41,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 			if (category.getEntries().isEmpty()) {
 				continue;
 			}
-			addButton(new GuiButtonBookCategory(
-					guiLeft + LEFT_PAGE_START_X + x * 36,
-					guiTop + 25 + y * 36,
-					category,
-					this::actionPerformed
-			));
+			addButton(new GuiButtonBookCategory(guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category, this::actionPerformed));
 			x++;
 			if (x == 3) {
 				y++;
@@ -61,23 +53,10 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	@Override
 	protected void drawText(MatrixStack transform) {
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		drawCenteredString(
-				transform,
-				fontRenderer,
-				new TranslationTextComponent("for.gui.book.about.title").mergeStyle(TextFormatting.UNDERLINE),
-				guiLeft + RIGHT_PAGE_START_X + 52,
-				guiTop + PAGE_START_Y,
-				0xD3D3D3
-		);
+		drawCenteredString(transform, fontRenderer, new TranslationTextComponent("for.gui.book.about.title").mergeStyle(TextFormatting.UNDERLINE), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		ITextComponent about = new TranslationTextComponent("for.gui.book.about");
 		fontRenderer.func_238418_a_(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
-		fontRenderer.func_243248_b(
-				transform,
-				new TranslationTextComponent("for.gui.book.about.author"),
-				guiLeft + RIGHT_PAGE_START_X,
-				guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about.getString(), 108),
-				0
-		);
+		fontRenderer.func_243248_b(transform, new TranslationTextComponent("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about.getString(), 108), 0);
 		LOGO.draw(transform, guiTop + LEFT_PAGE_START_Y + 110, 108, 24, guiLeft + RIGHT_PAGE_START_X);
 	}
 

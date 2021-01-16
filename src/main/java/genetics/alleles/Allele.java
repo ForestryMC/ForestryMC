@@ -2,16 +2,16 @@ package genetics.alleles;
 
 import com.google.common.base.MoreObjects;
 
-import genetics.api.alleles.AlleleInfo;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleType;
+import java.util.Objects;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.Objects;
+import genetics.api.alleles.AlleleInfo;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleType;
 
 public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 
@@ -54,18 +54,12 @@ public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 			return false;
 		}
 		IAllele otherAllele = (IAllele) obj;
-		return getRegistryName() != null ?
-				getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-				dominant == otherAllele.isDominant();
+		return getRegistryName() != null ? getRegistryName().equals(((IAllele) obj).getRegistryName()) : dominant == otherAllele.isDominant();
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects
-				.toStringHelper(this)
-				.add("name", getRegistryName())
-				.add("dominant", dominant)
-				.toString();
+		return MoreObjects.toStringHelper(this).add("name", getRegistryName()).add("dominant", dominant).toString();
 	}
 
 	public static class Type implements IAlleleType {

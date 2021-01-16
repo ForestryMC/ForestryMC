@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import net.minecraft.block.*;
+import java.util.EnumSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
@@ -18,8 +25,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
 import net.minecraftforge.common.IPlantable;
-
-import java.util.EnumSet;
 
 public class AIButterflyRest extends AIButterflyBase {
 
@@ -52,8 +57,7 @@ public class AIButterflyRest extends AIButterflyBase {
 	@Override
 	public boolean shouldExecute() {
 
-		if (entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST
-				&& entity.canFly()) {
+		if (entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST && entity.canFly()) {
 			return false;
 		}
 

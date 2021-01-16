@@ -1,20 +1,20 @@
 {
-  "title": "Bee House Cart",
-  "icon": {
-    "item": "forestry:cart_bee_house"
-  },
-  "content": [
-    [
-      {
-        "text": "One of my simpler inventions are bee house minecarts. You simply put a bee house or a apiary in a minecart."
-      },
-      {
-        "type": "crafting",
-        "locations": [
-          "forestry:bee_house_minecart",
-          "forestry:apiary_minecart"
-        ]
-      }
-    ]
-  ]
+	"title": "Bee House Cart",
+	"icon": {
+		"item": "forestry:cart_bee_house"
+	},
+	"content": [
+		[
+			{
+				"text": "One of my simpler inventions are bee house minecarts. You simply put a bee house or a apiary in a minecart."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bee_house_minecart",
+					"forestry:apiary_minecart"
+				]
+			}
+		]
+	]
 }

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.mail.items;
 
-import forestry.api.core.IItemSubtype;
-import forestry.api.mail.ILetter;
-import forestry.core.ItemGroupForestry;
-import forestry.core.items.ItemWithGui;
-import forestry.mail.Letter;
-import forestry.mail.gui.ContainerLetter;
-import forestry.mail.inventory.ItemInventoryLetter;
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,9 +34,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Locale;
+import forestry.api.core.IItemSubtype;
+import forestry.api.mail.ILetter;
+import forestry.core.ItemGroupForestry;
+import forestry.core.items.ItemWithGui;
+import forestry.mail.Letter;
+import forestry.mail.gui.ContainerLetter;
+import forestry.mail.inventory.ItemInventoryLetter;
 
 public class ItemLetter extends ItemWithGui {
 
@@ -48,9 +48,7 @@ public class ItemLetter extends ItemWithGui {
 	private final State state;
 
 	public ItemLetter(Size size, State state) {
-		super((new Item.Properties())
-				.group(ItemGroupForestry.tabForestry)
-				.maxStackSize(64));
+		super((new Item.Properties()).group(ItemGroupForestry.tabForestry).maxStackSize(64));
 		this.size = size;
 		this.state = state;
 	}
@@ -94,19 +92,12 @@ public class ItemLetter extends ItemWithGui {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(
-			ItemStack itemstack,
-			@Nullable World world,
-			List<ITextComponent> list,
-			ITooltipFlag flag
-	) {
+	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		super.addInformation(itemstack, world, list, flag);
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.blank").appendString(">"))
-					.mergeStyle(TextFormatting.GRAY));
+			list.add(new StringTextComponent("<").append(new TranslationTextComponent("for.gui.blank").appendString(">")).mergeStyle(TextFormatting.GRAY));
 			return;
 		}
 
@@ -115,7 +106,10 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	public enum State implements IItemSubtype {
-		FRESH, STAMPED, OPENED, EMPTIED;
+		FRESH,
+		STAMPED,
+		OPENED,
+		EMPTIED;
 
 		@Override
 		public String getString() {
@@ -124,7 +118,9 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	public enum Size implements IItemSubtype {
-		EMPTY, SMALL, BIG;
+		EMPTY,
+		SMALL,
+		BIG;
 
 		@Override
 		public String getString() {

@@ -1,9 +1,7 @@
 package forestry.cultivation.blocks;
 
-import forestry.api.core.IBlockSubtype;
-import forestry.core.blocks.BlockBase;
-import forestry.core.render.ParticleRender;
-import forestry.cultivation.tiles.TilePlanter;
+import java.util.Locale;
+import java.util.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -15,8 +13,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Locale;
-import java.util.Random;
+import forestry.api.core.IBlockSubtype;
+import forestry.core.blocks.BlockBase;
+import forestry.core.render.ParticleRender;
+import forestry.cultivation.tiles.TilePlanter;
 
 public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	private final Mode mode;
@@ -52,8 +52,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 
 	//TODO can probably propagate mode further through the code
 	public enum Mode implements IBlockSubtype {
-		MANUAL,
-		MANAGED;
+		MANUAL, MANAGED;
 
 		@Override
 		public String getString() {

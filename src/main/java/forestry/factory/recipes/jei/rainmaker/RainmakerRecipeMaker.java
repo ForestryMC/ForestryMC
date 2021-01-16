@@ -1,10 +1,10 @@
 package forestry.factory.recipes.jei.rainmaker;
 
-import forestry.api.fuels.FuelManager;
-import forestry.api.fuels.RainSubstrate;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.RainSubstrate;
 
 public class RainmakerRecipeMaker {
 	public static List<RainmakerRecipeWrapper> getRecipes() {

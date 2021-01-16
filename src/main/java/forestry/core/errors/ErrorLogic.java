@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,19 +7,19 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
 
-import forestry.api.core.ForestryAPI;
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorState;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.network.PacketBuffer;
 
-import java.util.HashSet;
-import java.util.Set;
+import forestry.api.core.ForestryAPI;
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorState;
 
 public class ErrorLogic implements IErrorLogic {
 	private final Set<IErrorState> errorStates = new HashSet<>();

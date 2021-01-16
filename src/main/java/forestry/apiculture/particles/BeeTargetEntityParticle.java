@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.particles;
 
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -114,22 +118,8 @@ public class BeeTargetEntityParticle extends SpriteTexturedParticle {
 		}
 
 		@Override
-		public Particle makeParticle(
-				BeeParticleData typeIn,
-				ClientWorld worldIn,
-				double x,
-				double y,
-				double z,
-				double xSpeed,
-				double ySpeed,
-				double zSpeed
-		) {
-			BeeTargetEntityParticle particle = new BeeTargetEntityParticle(
-					worldIn,
-					typeIn.particleStart,
-					typeIn.direction,
-					typeIn.color
-			);
+		public Particle makeParticle(BeeParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+			BeeTargetEntityParticle particle = new BeeTargetEntityParticle(worldIn, typeIn.particleStart, typeIn.direction, typeIn.color);
 			particle.selectSpriteRandomly(spriteSet);
 			return particle;
 		}

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.utils.datastructures;
 
-import forestry.core.utils.Log;
+import javax.annotation.Nullable;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -18,11 +22,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import forestry.core.utils.Log;
 
 //TODO - this class relies on meta a lot so probably will have to go.
 public class Stack {
@@ -63,8 +63,7 @@ public class Stack {
 		String[] parts = stackString.split(":+");
 
 		if (parts.length != 2 && parts.length != 3) {
-			Log.warning("Stack string (" + stackString +
-					") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
+			Log.warning("Stack string (" + stackString + ") isn't formatted properly. Suitable formats are <modId>:<name>, <modId>:<name>:<meta> or <modId>:<name>:*, e.g. IC2:blockWall:*");
 			return null;
 		}
 
@@ -75,11 +74,9 @@ public class Stack {
 			meta = missingMetaValue;
 		} else {
 			try {
-				meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/
-						: NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
+				meta = parts[2].equals("*") ? 0/*OreDictionary.WILDCARD_VALUE*/ : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
 			} catch (ParseException e) {
-				Log.warning("ItemStack string (" + stackString +
-						") has improperly formatted metadata. Suitable metadata are integer values or *.");
+				Log.warning("ItemStack string (" + stackString + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
 				return null;
 			}
 		}

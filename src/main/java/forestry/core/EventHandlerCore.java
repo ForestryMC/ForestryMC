@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,22 +7,12 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core;
 
-import forestry.api.core.ISpriteRegistry;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.apiculture.ApiaristAI;
-import forestry.apiculture.villagers.RegisterVillager;
-import forestry.core.config.Constants;
-import forestry.core.models.ModelBlockCached;
-import forestry.core.render.TextureManagerForestry;
-import forestry.modules.ModuleManager;
-
-import genetics.api.GeneticsAPI;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -47,9 +37,19 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.net.URL;
-import java.util.Collection;
-import java.util.Set;
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+
+import forestry.api.core.ISpriteRegistry;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.apiculture.ApiaristAI;
+import forestry.apiculture.villagers.RegisterVillager;
+import forestry.core.config.Constants;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.render.TextureManagerForestry;
+import forestry.modules.ModuleManager;
 
 public class EventHandlerCore {
 	public EventHandlerCore() {
@@ -66,10 +66,7 @@ public class EventHandlerCore {
 				continue;
 			}
 			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
-			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(
-					player.getEntityWorld(),
-					player.getGameProfile()
-			);
+			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
 	}
@@ -144,21 +141,10 @@ public class EventHandlerCore {
 		Set<String> lootPoolNames = ModuleManager.getLootPoolNames();
 
 		for (String lootTableFile : ModuleManager.getLootTableFiles()) {
-			ResourceLocation resourceLocation = new ResourceLocation(
-					Constants.MOD_ID,
-					event.getName().getPath() + "/" + lootTableFile
-			);
-			URL url = EventHandlerCore.class.getResource(
-					"/data/" + resourceLocation.getNamespace()
-							+ "/loot_tables/" + resourceLocation.getPath() + ".json"
-			);
+			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getPath() + "/" + lootTableFile);
+			URL url = EventHandlerCore.class.getResource("/data/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
 			if (url != null) {
-				event.getTable().addPool(
-						LootPool.builder()
-								.name(resourceLocation.getPath() + "_" + Constants.MOD_ID)
-								.addEntry(TableLootEntry.builder(resourceLocation))
-								.build()
-				);
+				event.getTable().addPool(LootPool.builder().name(resourceLocation.getPath() + "_" + Constants.MOD_ID).addEntry(TableLootEntry.builder(resourceLocation)).build());
 			}
 		}
 	}

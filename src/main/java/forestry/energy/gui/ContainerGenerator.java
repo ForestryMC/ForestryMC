@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.energy.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketBuffer;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
@@ -17,9 +20,6 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.energy.tiles.TileEuGenerator;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 

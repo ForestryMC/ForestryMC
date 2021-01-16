@@ -1,17 +1,21 @@
 package forestry.sorting.network.packets;
 
-import forestry.api.genetics.GeneticCapabilities;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.api.genetics.filter.IFilterLogic;
-import forestry.api.genetics.filter.IFilterRuleType;
-import forestry.core.network.*;
-import forestry.core.tiles.TileUtil;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
+
+import forestry.api.genetics.GeneticCapabilities;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.api.genetics.filter.IFilterLogic;
+import forestry.api.genetics.filter.IFilterRuleType;
+import forestry.core.network.ForestryPacket;
+import forestry.core.network.IForestryPacketHandlerServer;
+import forestry.core.network.IForestryPacketServer;
+import forestry.core.network.PacketBufferForestry;
+import forestry.core.network.PacketIdServer;
+import forestry.core.tiles.TileUtil;
 
 public class PacketFilterChangeRule extends ForestryPacket implements IForestryPacketServer {
 	private final BlockPos pos;
@@ -42,12 +46,7 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 			BlockPos pos = data.readBlockPos();
 			Direction facing = Direction.byIndex(data.readShort());
 			IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
-			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(
-					player.world,
-					pos,
-					GeneticCapabilities.FILTER_LOGIC,
-					null
-			);
+			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
 			logic.ifPresent(l -> {
 				if (l.setRule(facing, rule)) {
 					l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);

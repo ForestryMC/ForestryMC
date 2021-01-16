@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,14 +7,14 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import forestry.api.recipes.ICentrifugeRecipe;
+import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -27,7 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import java.util.Random;
+import forestry.api.recipes.ICentrifugeRecipe;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 	private final ResourceLocation id;
@@ -92,10 +92,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 			if (json.get("products") != null) {
 				for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
 					float chance = JSONUtils.getFloat(element.getAsJsonObject(), "chance");
-					ItemStack stack = CraftingHelper.getItemStack(
-							JSONUtils.getJsonObject(element.getAsJsonObject(), "item"),
-							true
-					);
+					ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(element.getAsJsonObject(), "item"), true);
 					outputs.add(new Product(chance, stack));
 				}
 			}

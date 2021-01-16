@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,12 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.api.core.tooltips.ToolTip;
-import forestry.core.network.IStreamable;
-import forestry.core.network.PacketBufferForestry;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -25,8 +24,9 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import forestry.api.core.tooltips.ToolTip;
+import forestry.core.network.IStreamable;
+import forestry.core.network.PacketBufferForestry;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -161,12 +161,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public String toString() {
-		return String.format(
-				"Tank: %s, %d/%d",
-				!fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty",
-				getFluidAmount(),
-				getCapacity()
-		);
+		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
 	}
 
 	protected boolean hasFluid() {
@@ -208,11 +203,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 			toolTip.add(new TranslationTextComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
 			amount = getFluid().getAmount();
 		}
-		TranslationTextComponent liquidAmount = new TranslationTextComponent(
-				"for.gui.tooltip.liquid.amount",
-				amount,
-				getCapacity()
-		);
+		TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
 		toolTip.add(liquidAmount);
 	}
 

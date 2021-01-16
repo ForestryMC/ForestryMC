@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,17 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.arboriculture.ITreeGenData;
+import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
-import java.util.Random;
+import forestry.api.arboriculture.ITreeGenData;
 
 public class FeatureBirch extends FeatureTreeVanilla {
 	public FeatureBirch(ITreeGenData tree) {
@@ -25,13 +25,7 @@ public class FeatureBirch extends FeatureTreeVanilla {
 	}
 
 	@Override
-	public boolean generate(
-			ISeedReader world,
-			ChunkGenerator generator,
-			Random rand,
-			BlockPos pos,
-			NoFeatureConfig config
-	) {
+	public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		return place(world, rand, pos, false);
 	}
 }

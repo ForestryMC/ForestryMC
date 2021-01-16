@@ -1,13 +1,11 @@
 package forestry.arboriculture;
 
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
-import forestry.core.utils.Log;
-
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -16,39 +14,18 @@ import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
+
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.TreeChromosomes;
+import forestry.core.config.Constants;
+import forestry.core.config.LocalizedConfiguration;
+import forestry.core.utils.Log;
 
 public class TreeConfig {
 	public static final String CONFIG_CATEGORY_TREE = "trees";
-	public static final String CONFIG_COMMENT =
-			"This config can be used to customise the world generation for all trees that where added by forestry or\n" +
-					"by an addon mod like extra trees.\n" +
-					"\n" +
-					"# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
-					"S:rarity=1.0\n" +
-					"\n" +
-					"# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
-					"dimensions {\n" +
-					"\tI:blacklist <\n" +
-					"\t\t1\n" +
-					"\t >\n" +
-					"\tI:whitelist <\n" +
-					"\t\t-1\n" +
-					"\t >\n" +
-					"}\n" +
-					"\n" +
-					"# Biome types or registry names can be added to these lists to blacklist them. \n" +
-					"biomes {\n" +
-					"\tblacklist {\n" +
-					"\t\tS:names <\n" +
-					"\t\t\tminecraft:plains\n" +
-					"\t\t >\n" +
-					"\t\tS:types <\n" +
-					"\t\t\tforest\n" +
-					"\t\t >\n" +
-					"\t}\n" +
-					"}";
+	public static final String CONFIG_COMMENT = "This config can be used to customise the world generation for all trees that where added by forestry or\n" + "by an addon mod like extra trees.\n" + "\n" + "# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" + "S:rarity=1.0\n" + "\n" + "# Dimension ids can be added to these lists to blacklist or whitelist them. \n" + "dimensions {\n" + "\tI:blacklist <\n" + "\t\t1\n" + "\t >\n" + "\tI:whitelist <\n" + "\t\t-1\n" + "\t >\n" + "}\n" + "\n" + "# Biome types or registry names can be added to these lists to blacklist them. \n" + "biomes {\n" + "\tblacklist {\n" + "\t\tS:names <\n" + "\t\t\tminecraft:plains\n" + "\t\t >\n" + "\t\tS:types <\n" + "\t\t\tforest\n" + "\t\t >\n" + "\t}\n" + "}";
 	private static final Map<ResourceLocation, TreeConfig> configs = new HashMap<>();
 	private static final TreeConfig GLOBAL = new TreeConfig(new ResourceLocation(Constants.MOD_ID, "global"), 1.0F);
 
@@ -68,17 +45,11 @@ public class TreeConfig {
 
 	public static void parse(LocalizedConfiguration config) {
 		config.setCategoryComment(CONFIG_CATEGORY_TREE, CONFIG_COMMENT);
-		config.setCategoryComment(
-				CONFIG_CATEGORY_TREE + ".global",
-				"All options defined in the global category are used for all trees."
-		);
+		config.setCategoryComment(CONFIG_CATEGORY_TREE + ".global", "All options defined in the global category are used for all trees.");
 		GLOBAL.parseConfig(config);
 		for (IAllele treeAllele : AlleleUtils.filteredAlleles(TreeChromosomes.SPECIES)) {
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
-			configs.put(
-					treeSpecies.getRegistryName(),
-					new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config)
-			);
+			configs.put(treeSpecies.getRegistryName(), new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config));
 		}
 	}
 
@@ -102,9 +73,7 @@ public class TreeConfig {
 
 	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return treeConfig != null
-				? treeConfig.isValidDimension(dimID.getLocation())
-				: GLOBAL.isValidDimension(dimID.getLocation());
+		return treeConfig != null ? treeConfig.isValidDimension(dimID.getLocation()) : GLOBAL.isValidDimension(dimID.getLocation());
 	}
 
 	public static boolean isValidBiome(@Nullable ResourceLocation treeUID, Biome biome) {
@@ -121,44 +90,28 @@ public class TreeConfig {
 	}
 
 	private TreeConfig parseConfig(LocalizedConfiguration config) {
-		for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new String[0])
-				.getStringList()
-		) {
+		for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new String[0]).getStringList()) {
 			blacklistedDimensions.add(dimName);
 		}
 
-		for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new String[0])
-				.getStringList()
-		) {
+		for (String dimName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new String[0]).getStringList()) {
 			whitelistedDimensions.add(dimName);
 		}
 
-		for (String typeName : config.get(
-				CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist",
-				"types",
-				new String[0]
-		).getStringList()) {
+		for (String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()) {
 			blacklistedBiomeTypes.add(Biome.Category.byName(typeName));
 		}
 
-		for (String biomeName : config.get(
-				CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist",
-				"names",
-				new String[0]
-		).getStringList()) {
+		for (String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()) {
 			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
 			if (biome != null) {
 				blacklistedBiomes.add(biome);
 			} else {
-				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName +
-						"'. No biome is registered under the registry name '" + biomeName + "'.");
+				Log.error("Failed to identify biome for the config property for the tree with the uid '" + treeName + "'. No biome is registered under the registry name '" + biomeName + "'.");
 			}
 		}
 
-		spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity)
-				.setMinValue(0.0F)
-				.setMaxValue(1.0F)
-				.getDouble();
+		spawnRarity = (float) config.get(CONFIG_CATEGORY_TREE + "." + treeName, "rarity", defaultRarity).setMinValue(0.0F).setMaxValue(1.0F).getDouble();
 		return this;
 	}
 

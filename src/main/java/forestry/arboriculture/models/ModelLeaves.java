@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,17 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.arboriculture.models;
 
-import forestry.arboriculture.blocks.BlockAbstractLeaves;
-import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.genetics.TreeHelper;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.models.ModelBlockCached;
-import forestry.core.models.baker.ModelBaker;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ResourceUtil;
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -28,8 +22,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
-import javax.annotation.Nullable;
-import java.util.Objects;
+import forestry.arboriculture.blocks.BlockAbstractLeaves;
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.genetics.TreeHelper;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.models.ModelBlockCached;
+import forestry.core.models.baker.ModelBaker;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
@@ -59,13 +59,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected void bakeBlock(
-			BlockForestryLeaves block,
-			IModelData extraData,
-			Key key,
-			ModelBaker baker,
-			boolean inventory
-	) {
+	protected void bakeBlock(BlockForestryLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
 		baker.addBlockModel(key.leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 
@@ -83,11 +77,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		ResourceLocation leafLocation = TileLeaves.getLeaveSprite(extraData, fancy);
 		ResourceLocation fruitLocation = TileLeaves.getFruitSprite(extraData);
 
-		return new Key(
-				ResourceUtil.getBlockSprite(leafLocation),
-				fruitLocation != null ? ResourceUtil.getBlockSprite(fruitLocation) : null,
-				fancy
-		);
+		return new Key(ResourceUtil.getBlockSprite(leafLocation), fruitLocation != null ? ResourceUtil.getBlockSprite(fruitLocation) : null, fancy);
 	}
 
 	public static class Key {
@@ -115,8 +105,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 				return false;
 			} else {
 				Key otherKey = (Key) other;
-				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite &&
-						otherKey.fancy == fancy;
+				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
 			}
 		}
 	}

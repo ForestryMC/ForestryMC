@@ -1,0 +1,32 @@
+{
+	"title": "蒸餾器",
+	"icon": {
+		"item": "forestry:still"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:still"
+				]
+			},
+			{
+				"text": "蒸餾器可將生物質以10:3的比例精煉為生質酒精。也就是說，十桶生物質可加工出三桶生質酒精。"
+			}
+		],
+		[
+			{
+				"text": "如果你有安裝 Buildcraft，你還可以使用 BuildCraft 的精煉廠，產率則是4:1。"
+			},
+			{
+				"text": "生質酒精可充當生物質發電機的燃料，以為 IndustrialCraft2 的機器提供電力；或用作 BuildCraft 的燃燒引擎的燃料。它不能用作生物燃油引擎的燃料！",
+				"paragraph": true
+			},
+			{
+				"text": "換言之，如果你沒有裝 Buildcraft 或 IndustrialCraft2，這台機器可能對你來說沒什麼用。",
+				"paragraph": true
+			}
+		]
+	]
+}

@@ -1,5 +1,10 @@
 package forestry.farming.compat;
 
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -14,11 +19,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.List;
-
 public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInfoRecipeWrapper> {
 	public static final ResourceLocation UID = new ResourceLocation(Constants.MOD_ID, "farming");
 	private final IDrawable slotDrawable;
@@ -29,15 +29,10 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	public FarmingInfoRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createBlankDrawable(144, 90), "for.jei.farming");
 		this.slotDrawable = guiHelper.getSlotDrawable();
-		ResourceLocation resourceLocation = new ResourceLocation(
-				Constants.MOD_ID,
-				Constants.TEXTURE_PATH_GUI + "jei/recipes.png"
-		);
+		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "jei/recipes.png");
 		addition = guiHelper.createDrawable(resourceLocation, 44, 0, 15, 15);
 		arrow = guiHelper.createDrawable(resourceLocation, 59, 0, 15, 15);
-		this.icon = guiHelper.createDrawableIngredient(
-				new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE))
-		);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)));
 	}
 
 	@Override
@@ -56,11 +51,7 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	}
 
 	@Override
-	public void setRecipe(
-			IRecipeLayout recipeLayout,
-			FarmingInfoRecipeWrapper recipeWrapper,
-			IIngredients ingredients
-	) {
+	public void setRecipe(IRecipeLayout recipeLayout, FarmingInfoRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
 		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);

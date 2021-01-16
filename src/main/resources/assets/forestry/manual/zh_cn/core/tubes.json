@@ -1,0 +1,74 @@
+{
+	"title": "电子管",
+	"icon":{
+		"item": "forestry:thermionic_tubes"
+	},
+	"content": [
+		[
+			{
+				"type": "fabricator",
+				"stacks": [
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 0
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 1
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 2
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 3
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 4
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 5
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 6
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 7
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 8
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 9
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 10
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 11
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 12
+					},
+					{
+						"item": "forestry:thermionic_tubes",
+						"data": 13
+					}
+				]
+			},
+			{
+				"text": "使用电烙铁可将电子管焊在电子板上。电子管的诸多作用均有在其工具提示中注明，但具体是哪一个作用会生效则取决于电路板的类型配置。焊在电子板上的电子管无法拆除。"
+			}
+		]
+	]
+}

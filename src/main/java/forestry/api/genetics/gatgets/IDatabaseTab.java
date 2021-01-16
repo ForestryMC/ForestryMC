@@ -1,15 +1,15 @@
 package forestry.api.genetics.gatgets;
 
-import forestry.core.gui.elements.lib.IDatabaseElement;
-
-import genetics.api.individual.IIndividual;
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import genetics.api.individual.IIndividual;
+
+import forestry.core.gui.elements.lib.IDatabaseElement;
 
 /**
  * A tab of the database screen that shows some information about a {@link IIndividual}.

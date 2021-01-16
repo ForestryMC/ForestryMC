@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,16 +7,16 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.particles;
-
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
+
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -52,15 +52,7 @@ public class IgnitionParticle extends Particle {
 		float f = (float) this.age / (float) this.maxAge;
 
 		if (this.rand.nextFloat() > f * 2) {
-			this.world.addParticle(
-					ParticleTypes.SMOKE,
-					this.posX,
-					this.posY,
-					this.posZ,
-					this.motionX,
-					this.motionY,
-					this.motionZ
-			);
+			this.world.addParticle(ParticleTypes.SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
 		}
 
 		this.motionY -= 0.03D;
@@ -76,9 +68,7 @@ public class IgnitionParticle extends Particle {
 	}
 
 	@Override
-	public void renderParticle(
-			IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks
-	) {
+	public void renderParticle(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
 
 	}
 

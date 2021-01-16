@@ -1,5 +1,10 @@
 package forestry.core.gui.elements;
 
+import java.util.function.Predicate;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.core.gui.elements.lib.IValueElement;
@@ -8,11 +13,6 @@ import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.elements.lib.events.TextEditEvent;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-
-import java.util.function.Predicate;
 
 public class TextEditElement extends GuiElement implements IValueElement<String> {
 
@@ -41,11 +41,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 		});
 		this.addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			IWindowElement windowElement = getWindow();
-			this.field.mouseClicked(
-					windowElement.getRelativeMouseX(this),
-					windowElement.getRelativeMouseY(this),
-					event.getButton()
-			);
+			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
 		//TODO - method protected so maybe AT the field itself?
 		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused2(true));

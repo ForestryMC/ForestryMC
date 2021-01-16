@@ -1,23 +1,8 @@
 package forestry.core.gui.elements;
 
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.IAlyzerPlugin;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.api.genetics.gatgets.IDatabasePlugin;
-import forestry.api.genetics.gatgets.IGeneticAnalyzer;
-import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
-import forestry.core.config.Constants;
-import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.*;
-import forestry.core.gui.elements.lib.*;
-import forestry.core.render.ColourProperties;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.mutation.IMutation;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.function.Predicate;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
@@ -30,17 +15,39 @@ import net.minecraft.util.text.Style;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.function.Predicate;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
+
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.IAlyzerPlugin;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.api.genetics.gatgets.IDatabasePlugin;
+import forestry.api.genetics.gatgets.IGeneticAnalyzer;
+import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
+import forestry.core.config.Constants;
+import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.layouts.AbstractElementLayout;
+import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.HorizontalLayout;
+import forestry.core.gui.elements.layouts.PaneLayout;
+import forestry.core.gui.elements.layouts.VerticalLayout;
+import forestry.core.gui.elements.lib.GuiConstants;
+import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.lib.IElementGroup;
+import forestry.core.gui.elements.lib.IElementLayout;
+import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.gui.elements.lib.IWindowElement;
+import forestry.core.render.ColourProperties;
 
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
 	/* Instance */
 	public static final GuiElementFactory INSTANCE = new GuiElementFactory();
-	private static final ResourceLocation TEXTURE = new ResourceLocation(
-			Constants.MOD_ID,
-			Constants.TEXTURE_PATH_GUI + "database_mutation_screen.png"
-	);
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "database_mutation_screen.png");
 	/* Drawables */
 	private static final Drawable QUESTION_MARK = new Drawable(TEXTURE, 78, 240, 16, 16);
 	private static final Drawable DOWN_SYMBOL = new Drawable(TEXTURE, 0, 247, 15, 9);
@@ -64,14 +71,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return element;
 	}
 
-	private static IElementGroup createUnknownMutationGroup(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IBreedingTracker breedingTracker
-	) {
+	private static IElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		PaneLayout element = new PaneLayout(x, y, width, height);
 
 		element.add(createQuestionMark(0, 0), createQuestionMark(32, 0));
@@ -79,13 +79,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return element;
 	}
 
-	private static void createProbabilityArrow(
-			PaneLayout element,
-			IMutation combination,
-			int x,
-			int y,
-			IBreedingTracker breedingTracker
-	) {
+	private static void createProbabilityArrow(PaneLayout element, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
 		float chance = combination.getBaseChance();
 		int line = 247;
 		int column = 100;
@@ -117,11 +111,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
-			element.label(new StringTextComponent("+"))
-					.setStyle(GuiConstants.DEFAULT_STYLE)
-					.setAlign(GuiElementAlignment.TOP_LEFT)
-					.setSize(10, 10)
-					.setLocation(x + 9, y + 1);
+			element.label(new StringTextComponent("+")).setStyle(GuiConstants.DEFAULT_STYLE).setAlign(GuiElementAlignment.TOP_LEFT).setSize(10, 10).setLocation(x + 9, y + 1);
 		}
 	}
 
@@ -187,13 +177,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 	}
 
 	@Override
-	public IGeneticAnalyzer createAnalyzer(
-			IWindowElement window,
-			int xPos,
-			int yPos,
-			boolean rightBoarder,
-			IGeneticAnalyzerProvider provider
-	) {
+	public IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
 		return new GeneticAnalyzer(window, xPos, yPos, rightBoarder, provider);
 	}
 
@@ -214,15 +198,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 	}
 
 	@Nullable
-	public IElementGroup createMutation(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IAllele species,
-			IBreedingTracker breedingTracker
-	) {
+	public IElementGroup createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
 			PaneLayout element = new PaneLayout(x, y, width, height);
 			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) mutation.getRoot();
@@ -246,14 +222,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 	}
 
 	@Nullable
-	public IElementGroup createMutationResultant(
-			int x,
-			int y,
-			int width,
-			int height,
-			IMutation mutation,
-			IBreedingTracker breedingTracker
-	) {
+	public IElementGroup createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
 			IElementGroup element = new PaneLayout(x, y, width, height);
 			IAlyzerPlugin plugin = ((IForestrySpeciesRoot) mutation.getRoot()).getAlyzerPlugin();
@@ -261,11 +230,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 
 			ItemStack firstPartner = iconStacks.get(mutation.getFirstParent().getRegistryName());
 			ItemStack secondPartner = iconStacks.get(mutation.getSecondParent().getRegistryName());
-			element.add(
-					new ItemElement(0, 0, firstPartner),
-					createProbabilityAdd(mutation, 21, 4),
-					new ItemElement(33, 0, secondPartner)
-			);
+			element.add(new ItemElement(0, 0, firstPartner), createProbabilityAdd(mutation, 21, 4), new ItemElement(33, 0, secondPartner));
 			return element;
 		}
 		// Do not display secret undiscovered mutations.
@@ -285,11 +250,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return layout;
 	}
 
-	public IGuiElement createToleranceInfo(
-			IAlleleValue<EnumTolerance> toleranceAllele,
-			IAlleleForestrySpecies species,
-			ITextComponent text
-	) {
+	public IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, ITextComponent text) {
 		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
 		layout.label(text, getStateStyle(species.isDominant()));
 		layout.add(createToleranceInfo(toleranceAllele));
@@ -330,9 +291,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 				break;
 		}
 		if (component == null) {
-			component = new StringTextComponent("(")
-					.append(toleranceAllele.getDisplayName())
-					.appendString(")");
+			component = new StringTextComponent("(").append(toleranceAllele.getDisplayName()).appendString(")");
 		}
 		layout.label(component).setStyle(textStyle);
 		return layout;

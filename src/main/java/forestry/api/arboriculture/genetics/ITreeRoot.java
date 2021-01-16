@@ -1,11 +1,21 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
+import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
@@ -13,16 +23,6 @@ import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRootPollinatable;
-
-import genetics.api.individual.IGenome;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
 
 public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 

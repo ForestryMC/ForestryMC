@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,9 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.apiculture.blocks.BlockAlveary;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -58,28 +57,6 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.RenderUtil;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
 
 public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
@@ -132,8 +109,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing != null) {
 				SidedInvWrapper sidedInvWrapper = new SidedInvWrapper(getInternalInventory(), facing);
-				return LazyOptional.of(() -> sidedInvWrapper)
-						.cast();    //TODO - still not sure if I am doing this right
+				return LazyOptional.of(() -> sidedInvWrapper).cast();    //TODO - still not sure if I am doing this right
 			} else {
 				InvWrapper invWrapper = new InvWrapper(getInternalInventory());
 				return LazyOptional.of(() -> invWrapper).cast();

@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,8 +7,11 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.apiculture.gui;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -17,9 +20,6 @@ import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.render.EnumTankLevel;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
 
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	private final TileAlveary tile;
@@ -35,13 +35,7 @@ public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
 		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
-		drawHealthMeter(
-				transform,
-				guiLeft + 20,
-				guiTop + 37,
-				alvearyController.getHealthScaled(46),
-				EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100))
-		);
+		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
 	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

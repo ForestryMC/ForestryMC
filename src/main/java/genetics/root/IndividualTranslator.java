@@ -1,5 +1,14 @@
 package genetics.root;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
@@ -7,15 +16,6 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.translator.IBlockTranslator;
 import genetics.api.root.translator.IIndividualTranslator;
 import genetics.api.root.translator.IItemTranslator;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class IndividualTranslator<I extends IIndividual> implements IIndividualTranslator<I> {
 	private final IIndividualRoot<I> root;
@@ -72,15 +72,13 @@ public class IndividualTranslator<I extends IIndividual> implements IIndividualT
 	@Override
 	public ItemStack getGeneticEquivalent(BlockState objectToTranslate) {
 		Optional<IBlockTranslator<I>> optional = getTranslator(objectToTranslate.getBlock());
-		return optional.map(blockTranslator -> blockTranslator.getGeneticEquivalent(objectToTranslate))
-				.orElse(ItemStack.EMPTY);
+		return optional.map(blockTranslator -> blockTranslator.getGeneticEquivalent(objectToTranslate)).orElse(ItemStack.EMPTY);
 	}
 
 	@Override
 	public ItemStack getGeneticEquivalent(ItemStack objectToTranslate) {
 		Optional<IItemTranslator<I>> optional = getTranslator(objectToTranslate.getItem());
-		return optional.map(itemTranslator -> itemTranslator.getGeneticEquivalent(objectToTranslate))
-				.orElse(ItemStack.EMPTY);
+		return optional.map(itemTranslator -> itemTranslator.getGeneticEquivalent(objectToTranslate)).orElse(ItemStack.EMPTY);
 	}
 
 	@Override

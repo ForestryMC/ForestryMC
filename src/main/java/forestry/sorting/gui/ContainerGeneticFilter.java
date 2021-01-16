@@ -1,15 +1,15 @@
 package forestry.sorting.gui;
 
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.network.PacketBuffer;
+
 import forestry.core.gui.ContainerTile;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.features.SortingContainers;
 import forestry.sorting.network.packets.PacketGuiFilterUpdate;
 import forestry.sorting.tiles.IFilterContainer;
 import forestry.sorting.tiles.TileGeneticFilter;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.network.PacketBuffer;
 
 public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 	private final IFilterContainer container;
@@ -30,12 +30,7 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
-				addSlot(new SlotGeneticFilter(
-						playerInventory,
-						column + row * 9 + 9,
-						xInv + column * 18,
-						yInv + row * 18
-				));
+				addSlot(new SlotGeneticFilter(playerInventory, column + row * 9 + 9, xInv + column * 18, yInv + row * 18));
 			}
 		}
 		// Player hotbar

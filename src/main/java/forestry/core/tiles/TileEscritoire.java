@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * Copyright (c) 2011-2014 SirSengir.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
@@ -7,10 +7,29 @@
  *
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- */
+ ******************************************************************************/
 package forestry.core.tiles;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+
 import com.mojang.authlib.GameProfile;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.utils.RootUtils;
 
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
@@ -25,25 +44,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
-
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IIndividualRoot;
-import genetics.utils.RootUtils;
-
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.io.IOException;
-import java.util.Optional;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
@@ -116,20 +116,8 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 		IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
 		IResearchHandler<IIndividual> handler = root.getComponent(ForestryComponentKeys.RESEARCH);
-		for (ItemStack itemstack : handler.getResearchBounty(
-				species,
-				world,
-				gameProfile,
-				individual,
-				game.getBountyLevel()
-		)) {
-			InventoryUtil.addStack(
-					getInternalInventory(),
-					itemstack,
-					InventoryEscritoire.SLOT_RESULTS_1,
-					InventoryEscritoire.SLOTS_RESULTS_COUNT,
-					true
-			);
+		for (ItemStack itemstack : handler.getResearchBounty(species, world, gameProfile, individual, game.getBountyLevel())) {
+			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}
 	}
 

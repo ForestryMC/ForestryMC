@@ -2,12 +2,9 @@ package forestry.core.blocks;
 
 import com.google.common.base.Preconditions;
 
-import forestry.core.config.Constants;
-import forestry.core.render.IForestryRenderer;
-import forestry.core.render.RenderForestryItem;
-import forestry.core.render.RenderForestryTile;
-import forestry.core.tiles.TileForestry;
-import forestry.modules.features.FeatureTileType;
+import javax.annotation.Nullable;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -21,9 +18,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-import javax.annotation.Nullable;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import forestry.core.config.Constants;
+import forestry.core.render.IForestryRenderer;
+import forestry.core.render.RenderForestryItem;
+import forestry.core.render.RenderForestryTile;
+import forestry.core.tiles.TileForestry;
+import forestry.modules.features.FeatureTileType;
 
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
 
@@ -37,31 +37,24 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@OnlyIn(Dist.CLIENT)
 	private Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>> tileRenderer;
 
-	public MachinePropertiesTesr(
-			Supplier<FeatureTileType<? extends T>> teType,
-			String name,
-			IShapeProvider shape,
-			ResourceLocation particleTexture,
-			boolean isFullCube
-	) {
+	public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape, ResourceLocation particleTexture, boolean isFullCube) {
 		super(teType, name, shape);
 		this.particleTexture = particleTexture;
 		this.isFullCube = isFullCube;
 	}
 
 	public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
-		DistExecutor.runWhenOn(Dist.CLIENT, () ->
-				() -> {
-					IMachineProperties machineProperties = type.getMachineProperties();
-					if (!(machineProperties instanceof IMachinePropertiesTesr)) {
-						return;
-					}
-					IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-					if (machinePropertiesTesr.getRenderer() == null) {
-						return;
-					}
-					properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
-				});
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			IMachineProperties machineProperties = type.getMachineProperties();
+			if (!(machineProperties instanceof IMachinePropertiesTesr)) {
+				return;
+			}
+			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
+			if (machinePropertiesTesr.getRenderer() == null) {
+				return;
+			}
+			properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+		});
 		return properties;
 	}
 

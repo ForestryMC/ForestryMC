@@ -1,19 +1,19 @@
-/*
+/*******************************************************************************
  * Copyright 2011-2014 SirSengir
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
- */
+ ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import forestry.api.genetics.EnumTolerance;
-import forestry.api.genetics.alleles.IAlleleFlowers;
+import net.minecraft.util.math.vector.Vector3i;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeList;
 import genetics.api.individual.IChromosomeValue;
 
-import net.minecraft.util.math.vector.Vector3i;
+import forestry.api.genetics.EnumTolerance;
+import forestry.api.genetics.alleles.IAlleleFlowers;
 
 /**
  * Enum representing the order of chromosomes in a bee's genome and what they control.
@@ -25,8 +25,7 @@ public class BeeChromosomes {
 	/**
 	 * Species of the bee. Alleles here must implement {@link IAlleleBeeSpecies}.
 	 */
-	public static final IChromosomeAllele<IAlleleBeeSpecies> SPECIES = TYPES.builder().name("species").asAllele(
-			IAlleleBeeSpecies.class);
+	public static final IChromosomeAllele<IAlleleBeeSpecies> SPECIES = TYPES.builder().name("species").asAllele(IAlleleBeeSpecies.class);
 	/**
 	 * (Production) Speed of the bee.
 	 */
@@ -42,20 +41,15 @@ public class BeeChromosomes {
 	/**
 	 * Temperature difference to its native supported one the bee can tolerate.
 	 */
-	public static final IChromosomeValue<EnumTolerance> TEMPERATURE_TOLERANCE = TYPES.builder().name(
-			"temperature_tolerance").asValue(EnumTolerance.class);
+	public static final IChromosomeValue<EnumTolerance> TEMPERATURE_TOLERANCE = TYPES.builder().name("temperature_tolerance").asValue(EnumTolerance.class);
 	/**
 	 * If true, a naturally diurnal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
 	 */
-	public static final IChromosomeValue<Boolean> NEVER_SLEEPS = TYPES.builder()
-			.name("never_sleeps")
-			.asValue(Boolean.class);
+	public static final IChromosomeValue<Boolean> NEVER_SLEEPS = TYPES.builder().name("never_sleeps").asValue(Boolean.class);
 	/**
 	 * Humidity difference to its native supported one the bee can tolerate.
 	 */
-	public static final IChromosomeValue<EnumTolerance> HUMIDITY_TOLERANCE = TYPES.builder()
-			.name("humidity_tolerance")
-			.asValue(EnumTolerance.class);
+	public static final IChromosomeValue<EnumTolerance> HUMIDITY_TOLERANCE = TYPES.builder().name("humidity_tolerance").asValue(EnumTolerance.class);
 	/**
 	 * If true the bee can work during rain.
 	 */
@@ -63,15 +57,11 @@ public class BeeChromosomes {
 	/**
 	 * If true, the bee can work without a clear view of the sky.
 	 */
-	public static final IChromosomeValue<Boolean> CAVE_DWELLING = TYPES.builder()
-			.name("tolerates_rain")
-			.asValue(Boolean.class);
+	public static final IChromosomeValue<Boolean> CAVE_DWELLING = TYPES.builder().name("tolerates_rain").asValue(Boolean.class);
 	/**
 	 * Contains the supported flower provider.
 	 */
-	public static final IChromosomeAllele<IAlleleFlowers> FLOWER_PROVIDER = TYPES.builder()
-			.name("flower_provider")
-			.asAllele(IAlleleFlowers.class);
+	public static final IChromosomeAllele<IAlleleFlowers> FLOWER_PROVIDER = TYPES.builder().name("flower_provider").asAllele(IAlleleFlowers.class);
 	/**
 	 * Determines pollination speed.
 	 */
@@ -79,14 +69,11 @@ public class BeeChromosomes {
 	/**
 	 * Determines the size of the bee's territory.
 	 */
-	public static final IChromosomeValue<Vector3i> TERRITORY = TYPES.builder()
-			.name("territory")
-			.asValue(Vector3i.class);
+	public static final IChromosomeValue<Vector3i> TERRITORY = TYPES.builder().name("territory").asValue(Vector3i.class);
 	/**
 	 * Determines the bee's effect.
 	 */
-	public static final IChromosomeAllele<IAlleleBeeEffect> EFFECT = TYPES.builder().name("effect").asAllele(
-			IAlleleBeeEffect.class);
+	public static final IChromosomeAllele<IAlleleBeeEffect> EFFECT = TYPES.builder().name("effect").asAllele(IAlleleBeeEffect.class);
 
 	private BeeChromosomes() {
 	}

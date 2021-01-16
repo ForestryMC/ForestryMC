@@ -1,11 +1,11 @@
 package forestry.cultivation.items;
 
-import forestry.core.items.ItemBlockForestry;
-import forestry.cultivation.blocks.BlockPlanter;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+
+import forestry.core.items.ItemBlockForestry;
+import forestry.cultivation.blocks.BlockPlanter;
 
 public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {
 
@@ -16,9 +16,6 @@ public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
 		String name = getBlock().blockType.getString();
-		return new TranslationTextComponent(
-				"block.forestry.planter." + (getBlock().getMode().getString()),
-				new TranslationTextComponent("block.forestry." + name)
-		);
+		return new TranslationTextComponent("block.forestry.planter." + (getBlock().getMode().getString()), new TranslationTextComponent("block.forestry." + name));
 	}
 }
