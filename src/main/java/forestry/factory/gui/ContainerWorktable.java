@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import forestry.core.utils.Log;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -32,7 +34,39 @@ import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
 
+import java.lang.reflect.Method;
+
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
+	private static final Method craftingEventHandler;
+	private static final Object craftingEventHandlerInstance;
+	static {
+		Object instance;
+		Method method;
+		try {
+			final Class<?> clazz = Class.forName("bq_standard.handlers.EventHandler");
+			method = clazz.getMethod("onItemCrafted", PlayerEvent.ItemCraftedEvent.class);
+			method.setAccessible(true);
+			instance = clazz.getConstructor().newInstance();
+		} catch (ReflectiveOperationException e) {
+			method = null;
+			instance = null;
+		}
+		if (instance != null)
+			Log.fine("BetterQuesting 3 Standard Expansion crafting quest compat enabled.");
+		craftingEventHandlerInstance = instance;
+		craftingEventHandler = method;
+	}
+
+	private static void callBQCraftingHandler(PlayerEvent.ItemCraftedEvent event) {
+		if (craftingEventHandler != null) {
+			try {
+				craftingEventHandler.invoke(craftingEventHandlerInstance, event);
+			} catch (ReflectiveOperationException e) {
+				Log.logThrowable("Error calling BQ3 crafting event handler", e);
+			}
+		}
+	}
+
 	private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry(this);
 	private long lastMemoryUpdate;
 	private boolean craftMatrixChanged = false;
@@ -117,6 +151,20 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 	public static void sendRecipeClick(int mouseButton, int recipeIndex) {
 		Proxies.net.sendToServer(new PacketGuiSelectRequest(mouseButton, recipeIndex));
+	}
+
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		final ItemStack transferred = super.transferStackInSlot(player, slotIndex);
+		if (!player.worldObj.isRemote) {
+			final Object o = inventorySlots.get(slotIndex);
+			if (o instanceof SlotCrafter) {
+				// use the ghost crafting matrix instead of actual crafting matrix
+				// so BQ3 won't do a lookup again later on
+				callBQCraftingHandler(new PlayerEvent.ItemCraftedEvent(player, transferred, ((SlotCrafter) o).inventory));
+			}
+		}
+		return transferred;
 	}
 
 	@Override

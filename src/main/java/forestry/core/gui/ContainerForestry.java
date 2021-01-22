@@ -83,7 +83,7 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	@Override
-	public final ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 		if (!canAccess(player)) {
 			return null;
 		}
