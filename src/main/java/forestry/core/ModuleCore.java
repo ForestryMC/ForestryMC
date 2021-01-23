@@ -23,6 +23,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -265,7 +266,7 @@ public class ModuleCore extends BlankForestryModule {
 			// Camouflaged Paneling
 			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
 			if (!biomass.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(8, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING, 1), biomass);
+				RecipeManagers.squeezerManager.addRecipe(8, Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING)), biomass);
 			}
 		}
 		// alternate recipes

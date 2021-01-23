@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -49,7 +50,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
@@ -165,7 +165,19 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		if (inventory.hasResources()) {
 			NonNullList<ItemStack> resources = inventory.getResources();
 
-			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, false) > 0) {
+			boolean containsSets = false;
+
+			if (currentRecipe != null) {
+				for (Ingredient resource : currentRecipe.getResources()) {
+					for (ItemStack stack : resources) {
+						if (containsSets = resource.test(stack)) {
+							break;
+						}
+					}
+				}
+			}
+
+			if (currentRecipe != null && containsSets) {
 				matchingRecipe = currentRecipe;
 			} else {
 				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);

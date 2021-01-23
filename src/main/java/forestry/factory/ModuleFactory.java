@@ -23,6 +23,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -356,30 +357,30 @@ public class ModuleFactory extends BlankForestryModule {
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
 		FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
 		if (!appleJuice.isEmpty()) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.APPLE), appleJuice,
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.APPLE), appleJuice,
 				CoreItems.MULCH.stack(), appleMulchAmount);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.CARROT), appleJuice,
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.CARROT), appleJuice,
 				CoreItems.MULCH.stack(), appleMulchAmount);
 		}
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
 		if (!seedOil.isEmpty()) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.WHEAT_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.PUMPKIN_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.MELON_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Items.BEETROOT_SEEDS), seedOil);
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.WHEAT_SEEDS), seedOil);
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.PUMPKIN_SEEDS), seedOil);
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.MELON_SEEDS), seedOil);
+			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.BEETROOT_SEEDS), seedOil);
 		}
 
-		RecipeManagers.squeezerManager.addRecipe(10, new ItemStack(Blocks.CACTUS), new FluidStack(Fluids.WATER, 500));
+		RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Blocks.CACTUS), new FluidStack(Fluids.WATER, 500));
 
-		NonNullList<ItemStack> lavaRecipeResources = NonNullList.create();
-		lavaRecipeResources.add(CoreItems.PHOSPHOR.stack(2));
-		lavaRecipeResources.add(new ItemStack(Blocks.COBBLESTONE));
+		NonNullList<Ingredient> lavaRecipeResources = NonNullList.create();
+		lavaRecipeResources.add(Ingredient.fromStacks(CoreItems.PHOSPHOR.stack(2)));
+		lavaRecipeResources.add(Ingredient.fromItems(Blocks.COBBLESTONE));
 		RecipeManagers.squeezerManager.addRecipe(10, lavaRecipeResources, new FluidStack(Fluids.LAVA, 1600));
 
-		NonNullList<ItemStack> iceRecipeResources = NonNullList.create();
-		iceRecipeResources.add(new ItemStack(Items.SNOWBALL));
-		iceRecipeResources.add(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 4));
+		NonNullList<Ingredient> iceRecipeResources = NonNullList.create();
+		iceRecipeResources.add(Ingredient.fromItems(Items.SNOWBALL));
+		iceRecipeResources.add(Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 4)));
 		FluidStack liquidIce = ForestryFluids.ICE.getFluid(4000);
 		if (!liquidIce.isEmpty()) {
 			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);

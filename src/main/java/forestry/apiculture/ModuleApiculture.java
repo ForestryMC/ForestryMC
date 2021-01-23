@@ -440,25 +440,24 @@ public class ModuleApiculture extends BlankForestryModule {
 			// / SQUEEZER
 			FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 			if (!honeyDropFluid.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(10, honeyDrop, honeyDropFluid, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 5);
-				RecipeManagers.squeezerManager.addRecipe(10, ApicultureItems.HONEYDEW.stack(), honeyDropFluid);
+				RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromStacks(honeyDrop), honeyDropFluid, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 5);
+				RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(ApicultureItems.HONEYDEW), honeyDropFluid);
 			}
 
 			ItemStack phosphor = CoreItems.PHOSPHOR.stack(2);
-			NonNullList<ItemStack> lavaIngredients = NonNullList.create();
-			lavaIngredients.add(phosphor);
-			lavaIngredients.add(new ItemStack(Blocks.SAND));
+			NonNullList<Ingredient> lavaIngredients = NonNullList.create();
+			lavaIngredients.add(Ingredient.fromStacks(phosphor));
+			lavaIngredients.add(Ingredient.fromItems(Blocks.SAND));
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
-			lavaIngredients.add(phosphor);
-			//TODO - sand or red sand?
-			lavaIngredients.add(new ItemStack(Blocks.SAND, 1));
+			lavaIngredients.add(Ingredient.fromStacks(phosphor));
+			lavaIngredients.add(Ingredient.fromItems(Blocks.RED_SAND));
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
 
 			lavaIngredients = NonNullList.create();
-			lavaIngredients.add(phosphor);
-			lavaIngredients.add(new ItemStack(Blocks.DIRT));
+			lavaIngredients.add(Ingredient.fromStacks(phosphor));
+			lavaIngredients.add(Ingredient.fromItems(Blocks.DIRT));
 			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 1600));
 
 			// / CARPENTER

@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -52,7 +53,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getResources() {
+	public NonNullList<Ingredient> getResources() {
 		return NonNullList.create();
 	}
 

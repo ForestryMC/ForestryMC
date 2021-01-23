@@ -19,6 +19,7 @@ import java.util.Set;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -227,23 +228,19 @@ public class DummyManagers {
 	public static class DummySqueezerManager extends DummyCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
 		@Override
-		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
-
+		public void addRecipe(int timePerItem, NonNullList<Ingredient> resources, FluidStack liquid, ItemStack remnants, int chance) {
 		}
 
 		@Override
-		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
-
+		public void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid, ItemStack remnants, int chance) {
 		}
 
 		@Override
-		public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
-
+		public void addRecipe(int timePerItem, NonNullList<Ingredient> resources, FluidStack liquid) {
 		}
 
 		@Override
-		public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
-
+		public void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid) {
 		}
 
 		@Nullable

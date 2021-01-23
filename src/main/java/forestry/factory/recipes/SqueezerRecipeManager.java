@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
@@ -21,7 +22,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
@@ -30,27 +30,27 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	}
 
 	@Override
-	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid, ItemStack remnants, int chance) {
+	public void addRecipe(int timePerItem, NonNullList<Ingredient> resources, FluidStack liquid, ItemStack remnants, int chance) {
 		ISqueezerRecipe recipe = new SqueezerRecipe(IForestryRecipe.anonymous(), timePerItem, resources, liquid, remnants, chance / 100.0f);
 		addRecipe(recipe);
 	}
 
 	@Override
-	public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid, ItemStack remnants, int chance) {
-		NonNullList<ItemStack> resourcesList = NonNullList.create();
-		resourcesList.add(resources);
+	public void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid, ItemStack remnants, int chance) {
+		NonNullList<Ingredient> resourcesList = NonNullList.create();
+		resourcesList.add(resource);
 		addRecipe(timePerItem, resourcesList, liquid, remnants, chance);
 	}
 
 	@Override
-	public void addRecipe(int timePerItem, NonNullList<ItemStack> resources, FluidStack liquid) {
+	public void addRecipe(int timePerItem, NonNullList<Ingredient> resources, FluidStack liquid) {
 		addRecipe(timePerItem, resources, liquid, ItemStack.EMPTY, 0);
 	}
 
 	@Override
-	public void addRecipe(int timePerItem, ItemStack resources, FluidStack liquid) {
-		NonNullList<ItemStack> resourcesList = NonNullList.create();
-		resourcesList.add(resources);
+	public void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid) {
+		NonNullList<Ingredient> resourcesList = NonNullList.create();
+		resourcesList.add(resource);
 		addRecipe(timePerItem, resourcesList, liquid);
 	}
 
@@ -58,8 +58,12 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	@Nullable
 	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
-				return recipe;
+			for (Ingredient resource : recipe.getResources()) {
+				for (ItemStack item : items) {
+					if (resource.test(item)) {
+						return recipe;
+					}
+				}
 			}
 		}
 
@@ -69,8 +73,8 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	@Override
 	public boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			for (ItemStack recipeInput : recipe.getResources()) {
-				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false)) {
+			for (Ingredient recipeInput : recipe.getResources()) {
+				if (recipeInput.test(itemStack)) {
 					return true;
 				}
 			}
