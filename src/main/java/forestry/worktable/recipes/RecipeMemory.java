@@ -14,11 +14,13 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -47,7 +49,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		for (int j = 0; j < nbttaglist.size(); ++j) {
 			CompoundNBT recipeNbt = nbttaglist.getCompound(j);
 			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
-			if (recipe.getSelectedRecipe() != null) {
+			if (recipe.hasSelectedRecipe()) {
 				memorizedRecipes.add(recipe);
 			}
 		}
@@ -57,8 +59,9 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		return lastUpdate;
 	}
 
-	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe) {
-		if (recipe.getSelectedRecipe() == null) {
+	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe, World world) {
+		ICraftingRecipe selectedRecipe = recipe.getSelectedRecipe(world);
+		if (selectedRecipe == null) {
 			return;
 		}
 
@@ -66,11 +69,11 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		recipe.updateLastUse(lastUpdate);
 
 		if (recipe.hasRecipeConflict()) {
-			recipe.removeRecipeConflicts();
+			recipe.removeRecipeConflicts(world);
 		}
 
 		// update existing matching recipes
-		MemorizedRecipe memory = getExistingMemorizedRecipe(recipe.getSelectedRecipe());
+		MemorizedRecipe memory = getExistingMemorizedRecipe(selectedRecipe, world);
 		if (memory != null) {
 			updateExistingRecipe(memory, recipe);
 			return;
@@ -119,12 +122,14 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		return memorizedRecipes.get(recipeIndex);
 	}
 
+	//Client Only
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
+		World world = Minecraft.getInstance().world;
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
 			return ItemStack.EMPTY;
 		}
-		return recipe.getOutputIcon();
+		return recipe.getOutputIcon(world);
 	}
 
 	public boolean isLocked(int recipeIndex) {
@@ -140,10 +145,10 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Nullable
-	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable IRecipe recipe) {
+	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable ICraftingRecipe recipe, World world) {
 		if (recipe != null) {
 			for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
-				if (memorizedRecipe.hasRecipe(recipe)) {
+				if (memorizedRecipe.hasRecipe(recipe, world)) {
 					return memorizedRecipe;
 				}
 			}
@@ -156,7 +161,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	public CompoundNBT write(CompoundNBT compoundNBT) {
 		ListNBT nbttaglist = new ListNBT();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
-			if (recipe != null && recipe.getSelectedRecipe() != null) {
+			if (recipe != null && recipe.hasSelectedRecipe()) {
 				CompoundNBT recipeNbt = new CompoundNBT();
 				recipe.write(recipeNbt);
 				nbttaglist.add(recipeNbt);

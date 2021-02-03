@@ -16,6 +16,8 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
@@ -30,6 +32,8 @@ import forestry.core.circuits.ISocketable;
 import forestry.core.inventory.ItemHandlerInventoryManipulator;
 import forestry.core.inventory.StandardStackFilters;
 import forestry.core.tiles.AdjacentTileCache;
+
+import java.util.Collection;
 
 //import net.minecraftforge.fml.common.Optional;
 //import forestry.plugins.ForestryCompatPlugins;
@@ -124,6 +128,36 @@ public abstract class InventoryUtil {
 	}
 
 	/* REMOVAL */
+
+
+	public static boolean consumeIngredients(IInventory inventory, NonNullList<Ingredient> ingredients, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
+		int[] consumeStacks = ItemStackUtil.createConsume(ingredients, inventory, craftingTools);
+		if(doRemove){
+			return consumeItems(inventory, consumeStacks, player, stowContainer);
+		}else{
+			return consumeStacks.length > 0;
+		}
+	}
+
+	private static boolean consumeItems(IInventory inventory, int[] consumeStacks, @Nullable PlayerEntity player, boolean stowContainer) {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			int count = consumeStacks[i];
+			if(count <= 0){
+				continue;
+			}
+			ItemStack oldStack = inventory.getStackInSlot(i);
+			ItemStack removed = inventory.decrStackSize(i, count);
+
+			if (stowContainer && oldStack.getItem().hasContainerItem(oldStack)) {
+				stowContainerItem(removed, inventory, i, player);
+			}
+
+			if(count > removed.getCount()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Removes a set of items from an inventory.

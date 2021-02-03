@@ -14,7 +14,13 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.List;
 
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.RecipeUtils;
+import forestry.core.utils.WorldUtils;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,7 +28,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -138,13 +144,33 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	private boolean craftRecipe(boolean simulate) {
+		if (currentRecipe == null) {
+			return false;
+		}
+
+		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(world);
+		if (selectedRecipe == null) {
+			return false;
+		}
+
+		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
+		if(!InventoryUtil.consumeIngredients(inventory, selectedRecipe.getIngredients(),null,true,false, !simulate)){
+			return false;
+		}
+
+		if (!simulate) {
+			// update crafting display to match the ingredients that were actually used
+			//currentRecipe.setCraftMatrix(crafting);
+			setCurrentRecipe(currentRecipe);
+		}
+
 		return true;
 	}
 
 	@Override
 	public void onCraftingComplete(PlayerEntity player) {
 		Preconditions.checkNotNull(currentRecipe);
-		IRecipe selectedRecipe = currentRecipe.getSelectedRecipe();
+		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(world);
 		Preconditions.checkNotNull(selectedRecipe);
 
 		ForgeHooks.setCraftingPlayer(player);
@@ -161,18 +187,18 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		}
 
 		if (!world.isRemote) {
-			recipeMemory.memorizeRecipe(world.getGameTime(), currentRecipe);
+			recipeMemory.memorizeRecipe(world.getGameTime(), currentRecipe, world);
 		}
 	}
 
 	@Nullable
 	@Override
-	public IRecipe getRecipeUsed() {
+	public ICraftingRecipe getRecipeUsed() {
 		if (currentRecipe == null) {
 			return null;
 		}
 
-		return currentRecipe.getSelectedRecipe();
+		return currentRecipe.getSelectedRecipe(world);
 	}
 
 	/* Crafting Container methods */
@@ -187,7 +213,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	private void setCraftingDisplay(IInventory craftMatrix) {
 		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, craftMatrix.getStackInSlot(slot));
+			ItemStack stack = craftMatrix.getStackInSlot(slot);
+			craftingDisplay.setInventorySlotContents(slot, stack.copy());
 		}
 	}
 
@@ -202,6 +229,21 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	public void setCurrentRecipe(CraftingInventoryForestry crafting) {
+		List<ICraftingRecipe> recipes = RecipeUtils.getRecipes(IRecipeType.CRAFTING, crafting, world);
+		MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
+
+		if (currentRecipe != null && recipe != null) {
+			//TODO: Find a new way to find unneeded updates
+			if (recipe.hasRecipe(currentRecipe.getSelectedRecipe(world), world)) {
+				/*NonNullList<ItemStack> stacks = InventoryUtil.getStacks(crafting);
+				NonNullList<ItemStack> currentStacks = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
+				if (ItemStackUtil.equalSets(stacks, currentStacks)) {
+					return;
+				}*/
+			}
+		}
+
+		setCurrentRecipe(recipe);
 	}
 
 	/* Network Sync with PacketWorktableRecipeUpdate */

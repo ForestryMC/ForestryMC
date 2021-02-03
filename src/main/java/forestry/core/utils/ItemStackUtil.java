@@ -14,7 +14,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeItemHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
@@ -31,6 +37,8 @@ import net.minecraft.world.World;
 import forestry.core.utils.datastructures.Stack;
 
 public abstract class ItemStackUtil {
+
+	private static final int[] EMPTY_CONSUME = new int[0];
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
@@ -150,35 +158,6 @@ public abstract class ItemStackUtil {
 		return condensed;
 	}
 
-	public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(NonNullList<ItemStack> stacks, NonNullList<String> dicts) {
-		NonNullList<ItemStack> condensed = NonNullList.create();
-		NonNullList<String> condensedDicts = NonNullList.create();
-
-		for (int i = 0; i < stacks.size(); i++) {
-			ItemStack stack = stacks.get(i);
-			if (stack.isEmpty()) {
-				continue;
-			}
-
-			boolean matched = false;
-			for (ItemStack cached : condensed) {
-				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
-					cached.grow(stack.getCount());
-					matched = true;
-				}
-			}
-
-			if (!matched) {
-				ItemStack cached = stack.copy();
-				condensed.add(cached);
-				condensedDicts.add(dicts.get(i));
-			}
-
-		}
-
-		return Pair.of(condensed, condensedDicts);
-	}
-
 	public static boolean containsItemStack(Iterable<ItemStack> list, ItemStack itemStack) {
 		for (ItemStack listStack : list) {
 			if (isIdenticalItem(listStack, itemStack)) {
@@ -186,6 +165,53 @@ public abstract class ItemStackUtil {
 			}
 		}
 		return false;
+	}
+
+	public static int[] createConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
+		return createConsume(set, inventory.getSizeInventory(), inventory::getStackInSlot, craftingTools);
+	}
+
+	public static int[] createConsume(NonNullList<Ingredient> set, int stockCount, Function<Integer, ItemStack> stock, boolean craftingTools) {
+		int totalSets = 0;
+
+		//A array that contains the amount of items that is needed from this stack
+		int[] reqAmounts = new int[stockCount];
+		int found = 0;
+		for (Ingredient ing : set) {
+			if (ing.hasNoMatchingItems()) {
+				found++;
+				continue;
+			}
+			for (ItemStack stack : ing.getMatchingStacks()) {
+				int curFound = found;
+				for (int i = 0; i < reqAmounts.length; i++) {
+					ItemStack offer = stock.apply(i);
+					if (offer.getCount() > reqAmounts[i] && isCraftingEquivalent(stack, offer, craftingTools)) {
+						reqAmounts[i] = reqAmounts[i] + 1;
+						found++;
+						break;
+					}
+				}
+				if (found > curFound)
+					break;
+			}
+		}
+		if (found < set.size())
+			return EMPTY_CONSUME;
+
+		return reqAmounts;
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
+		return createConsume(set, inventory, craftingTools).length > 0;
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, IInventory inventory) {
+		return canConsume(set, inventory, false);
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, int stockCount, Function<Integer, ItemStack> stock, boolean craftingTools) {
+		return createConsume(set, stockCount, stock, craftingTools).length > 0;
 	}
 
 	/**

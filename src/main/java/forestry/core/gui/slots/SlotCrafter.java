@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -73,14 +74,14 @@ public class SlotCrafter extends Slot {
 	protected void onCrafting(ItemStack stack) {
 		if (this.amountCrafted > 0) {
 			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
-			BasicEventHooks.firePlayerCraftingEvent(this.player, stack, craftMatrix);
+			net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerCraftingEvent(this.player, stack, this.craftMatrix);
+		}
+
+		if (this.inventory instanceof IRecipeHolder) {
+			((IRecipeHolder)this.inventory).onCrafting(this.player);
 		}
 
 		this.amountCrafted = 0;
-		IRecipe irecipe = crafter.getRecipeUsed();
-		if (irecipe != null && !irecipe.isDynamic()) {
-			this.player.unlockRecipes(Lists.newArrayList(irecipe));
-		}
 	}
 
 	@Override
