@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
@@ -55,7 +54,8 @@ import forestry.core.utils.NetworkUtil;
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
 	public BlockForestryLeaves() {
-		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly().notSolid());
+		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly()
+				.notSolid());
 	}
 
 	@Override
@@ -69,15 +69,15 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+	protected List<ItemStack> getLeafDrop(List<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier) {
 		TileLeaves tile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (tile == null) {
-			return;
+			return drops;
 		}
 
 		ITree tree = tile.getTree();
 		if (tree == null) {
-			return;
+			return drops;
 		}
 
 		// Add saplings	//TODO cast
@@ -93,6 +93,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		if (tile.hasFruit()) {
 			drops.addAll(tree.produceStacks(world, pos, tile.getRipeningTime()));
 		}
+
+		return drops;
 	}
 
 	@Override
@@ -135,7 +137,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					return ActionResultType.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes()
+						.createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return ActionResultType.SUCCESS;

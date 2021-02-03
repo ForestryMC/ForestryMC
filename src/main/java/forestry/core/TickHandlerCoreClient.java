@@ -23,7 +23,6 @@ import forestry.core.utils.GeneticsUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class TickHandlerCoreClient {
-
 	private boolean hasNaturalistEye;
 
 	//TODO - register event handlers
@@ -37,10 +36,12 @@ public class TickHandlerCoreClient {
 					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 					if (this.hasNaturalistEye != hasNaturalistEye) {
 						this.hasNaturalistEye = hasNaturalistEye;
-						//TODO - I think this is the correct field
+
 						WorldRenderer renderGlobal = minecraft.worldRenderer;
 						if (renderGlobal != null) {
-							renderGlobal.markBlockRangeForRenderUpdate((int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32, (int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
+							renderGlobal.markBlockRangeForRenderUpdate((int) player.getPosX() - 32, (int) player
+									.getPosY() - 32, (int) player.getPosZ() - 32, (int) player
+									.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
 						}
 					}
 				}

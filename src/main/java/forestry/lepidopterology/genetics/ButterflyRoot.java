@@ -51,6 +51,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
+import forestry.core.utils.RenderUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyEntities;
@@ -95,7 +96,8 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	@Override
 	public int getSpeciesCount() {
 		if (butterflySpeciesCount < 0) {
-			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES).filter(IAlleleButterflySpecies::isCounted).count();
+			butterflySpeciesCount = (int) AlleleUtils.filteredStream(ButterflyChromosomes.SPECIES)
+					.filter(IAlleleButterflySpecies::isCounted).count();
 		}
 
 		return butterflySpeciesCount;
@@ -126,6 +128,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
 			return pos.down();
 		}
+
 		for (int tries = 0; tries < 3; tries++) {
 			for (int y = 1; y < world.getRandom().nextInt(5); y++) {
 				BlockPos coordinate = pos.add(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
@@ -150,6 +153,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 				return isNurseryValid(nursery, caterpillar, gameProfile);
 			}
 		}
+
 		return false;
 	}
 
@@ -165,7 +169,8 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 	@Override
 	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
-		return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
+		return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY
+				.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
 
 	@Override

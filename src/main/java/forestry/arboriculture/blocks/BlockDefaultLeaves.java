@@ -8,7 +8,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -26,6 +25,7 @@ import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.proxy.Proxies;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -35,7 +35,10 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeaves(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly().notSolid());
+		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly()
+				.notSolid()
+				.setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow
+						.equals(definition)));
 		this.definition = definition;
 	}
 
@@ -65,10 +68,10 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 	}
 
 	@Override
-	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+	protected List<ItemStack> getLeafDrop(List<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
-			return;
+			return drops;
 		}
 
 		// Add saplings
@@ -78,6 +81,8 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 				drops.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
+
+		return drops;
 	}
 
 	/* RENDERING */
@@ -97,8 +102,8 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 		if (treeDefinition == null) {
 			treeDefinition = TreeDefinition.Oak;
 		}
-		IGenome genome = treeDefinition.getGenome();
 
+		IGenome genome = treeDefinition.getGenome();
 		ILeafSpriteProvider spriteProvider = genome.getActiveAllele(TreeChromosomes.SPECIES).getLeafSpriteProvider();
 		return spriteProvider.getColor(false);
 	}

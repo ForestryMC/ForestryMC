@@ -84,10 +84,14 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
 		for (EnumContainerType type : EnumContainerType.values()) {
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));
+			ModelLoader
+					.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
+			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type
+					.getString() + "_filled", "inventory"));
 		}
-		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
+		CoreBlocks.BASE.getBlocks()
+				.forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent()));
+		ModelLoaderRegistry
+				.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
 	}
 }

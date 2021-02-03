@@ -44,7 +44,8 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeavesFruit(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly().notSolid());
+		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly()
+				.notSolid());
 		this.definition = definition;
 	}
 
@@ -81,10 +82,10 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	}
 
 	@Override
-	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune) {
+	protected List<ItemStack> getLeafDrop(List<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
-			return;
+			return drops;
 		}
 
 		// Add saplings
@@ -102,6 +103,8 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			NonNullList<ItemStack> produceStacks = tree.produceStacks(world, pos, Integer.MAX_VALUE);
 			drops.addAll(produceStacks);
 		}
+
+		return drops;
 	}
 
 	/* RENDERING */

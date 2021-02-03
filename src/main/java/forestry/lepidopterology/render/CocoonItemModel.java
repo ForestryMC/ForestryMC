@@ -53,7 +53,6 @@ public class CocoonItemModel extends AbstractItemModel {
 	}
 
 	private static class Geometry implements IModelGeometry<CocoonItemModel.Geometry> {
-
 		@Override
 		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
 			ImmutableMap.Builder<String, ImmutableList<IBakedModel>> bakedModels = new ImmutableMap.Builder<>();

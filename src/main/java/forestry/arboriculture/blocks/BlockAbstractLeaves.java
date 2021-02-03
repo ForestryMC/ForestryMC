@@ -2,18 +2,19 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
@@ -41,13 +42,8 @@ import forestry.core.blocks.IColoredBlock;
 public abstract class BlockAbstractLeaves extends LeavesBlock implements IColoredBlock {
 	public static final int FOLIAGE_COLOR_INDEX = 0;
 	public static final int FRUIT_COLOR_INDEX = 2;
-	/* DROP HANDLING */
-	// Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
-	// 			because there is no Player parameter in getDrops()
-	//          and Mojang destroys the block and tile before calling getDrops.
-	// TODO in 1.13 - use new getDrops() (https://github.com/MinecraftForge/MinecraftForge/pull/4727)
-	//TODO in 1.14 - I think this can be done in loot tables by match_tool?
-	private final ThreadLocal<NonNullList<ItemStack>> drops = new ThreadLocal<>();
+
+	private final ThreadLocal<List<ItemStack>> drops = new ThreadLocal<>();
 
 	public BlockAbstractLeaves(Properties properties) {
 		super(properties);
@@ -64,17 +60,15 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	/**
 	 * {@link IToolGrafter}'s drop bonus handling is done here.
 	 */
-	//TODO leaf drop
 	@Override
-	public final void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, player.getActiveItemStack());
+	public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
 		float saplingModifier = 1.0f;
 
 		ItemStack heldStack = player.inventory.getCurrentItem();
 		Item heldItem = heldStack.getItem();
 		if (heldItem instanceof IToolGrafter) {
 			IToolGrafter grafter = (IToolGrafter) heldItem;
-			saplingModifier = grafter.getSaplingModifier(heldStack, world, player, pos);
+			saplingModifier = grafter.getSaplingModifier(heldStack, worldIn, player, pos);
 			heldStack.damageItem(1, player, p -> {
 			});
 			if (heldStack.isEmpty()) {
@@ -83,9 +77,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		}
 
 		GameProfile playerProfile = player.getGameProfile();
-		NonNullList<ItemStack> drops = NonNullList.create();
-		getLeafDrop(drops, world, playerProfile, pos, saplingModifier, fortune);
-		this.drops.set(drops);
+		this.drops.set(getLeafDrop(NonNullList.create(), worldIn, playerProfile, pos, saplingModifier));
 	}
 
 	@Override
@@ -134,7 +126,6 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		}
 	}
 
-	//TODO since loot done in loot table I don't know if this works
 	@Nonnull
 	@Override
 	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
@@ -143,12 +134,29 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			tree = TreeDefinition.Oak.createIndividual();
 		}
 
-		ItemStack decorativeLeaves = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider().getDecorativeLeaves();
+		ItemStack decorativeLeaves = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getLeafProvider()
+				.getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {
 			return Collections.singletonList(decorativeLeaves);
 		}
+	}
+
+	@Override
+	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+		World world = builder.getWorld();
+		BlockPos pos = new BlockPos(builder.assertPresent(LootParameters.field_237457_g_));
+
+		List<ItemStack> ret = this.drops.get();
+		this.drops.remove();
+		if (ret != null) {
+			drops.set(ret);
+		} else {
+			this.drops.set(getLeafDrop(new ArrayList<ItemStack>(), (World) world, null, pos, 1.0f));
+		}
+
+		return this.drops.get();
 	}
 
 	@Override
@@ -170,29 +178,5 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		entityIn.setMotion(motion.getX() * 0.4D, motion.getY(), motion.getZ() * 0.4D);
 	}
 
-	//TODO temp for now, should be done in loot table I think. Probably wrong
-	//    @Override
-	//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-	//        List<ItemStack> ret = super.getDrops(state, builder);
-	//        World world = builder.getWorld();
-	//        ItemStack tool = builder.get(LootParameters.TOOL);
-	//        Item toolItem = tool.getItem();    //TODO null
-	//        if (toolItem instanceof IToolGrafter) {
-	//            IToolGrafter grafter = (IToolGrafter) toolItem;
-	//        }
-	//
-	//        List<ItemStack> ret = this.drops.get();
-	//        this.drops.remove();
-	//        if (ret != null) {
-	//            drops.addAll(ret);
-	//        } else {
-	//            if (!(world instanceof World)) {
-	//                return;
-	//            }
-	//            // leaves not harvested, get drops normally
-	//            getLeafDrop(drops, (World) world, null, pos, 1.0f, fortune);
-	//        }
-	//    }
-
-	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune);
+	protected abstract List<ItemStack> getLeafDrop(List<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier);
 }

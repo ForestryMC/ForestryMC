@@ -117,7 +117,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (leafSpriteProvider != null) {
 			return leafSpriteProvider;
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
+					.getActiveAllele(TreeChromosomes.SPECIES);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}
@@ -184,7 +185,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		data.writeByte(leafState);
 
 		if (hasFruit) {
-			String fruitAlleleUID = getTree().getGenome().getActiveAllele(TreeChromosomes.FRUITS).getRegistryName().toString();
+			String fruitAlleleUID = getTree().getGenome().getActiveAllele(TreeChromosomes.FRUITS).getRegistryName()
+					.toString();
 			int colourFruits = getFruitColour();
 
 			data.writeString(fruitAlleleUID);
@@ -194,7 +196,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public void readData(PacketBufferForestry data) {
-
 		String speciesUID = data.readString(); // this is called instead of super.readData, be careful!
 
 		byte leafState = data.readByte();
@@ -210,7 +211,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
 		if (treeTemplate != null) {
 			if (fruitAlleleUID != null) {
-				AlleleUtils.actOn(new ResourceLocation(fruitAlleleUID), IAlleleFruit.class, fruitAllele -> treeTemplate[TreeChromosomes.FRUITS.getIndex()] = fruitAllele);
+				AlleleUtils
+						.actOn(new ResourceLocation(fruitAlleleUID), IAlleleFruit.class, fruitAllele -> treeTemplate[TreeChromosomes.FRUITS
+								.getIndex()] = fruitAllele);
 			}
 
 			ITree tree = TreeManager.treeRoot.templateAsIndividual(treeTemplate);
@@ -345,7 +348,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (species != null) {
 			return species.getLeafSpriteProvider();
 		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome().getActiveAllele(TreeChromosomes.SPECIES);
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
+					.getActiveAllele(TreeChromosomes.SPECIES);
 			return oakSpecies.getLeafSpriteProvider();
 		}
 	}
@@ -388,7 +392,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public boolean canMateWith(IIndividual individual) {
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
-			return tree != null && !tree.getMate().isPresent() && (ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
+			return tree != null && !tree.getMate().isPresent() && (ModuleApiculture.doSelfPollination || !tree
+					.isGeneticEqual(individual));
 		}
 		return false;
 	}
@@ -419,6 +424,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (tree == null) {
 			return "for.leaves.corrupted";
 		}
+
 		return tree.getGenome().getPrimary().getLocalisationKey();
 	}
 
@@ -516,10 +522,13 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		damage += caterpillar.getGenome().getActiveValue(ButterflyChromosomes.METABOLISM);
 
 		IGenome caterpillarGenome = caterpillar.getGenome();
-		int caterpillarMatureTime = Math.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
+		int caterpillarMatureTime = Math
+				.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome
+						.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
-			ButterflyManager.butterflyRoot.plantCocoon(world, pos.down(), getCaterpillar(), getOwnerHandler().getOwner(), 0, false);
+			ButterflyManager.butterflyRoot
+					.plantCocoon(world, pos.down(), getCaterpillar(), getOwnerHandler().getOwner(), 0, false);
 			setCaterpillar(null);
 		} else if (!wasDestroyed && isDestroyed(tree, damage)) {
 			sendNetworkUpdate();

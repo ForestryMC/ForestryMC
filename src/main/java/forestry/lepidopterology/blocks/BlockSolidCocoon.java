@@ -40,8 +40,11 @@ public class BlockSolidCocoon extends Block {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE).harvestTool(ItemScoop.SCOOP).harvestLevel(0).hardnessAndResistance(0.5F).tickRandomly().sound(SoundType.GROUND));
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault).with(AlleleButterflyCocoon.AGE, 0));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE).harvestTool(ItemScoop.SCOOP).harvestLevel(0)
+				.hardnessAndResistance(0.5F).tickRandomly().sound(SoundType.GROUND)
+				.setOpaque((state, reader, pos) -> false));
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+				.with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
@@ -51,13 +54,10 @@ public class BlockSolidCocoon extends Block {
 
 	@Override
 	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos pos, BlockPos facingPos) {
-		if (facing != Direction.UP || !facingState.isAir(world, facingPos)) {
-			return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
-		}
-
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon != null) {
-			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON)).with(AlleleButterflyCocoon.AGE, cocoon.getAge());
+			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON))
+					.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
 
 		return super.updatePostPlacement(state, facing, facingState, world, pos, facingPos);
@@ -80,11 +80,6 @@ public class BlockSolidCocoon extends Block {
 	//	public boolean isFullBlock(BlockState state) {
 	//		return false;
 	//	}
-	//
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state) {
-	//		return false;
-	//	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -100,21 +95,6 @@ public class BlockSolidCocoon extends Block {
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileCocoon(true);
 	}
-
-	//    @Override
-	//    public BlockState updatePostPlacement(
-	//            BlockState state,
-	//            Direction facing,
-	//            BlockState facingState,
-	//            IWorld worldIn,
-	//            BlockPos currentPos,
-	//            BlockPos facingPos
-	//    ) {
-	//        if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
-	//            return state;
-	//        }
-	//        return Blocks.AIR.getDefaultState();
-	//    }
 
 	@Override
 	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {

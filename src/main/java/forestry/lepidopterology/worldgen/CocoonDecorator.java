@@ -44,18 +44,21 @@ public class CocoonDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	public static boolean genCocoon(ISeedReader world, Random rand, BlockPos pos, IButterfly butterfly) {
-		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity() * ModuleLepidopterology.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
+		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity() * ModuleLepidopterology
+				.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
 			return false;
 		}
 
 		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ()));
 
-		Set<Biome.Category> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getSpawnBiomes();
+		Set<Biome.Category> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
+				.getSpawnBiomes();
 
 		boolean biomeTypesGood = false;
 		for (Biome.Category category : speciesCategories) {
 			if (category == biome.getCategory()) {
 				biomeTypesGood = true;
+				break;
 			}
 		}
 
@@ -148,7 +151,8 @@ public class CocoonDecorator extends Feature<NoFeatureConfig> {
 
 	@Override
 	public boolean generate(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot.getIndividualTemplates());
+		ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot
+				.getIndividualTemplates());
 
 		Collections.shuffle(butterflys, rand);
 		for (IButterfly butterfly : butterflys) {

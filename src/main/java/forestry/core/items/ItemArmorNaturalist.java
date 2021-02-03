@@ -39,7 +39,8 @@ import forestry.core.utils.ItemTooltipUtil;
 public class ItemArmorNaturalist extends ArmorItem {
 
 	public ItemArmorNaturalist() {
-		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties()).maxDamage(100).group(ItemGroupForestry.tabForestry));
+		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties()).maxDamage(100)
+				.group(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

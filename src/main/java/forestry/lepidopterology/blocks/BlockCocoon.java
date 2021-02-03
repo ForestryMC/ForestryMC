@@ -14,7 +14,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,6 +29,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.server.ServerWorld;
 
 import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.tiles.TileUtil;
@@ -39,31 +39,21 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block {
-	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(5.0, 5.0, 5.0, 11F, 16F, 11F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
 	public BlockCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE).tickRandomly().notSolid().sound(SoundType.GROUND));
+		super(Block.Properties.create(MaterialCocoon.INSTANCE).tickRandomly().sound(SoundType.GROUND)
+				.setOpaque((state, reader, pos) -> false));
 
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault).with(AlleleButterflyCocoon.AGE, 0));
+		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
+				.with(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
-
-	//TODO
-	//	@OnlyIn(Dist.CLIENT)
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
-	//		if (cocoon != null) {
-	//			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getCocoon())
-	//				.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
-	//		}
-	//		return super.getActualState(state, world, pos);
-	//	}
 
 	@Override
 	public boolean hasTileEntity(BlockState state) {
@@ -94,15 +84,23 @@ public class BlockCocoon extends Block {
 
 	@Override
 	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
-			return state;
+		TileCocoon cocoon = TileUtil.getTile(worldIn, currentPos, TileCocoon.class);
+		if (cocoon != null) {
+			state = state.with(COCOON, cocoon.getCaterpillar().getGenome().getActiveAllele(ButterflyChromosomes.COCOON))
+					.with(AlleleButterflyCocoon.AGE, cocoon.getAge());
 		}
-		return Blocks.AIR.getDefaultState();
+
+		return super.updatePostPlacement(state, facing, facingState, worldIn, currentPos, facingPos);
 	}
 
 	//other shapes (collision etc) defer to this in block I believe
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+		return BOUNDING_BOX;
+	}
+
+	@Override
+	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		return BOUNDING_BOX;
 	}
 
