@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -28,9 +28,9 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	FluidStack getLiquid();
 
 	/**
-	 * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
+	 * @return the plan for this recipe (the item in the top right slot)
 	 */
-	ItemStack getPlan();
+	Ingredient getPlan();
 
 	/**
 	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the IFabricatorRecipe's output.

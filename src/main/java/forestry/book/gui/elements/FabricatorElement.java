@@ -65,9 +65,9 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 				selectedElement.add(new IngredientElement(21 + x * 19, 1 + y * 19, ingredient));
 			}
 		}
-		ItemStack plan = recipe.getPlan();
-		if (!plan.isEmpty()) {
-			selectedElement.item(91, 1, plan);
+		Ingredient plan = recipe.getPlan();
+		if (!plan.hasNoMatchingItems()) {
+			selectedElement.item(91, 1, plan.getMatchingStacks()[0]);
 		}
 		selectedElement.item(91, 39, recipe.getRecipeOutput());
 		NonNullList<Ingredient> smeltingInput = NonNullList.create();

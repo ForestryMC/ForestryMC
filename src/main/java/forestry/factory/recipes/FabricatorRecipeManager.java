@@ -42,7 +42,7 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
 		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
 			if (fluidStack.containsFluid(recipe.getLiquid())
-					&& recipe.getPlan().equals(plan)
+					&& recipe.getPlan().test(plan)
 					&& recipe.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)) {
 				return Optional.of(recipe);
 			}
@@ -54,7 +54,7 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 	@Override
 	public boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan) {
 		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
-			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
+			if (recipe.getPlan().test(plan)) {
 				return true;
 			}
 		}

@@ -13,14 +13,13 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -29,11 +28,11 @@ import forestry.api.recipes.IFabricatorRecipe;
 public class FabricatorRecipe implements IFabricatorRecipe {
 
 	private final ResourceLocation id;
-	private final ItemStack plan;
+	private final Ingredient plan;
 	private final FluidStack molten;
 	private final ShapedRecipe recipe;
 
-	public FabricatorRecipe(ResourceLocation id, ItemStack plan, FluidStack molten, ShapedRecipe recipe) {
+	public FabricatorRecipe(ResourceLocation id, Ingredient plan, FluidStack molten, ShapedRecipe recipe) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
@@ -50,7 +49,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
-	public ItemStack getPlan() {
+	public Ingredient getPlan() {
 		return plan;
 	}
 
@@ -68,7 +67,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 		@Override
 		public FabricatorRecipe read(ResourceLocation recipeId, JsonObject json) {
-			ItemStack plan = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "plan"), true);
+			Ingredient plan = Ingredient.deserialize(json.get("plan"));
 			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "molten"));
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 
@@ -77,7 +76,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 		@Override
 		public FabricatorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			ItemStack plan = buffer.readItemStack();
+			Ingredient plan = Ingredient.read(buffer);
 			FluidStack molten = buffer.readFluidStack();
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
 
@@ -86,7 +85,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 		@Override
 		public void write(PacketBuffer buffer, FabricatorRecipe recipe) {
-			buffer.writeItemStack(recipe.getPlan());
+			recipe.getPlan().write(buffer);
 			buffer.writeFluidStack(recipe.getLiquid());
 			IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe.getCraftingGridRecipe());
 		}
