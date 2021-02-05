@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -34,16 +35,19 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-		//TODO json
-		//		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
-		//		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
-		//
-		//		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
-		//		addRecipe(recipe);
+		// TODO: json
 	}
 
 	@Override
-	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
+	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
+		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
+			if (fluidStack.containsFluid(recipe.getLiquid())
+					&& recipe.getPlan().equals(plan)
+					&& recipe.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)) {
+				return Optional.of(recipe);
+			}
+		}
+
 		return Optional.empty();
 	}
 

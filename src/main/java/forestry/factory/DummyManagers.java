@@ -127,7 +127,7 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources) {
+		public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
 			return Optional.empty();
 		}
 

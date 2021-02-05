@@ -172,7 +172,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		IInventoryAdapter inventory = getInternalInventory();
 		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), world, liquid, plan, craftingInventory);
 		IFabricatorRecipe recipe = recipePair.orElse(null);
 		if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
 			return Optional.empty();
@@ -239,7 +239,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasResources = true;
 
 		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), plan, craftingInventory);
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), world, moltenTank.getFluid(), plan, craftingInventory);
 		if (recipePair.isPresent()) {
 			IFabricatorRecipe recipe = recipePair.orElse(null);
 			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);

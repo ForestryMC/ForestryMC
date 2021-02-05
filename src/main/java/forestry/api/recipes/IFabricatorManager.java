@@ -12,6 +12,7 @@ import java.util.Optional;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -19,7 +20,7 @@ public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe>
 
 	void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern);
 
-	Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack plan, IInventory resources);
+	Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources);
 
 	boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan);
 
