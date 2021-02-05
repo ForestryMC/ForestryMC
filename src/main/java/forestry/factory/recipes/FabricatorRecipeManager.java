@@ -69,7 +69,7 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 		}
 
 		return getRecipes(recipeManager).stream().filter(recipe -> {
-			ItemStack o = recipe.getRecipeOutput();
+			ItemStack o = recipe.getCraftingGridRecipe().getRecipeOutput();
 			return ItemStackUtil.isIdenticalItem(output, o);
 		}).collect(Collectors.toList());
 	}

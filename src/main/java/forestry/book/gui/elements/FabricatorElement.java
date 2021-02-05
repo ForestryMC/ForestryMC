@@ -69,7 +69,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 		if (!plan.hasNoMatchingItems()) {
 			selectedElement.item(91, 1, plan.getMatchingStacks()[0]);
 		}
-		selectedElement.item(91, 39, recipe.getRecipeOutput());
+		selectedElement.item(91, 39, recipe.getCraftingGridRecipe().getRecipeOutput());
 		NonNullList<Ingredient> smeltingInput = NonNullList.create();
 		Fluid recipeFluid = recipe.getLiquid().getFluid();
 		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {

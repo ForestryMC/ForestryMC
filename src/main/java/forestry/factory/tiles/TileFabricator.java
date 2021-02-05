@@ -73,7 +73,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, false).setFilters(() -> RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(getWorld().getRecipeManager()));
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, true).setFilters(() -> RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(getWorld().getRecipeManager()));
 
 		tankManager = new TankManager(this, moltenTank);
 	}
@@ -186,7 +186,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return ItemStack.EMPTY;
 		}
 
-		return myRecipe.getRecipeOutput().copy();
+		return myRecipe.getCraftingGridRecipe().getRecipeOutput().copy();
 	}
 
 	/* ISlotPickupWatcher */
