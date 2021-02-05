@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
@@ -41,6 +43,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	/**
 	 * @return the fluid required for this recipe. return null if there is no required fluid.
 	 */
+	@Nullable
 	FluidStack getFluidResource();
 
 	@Override

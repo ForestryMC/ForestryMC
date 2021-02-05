@@ -13,6 +13,8 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
@@ -29,11 +31,12 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 
 	private final ResourceLocation id;
 	private final int packagingTime;
+	@Nullable
 	private final FluidStack liquid;
 	private final Ingredient box;
 	private final ShapedRecipe recipe;
 
-	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ShapedRecipe recipe) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipe recipe) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(recipe);
@@ -56,6 +59,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
+	@Nullable
 	public FluidStack getFluidResource() {
 		return liquid;
 	}
@@ -75,7 +79,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
 			int packagingTime = JSONUtils.getInt(json, "time");
-			FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
+			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid")) : null;
 			Ingredient box = Ingredient.deserialize(json.get("box"));
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 
@@ -85,7 +89,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public CarpenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
 			int packagingTime = buffer.readVarInt();
-			FluidStack liquid = FluidStack.readFromPacket(buffer);
+			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : null;
 			Ingredient box = Ingredient.read(buffer);
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
 
@@ -95,7 +99,14 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public void write(PacketBuffer buffer, CarpenterRecipe recipe) {
 			buffer.writeVarInt(recipe.packagingTime);
-			recipe.liquid.writeToPacket(buffer);
+
+			if (recipe.liquid != null) {
+				buffer.writeBoolean(true);
+				recipe.liquid.writeToPacket(buffer);
+			} else {
+				buffer.writeBoolean(false);
+			}
+
 			recipe.box.write(buffer);
 			IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe.recipe);
 		}
