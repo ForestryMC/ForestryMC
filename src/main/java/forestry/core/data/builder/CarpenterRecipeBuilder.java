@@ -15,10 +15,6 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -32,7 +28,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class CarpenterRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private int packagingTime;
 	@Nullable
 	private FluidStack liquid;
@@ -66,11 +61,7 @@ public class CarpenterRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, packagingTime, liquid, box, recipe, advancementBuilder, null));
+		consumer.accept(new Result(id, packagingTime, liquid, box, recipe));
 	}
 
 	public static class Result implements IFinishedRecipe {
@@ -80,17 +71,13 @@ public class CarpenterRecipeBuilder {
 		private final FluidStack liquid;
 		private final Ingredient box;
 		private final ShapedRecipeBuilder.Result recipe;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipeBuilder.Result recipe, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipeBuilder.Result recipe) {
 			this.id = id;
 			this.packagingTime = packagingTime;
 			this.liquid = liquid;
 			this.box = box;
 			this.recipe = recipe;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -117,12 +104,12 @@ public class CarpenterRecipeBuilder {
 
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

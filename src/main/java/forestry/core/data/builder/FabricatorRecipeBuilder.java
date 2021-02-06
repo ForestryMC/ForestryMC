@@ -14,10 +14,6 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -31,7 +27,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class FabricatorRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private Ingredient plan;
 	private FluidStack molten;
 	private ShapedRecipeBuilder.Result recipe;
@@ -54,11 +49,7 @@ public class FabricatorRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, plan, molten, recipe, advancementBuilder, null));
+		consumer.accept(new Result(id, plan, molten, recipe));
 	}
 
 	public static class Result implements IFinishedRecipe {
@@ -66,16 +57,12 @@ public class FabricatorRecipeBuilder {
 		private final Ingredient plan;
 		private final FluidStack molten;
 		private final ShapedRecipeBuilder.Result recipe;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, Ingredient plan, FluidStack molten, ShapedRecipeBuilder.Result recipe, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, Ingredient plan, FluidStack molten, ShapedRecipeBuilder.Result recipe) {
 			this.id = id;
 			this.plan = plan;
 			this.molten = molten;
 			this.recipe = recipe;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -97,12 +84,12 @@ public class FabricatorRecipeBuilder {
 
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

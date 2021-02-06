@@ -5,10 +5,6 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -22,7 +18,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class FermenterRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private Ingredient resource;
 	private int fermentationValue;
 	private float modifier;
@@ -55,11 +50,7 @@ public class FermenterRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, resource, fermentationValue, modifier, output, fluidResource, advancementBuilder, null));
+		consumer.accept(new Result(id, resource, fermentationValue, modifier, output, fluidResource));
 	}
 
 	private static class Result implements IFinishedRecipe {
@@ -69,18 +60,14 @@ public class FermenterRecipeBuilder {
 		private final float modifier;
 		private final Fluid output;
 		private final FluidStack fluidResource;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
 			this.id = id;
 			this.resource = resource;
 			this.fermentationValue = fermentationValue;
 			this.modifier = modifier;
 			this.output = output;
 			this.fluidResource = fluidResource;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -105,13 +92,13 @@ public class FermenterRecipeBuilder {
 		@Nullable
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Nullable
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

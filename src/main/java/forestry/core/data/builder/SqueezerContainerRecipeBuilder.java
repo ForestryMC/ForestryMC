@@ -5,10 +5,6 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -19,7 +15,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class SqueezerContainerRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private ItemStack emptyContainer;
 	private int processingTime;
 	private ItemStack remnants;
@@ -46,11 +41,7 @@ public class SqueezerContainerRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, emptyContainer, processingTime, remnants, remnantsChance, advancementBuilder, null));
+		consumer.accept(new Result(id, emptyContainer, processingTime, remnants, remnantsChance));
 	}
 
 	private static class Result implements IFinishedRecipe {
@@ -59,17 +50,13 @@ public class SqueezerContainerRecipeBuilder {
 		private final int processingTime;
 		private final ItemStack remnants;
 		private final float remnantsChance;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
 			this.id = id;
 			this.emptyContainer = emptyContainer;
 			this.processingTime = processingTime;
 			this.remnants = remnants;
 			this.remnantsChance = remnantsChance;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -93,13 +80,13 @@ public class SqueezerContainerRecipeBuilder {
 		@Nullable
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Nullable
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

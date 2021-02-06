@@ -15,10 +15,6 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -30,7 +26,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class CentrifugeRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private int processingTime;
 	private ItemStack input;
 	private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
@@ -46,11 +41,7 @@ public class CentrifugeRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, processingTime, input, outputs, advancementBuilder, null));
+		consumer.accept(new Result(id, processingTime, input, outputs));
 	}
 
 	public static class Result implements IFinishedRecipe {
@@ -58,16 +49,12 @@ public class CentrifugeRecipeBuilder {
 		private final int processingTime;
 		private final ItemStack input;
 		private final NonNullList<ICentrifugeRecipe.Product> outputs;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs) {
 			this.id = id;
 			this.processingTime = processingTime;
 			this.input = input;
 			this.outputs = outputs;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -99,12 +86,12 @@ public class CentrifugeRecipeBuilder {
 
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

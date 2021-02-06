@@ -5,10 +5,6 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +16,6 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class StillRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private int timePerUnit;
 	private FluidStack input;
 	private FluidStack output;
@@ -41,11 +36,7 @@ public class StillRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
-				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
-				.withRewards(AdvancementRewards.Builder.recipe(id))
-				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, timePerUnit, input, output, advancementBuilder, null));
+		consumer.accept(new Result(id, timePerUnit, input, output));
 	}
 
 	private static class Result implements IFinishedRecipe {
@@ -53,16 +44,12 @@ public class StillRecipeBuilder {
 		private final int timePerUnit;
 		private final FluidStack input;
 		private final FluidStack output;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, int timePerUnit, FluidStack input, FluidStack output, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, int timePerUnit, FluidStack input, FluidStack output) {
 			this.id = id;
 			this.timePerUnit = timePerUnit;
 			this.input = input;
 			this.output = output;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -85,13 +72,13 @@ public class StillRecipeBuilder {
 		@Nullable
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Nullable
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }
