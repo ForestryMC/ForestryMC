@@ -115,7 +115,7 @@ public class FabricatorSmeltingRecipeBuilder {
 		public void serialize(JsonObject json) {
 			json.addProperty("melting", meltingPoint);
 			json.add("resource", RecipeSerializers.item(resource));
-			json.add("liquid", RecipeSerializers.serializeFluid(product));
+			json.add("product", RecipeSerializers.serializeFluid(product));
 		}
 
 		@Override

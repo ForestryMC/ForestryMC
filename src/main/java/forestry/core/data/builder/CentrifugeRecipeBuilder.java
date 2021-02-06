@@ -56,6 +56,11 @@ public class CentrifugeRecipeBuilder {
 		return this;
 	}
 
+	public CentrifugeRecipeBuilder product(float probability, ItemStack stack) {
+		outputs.add(new ICentrifugeRecipe.Product(probability, stack));
+		return this;
+	}
+
 	public void build(Consumer<IFinishedRecipe> consumer) {
 		build(consumer, input.getItem().getRegistryName());
 	}
