@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.data.builder;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
@@ -20,49 +19,38 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.api.recipes.ICentrifugeRecipe;
+import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFabricatorRecipe;
 import forestry.factory.recipes.RecipeSerializers;
 
-public class CentrifugeRecipeBuilder {
+public class FabricatorRecipeBuilder {
 
 	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
-	private int processingTime;
-	private ItemStack input;
-	private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
+	private Ingredient plan;
+	private FluidStack molten;
+	private ShapedRecipeBuilder.Result recipe;
 
-	public CentrifugeRecipeBuilder processingTime(int processingTime) {
-		this.processingTime = processingTime;
+	public FabricatorRecipeBuilder plan(Ingredient plan) {
+		this.plan = plan;
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder input(ItemStack input) {
-		this.input = input;
+	public FabricatorRecipeBuilder molten(FluidStack molten) {
+		this.molten = molten;
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder input(IItemProvider provider) {
-		this.input = new ItemStack(provider.asItem());
+	public FabricatorRecipeBuilder recipe(Consumer<Consumer<IFinishedRecipe>> consumer) {
+		Holder<IFinishedRecipe> holder = new Holder<>();
+		consumer.accept(holder::set);
+		this.recipe = (ShapedRecipeBuilder.Result) holder.get();
 		return this;
-	}
-
-	public CentrifugeRecipeBuilder product(ICentrifugeRecipe.Product product) {
-		outputs.add(product);
-		return this;
-	}
-
-	public CentrifugeRecipeBuilder product(float probability, ItemStack stack) {
-		outputs.add(new ICentrifugeRecipe.Product(probability, stack));
-		return this;
-	}
-
-	public void build(Consumer<IFinishedRecipe> consumer) {
-		build(consumer, input.getItem().getRegistryName());
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
@@ -70,41 +58,31 @@ public class CentrifugeRecipeBuilder {
 				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
 				.withRewards(AdvancementRewards.Builder.recipe(id))
 				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, processingTime, input, outputs, advancementBuilder, null));
+		consumer.accept(new Result(id, plan, molten, recipe, advancementBuilder, null));
 	}
 
 	public static class Result implements IFinishedRecipe {
 		private final ResourceLocation id;
-		private final int processingTime;
-		private final ItemStack input;
-		private final NonNullList<ICentrifugeRecipe.Product> outputs;
+		private final Ingredient plan;
+		private final FluidStack molten;
+		private final ShapedRecipeBuilder.Result recipe;
 		private final Advancement.Builder advancementBuilder;
 		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, Ingredient plan, FluidStack molten, ShapedRecipeBuilder.Result recipe, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
 			this.id = id;
-			this.processingTime = processingTime;
-			this.input = input;
-			this.outputs = outputs;
+			this.plan = plan;
+			this.molten = molten;
+			this.recipe = recipe;
 			this.advancementBuilder = advancementBuilder;
 			this.advancementId = advancementId;
 		}
 
 		@Override
 		public void serialize(JsonObject json) {
-			json.addProperty("time", processingTime);
-			json.add("input", RecipeSerializers.item(input));
-
-			JsonArray products = new JsonArray();
-
-			for (ICentrifugeRecipe.Product product : outputs) {
-				JsonObject object = new JsonObject();
-				object.addProperty("chance", product.getProbability());
-				object.add("item", RecipeSerializers.item(product.getStack()));
-				products.add(object);
-			}
-
-			json.add("products", products);
+			json.add("plan", plan.serialize());
+			json.add("molten", RecipeSerializers.serializeFluid(molten));
+			json.add("recipe", recipe.getRecipeJson());
 		}
 
 		@Override
@@ -114,7 +92,7 @@ public class CentrifugeRecipeBuilder {
 
 		@Override
 		public IRecipeSerializer<?> getSerializer() {
-			return ICentrifugeRecipe.Companion.SERIALIZER;
+			return IFabricatorRecipe.Companion.SERIALIZER;
 		}
 
 		@Override

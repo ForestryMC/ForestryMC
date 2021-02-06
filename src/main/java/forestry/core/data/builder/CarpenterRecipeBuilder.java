@@ -76,31 +76,11 @@ public class CarpenterRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		validate(id);
-
 		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
 				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
 				.withRewards(AdvancementRewards.Builder.recipe(id))
 				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, packagingTime, liquid, box, recipe, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + recipe.getSerializer().read(id, recipe.getRecipeJson()).getRecipeOutput().getItem().getGroup().getPath() + "/" + id.getPath())));
-	}
-
-	private void validate(ResourceLocation id) {
-		if (packagingTime <= 0) {
-			throw error(id, "Packaging time was not set or is below 1");
-		}
-
-		if (box == null) {
-			throw error(id, "Box was not set");
-		}
-
-		if (recipe == null) {
-			throw error(id, "Recipe was not set");
-		}
-	}
-
-	private static IllegalStateException error(ResourceLocation id, String message) {
-		return new IllegalStateException(message + " (" + id + ")");
+		consumer.accept(new Result(id, packagingTime, liquid, box, recipe, advancementBuilder, null));
 	}
 
 	public static class Result implements IFinishedRecipe {

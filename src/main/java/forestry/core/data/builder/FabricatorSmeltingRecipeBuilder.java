@@ -67,31 +67,11 @@ public class FabricatorSmeltingRecipeBuilder {
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		validate(id);
-
 		advancementBuilder.withParentId(new ResourceLocation("recipes/root"))
 				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
 				.withRewards(AdvancementRewards.Builder.recipe(id))
 				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, meltingPoint, resource, product, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + resource.getItem().getGroup().getPath() + "/" + id.getPath())));
-	}
-
-	private void validate(ResourceLocation id) {
-		if (meltingPoint <= 0) {
-			throw error(id, "Packaging time was not set or is below 1");
-		}
-
-		if (product == null || product.isEmpty()) {
-			throw error(id, "Liquid was not set");
-		}
-
-		if (resource == null || resource.isEmpty()) {
-			throw error(id, "Box was not set");
-		}
-	}
-
-	private static IllegalStateException error(ResourceLocation id, String message) {
-		return new IllegalStateException(message + " (" + id + ")");
+		consumer.accept(new Result(id, meltingPoint, resource, product, advancementBuilder, null));
 	}
 
 	public static class Result implements IFinishedRecipe {
