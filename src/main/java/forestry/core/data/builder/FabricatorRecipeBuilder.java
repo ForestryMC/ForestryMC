@@ -36,12 +36,12 @@ public class FabricatorRecipeBuilder {
 	private FluidStack molten;
 	private ShapedRecipeBuilder.Result recipe;
 
-	public FabricatorRecipeBuilder plan(Ingredient plan) {
+	public FabricatorRecipeBuilder setPlan(Ingredient plan) {
 		this.plan = plan;
 		return this;
 	}
 
-	public FabricatorRecipeBuilder molten(FluidStack molten) {
+	public FabricatorRecipeBuilder setMolten(FluidStack molten) {
 		this.molten = molten;
 		return this;
 	}

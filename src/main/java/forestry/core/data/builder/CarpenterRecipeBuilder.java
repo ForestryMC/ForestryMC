@@ -21,7 +21,6 @@ import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -40,35 +39,26 @@ public class CarpenterRecipeBuilder {
 	private Ingredient box;
 	private ShapedRecipeBuilder.Result recipe;
 
-	public CarpenterRecipeBuilder packagingTime(int packagingTime) {
+	public CarpenterRecipeBuilder setPackagingTime(int packagingTime) {
 		this.packagingTime = packagingTime;
 		return this;
 	}
 
-	public CarpenterRecipeBuilder liquid(FluidStack liquid) {
+	public CarpenterRecipeBuilder setLiquid(@Nullable FluidStack liquid) {
 		this.liquid = liquid;
 		return this;
 	}
 
-	public CarpenterRecipeBuilder liquid(Fluid fluid) {
-		this.liquid = new FluidStack(fluid, 1000);
-		return this;
-	}
-
-	public CarpenterRecipeBuilder box(Ingredient box) {
+	public CarpenterRecipeBuilder setBox(Ingredient box) {
 		this.box = box;
-		return this;
-	}
-
-	public CarpenterRecipeBuilder recipe(ShapedRecipeBuilder.Result recipe) {
-		this.recipe = recipe;
 		return this;
 	}
 
 	public CarpenterRecipeBuilder recipe(Consumer<Consumer<IFinishedRecipe>> consumer) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
 		consumer.accept(holder::set);
-		return recipe((ShapedRecipeBuilder.Result) holder.get());
+		recipe = (ShapedRecipeBuilder.Result) holder.get();
+		return this;
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer) {

@@ -10,47 +10,33 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IStillRecipe;
 import forestry.factory.recipes.RecipeSerializers;
 
-public class FermenterRecipeBuilder {
+public class StillRecipeBuilder {
 
 	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
-	private Ingredient resource;
-	private int fermentationValue;
-	private float modifier;
-	private Fluid output;
-	private FluidStack fluidResource;
+	private int timePerUnit;
+	private FluidStack input;
+	private FluidStack output;
 
-	public FermenterRecipeBuilder setResource(Ingredient resource) {
-		this.resource = resource;
+	public StillRecipeBuilder setTimePerUnit(int timePerUnit) {
+		this.timePerUnit = timePerUnit;
 		return this;
 	}
 
-	public FermenterRecipeBuilder setFermentationValue(int fermentationValue) {
-		this.fermentationValue = fermentationValue;
+	public StillRecipeBuilder setInput(FluidStack input) {
+		this.input = input;
 		return this;
 	}
 
-	public FermenterRecipeBuilder setModifier(float modifier) {
-		this.modifier = modifier;
-		return this;
-	}
-
-	public FermenterRecipeBuilder setOutput(Fluid output) {
+	public StillRecipeBuilder setOutput(FluidStack output) {
 		this.output = output;
-		return this;
-	}
-
-	public FermenterRecipeBuilder setFluidResource(FluidStack fluidResource) {
-		this.fluidResource = fluidResource;
 		return this;
 	}
 
@@ -59,37 +45,31 @@ public class FermenterRecipeBuilder {
 				.withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id))
 				.withRewards(AdvancementRewards.Builder.recipe(id))
 				.withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, resource, fermentationValue, modifier, output, fluidResource, advancementBuilder, null));
+		consumer.accept(new Result(id, timePerUnit, input, output, advancementBuilder, null));
 	}
 
 	private static class Result implements IFinishedRecipe {
 		private final ResourceLocation id;
-		private final Ingredient resource;
-		private final int fermentationValue;
-		private final float modifier;
-		private final Fluid output;
-		private final FluidStack fluidResource;
+		private final int timePerUnit;
+		private final FluidStack input;
+		private final FluidStack output;
 		private final Advancement.Builder advancementBuilder;
 		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, int timePerUnit, FluidStack input, FluidStack output, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
 			this.id = id;
-			this.resource = resource;
-			this.fermentationValue = fermentationValue;
-			this.modifier = modifier;
+			this.timePerUnit = timePerUnit;
+			this.input = input;
 			this.output = output;
-			this.fluidResource = fluidResource;
 			this.advancementBuilder = advancementBuilder;
 			this.advancementId = advancementId;
 		}
 
 		@Override
 		public void serialize(JsonObject json) {
-			json.add("resource", resource.serialize());
-			json.addProperty("fermentationValue", fermentationValue);
-			json.addProperty("modifier", modifier);
-			json.addProperty("output", output.getRegistryName().toString());
-			json.add("fluidResource", RecipeSerializers.serializeFluid(fluidResource));
+			json.addProperty("time", timePerUnit);
+			json.add("input", RecipeSerializers.serializeFluid(input));
+			json.add("output", RecipeSerializers.serializeFluid(output));
 		}
 
 		@Override
@@ -99,7 +79,7 @@ public class FermenterRecipeBuilder {
 
 		@Override
 		public IRecipeSerializer<?> getSerializer() {
-			return IFermenterRecipe.Companion.SERIALIZER;
+			return IStillRecipe.Companion.SERIALIZER;
 		}
 
 		@Nullable

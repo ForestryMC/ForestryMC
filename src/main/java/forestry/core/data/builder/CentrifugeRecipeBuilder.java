@@ -22,7 +22,6 @@ import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -36,33 +35,14 @@ public class CentrifugeRecipeBuilder {
 	private ItemStack input;
 	private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
 
-	public CentrifugeRecipeBuilder processingTime(int processingTime) {
+	public CentrifugeRecipeBuilder setProcessingTime(int processingTime) {
 		this.processingTime = processingTime;
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder input(ItemStack input) {
+	public CentrifugeRecipeBuilder setInput(ItemStack input) {
 		this.input = input;
 		return this;
-	}
-
-	public CentrifugeRecipeBuilder input(IItemProvider provider) {
-		this.input = new ItemStack(provider.asItem());
-		return this;
-	}
-
-	public CentrifugeRecipeBuilder product(ICentrifugeRecipe.Product product) {
-		outputs.add(product);
-		return this;
-	}
-
-	public CentrifugeRecipeBuilder product(float probability, ItemStack stack) {
-		outputs.add(new ICentrifugeRecipe.Product(probability, stack));
-		return this;
-	}
-
-	public void build(Consumer<IFinishedRecipe> consumer) {
-		build(consumer, input.getItem().getRegistryName());
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
