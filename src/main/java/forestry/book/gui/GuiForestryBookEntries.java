@@ -27,6 +27,16 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 		this.category = category;
 	}
 
+	@Override
+	public void init() {
+		super.init();
+		int offset = entryIndex * 24;
+		addEntryButtons(offset, LEFT_PAGE_START_X, LEFT_PAGE_START_Y);
+		addEntryButtons(offset + 12, RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y);
+		window.init(guiLeft, guiTop);
+		window.clear();
+	}
+
 	private void addEntryButtons(int indexStart, int xStart, int yStart) {
 		List<IBookEntry> entries = new ArrayList<>(category.getEntries());
 		if (indexStart >= entries.size()) {
@@ -46,16 +56,6 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 	protected void initButtons(GuiButtonPage leftButton, GuiButtonPage rightButton, GuiButtonBack backButton) {
 		leftButton.visible = entryIndex > 0;
 		rightButton.visible = category.getEntries().size() > (entryIndex + 1) * 24;
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		int offset = entryIndex * 24;
-		addEntryButtons(offset, LEFT_PAGE_START_X, LEFT_PAGE_START_Y);
-		addEntryButtons(offset + 12, RIGHT_PAGE_START_X, RIGHT_PAGE_START_Y);
-		window.init(guiLeft, guiTop);
-		window.clear();
 	}
 
 	@Override

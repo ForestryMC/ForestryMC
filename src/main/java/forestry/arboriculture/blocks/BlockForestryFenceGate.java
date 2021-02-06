@@ -29,11 +29,23 @@ public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped
 	private final IWoodType woodType;
 
 	public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD).hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F).sound(SoundType.WOOD));
+		super(Block.Properties.create(Material.WOOD)
+			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+			.sound(SoundType.WOOD));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 
 		//		setCreativeTab(Tabs.tabArboriculture);	TODO creative tab
+	}
+
+	@Override
+	public boolean isFireproof() {
+		return fireproof;
+	}
+
+	@Override
+	public IWoodType getWoodType() {
+		return woodType;
 	}
 
 	@Override
@@ -55,15 +67,5 @@ public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped
 	@Override
 	public WoodBlockKind getBlockKind() {
 		return WoodBlockKind.FENCE_GATE;
-	}
-
-	@Override
-	public boolean isFireproof() {
-		return fireproof;
-	}
-
-	@Override
-	public IWoodType getWoodType() {
-		return woodType;
 	}
 }

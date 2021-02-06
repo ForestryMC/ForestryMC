@@ -47,6 +47,11 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	}
 
 	@Override
+	public IBeeHousingInventory getBeeInventory() {
+		return beeInventory;
+	}
+
+	@Override
 	public Iterable<IBeeModifier> getBeeModifiers() {
 		return Collections.singleton(beeModifier);
 	}
@@ -54,11 +59,6 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
-	}
-
-	@Override
-	public IBeeHousingInventory getBeeInventory() {
-		return beeInventory;
 	}
 
 	@Override

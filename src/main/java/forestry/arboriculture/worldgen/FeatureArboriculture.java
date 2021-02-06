@@ -40,15 +40,6 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		this.tree = tree;
 	}
 
-	@Nullable
-	private static GameProfile getOwner(IWorld world, BlockPos pos) {
-		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
-		if (tile == null) {
-			return null;
-		}
-		return tile.getOwnerHandler().getOwner();
-	}
-
 	@Override
 	public boolean place(IWorld world, Random rand, BlockPos pos, boolean forced) {
 		if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
@@ -78,6 +69,15 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		}
 
 		return false;
+	}
+
+	@Nullable
+	private static GameProfile getOwner(IWorld world, BlockPos pos) {
+		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
+		if (tile == null) {
+			return null;
+		}
+		return tile.getOwnerHandler().getOwner();
 	}
 
 	public void preGenerate(IWorld world, Random rand, BlockPos startPos) {

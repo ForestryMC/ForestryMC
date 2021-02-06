@@ -26,6 +26,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
+import forestry.core.utils.ClientUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
@@ -38,7 +39,7 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	}
 
 	public FabricatorElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.fabricatorManager.getRecipes(Minecraft.getInstance().world.getRecipeManager(), x)).flatMap(Collection::stream).toArray(IFabricatorRecipe[]::new));
+		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.fabricatorManager.getRecipes(ClientUtils.getRecipeManager(), x)).flatMap(Collection::stream).toArray(IFabricatorRecipe[]::new));
 	}
 
 	public FabricatorElement(int xPos, int yPos, IFabricatorRecipe[] recipes) {
@@ -47,21 +48,6 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 		drawable(0, 2, FABRICATOR_BACKGROUND);
 		add(selectedElement);
 		setIndex(0);
-	}
-
-	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
-		RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
-			Fluid fluid = smelting.getProduct().getFluid();
-			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<>());
-			}
-
-			smeltingInputs.get(fluid).add(smelting);
-		}
-
-		return smeltingInputs;
 	}
 
 	@Override
@@ -80,9 +66,9 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 			}
 		}
 
-		ItemStack plan = recipe.getPlan();
-		if (!plan.isEmpty()) {
-			selectedElement.item(91, 1, plan);
+		Ingredient plan = recipe.getPlan();
+		if (!plan.hasNoMatchingItems()) {
+			selectedElement.item(91, 1, plan.getMatchingStacks()[0]);
 		}
 
 		selectedElement.item(91, 39, recipe.getCraftingGridRecipe().getRecipeOutput());
@@ -96,5 +82,20 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 			selectedElement.add(new IngredientElement(1, 6, new CompoundIngredient(smeltingInput) {
 			}));
 		}
+	}
+
+	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+		RecipeManager recipeManager = ClientUtils.getRecipeManager();
+		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
+			Fluid fluid = smelting.getProduct().getFluid();
+			if (!smeltingInputs.containsKey(fluid)) {
+				smeltingInputs.put(fluid, new ArrayList<>());
+			}
+
+			smeltingInputs.get(fluid).add(smelting);
+		}
+
+		return smeltingInputs;
 	}
 }

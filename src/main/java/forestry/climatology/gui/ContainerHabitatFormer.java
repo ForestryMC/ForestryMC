@@ -39,14 +39,15 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	//Selection Request Ids
 	static final int REQUEST_ID_CIRCLE = 0;
 	static final int REQUEST_ID_RANGE = 1;
-	//Container Helper
-	private final ContainerLiquidTanksHelper<TileHabitatFormer> helper;
 	//Gui Update
 	private IClimateState previousState = ClimateStateHelper.INSTANCE.absent();
 	private IClimateState previousTarget = ClimateStateHelper.INSTANCE.absent();
 	private IClimateState previousDefault = ClimateStateHelper.INSTANCE.absent();
 	private int previousRange;
 	private boolean previousCircular;
+
+	//Container Helper
+	private final ContainerLiquidTanksHelper<TileHabitatFormer> helper;
 
 	public ContainerHabitatFormer(int windowId, PlayerInventory playerInventory, TileHabitatFormer tile) {
 		super(windowId, ClimatologyContainers.HABITAT_FORMER.containerType(), playerInventory, tile, 8, 151);
@@ -132,11 +133,6 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public IFluidTank getTank(int slot) {
-		return tile.getTankManager().getTank(slot);
-	}
-
-	@Override
 	public void addListener(IContainerListener crafting) {
 		super.addListener(crafting);
 		tile.getTankManager().containerAdded(this, crafting);
@@ -146,5 +142,10 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	public void onContainerClosed(PlayerEntity PlayerEntity) {
 		super.onContainerClosed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
+	}
+
+	@Override
+	public IFluidTank getTank(int slot) {
+		return tile.getTankManager().getTank(slot);
 	}
 }

@@ -143,12 +143,6 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 		return () -> genome;
 	}
 
-	/* BREEDING TRACKER */
-	@Override
-	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
-		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
-	}
-
 	@Override
 	public void registerLeafTickHandler(ILeafTickHandler handler) {
 		leafTickHandlers.add(handler);
@@ -232,62 +226,10 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 		return false;
 	}
 
+	/* BREEDING TRACKER */
 	@Override
-	public List<ITreekeepingMode> getTreekeepingModes() {
-		return this.treekeepingModes;
-	}
-
-	@Override
-	public ITreekeepingMode getTreekeepingMode(IWorld world) {
-		if (activeTreekeepingMode != null) {
-			return activeTreekeepingMode;
-		}
-
-		// No Treekeeping mode yet, item it.
-		IArboristTracker tracker = getBreedingTracker(world, null);
-		String modeName = tracker.getModeName();
-		ITreekeepingMode mode = getTreekeepingMode(modeName);
-		Preconditions.checkNotNull(mode);
-		setTreekeepingMode(world, mode);
-		Log.debug("Set Treekeeping mode for a world to " + mode.getName());
-
-		return activeTreekeepingMode;
-	}
-
-	@Override
-	public ITreekeepingMode getTreekeepingMode(String name) {
-		for (ITreekeepingMode mode : treekeepingModes) {
-			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
-				return mode;
-			}
-		}
-
-		Log.debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
-		return treekeepingModes.get(0);
-	}
-
-	@Override
-	public void registerTreekeepingMode(ITreekeepingMode mode) {
-		treekeepingModes.add(mode);
-	}
-
-	@Override
-	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
-		activeTreekeepingMode = mode;
-		getBreedingTracker(world, null).setModeName(mode.getName());
-	}
-
-	@Override
-	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
-		if (providersForFamilies.isEmpty()) {
-			AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
-				IFruitProvider fruitProvider = fruit.getProvider();
-				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
-				fruitProviders.add(fruitProvider);
-			});
-		}
-
-		return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());
+	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
 	@Override
@@ -311,6 +253,51 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
+	public List<ITreekeepingMode> getTreekeepingModes() {
+		return this.treekeepingModes;
+	}
+
+	@Override
+	public ITreekeepingMode getTreekeepingMode(IWorld world) {
+		if (activeTreekeepingMode != null) {
+			return activeTreekeepingMode;
+		}
+
+		// No Treekeeping mode yet, item it.
+		IArboristTracker tracker = getBreedingTracker(world, null);
+		String modeName = tracker.getModeName();
+		ITreekeepingMode mode = getTreekeepingMode(modeName);
+		Preconditions.checkNotNull(mode);
+		setTreekeepingMode(world, mode);
+		Log.debug("Set Treekeeping mode for a world to " + mode.getName());
+
+		return activeTreekeepingMode;
+	}
+
+	@Override
+	public void registerTreekeepingMode(ITreekeepingMode mode) {
+		treekeepingModes.add(mode);
+	}
+
+	@Override
+	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
+		activeTreekeepingMode = mode;
+		getBreedingTracker(world, null).setModeName(mode.getName());
+	}
+
+	@Override
+	public ITreekeepingMode getTreekeepingMode(String name) {
+		for (ITreekeepingMode mode : treekeepingModes) {
+			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
+				return mode;
+			}
+		}
+
+		Log.debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
+		return treekeepingModes.get(0);
+	}
+
+	@Override
 	public ICheckPollinatable createPollinatable(IIndividual individual) {
 		Preconditions.checkArgument(individual instanceof ITree, "individual must be a tree");
 		return new CheckPollinatableTree((ITree) individual);
@@ -326,5 +313,18 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily) {
+		if (providersForFamilies.isEmpty()) {
+			AlleleUtils.forEach(TreeChromosomes.FRUITS, (fruit) -> {
+				IFruitProvider fruitProvider = fruit.getProvider();
+				Collection<IFruitProvider> fruitProviders = providersForFamilies.computeIfAbsent(fruitProvider.getFamily(), k -> new ArrayList<>());
+				fruitProviders.add(fruitProvider);
+			});
+		}
+
+		return providersForFamilies.computeIfAbsent(fruitFamily, k -> new ArrayList<>());
 	}
 }

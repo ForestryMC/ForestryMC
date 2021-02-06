@@ -12,6 +12,7 @@ package forestry.factory.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 
@@ -67,9 +68,9 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 		return InventoryUtil.getStacks(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 	}
 
-	public boolean removeResources(NonNullList<ItemStack> stacks) {
+	public boolean removeResources(NonNullList<Ingredient> stacks) {
 		IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, stacks, null, false, false, true);
+		return InventoryUtil.consumeIngredients(inventory, stacks, null, false, false, true);
 	}
 
 	public boolean addRemnant(ItemStack remnant, boolean doAdd) {

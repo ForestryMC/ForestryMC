@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -104,9 +105,9 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 
 		IFabricatorRecipe recipe = recipeWrapper.getRecipe();
 
-		ItemStack plan = recipe.getPlan();
-		if (!plan.isEmpty()) {
-			guiItemStacks.set(planSlot, plan);
+		Ingredient plan = recipe.getPlan();
+		if (!plan.hasNoMatchingItems()) {
+			guiItemStacks.set(planSlot, plan.getMatchingStacks()[0]);
 		}
 
 		List<ItemStack> smeltingInput = new ArrayList<>();

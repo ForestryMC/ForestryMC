@@ -44,8 +44,11 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeavesFruit(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly()
-				.notSolid());
+		super(Block.Properties.create(Material.LEAVES)
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.tickRandomly()
+			.notSolid());
 		this.definition = definition;
 	}
 
@@ -72,15 +75,6 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		return ActionResultType.PASS;
 	}
 
-	public TreeDefinition getDefinition() {
-		return definition;
-	}
-
-	@Override
-	protected ITree getTree(IBlockReader world, BlockPos pos) {
-		return definition.createIndividual();
-	}
-
 	@Override
 	protected List<ItemStack> getLeafDrop(List<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier) {
 		ITree tree = getTree(world, pos);
@@ -105,6 +99,15 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 		}
 
 		return drops;
+	}
+
+	public TreeDefinition getDefinition() {
+		return definition;
+	}
+
+	@Override
+	protected ITree getTree(IBlockReader world, BlockPos pos) {
+		return definition.createIndividual();
 	}
 
 	/* RENDERING */

@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -29,7 +30,7 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	/**
 	 * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
 	 */
-	ItemStack getPlan();
+	Ingredient getPlan();
 
 	@Override
 	default IRecipeSerializer<?> getSerializer() {

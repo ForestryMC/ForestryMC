@@ -28,11 +28,6 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	}
 
 	@Override
-	protected boolean hasButtons() {
-		return false;
-	}
-
-	@Override
 	public void init() {
 		super.init();
 		int x = 0;
@@ -48,6 +43,11 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 				x = 0;
 			}
 		}
+	}
+
+	@Override
+	protected boolean hasButtons() {
+		return false;
 	}
 
 	@Override

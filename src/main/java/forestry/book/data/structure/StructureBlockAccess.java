@@ -1,4 +1,4 @@
-/*
+/*******************************************************************************
  * The MIT License (MIT)
  * Copyright (c) 2013-2014 Slime Knights (mDiyo, fuj1n, Sunstrike, progwml6, pillbox, alexbegt)
  *
@@ -9,7 +9,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Any alternate licenses are noted where appropriate.
- */
+ *******************************************************************************/
 package forestry.book.data.structure;
 
 import javax.annotation.Nullable;
@@ -46,6 +46,11 @@ public class StructureBlockAccess implements IBlockReader {
 	}
 
 	@Override
+	public int getLightValue(BlockPos pos) {
+		return 15 << 20 | 15 << 4;
+	}
+
+	@Override
 	public BlockState getBlockState(BlockPos pos) {
 		int x = pos.getX();
 		int y = pos.getY();
@@ -67,11 +72,6 @@ public class StructureBlockAccess implements IBlockReader {
 	@Override
 	public FluidState getFluidState(BlockPos blockPos) {
 		return null;
-	}
-
-	@Override
-	public int getLightValue(BlockPos pos) {
-		return 15 << 20 | 15 << 4;
 	}
 
 }

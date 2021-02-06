@@ -79,7 +79,12 @@ public class HabitatSelectionElement extends ElementGroup {
 	}
 
 	private enum EnumClimate {
-		ICY("habitats/snow", WorldGenRegistries.BIOME.getOrThrow(Biomes.SNOWY_TUNDRA)), COLD("habitats/taiga", WorldGenRegistries.BIOME.getOrThrow(Biomes.TAIGA)), HILLS("habitats/hills", WorldGenRegistries.BIOME.getOrThrow(Biomes.SWAMP)), NORMAL("habitats/plains", WorldGenRegistries.BIOME.getOrThrow(Biomes.PLAINS)), WARM("habitats/jungle", WorldGenRegistries.BIOME.getOrThrow(Biomes.JUNGLE)), HOT("habitats/desert", WorldGenRegistries.BIOME.getOrThrow(Biomes.DESERT));
+		ICY("habitats/snow", WorldGenRegistries.BIOME.getOrThrow(Biomes.SNOWY_TUNDRA)),
+		COLD("habitats/taiga", WorldGenRegistries.BIOME.getOrThrow(Biomes.TAIGA)),
+		HILLS("habitats/hills", WorldGenRegistries.BIOME.getOrThrow(Biomes.SWAMP)),
+		NORMAL("habitats/plains", WorldGenRegistries.BIOME.getOrThrow(Biomes.PLAINS)),
+		WARM("habitats/jungle", WorldGenRegistries.BIOME.getOrThrow(Biomes.JUNGLE)),
+		HOT("habitats/desert", WorldGenRegistries.BIOME.getOrThrow(Biomes.DESERT));
 		private final IClimateState climateState;
 		private final String spriteName;
 

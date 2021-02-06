@@ -82,13 +82,13 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
-		return new Vector3d(0, 0, 0);
+	public BlockPos getCoordinates() {
+		return BlockPos.ZERO;
 	}
 
 	@Override
-	public BlockPos getCoordinates() {
-		return BlockPos.ZERO;
+	public Vector3d getBeeFXCoordinates() {
+		return new Vector3d(0, 0, 0);
 	}
 
 	@Override

@@ -130,6 +130,20 @@ public class WoodAccess implements IWoodAccess {
 	}
 
 	@Override
+	public void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, BlockState blockState, ItemStack itemStack) {
+		if (woodBlockKind == WoodBlockKind.DOOR) {
+			fireproof = true;
+		}
+		Preconditions.checkArgument(!itemStack.isEmpty(), "Empty Itemstack");
+		WoodMap woodMap = woodMaps.get(woodBlockKind);
+		if (!registeredWoodTypes.contains(woodType)) {
+			registeredWoodTypes.add(woodType);
+		}
+		woodMap.getItem(fireproof).put(woodType, itemStack);
+		woodMap.getBlock(fireproof).put(woodType, blockState);
+	}
+
+	@Override
 	public ItemStack getStack(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof) {
 		if (woodBlockKind == WoodBlockKind.DOOR) {
 			fireproof = true;
@@ -160,20 +174,6 @@ public class WoodAccess implements IWoodAccess {
 	@Override
 	public List<IWoodType> getRegisteredWoodTypes() {
 		return registeredWoodTypes;
-	}
-
-	@Override
-	public void register(IWoodType woodType, WoodBlockKind woodBlockKind, boolean fireproof, BlockState blockState, ItemStack itemStack) {
-		if (woodBlockKind == WoodBlockKind.DOOR) {
-			fireproof = true;
-		}
-		Preconditions.checkArgument(!itemStack.isEmpty(), "Empty Itemstack");
-		WoodMap woodMap = woodMaps.get(woodBlockKind);
-		if (!registeredWoodTypes.contains(woodType)) {
-			registeredWoodTypes.add(woodType);
-		}
-		woodMap.getItem(fireproof).put(woodType, itemStack);
-		woodMap.getBlock(fireproof).put(woodType, blockState);
 	}
 
 	private static class WoodMap {

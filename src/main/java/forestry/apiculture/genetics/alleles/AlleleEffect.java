@@ -39,6 +39,31 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		super(Constants.MOD_ID, "effect", valueName, isDominant);
 	}
 
+	@Override
+	public IEffectData validateStorage(IEffectData storedData) {
+		return storedData;
+	}
+
+	@Override
+	public boolean isCombinable() {
+		return false;
+	}
+
+	@Override
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		return storedData;
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
+		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
+
+		ParticleRender.addBeeHiveFX(housing, genome, flowerPositions);
+		return storedData;
+	}
+
 	public static Vector3i getModifiedArea(IGenome genome, IBeeHousing housing) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 		float territoryModifier = beeModifier.getTerritoryModifier(genome, 1f);
@@ -77,30 +102,5 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 	public static <T extends Entity> List<T> getEntitiesInRange(IGenome genome, IBeeHousing housing, Class<T> entityClass) {
 		AxisAlignedBB boundingBox = getBounding(genome, housing);
 		return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
-	}
-
-	@Override
-	public boolean isCombinable() {
-		return false;
-	}
-
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		return storedData;
-	}
-
-	@Override
-	public IEffectData doEffect(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		return storedData;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		IBeekeepingLogic beekeepingLogic = housing.getBeekeepingLogic();
-		List<BlockPos> flowerPositions = beekeepingLogic.getFlowerPositions();
-
-		ParticleRender.addBeeHiveFX(housing, genome, flowerPositions);
-		return storedData;
 	}
 }

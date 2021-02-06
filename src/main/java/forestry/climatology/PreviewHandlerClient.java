@@ -58,12 +58,16 @@ public class PreviewHandlerClient {
 		tickHelper.onTick();
 		if (tickHelper.updateOnInterval(100)) {
 			ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
-			if (stack.isEmpty() || !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack) || !ItemHabitatScreen.isValid(stack, player.world) || !ItemHabitatScreen.isPreviewModeActive(stack)) {
+			if (stack.isEmpty()
+				|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
+				|| !ItemHabitatScreen.isValid(stack, player.world)
+				|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
 				renderer.clearPreview();
 				return;
 			}
 			BlockPos currentPos = ItemHabitatScreen.getPosition(stack);
-			if (currentPos == null || player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
+			if (currentPos == null
+				|| player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
 				renderer.clearPreview();
 				return;
 			}
@@ -72,7 +76,9 @@ public class PreviewHandlerClient {
 				renderer.clearPreview();
 				return;
 			}
-			transformer.ifPresent(t -> renderer.updatePreview(currentPos, t.getRange(), t.isCircular()));
+			transformer.ifPresent(t ->
+				renderer.updatePreview(currentPos, t.getRange(), t.isCircular())
+			);
 		}
 	}
 

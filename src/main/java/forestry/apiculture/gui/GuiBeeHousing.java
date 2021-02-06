@@ -26,6 +26,17 @@ import forestry.core.render.EnumTankLevel;
 public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> extends GuiAnalyzerProvider<C> {
 	private final IGuiBeeHousingDelegate delegate;
 
+	public enum Icon {
+		APIARY("apiary.png"),
+		BEE_HOUSE("alveary.png");
+
+		private final String path;
+
+		Icon(String path) {
+			this.path = path;
+		}
+	}
+
 	//TODO be hacky and use title to get the icon?
 	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
@@ -40,6 +51,20 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 			}
 		}
 		analyzer.init();
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+
+		bindTexture(textureFile);
+		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
+	}
+
+	@Override
+	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
+		Slot slot = container.getForestrySlot(1 + selectedSlot);
+		SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
 	}
 
 	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
@@ -66,30 +91,5 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	@Override
 	protected boolean hasErrors() {
 		return delegate.getErrorLogic().hasErrors();
-	}
-
-	@Override
-	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
-		Slot slot = container.getForestrySlot(1 + selectedSlot);
-		SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
-
-		bindTexture(textureFile);
-		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
-	}
-
-	public enum Icon {
-		APIARY("apiary.png"),
-		BEE_HOUSE("alveary.png");
-
-		private final String path;
-
-		Icon(String path) {
-			this.path = path;
-		}
 	}
 }

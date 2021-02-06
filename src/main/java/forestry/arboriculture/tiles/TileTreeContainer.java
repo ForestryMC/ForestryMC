@@ -55,12 +55,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		super(tileEntityTypeIn);
 	}
 
-	private static ITree getTree(String speciesUID) {
-		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
-		Preconditions.checkArgument(treeTemplate.length > 0, "There is no tree template for speciesUID %s", speciesUID);
-		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
-	}
-
 	/* SAVING & LOADING */
 	@Override
 	public void read(BlockState state, CompoundNBT compoundNBT) {
@@ -86,17 +80,6 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		return compoundNBT;
 	}
 
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
-	}
-
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
-		return NBTUtilForestry.writeStreamableToNbt(this, tag);
-	}
-
 	/* CLIENT INFORMATION */
 
 	@Override
@@ -116,12 +99,13 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		setTree(tree);
 	}
 
-	@Nullable
-	public ITree getTree() {
-		return this.containedTree;
+	private static ITree getTree(String speciesUID) {
+		IAllele[] treeTemplate = TreeManager.treeRoot.getTemplates().getTemplate(speciesUID);
+		Preconditions.checkArgument(treeTemplate.length > 0, "There is no tree template for speciesUID %s", speciesUID);
+		return TreeManager.treeRoot.templateAsIndividual(treeTemplate);
 	}
 
-	/* UPDATING */
+	/* CLIENT INFORMATION */
 
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
@@ -131,10 +115,17 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		}
 	}
 
+	@Nullable
+	public ITree getTree() {
+		return this.containedTree;
+	}
+
 	@Override
 	public IOwnerHandler getOwnerHandler() {
 		return ownerHandler;
 	}
+
+	/* UPDATING */
 
 	/**
 	 * Leaves and saplings will implement their logic here.
@@ -142,11 +133,22 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	public abstract void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand);
 
 	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+	}
+
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
 		handleUpdateTag(getBlockState(), nbt);
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
+		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override

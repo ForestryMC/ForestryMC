@@ -114,36 +114,6 @@ public enum HiveDescription implements IHiveDescription {
 		this.hiveType = hiveType;
 	}
 
-	protected static void postGenFlowers(ISeedReader world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
-		int plantedCount = 0;
-		for (int i = 0; i < 10; i++) {
-			int xOffset = rand.nextInt(8) - 4;
-			int zOffset = rand.nextInt(8) - 4;
-			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
-			if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
-				continue;
-			}
-
-			blockPos = groundGen.getPosForHive(world, blockPos.getX(), blockPos.getZ());
-			if (blockPos == null) {
-				continue;
-			}
-
-			BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
-			Block block = state.getBlock();
-			if (!block.getDefaultState().isValidPosition(world, blockPos)) {
-				continue;
-			}
-
-			world.setBlockState(blockPos, state, Constants.FLAG_BLOCK_SYNC);
-			plantedCount++;
-
-			if (plantedCount >= 3) {
-				break;
-			}
-		}
-	}
-
 	@Override
 	public IHiveGen getHiveGen() {
 		return hiveGen;
@@ -180,5 +150,35 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+	}
+
+	protected static void postGenFlowers(ISeedReader world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
+		int plantedCount = 0;
+		for (int i = 0; i < 10; i++) {
+			int xOffset = rand.nextInt(8) - 4;
+			int zOffset = rand.nextInt(8) - 4;
+			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
+			if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
+				continue;
+			}
+
+			blockPos = groundGen.getPosForHive(world, blockPos.getX(), blockPos.getZ());
+			if (blockPos == null) {
+				continue;
+			}
+
+			BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
+			Block block = state.getBlock();
+			if (!block.getDefaultState().isValidPosition(world, blockPos)) {
+				continue;
+			}
+
+			world.setBlockState(blockPos, state, Constants.FLAG_BLOCK_SYNC);
+			plantedCount++;
+
+			if (plantedCount >= 3) {
+				break;
+			}
+		}
 	}
 }

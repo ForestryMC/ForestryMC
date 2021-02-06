@@ -32,13 +32,13 @@ public enum EnumFruitFamily implements IFruitFamily {
 	}
 
 	@Override
-	public TranslationTextComponent getName() {
-		return new TranslationTextComponent("for.family." + uid);
+	public String getScientific() {
+		return this.scientific;
 	}
 
 	@Override
-	public String getScientific() {
-		return this.scientific;
+	public TranslationTextComponent getName() {
+		return new TranslationTextComponent("for.family." + uid);
 	}
 
 	@Override

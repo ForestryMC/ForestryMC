@@ -34,6 +34,21 @@ public class ItemSmoker extends ItemForestry {
 		super((new Item.Properties()).maxStackSize(1).group(ItemGroups.tabApiculture));
 	}
 
+	@Override
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
+			addSmoke(stack, worldIn, entityIn, 1);
+		}
+	}
+
+	@Override
+	public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+		super.onUsingTick(stack, player, count);
+		World world = player.world;
+		addSmoke(stack, world, player, (count % 5) + 1);
+	}
+
 	private static HandSide getHandSide(ItemStack stack, Entity entity) {
 		if (entity instanceof LivingEntity) {
 			LivingEntity LivingEntity = (LivingEntity) entity;
@@ -75,6 +90,12 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		TileUtil.actOnTile(context.getWorld(), context.getPos(), IHiveTile.class, IHiveTile::calmBees);
+		return super.onItemUseFirst(stack, context);
+	}
+
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		playerIn.setActiveHand(handIn);
 		ItemStack itemStack = playerIn.getHeldItem(handIn);
@@ -82,29 +103,8 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
-			addSmoke(stack, worldIn, entityIn, 1);
-		}
-	}
-
-	@Override
 	public int getUseDuration(ItemStack stack) {
 		return 32;
-	}
-
-	@Override
-	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-		TileUtil.actOnTile(context.getWorld(), context.getPos(), IHiveTile.class, IHiveTile::calmBees);
-		return super.onItemUseFirst(stack, context);
-	}
-
-	@Override
-	public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-		super.onUsingTick(stack, player, count);
-		World world = player.world;
-		addSmoke(stack, world, player, (count % 5) + 1);
 	}
 
 	@Override

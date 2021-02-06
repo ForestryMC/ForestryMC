@@ -73,14 +73,14 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 		return providerHelper.getAnalyzerSlot();
 	}
 
-	@Override
-	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		addSlot(new SlotLockable(playerInventory, slot, x, y));
-	}
-
 	/* Methods - Implement ContainerForestry */
 	@Override
 	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+		addSlot(new SlotLockable(playerInventory, slot, x, y));
+	}
+
+	@Override
+	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
 		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 

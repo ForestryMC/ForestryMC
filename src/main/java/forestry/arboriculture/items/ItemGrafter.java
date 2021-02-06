@@ -56,14 +56,17 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		return true;
+	public boolean canHarvestBlock(BlockState state) {
+		Block block = state.getBlock();
+		return block instanceof LeavesBlock ||
+			state.getMaterial() == Material.LEAVES ||
+			block.isIn(BlockTags.LEAVES) ||
+			super.canHarvestBlock(state);
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state) {
-		Block block = state.getBlock();
-		return block instanceof LeavesBlock || state.getMaterial() == Material.LEAVES || block.isIn(BlockTags.LEAVES) || super.canHarvestBlock(state);
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+		return true;
 	}
 
 	@Override

@@ -32,6 +32,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.ClientUtils;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	private final ItemInventorySolderingIron itemInventory;
@@ -62,7 +63,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		for (int i = 0; i < 4; i++) {
 			ITextComponent description;
 			ItemStack tube = itemInventory.getStackInSlot(i + 2);
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(Minecraft.getInstance().world.getRecipeManager(), layout, tube);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(ClientUtils.getRecipeManager(), layout, tube);
 			if (recipe == null) {
 				description = new StringTextComponent(">").append(new TranslationTextComponent("for.gui.noeffect")).appendString(")");
 			} else {

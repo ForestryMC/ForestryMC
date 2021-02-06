@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
@@ -30,14 +31,10 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 		super(IFabricatorRecipe.TYPE);
 	}
 
-	public Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, ItemStack plan, IInventory resources) {
+	public Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
 		for (IFabricatorRecipe recipe : getRecipes(manager)) {
-			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
-				continue;
-			}
-
-			Ingredient[][] result = RecipeUtil.matches(recipe.getCraftingGridRecipe(), resources);
-			if (result != null) {
+			if (fluidStack.containsFluid(recipe.getLiquid()) && recipe.getPlan().test(plan) && recipe
+					.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)) {
 				return Optional.of(recipe);
 			}
 		}
@@ -47,7 +44,7 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 
 	public boolean isPlan(RecipeManager manager, ItemStack plan) {
 		for (IFabricatorRecipe recipe : getRecipes(manager)) {
-			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
+			if (recipe.getPlan().test(plan)) {
 				return true;
 			}
 		}

@@ -68,53 +68,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		this.type = type;
 	}
 
-	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
-		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
-		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
-			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-		}
-
-		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), worldIn, pos, true);
-		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
-			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-		}
-
-		if (!worldIn.isRemote) {
-			pollinatable.mateWith(tree);
-
-			BlockState blockState = worldIn.getBlockState(pos);
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
-			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
-
-			if (!player.isCreative()) {
-				itemStackIn.shrink(1);
-			}
-		}
-
-		return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
-	}
-
-	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
-		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
-		BlockState hitBlock = worldIn.getBlockState(pos);
-		if (!hitBlock.isReplaceable(context)) {
-			if (!worldIn.isAirBlock(pos.up())) {
-				return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-			}
-			pos = pos.up();
-		}
-
-		if (tree.canStay(worldIn, pos)) {
-			if (TreeManager.treeRoot.plantSapling(worldIn, tree, player.getGameProfile(), pos)) {
-				if (!player.isCreative()) {
-					itemStackIn.shrink(1);
-				}
-				return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
-			}
-		}
-		return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
-	}
-
 	@Override
 	protected IAlleleTreeSpecies getSpecies(ItemStack itemStack) {
 		return GeneticHelper.getOrganism(itemStack).getAllele(TreeChromosomes.SPECIES, true);
@@ -124,6 +77,27 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return GeneticHelper.createOrganism(stack, type, TreeHelper.getRoot().getDefinition());
+	}
+
+	@Override
+	public ITextComponent getDisplayName(ItemStack itemStack) {
+		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
+			return new StringTextComponent("Unknown");
+		}
+		IAlleleForestrySpecies species = getSpecies(itemStack);
+
+		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
+		return ResourceUtil.tryTranslate(customTreeKey, () -> {
+			ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
+			return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
+		});
+	}
+
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.isInGroup(tab)) {
+			addCreativeItems(subItems, true);
+		}
 	}
 
 	public void addCreativeItems(NonNullList<ItemStack> subItems, boolean hideSecrets) {
@@ -195,25 +169,51 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		return new ActionResult<>(ActionResultType.PASS, itemStack);
 	}
 
-	@Override
-	public ITextComponent getDisplayName(ItemStack itemStack) {
-		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
-			return new StringTextComponent("Unknown");
+	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
+		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
+		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
+			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 		}
-		IAlleleForestrySpecies species = getSpecies(itemStack);
 
-		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
-		return ResourceUtil.tryTranslate(customTreeKey, () -> {
-			ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
-			return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
-		});
+		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), worldIn, pos, true);
+		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
+			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+		}
+
+		if (!worldIn.isRemote) {
+			pollinatable.mateWith(tree);
+
+			BlockState blockState = worldIn.getBlockState(pos);
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
+			NetworkUtil.sendNetworkPacket(packet, pos, worldIn);
+
+			if (!player.isCreative()) {
+				itemStackIn.shrink(1);
+			}
+		}
+
+		return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 	}
 
-	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
-			addCreativeItems(subItems, true);
+	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
+		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
+		BlockState hitBlock = worldIn.getBlockState(pos);
+		if (!hitBlock.isReplaceable(context)) {
+			if (!worldIn.isAirBlock(pos.up())) {
+				return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+			}
+			pos = pos.up();
 		}
+
+		if (tree.canStay(worldIn, pos)) {
+			if (TreeManager.treeRoot.plantSapling(worldIn, tree, player.getGameProfile(), pos)) {
+				if (!player.isCreative()) {
+					itemStackIn.shrink(1);
+				}
+				return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+			}
+		}
+		return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 	}
 
 	@Override

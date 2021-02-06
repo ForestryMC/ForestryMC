@@ -17,10 +17,6 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")
 public class ModuleCharcoal extends BlankForestryModule {
 
-	public static ItemGroup getGroup() {
-		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
-	}
-
 	@Override
 	public void setupAPI() {
 		TreeManager.charcoalManager = new CharcoalManager();
@@ -37,5 +33,9 @@ public class ModuleCharcoal extends BlankForestryModule {
 			manager.registerWall(Blocks.GRAVEL, 1);
 			manager.registerWall(Blocks.NETHERRACK, 3);
 		}
+	}
+
+	public static ItemGroup getGroup() {
+		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
 	}
 }

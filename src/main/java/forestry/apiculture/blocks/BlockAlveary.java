@@ -61,8 +61,7 @@ public class BlockAlveary extends BlockStructure {
 	private final BlockAlvearyType type;
 
 	private enum State implements IStringSerializable {
-		ON,
-		OFF;
+		ON, OFF;
 
 		@Override
 		public String getString() {
@@ -71,10 +70,7 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	private enum AlvearyPlainType implements IStringSerializable {
-		NORMAL,
-		ENTRANCE,
-		ENTRANCE_LEFT,
-		ENTRANCE_RIGHT;
+		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
 
 		@Override
 		public String getString() {

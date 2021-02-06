@@ -84,8 +84,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	public static boolean isValid(ItemStack stack, @Nullable World world) {
 		BlockPos pos = getPosition(stack);
 		int dimension = getDimension(stack);
-		if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */
-				!world.isBlockLoaded(pos)) {
+		if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */!world.isBlockLoaded(pos)) {
 			return false;
 		} else {
 			return TileUtil.getTile(world, pos, IClimateHousing.class) != null;

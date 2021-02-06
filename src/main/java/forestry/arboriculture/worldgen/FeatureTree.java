@@ -41,13 +41,6 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	}
 
 	@Override
-	public final void preGenerate(IWorld world, Random rand, BlockPos startPos) {
-		super.preGenerate(world, rand, startPos);
-		height = determineHeight(world, rand, baseHeight, heightVariation);
-		girth = tree.getGirth();
-	}
-
-	@Override
 	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 		return Collections.emptySet();
@@ -73,6 +66,13 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	@Nullable
 	public BlockPos getValidGrowthPos(IWorld world, BlockPos pos) {
 		return tree.canGrow(world, pos, girth, height);
+	}
+
+	@Override
+	public final void preGenerate(IWorld world, Random rand, BlockPos startPos) {
+		super.preGenerate(world, rand, startPos);
+		height = determineHeight(world, rand, baseHeight, heightVariation);
+		girth = tree.getGirth();
 	}
 
 	protected int modifyByHeight(IWorld world, int val, int min, int max) {

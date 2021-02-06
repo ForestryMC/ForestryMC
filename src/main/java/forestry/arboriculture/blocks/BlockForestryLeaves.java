@@ -54,8 +54,11 @@ import forestry.core.utils.NetworkUtil;
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
 	public BlockForestryLeaves() {
-		super(Block.Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).tickRandomly()
-				.notSolid());
+		super(Block.Properties.create(Material.LEAVES)
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.tickRandomly()
+			.notSolid());
 	}
 
 	@Override
@@ -66,6 +69,29 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 		}
 
 		return null;
+	}
+
+	@Override
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+		super.tick(state, world, pos, rand);
+
+		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
+
+		// check leaves tile because they might have decayed
+		if (tileLeaves != null && !tileLeaves.isRemoved() && rand.nextFloat() <= 0.1) {
+			tileLeaves.onBlockTick(world, pos, state, rand);
+		}
+	}
+
+	/* TILE ENTITY */
+	@Override
+	public boolean hasTileEntity(BlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+		return new TileLeaves();
 	}
 
 	@Override
@@ -98,29 +124,6 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-		super.tick(state, world, pos, rand);
-
-		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
-
-		// check leaves tile because they might have decayed
-		if (tileLeaves != null && !tileLeaves.isRemoved() && rand.nextFloat() <= 0.1) {
-			tileLeaves.onBlockTick(world, pos, state, rand);
-		}
-	}
-
-	/* TILE ENTITY */
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileLeaves();
-	}
-
-	@Override
 	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
@@ -137,8 +140,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					return ActionResultType.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
-				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes()
-						.createStack(caterpillar, EnumFlutterType.CATERPILLAR);
+				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
 				return ActionResultType.SUCCESS;

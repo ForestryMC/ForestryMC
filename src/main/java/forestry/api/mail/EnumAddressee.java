@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Locale;
 
 public enum EnumAddressee {
-	PLAYER,	TRADER;
+	PLAYER, TRADER;
 
 	@Nullable
 	public static EnumAddressee fromString(String ident) {

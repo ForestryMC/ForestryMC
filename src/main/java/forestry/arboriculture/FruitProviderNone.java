@@ -38,6 +38,16 @@ import forestry.core.config.Constants;
 
 public class FruitProviderNone implements IFruitProvider {
 
+	private static class OverlayType {
+		public final String ident;
+		public final ResourceLocation sprite;
+
+		public OverlayType(String ident) {
+			this.ident = ident;
+			this.sprite = new ResourceLocation(Constants.MOD_ID, "block/leaves/fruits." + ident);
+		}
+	}
+
 	private static final HashMap<String, OverlayType> overlayTypes = new HashMap<>();
 
 	static {
@@ -67,6 +77,21 @@ public class FruitProviderNone implements IFruitProvider {
 	@Override
 	public IFruitFamily getFamily() {
 		return family;
+	}
+
+	@Override
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+		return NonNullList.create();
+	}
+
+	@Override
+	public boolean requiresFruitBlocks() {
+		return false;
+	}
+
+	@Override
+	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
+		return false;
 	}
 
 	@Override
@@ -100,24 +125,8 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
-		return NonNullList.create();
-	}
-
-	@Override
 	public ITextComponent getDescription() {
 		return new TranslationTextComponent(unlocalizedDescription);
-	}
-
-	@Nullable
-	@Override
-	public String getModelName() {
-		return null;
-	}
-
-	@Override
-	public String getModID() {
-		return Constants.MOD_ID;
 	}
 
 	@Override
@@ -139,16 +148,6 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean requiresFruitBlocks() {
-		return false;
-	}
-
-	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
-		return false;
-	}
-
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 		if (overlay != null) {
@@ -156,13 +155,14 @@ public class FruitProviderNone implements IFruitProvider {
 		}
 	}
 
-	private static class OverlayType {
-		public final String ident;
-		public final ResourceLocation sprite;
+	@Nullable
+	@Override
+	public String getModelName() {
+		return null;
+	}
 
-		public OverlayType(String ident) {
-			this.ident = ident;
-			this.sprite = new ResourceLocation(Constants.MOD_ID, "block/leaves/fruits." + ident);
-		}
+	@Override
+	public String getModID() {
+		return Constants.MOD_ID;
 	}
 }

@@ -1,6 +1,7 @@
 package forestry.factory.recipes.jei.squeezer;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import forestry.api.recipes.ISqueezerRecipe;
@@ -15,8 +16,8 @@ public class SqueezerRecipeWrapper extends AbstractSqueezerRecipeWrapper<ISqueez
 
 	@Override
 	public void setIngredients(IIngredients ingredients) {
-		NonNullList<ItemStack> resources = getRecipe().getResources();
-		ingredients.setInputs(VanillaTypes.ITEM, resources);
+		NonNullList<Ingredient> resources = getRecipe().getResources();
+		ingredients.setInputIngredients(resources);
 
 		ItemStack remnants = getRecipe().getRemnants();
 		if (!remnants.isEmpty()) {

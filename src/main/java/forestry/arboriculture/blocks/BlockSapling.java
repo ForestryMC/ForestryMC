@@ -49,6 +49,23 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
 	}
 
+	@Override
+	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+		return SHAPE;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+		return new TileSapling();
+	}
+
+	/* RENDERING */
+	/*@Override
+	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
+		return false;
+	}*/
+
 	/* PLANTING */
 	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
 		TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
@@ -59,22 +76,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		ITree tree = tile.getTree();
 		return tree != null && tree.canStay(world, pos);
 	}
-
-	private static void dropAsSapling(World world, BlockPos pos) {
-		if (world.isRemote) {
-			return;
-		}
-		ItemStack drop = getDrop(world, pos);
-		if (!drop.isEmpty()) {
-			ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-		}
-	}
-
-	/* RENDERING */
-	/*@Override
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-		return false;
-	}*/
 
 	private static ItemStack getDrop(IBlockReader world, BlockPos pos) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
@@ -87,12 +88,6 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		return ItemStack.EMPTY;
 	}
 
-	@Nullable
-	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileSapling();
-	}
-
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
@@ -103,17 +98,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-		ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.BLOCK_ENTITY).getPos());
-		if (!drop.isEmpty()) {
-			return Collections.singletonList(drop);
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
+		if (sapling == null || sapling.getTree() == null) {
+			return ItemStack.EMPTY;
 		}
-		return Collections.emptyList();
-	}
-
-	@Override
-	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
-		return SHAPE;
+		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
 	@Override
@@ -127,18 +117,23 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
 
-	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
-		if (sapling == null || sapling.getTree() == null) {
-			return ItemStack.EMPTY;
+	private static void dropAsSapling(World world, BlockPos pos) {
+		if (world.isRemote) {
+			return;
 		}
-		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
+		ItemStack drop = getDrop(world, pos);
+		if (!drop.isEmpty()) {
+			ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+		}
 	}
 
 	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-		return true;
+	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
+		ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.BLOCK_ENTITY).getPos());
+		if (!drop.isEmpty()) {
+			return Collections.singletonList(drop);
+		}
+		return Collections.emptyList();
 	}
 
 	/* GROWNING */
@@ -149,6 +144,11 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		}
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		return saplingTile == null || saplingTile.canAcceptBoneMeal(rand);
+	}
+
+	@Override
+	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+		return true;
 	}
 
 	@Override

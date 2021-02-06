@@ -43,11 +43,6 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-	}
-
-	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip toolTip = new ToolTip();
 		toolTip.add(category.getLocalizedName());
@@ -57,6 +52,11 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 	@Override
 	public boolean isToolTipVisible() {
 		return true;
+	}
+
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY) {
+		return mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 	}
 
 	@Override

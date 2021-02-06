@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
@@ -35,12 +36,12 @@ import forestry.core.utils.ItemStackUtil;
 public class SqueezerRecipe implements ISqueezerRecipe {
 	private final ResourceLocation id;
 	private final int processingTime;
-	private final NonNullList<ItemStack> resources;
+	private final NonNullList<Ingredient> resources;
 	private final FluidStack fluidOutput;
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerRecipe(ResourceLocation id, int processingTime, NonNullList<ItemStack> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
+	public SqueezerRecipe(ResourceLocation id, int processingTime, NonNullList<Ingredient> resources, FluidStack fluidOutput, ItemStack remnants, float remnantsChance) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resources);
 		Preconditions.checkArgument(!resources.isEmpty());
@@ -56,7 +57,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getResources() {
+	public NonNullList<Ingredient> getResources() {
 		return resources;
 	}
 
@@ -106,7 +107,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		@Override
 		public SqueezerRecipe read(ResourceLocation recipeId, JsonObject json) {
 			int processingTime = JSONUtils.getInt(json, "time");
-			NonNullList<ItemStack> resources = NonNullList.create();
+			NonNullList<Ingredient> resources = NonNullList.create();
 			FluidStack fluidOutput = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "output"));
 
 			ItemStack remnants = ItemStack.EMPTY;
@@ -123,7 +124,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 
 			if (json.get("resources") != null) {
 				for (JsonElement element : JSONUtils.getJsonArray(json, "resources")) {
-					resources.add(ShapedRecipe.deserializeItem(element.getAsJsonObject()));
+					resources.add(Ingredient.deserialize(element));
 				}
 			}
 
@@ -133,7 +134,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		@Override
 		public SqueezerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
 			int processingTime = buffer.readVarInt();
-			NonNullList<ItemStack> resources = RecipeSerializers.read(buffer, PacketBuffer::readItemStack);
+			NonNullList<Ingredient> resources = RecipeSerializers.read(buffer, Ingredient::read);
 			FluidStack fluidOutput = FluidStack.readFromPacket(buffer);
 			ItemStack remnants = buffer.readItemStack();
 			float remnantsChance = buffer.readFloat();
@@ -144,7 +145,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		@Override
 		public void write(PacketBuffer buffer, SqueezerRecipe recipe) {
 			buffer.writeVarInt(recipe.processingTime);
-			RecipeSerializers.write(buffer, recipe.resources, PacketBuffer::writeItemStack);
+			RecipeSerializers.write(buffer, recipe.resources, (packetBuffer, ingredient) -> ingredient.write(packetBuffer));
 			recipe.fluidOutput.writeToPacket(buffer);
 			buffer.writeItemStack(recipe.remnants);
 			buffer.writeFloat(recipe.remnantsChance);

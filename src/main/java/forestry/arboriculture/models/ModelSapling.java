@@ -50,7 +50,8 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	private final Map<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> modelsBySpecies;
 
 	public ModelSapling() {
-		this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES).collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
+		this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+			.collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
 	}
 
 	@Override
@@ -70,13 +71,15 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		return new Baked(itemModels.build(), blockModels.build());
 	}
 
-	@Override
-	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-		return getDependencies().stream().flatMap(location -> modelGetter.apply(location).getTextures(modelGetter, missingTextureErrors).stream()).collect(Collectors.toSet());
-	}
-
 	public Collection<ResourceLocation> getDependencies() {
 		return modelsBySpecies.values().stream().flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
+	}
+
+	@Override
+	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		return getDependencies().stream()
+			.flatMap(location -> modelGetter.apply(location).getTextures(modelGetter, missingTextureErrors).stream())
+			.collect(Collectors.toSet());
 	}
 
 	public static class Baked implements IBakedModel {

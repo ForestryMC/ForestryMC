@@ -42,6 +42,29 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		super("radioactive", true, 40, false, true);
 	}
 
+	@Override
+	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
+		harmEntities(genome, housing);
+
+		return destroyEnvironment(genome, storedData, housing);
+	}
+
+	private void harmEntities(IGenome genome, IBeeHousing housing) {
+		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
+		for (LivingEntity entity : entities) {
+			int damage = 8;
+
+			// Entities are not attacked if they wear a full set of apiarist's armor.
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
+			damage -= count * 2;
+			if (damage <= 0) {
+				continue;
+			}
+
+			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
+		}
+	}
+
 	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
 		Random rand = world.rand;
@@ -89,28 +112,5 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 		}
 
 		return storedData;
-	}
-
-	@Override
-	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		harmEntities(genome, housing);
-
-		return destroyEnvironment(genome, storedData, housing);
-	}
-
-	private void harmEntities(IGenome genome, IBeeHousing housing) {
-		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
-		for (LivingEntity entity : entities) {
-			int damage = 8;
-
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
-			damage -= count * 2;
-			if (damage <= 0) {
-				continue;
-			}
-
-			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
-		}
 	}
 }

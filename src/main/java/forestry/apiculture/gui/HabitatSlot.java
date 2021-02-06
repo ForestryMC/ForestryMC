@@ -43,6 +43,13 @@ public class HabitatSlot extends Widget {
 		this.iconIndex = "habitats/" + name.toLowerCase(Locale.ENGLISH);
 	}
 
+	@Override
+	public ToolTip getToolTip(int mouseX, int mouseY) {
+		ToolTip tooltip = new ToolTip();
+		tooltip.add(new TranslationTextComponent("forestry.habitat." + name));
+		return tooltip;
+	}
+
 	@OnlyIn(Dist.CLIENT)
 	public TextureAtlasSprite getIcon() {
 		return TextureManagerForestry.getInstance().getDefault(iconIndex);
@@ -62,12 +69,5 @@ public class HabitatSlot extends Widget {
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
-	}
-
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TranslationTextComponent("forestry.habitat." + name));
-		return tooltip;
 	}
 }

@@ -23,12 +23,14 @@ public enum ArboricultureFilterRuleType implements IFilterRuleType {
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent();
 		}
-	}, SAPLING {
+	},
+	SAPLING {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumGermlingType.SAPLING;
 		}
-	}, POLLEN {
+	},
+	POLLEN {
 		@Override
 		public boolean isValid(ItemStack itemStack, IFilterData data) {
 			return data.isPresent() && data.getType() == EnumGermlingType.POLLEN;
@@ -56,11 +58,6 @@ public enum ArboricultureFilterRuleType implements IFilterRuleType {
 		return false;
 	}
 
-	@Override
-	public String getUID() {
-		return uid;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public TextureAtlasSprite getSprite() {
@@ -76,5 +73,10 @@ public enum ArboricultureFilterRuleType implements IFilterRuleType {
 	@Override
 	public String getRootUID() {
 		return TreeManager.treeRoot.getUID();
+	}
+
+	@Override
+	public String getUID() {
+		return uid;
 	}
 }

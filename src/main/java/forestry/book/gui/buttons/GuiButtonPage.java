@@ -41,11 +41,6 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 		}
 	}
 
-	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return false;
-	}
-
 	@Nullable
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
@@ -54,6 +49,11 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 
 	@Override
 	public boolean isToolTipVisible() {
+		return false;
+	}
+
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY) {
 		return false;
 	}
 }

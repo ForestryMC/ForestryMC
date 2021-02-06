@@ -37,15 +37,15 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit, ISet
 		return this.provider;
 	}
 
+	@Override
+	public ITextComponent getDisplayName() {
+		return getProvider().getDescription();
+	}
+
 	@Nullable
 	@Override
 	public String getModelName() {
 		return getProvider().getModelName();
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return getProvider().getDescription();
 	}
 
 	@Override

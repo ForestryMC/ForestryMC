@@ -91,7 +91,8 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
-		return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) && rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
+		return queen.getGeneration() > 96 + rand.nextInt(6) + rand.nextInt(6) &&
+				rand.nextFloat() < 0.02f * beeModifier.getGeneticDecay(queen.getGenome(), 1f);
 	}
 
 	@Override

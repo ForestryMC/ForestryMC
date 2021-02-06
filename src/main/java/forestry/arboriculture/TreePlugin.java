@@ -84,76 +84,83 @@ public class TreePlugin implements IGeneticPlugin {
 	public void createRoot(IRootManager rootManager, IGeneticFactory geneticFactory) {
 		//TODO tags?
 		IIndividualRootBuilder<ITree> rootBuilder = rootManager.createRoot(TreeRoot.UID);
-		rootBuilder.setRootFactory(TreeRoot::new).setSpeciesType(TreeChromosomes.SPECIES).addListener(ComponentKeys.TYPES, (IOrganismTypes<ITree> builder) -> {
-			builder.registerType(EnumGermlingType.SAPLING, ArboricultureItems.SAPLING::stack);
-			builder.registerType(EnumGermlingType.POLLEN, ArboricultureItems.POLLEN_FERTILE::stack);
-		}).addComponent(ComponentKeys.TRANSLATORS).addComponent(ComponentKeys.MUTATIONS).addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new).addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<ITree> builder) -> {
-			builder.setResearchSuitability(new ItemStack(Blocks.OAK_SAPLING), 1.0f);
-			builder.addPlugin((species, itemstack) -> {
-				if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies)) {
-					return -1F;
-				}
-				IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) species;
+		rootBuilder
+			.setRootFactory(TreeRoot::new)
+			.setSpeciesType(TreeChromosomes.SPECIES)
+			.addListener(ComponentKeys.TYPES, (IOrganismTypes<ITree> builder) -> {
+				builder.registerType(EnumGermlingType.SAPLING, ArboricultureItems.SAPLING::stack);
+				builder.registerType(EnumGermlingType.POLLEN, ArboricultureItems.POLLEN_FERTILE::stack);
+			})
+			.addComponent(ComponentKeys.TRANSLATORS)
+			.addComponent(ComponentKeys.MUTATIONS)
+			.addComponent(ForestryComponentKeys.RESEARCH, ResearchHandler::new)
+			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<ITree> builder) -> {
+				builder.setResearchSuitability(new ItemStack(Blocks.OAK_SAPLING), 1.0f);
+				builder.addPlugin((species, itemstack) -> {
+					if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies)) {
+						return -1F;
+					}
+					IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) species;
 
-				Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
-				for (IFruitFamily fruitFamily : suitableFruit) {
-					Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
-					for (IFruitProvider fruitProvider : fruitProviders) {
-						IProductList products = fruitProvider.getProducts();
-						for (ItemStack stack : products.getPossibleStacks()) {
-							if (stack.isItemEqual(itemstack)) {
-								return 1.0f;
+					Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
+					for (IFruitFamily fruitFamily : suitableFruit) {
+						Collection<IFruitProvider> fruitProviders = TreeManager.treeRoot.getFruitProvidersForFruitFamily(fruitFamily);
+						for (IFruitProvider fruitProvider : fruitProviders) {
+							IProductList products = fruitProvider.getProducts();
+							for (ItemStack stack : products.getPossibleStacks()) {
+								if (stack.isItemEqual(itemstack)) {
+									return 1.0f;
+								}
 							}
-						}
-						IProductList specialtyChances = fruitProvider.getSpecialty();
-						for (ItemStack stack : specialtyChances.getPossibleStacks()) {
-							if (stack.isItemEqual(itemstack)) {
-								return 1.0f;
+							IProductList specialtyChances = fruitProvider.getSpecialty();
+							for (ItemStack stack : specialtyChances.getPossibleStacks()) {
+								if (stack.isItemEqual(itemstack)) {
+									return 1.0f;
+								}
 							}
 						}
 					}
-				}
-				return -1F;
-			});
-		}).addListener(ComponentKeys.TRANSLATORS, (IIndividualTranslator<ITree> builder) -> {
-			Function<TreeDefinition, IBlockTranslator<ITree>> leavesFactory = (definition) -> (BlockState blockState) -> {
-				if (blockState.get(LeavesBlock.PERSISTENT)) {
-					return null;
-				}
-				return definition.createIndividual();
-			};
-			Function<TreeDefinition, IItemTranslator<ITree>> saplingFactory = definition -> new IItemTranslator<ITree>() {
-				@Override
-				public ITree getIndividualFromObject(ItemStack itemStack) {
+					return -1F;
+				});
+			}).addListener(ComponentKeys.TRANSLATORS, (IIndividualTranslator<ITree> builder) -> {
+				Function<TreeDefinition, IBlockTranslator<ITree>> leavesFactory = (definition) -> (BlockState blockState) -> {
+					if (blockState.get(LeavesBlock.PERSISTENT)) {
+						return null;
+					}
 					return definition.createIndividual();
+				};
+				Function<TreeDefinition, IItemTranslator<ITree>> saplingFactory = definition -> new IItemTranslator<ITree>() {
+					@Override
+					public ITree getIndividualFromObject(ItemStack itemStack) {
+						return definition.createIndividual();
+					}
+
+					@Override
+					public ItemStack getGeneticEquivalent(ItemStack itemStack) {
+						return definition.getMemberStack(EnumGermlingType.SAPLING);
+					}
+				};
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.Oak), Blocks.OAK_LEAVES);
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.Birch), Blocks.BIRCH_LEAVES);
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.Spruce), Blocks.SPRUCE_LEAVES);
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.Jungle), Blocks.JUNGLE_LEAVES);
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.Acacia), Blocks.ACACIA_LEAVES);
+				builder.registerTranslator(leavesFactory.apply(TreeDefinition.DarkOak), Blocks.DARK_OAK_LEAVES);
+
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.Oak), Items.OAK_SAPLING);
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.Birch), Items.BIRCH_LEAVES);
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.Spruce), Items.SPRUCE_LEAVES);
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.Jungle), Items.JUNGLE_LEAVES);
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.Acacia), Items.ACACIA_LEAVES);
+				builder.registerTranslator(saplingFactory.apply(TreeDefinition.DarkOak), Items.DARK_OAK_LEAVES);
+
+				for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT.getFeatureByType().entrySet()) {
+					builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
 				}
-
-				@Override
-				public ItemStack getGeneticEquivalent(ItemStack itemStack) {
-					return definition.getMemberStack(EnumGermlingType.SAPLING);
+				for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
+					builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
 				}
-			};
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.Oak), Blocks.OAK_LEAVES);
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.Birch), Blocks.BIRCH_LEAVES);
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.Spruce), Blocks.SPRUCE_LEAVES);
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.Jungle), Blocks.JUNGLE_LEAVES);
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.Acacia), Blocks.ACACIA_LEAVES);
-			builder.registerTranslator(leavesFactory.apply(TreeDefinition.DarkOak), Blocks.DARK_OAK_LEAVES);
-
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.Oak), Items.OAK_SAPLING);
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.Birch), Items.BIRCH_LEAVES);
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.Spruce), Items.SPRUCE_LEAVES);
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.Jungle), Items.JUNGLE_LEAVES);
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.Acacia), Items.ACACIA_LEAVES);
-			builder.registerTranslator(saplingFactory.apply(TreeDefinition.DarkOak), Items.DARK_OAK_LEAVES);
-
-			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeaves, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT.getFeatureByType().entrySet()) {
-				builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
-			}
-			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
-				builder.registerTranslator(blockState -> leaves.getKey().createIndividual(), leaves.getValue().block());
-			}
-		}).setDefaultTemplate(TreeHelper::createDefaultTemplate);
+			}).setDefaultTemplate(TreeHelper::createDefaultTemplate);
 	}
 
 	@Override

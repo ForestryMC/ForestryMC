@@ -34,22 +34,6 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		super("fertile", false, 6, true, false);
 	}
 
-	private static int getRandomOffset(Random random, int centrePos, int offset) {
-		return centrePos + random.nextInt(offset) - offset / 2;
-	}
-
-	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
-		for (int y = maxY; y >= minY; --y) {
-			BlockState state = world.getBlockState(new BlockPos(x, y, z));
-			Block block = state.getBlock();
-			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
@@ -73,6 +57,22 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		}
 
 		return storedData;
+	}
+
+	private static int getRandomOffset(Random random, int centrePos, int offset) {
+		return centrePos + random.nextInt(offset) - offset / 2;
+	}
+
+	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
+		for (int y = maxY; y >= minY; --y) {
+			BlockState state = world.getBlockState(new BlockPos(x, y, z));
+			Block block = state.getBlock();
+			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+				world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

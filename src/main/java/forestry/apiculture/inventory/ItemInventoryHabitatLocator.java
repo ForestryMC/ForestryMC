@@ -74,17 +74,6 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 	}
 
-	/* IFilterSlotDelegate */
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_ENERGY) {
-			return isEnergy(itemStack);
-		} else if (slotIndex == SLOT_SPECIMEN) {
-			return BeeManager.beeRoot.isMember(itemStack);
-		}
-		return false;
-	}
-
 	public Set<Biome> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
 	}
@@ -108,6 +97,17 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 
 		return errorStates.build();
+	}
+
+	/* IFilterSlotDelegate */
+	@Override
+	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+		if (slotIndex == SLOT_ENERGY) {
+			return isEnergy(itemStack);
+		} else if (slotIndex == SLOT_SPECIMEN) {
+			return BeeManager.beeRoot.isMember(itemStack);
+		}
+		return false;
 	}
 
 }

@@ -10,11 +10,12 @@ import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IBee;
 
 class HiveBeeHousingInventory implements IBeeHousingInventory {
-	private final TileHive hive;
 	@Nullable
 	private ItemStack queen;
 	@Nullable
 	private ItemStack drone;
+
+	private final TileHive hive;
 
 	public HiveBeeHousingInventory(TileHive hive) {
 		this.hive = hive;
@@ -30,17 +31,17 @@ class HiveBeeHousingInventory implements IBeeHousingInventory {
 	}
 
 	@Override
-	public void setQueen(ItemStack itemstack) {
-		this.queen = itemstack;
-	}
-
-	@Override
 	public ItemStack getDrone() {
 		if (drone == null) {
 			IBee bee = hive.getContainedBee();
 			drone = BeeManager.beeRoot.getTypes().createStack(bee, EnumBeeType.DRONE);
 		}
 		return drone;
+	}
+
+	@Override
+	public void setQueen(ItemStack itemstack) {
+		this.queen = itemstack;
 	}
 
 	@Override

@@ -38,21 +38,6 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		super("creeper", true, 20, false, true);
 	}
 
-	private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
-
-		int explosionTimer = storedData.getInteger(indexExplosionTimer);
-		explosionTimer--;
-		storedData.setInteger(indexExplosionTimer, explosionTimer);
-
-		if (explosionTimer > 0) {
-			return;
-		}
-
-		if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-			world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
-		}
-	}
-
 	@Override
 	public IEffectData validateStorage(IEffectData storedData) {
 		if (!(storedData instanceof EffectData)) {
@@ -108,6 +93,21 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		}
 
 		return storedData;
+	}
+
+	private static void progressExplosion(IEffectData storedData, World world, BlockPos pos) {
+
+		int explosionTimer = storedData.getInteger(indexExplosionTimer);
+		explosionTimer--;
+		storedData.setInteger(indexExplosionTimer, explosionTimer);
+
+		if (explosionTimer > 0) {
+			return;
+		}
+
+		if (world.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+			world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
+		}
 	}
 
 }

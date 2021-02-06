@@ -22,11 +22,6 @@ public class BlockForestryStairs extends StairsBlock implements IWoodTyped {
 	}
 
 	@Override
-	public WoodBlockKind getBlockKind() {
-		return WoodBlockKind.STAIRS;
-	}
-
-	@Override
 	public boolean isFireproof() {
 		return fireproof;
 	}
@@ -34,6 +29,11 @@ public class BlockForestryStairs extends StairsBlock implements IWoodTyped {
 	@Override
 	public IWoodType getWoodType() {
 		return woodType;
+	}
+
+	@Override
+	public WoodBlockKind getBlockKind() {
+		return WoodBlockKind.STAIRS;
 	}
 
 	@Override

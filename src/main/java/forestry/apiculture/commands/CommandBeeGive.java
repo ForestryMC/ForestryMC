@@ -48,12 +48,12 @@ import forestry.apiculture.genetics.BeeDefinition;
 public class CommandBeeGive {
 	public static LiteralArgumentBuilder<CommandSource> register() {
 		return Commands.literal("give").requires(PermLevel.ADMIN)
-						.then(Commands.argument("bee", BeeArgument.beeArgument())
-								.then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
-										.then(Commands.argument("player", EntityArgument.player())
-												.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), EntityArgument.getPlayer(a, "player"))))
-										.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), a.getSource().asPlayer())))
-								.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), EnumBeeType.QUEEN, a.getSource().asPlayer())))
+				.then(Commands.argument("bee", BeeArgument.beeArgument())
+						.then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
+								.then(Commands.argument("player", EntityArgument.player())
+										.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), EntityArgument.getPlayer(a, "player"))))
+								.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), a.getSource().asPlayer())))
+						.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), EnumBeeType.QUEEN, a.getSource().asPlayer())))
 				.executes(a -> execute(a.getSource(), BeeDefinition.FOREST.createIndividual(), EnumBeeType.QUEEN, a.getSource().asPlayer()));
 	}
 
@@ -86,7 +86,8 @@ public class CommandBeeGive {
 
 		@Override
 		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-			return ISuggestionProvider.suggest(BeeManager.beeRoot.getIndividualTemplates().stream().map(IIndividual::getGenome)
+			return ISuggestionProvider.suggest(BeeManager.beeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
 					.map(a -> a.getActiveAllele(BeeChromosomes.SPECIES))
 					.map(IAllele::getRegistryName)
 					.map(ResourceLocation::toString), builder);

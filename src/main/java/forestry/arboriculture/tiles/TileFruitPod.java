@@ -98,6 +98,13 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 		return compoundNBT;
 	}
 
+	/* UPDATING */
+	public void onBlockTick(World world, BlockPos pos, BlockState state, Random rand) {
+		if (canMature() && rand.nextFloat() <= yield) {
+			addRipeness(0.5f);
+		}
+	}
+
 	/* NETWORK */
 	@Nullable
 	@Override
@@ -109,13 +116,6 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT tag = super.getUpdateTag();
 		return NBTUtilForestry.writeStreamableToNbt(this, tag);
-	}
-
-	/* UPDATING */
-	public void onBlockTick(World world, BlockPos pos, BlockState state, Random rand) {
-		if (canMature() && rand.nextFloat() <= yield) {
-			addRipeness(0.5f);
-		}
 	}
 
 	public boolean canMature() {
@@ -148,17 +148,17 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(getBlockState(), nbt);
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
+		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
-		NBTUtilForestry.readStreamableFromNbt(this, tag);
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		super.onDataPacket(net, pkt);
+		CompoundNBT nbt = pkt.getNbtCompound();
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	/* IFRUITBEARER */

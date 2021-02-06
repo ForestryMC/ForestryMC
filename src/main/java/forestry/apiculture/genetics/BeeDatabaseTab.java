@@ -37,6 +37,11 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 	}
 
 	@Override
+	public DatabaseMode getMode() {
+		return mode;
+	}
+
+	@Override
 	public void createElements(IDatabaseElement container, IBee bee, ItemStack itemStack) {
 		Optional<IOrganismType> optionalType = BeeManager.beeRoot.getTypes().getType(itemStack);
 		if (!optionalType.isPresent()) {
@@ -114,10 +119,5 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 	@Override
 	public ItemStack getIconStack() {
 		return BeeDefinition.MEADOWS.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumBeeType.PRINCESS : EnumBeeType.DRONE);
-	}
-
-	@Override
-	public DatabaseMode getMode() {
-		return mode;
 	}
 }

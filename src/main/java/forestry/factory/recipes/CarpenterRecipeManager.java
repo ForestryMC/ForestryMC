@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -40,9 +41,9 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory) {
+	public Optional<ICarpenterRecipe> findMatchingRecipe(RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world) {
 		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, liquid, item, inventory)) {
+			if (matches(recipe, liquid, item, inventory, world)) {
 				return Optional.of(recipe);
 			}
 		}
@@ -51,7 +52,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory) {
+	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world) {
 		if (recipe == null) {
 			return false;
 		}
@@ -69,7 +70,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		}
 
 		ShapedRecipe internal = recipe.getCraftingGridRecipe();
-		return RecipeUtil.matches(internal, craftingInventory) != null;
+		return internal.matches(FakeCraftingInventory.of(craftingInventory), world);
 	}
 
 	public boolean isBox(RecipeManager manager, ItemStack resource) {

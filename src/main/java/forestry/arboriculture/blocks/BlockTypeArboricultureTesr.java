@@ -30,7 +30,11 @@ public enum BlockTypeArboricultureTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileNaturalistChest> BlockTypeArboricultureTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderName, VoxelShape shape) {
-		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name).setParticleTexture(name + ".0").setNotFullCube().setShape(shape).create();
+		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
+			.setParticleTexture(name + ".0")
+			.setNotFullCube()
+			.setShape(shape)
+			.create();
 		Proxies.render.setRenderChest(machineProperties, renderName);
 		this.machineProperties = machineProperties;
 	}

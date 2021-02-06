@@ -11,9 +11,12 @@ import java.util.Optional;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
+
+import net.minecraftforge.fluids.FluidStack;
 
 public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe> {
-	Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, ItemStack plan, IInventory resources);
+	Optional<IFabricatorRecipe> findMatchingRecipe(RecipeManager manager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources);
 
 	boolean isPlan(RecipeManager manager, ItemStack plan);
 

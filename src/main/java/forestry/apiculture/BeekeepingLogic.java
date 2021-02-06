@@ -143,6 +143,15 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
+	public void writeData(PacketBuffer data) {
+		data.writeBoolean(active);
+		if (active) {
+			data.writeItemStack(queenStack);
+			hasFlowersCache.writeData(data);
+		}
+	}
+
+	@Override
 	public void readData(PacketBuffer data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
@@ -150,15 +159,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			queenStack = data.readItemStack();
 			queen = BeeManager.beeRoot.create(queenStack).orElse(null);
 			hasFlowersCache.readData(data);
-		}
-	}
-
-	@Override
-	public void writeData(PacketBuffer data) {
-		data.writeBoolean(active);
-		if (active) {
-			data.writeItemStack(queenStack);
-			hasFlowersCache.writeData(data);
 		}
 	}
 
@@ -171,6 +171,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		syncToClient();
 	}
+
+	/* UPDATING */
 
 	@Override
 	public boolean canWork() {
@@ -440,8 +442,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		return spawn;
 	}
 
-	/* CLIENT */
-
 	/**
 	 * Creates the succeeding princess and between one and three drones.
 	 */
@@ -486,6 +486,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		return spawn;
 	}
+
+	/* CLIENT */
 
 	@Override
 	public void syncToClient() {

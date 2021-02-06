@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +48,7 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 				}
 			}
 
-			List<IRecipe> matchingRecipes = RecipeUtil.findMatchingRecipes(inventory, player.world);
+			List<ICraftingRecipe> matchingRecipes = RecipeUtil.findMatchingRecipes(inventory, player.world);
 			if (!matchingRecipes.isEmpty()) {
 				MemorizedRecipe recipe = new MemorizedRecipe(inventory, matchingRecipes);
 				container.sendWorktableRecipeRequest(recipe);

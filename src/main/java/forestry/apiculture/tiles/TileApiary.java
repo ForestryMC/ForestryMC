@@ -54,6 +54,11 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	@Override
+	public IBeeHousingInventory getBeeInventory() {
+		return inventory;
+	}
+
+	@Override
 	public IApiaryInventory getApiaryInventory() {
 		return inventory;
 	}
@@ -77,11 +82,6 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	@Override
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
-	}
-
-	@Override
-	public IBeeHousingInventory getBeeInventory() {
-		return inventory;
 	}
 
 	/* ITRIGGERPROVIDER */

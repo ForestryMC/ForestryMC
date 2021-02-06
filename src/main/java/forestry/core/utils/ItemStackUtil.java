@@ -14,13 +14,16 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +32,8 @@ import net.minecraft.world.World;
 import forestry.core.utils.datastructures.Stack;
 
 public abstract class ItemStackUtil {
+
+	private static final int[] EMPTY_CONSUME = new int[0];
 
 	/**
 	 * Compares item id, damage and NBT. Accepts wildcard damage.
@@ -154,6 +159,54 @@ public abstract class ItemStackUtil {
 			}
 		}
 		return false;
+	}
+
+	public static int[] createConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
+		return createConsume(set, inventory.getSizeInventory(), inventory::getStackInSlot, craftingTools);
+	}
+
+	public static int[] createConsume(NonNullList<Ingredient> set, int stockCount, Function<Integer, ItemStack> stock, boolean craftingTools) {
+		int totalSets = 0;
+
+		//A array that contains the amount of items that is needed from this stack
+		int[] reqAmounts = new int[stockCount];
+		int found = 0;
+		for (Ingredient ing : set) {
+			if (ing.hasNoMatchingItems()) {
+				found++;
+				continue;
+			}
+			for (ItemStack stack : ing.getMatchingStacks()) {
+				int curFound = found;
+				for (int i = 0; i < reqAmounts.length; i++) {
+					ItemStack offer = stock.apply(i);
+					if (offer.getCount() > reqAmounts[i] && isCraftingEquivalent(stack, offer, craftingTools)) {
+						reqAmounts[i] = reqAmounts[i] + 1;
+						found++;
+						break;
+					}
+				}
+				if (found > curFound) {
+					break;
+				}
+			}
+		}
+		if (found < set.size()) {
+			return EMPTY_CONSUME;
+		}
+		return reqAmounts;
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
+		return createConsume(set, inventory, craftingTools).length > 0;
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, IInventory inventory) {
+		return canConsume(set, inventory, false);
+	}
+
+	public static boolean canConsume(NonNullList<Ingredient> set, int stockCount, Function<Integer, ItemStack> stock, boolean craftingTools) {
+		return createConsume(set, stockCount, stock, craftingTools).length > 0;
 	}
 
 	/**
@@ -314,7 +367,8 @@ public abstract class ItemStackUtil {
 	}
 
 	public static boolean equals(BlockState state, ItemStack stack) {
-		return state.getBlock() == getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
+		return state
+				.getBlock() == getBlock(stack);// && state.getBlock().getMetaFromState(state) == stack.getItemDamage();
 	}
 
 	public static boolean equals(Block block, int meta, ItemStack stack) {

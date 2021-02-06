@@ -65,6 +65,16 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		return TreeManager.treeRoot;
 	}
 
+	@Override
+	public float getRarity() {
+		return rarity;
+	}
+
+	@Override
+	public IGrowthProvider getGrowthProvider() {
+		return growthProvider;
+	}
+
 	/* OTHER */
 	@Override
 	public PlantType getPlantType() {
@@ -82,29 +92,13 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 	}
 
 	@Override
-	public float getRarity() {
-		return rarity;
-	}
-
-	@Override
-	public ILeafProvider getLeafProvider() {
-		return leafProvider;
-	}
-
-	@Override
-	public IGrowthProvider getGrowthProvider() {
-		return growthProvider;
-	}
-
-	@Override
 	public ILeafSpriteProvider getLeafSpriteProvider() {
 		return leafSpriteProvider;
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public int getGermlingColour(EnumGermlingType type, int renderPass) {
-		return germlingModelProvider.getSpriteColor(type, renderPass);
+	public int getSpriteColour(int renderPass) {
+		return leafSpriteProvider.getColor(false);
 	}
 
 	@Override
@@ -120,8 +114,14 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 	}
 
 	@Override
-	public int getSpriteColour(int renderPass) {
-		return leafSpriteProvider.getColor(false);
+	@OnlyIn(Dist.CLIENT)
+	public int getGermlingColour(EnumGermlingType type, int renderPass) {
+		return germlingModelProvider.getSpriteColor(type, renderPass);
+	}
+
+	@Override
+	public ILeafProvider getLeafProvider() {
+		return leafProvider;
 	}
 
 	@Override

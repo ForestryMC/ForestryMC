@@ -45,10 +45,11 @@ import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
 
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingDelegate, IStreamableGui {
-	protected final ClimateListener climateListener;
 	private final String hintKey;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private final IBeekeepingLogic beeLogic;
+	protected final ClimateListener climateListener;
+
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
@@ -58,6 +59,97 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 
 		climateListener = new ClimateListener(this);
+	}
+
+	@Override
+	public String getHintKey() {
+		return hintKey;
+	}
+
+	@Override
+	public IBeekeepingLogic getBeekeepingLogic() {
+		return beeLogic;
+	}
+
+	/* LOADING & SAVING */
+	@Override
+	public CompoundNBT write(CompoundNBT compoundNBT) {
+		compoundNBT = super.write(compoundNBT);
+		beeLogic.write(compoundNBT);
+		ownerHandler.write(compoundNBT);
+		return compoundNBT;
+	}
+
+	@Override
+	public void read(BlockState state, CompoundNBT compoundNBT) {
+		super.read(state, compoundNBT);
+		beeLogic.read(compoundNBT);
+		ownerHandler.read(compoundNBT);
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT updateTag = super.getUpdateTag();
+		beeLogic.write(updateTag);
+		ownerHandler.write(updateTag);
+		return updateTag;
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+		super.handleUpdateTag(state, tag);
+		beeLogic.read(tag);
+		ownerHandler.read(tag);
+	}
+
+	@Override
+	public IOwnerHandler getOwnerHandler() {
+		return ownerHandler;
+	}
+
+	/* ICLIMATISED */
+	@Override
+	public EnumTemperature getTemperature() {
+		return climateListener.getTemperature();
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return climateListener.getHumidity();
+	}
+
+	@Override
+	public float getExactTemperature() {
+		return climateListener.getExactTemperature();
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return climateListener.getExactHumidity();
+	}
+
+	@Override
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
+			return LazyOptional.of(() -> climateListener).cast();
+		}
+		return super.getCapability(capability, facing);
+	}
+
+	/* UPDATING */
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void updateClientSide() {
+		if (beeLogic.canDoBeeFX() && updateOnInterval(4)) {
+			beeLogic.doBeeFX();
+
+			if (updateOnInterval(50)) {
+				doPollenFX(world, getPos().getX(), getPos().getY(), getPos().getZ());
+			}
+		}
+
+		climateListener.updateClientSide(true);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -77,8 +169,31 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public IBeekeepingLogic getBeekeepingLogic() {
-		return beeLogic;
+	public void updateServerSide() {
+		if (beeLogic.canWork()) {
+			beeLogic.doWork();
+		}
+	}
+
+	@Override
+	public int getHealthScaled(int i) {
+		return breedingProgressPercent * i / 100;
+	}
+
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		data.writeVarInt(beeLogic.getBeeProgressPercent());
+	}
+
+	@Override
+	public void readGuiData(PacketBufferForestry data) {
+		breedingProgressPercent = data.readVarInt();
+	}
+
+	// IBEEHOUSING
+	@Override
+	public Biome getBiome() {
+		return world.getBiome(getPos());
 	}
 
 	//TODO check this call
@@ -105,119 +220,5 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	@Override
 	public Vector3d getBeeFXCoordinates() {
 		return new Vector3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
-	}
-
-	@Override
-	public IOwnerHandler getOwnerHandler() {
-		return ownerHandler;
-	}
-
-	@Override
-	public float getExactTemperature() {
-		return climateListener.getExactTemperature();
-	}
-
-	@Override
-	public float getExactHumidity() {
-		return climateListener.getExactHumidity();
-	}
-
-	/* UPDATING */
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void updateClientSide() {
-		if (beeLogic.canDoBeeFX() && updateOnInterval(4)) {
-			beeLogic.doBeeFX();
-
-			if (updateOnInterval(50)) {
-				doPollenFX(world, getPos().getX(), getPos().getY(), getPos().getZ());
-			}
-		}
-
-		climateListener.updateClientSide(true);
-	}
-
-	@Override
-	public void updateServerSide() {
-		if (beeLogic.canWork()) {
-			beeLogic.doWork();
-		}
-	}
-
-	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
-		beeLogic.read(compoundNBT);
-		ownerHandler.read(compoundNBT);
-	}
-
-	/* LOADING & SAVING */
-	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
-		beeLogic.write(compoundNBT);
-		ownerHandler.write(compoundNBT);
-		return compoundNBT;
-	}
-
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT updateTag = super.getUpdateTag();
-		beeLogic.write(updateTag);
-		ownerHandler.write(updateTag);
-		return updateTag;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
-		beeLogic.read(tag);
-		ownerHandler.read(tag);
-	}
-
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == ClimateCapabilities.CLIMATE_LISTENER) {
-			return LazyOptional.of(() -> climateListener).cast();
-		}
-		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public int getHealthScaled(int i) {
-		return breedingProgressPercent * i / 100;
-	}
-
-	@Override
-	public String getHintKey() {
-		return hintKey;
-	}
-
-	@Override
-	public void writeGuiData(PacketBufferForestry data) {
-		data.writeVarInt(beeLogic.getBeeProgressPercent());
-	}
-
-	@Override
-	public void readGuiData(PacketBufferForestry data) {
-		breedingProgressPercent = data.readVarInt();
-	}
-
-	// IBEEHOUSING
-	@Override
-	public Biome getBiome() {
-		return world.getBiome(getPos());
-	}
-
-	/* ICLIMATISED */
-	@Override
-	public EnumTemperature getTemperature() {
-		return climateListener.getTemperature();
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return climateListener.getHumidity();
 	}
 }

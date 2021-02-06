@@ -5,14 +5,9 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -21,58 +16,22 @@ import forestry.factory.recipes.RecipeSerializers;
 
 public class CentrifugeRecipeBuilder {
 
-	private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
 	private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
 	private int processingTime;
 	private ItemStack input;
 
-	private static IllegalStateException error(ResourceLocation id, String message) {
-		return new IllegalStateException(message + " (" + id + ")");
-	}
-
-	public CentrifugeRecipeBuilder processingTime(int processingTime) {
+	public CentrifugeRecipeBuilder setProcessingTime(int processingTime) {
 		this.processingTime = processingTime;
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder input(ItemStack input) {
+	public CentrifugeRecipeBuilder setInput(ItemStack input) {
 		this.input = input;
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder input(IItemProvider provider) {
-		this.input = new ItemStack(provider.asItem());
-		return this;
-	}
-
-	public CentrifugeRecipeBuilder product(ICentrifugeRecipe.Product product) {
-		outputs.add(product);
-		return this;
-	}
-
-	public void build(Consumer<IFinishedRecipe> consumer) {
-		build(consumer, input.getItem().getRegistryName());
-	}
-
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		validate(id);
-
-		advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
-		consumer.accept(new Result(id, processingTime, input, outputs, advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + input.getItem().getGroup().getPath() + "/" + id.getPath())));
-	}
-
-	private void validate(ResourceLocation id) {
-		if (processingTime <= 0) {
-			throw error(id, "Processing time was not set or is below 1");
-		}
-
-		if (input == null || input.isEmpty()) {
-			throw error(id, "Input was not set");
-		}
-
-		if (outputs.isEmpty()) {
-			throw error(id, "Recipe outputs were empty");
-		}
+		consumer.accept(new Result(id, processingTime, input, outputs));
 	}
 
 	public static class Result implements IFinishedRecipe {
@@ -80,16 +39,12 @@ public class CentrifugeRecipeBuilder {
 		private final int processingTime;
 		private final ItemStack input;
 		private final NonNullList<ICentrifugeRecipe.Product> outputs;
-		private final Advancement.Builder advancementBuilder;
-		private final ResourceLocation advancementId;
 
-		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs, Advancement.Builder advancementBuilder, ResourceLocation advancementId) {
+		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs) {
 			this.id = id;
 			this.processingTime = processingTime;
 			this.input = input;
 			this.outputs = outputs;
-			this.advancementBuilder = advancementBuilder;
-			this.advancementId = advancementId;
 		}
 
 		@Override
@@ -121,12 +76,12 @@ public class CentrifugeRecipeBuilder {
 
 		@Override
 		public JsonObject getAdvancementJson() {
-			return advancementBuilder.serialize();
+			return null;
 		}
 
 		@Override
 		public ResourceLocation getAdvancementID() {
-			return advancementId;
+			return null;
 		}
 	}
 }

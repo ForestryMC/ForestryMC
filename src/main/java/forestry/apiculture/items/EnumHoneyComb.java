@@ -56,13 +56,6 @@ public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSu
 		this.secret = secret;
 	}
 
-	public static EnumHoneyComb get(int meta) {
-		if (meta >= VALUES.length) {
-			meta = 0;
-		}
-		return VALUES[meta];
-	}
-
 	@Override
 	public String getString() {
 		return name;
@@ -70,5 +63,12 @@ public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSu
 
 	public boolean isSecret() {
 		return secret;
+	}
+
+	public static EnumHoneyComb get(int meta) {
+		if (meta >= VALUES.length) {
+			meta = 0;
+		}
+		return VALUES[meta];
 	}
 }

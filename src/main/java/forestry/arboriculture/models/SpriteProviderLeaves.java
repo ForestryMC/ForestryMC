@@ -30,17 +30,17 @@ public class SpriteProviderLeaves implements ILeafSpriteProvider {
 	}
 
 	@Override
-	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
-		return leafTexture.getSprite(pollinated, fancy);
-	}
-
-	@Override
 	public int getColor(boolean pollinated) {
 		if (pollinated) {
 			return colorPollinated;
 		} else {
 			return color;
 		}
+	}
+
+	@Override
+	public ResourceLocation getSprite(boolean pollinated, boolean fancy) {
+		return leafTexture.getSprite(pollinated, fancy);
 	}
 }
 

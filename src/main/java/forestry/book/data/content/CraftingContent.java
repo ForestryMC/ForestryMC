@@ -20,6 +20,7 @@ import forestry.book.gui.elements.CraftingElement;
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.utils.ClientUtils;
 
 /**
  * A book content that displays one ore more crafting recipes.
@@ -40,7 +41,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 		List<IRecipe> recipes = new LinkedList<>();
 		for (ResourceLocation location : data.locations) {
 			//TODO sides
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().world.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = ClientUtils.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
 			IRecipe recipe = recipeMap.get(location);
 			if (recipe != null) {
 				recipes.add(recipe);

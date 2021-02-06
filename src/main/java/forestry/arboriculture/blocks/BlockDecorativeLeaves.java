@@ -35,7 +35,13 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 	private final TreeDefinition definition;
 
 	public BlockDecorativeLeaves(TreeDefinition definition) {
-		super(Properties.create(Material.LEAVES).hardnessAndResistance(0.2f).sound(SoundType.PLANT).notSolid().setSuffocates(BlockUtil::alwaysTrue).setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition)));
+		super(Properties.create(Material.LEAVES)
+			.hardnessAndResistance(0.2f)
+			.sound(SoundType.PLANT)
+			.notSolid()
+			.setSuffocates(BlockUtil::alwaysTrue)
+			.setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition))
+		);
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
 		this.definition = definition;

@@ -84,14 +84,6 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 	}
 
 	@Override
-	public void init() {
-		super.init();
-
-		startX = (this.width - this.xSize) / 2;
-		startY = (this.height - this.ySize) / 2;
-	}
-
-	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
 
@@ -114,6 +106,14 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		}
 
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
+	}
+
+	@Override
+	public void init() {
+		super.init();
+
+		startX = (this.width - this.xSize) / 2;
+		startY = (this.height - this.ySize) / 2;
 	}
 
 	@Override

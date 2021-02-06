@@ -39,14 +39,6 @@ public class BlockForestryLog extends RotatedPillarBlock implements IWoodTyped {
 		return woodType;
 	}
 
-	@Override
-	public final int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		if (fireproof) {
-			return 0;
-		}
-		return 5;
-	}
-
 	/* PROPERTIES */
 	@Override
 	public final int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
@@ -59,5 +51,13 @@ public class BlockForestryLog extends RotatedPillarBlock implements IWoodTyped {
 		} else {
 			return 5;
 		}
+	}
+
+	@Override
+	public final int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		if (fireproof) {
+			return 0;
+		}
+		return 5;
 	}
 }

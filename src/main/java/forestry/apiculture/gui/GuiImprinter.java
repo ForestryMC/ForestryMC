@@ -60,43 +60,6 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		}
 	}
 
-	private static int getHabitatSlotAtPosition(double i, double j) {
-		int[] xPos = new int[]{12, 12};
-		int[] yPos = new int[]{32, 52};
-
-		for (int l = 0; l < xPos.length; l++) {
-			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
-				return l;
-			}
-		}
-
-		return -1;
-	}
-
-	private static void advanceSelection(int index) {
-		sendSelectionChange(index, 0);
-	}
-
-	private static void regressSelection(int index) {
-		sendSelectionChange(index, 1);
-	}
-
-	private static void sendSelectionChange(int index, int advance) {
-		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
-	}
-
-	private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
-		GuiUtil.drawItemStack(this, iconStacks.get(bee.getRegistryName().toString()), x, y);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-
-		startX = (this.width - this.xSize) / 2;
-		startY = (this.height - this.ySize) / 2;
-	}
-
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
@@ -119,6 +82,23 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 	}
 
+	private void drawBeeSpeciesIcon(IAlleleBeeSpecies bee, int x, int y) {
+		GuiUtil.drawItemStack(this, iconStacks.get(bee.getRegistryName().toString()), x, y);
+	}
+
+	private static int getHabitatSlotAtPosition(double i, double j) {
+		int[] xPos = new int[]{12, 12};
+		int[] yPos = new int[]{32, 52};
+
+		for (int l = 0; l < xPos.length; l++) {
+			if (i >= xPos[l] && i <= xPos[l] + 16 && j >= yPos[l] && j <= yPos[l] + 16) {
+				return l;
+			}
+		}
+
+		return -1;
+	}
+
 	//TODO check return
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int k) {
@@ -139,6 +119,26 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		}
 
 		return true;
+	}
+
+	@Override
+	public void init() {
+		super.init();
+
+		startX = (this.width - this.xSize) / 2;
+		startY = (this.height - this.ySize) / 2;
+	}
+
+	private static void advanceSelection(int index) {
+		sendSelectionChange(index, 0);
+	}
+
+	private static void regressSelection(int index) {
+		sendSelectionChange(index, 1);
+	}
+
+	private static void sendSelectionChange(int index, int advance) {
+		NetworkUtil.sendToServer(new PacketGuiSelectRequest(index, advance));
 	}
 
 	@Override

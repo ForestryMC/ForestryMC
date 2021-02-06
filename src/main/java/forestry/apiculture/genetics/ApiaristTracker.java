@@ -41,6 +41,28 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
+	public void read(CompoundNBT compoundNBT) {
+
+		queensTotal = compoundNBT.getInt("QueensTotal");
+		princessesTotal = compoundNBT.getInt("PrincessesTotal");
+		dronesTotal = compoundNBT.getInt("DronesTotal");
+
+		super.read(compoundNBT);
+
+	}
+
+	@Override
+	public CompoundNBT write(CompoundNBT compoundnbt) {
+
+		compoundnbt.putInt("QueensTotal", queensTotal);
+		compoundnbt.putInt("PrincessesTotal", princessesTotal);
+		compoundnbt.putInt("DronesTotal", dronesTotal);
+
+		compoundnbt = super.write(compoundnbt);
+		return compoundnbt;
+	}
+
+	@Override
 	public void registerPickup(IIndividual individual) {
 		IBeeRoot speciesRoot = (IBeeRoot) individual.getRoot();
 		if (!speciesRoot.getUID().equals(speciesRootUID())) {
@@ -100,28 +122,6 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	@Override
 	protected String speciesRootUID() {
 		return BeeRoot.UID;
-	}
-
-	@Override
-	public void read(CompoundNBT compoundNBT) {
-
-		queensTotal = compoundNBT.getInt("QueensTotal");
-		princessesTotal = compoundNBT.getInt("PrincessesTotal");
-		dronesTotal = compoundNBT.getInt("DronesTotal");
-
-		super.read(compoundNBT);
-
-	}
-
-	@Override
-	public CompoundNBT write(CompoundNBT compoundnbt) {
-
-		compoundnbt.putInt("QueensTotal", queensTotal);
-		compoundnbt.putInt("PrincessesTotal", princessesTotal);
-		compoundnbt.putInt("DronesTotal", dronesTotal);
-
-		compoundnbt = super.write(compoundnbt);
-		return compoundnbt;
 	}
 
 }

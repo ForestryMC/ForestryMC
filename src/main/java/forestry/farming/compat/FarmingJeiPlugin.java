@@ -11,6 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
+import forestry.core.utils.ClientUtils;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -61,7 +62,7 @@ public class FarmingJeiPlugin implements IModPlugin {
 			return;
 		}
 
-		RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
 		registration.addRecipes(FarmingInfoRecipeMaker.getRecipes(recipeManager), FarmingInfoRecipeCategory.UID);
 	}

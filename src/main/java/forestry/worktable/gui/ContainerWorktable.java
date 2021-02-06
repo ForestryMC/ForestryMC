@@ -124,7 +124,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		ItemStack currentStack = craftMatrix.getStackInSlot(slot);
 
 		if (!ItemStackUtil.isIdenticalItem(stack, currentStack)) {
-			craftMatrix.setInventorySlotContents(slot, stack);
+			craftMatrix.setInventorySlotContents(slot, stack.copy());
 		}
 	}
 

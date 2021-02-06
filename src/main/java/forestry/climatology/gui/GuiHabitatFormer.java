@@ -111,14 +111,6 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		}
 	}
 
-	@Override
-	protected void addLedgers() {
-		addClimateLedger(tile);
-		addErrorLedger(tile);
-		addPowerLedger(tile.getEnergyManager());
-		addHintLedger("habitat_former");
-	}
-
 	private void updateRange() {
 		rangeBar.setValue(transformer.getRange());
 	}
@@ -147,6 +139,10 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		sendClimateUpdate();
 	}
 
+	public void setClimate(IClimateState state) {
+		transformer.setTarget(state.copy());
+	}
+
 	public void sendClimateUpdate() {
 		IClimateState targetedState = transformer.getTarget();
 		if (targetedState.isPresent()) {
@@ -159,8 +155,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		return transformer.getTarget();
 	}
 
-	public void setClimate(IClimateState state) {
-		transformer.setTarget(state.copy());
+	@Override
+	protected void addLedgers() {
+		addClimateLedger(tile);
+		addErrorLedger(tile);
+		addPowerLedger(tile.getEnergyManager());
+		addHintLedger("habitat_former");
 	}
 
 	@Override

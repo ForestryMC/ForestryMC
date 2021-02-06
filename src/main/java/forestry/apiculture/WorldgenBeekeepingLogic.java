@@ -60,19 +60,19 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
+	public void writeData(PacketBuffer data) {
+		data.writeBoolean(active);
+		if (active) {
+			hasFlowersCache.writeData(data);
+		}
+	}
+
+	@Override
 	public void readData(PacketBuffer data) {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
 			hasFlowersCache.readData(data);
-		}
-	}
-
-	@Override
-	public void writeData(PacketBuffer data) {
-		data.writeBoolean(active);
-		if (active) {
-			hasFlowersCache.writeData(data);
 		}
 	}
 
@@ -85,6 +85,8 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 		syncToClient();
 	}
+
+	/* UPDATING */
 
 	@Override
 	public boolean canWork() {
@@ -111,8 +113,6 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	public void doWork() {
 
 	}
-
-	/* UPDATING */
 
 	@Override
 	public void clearCachedValues() {

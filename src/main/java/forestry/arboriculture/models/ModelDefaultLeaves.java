@@ -44,6 +44,33 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 		super(BlockDefaultLeaves.class);
 	}
 
+	public static class Key {
+		public final TreeDefinition definition;
+		public final boolean fancy;
+		private final int hashCode;
+
+		public Key(TreeDefinition definition, boolean fancy) {
+			this.definition = definition;
+			this.fancy = fancy;
+			this.hashCode = Objects.hash(definition, fancy);
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof Key)) {
+				return false;
+			} else {
+				Key otherKey = (Key) other;
+				return otherKey.definition == definition && otherKey.fancy == fancy;
+			}
+		}
+	}
+
 	@Override
 	public boolean isSideLit() {
 		return false;
@@ -94,32 +121,5 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 
 		// Set the particle sprite
 		baker.setParticleSprite(leafSprite);
-	}
-
-	public static class Key {
-		public final TreeDefinition definition;
-		public final boolean fancy;
-		private final int hashCode;
-
-		public Key(TreeDefinition definition, boolean fancy) {
-			this.definition = definition;
-			this.fancy = fancy;
-			this.hashCode = Objects.hash(definition, fancy);
-		}
-
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-
-		@Override
-		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
-				return false;
-			} else {
-				Key otherKey = (Key) other;
-				return otherKey.definition == definition && otherKey.fancy == fancy;
-			}
-		}
 	}
 }

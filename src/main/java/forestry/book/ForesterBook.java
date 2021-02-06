@@ -19,12 +19,23 @@ public class ForesterBook implements IForesterBook {
 	private final Map<String, IBookCategory> categoriesByName = new HashMap<>();
 
 	@Override
+	public Collection<String> getCategoryNames() {
+		return categoriesByName.keySet();
+	}
+
+	@Override
 	public IBookCategory addCategory(String name) {
 		IBookCategory category = getCategory(name);
 		if (category == null) {
 			categoriesByName.put(name, category = new BookCategory(name));
 		}
 		return category;
+	}
+
+	void addCategories(IBookCategory[] categories) {
+		for (IBookCategory category : categories) {
+			categoriesByName.put(category.getName(), category);
+		}
 	}
 
 	@Nullable
@@ -36,11 +47,6 @@ public class ForesterBook implements IForesterBook {
 	@Override
 	public Collection<IBookCategory> getCategories() {
 		return categoriesByName.values();
-	}
-
-	@Override
-	public Collection<String> getCategoryNames() {
-		return categoriesByName.keySet();
 	}
 
 	@Override
@@ -60,11 +66,5 @@ public class ForesterBook implements IForesterBook {
 			}
 		}
 		return null;
-	}
-
-	void addCategories(IBookCategory[] categories) {
-		for (IBookCategory category : categories) {
-			categoriesByName.put(category.getName(), category);
-		}
 	}
 }

@@ -70,19 +70,11 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-		float stage = getRipeningStage(ripeningTime);
-		return getColour(stage);
-	}
+	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+		NonNullList<ItemStack> product = NonNullList.create();
+		products.addProducts(world, pos, product, Product::getChance, world.rand);
 
-	@Override
-	public int getDecorativeColor() {
-		return getColour(1.0f);
-	}
-
-	@Override
-	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
-		return true;
+		return product;
 	}
 
 	@Override
@@ -91,11 +83,14 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
-		NonNullList<ItemStack> product = NonNullList.create();
-		products.addProducts(world, pos, product, Product::getChance, world.rand);
+	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
+		return true;
+	}
 
-		return product;
+	@Override
+	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		float stage = getRipeningStage(ripeningTime);
+		return getColour(stage);
 	}
 
 	private int getColour(float stage) {
@@ -104,5 +99,10 @@ public class FruitProviderRipening extends FruitProviderNone {
 		int b = (colourCallow & 255) + (int) (diffB * stage);
 
 		return (r & 255) << 16 | (g & 255) << 8 | b & 255;
+	}
+
+	@Override
+	public int getDecorativeColor() {
+		return getColour(1.0f);
 	}
 }

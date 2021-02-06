@@ -32,7 +32,10 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private TreePlugin() {
-		super(new TreeDatabaseTab(DatabaseMode.ACTIVE), new TreeDatabaseTab(DatabaseMode.INACTIVE), new ProductsTab(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1)), new MutationsTab(ArboricultureItems.GRAFTER::stack));
+		super(new TreeDatabaseTab(DatabaseMode.ACTIVE),
+			new TreeDatabaseTab(DatabaseMode.INACTIVE),
+			new ProductsTab(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY, 1)),
+			new MutationsTab(ArboricultureItems.GRAFTER::stack));
 		NonNullList<ItemStack> treeList = NonNullList.create();
 		ArboricultureItems.SAPLING.item().addCreativeItems(treeList, false);
 		for (ItemStack treeStack : treeList) {
@@ -46,12 +49,12 @@ public class TreePlugin extends DatabasePlugin<ITree> {
 	}
 
 	@Override
-	public List<String> getHints() {
-		return Config.hints.get("treealyzer");
+	public Map<String, ItemStack> getIndividualStacks() {
+		return iconStacks;
 	}
 
 	@Override
-	public Map<String, ItemStack> getIndividualStacks() {
-		return iconStacks;
+	public List<String> getHints() {
+		return Config.hints.get("treealyzer");
 	}
 }

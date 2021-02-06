@@ -25,7 +25,34 @@ import forestry.core.utils.Log;
 
 public class TreeConfig {
 	public static final String CONFIG_CATEGORY_TREE = "trees";
-	public static final String CONFIG_COMMENT = "This config can be used to customise the world generation for all trees that where added by forestry or\n" + "by an addon mod like extra trees.\n" + "\n" + "# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" + "S:rarity=1.0\n" + "\n" + "# Dimension ids can be added to these lists to blacklist or whitelist them. \n" + "dimensions {\n" + "\tI:blacklist <\n" + "\t\t1\n" + "\t >\n" + "\tI:whitelist <\n" + "\t\t-1\n" + "\t >\n" + "}\n" + "\n" + "# Biome types or registry names can be added to these lists to blacklist them. \n" + "biomes {\n" + "\tblacklist {\n" + "\t\tS:names <\n" + "\t\t\tminecraft:plains\n" + "\t\t >\n" + "\t\tS:types <\n" + "\t\t\tforest\n" + "\t\t >\n" + "\t}\n" + "}";
+	public static final String CONFIG_COMMENT =
+		"This config can be used to customise the world generation for all trees that where added by forestry or\n" +
+			"by an addon mod like extra trees.\n" +
+			"\n" +
+			"# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
+			"S:rarity=1.0\n" +
+			"\n" +
+			"# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
+			"dimensions {\n" +
+			"\tI:blacklist <\n" +
+			"\t\t1\n" +
+			"\t >\n" +
+			"\tI:whitelist <\n" +
+			"\t\t-1\n" +
+			"\t >\n" +
+			"}\n" +
+			"\n" +
+			"# Biome types or registry names can be added to these lists to blacklist them. \n" +
+			"biomes {\n" +
+			"\tblacklist {\n" +
+			"\t\tS:names <\n" +
+			"\t\t\tminecraft:plains\n" +
+			"\t\t >\n" +
+			"\t\tS:types <\n" +
+			"\t\t\tforest\n" +
+			"\t\t >\n" +
+			"\t}\n" +
+			"}";
 	private static final Map<ResourceLocation, TreeConfig> configs = new HashMap<>();
 	private static final TreeConfig GLOBAL = new TreeConfig(new ResourceLocation(Constants.MOD_ID, "global"), 1.0F);
 
@@ -51,42 +78,6 @@ public class TreeConfig {
 			IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) treeAllele;
 			configs.put(treeSpecies.getRegistryName(), new TreeConfig(treeSpecies.getRegistryName(), treeSpecies.getRarity()).parseConfig(config));
 		}
-	}
-
-	public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
-		TreeConfig treeConfig = configs.get(treeUID);
-		if (treeUID == null) {
-			treeConfig = GLOBAL;
-		}
-
-		treeConfig.blacklistedDimensions.add(dimName);
-	}
-
-	public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
-		TreeConfig treeConfig = configs.get(treeUID);
-		if (treeUID == null) {
-			treeConfig = GLOBAL;
-		}
-
-		treeConfig.whitelistedDimensions.add(dimName);
-	}
-
-	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
-		TreeConfig treeConfig = configs.get(treeUID);
-		return treeConfig != null ? treeConfig.isValidDimension(dimID.getLocation()) : GLOBAL.isValidDimension(dimID.getLocation());
-	}
-
-	public static boolean isValidBiome(@Nullable ResourceLocation treeUID, Biome biome) {
-		TreeConfig treeConfig = configs.get(treeUID);
-		return treeUID != null ? treeConfig.isValidBiome(biome) : GLOBAL.isValidBiome(biome);
-	}
-
-	public static float getSpawnRarity(@Nullable ResourceLocation treeUID) {
-		TreeConfig treeConfig = configs.get(treeUID);
-		if (treeUID == null) {
-			treeConfig = GLOBAL;
-		}
-		return treeConfig.spawnRarity;
 	}
 
 	private TreeConfig parseConfig(LocalizedConfiguration config) {
@@ -115,6 +106,29 @@ public class TreeConfig {
 		return this;
 	}
 
+	public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		if (treeUID == null) {
+			treeConfig = GLOBAL;
+		}
+
+		treeConfig.blacklistedDimensions.add(dimName);
+	}
+
+	public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, String dimName) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		if (treeUID == null) {
+			treeConfig = GLOBAL;
+		}
+
+		treeConfig.whitelistedDimensions.add(dimName);
+	}
+
+	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		return treeConfig != null ? treeConfig.isValidDimension(dimID.getLocation()) : GLOBAL.isValidDimension(dimID.getLocation());
+	}
+
 	private boolean isValidDimension(ResourceLocation dimID) {
 		//blacklist has priority
 		if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID.toString())) {
@@ -124,12 +138,25 @@ public class TreeConfig {
 		return false;
 	}
 
+	public static boolean isValidBiome(@Nullable ResourceLocation treeUID, Biome biome) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		return treeUID != null ? treeConfig.isValidBiome(biome) : GLOBAL.isValidBiome(biome);
+	}
+
 	private boolean isValidBiome(Biome biome) {
 		if (blacklistedBiomes.contains(biome)) {
 			return false;
 		}
 
 		return Arrays.stream(Biome.Category.values()).noneMatch(blacklistedBiomeTypes::contains);
+	}
+
+	public static float getSpawnRarity(@Nullable ResourceLocation treeUID) {
+		TreeConfig treeConfig = configs.get(treeUID);
+		if (treeUID == null) {
+			treeConfig = GLOBAL;
+		}
+		return treeConfig.spawnRarity;
 	}
 }
 

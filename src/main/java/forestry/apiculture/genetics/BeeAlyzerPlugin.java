@@ -287,13 +287,13 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 	}
 
 	@Override
-	public List<String> getHints() {
-		return Config.hints.get("beealyzer");
+	public Map<ResourceLocation, ItemStack> getIconStacks() {
+		return iconStacks;
 	}
 
 	@Override
-	public Map<ResourceLocation, ItemStack> getIconStacks() {
-		return iconStacks;
+	public List<String> getHints() {
+		return Config.hints.get("beealyzer");
 	}
 
 }

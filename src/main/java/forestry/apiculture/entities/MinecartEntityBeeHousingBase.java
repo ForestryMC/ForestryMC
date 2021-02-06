@@ -135,11 +135,6 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public GameProfile getOwner() {
-		return getOwnerHandler().getOwner();
-	}
-
-	@Override
 	public World getWorldObj() {
 		return world;
 	}
@@ -147,6 +142,11 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	@Override
 	public Biome getBiome() {
 		return world.getBiome(getPosition());
+	}
+
+	@Override
+	public GameProfile getOwner() {
+		return getOwnerHandler().getOwner();
 	}
 
 	@Override

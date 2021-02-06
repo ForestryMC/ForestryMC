@@ -103,10 +103,13 @@ public final class TreeGenHelper {
 		}
 
 		if (species == null) {
-			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES).filter(allele -> {
-				String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
-				return displayName.equals(speciesName.toString());
-			}).findFirst().orElse(null);
+			species = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
+				.filter(allele -> {
+					String displayName = allele.getDisplayName().getString().replaceAll("\\s", "");
+					return displayName.equals(speciesName.toString());
+				})
+				.findFirst()
+				.orElse(null);
 		}
 
 		if (species == null) {

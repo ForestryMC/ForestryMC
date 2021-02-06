@@ -18,6 +18,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.utils.ClientUtils;
 import forestry.core.utils.JeiUtil;
 import forestry.factory.MachineUIDs;
 import forestry.factory.ModuleFactory;
@@ -99,7 +100,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		}
 
 		if (ModuleFactory.machineEnabled(MachineUIDs.FABRICATOR)) {
-			RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+			RecipeManager recipeManager = ClientUtils.getRecipeManager();
 			categories.add(new FabricatorRecipeCategory(guiHelper, recipeManager));
 		}
 
@@ -132,7 +133,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 			return;
 		}
 
-		RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
 		if (ModuleFactory.machineEnabled(MachineUIDs.BOTTLER)) {
 			registry.addRecipes(BottlerRecipeMaker.getBottlerRecipes(registry.getIngredientManager()), ForestryRecipeCategoryUid.BOTTLER);

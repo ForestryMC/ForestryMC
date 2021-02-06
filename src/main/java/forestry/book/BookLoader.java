@@ -56,7 +56,13 @@ import forestry.modules.ModuleHelper;
 //TODO use selective resource reloader
 @OnlyIn(Dist.CLIENT)
 public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
-	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(BookContent.class, new BookContentDeserializer()).registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer()).registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location"))).registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY)).registerTypeAdapter(Entries.class, new EntriesDeserializer()).create();
+	public static final Gson GSON = new GsonBuilder()
+		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
+		.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
+		.registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location")))
+		.registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
+		.registerTypeAdapter(Entries.class, new EntriesDeserializer())
+		.create();
 	public static final BookLoader INSTANCE = new BookLoader();
 	private static final String BOOK_LOCATION = "forestry:manual/";
 	private static final String BOOK_LOCATION_LANG = BOOK_LOCATION + "%s/%s";
@@ -76,30 +82,6 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		registerContentType("index", IndexContent.class);
 		registerContentType("fabricator", FabricatorContent.class);
 		registerPageFactory(JsonPageFactory.NAME, JsonPageFactory.INSTANCE);
-	}
-
-	@Nullable
-	public static IResource getResource(String path) {
-		IResource resource;
-		if (!path.contains(":")) {
-			Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
-			String lang = currentLanguage.getCode();
-
-			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
-			resource = ResourceUtil.getResource(location);
-			if (resource != null) {
-				return resource;
-			}
-			location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, DEFAULT_LANG, path));
-			resource = ResourceUtil.getResource(location);
-			if (resource != null) {
-				return resource;
-			}
-			location = new ResourceLocation(BOOK_LOCATION + path);
-			return ResourceUtil.getResource(location);
-		}
-		ResourceLocation location = new ResourceLocation(path);
-		return ResourceUtil.getResource(location);
 	}
 
 	@Override
@@ -139,6 +121,30 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	@Override
 	public void invalidateBook() {
 		book = null;
+	}
+
+	@Nullable
+	public static IResource getResource(String path) {
+		IResource resource;
+		if (!path.contains(":")) {
+			Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
+			String lang = currentLanguage.getCode();
+
+			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));
+			resource = ResourceUtil.getResource(location);
+			if (resource != null) {
+				return resource;
+			}
+			location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, DEFAULT_LANG, path));
+			resource = ResourceUtil.getResource(location);
+			if (resource != null) {
+				return resource;
+			}
+			location = new ResourceLocation(BOOK_LOCATION + path);
+			return ResourceUtil.getResource(location);
+		}
+		ResourceLocation location = new ResourceLocation(path);
+		return ResourceUtil.getResource(location);
 	}
 
 	@Nullable

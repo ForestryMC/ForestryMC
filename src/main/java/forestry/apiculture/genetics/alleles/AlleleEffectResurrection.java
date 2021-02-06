@@ -32,6 +32,32 @@ import forestry.core.utils.ItemStackUtil;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
+	private static class Resurrectable<T extends MobEntity> {
+		private final ItemStack res;
+		private final EntityType<T> risen;
+		private final Consumer<T> risenTransformer;
+
+		private Resurrectable(ItemStack res, EntityType<T> risen) {
+			this(res, risen, e -> {
+			});
+		}
+
+		private Resurrectable(ItemStack res, EntityType<T> risen, Consumer<T> risenTransformer) {
+			this.res = res;
+			this.risen = risen;
+			this.risenTransformer = risenTransformer;
+		}
+
+		private boolean spawnAndTransform(ItemEntity entity) {
+			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.getPosX(), entity.getPosY(), entity.getPosZ());
+			if (spawnedEntity != null) {
+				this.risenTransformer.accept(spawnedEntity);
+				return true;
+			}
+			return false;
+		}
+	}
+
 	private final List<Resurrectable<? extends MobEntity>> resurrectables;
 
 	public AlleleEffectResurrection(String name, List<Resurrectable<? extends MobEntity>> resurrectables) {
@@ -100,31 +126,5 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 
 		return false;
-	}
-
-	private static class Resurrectable<T extends MobEntity> {
-		private final ItemStack res;
-		private final EntityType<T> risen;
-		private final Consumer<T> risenTransformer;
-
-		private Resurrectable(ItemStack res, EntityType<T> risen) {
-			this(res, risen, e -> {
-			});
-		}
-
-		private Resurrectable(ItemStack res, EntityType<T> risen, Consumer<T> risenTransformer) {
-			this.res = res;
-			this.risen = risen;
-			this.risenTransformer = risenTransformer;
-		}
-
-		private boolean spawnAndTransform(ItemEntity entity) {
-			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.getPosX(), entity.getPosY(), entity.getPosZ());
-			if (spawnedEntity != null) {
-				this.risenTransformer.accept(spawnedEntity);
-				return true;
-			}
-			return false;
-		}
 	}
 }

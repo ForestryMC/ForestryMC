@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -21,7 +22,7 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	/**
 	 * @return item stacks representing the required resources for one process. Stack size will be taken into account.
 	 */
-	NonNullList<ItemStack> getResources();
+	NonNullList<Ingredient> getResources();
 
 	/**
 	 * @return Number of work cycles required to squeeze one set of resources.

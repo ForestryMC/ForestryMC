@@ -42,18 +42,17 @@ public class BlockWoodPile extends Block {
 	public static final int TICK_RATE = 960;
 
 	public BlockWoodPile() {
-		super(Block.Properties.create(Material.WOOD).hardnessAndResistance(1.5f).sound(SoundType.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
+		super(Block.Properties.create(Material.WOOD)
+			.hardnessAndResistance(1.5f)
+			.sound(SoundType.WOOD)
+			.harvestLevel(0)
+			.harvestTool(ToolType.AXE));
 		setDefaultState(getStateContainer().getBaseState().with(AGE, 0).with(IS_ACTIVE, false));
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
-		boolean isActive = state.get(IS_ACTIVE);
-		if (world.getBlockState(fromPos).getBlock() == Blocks.FIRE) {
-			if (!isActive) {
-				activatePile(state, world, pos, true);
-			}
-		}
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(IS_ACTIVE, AGE);
 	}
 
 	//TODO voxelShape
@@ -85,6 +84,23 @@ public class BlockWoodPile extends Block {
 		}
 
 		world.getPendingBlockTicks().scheduleTick(pos, this, TICK_RATE + world.rand.nextInt(RANDOM_TICK));
+	}
+
+	@Override
+	public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+		boolean isActive = state.get(IS_ACTIVE);
+		if (world.getBlockState(fromPos).getBlock() == Blocks.FIRE) {
+			if (!isActive) {
+				activatePile(state, world, pos, true);
+			}
+		}
+	}
+
+	private void activatePile(BlockState state, World world, BlockPos pos, boolean scheduleUpdate) {
+		world.setBlockState(pos, state.with(IS_ACTIVE, true), 2);
+		if (scheduleUpdate) {
+			world.getPendingBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.rand.nextInt(RANDOM_TICK)) / 4);
+		}
 	}
 
 	@Override
@@ -120,24 +136,9 @@ public class BlockWoodPile extends Block {
 		}
 	}
 
-	private void activatePile(BlockState state, World world, BlockPos pos, boolean scheduleUpdate) {
-		world.setBlockState(pos, state.with(IS_ACTIVE, true), 2);
-		if (scheduleUpdate) {
-			world.getPendingBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.rand.nextInt(RANDOM_TICK)) / 4);
-		}
-	}
-
 	@Override
-	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
-		if (state.get(IS_ACTIVE)) {
-			return 10;
-		}
-		return super.getLightValue(state, world, pos);
-	}
-
-	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		return 25;
+	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		return 12;
 	}
 
 	@Override
@@ -146,8 +147,16 @@ public class BlockWoodPile extends Block {
 	}
 
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
-		return 12;
+	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+		return 25;
+	}
+
+	@Override
+	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+		if (state.get(IS_ACTIVE)) {
+			return 10;
+		}
+		return super.getLightValue(state, world, pos);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -168,11 +177,6 @@ public class BlockWoodPile extends Block {
 				world.addParticle(ParticleTypes.SMOKE, f + f3 - 0.5, f1 + 1, f2 + f4, 0.0D, 0.15D, 0.0D);
 			}
 		}
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		builder.add(IS_ACTIVE, AGE);
 	}
 
 	private float getCharcoalAmount(World world, BlockPos pos) {

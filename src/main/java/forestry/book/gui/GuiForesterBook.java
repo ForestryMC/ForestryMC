@@ -48,17 +48,20 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		setGuiScreen(this);
 	}
 
-	@Nullable
-	public static GuiForesterBook getGuiScreen() {
-		return guiScreen;
-	}
-
-	public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {
-		GuiForesterBook.guiScreen = guiScreen;
-	}
-
 	public IForesterBook getBook() {
 		return book;
+	}
+
+	@Override
+	public void init() {
+		super.init();
+		this.buttons.clear();
+		if (hasButtons()) {
+			GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
+			GuiButtonPage rightButton = addButton(new GuiButtonPage(guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false, this::actionPerformed));
+			GuiButtonBack backButton = addButton(new GuiButtonBack(guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20, this::actionPerformed));
+			initButtons(leftButton, rightButton, backButton);
+		}
 	}
 
 	protected boolean hasButtons() {
@@ -66,6 +69,11 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	protected void initButtons(GuiButtonPage leftButton, GuiButtonPage rightButton, GuiButtonBack backButton) {
+	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
 	}
 
 	@Override
@@ -89,23 +97,6 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	}
 
 	@Override
-	public void init() {
-		super.init();
-		this.buttons.clear();
-		if (hasButtons()) {
-			GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
-			GuiButtonPage rightButton = addButton(new GuiButtonPage(guiLeft + X_SIZE - 44, guiTop + Y_SIZE - 20, false, this::actionPerformed));
-			GuiButtonBack backButton = addButton(new GuiButtonBack(guiLeft + X_SIZE / 2 - 12, guiTop + Y_SIZE - 20, this::actionPerformed));
-			initButtons(leftButton, rightButton, backButton);
-		}
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawTooltips(transform, mouseY, mouseX);
 		PlayerInventory playerInv = minecraft.player.inventory;
@@ -124,6 +115,15 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
 	protected List<ITextComponent> getTooltip(int mouseX, int mouseY) {
 		return Collections.emptyList();
+	}
+
+	@Nullable
+	public static GuiForesterBook getGuiScreen() {
+		return guiScreen;
+	}
+
+	public static void setGuiScreen(@Nullable GuiForesterBook guiScreen) {
+		GuiForesterBook.guiScreen = guiScreen;
 	}
 
 	protected abstract void actionPerformed(Button button);

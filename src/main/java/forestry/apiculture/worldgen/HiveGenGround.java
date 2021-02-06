@@ -34,6 +34,13 @@ public class HiveGenGround extends HiveGen {
 	}
 
 	@Override
+	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+		BlockState groundBlockState = world.getBlockState(pos.down());
+		Material groundBlockMaterial = groundBlockState.getMaterial();
+		return groundMaterials.contains(groundBlockMaterial);
+	}
+
+	@Override
 	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
 		// get to the ground
 		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
@@ -55,12 +62,5 @@ public class HiveGenGround extends HiveGen {
 		}
 
 		return pos.up();
-	}
-
-	@Override
-	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-		BlockState groundBlockState = world.getBlockState(pos.down());
-		Material groundBlockMaterial = groundBlockState.getMaterial();
-		return groundMaterials.contains(groundBlockMaterial);
 	}
 }

@@ -21,23 +21,10 @@ import forestry.book.gui.elements.FabricatorElement;
 import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.utils.ClientUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
-
-	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
-		RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
-			Fluid fluid = smelting.getProduct().getFluid();
-			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<>());
-			}
-			smeltingInputs.get(fluid).add(smelting);
-		}
-
-		return smeltingInputs;
-	}
 
 	@Override
 	public Class<? extends CraftingData> getDataClass() {
@@ -55,5 +42,19 @@ public class FabricatorContent extends BookContent<CraftingData> {
 			page.add(new FabricatorElement(0, 0, data.stacks));
 		}
 		return true;
+	}
+
+	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs() {
+		RecipeManager recipeManager = ClientUtils.getRecipeManager();
+		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
+		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(recipeManager)) {
+			Fluid fluid = smelting.getProduct().getFluid();
+			if (!smeltingInputs.containsKey(fluid)) {
+				smeltingInputs.put(fluid, new ArrayList<>());
+			}
+			smeltingInputs.get(fluid).add(smelting);
+		}
+
+		return smeltingInputs;
 	}
 }

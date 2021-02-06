@@ -17,6 +17,21 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.Heightmap;
 
 public class HiveGenTree extends HiveGen {
+
+	@Override
+	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+		BlockPos posAbove = pos.up();
+		BlockState blockStateAbove = world.getBlockState(posAbove);
+		if (!isTreeBlock(blockStateAbove, world, posAbove)) {
+			return false;
+		}
+
+		// not a good location if right on top of something
+		BlockPos posBelow = pos.down();
+		BlockState blockStateBelow = world.getBlockState(posBelow);
+		return canReplace(blockStateBelow, world, posBelow);
+	}
+
 	@Override
 	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
 		// get top leaf block
@@ -39,19 +54,5 @@ public class HiveGenTree extends HiveGen {
 		} while (isTreeBlock(blockState, world, pos));
 
 		return pos.toImmutable();
-	}
-
-	@Override
-	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-		BlockPos posAbove = pos.up();
-		BlockState blockStateAbove = world.getBlockState(posAbove);
-		if (!isTreeBlock(blockStateAbove, world, posAbove)) {
-			return false;
-		}
-
-		// not a good location if right on top of something
-		BlockPos posBelow = pos.down();
-		BlockState blockStateBelow = world.getBlockState(posBelow);
-		return canReplace(blockStateBelow, world, posBelow);
 	}
 }

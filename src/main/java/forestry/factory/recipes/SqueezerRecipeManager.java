@@ -13,6 +13,7 @@ package forestry.factory.recipes;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
 
@@ -28,8 +29,10 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	@Nullable
 	public ISqueezerRecipe findMatchingRecipe(RecipeManager manager, NonNullList<ItemStack> items) {
 		for (ISqueezerRecipe recipe : getRecipes(manager)) {
-			if (ItemStackUtil.containsSets(recipe.getResources(), items, false) > 0) {
-				return recipe;
+			for (Ingredient resource : recipe.getResources()) {
+				if (ItemStackUtil.createConsume(recipe.getResources(), items.size(), items::get, false).length > 0) {
+					return recipe;
+				}
 			}
 		}
 
@@ -38,8 +41,8 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 
 	public boolean canUse(RecipeManager manager, ItemStack itemStack) {
 		for (ISqueezerRecipe recipe : getRecipes(manager)) {
-			for (ItemStack recipeInput : recipe.getResources()) {
-				if (ItemStackUtil.isCraftingEquivalent(recipeInput, itemStack, false) || recipe.isFilledContainer(itemStack)) {
+			for (Ingredient recipeInput : recipe.getResources()) {
+				if (recipeInput.test(itemStack)) {
 					return true;
 				}
 			}

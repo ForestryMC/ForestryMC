@@ -46,11 +46,6 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 		return inventory;
 	}
 
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAlvearySieve(windowId, inv, this);
-	}
-
 	public ISlotPickupWatcher getCrafter() {
 		return inventory;
 	}
@@ -58,6 +53,11 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	@Override
 	public IBeeListener getBeeListener() {
 		return beeListener;
+	}
+
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlvearySieve(windowId, inv, this);
 	}
 
 	static class AlvearySieveBeeListener extends DefaultBeeListener {

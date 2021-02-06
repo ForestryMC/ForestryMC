@@ -62,6 +62,15 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
+	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
+		if (tile == null) {
+			return ItemStack.EMPTY;
+		}
+		return tile.getPickBlock();
+	}
+
+	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 		if (!isValidPosition(state, world, pos)) {
 			spawnDrops(state, world, pos);
@@ -78,24 +87,23 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
+	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
+		if (!world.isRemote) {
+			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
+			if (tile != null) {
+				for (ItemStack drop : tile.getDrops()) {
+					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+				}
+			}
+		}
+
+		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+	}
+
+	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
 		Direction facing = state.get(HORIZONTAL_FACING);
 		return BlockUtil.isValidPodLocation(world, pos, facing);
-	}
-
-	/* IGrowable */
-	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
-		return podTile != null && podTile.canMature();
-	}
-
-	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
-		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
-		if (podTile != null) {
-			podTile.addRipeness(0.5f);
-		}
 	}
 
 	//TODO onBlockHarvested??
@@ -115,26 +123,18 @@ public class BlockFruitPod extends CocoaBlock {
 		return new TileFruitPod();
 	}
 
+	/* IGrowable */
 	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isRemote) {
-			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
-			if (tile != null) {
-				for (ItemStack drop : tile.getDrops()) {
-					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-				}
-			}
-		}
-
-		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
+		return podTile != null && podTile.canMature();
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
-		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
-		if (tile == null) {
-			return ItemStack.EMPTY;
+	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
+		if (podTile != null) {
+			podTile.addRipeness(0.5f);
 		}
-		return tile.getPickBlock();
 	}
 }

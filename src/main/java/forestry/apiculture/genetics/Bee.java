@@ -119,67 +119,9 @@ public class Bee extends IndividualLiving implements IBee {
 		this.generation = generation;
 	}
 
-	@Nullable
-	private static IChromosome[] mutateSpecies(IBeeHousing housing, IGenome genomeOne, IGenome genomeTwo) {
-
-		World world = housing.getWorldObj();
-
-		IChromosome[] parent1 = genomeOne.getChromosomes();
-		IChromosome[] parent2 = genomeTwo.getChromosomes();
-
-		IGenome genome0;
-		IGenome genome1;
-
-		IAlleleBeeSpecies allele0;
-		IAlleleBeeSpecies allele1;
-
-		if (world.rand.nextBoolean()) {
-			allele0 = (IAlleleBeeSpecies) parent1[BeeChromosomes.SPECIES.ordinal()].getActiveAllele();
-			allele1 = (IAlleleBeeSpecies) parent2[BeeChromosomes.SPECIES.ordinal()].getInactiveAllele();
-
-			genome0 = genomeOne;
-			genome1 = genomeTwo;
-		} else {
-			allele0 = (IAlleleBeeSpecies) parent2[BeeChromosomes.SPECIES.ordinal()].getActiveAllele();
-			allele1 = (IAlleleBeeSpecies) parent1[BeeChromosomes.SPECIES.ordinal()].getInactiveAllele();
-
-			genome0 = genomeTwo;
-			genome1 = genomeOne;
-		}
-
-		GameProfile playerProfile = housing.getOwner();
-		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
-
-		IMutationContainer<IBee, ? extends IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
-		List<? extends IMutation> combinations = container.getCombinations(allele0, allele1, true);
-		for (IMutation mutation : combinations) {
-			IBeeMutation beeMutation = (IBeeMutation) mutation;
-
-			float chance = beeMutation.getChance(housing, allele0, allele1, genome0, genome1);
-			if (chance <= 0) {
-				continue;
-			}
-
-			// boost chance for researched mutations
-			if (breedingTracker.isResearched(beeMutation)) {
-				float mutationBoost = chance * (Config.researchMutationBoostMultiplier - 1.0f);
-				mutationBoost = Math.min(Config.maxResearchMutationBoostPercent, mutationBoost);
-				chance += mutationBoost;
-			}
-
-			if (chance > world.rand.nextFloat() * 100) {
-				breedingTracker.registerMutation(mutation);
-				return BeeManager.beeRoot.getKaryotype().templateAsChromosomes(mutation.getTemplate());
-			}
-		}
-
-		return null;
-	}
-
-	private static Vector3i getArea(IGenome genome, IBeeModifier beeModifier) {
-		Vector3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
-		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
-		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
+	@Override
+	public IIndividualRoot getRoot() {
+		return BeeManager.beeRoot;
 	}
 
 	@Override
@@ -198,12 +140,8 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public void age(World world, float housingLifespanModifier) {
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
-		IBeeModifier beeModifier = mode.getBeeModifier();
-		float finalModifier = housingLifespanModifier * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
-
-		super.age(world, finalModifier);
+	public void setIsNatural(boolean flag) {
+		this.isNatural = flag;
 	}
 
 	@Override
@@ -214,11 +152,6 @@ public class Bee extends IndividualLiving implements IBee {
 	@Override
 	public int getGeneration() {
 		return generation;
-	}
-
-	@Override
-	public void setIsNatural(boolean flag) {
-		this.isNatural = flag;
 	}
 
 	/* EFFECTS */
@@ -243,6 +176,11 @@ public class Bee extends IndividualLiving implements IBee {
 		return storedData;
 	}
 
+	private IEffectData doEffect(IAlleleBeeEffect effect, IEffectData storedData, IBeeHousing housing) {
+		storedData = effect.validateStorage(storedData);
+		return effect.doEffect(genome, storedData, housing);
+	}
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData[] doFX(IEffectData[] storedData, IBeeHousing housing) {
@@ -263,6 +201,20 @@ public class Bee extends IndividualLiving implements IBee {
 		storedData[1] = doFX(secondary, storedData[1], housing);
 
 		return storedData;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private IEffectData doFX(IAlleleBeeEffect effect, IEffectData storedData, IBeeHousing housing) {
+		return effect.doFX(genome, storedData, housing);
+	}
+
+	// INFORMATION
+
+	@Override
+	public IBee copy() {
+		CompoundNBT compound = new CompoundNBT();
+		this.write(compound);
+		return new Bee(compound);
 	}
 
 	@Override
@@ -344,6 +296,32 @@ public class Bee extends IndividualLiving implements IBee {
 		return errorStates;
 	}
 
+	private boolean canWorkAtNight(IBeeModifier beeModifier) {
+		return genome.getActiveAllele(BeeChromosomes.SPECIES).isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS) || beeModifier.isSelfLighted();
+	}
+
+	private boolean canWorkDuringDay() {
+		return !genome.getActiveAllele(BeeChromosomes.SPECIES).isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS);
+	}
+
+	private boolean canWorkUnderground(IBeeModifier beeModifier) {
+		return genome.getActiveValue(BeeChromosomes.CAVE_DWELLING) || beeModifier.isSunlightSimulated();
+	}
+
+	private boolean canFlyInRain(IBeeModifier beeModifier) {
+		return genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN) || beeModifier.isSealed();
+	}
+
+	private boolean isSuitableBiome(Biome biome) {
+		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
+		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
+		return isSuitableClimate(temperature, humidity);
+	}
+
+	private boolean isSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
+		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity, genome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature(), genome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE), genome.getActiveAllele(BeeChromosomes.SPECIES).getHumidity(), genome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE));
+	}
+
 	@Override
 	public List<Biome> getSuitableBiomes() {
 		List<Biome> suitableBiomes = new ArrayList<>();
@@ -354,6 +332,75 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		return suitableBiomes;
+	}
+
+	@Override
+	public void addTooltip(List<ITextComponent> list) {
+		ToolTip toolTip = new ToolTip();
+
+		// No info 4 u!
+		if (!isAnalyzed) {
+			toolTip.singleLine().text(new StringTextComponent("<")).translated("for.gui.unknown").text(new StringTextComponent(">")).style(TextFormatting.GRAY).create();
+			return;
+		}
+
+		// You analyzed it? Juicy tooltip coming up!
+		IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
+		IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
+		if (!isPureBred(BeeChromosomes.SPECIES)) {
+			toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).style(TextFormatting.BLUE);
+		}
+
+		if (generation > 0) {
+			Rarity rarity;
+			if (generation >= 1000) {
+				rarity = Rarity.EPIC;
+			} else if (generation >= 100) {
+				rarity = Rarity.RARE;
+			} else if (generation >= 10) {
+				rarity = Rarity.UNCOMMON;
+			} else {
+				rarity = Rarity.COMMON;
+			}
+			toolTip.translated("for.gui.beealyzer.generations", generation).style(rarity.color);
+		}
+
+		toolTip.singleLine().add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName()).text(new StringTextComponent(" ")).translated("for.gui.life").style(TextFormatting.GRAY).create();
+
+		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
+
+		TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
+		if (ResourceUtil.canTranslate(customSpeed)) {
+			toolTip.singleLine().add(customSpeed).style(TextFormatting.GRAY).create();
+		} else {
+			toolTip.singleLine().add(speedAllele.getDisplayName()).text(new StringTextComponent(" ")).translated("for.gui.worker").style(TextFormatting.GRAY).create();
+		}
+
+		IAlleleValue<EnumTolerance> tempToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
+		IAlleleValue<EnumTolerance> humidToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
+
+		toolTip.singleLine().text(new StringTextComponent("T: ")).add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(new StringTextComponent(" / ")).add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+		toolTip.singleLine().text(new StringTextComponent("H: ")).add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(new StringTextComponent(" / ")).add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
+
+		toolTip.add(genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription(), TextFormatting.GRAY);
+
+		if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
+			toolTip.text(GenericRatings.rateActivityTime(true, false)).style(TextFormatting.RED);
+		}
+
+		if (genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN)) {
+			toolTip.translated("for.gui.flyer.tooltip").style(TextFormatting.WHITE);
+		}
+		list.addAll(toolTip.getLines());
+	}
+
+	@Override
+	public void age(World world, float housingLifespanModifier) {
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
+		IBeeModifier beeModifier = mode.getBeeModifier();
+		float finalModifier = housingLifespanModifier * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
+
+		super.age(world, finalModifier);
 	}
 
 	// PRODUCTION
@@ -467,36 +514,90 @@ public class Bee extends IndividualLiving implements IBee {
 		return bees;
 	}
 
-	@Override
-	public Optional<BlockPos> plantFlowerRandom(IBeeHousing housing, List<BlockState> potentialFlowers) {
-		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-
-		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
+	private IBee createOffspring(IBeeHousing housing, IGenome mate, int generation) {
 
 		World world = housing.getWorldObj();
-		Random random = world.rand;
 
-		// Correct speed
-		if (random.nextInt(100) >= chance) {
-			return Optional.empty();
+		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
+		IChromosome[] parent1 = genome.getChromosomes();
+		IChromosome[] parent2 = mate.getChromosomes();
+
+		// Check for mutation. Replace one of the parents with the mutation
+		// template if mutation occurred.
+		IChromosome[] mutated1 = mutateSpecies(housing, genome, mate);
+		if (mutated1 != null) {
+			parent1 = mutated1;
+		}
+		IChromosome[] mutated2 = mutateSpecies(housing, mate, genome);
+		if (mutated2 != null) {
+			parent2 = mutated2;
 		}
 
-		// Gather required info
-		IFlowerProvider provider = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
-		Vector3i area = getArea(genome, beeModifier);
-		Vector3i offset = new Vector3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
-		BlockPos housingPos = housing.getCoordinates();
-
-		for (int i = 0; i < 10; i++) {
-			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
-			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
-
-			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock, potentialFlowers)) {
-				return Optional.of(posBlock);
+		for (int i = 0; i < parent1.length; i++) {
+			if (parent1[i] != null && parent2[i] != null) {
+				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
 			}
 		}
 
-		return Optional.empty();
+		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
+		return new Bee(new Genome(BeeManager.beeRoot.getKaryotype(), chromosomes), null, mode.isNaturalOffspring(this), generation);
+	}
+
+	@Nullable
+	private static IChromosome[] mutateSpecies(IBeeHousing housing, IGenome genomeOne, IGenome genomeTwo) {
+
+		World world = housing.getWorldObj();
+
+		IChromosome[] parent1 = genomeOne.getChromosomes();
+		IChromosome[] parent2 = genomeTwo.getChromosomes();
+
+		IGenome genome0;
+		IGenome genome1;
+
+		IAlleleBeeSpecies allele0;
+		IAlleleBeeSpecies allele1;
+
+		if (world.rand.nextBoolean()) {
+			allele0 = (IAlleleBeeSpecies) parent1[BeeChromosomes.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleBeeSpecies) parent2[BeeChromosomes.SPECIES.ordinal()].getInactiveAllele();
+
+			genome0 = genomeOne;
+			genome1 = genomeTwo;
+		} else {
+			allele0 = (IAlleleBeeSpecies) parent2[BeeChromosomes.SPECIES.ordinal()].getActiveAllele();
+			allele1 = (IAlleleBeeSpecies) parent1[BeeChromosomes.SPECIES.ordinal()].getInactiveAllele();
+
+			genome0 = genomeTwo;
+			genome1 = genomeOne;
+		}
+
+		GameProfile playerProfile = housing.getOwner();
+		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, playerProfile);
+
+		IMutationContainer<IBee, ? extends IMutation> container = BeeManager.beeRoot.getComponent(ComponentKeys.MUTATIONS);
+		List<? extends IMutation> combinations = container.getCombinations(allele0, allele1, true);
+		for (IMutation mutation : combinations) {
+			IBeeMutation beeMutation = (IBeeMutation) mutation;
+
+			float chance = beeMutation.getChance(housing, allele0, allele1, genome0, genome1);
+			if (chance <= 0) {
+				continue;
+			}
+
+			// boost chance for researched mutations
+			if (breedingTracker.isResearched(beeMutation)) {
+				float mutationBoost = chance * (Config.researchMutationBoostMultiplier - 1.0f);
+				mutationBoost = Math.min(Config.maxResearchMutationBoostPercent, mutationBoost);
+				chance += mutationBoost;
+			}
+
+			if (chance > world.rand.nextFloat() * 100) {
+				breedingTracker.registerMutation(mutation);
+				return BeeManager.beeRoot.getKaryotype().templateAsChromosomes(mutation.getTemplate());
+			}
+		}
+
+		return null;
 	}
 
 	/* FLOWERS */
@@ -588,141 +689,41 @@ public class Bee extends IndividualLiving implements IBee {
 		return false;
 	}
 
-	private IEffectData doEffect(IAlleleBeeEffect effect, IEffectData storedData, IBeeHousing housing) {
-		storedData = effect.validateStorage(storedData);
-		return effect.doEffect(genome, storedData, housing);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private IEffectData doFX(IAlleleBeeEffect effect, IEffectData storedData, IBeeHousing housing) {
-		return effect.doFX(genome, storedData, housing);
-	}
-
-	private boolean canWorkAtNight(IBeeModifier beeModifier) {
-		return genome.getActiveAllele(BeeChromosomes.SPECIES).isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS) || beeModifier.isSelfLighted();
-	}
-
-	private boolean canWorkDuringDay() {
-		return !genome.getActiveAllele(BeeChromosomes.SPECIES).isNocturnal() || genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS);
-	}
-
-	private boolean canWorkUnderground(IBeeModifier beeModifier) {
-		return genome.getActiveValue(BeeChromosomes.CAVE_DWELLING) || beeModifier.isSunlightSimulated();
-	}
-
-	private boolean canFlyInRain(IBeeModifier beeModifier) {
-		return genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN) || beeModifier.isSealed();
-	}
-
-	private boolean isSuitableBiome(Biome biome) {
-		EnumTemperature temperature = EnumTemperature.getFromBiome(biome);
-		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
-		return isSuitableClimate(temperature, humidity);
-	}
-
-	private boolean isSuitableClimate(EnumTemperature temperature, EnumHumidity humidity) {
-		return AlleleManager.climateHelper.isWithinLimits(temperature, humidity, genome.getActiveAllele(BeeChromosomes.SPECIES).getTemperature(), genome.getActiveValue(BeeChromosomes.TEMPERATURE_TOLERANCE), genome.getActiveAllele(BeeChromosomes.SPECIES).getHumidity(), genome.getActiveValue(BeeChromosomes.HUMIDITY_TOLERANCE));
-	}
-
 	@Override
-	public void addTooltip(List<ITextComponent> list) {
-		ToolTip toolTip = new ToolTip();
+	public Optional<BlockPos> plantFlowerRandom(IBeeHousing housing, List<BlockState> potentialFlowers) {
+		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
 
-		// No info 4 u!
-		if (!isAnalyzed) {
-			toolTip.singleLine().text(new StringTextComponent("<")).translated("for.gui.unknown").text(new StringTextComponent(">")).style(TextFormatting.GRAY).create();
-			return;
-		}
-
-		// You analyzed it? Juicy tooltip coming up!
-		IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
-		IAlleleBeeSpecies secondary = genome.getInactiveAllele(BeeChromosomes.SPECIES);
-		if (!isPureBred(BeeChromosomes.SPECIES)) {
-			toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).style(TextFormatting.BLUE);
-		}
-
-		if (generation > 0) {
-			Rarity rarity;
-			if (generation >= 1000) {
-				rarity = Rarity.EPIC;
-			} else if (generation >= 100) {
-				rarity = Rarity.RARE;
-			} else if (generation >= 10) {
-				rarity = Rarity.UNCOMMON;
-			} else {
-				rarity = Rarity.COMMON;
-			}
-			toolTip.translated("for.gui.beealyzer.generations", generation).style(rarity.color);
-		}
-
-		toolTip.singleLine().add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName()).text(new StringTextComponent(" ")).translated("for.gui.life").style(TextFormatting.GRAY).create();
-
-		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
-
-		TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
-		if (ResourceUtil.canTranslate(customSpeed)) {
-			toolTip.singleLine().add(customSpeed).style(TextFormatting.GRAY).create();
-		} else {
-			toolTip.singleLine().add(speedAllele.getDisplayName()).text(new StringTextComponent(" ")).translated("for.gui.worker").style(TextFormatting.GRAY).create();
-		}
-
-		IAlleleValue<EnumTolerance> tempToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.TEMPERATURE_TOLERANCE);
-		IAlleleValue<EnumTolerance> humidToleranceAllele = getGenome().getActiveAllele(BeeChromosomes.HUMIDITY_TOLERANCE);
-
-		toolTip.singleLine().text(new StringTextComponent("T: ")).add(AlleleManager.climateHelper.toDisplay(primary.getTemperature())).text(new StringTextComponent(" / ")).add(tempToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
-		toolTip.singleLine().text(new StringTextComponent("H: ")).add(AlleleManager.climateHelper.toDisplay(primary.getHumidity())).text(new StringTextComponent(" / ")).add(humidToleranceAllele.getDisplayName()).style(TextFormatting.GREEN).create();
-
-		toolTip.add(genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider().getDescription(), TextFormatting.GRAY);
-
-		if (genome.getActiveValue(BeeChromosomes.NEVER_SLEEPS)) {
-			toolTip.text(GenericRatings.rateActivityTime(true, false)).style(TextFormatting.RED);
-		}
-
-		if (genome.getActiveValue(BeeChromosomes.TOLERATES_RAIN)) {
-			toolTip.translated("for.gui.flyer.tooltip").style(TextFormatting.WHITE);
-		}
-		list.addAll(toolTip.getLines());
-	}
-
-	@Override
-	public IIndividualRoot getRoot() {
-		return BeeManager.beeRoot;
-	}
-
-	// INFORMATION
-	@Override
-	public IBee copy() {
-		CompoundNBT compound = new CompoundNBT();
-		this.write(compound);
-		return new Bee(compound);
-	}
-
-	private IBee createOffspring(IBeeHousing housing, IGenome mate, int generation) {
+		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorldObj();
+		Random random = world.rand;
 
-		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
-		IChromosome[] parent1 = genome.getChromosomes();
-		IChromosome[] parent2 = mate.getChromosomes();
-
-		// Check for mutation. Replace one of the parents with the mutation
-		// template if mutation occurred.
-		IChromosome[] mutated1 = mutateSpecies(housing, genome, mate);
-		if (mutated1 != null) {
-			parent1 = mutated1;
-		}
-		IChromosome[] mutated2 = mutateSpecies(housing, mate, genome);
-		if (mutated2 != null) {
-			parent2 = mutated2;
+		// Correct speed
+		if (random.nextInt(100) >= chance) {
+			return Optional.empty();
 		}
 
-		for (int i = 0; i < parent1.length; i++) {
-			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
+		// Gather required info
+		IFlowerProvider provider = genome.getActiveAllele(BeeChromosomes.FLOWER_PROVIDER).getProvider();
+		Vector3i area = getArea(genome, beeModifier);
+		Vector3i offset = new Vector3i(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
+		BlockPos housingPos = housing.getCoordinates();
+
+		for (int i = 0; i < 10; i++) {
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(random, area);
+			BlockPos posBlock = VectUtil.add(housingPos, randomPos, offset);
+
+			if (FlowerManager.flowerRegistry.growFlower(provider.getFlowerType(), world, this, posBlock, potentialFlowers)) {
+				return Optional.of(posBlock);
 			}
 		}
 
-		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
-		return new Bee(new Genome(BeeManager.beeRoot.getKaryotype(), chromosomes), null, mode.isNaturalOffspring(this), generation);
+		return Optional.empty();
+	}
+
+	private static Vector3i getArea(IGenome genome, IBeeModifier beeModifier) {
+		Vector3i genomeTerritory = genome.getActiveValue(BeeChromosomes.TERRITORY);
+		float housingModifier = beeModifier.getTerritoryModifier(genome, 1f);
+		return VectUtil.scale(genomeTerritory, housingModifier * 3.0f);
 	}
 }

@@ -25,6 +25,10 @@ public class CommandTree {
 		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
 		ICommandModeHelper modeHelper = new TreeModeHelper();
 
-		return Commands.literal("tree").then(CommandTreeSpawn.register("spawnTree", new TreeSpawner())).then(CommandTreeSpawn.register("spawnForest", new ForestSpawner())).then(CommandMode.register(modeHelper)).then(CommandSaveStats.register(saveHelper, modeHelper));
+		return Commands.literal("tree")
+				.then(CommandTreeSpawn.register("spawnTree", new TreeSpawner()))
+				.then(CommandTreeSpawn.register("spawnForest", new ForestSpawner()))
+				.then(CommandMode.register(modeHelper))
+				.then(CommandSaveStats.register(saveHelper, modeHelper));
 	}
 }

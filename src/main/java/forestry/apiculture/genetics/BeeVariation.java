@@ -38,14 +38,14 @@ public abstract class BeeVariation implements IBeeDefinition {
 	}
 
 	@Override
-	public IAlleleBeeSpecies getSpecies() {
-		return genome.getActiveAllele(BeeChromosomes.SPECIES);
-	}
-
-	@Override
 	public final ItemStack getMemberStack(EnumBeeType beeType) {
 		IBee bee = createIndividual();
 		return BeeHelper.getRoot().getTypes().createStack(bee, beeType);
+	}
+
+	@Override
+	public IAlleleBeeSpecies getSpecies() {
+		return genome.getActiveAllele(BeeChromosomes.SPECIES);
 	}
 
 	public static class RainResist extends BeeVariation {

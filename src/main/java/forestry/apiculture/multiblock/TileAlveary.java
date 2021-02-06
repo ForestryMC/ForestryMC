@@ -128,17 +128,6 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 		return getMultiblockLogic().getController().getBiome();
 	}
 
-	/* IClimatised */
-	@Override
-	public EnumTemperature getTemperature() {
-		return getMultiblockLogic().getController().getTemperature();
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return getMultiblockLogic().getController().getHumidity();
-	}
-
 	/* IBeeHousing */
 	@Override
 	public Iterable<IBeeModifier> getBeeModifiers() {
@@ -161,6 +150,22 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	}
 
 	@Override
+	public Vector3d getBeeFXCoordinates() {
+		return getMultiblockLogic().getController().getBeeFXCoordinates();
+	}
+
+	/* IClimatised */
+	@Override
+	public EnumTemperature getTemperature() {
+		return getMultiblockLogic().getController().getTemperature();
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return getMultiblockLogic().getController().getHumidity();
+	}
+
+	@Override
 	public int getBlockLightValue() {
 		return getMultiblockLogic().getController().getBlockLightValue();
 	}
@@ -173,11 +178,6 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	@Override
 	public boolean isRaining() {
 		return getMultiblockLogic().getController().isRaining();
-	}
-
-	@Override
-	public Vector3d getBeeFXCoordinates() {
-		return getMultiblockLogic().getController().getBeeFXCoordinates();
 	}
 
 	@Override

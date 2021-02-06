@@ -38,37 +38,6 @@ import forestry.core.items.EnumCraftingMaterial;
 
 public class ItemArmorApiarist extends ArmorItem {
 
-	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
-		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).group(ItemGroups.tabApiculture));
-	}
-
-	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-		if (ApicultureItems.APIARIST_LEGS.itemEqual(stack)) {
-			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
-		} else {
-			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
-		}
-	}
-
-	@Override
-	@Nullable
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-		return new ICapabilityProvider() {
-
-			//TODO - null issues
-			@Override
-			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST && slot == EquipmentSlotType.HEAD) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				}
-				return LazyOptional.empty();
-			}
-		};
-	}
-
 	public static final class ApiaristArmorMaterial implements IArmorMaterial {
 
 		private static final int[] reductions = new int[]{1, 2, 3, 1};
@@ -112,5 +81,36 @@ public class ItemArmorApiarist extends ArmorItem {
 		public float getKnockbackResistance() {
 			return 0.0F;
 		}
+	}
+
+	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
+		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).group(ItemGroups.tabApiculture));
+	}
+
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+		if (ApicultureItems.APIARIST_LEGS.itemEqual(stack)) {
+			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
+		} else {
+			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
+		}
+	}
+
+	@Override
+	@Nullable
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+		return new ICapabilityProvider() {
+
+			//TODO - null issues
+			@Override
+			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
+					return LazyOptional.of(capability::getDefaultInstance);
+				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST && slot == EquipmentSlotType.HEAD) {
+					return LazyOptional.of(capability::getDefaultInstance);
+				}
+				return LazyOptional.empty();
+			}
+		};
 	}
 }

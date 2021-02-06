@@ -32,6 +32,17 @@ import forestry.apiculture.entities.MinecartEntityBeehouse;
 
 public class ItemMinecartBeehousing extends MinecartItem {
 
+	//TODO merge with BlockTypeApiculture?
+	public enum Type implements IItemSubtype {
+		BEE_HOUSE,
+		APIARY;
+
+		@Override
+		public String getString() {
+			return toString().toLowerCase(Locale.ENGLISH);
+		}
+	}
+
 	private final Type type;
 
 	public ItemMinecartBeehousing(Type type) {
@@ -81,16 +92,5 @@ public class ItemMinecartBeehousing extends MinecartItem {
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		return "cart." + type.getString();
-	}
-
-	//TODO merge with BlockTypeApiculture?
-	public enum Type implements IItemSubtype {
-		BEE_HOUSE,
-		APIARY;
-
-		@Override
-		public String getString() {
-			return toString().toLowerCase(Locale.ENGLISH);
-		}
 	}
 }

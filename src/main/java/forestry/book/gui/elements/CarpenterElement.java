@@ -19,6 +19,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
+import forestry.core.utils.ClientUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
@@ -31,7 +32,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	}
 
 	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.carpenterManager.getRecipes(Minecraft.getInstance().world.getRecipeManager(), x)).flatMap(Collection::stream).toArray(ICarpenterRecipe[]::new));
+		this(0, 0, Arrays.stream(stacks).map(x -> RecipeManagers.carpenterManager.getRecipes(ClientUtils.getRecipeManager(), x)).flatMap(Collection::stream).toArray(ICarpenterRecipe[]::new));
 	}
 
 	public CarpenterElement(int xPos, int yPos, ICarpenterRecipe[] recipes) {

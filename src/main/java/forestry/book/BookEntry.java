@@ -36,18 +36,28 @@ public class BookEntry implements IBookEntry {
 	}
 
 	@Override
-	public ItemStack getStack() {
-		return stack;
-	}
-
-	@Override
-	public String getName() {
-		return name;
+	public BookContent[][] getContent() {
+		return content;
 	}
 
 	@Override
 	public IBookPageFactory getPageFactory() {
 		return loader;
+	}
+
+	@Override
+	public ItemStack getStack() {
+		return stack;
+	}
+
+	@Override
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent(title);
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 	@Override
@@ -59,15 +69,5 @@ public class BookEntry implements IBookEntry {
 	@Nullable
 	public IBookEntry getParent() {
 		return parent;
-	}
-
-	@Override
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent(title);
-	}
-
-	@Override
-	public BookContent[][] getContent() {
-		return content;
 	}
 }

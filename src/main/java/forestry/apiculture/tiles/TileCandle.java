@@ -29,16 +29,9 @@ public class TileCandle extends TileEntity {
 		super(ApicultureTiles.CANDLE.tileType());
 	}
 
-	private static int[] fromIntColour(int value) {
-		int[] cs = new int[3];
-		cs[0] = (value & 0xff0000) >> 16;
-		cs[1] = (value & 0x00ff00) >> 8;
-		cs[2] = value & 0x0000ff;
-		return cs;
-	}
-
-	private static int toIntColour(int r, int g, int b) {
-		return r << 16 | g << 8 | b;
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
 	}
 
 	@Override
@@ -47,6 +40,12 @@ public class TileCandle extends TileEntity {
 		super.onDataPacket(net, pkt);
 		CompoundNBT nbt = pkt.getNbtCompound();
 		handleUpdateTag(getBlockState(), nbt);
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT tag = super.getUpdateTag();
+		return write(tag);
 	}
 
 	@Override
@@ -75,17 +74,6 @@ public class TileCandle extends TileEntity {
 		return tagRoot;
 	}
 
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
-	}
-
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
-		return write(tag);
-	}
-
 	public boolean isLit() {
 		return lit;
 	}
@@ -106,5 +94,17 @@ public class TileCandle extends TileEntity {
 		int[] myColour = fromIntColour(this.colour);
 		int[] addColour = fromIntColour(colour2);
 		this.colour = toIntColour((addColour[0] + myColour[0]) / 2, (addColour[0] + myColour[0]) / 2, (addColour[2] + myColour[2]) / 2);
+	}
+
+	private static int[] fromIntColour(int value) {
+		int[] cs = new int[3];
+		cs[0] = (value & 0xff0000) >> 16;
+		cs[1] = (value & 0x00ff00) >> 8;
+		cs[2] = value & 0x0000ff;
+		return cs;
+	}
+
+	private static int toIntColour(int r, int g, int b) {
+		return r << 16 | g << 8 | b;
 	}
 }

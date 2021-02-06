@@ -25,6 +25,16 @@ public class BlockForestrySlab extends SlabBlock implements IWoodTyped {
 	}
 
 	@Override
+	public boolean isFireproof() {
+		return fireproof;
+	}
+
+	@Override
+	public IWoodType getWoodType() {
+		return woodType;
+	}
+
+	@Override
 	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
 		return fireproof ? 0 : 20;
 	}
@@ -37,15 +47,5 @@ public class BlockForestrySlab extends SlabBlock implements IWoodTyped {
 	@Override
 	public WoodBlockKind getBlockKind() {
 		return WoodBlockKind.SLAB;
-	}
-
-	@Override
-	public boolean isFireproof() {
-		return fireproof;
-	}
-
-	@Override
-	public IWoodType getWoodType() {
-		return woodType;
 	}
 }

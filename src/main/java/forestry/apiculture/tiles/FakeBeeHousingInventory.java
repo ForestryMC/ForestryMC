@@ -17,13 +17,13 @@ public class FakeBeeHousingInventory implements IBeeHousingInventory {
 	}
 
 	@Override
-	public void setQueen(ItemStack itemstack) {
-
+	public ItemStack getDrone() {
+		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack getDrone() {
-		return ItemStack.EMPTY;
+	public void setQueen(ItemStack itemstack) {
+
 	}
 
 	@Override

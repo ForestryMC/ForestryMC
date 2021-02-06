@@ -94,8 +94,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public boolean hasWork() {
-		return true;
+	public void onRemoval() {
+		transformer.removeTransformer();
 	}
 
 	@Override
@@ -109,40 +109,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
-
-		tankManager.read(data);
-
-		if (data.contains(TRANSFORMER_KEY)) {
-			CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
-			transformer.read(nbtTag);
-		}
-	}
-
-	/* Methods - SAVING & LOADING */
-	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		super.write(data);
-
-		tankManager.write(data);
-
-		data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
-
-		return data;
-	}
-
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return LazyOptional.of(() -> tankManager).cast();
-		}
-
-		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
-			return LazyOptional.of(() -> transformer).cast();
-		}
-
-		return super.getCapability(capability, facing);
+	public boolean hasWork() {
+		return true;
 	}
 
 	@Override
@@ -159,19 +127,6 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 			updateTemperature(errorLogic, changedState);
 		}
 		return true;
-	}
-
-	/* Methods - Implement IStreamableGui */
-	@Override
-	public void writeGuiData(PacketBufferForestry data) {
-		super.writeGuiData(data);
-		transformer.writeData(data);
-	}
-
-	@Override
-	public void readGuiData(PacketBufferForestry data) throws IOException {
-		super.readGuiData(data);
-		transformer.readData(data);
 	}
 
 	private void updateHumidity(IErrorLogic errorLogic, IClimateState changedState) {
@@ -243,43 +198,6 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * transformer.getCostModifier());
 	}
 
-	private IClimateState getClimateDifference() {
-		IClimateState defaultState = transformer.getDefault();
-		IClimateState targetedState = transformer.getTarget();
-		return targetedState.subtract(defaultState);
-	}
-
-	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerHabitatFormer(windowId, inv, this);
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromValue(getExactTemperature());
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getExactHumidity());
-	}
-
-	@Override
-	public float getExactTemperature() {
-		return transformer.getCurrent().getTemperature();
-	}
-
-	@Override
-	public float getExactHumidity() {
-		return transformer.getCurrent().getHumidity();
-	}
-
-	/* Methods - Implement IClimateHousing */
-	@Override
-	public IClimateTransformer getTransformer() {
-		return transformer;
-	}
-
 	@Override
 	public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
 		if (type == ClimateType.HUMIDITY) {
@@ -308,9 +226,83 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		setNeedsNetworkUpdate();
 	}
 
+	private IClimateState getClimateDifference() {
+		IClimateState defaultState = transformer.getDefault();
+		IClimateState targetedState = transformer.getTarget();
+		return targetedState.subtract(defaultState);
+	}
+
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerHabitatFormer(windowId, inv, this);
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromValue(getExactTemperature());
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(getExactHumidity());
+	}
+
 	@Override
 	public Biome getBiome() {
 		return world.getBiome(getPos());
+	}
+
+	@Override
+	public float getExactTemperature() {
+		return transformer.getCurrent().getTemperature();
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return transformer.getCurrent().getHumidity();
+	}
+
+	/* Methods - Implement IClimateHousing */
+	@Override
+	public IClimateTransformer getTransformer() {
+		return transformer;
+	}
+
+	/* Methods - Implement IStreamableGui */
+	@Override
+	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
+		transformer.writeData(data);
+	}
+
+	@Override
+	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
+		transformer.readData(data);
+	}
+
+	/* Methods - SAVING & LOADING */
+	@Override
+	public CompoundNBT write(CompoundNBT data) {
+		super.write(data);
+
+		tankManager.write(data);
+
+		data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
+
+		return data;
+	}
+
+	@Override
+	public void read(BlockState state, CompoundNBT data) {
+		super.read(state, data);
+
+		tankManager.read(data);
+
+		if (data.contains(TRANSFORMER_KEY)) {
+			CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
+			transformer.read(nbtTag);
+		}
 	}
 
 	/* Network */
@@ -330,7 +322,15 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public void onRemoval() {
-		transformer.removeTransformer();
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return LazyOptional.of(() -> tankManager).cast();
+		}
+
+		if (capability == ClimateCapabilities.CLIMATE_TRANSFORMER) {
+			return LazyOptional.of(() -> transformer).cast();
+		}
+
+		return super.getCapability(capability, facing);
 	}
 }

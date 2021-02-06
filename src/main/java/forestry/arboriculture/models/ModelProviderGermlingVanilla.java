@@ -28,6 +28,15 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 	}
 
 	@Override
+	public int getSpriteColor(EnumGermlingType type, int renderPass) {
+		if (type == EnumGermlingType.POLLEN) {
+			return leafSpriteProvider.getColor(false);
+		} else {
+			return 0xFFFFFF;
+		}
+	}
+
+	@Override
 	public ResourceLocation getItemModel() {
 		switch (woodType) {
 			case SPRUCE:
@@ -60,15 +69,6 @@ public class ModelProviderGermlingVanilla implements IGermlingModelProvider {
 				return new ResourceLocation("minecraft", "block/dark_oak_sapling");
 			default:
 				return new ResourceLocation("minecraft", "block/oak_sapling");
-		}
-	}
-
-	@Override
-	public int getSpriteColor(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.POLLEN) {
-			return leafSpriteProvider.getColor(false);
-		} else {
-			return 0xFFFFFF;
 		}
 	}
 }

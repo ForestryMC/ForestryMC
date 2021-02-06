@@ -31,49 +31,6 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		super("mycophilic", true, 20, false, false);
 	}
 
-	private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
-		List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
-		for (CowEntity cow : cows) {
-			if (convertCowToMooshroom(cow)) {
-				return;
-			}
-		}
-	}
-
-	private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
-		Block block = blockState.getBlock();
-		if (block == Blocks.GRASS_BLOCK || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
-			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
-		Block block = blockState.getBlock();
-		if (block instanceof MushroomBlock) {
-			MushroomBlock mushroom = (MushroomBlock) block;
-			mushroom.grow(world, pos, blockState, world.rand);
-			return true;
-		}
-		return false;
-	}
-
-	private static boolean convertCowToMooshroom(CowEntity cow) {
-		if (cow instanceof MooshroomEntity) {
-			return false;
-		}
-		World world = cow.world;
-		cow.remove();
-		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
-		mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
-		mooshroom.setHealth(cow.getHealth());
-		mooshroom.renderYawOffset = cow.renderYawOffset;
-		world.addEntity(mooshroom);
-		world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
-		return true;
-	}
-
 	@Override
 	public IEffectData validateStorage(IEffectData storedData) {
 		if (storedData instanceof EffectData && ((EffectData) storedData).getIntSize() == 2) {
@@ -118,5 +75,48 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 				}
 			}
 		}
+	}
+
+	private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
+		List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
+		for (CowEntity cow : cows) {
+			if (convertCowToMooshroom(cow)) {
+				return;
+			}
+		}
+	}
+
+	private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
+		Block block = blockState.getBlock();
+		if (block == Blocks.GRASS_BLOCK || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
+			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
+		Block block = blockState.getBlock();
+		if (block instanceof MushroomBlock) {
+			MushroomBlock mushroom = (MushroomBlock) block;
+			mushroom.grow(world, pos, blockState, world.rand);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean convertCowToMooshroom(CowEntity cow) {
+		if (cow instanceof MooshroomEntity) {
+			return false;
+		}
+		World world = cow.world;
+		cow.remove();
+		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
+		mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
+		mooshroom.setHealth(cow.getHealth());
+		mooshroom.renderYawOffset = cow.renderYawOffset;
+		world.addEntity(mooshroom);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
+		return true;
 	}
 }

@@ -38,7 +38,10 @@ import forestry.arboriculture.genetics.TreeDefinition;
 
 public final class CommandTreeSpawn {
 	public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
-		return Commands.literal(name).requires(PermLevel.ADMIN).then(Commands.argument("type", TreeArgument.treeArgument()).executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", ITree.class)))).executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
+		return Commands.literal(name).requires(PermLevel.ADMIN)
+				.then(Commands.argument("type", TreeArgument.treeArgument())
+						.executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", ITree.class))))
+				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
 	}
 
 	public static int run(ITreeSpawner treeSpawner, CommandSource source, ITree tree) throws CommandSyntaxException {
@@ -54,18 +57,26 @@ public final class CommandTreeSpawn {
 		@Override
 		public ITree parse(final StringReader reader) throws CommandSyntaxException {
 			ResourceLocation location = ResourceLocation.read(reader);
-
 			return TreeManager.treeRoot.templateAsIndividual(TreeManager.treeRoot.getTemplate(location.toString()));
 		}
 
 		@Override
 		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-			return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream().map(IIndividual::getGenome).map(a -> a.getActiveAllele(TreeChromosomes.SPECIES)).map(IAllele::getRegistryName).map(ResourceLocation::toString), builder);
+			return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString), builder);
 		}
 
 		@Override
 		public Collection<String> getExamples() {
-			return TreeManager.treeRoot.getIndividualTemplates().stream().map(IIndividual::getGenome).map(a -> a.getActiveAllele(TreeChromosomes.SPECIES)).map(IAllele::getRegistryName).map(ResourceLocation::toString).collect(Collectors.toList());
+			return TreeManager.treeRoot.getIndividualTemplates().stream()
+					.map(IIndividual::getGenome)
+					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
+					.map(IAllele::getRegistryName)
+					.map(ResourceLocation::toString)
+					.collect(Collectors.toList());
 		}
 	}
 }

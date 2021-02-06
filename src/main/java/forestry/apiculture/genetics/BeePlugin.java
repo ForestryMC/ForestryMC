@@ -31,7 +31,10 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	protected final Map<String, ItemStack> iconStacks = new HashMap<>();
 
 	private BeePlugin() {
-		super(new BeeDatabaseTab(DatabaseMode.ACTIVE), new BeeDatabaseTab(DatabaseMode.INACTIVE), new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)), new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack));
+		super(new BeeDatabaseTab(DatabaseMode.ACTIVE),
+			new BeeDatabaseTab(DatabaseMode.INACTIVE),
+			new ProductsTab(() -> ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY)),
+			new MutationsTab(ApicultureItems.FRAME_IMPREGNATED::stack));
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
 		for (ItemStack beeStack : beeList) {
@@ -45,12 +48,12 @@ public class BeePlugin extends DatabasePlugin<IBee> {
 	}
 
 	@Override
-	public List<String> getHints() {
-		return Config.hints.get("beealyzer");
+	public Map<String, ItemStack> getIndividualStacks() {
+		return iconStacks;
 	}
 
 	@Override
-	public Map<String, ItemStack> getIndividualStacks() {
-		return iconStacks;
+	public List<String> getHints() {
+		return Config.hints.get("beealyzer");
 	}
 }

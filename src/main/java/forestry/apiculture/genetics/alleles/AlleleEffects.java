@@ -34,25 +34,25 @@ public class AlleleEffects {
 
 	static {
 		beeEffects = Arrays.asList(
-				effectNone = new AlleleEffectNone("none", true),
-				effectAggressive = new AlleleEffectAggressive(),
-				effectHeroic = new AlleleEffectHeroic(),
-				effectBeatific = new AlleleEffectPotion("beatific", false, Effects.REGENERATION, 100),
-				effectMiasmic = new AlleleEffectPotion("miasmic", false, Effects.POISON, 600, 100, 0.1f),
-				effectMisanthrope = new AlleleEffectMisanthrope(),
-				effectGlacial = new AlleleEffectGlacial(),
-				effectRadioactive = new AlleleEffectRadioactive(),
-				effectCreeper = new AlleleEffectCreeper(),
-				effectIgnition = new AlleleEffectIgnition(),
-				effectExploration = new AlleleEffectExploration(),
-				effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
-				effectSnowing = new AlleleEffectSnowing(),
-				effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
-				effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
-				effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
-				effectRepulsion = new AlleleEffectRepulsion(),
-				effectFertile = new AlleleEffectFertile(),
-				effectMycophilic = new AlleleEffectFungification()
+			effectNone = new AlleleEffectNone("none", true),
+			effectAggressive = new AlleleEffectAggressive(),
+			effectHeroic = new AlleleEffectHeroic(),
+			effectBeatific = new AlleleEffectPotion("beatific", false, Effects.REGENERATION, 100),
+			effectMiasmic = new AlleleEffectPotion("miasmic", false, Effects.POISON, 600, 100, 0.1f),
+			effectMisanthrope = new AlleleEffectMisanthrope(),
+			effectGlacial = new AlleleEffectGlacial(),
+			effectRadioactive = new AlleleEffectRadioactive(),
+			effectCreeper = new AlleleEffectCreeper(),
+			effectIgnition = new AlleleEffectIgnition(),
+			effectExploration = new AlleleEffectExploration(),
+			effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
+			effectSnowing = new AlleleEffectSnowing(),
+			effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.NAUSEA, 100),
+			effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
+			effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
+			effectRepulsion = new AlleleEffectRepulsion(),
+			effectFertile = new AlleleEffectFertile(),
+			effectMycophilic = new AlleleEffectFungification()
 		);
 	}
 

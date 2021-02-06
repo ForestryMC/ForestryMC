@@ -62,6 +62,16 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
+	public IInventoryAdapter getInternalInventory() {
+		return inventory;
+	}
+
+	@Override
+	public boolean allowsAutomation() {
+		return true;
+	}
+
+	@Override
 	public void setWorldAndPos(World world, BlockPos pos) {
 		super.setWorldAndPos(world, pos);
 
@@ -130,17 +140,12 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		return compoundNBT;
 	}
 
-	@Override
-	public boolean allowsAutomation() {
-		return true;
-	}
+	/* ILIQUIDTANKCONTAINER */
 
 	@Override
 	public TankManager getTankManager() {
 		return tankManager;
 	}
-
-	/* ILIQUIDTANKCONTAINER */
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
@@ -152,11 +157,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return LazyOptional.empty();
-	}
-
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return inventory;
 	}
 
 	@Override

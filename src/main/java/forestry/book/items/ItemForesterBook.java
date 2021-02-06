@@ -47,12 +47,6 @@ public class ItemForesterBook extends ItemWithGui {
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
 	}
 
-	@Nullable
-	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return null;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	private void bookOpenGui(PlayerEntity player, ItemStack stack) {
 		IForesterBook book = BookLoader.INSTANCE.loadBook();
@@ -63,5 +57,11 @@ public class ItemForesterBook extends ItemWithGui {
 		}
 		GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
 		Minecraft.getInstance().displayGuiScreen(bookGui);    //TODO does this work
+	}
+
+	@Nullable
+	@Override
+	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+		return null;
 	}
 }

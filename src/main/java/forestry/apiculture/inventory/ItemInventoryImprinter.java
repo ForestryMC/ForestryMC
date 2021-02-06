@@ -93,12 +93,12 @@ public class ItemInventoryImprinter extends ItemInventory {
 		return primaryIndex;
 	}
 
-	public void setPrimaryIndex(int index) {
-		primaryIndex = index;
-	}
-
 	public int getSecondaryIndex() {
 		return secondaryIndex;
+	}
+
+	public void setPrimaryIndex(int index) {
+		primaryIndex = index;
 	}
 
 	public void setSecondaryIndex(int index) {

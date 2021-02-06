@@ -46,12 +46,6 @@ public class TileSapling extends TileTreeContainer {
 		super(ArboricultureTiles.SAPLING.tileType());
 	}
 
-	private static int getRequiredMaturity(World world, ITree tree) {
-		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
-		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
-		return Math.round(tree.getRequiredMaturity() * maturationModifier);
-	}
-
 	/* SAVING & LOADING */
 	@Override
 	public void read(BlockState state, CompoundNBT compoundNBT) {
@@ -72,6 +66,12 @@ public class TileSapling extends TileTreeContainer {
 	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
 		timesTicked++;
 		tryGrow(rand, false);
+	}
+
+	private static int getRequiredMaturity(World world, ITree tree) {
+		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
+		return Math.round(tree.getRequiredMaturity() * maturationModifier);
 	}
 
 	public boolean canAcceptBoneMeal(Random rand) {

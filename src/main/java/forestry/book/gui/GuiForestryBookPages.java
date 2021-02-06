@@ -110,6 +110,11 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	}
 
 	@Override
+	public ITextComponent getTitle() {
+		return entry.getTitle();
+	}
+
+	@Override
 	protected void actionPerformed(Button button) {
 		if (button instanceof GuiButtonPage) {
 			GuiButtonPage pageButton = (GuiButtonPage) button;
@@ -134,11 +139,6 @@ public class GuiForestryBookPages extends GuiForesterBook {
 				displayEntries();
 			}
 		}
-	}
-
-	@Override
-	public ITextComponent getTitle() {
-		return entry.getTitle();
 	}
 
 	private void displayEntries() {

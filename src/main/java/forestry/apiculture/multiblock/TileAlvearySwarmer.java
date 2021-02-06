@@ -58,8 +58,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAlvearySwarmer(windowId, inv, this);
+	public boolean allowsAutomation() {
+		return true;
 	}
 
 	/* UPDATING */
@@ -194,11 +194,6 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	@Override
-	public boolean allowsAutomation() {
-		return true;
-	}
-
-	@Override
 	public boolean isActive() {
 		return active;
 	}
@@ -214,5 +209,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		if (world != null && !world.isRemote) {
 			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
 		}
+	}
+
+	@Override
+	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+		return new ContainerAlvearySwarmer(windowId, inv, this);
 	}
 }

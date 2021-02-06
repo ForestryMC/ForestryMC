@@ -32,18 +32,6 @@ public class BookEntryBuilder implements IBookEntryBuilder {
 	}
 
 	@Override
-	public IBookEntryBuilder setContent(BookContent[][] content) {
-		this.content = content;
-		return this;
-	}
-
-	@Override
-	public IBookEntryBuilder setTitle(String title) {
-		this.title = title;
-		return this;
-	}
-
-	@Override
 	public BookEntryBuilder setStack(ItemStack stack) {
 		this.stack = stack;
 		return this;
@@ -60,6 +48,18 @@ public class BookEntryBuilder implements IBookEntryBuilder {
 		BookEntryBuilder builder = new BookEntryBuilder(category, name).setStack(stack);
 		subEntries.add(builder);
 		return builder;
+	}
+
+	@Override
+	public IBookEntryBuilder setContent(BookContent[][] content) {
+		this.content = content;
+		return this;
+	}
+
+	@Override
+	public IBookEntryBuilder setTitle(String title) {
+		this.title = title;
+		return this;
 	}
 
 	@Override

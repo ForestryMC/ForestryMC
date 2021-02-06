@@ -55,13 +55,15 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	private final InventoryBeeHousing inventory;
 	private final IBeekeepingLogic beekeepingLogic;
 	private final IClimateListener listener;
+
+	private float tempChange = 0.0f;
+	private float humidChange = 0.0f;
+
 	// PARTS
 	private final Set<IBeeModifier> beeModifiers = new HashSet<>();
 	private final Set<IBeeListener> beeListeners = new HashSet<>();
 	private final Set<IAlvearyComponent.Climatiser> climatisers = new HashSet<>();
 	private final Set<IAlvearyComponent.Active> activeComponents = new HashSet<>();
-	private float tempChange = 0.0f;
-	private float humidChange = 0.0f;
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
@@ -72,39 +74,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		this.listener = ClimateManager.climateFactory.createListener(this);
 
 		this.beeModifiers.add(new AlvearyBeeModifier());
-	}
-
-	private static float equalizeChange(float change) {
-		if (change == 0) {
-			return 0;
-		}
-
-		change *= 0.95f;
-		if (change <= 0.001f && change >= -0.001f) {
-			change = 0;
-		}
-		return change;
-	}
-
-	@Override
-	public IClimateListener getClimateListener() {
-		return listener;
-	}
-
-	/* GUI */
-	@Override
-	public int getHealthScaled(int i) {
-		return breedingProgressPercent * i / 100;
-	}
-
-	@Override
-	public Iterable<IBeeModifier> getBeeModifiers() {
-		return beeModifiers;
-	}
-
-	@Override
-	public Iterable<IBeeListener> getBeeListeners() {
-		return beeListeners;
 	}
 
 	@Override
@@ -118,33 +87,27 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public int getBlockLightValue() {
-		BlockPos topCenter = getTopCenterCoord();
-		//TODO light
-		return world.getLight(topCenter.up());
+	public IInventoryAdapter getInternalInventory() {
+		if (isAssembled()) {
+			return inventory;
+		} else {
+			return FakeInventoryAdapter.instance();
+		}
 	}
 
 	@Override
-	public boolean canBlockSeeTheSky() {
-		BlockPos topCenter = getTopCenterCoord();
-		return world.canBlockSeeSky(topCenter.add(0, 2, 0));
+	public IClimateListener getClimateListener() {
+		return listener;
 	}
 
 	@Override
-	public boolean isRaining() {
-		BlockPos topCenter = getTopCenterCoord();
-		return world.isRainingAt(topCenter.add(0, 2, 0));
+	public Iterable<IBeeListener> getBeeListeners() {
+		return beeListeners;
 	}
 
 	@Override
-	public GameProfile getOwner() {
-		return getOwnerHandler().getOwner();
-	}
-
-	@Override
-	public Vector3d getBeeFXCoordinates() {
-		BlockPos coord = getCenterCoord();
-		return new Vector3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
+	public Iterable<IBeeModifier> getBeeModifiers() {
+		return beeModifiers;
 	}
 
 	@Override
@@ -203,63 +166,6 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	protected void onAssimilate(IMultiblockControllerInternal assimilated) {
-
-	}
-
-	@Override
-	protected boolean updateServer(int tickCount) {
-		for (IAlvearyComponent.Active activeComponent : activeComponents) {
-			activeComponent.updateServer(tickCount);
-		}
-
-		final boolean canWork = beekeepingLogic.canWork();
-		if (canWork) {
-			beekeepingLogic.doWork();
-		}
-
-		for (IAlvearyComponent.Climatiser climatiser : climatisers) {
-			climatiser.changeClimate(tickCount, this);
-		}
-
-		tempChange = equalizeChange(tempChange);
-		humidChange = equalizeChange(humidChange);
-
-		return canWork;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	protected void updateClient(int tickCount) {
-		for (IAlvearyComponent.Active activeComponent : activeComponents) {
-			activeComponent.updateClient(tickCount);
-		}
-
-		if (beekeepingLogic.canDoBeeFX() && updateOnInterval(2)) {
-			beekeepingLogic.doBeeFX();
-
-			if (updateOnInterval(50)) {
-				BlockPos center = getCenterCoord();
-				float fxX = center.getX() + 0.5F;
-				float fxY = center.getY() + 1.0F;
-				float fxZ = center.getZ() + 0.5F;
-				float distanceFromCenter = 1.6F;
-
-				float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
-				float upSpread = world.rand.nextFloat() * 0.8F;
-				fxY += upSpread;
-
-				// display fx on all 4 sides
-				ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
-				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
-				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
-			}
-		}
-		listener.updateClientSide(false);
-	}
-
-	@Override
 	protected void isMachineWhole() throws MultiblockValidationException {
 		super.isMachineWhole();
 
@@ -311,7 +217,10 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		}
 	}
 
-	/* IActivatable */
+	@Override
+	protected void onAssimilate(IMultiblockControllerInternal assimilated) {
+
+	}
 
 	@Override
 	public void onAssimilated(IMultiblockControllerInternal assimilator) {
@@ -319,20 +228,67 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void formatDescriptionPacket(CompoundNBT data) {
-		this.write(data);
-		beekeepingLogic.write(data);
+	protected boolean updateServer(int tickCount) {
+		for (IAlvearyComponent.Active activeComponent : activeComponents) {
+			activeComponent.updateServer(tickCount);
+		}
+
+		final boolean canWork = beekeepingLogic.canWork();
+		if (canWork) {
+			beekeepingLogic.doWork();
+		}
+
+		for (IAlvearyComponent.Climatiser climatiser : climatisers) {
+			climatiser.changeClimate(tickCount, this);
+		}
+
+		tempChange = equalizeChange(tempChange);
+		humidChange = equalizeChange(humidChange);
+
+		return canWork;
+	}
+
+	private static float equalizeChange(float change) {
+		if (change == 0) {
+			return 0;
+		}
+
+		change *= 0.95f;
+		if (change <= 0.001f && change >= -0.001f) {
+			change = 0;
+		}
+		return change;
 	}
 
 	@Override
-	public void decodeDescriptionPacket(CompoundNBT data) {
-		this.read(data);
-		beekeepingLogic.read(data);
-	}
+	@OnlyIn(Dist.CLIENT)
+	protected void updateClient(int tickCount) {
+		for (IAlvearyComponent.Active activeComponent : activeComponents) {
+			activeComponent.updateClient(tickCount);
+		}
 
-	@Override
-	public String getUnlocalizedType() {
-		return "for.multiblock.alveary.type";
+		if (beekeepingLogic.canDoBeeFX() && updateOnInterval(2)) {
+			beekeepingLogic.doBeeFX();
+
+			if (updateOnInterval(50)) {
+				BlockPos center = getCenterCoord();
+				float fxX = center.getX() + 0.5F;
+				float fxY = center.getY() + 1.0F;
+				float fxZ = center.getZ() + 0.5F;
+				float distanceFromCenter = 1.6F;
+
+				float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
+				float upSpread = world.rand.nextFloat() * 0.8F;
+				fxY += upSpread;
+
+				// display fx on all 4 sides
+				ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ - distanceFromCenter);
+				ParticleRender.addEntityHoneyDustFX(world, fxX + leftRightSpreadFromCenter, fxY, fxZ + distanceFromCenter);
+			}
+		}
+		listener.updateClientSide(false);
 	}
 
 	@Override
@@ -359,18 +315,39 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public IInventoryAdapter getInternalInventory() {
-		if (isAssembled()) {
-			return inventory;
-		} else {
-			return FakeInventoryAdapter.instance();
-		}
+	public void formatDescriptionPacket(CompoundNBT data) {
+		this.write(data);
+		beekeepingLogic.write(data);
 	}
+
+	@Override
+	public void decodeDescriptionPacket(CompoundNBT data) {
+		this.read(data);
+		beekeepingLogic.read(data);
+	}
+
+	/* IActivatable */
 
 	@Override
 	public BlockPos getCoordinates() {
 		BlockPos coord = getCenterCoord();
 		return coord.add(0, +1, 0);
+	}
+
+	@Override
+	public Vector3d getBeeFXCoordinates() {
+		BlockPos coord = getCenterCoord();
+		return new Vector3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
+	}
+
+	@Override
+	public float getExactTemperature() {
+		return listener.getExactTemperature() + tempChange;
+	}
+
+	@Override
+	public float getExactHumidity() {
+		return listener.getExactHumidity() + humidChange;
 	}
 
 	@Override
@@ -392,19 +369,38 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public float getExactTemperature() {
-		return listener.getExactTemperature() + tempChange;
+	public GameProfile getOwner() {
+		return getOwnerHandler().getOwner();
 	}
 
 	@Override
-	public float getExactHumidity() {
-		return listener.getExactHumidity() + humidChange;
+	public String getUnlocalizedType() {
+		return "for.multiblock.alveary.type";
 	}
 
 	@Override
 	public Biome getBiome() {
 		BlockPos coords = getReferenceCoord();
 		return world.getBiome(coords);
+	}
+
+	@Override
+	public int getBlockLightValue() {
+		BlockPos topCenter = getTopCenterCoord();
+		//TODO light
+		return world.getLight(topCenter.up());
+	}
+
+	@Override
+	public boolean canBlockSeeTheSky() {
+		BlockPos topCenter = getTopCenterCoord();
+		return world.canBlockSeeSky(topCenter.add(0, 2, 0));
+	}
+
+	@Override
+	public boolean isRaining() {
+		BlockPos topCenter = getTopCenterCoord();
+		return world.isRainingAt(topCenter.add(0, 2, 0));
 	}
 
 	@Override
@@ -423,6 +419,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);
 		humidChange = Math.min(boundaryUp - humidity, humidChange);
+	}
+
+	/* GUI */
+	@Override
+	public int getHealthScaled(int i) {
+		return breedingProgressPercent * i / 100;
 	}
 
 	@Override

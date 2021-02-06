@@ -38,6 +38,11 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 	}
 
 	@Override
+	public DatabaseMode getMode() {
+		return mode;
+	}
+
+	@Override
 	public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
 		IAlleleTreeSpecies primarySpecies = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getInactiveAllele(TreeChromosomes.SPECIES);
@@ -90,10 +95,5 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 	@Override
 	public ItemStack getIconStack() {
 		return TreeDefinition.Cherry.getMemberStack(mode == DatabaseMode.ACTIVE ? EnumGermlingType.SAPLING : EnumGermlingType.POLLEN);
-	}
-
-	@Override
-	public DatabaseMode getMode() {
-		return mode;
 	}
 }

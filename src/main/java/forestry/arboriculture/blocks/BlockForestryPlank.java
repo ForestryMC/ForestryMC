@@ -16,6 +16,14 @@ import forestry.arboriculture.IWoodTyped;
 
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
+	public static Properties createWoodProperties(IWoodType woodType) {
+		return Block.Properties.create(Material.WOOD)
+			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
+			.sound(SoundType.WOOD)
+			.harvestTool(ToolType.AXE)
+			.harvestLevel(0);
+	}
+
 	private final boolean fireproof;
 	private final IWoodType woodType;
 
@@ -25,13 +33,8 @@ public class BlockForestryPlank extends Block implements IWoodTyped {
 		this.woodType = woodType;
 	}
 
-	public static Properties createWoodProperties(IWoodType woodType) {
-		return Block.Properties.create(Material.WOOD).hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F).sound(SoundType.WOOD).harvestTool(ToolType.AXE).harvestLevel(0);
-	}
-
-	@Override
-	public WoodBlockKind getBlockKind() {
-		return WoodBlockKind.PLANKS;
+	public IWoodType getWoodType() {
+		return woodType;
 	}
 
 	@Override
@@ -39,8 +42,9 @@ public class BlockForestryPlank extends Block implements IWoodTyped {
 		return fireproof;
 	}
 
-	public IWoodType getWoodType() {
-		return woodType;
+	@Override
+	public WoodBlockKind getBlockKind() {
+		return WoodBlockKind.PLANKS;
 	}
 
 	@Override

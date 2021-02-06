@@ -18,12 +18,12 @@ import forestry.api.genetics.alleles.AlleleManager;
 
 public class ClimateGrowthProvider implements IGrowthProvider {
 
-	private final EnumTolerance temperatureTolerance;
-	private final EnumTolerance humidityTolerance;
 	@Nullable
 	private EnumTemperature temperature;
 	@Nullable
 	private EnumHumidity humidity;
+	private final EnumTolerance temperatureTolerance;
+	private final EnumTolerance humidityTolerance;
 
 	public ClimateGrowthProvider(EnumTemperature temperature, EnumTolerance temperatureTolerance, EnumHumidity humidity, EnumTolerance humidityTolerance) {
 		this.temperature = temperature;

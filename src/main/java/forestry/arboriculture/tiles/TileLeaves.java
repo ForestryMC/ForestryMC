@@ -99,35 +99,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		super(ArboricultureTiles.LEAVES.tileType());
 	}
 
-	/* INFORMATION */
-	private static boolean isDestroyed(@Nullable ITree tree, int damage) {
-		return tree != null && damage > tree.getResilience();
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public static ResourceLocation getLeaveSprite(IModelData data, boolean fancy) {
-		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider(data);
-		final Boolean pollinated = data.getData(POLLINATED);
-		return leafSpriteProvider.getSprite(pollinated != null && pollinated, fancy);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private static ILeafSpriteProvider getLeafSpriteProvider(IModelData data) {
-		final ILeafSpriteProvider leafSpriteProvider = data.getData(SPRITE_PROVIDER);
-		if (leafSpriteProvider != null) {
-			return leafSpriteProvider;
-		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
-					.getActiveAllele(TreeChromosomes.SPECIES);
-			return oakSpecies.getLeafSpriteProvider();
-		}
-	}
-
-	@Nullable
-	public static ResourceLocation getFruitSprite(IModelData data) {
-		return data.getData(FRUIT_TEXTURE);
-	}
-
 	/* SAVING & LOADING */
 	@Override
 	public void read(BlockState state, CompoundNBT compoundNBT) {
@@ -165,6 +136,251 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			compoundNBT.put(NBT_CATERPILLAR, caterpillarNbt);
 		}
 		return compoundNBT;
+	}
+
+	@Override
+	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+		ITree tree = getTree();
+		if (tree == null) {
+			return;
+		}
+
+		IGenome genome = tree.getGenome();
+		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);
+
+		boolean isDestroyed = isDestroyed(tree, damage);
+		for (ILeafTickHandler tickHandler : primary.getRoot().getLeafTickHandlers()) {
+			if (tickHandler.onRandomLeafTick(tree, world, rand, getPos(), isDestroyed)) {
+				return;
+			}
+		}
+
+		if (isDestroyed) {
+			return;
+		}
+
+		if (damage > 0) {
+			damage--;
+		}
+
+		if (hasFruit() && getRipeningTime() < ripeningPeriod) {
+			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
+			float sappinessModifier = treekeepingMode.getSappinessModifier(genome, 1f);
+			float sappiness = genome.getActiveValue(TreeChromosomes.SAPPINESS) * sappinessModifier;
+
+			if (rand.nextFloat() < sappiness) {
+				ripeningTime++;
+				sendNetworkUpdateRipening();
+			}
+		}
+
+		if (caterpillar != null) {
+			matureCaterpillar();
+		}
+
+		effectData = tree.doEffect(effectData, world, getPos());
+	}
+
+	@Override
+	public void setTree(ITree tree) {
+		ITree oldTree = getTree();
+		super.setTree(tree);
+
+		IGenome genome = tree.getGenome();
+		species = genome.getActiveAllele(TreeChromosomes.SPECIES);
+
+		if (oldTree != null && !tree.equals(oldTree)) {
+			checkFruit = true;
+		}
+
+		if (tree.canBearFruit() && checkFruit && world != null && !world.isRemote) {
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
+			if (fruitProvider.isFruitLeaf(genome, world, getPos())) {
+				isFruitLeaf = fruitProvider.getFruitChance(genome, world, getPos()) >= world.rand.nextFloat();
+			}
+		}
+
+		if (isFruitLeaf) {
+			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
+			if (world != null && world.isRemote) {
+				fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
+			}
+
+			ripeningPeriod = (short) fruitProvider.getRipeningPeriod();
+		} else if (world != null && world.isRemote) {
+			fruitSprite = null;
+		}
+		requestModelDataUpdate();
+
+		markDirty();
+	}
+
+	/* INFORMATION */
+	private static boolean isDestroyed(@Nullable ITree tree, int damage) {
+		return tree != null && damage > tree.getResilience();
+	}
+
+	@Override
+	public boolean isPollinated() {
+		ITree tree = getTree();
+		return tree != null && !isDestroyed(tree, damage) && tree.getMate().isPresent();
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public int getFoliageColour(PlayerEntity player) {
+		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
+		final int baseColor = getLeafSpriteProvider().getColor(showPollinated);
+
+		ITree tree = getTree();
+		if (isDestroyed(tree, damage)) {
+			return ColourUtil.addRGBComponents(baseColor, 92, 61, 0);
+		} else if (caterpillar != null) {
+			return ColourUtil.multiplyRGBComponents(baseColor, 1.5f);
+		} else {
+			return baseColor;
+		}
+	}
+
+	public int getFruitColour() {
+		if (colourFruits == 0 && hasFruit()) {
+			colourFruits = determineFruitColour();
+		}
+		return colourFruits;
+	}
+
+	private int determineFruitColour() {
+		ITree tree = getTree();
+		if (tree == null) {
+			tree = TreeDefinition.Cherry.createIndividual();
+		}
+		IGenome genome = tree.getGenome();
+		IFruitProvider fruit = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
+		return fruit.getColour(genome, world, getPos(), getRipeningTime());
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public ResourceLocation getLeaveSprite(boolean fancy) {
+		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider();
+		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private ILeafSpriteProvider getLeafSpriteProvider() {
+		if (species != null) {
+			return species.getLeafSpriteProvider();
+		} else {
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
+					.getActiveAllele(TreeChromosomes.SPECIES);
+			return oakSpecies.getLeafSpriteProvider();
+		}
+	}
+
+	@Nullable
+	public ResourceLocation getFruitSprite() {
+		return fruitSprite;
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public static ResourceLocation getLeaveSprite(IModelData data, boolean fancy) {
+		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider(data);
+		final Boolean pollinated = data.getData(POLLINATED);
+		return leafSpriteProvider.getSprite(pollinated != null && pollinated, fancy);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private static ILeafSpriteProvider getLeafSpriteProvider(IModelData data) {
+		final ILeafSpriteProvider leafSpriteProvider = data.getData(SPRITE_PROVIDER);
+		if (leafSpriteProvider != null) {
+			return leafSpriteProvider;
+		} else {
+			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
+					.getActiveAllele(TreeChromosomes.SPECIES);
+			return oakSpecies.getLeafSpriteProvider();
+		}
+	}
+
+	@Nullable
+	public static ResourceLocation getFruitSprite(IModelData data) {
+		return data.getData(FRUIT_TEXTURE);
+	}
+
+	@Override
+	public IModelData getModelData() {
+		ModelDataMap.Builder builder = new ModelDataMap.Builder();
+		builder.withInitial(SPRITE_PROVIDER, getLeafSpriteProvider());
+		builder.withInitial(POLLINATED, isPollinatedState);
+		builder.withInitial(FRUIT_TEXTURE, fruitSprite);
+		return builder.build();
+	}
+
+	public int getRipeningTime() {
+		return ripeningTime;
+	}
+
+	/* IPOLLINATABLE */
+	@Override
+	public PlantType getPlantType() {
+		ITree tree = getTree();
+		if (tree == null) {
+			return PlantType.PLAINS;
+		}
+
+		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
+	}
+
+	@Override
+	public boolean canMateWith(IIndividual individual) {
+		if (individual instanceof ITree) {
+			ITree tree = getTree();
+			return tree != null && !tree.getMate().isPresent() && (ModuleApiculture.doSelfPollination || !tree
+					.isGeneticEqual(individual));
+		}
+		return false;
+	}
+
+	@Override
+	public void mateWith(IIndividual individual) {
+		if (individual instanceof ITree) {
+			ITree tree = getTree();
+			if (tree == null || world == null) {
+				return;
+			}
+
+			tree.mate(individual.getGenome());
+			if (!world.isRemote) {
+				sendNetworkUpdate();
+			}
+		}
+	}
+
+	@Override
+	public ITree getPollen() {
+		return getTree();
+	}
+
+	public String getUnlocalizedName() {
+		ITree tree = getTree();
+		if (tree == null) {
+			return "for.leaves.corrupted";
+		}
+
+		return tree.getGenome().getPrimary().getLocalisationKey();
+	}
+
+	/* NETWORK */
+	private void sendNetworkUpdate() {
+		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
+	}
+
+	private void sendNetworkUpdateRipening() {
+		int newColourFruits = determineFruitColour();
+		if (newColourFruits == colourFruits) {
+			return;
+		}
+		colourFruits = newColourFruits;
+
+		PacketRipeningUpdate ripeningUpdate = new PacketRipeningUpdate(this);
+		NetworkUtil.sendNetworkPacket(ripeningUpdate, pos, world);
 	}
 
 	@Override
@@ -229,233 +445,12 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public void setTree(ITree tree) {
-		ITree oldTree = getTree();
-		super.setTree(tree);
-
-		IGenome genome = tree.getGenome();
-		species = genome.getActiveAllele(TreeChromosomes.SPECIES);
-
-		if (oldTree != null && !tree.equals(oldTree)) {
-			checkFruit = true;
-		}
-
-		if (tree.canBearFruit() && checkFruit && world != null && !world.isRemote) {
-			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-			if (fruitProvider.isFruitLeaf(genome, world, getPos())) {
-				isFruitLeaf = fruitProvider.getFruitChance(genome, world, getPos()) >= world.rand.nextFloat();
-			}
-		}
-
-		if (isFruitLeaf) {
-			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-			if (world != null && world.isRemote) {
-				fruitSprite = fruitProvider.getSprite(genome, world, getPos(), getRipeningTime());
-			}
-
-			ripeningPeriod = (short) fruitProvider.getRipeningPeriod();
-		} else if (world != null && world.isRemote) {
-			fruitSprite = null;
-		}
-		requestModelDataUpdate();
-
-		markDirty();
-	}
-
-	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
-		ITree tree = getTree();
-		if (tree == null) {
-			return;
-		}
-
-		IGenome genome = tree.getGenome();
-		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);
-
-		boolean isDestroyed = isDestroyed(tree, damage);
-		for (ILeafTickHandler tickHandler : primary.getRoot().getLeafTickHandlers()) {
-			if (tickHandler.onRandomLeafTick(tree, world, rand, getPos(), isDestroyed)) {
-				return;
-			}
-		}
-
-		if (isDestroyed) {
-			return;
-		}
-
-		if (damage > 0) {
-			damage--;
-		}
-
-		if (hasFruit() && getRipeningTime() < ripeningPeriod) {
-			ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
-			float sappinessModifier = treekeepingMode.getSappinessModifier(genome, 1f);
-			float sappiness = genome.getActiveValue(TreeChromosomes.SAPPINESS) * sappinessModifier;
-
-			if (rand.nextFloat() < sappiness) {
-				ripeningTime++;
-				sendNetworkUpdateRipening();
-			}
-		}
-
-		if (caterpillar != null) {
-			matureCaterpillar();
-		}
-
-		effectData = tree.doEffect(effectData, world, getPos());
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public int getFoliageColour(PlayerEntity player) {
-		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
-		final int baseColor = getLeafSpriteProvider().getColor(showPollinated);
-
-		ITree tree = getTree();
-		if (isDestroyed(tree, damage)) {
-			return ColourUtil.addRGBComponents(baseColor, 92, 61, 0);
-		} else if (caterpillar != null) {
-			return ColourUtil.multiplyRGBComponents(baseColor, 1.5f);
-		} else {
-			return baseColor;
-		}
-	}
-
-	public int getFruitColour() {
-		if (colourFruits == 0 && hasFruit()) {
-			colourFruits = determineFruitColour();
-		}
-		return colourFruits;
-	}
-
-	private int determineFruitColour() {
-		ITree tree = getTree();
-		if (tree == null) {
-			tree = TreeDefinition.Cherry.createIndividual();
-		}
-		IGenome genome = tree.getGenome();
-		IFruitProvider fruit = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-		return fruit.getColour(genome, world, getPos(), getRipeningTime());
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public ResourceLocation getLeaveSprite(boolean fancy) {
-		final ILeafSpriteProvider leafSpriteProvider = getLeafSpriteProvider();
-		return leafSpriteProvider.getSprite(isPollinatedState, fancy);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private ILeafSpriteProvider getLeafSpriteProvider() {
-		if (species != null) {
-			return species.getLeafSpriteProvider();
-		} else {
-			IAlleleTreeSpecies oakSpecies = TreeDefinition.Oak.createIndividual().getGenome()
-					.getActiveAllele(TreeChromosomes.SPECIES);
-			return oakSpecies.getLeafSpriteProvider();
-		}
-	}
-
-	@Nullable
-	public ResourceLocation getFruitSprite() {
-		return fruitSprite;
-	}
-
-	@Override
-	public IModelData getModelData() {
-		ModelDataMap.Builder builder = new ModelDataMap.Builder();
-		builder.withInitial(SPRITE_PROVIDER, getLeafSpriteProvider());
-		builder.withInitial(POLLINATED, isPollinatedState);
-		builder.withInitial(FRUIT_TEXTURE, fruitSprite);
-		return builder.build();
-	}
-
-	public int getRipeningTime() {
-		return ripeningTime;
-	}
-
-	/* IPOLLINATABLE */
-	@Override
-	public PlantType getPlantType() {
-		ITree tree = getTree();
-		if (tree == null) {
-			return PlantType.PLAINS;
-		}
-
-		return tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
-	}
-
-	@Override
-	public ITree getPollen() {
-		return getTree();
-	}
-
-	@Override
-	public boolean canMateWith(IIndividual individual) {
-		if (individual instanceof ITree) {
-			ITree tree = getTree();
-			return tree != null && !tree.getMate().isPresent() && (ModuleApiculture.doSelfPollination || !tree
-					.isGeneticEqual(individual));
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isPollinated() {
-		ITree tree = getTree();
-		return tree != null && !isDestroyed(tree, damage) && tree.getMate().isPresent();
-	}
-
-	@Override
-	public void mateWith(IIndividual individual) {
-		if (individual instanceof ITree) {
-			ITree tree = getTree();
-			if (tree == null || world == null) {
-				return;
-			}
-
-			tree.mate(individual.getGenome());
-			if (!world.isRemote) {
-				sendNetworkUpdate();
-			}
-		}
-	}
-
-	public String getUnlocalizedName() {
-		ITree tree = getTree();
-		if (tree == null) {
-			return "for.leaves.corrupted";
-		}
-
-		return tree.getGenome().getPrimary().getLocalisationKey();
-	}
-
-	/* NETWORK */
-	private void sendNetworkUpdate() {
-		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
-	}
-
-	private void sendNetworkUpdateRipening() {
-		int newColourFruits = determineFruitColour();
-		if (newColourFruits == colourFruits) {
-			return;
-		}
-		colourFruits = newColourFruits;
-
-		PacketRipeningUpdate ripeningUpdate = new PacketRipeningUpdate(this);
-		NetworkUtil.sendNetworkPacket(ripeningUpdate, pos, world);
-	}
-
-	@Override
 	public void fromRipeningPacket(int newColourFruits) {
 		if (newColourFruits == colourFruits) {
 			return;
 		}
 		colourFruits = newColourFruits;
 		RenderUtil.markForUpdate(pos);
-	}
-
-	@Override
-	public boolean hasFruit() {
-		return isFruitLeaf && !isDestroyed(getTree(), damage);
 	}
 
 	@Override
@@ -490,6 +485,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			return 0f;
 		}
 		return (float) getRipeningTime() / ripeningPeriod;
+	}
+
+	@Override
+	public boolean hasFruit() {
+		return isFruitLeaf && !isDestroyed(getTree(), damage);
 	}
 
 	@Override
@@ -547,6 +547,11 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
+	public IIndividual getNanny() {
+		return getTree();
+	}
+
+	@Override
 	public void setCaterpillar(@Nullable IButterfly caterpillar) {
 		maturationTime = 0;
 		this.caterpillar = caterpillar;
@@ -554,19 +559,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public IIndividual getNanny() {
-		return getTree();
-	}
-
-	@Override
 	public boolean canNurse(IButterfly caterpillar) {
 		ITree tree = getTree();
 		return !isDestroyed(tree, damage) && this.caterpillar == null;
-	}
-
-	@Override
-	public World getWorldObj() {
-		return world;
 	}
 
 	@Override
@@ -582,5 +577,10 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public EnumHumidity getHumidity() {
 		return EnumHumidity.getFromValue(getBiome().getDownfall());
+	}
+
+	@Override
+	public World getWorldObj() {
+		return world;
 	}
 }

@@ -72,14 +72,6 @@ public class ClimateBarElement extends GuiElement {
 		});
 	}
 
-	private static void setGLColorFromInt(int color) {
-		float red = (color >> 16 & 0xFF) / 255.0F;
-		float green = (color >> 8 & 0xFF) / 255.0F;
-		float blue = (color & 0xFF) / 255.0F;
-
-		RenderSystem.color4f(red, green, blue, 1.0F);
-	}
-
 	@Override
 	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		handleMouse(mouseX - getX(), mouseY - getY());
@@ -113,6 +105,14 @@ public class ClimateBarElement extends GuiElement {
 	private int getDefaultPosition() {
 		float value = transformer.getDefault().getClimate(type);
 		return (int) (value * 49 / MAX_VALUE);
+	}
+
+	private static void setGLColorFromInt(int color) {
+		float red = (color >> 16 & 0xFF) / 255.0F;
+		float green = (color >> 8 & 0xFF) / 255.0F;
+		float blue = (color & 0xFF) / 255.0F;
+
+		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
 	private void handleMouse(int mouseX, int mouseY) {

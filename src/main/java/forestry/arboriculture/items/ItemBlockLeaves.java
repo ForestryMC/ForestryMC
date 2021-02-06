@@ -32,18 +32,6 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		super(block);
 	}
 
-	public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
-		String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
-		if (I18n.hasKey(customTreeKey)) {
-			return new TranslationTextComponent(customTreeKey);
-		}
-
-		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
-
-		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
-		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
-	}
-
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemstack) {
 		if (!itemstack.hasTag()) {
@@ -55,6 +43,18 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 
 		String unlocalizedName = tileLeaves.getUnlocalizedName();
 		return getDisplayName(unlocalizedName);
+	}
+
+	public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
+		String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
+		if (I18n.hasKey(customTreeKey)) {
+			return new TranslationTextComponent(customTreeKey);
+		}
+
+		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
+
+		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
+		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
 	}
 
 	@Override

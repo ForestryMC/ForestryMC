@@ -35,6 +35,15 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	private static final int WORK_CYCLES = 1;
 	private static final int ENERGY_PER_OPERATION = 50;
+
+	protected interface IClimitiserDefinition {
+		float getChangePerTransfer();
+
+		float getBoundaryUp();
+
+		float getBoundaryDown();
+	}
+
 	private final EnergyManager energyManager;
 	private final IClimitiserDefinition definition;
 	private int workingTime = 0;
@@ -128,13 +137,5 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 			return energyCapability;
 		}
 		return super.getCapability(capability, facing);
-	}
-
-	protected interface IClimitiserDefinition {
-		float getChangePerTransfer();
-
-		float getBoundaryUp();
-
-		float getBoundaryDown();
 	}
 }

@@ -16,6 +16,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
@@ -124,6 +125,34 @@ public abstract class InventoryUtil {
 	}
 
 	/* REMOVAL */
+	public static boolean consumeIngredients(IInventory inventory, NonNullList<Ingredient> ingredients, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools, boolean doRemove) {
+		int[] consumeStacks = ItemStackUtil.createConsume(ingredients, inventory, craftingTools);
+		if (doRemove && consumeStacks.length > 0) {
+			return consumeItems(inventory, consumeStacks, player, stowContainer);
+		} else {
+			return consumeStacks.length > 0;
+		}
+	}
+
+	private static boolean consumeItems(IInventory inventory, int[] consumeStacks, @Nullable PlayerEntity player, boolean stowContainer) {
+		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+			int count = consumeStacks[i];
+			if (count <= 0) {
+				continue;
+			}
+			ItemStack oldStack = inventory.getStackInSlot(i);
+			ItemStack removed = inventory.decrStackSize(i, count);
+
+			if (stowContainer && oldStack.getItem().hasContainerItem(oldStack)) {
+				stowContainerItem(removed, inventory, i, player);
+			}
+
+			if (count > removed.getCount()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Removes a set of items from an inventory.
@@ -542,7 +571,9 @@ public abstract class InventoryUtil {
 			ItemEntity entityitem = new ItemEntity(world, x + f, y + f1, z + f2, drop);
 			double accel = 0.05D;
 			//TODO - hopefully correct I think
-			entityitem.setVelocity(world.rand.nextGaussian() * accel, world.rand.nextGaussian() * accel + 0.2F, world.rand.nextGaussian() * accel);
+			entityitem
+					.setVelocity(world.rand.nextGaussian() * accel, world.rand.nextGaussian() * accel + 0.2F, world.rand
+							.nextGaussian() * accel);
 			world.addEntity(entityitem);
 		}
 	}

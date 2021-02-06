@@ -39,6 +39,15 @@ import forestry.core.utils.BlockUtil;
 
 public class FruitProviderPod extends FruitProviderNone {
 
+	public enum EnumPodType {
+		COCOA, DATES, PAPAYA;
+		//, COCONUT;
+
+		public String getModelName() {
+			return toString().toLowerCase(Locale.ENGLISH);
+		}
+	}
+
 	private final EnumPodType type;
 	private ProductListWrapper products;
 
@@ -55,8 +64,8 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public IProductList getProducts() {
-		return products;
+	public boolean requiresFruitBlocks() {
+		return true;
 	}
 
 	@Override
@@ -66,26 +75,6 @@ public class FruitProviderPod extends FruitProviderNone {
 		}
 
 		return NonNullList.create();
-	}
-
-	@Override
-	public String getModelName() {
-		return type.getModelName();
-	}
-
-	@Override
-	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
-		return null;
-	}
-
-	@Override
-	public ResourceLocation getDecorativeSprite() {
-		return null;
-	}
-
-	@Override
-	public boolean requiresFruitBlocks() {
-		return true;
 	}
 
 	@Override
@@ -103,16 +92,27 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
+	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+		return null;
+	}
+
+	@Override
+	public ResourceLocation getDecorativeSprite() {
+		return null;
+	}
+
+	@Override
+	public IProductList getProducts() {
+		return products;
+	}
+
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(TextureStitchEvent.Pre event) {
 	}
 
-	public enum EnumPodType {
-		COCOA, DATES, PAPAYA;
-		//, COCONUT;
-
-		public String getModelName() {
-			return toString().toLowerCase(Locale.ENGLISH);
-		}
+	@Override
+	public String getModelName() {
+		return type.getModelName();
 	}
 }

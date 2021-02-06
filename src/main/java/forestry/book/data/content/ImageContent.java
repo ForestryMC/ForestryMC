@@ -35,7 +35,8 @@ public class ImageContent extends BookContent<Drawable> {
 			return false;
 		}
 		if (center) {
-			page.pane(page.getWidth(), pageHeight - page.getHeight()).add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
+			page.pane(page.getWidth(), pageHeight - page.getHeight())
+				.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
 		} else {
 			page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
 		}

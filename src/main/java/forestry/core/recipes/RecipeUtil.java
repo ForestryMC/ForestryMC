@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
@@ -84,7 +85,7 @@ public abstract class RecipeUtil {
 		return ItemStack.EMPTY;
 	}
 
-	public static List<IRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {    //TODO - is the stream() needed anymore?
+	public static List<ICraftingRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {
 		return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
 	}
 

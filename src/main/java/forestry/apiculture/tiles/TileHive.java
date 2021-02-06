@@ -101,18 +101,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		beeTargetPredicate = new BeeTargetPredicate(this);
 	}
 
-	private static void attack(LivingEntity entity, int maxDamage) {
-		double attackAmount = entity.world.rand.nextDouble() / 2.0 + 0.5;
-		int damage = (int) (attackAmount * maxDamage);
-		if (damage > 0) {
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
-			if (entity.world.rand.nextInt(4) >= count) {
-				entity.attackEntityFrom(damageSourceBeeHive, damage);
-			}
-		}
-	}
-
 	@Override
 	public void tick() {
 		if (Config.generateBeehivesDebug) {
@@ -219,20 +207,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		return compoundNBT;
 	}
 
-	@Nullable
-	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
-	}
-
-	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT nbt = super.getUpdateTag();
-		nbt.putBoolean("active", calmTime == 0);
-		beeLogic.write(nbt);
-		return nbt;
-	}
-
 	@Override
 	public void calmBees() {
 		calmTime = 5;
@@ -267,12 +241,47 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		}
 	}
 
+	private static void attack(LivingEntity entity, int maxDamage) {
+		double attackAmount = entity.world.rand.nextDouble() / 2.0 + 0.5;
+		int damage = (int) (attackAmount * maxDamage);
+		if (damage > 0) {
+			// Entities are not attacked if they wear a full set of apiarist's armor.
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
+			if (entity.world.rand.nextInt(4) >= count) {
+				entity.attackEntityFrom(damageSourceBeeHive, damage);
+			}
+		}
+	}
+
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
-		handleUpdateTag(getBlockState(), nbt);
+	public boolean isActive() {
+		return active;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		if (this.active == active) {
+			return;
+		}
+		this.active = active;
+
+		if (!world.isRemote) {
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+		}
+	}
+
+	@Nullable
+	@Override
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
+	}
+
+	@Override
+	public CompoundNBT getUpdateTag() {
+		CompoundNBT nbt = super.getUpdateTag();
+		nbt.putBoolean("active", calmTime == 0);
+		beeLogic.write(nbt);
+		return nbt;
 	}
 
 	@Override
@@ -280,6 +289,14 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		super.handleUpdateTag(state, tag);
 		setActive(tag.getBoolean("active"));
 		beeLogic.read(tag);
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+		super.onDataPacket(net, pkt);
+		CompoundNBT nbt = pkt.getNbtCompound();
+		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
@@ -303,6 +320,17 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), getPos());
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		float humidity = getBiome().getDownfall();
+		return EnumHumidity.getFromValue(humidity);
+	}
+
+	@Override
 	public int getBlockLightValue() {
 		return getWorld().isDaytime() ? 15 : 0; // hives may have the sky obstructed but should still be active
 	}
@@ -318,6 +346,16 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
+	public World getWorldObj() {
+		return world;
+	}
+
+	@Override
+	public Biome getBiome() {
+		return getWorld().getBiome(getPos());
+	}
+
+	@Override
 	@Nullable
 	public GameProfile getOwner() {
 		return null;
@@ -330,27 +368,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public World getWorldObj() {
-		return world;
-	}
-
-	@Override
-	public Biome getBiome() {
-		return getWorld().getBiome(getPos());
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPos());
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		float humidity = getBiome().getDownfall();
-		return EnumHumidity.getFromValue(humidity);
-	}
-
-	@Override
 	public IErrorLogic getErrorLogic() {
 		return errorLogic;
 	}
@@ -358,23 +375,6 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	@Override
 	public BlockPos getCoordinates() {
 		return getPos();
-	}
-
-	@Override
-	public boolean isActive() {
-		return active;
-	}
-
-	@Override
-	public void setActive(boolean active) {
-		if (this.active == active) {
-			return;
-		}
-		this.active = active;
-
-		if (!world.isRemote) {
-			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
-		}
 	}
 
 	private static class BeeTargetPredicate implements Predicate<LivingEntity> {

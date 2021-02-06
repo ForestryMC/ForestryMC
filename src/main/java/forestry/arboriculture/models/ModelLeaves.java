@@ -37,6 +37,36 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		super(BlockForestryLeaves.class);
 	}
 
+	public static class Key {
+		public final TextureAtlasSprite leafSprite;
+		@Nullable
+		public final TextureAtlasSprite fruitSprite;
+		public final boolean fancy;
+		private final int hashCode;
+
+		public Key(TextureAtlasSprite leafSprite, @Nullable TextureAtlasSprite fruitSprite, boolean fancy) {
+			this.leafSprite = leafSprite;
+			this.fruitSprite = fruitSprite;
+			this.fancy = fancy;
+			this.hashCode = Objects.hash(leafSprite, fruitSprite, fancy);
+		}
+
+		@Override
+		public int hashCode() {
+			return hashCode;
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (!(other instanceof Key)) {
+				return false;
+			} else {
+				Key otherKey = (Key) other;
+				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
+			}
+		}
+	}
+
 	@Override
 	public boolean isSideLit() {
 		return false;
@@ -78,35 +108,5 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 		ResourceLocation fruitLocation = TileLeaves.getFruitSprite(extraData);
 
 		return new Key(ResourceUtil.getBlockSprite(leafLocation), fruitLocation != null ? ResourceUtil.getBlockSprite(fruitLocation) : null, fancy);
-	}
-
-	public static class Key {
-		public final TextureAtlasSprite leafSprite;
-		@Nullable
-		public final TextureAtlasSprite fruitSprite;
-		public final boolean fancy;
-		private final int hashCode;
-
-		public Key(TextureAtlasSprite leafSprite, @Nullable TextureAtlasSprite fruitSprite, boolean fancy) {
-			this.leafSprite = leafSprite;
-			this.fruitSprite = fruitSprite;
-			this.fancy = fancy;
-			this.hashCode = Objects.hash(leafSprite, fruitSprite, fancy);
-		}
-
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-
-		@Override
-		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
-				return false;
-			} else {
-				Key otherKey = (Key) other;
-				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
-			}
-		}
 	}
 }

@@ -71,17 +71,18 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public int getSpeciesCount() {
-		if (beeSpeciesCount < 0) {
-			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES).filter(IAlleleBeeSpecies::isCounted).count();
-		}
-
-		return beeSpeciesCount;
+	public Class<? extends IBee> getMemberClass() {
+		return IBee.class;
 	}
 
 	@Override
-	public boolean isMember(IIndividual individual) {
-		return individual instanceof IBee;
+	public int getSpeciesCount() {
+		if (beeSpeciesCount < 0) {
+			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES)
+				.filter(IAlleleBeeSpecies::isCounted).count();
+		}
+
+		return beeSpeciesCount;
 	}
 
 	@Override
@@ -103,47 +104,6 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IAlyzerPlugin getAlyzerPlugin() {
-		return BeeAlyzerPlugin.INSTANCE;
-	}
-
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public IDatabasePlugin getSpeciesPlugin() {
-		return BeePlugin.INSTANCE;
-	}
-
-	@Override
-	public IBee create(CompoundNBT compound) {
-		return new Bee(compound);
-	}
-
-	@Override
-	public IBee create(IGenome genome) {
-		return new Bee(genome);
-	}
-
-	@Override
-	public IBee create(IGenome genome, IGenome mate) {
-		return new Bee(genome, mate);
-	}
-
-	@Override
-	public Class<? extends IBee> getMemberClass() {
-		return IBee.class;
-	}
-
-	@Override
-	public IGenomeWrapper createWrapper(IGenome genome) {
-		return () -> genome;
-	}
-
-	@Override
-	public IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
-		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
-	}
-
-	@Override
 	public boolean isDrone(ItemStack stack) {
 		Optional<IOrganismType> optional = getTypes().getType(stack);
 		return optional.isPresent() && optional.get() == EnumBeeType.DRONE;
@@ -158,6 +118,26 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 
 		CompoundNBT nbt = stack.getTag();
 		return nbt != null && nbt.contains("Mate");
+	}
+
+	@Override
+	public IBee create(IGenome genome) {
+		return new Bee(genome);
+	}
+
+	@Override
+	public IBee create(IGenome genome, IGenome mate) {
+		return new Bee(genome, mate);
+	}
+
+	@Override
+	public IGenomeWrapper createWrapper(IGenome genome) {
+		return () -> genome;
+	}
+
+	@Override
+	public IBee create(CompoundNBT compound) {
+		return new Bee(compound);
 	}
 
 	@Override
@@ -195,18 +175,6 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IBeekeepingMode getBeekeepingMode(String name) {
-		for (IBeekeepingMode mode : beekeepingModes) {
-			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
-				return mode;
-			}
-		}
-
-		Log.debug("Failed to find a beekeeping mode called '{}', reverting to fallback.", name);
-		return beekeepingModes.get(0);
-	}
-
-	@Override
 	public void registerBeekeepingMode(IBeekeepingMode mode) {
 		beekeepingModes.add(mode);
 	}
@@ -220,18 +188,20 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing) {
-		return new BeekeepingLogic(housing);
+	public IBeekeepingMode getBeekeepingMode(String name) {
+		for (IBeekeepingMode mode : beekeepingModes) {
+			if (mode.getName().equals(name) || mode.getName().equals(name.toLowerCase(Locale.ENGLISH))) {
+				return mode;
+			}
+		}
+
+		Log.debug("Failed to find a beekeeping mode called '{}', reverting to fallback.", name);
+		return beekeepingModes.get(0);
 	}
 
 	@Override
-	public IBeeModifier createBeeHousingModifier(IBeeHousing housing) {
-		return new BeeHousingModifier(housing);
-	}
-
-	@Override
-	public IBeeListener createBeeHousingListener(IBeeHousing housing) {
-		return new BeeHousingListener(housing);
+	public IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
 	@Override
@@ -252,5 +222,36 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 		ApiaristTracker apiaristTracker = (ApiaristTracker) tracker;
 		apiaristTracker.setWorld(world);
 		apiaristTracker.setUsername(profile);
+	}
+
+	@Override
+	public boolean isMember(IIndividual individual) {
+		return individual instanceof IBee;
+	}
+
+	@Override
+	public IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing) {
+		return new BeekeepingLogic(housing);
+	}
+
+	@Override
+	public IBeeModifier createBeeHousingModifier(IBeeHousing housing) {
+		return new BeeHousingModifier(housing);
+	}
+
+	@Override
+	public IBeeListener createBeeHousingListener(IBeeHousing housing) {
+		return new BeeHousingListener(housing);
+	}
+
+	@Override
+	public IAlyzerPlugin getAlyzerPlugin() {
+		return BeeAlyzerPlugin.INSTANCE;
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public IDatabasePlugin getSpeciesPlugin() {
+		return BeePlugin.INSTANCE;
 	}
 }

@@ -61,54 +61,6 @@ public class HabitatLocatorLogic {
 	@Nullable
 	private BlockPos searchCenter;
 
-	@Nullable
-	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<Biome> biomesToSearch) {
-		Biome biome;
-
-		biome = world.getBiome(pos);
-		if (!biomesToSearch.contains(biome)) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.add(-minBiomeRadius, 0, 0));
-		if (!biomesToSearch.contains(biome)) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.add(minBiomeRadius, 0, 0));
-		if (!biomesToSearch.contains(biome)) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.add(0, 0, -minBiomeRadius));
-		if (!biomesToSearch.contains(biome)) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.add(0, 0, minBiomeRadius));
-		if (!biomesToSearch.contains(biome)) {
-			return null;
-		}
-
-		return pos;
-	}
-
-	private static void removeInvalidBiomes(Biome currentBiome, Set<Biome> biomesToSearch) {
-		biomesToSearch.removeAll(waterBiomes);
-
-		if (Biome.Category.NETHER == currentBiome.getCategory()) {
-			biomesToSearch.retainAll(netherBiomes);
-		} else {
-			biomesToSearch.removeAll(netherBiomes);
-		}
-
-		if (Biome.Category.THEEND == currentBiome.getCategory()) {
-			biomesToSearch.retainAll(endBiomes);
-		} else {
-			biomesToSearch.removeAll(endBiomes);
-		}
-	}
-
 	public boolean isBiomeFound() {
 		return biomeFound;
 	}
@@ -210,5 +162,53 @@ public class HabitatLocatorLogic {
 		}
 
 		return null;
+	}
+
+	@Nullable
+	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<Biome> biomesToSearch) {
+		Biome biome;
+
+		biome = world.getBiome(pos);
+		if (!biomesToSearch.contains(biome)) {
+			return null;
+		}
+
+		biome = world.getBiome(pos.add(-minBiomeRadius, 0, 0));
+		if (!biomesToSearch.contains(biome)) {
+			return null;
+		}
+
+		biome = world.getBiome(pos.add(minBiomeRadius, 0, 0));
+		if (!biomesToSearch.contains(biome)) {
+			return null;
+		}
+
+		biome = world.getBiome(pos.add(0, 0, -minBiomeRadius));
+		if (!biomesToSearch.contains(biome)) {
+			return null;
+		}
+
+		biome = world.getBiome(pos.add(0, 0, minBiomeRadius));
+		if (!biomesToSearch.contains(biome)) {
+			return null;
+		}
+
+		return pos;
+	}
+
+	private static void removeInvalidBiomes(Biome currentBiome, Set<Biome> biomesToSearch) {
+		biomesToSearch.removeAll(waterBiomes);
+
+		if (Biome.Category.NETHER == currentBiome.getCategory()) {
+			biomesToSearch.retainAll(netherBiomes);
+		} else {
+			biomesToSearch.removeAll(netherBiomes);
+		}
+
+		if (Biome.Category.THEEND == currentBiome.getCategory()) {
+			biomesToSearch.retainAll(endBiomes);
+		} else {
+			biomesToSearch.removeAll(endBiomes);
+		}
 	}
 }
