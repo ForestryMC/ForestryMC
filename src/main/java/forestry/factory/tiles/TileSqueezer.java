@@ -16,10 +16,10 @@ import java.io.IOException;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -46,10 +46,12 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
+import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
@@ -168,13 +170,8 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			boolean containsSets = false;
 
 			if (currentRecipe != null) {
-				for (Ingredient resource : currentRecipe.getResources()) {
-					for (ItemStack stack : resources) {
-						if (containsSets = resource.test(stack)) {
-							break;
-						}
-					}
-				}
+				IInventory inventory = new InventoryMapper(this, InventorySqueezer.SLOT_RESOURCE_1, InventorySqueezer.SLOTS_RESOURCE_COUNT);
+				containsSets = InventoryUtil.consumeIngredients(inventory, currentRecipe.getResources(), null, false, false, false);
 			}
 
 			if (currentRecipe != null && containsSets) {

@@ -25,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -205,11 +204,10 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			FluidStack liquid = myRecipe.getLiquid();
 
 			// Remove resources
-			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			if (removeFromInventory(crafting, false)) {
+			if (removeFromInventory(myRecipe, false)) {
 				FluidStack drained = moltenTank.drainInternal(liquid, IFluidHandler.FluidAction.SIMULATE);
 				if (!drained.isEmpty() && drained.isFluidStackIdentical(liquid)) {
-					removeFromInventory(crafting, true);
+					removeFromInventory(myRecipe, true);
 					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
 					// Damage plan
@@ -227,9 +225,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	private boolean removeFromInventory(NonNullList<ItemStack> set, boolean doRemove) {
+	private boolean removeFromInventory(IFabricatorRecipe recipe, boolean doRemove) {
 		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, set, null, true, false, doRemove);
+		return InventoryUtil.consumeIngredients(inventory, recipe.getCraftingGridRecipe().getIngredients(), null, true, false, doRemove);
 	}
 
 	@Override
@@ -242,8 +240,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), world, moltenTank.getFluid(), plan, craftingInventory);
 		if (recipePair.isPresent()) {
 			IFabricatorRecipe recipe = recipePair.orElse(null);
-			NonNullList<ItemStack> crafting = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
-			hasResources = removeFromInventory(crafting, false);
+			hasResources = removeFromInventory(recipe, false);
 			FluidStack toDrain = recipe.getLiquid();
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);

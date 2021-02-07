@@ -24,7 +24,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -198,9 +197,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 		}
 
-		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, craftingSets, null, true, false, doRemove);
+		return InventoryUtil.consumeIngredients(inventory, currentRecipe.getCraftingGridRecipe().getIngredients(), null, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */

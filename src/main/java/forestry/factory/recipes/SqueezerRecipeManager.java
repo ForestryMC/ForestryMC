@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.core.utils.ItemStackUtil;
 
 public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
@@ -58,12 +59,8 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	@Nullable
 	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
 		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			for (Ingredient resource : recipe.getResources()) {
-				for (ItemStack item : items) {
-					if (resource.test(item)) {
-						return recipe;
-					}
-				}
+			if (ItemStackUtil.createConsume(recipe.getResources(), items.size(), items::get, false).length > 0) {
+				return recipe;
 			}
 		}
 
