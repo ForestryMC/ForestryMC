@@ -391,11 +391,6 @@ public class ModuleFactory extends BlankForestryModule {
 		if (!biomass.isEmpty() && !ethanol.isEmpty()) {
 			RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, biomass, ethanol);
 		}
-		// MOISTENER
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Blocks.MYCELIUM), 5000);
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.MOSSY_COBBLESTONE), 20000);
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.STONE_BRICKS), new ItemStack(Blocks.MOSSY_STONE_BRICKS), 20000);
-		RecipeManagers.moistenerManager.addRecipe(new ItemStack(Blocks.SPRUCE_LEAVES), new ItemStack(Blocks.PODZOL), 5000);
 
 		// FERMENTER
 		// TODO: Re-enable

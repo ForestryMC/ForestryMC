@@ -32,6 +32,7 @@ import forestry.apiculture.items.EnumPropolis;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
+import forestry.core.data.builder.MoistenerRecipeBuilder;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
@@ -48,6 +49,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		registerCentrifuge(consumer);
 		registerFabricatorSmelting(consumer);
+		registerFermenter(consumer);
+		registerMoistener(consumer);
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -227,7 +230,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.build(consumer, anonymous());
 	}
 
-	private void register(Consumer<IFinishedRecipe> consumer) {
+	private void registerFermenter(Consumer<IFinishedRecipe> consumer) {
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.BROWN_MUSHROOM))
 				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
@@ -266,7 +269,31 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					.setFermentationValue(500)
 					.setModifier(1.0f)
 					.setOutput(shortMead.getFluid())
-					.setFluidResource(honey);
+					.setFluidResource(honey)
+					.build(consumer, anonymous());
 		}
+	}
+
+	private void registerMoistener(Consumer<IFinishedRecipe> consumer) {
+		new MoistenerRecipeBuilder()
+				.setResource(Ingredient.fromItems(Items.WHEAT_SEEDS))
+				.setProduct(new ItemStack(Blocks.MYCELIUM))
+				.setTimePerItem(5000)
+				.build(consumer, anonymous());
+		new MoistenerRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.COBBLESTONE))
+				.setProduct(new ItemStack(Blocks.MOSSY_COBBLESTONE))
+				.setTimePerItem(20000)
+				.build(consumer, anonymous());
+		new MoistenerRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.STONE_BRICKS))
+				.setProduct(new ItemStack(Blocks.MOSSY_STONE_BRICKS))
+				.setTimePerItem(20000)
+				.build(consumer, anonymous());
+		new MoistenerRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.SPRUCE_LEAVES))
+				.setProduct(new ItemStack(Blocks.PODZOL))
+				.setTimePerItem(5000)
+				.build(consumer, anonymous());
 	}
 }
