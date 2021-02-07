@@ -33,8 +33,11 @@ import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
 import forestry.core.data.builder.MoistenerRecipeBuilder;
+import forestry.core.data.builder.SqueezerContainerRecipeBuilder;
 import forestry.core.features.CoreItems;
+import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
+import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 
 import static forestry.api.recipes.IForestryRecipe.anonymous;
@@ -51,6 +54,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		registerFabricatorSmelting(consumer);
 		registerFermenter(consumer);
 		registerMoistener(consumer);
+		registerSqueezerContainer(consumer);
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -294,6 +298,27 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setResource(Ingredient.fromItems(Blocks.SPRUCE_LEAVES))
 				.setProduct(new ItemStack(Blocks.PODZOL))
 				.setTimePerItem(5000)
+				.build(consumer, anonymous());
+	}
+
+	private void registerSqueezerContainer(Consumer<IFinishedRecipe> consumer) {
+		new SqueezerContainerRecipeBuilder()
+				.setProcessingTime(10)
+				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.CAN))
+				.setRemnants(CoreItems.INGOT_TIN.stack())
+				.setRemnantsChance(0.05f)
+				.build(consumer, anonymous());
+		new SqueezerContainerRecipeBuilder()
+				.setProcessingTime(10)
+				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE))
+				.setRemnants(CoreItems.BEESWAX.stack())
+				.setRemnantsChance(0.10f)
+				.build(consumer, anonymous());
+		new SqueezerContainerRecipeBuilder()
+				.setProcessingTime(10)
+				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY))
+				.setRemnants(CoreItems.REFRACTORY_WAX.stack())
+				.setRemnantsChance(0.10f)
 				.build(consumer, anonymous());
 	}
 }

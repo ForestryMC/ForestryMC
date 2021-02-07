@@ -24,12 +24,8 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.modules.ForestryModule;
-import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
-import forestry.core.features.CoreItems;
-import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumContainerType;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -49,12 +45,6 @@ public class ModuleFluids extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		if (RecipeManagers.squeezerContainerManager != null) {
-			RecipeManagers.squeezerContainerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAN), CoreItems.INGOT_TIN.stack(), 0.05f);
-			RecipeManagers.squeezerContainerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE), CoreItems.BEESWAX.stack(), 0.10f);
-			RecipeManagers.squeezerContainerManager.addContainerRecipe(10, FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY), CoreItems.REFRACTORY_WAX.stack(), 0.10f);
-		}
-
 		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
 		if (!ethanol.isEmpty()) {
 			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
