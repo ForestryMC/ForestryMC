@@ -11,7 +11,6 @@
 package forestry.apiculture;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -478,100 +477,6 @@ public class ModuleApiculture extends BlankForestryModule {
 				"#X#",
 				'#', CoreItems.BEESWAX.stack(),
 				'X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1));
-
-			// / CENTRIFUGE
-			// Honey combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1), ImmutableMap.of(
-				CoreItems.BEESWAX.stack(), 1.0f,
-				honeyDrop, 0.9f
-			));
-
-			// Cocoa combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1), ImmutableMap.of(
-				CoreItems.BEESWAX.stack(), 1.0f,
-				new ItemStack(Items.COCOA_BEANS), 0.5f
-			));
-
-			// Simmering combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1), ImmutableMap.of(
-				CoreItems.REFRACTORY_WAX.stack(), 1.0f,
-				CoreItems.PHOSPHOR.stack(2), 0.7f
-			));
-
-			// Stringy combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.STRINGY, 1), ImmutableMap.of(
-				ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 1.0f,
-				honeyDrop, 0.4f
-			));
-
-			// Dripping combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.DRIPPING, 1), ImmutableMap.of(
-				ApicultureItems.HONEYDEW.stack(), 1.0f,
-				honeyDrop, 0.4f
-			));
-
-			// Frozen combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1), ImmutableMap.of(
-				CoreItems.BEESWAX.stack(), 0.8f,
-				honeyDrop, 0.7f,
-				new ItemStack(Items.SNOWBALL), 0.4f,
-				ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1), 0.2f
-			));
-
-			// Silky combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1), ImmutableMap.of(
-				honeyDrop, 1.0f,
-				ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1), 0.8f
-			));
-
-			// Parched combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1), ImmutableMap.of(
-				CoreItems.BEESWAX.stack(), 1.0f,
-				honeyDrop, 0.9f
-			));
-
-			// Mysterious combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1), ImmutableMap.of(
-				ApicultureItems.PROPOLIS.stack(EnumPropolis.PULSATING, 1), 1.0f,
-				honeyDrop, 0.4f
-			));
-
-			// Irradiated combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.of(
-			));
-
-			// Powdery combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.POWDERY, 1), ImmutableMap.of(
-				honeyDrop, 0.2f,
-				CoreItems.BEESWAX.stack(), 0.2f,
-				new ItemStack(Items.GUNPOWDER), 0.9f
-			));
-
-			// Wheaten Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.WHEATEN, 1), ImmutableMap.of(
-				honeyDrop, 0.2f,
-				CoreItems.BEESWAX.stack(), 0.2f,
-				new ItemStack(Items.WHEAT), 0.8f
-			));
-
-			// Mossy Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1), ImmutableMap.of(
-				CoreItems.BEESWAX.stack(), 1.0f,
-				honeyDrop, 0.9f
-			));
-
-			// Mellow Combs
-			RecipeManagers.centrifugeManager.addRecipe(20, ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1), ImmutableMap.of(
-				ApicultureItems.HONEYDEW.stack(), 0.6f,
-				CoreItems.BEESWAX.stack(), 0.2f,
-				new ItemStack(Items.QUARTZ), 0.3f
-			));
-
-			// Silky Propolis
-			RecipeManagers.centrifugeManager.addRecipe(5, ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1), ImmutableMap.of(
-				CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.6f,
-				ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 0.1f
-			));
 
 			// / FERMENTER
 			FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);

@@ -78,6 +78,7 @@ import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.ForestryMachineRecipeProvider;
 import forestry.core.data.ForestryRecipeProvider;
 import forestry.core.data.WoodBlockModelProvider;
 import forestry.core.data.WoodBlockStateProvider;
@@ -262,6 +263,7 @@ public class Forestry {
 			generator.addProvider(new ForestryBlockModelProvider(generator));
 			generator.addProvider(new ForestryItemModelProvider(generator));
 			generator.addProvider(new ForestryRecipeProvider(generator));
+			generator.addProvider(new ForestryMachineRecipeProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {

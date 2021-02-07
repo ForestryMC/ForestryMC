@@ -40,6 +40,11 @@ public class CentrifugeRecipeBuilder {
 		return this;
 	}
 
+	public CentrifugeRecipeBuilder product(float chance, ItemStack itemStack) {
+		outputs.add(new ICentrifugeRecipe.Product(chance, itemStack));
+		return this;
+	}
+
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, processingTime, input, outputs));
 	}

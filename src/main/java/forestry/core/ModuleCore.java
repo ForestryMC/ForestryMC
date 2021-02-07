@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core;
 
-import com.google.common.collect.ImmutableMap;
-
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -268,12 +266,6 @@ public class ModuleCore extends BlankForestryModule {
 			if (!biomass.isEmpty()) {
 				RecipeManagers.squeezerManager.addRecipe(8, Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING)), biomass);
 			}
-		}
-		// alternate recipes
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			RecipeManagers.centrifugeManager.addRecipe(5, new ItemStack(Items.STRING), ImmutableMap.of(
-					CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1), 0.15f
-			));
 		}
 
 		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
