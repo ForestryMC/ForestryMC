@@ -12,11 +12,15 @@ package forestry.core.data;
 
 import java.util.function.Consumer;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -24,7 +28,9 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
+import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.features.CoreItems;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
 
 import static forestry.api.recipes.IForestryRecipe.anonymous;
@@ -38,6 +44,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		registerCentrifuge(consumer);
+		registerFabricatorSmelting(consumer);
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -172,6 +179,48 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1))
 				.product(0.6f, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1))
 				.product(0.1f, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
+				.build(consumer, anonymous());
+	}
+
+	private void registerFabricatorSmelting(Consumer<IFinishedRecipe> consumer) {
+		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
+		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
+		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
+
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.GLASS))
+				.setProduct(liquidGlassBucket)
+				.setMeltingPoint(1000)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.GLASS_PANE))
+				.setProduct(liquidGlass375)
+				.setMeltingPoint(1000)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.SAND))
+				.setProduct(liquidGlassBucket)
+				.setMeltingPoint(3000)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.RED_SAND))
+				.setProduct(liquidGlassBucket)
+				.setMeltingPoint(3000)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.SANDSTONE))
+				.setProduct(liquidGlassX4)
+				.setMeltingPoint(4800)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.SMOOTH_SANDSTONE))
+				.setProduct(liquidGlassX4)
+				.setMeltingPoint(4800)
+				.build(consumer, anonymous());
+		new FabricatorSmeltingRecipeBuilder()
+				.setResource(new ItemStack(Blocks.CHISELED_SANDSTONE))
+				.setProduct(liquidGlassX4)
+				.setMeltingPoint(4800)
 				.build(consumer, anonymous());
 	}
 }

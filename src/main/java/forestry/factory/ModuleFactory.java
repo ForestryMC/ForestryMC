@@ -410,18 +410,6 @@ public class ModuleFactory extends BlankForestryModule {
 		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.HONEY.getFluid(1));
 		RecipeManagers.fermenterManager.addRecipe(new ItemStack(Blocks.RED_MUSHROOM), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"), 1.5f, ForestryFluids.BIOMASS.getFluid(1), ForestryFluids.JUICE.getFluid(1));
 
-		// FABRICATOR
-		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
-		if (!liquidGlass375.isEmpty() && !liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS), liquidGlassBucket, 1000);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.GLASS_PANE), liquidGlass375, 1000);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SAND), liquidGlassBucket, 3000);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.RED_SAND), liquidGlassBucket, 3000);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SANDSTONE), liquidGlassX4, 4800);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.SMOOTH_SANDSTONE), liquidGlassX4, 4800);
-			RecipeManagers.fabricatorSmeltingManager.addSmelting(new ItemStack(Blocks.CHISELED_SANDSTONE), liquidGlassX4, 4800);
-			//TODO red sandstone
-		}
 		// / CARPENTER
 		RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.SEED_OIL.getFluid(250), ItemStack.EMPTY, CoreItems.IMPREGNATED_CASING.stack(),
 			"###",
