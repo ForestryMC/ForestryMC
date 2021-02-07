@@ -1,0 +1,280 @@
+{
+	"title": "Макеты фермы",
+	"icon": {
+		"item": "forestry:wrench"
+	},
+	"content": [
+		[
+			{
+				"type": "index",
+				"entries": [
+					{
+						"title": "Маленькая",
+						"page": 1
+					},
+					{
+						"title": "Средняя",
+						"page": 2
+					},
+					{
+						"title": "Средне-большая",
+						"page": 3
+					},
+					{
+						"title": "Большая",
+						"page": 4
+					},
+					{
+						"title": "Очень большая",
+						"page": 5
+					}
+				]
+			}
+		],
+		[
+			{
+				"text": "Маленькая",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Ш×Д×В: 3×3×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Радиус: 7 Блоков"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Пространство (Ш*Д): 17×17"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Блоков фермы: 36"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Поле фермы: 126"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 171,
+					"vHeight": 171,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x3.png",
+					"textureWidth": 171,
+					"textureHeight": 171,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Средняя",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Ш×Д×В: 3×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Радиус: 9 Блоков"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Пространство (Ш*Д): 21×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Блоков фермы: 48"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Поле фермы: 270"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 211,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x4.png",
+					"textureWidth": 211,
+					"textureHeight": 221,
+					"width": 85,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Средне-большая",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Ш×Д×В: 4×4×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Радиус: 9 Блоков"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Пространство (Ш*Д): 22×22"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Блоков фермы: 64"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Поле фермы: 288"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 221,
+					"vHeight": 221,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/4x4.png",
+					"textureWidth": 221,
+					"textureHeight": 221,
+					"width": 89,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Большая",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Ш×Д×В: 3×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Радиус: 11 Блоков"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Пространство (Ш*Д): 25×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Блоков фермы: 60"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Поле фермы: 396"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 250,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 250,
+					"textureHeight": 271,
+					"width": 82,
+					"height": 89
+			}
+		],
+		[
+			{
+				"text": "Очень большая",
+				"underlined": true
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Ш×Д×В: 5×5×4"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Радиус: 11 Блоков"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Пространство (Ш*Д): 27×27"
+			},
+			{
+				"text": "\n"
+			},
+			{
+				"text": "Блоков фермы: 100"
+			},
+					{
+				"text": "\n"
+			},
+			{
+				"text": "Поле фермы: 440"
+			},
+			{
+					"type": "image",
+					"center": true,
+					"u": 0,
+					"v": 0,
+					"uWidth": 271,
+					"vHeight": 271,
+					"textureLocation": "forestry:textures/gui/almanac/fam_layouts/3x5.png",
+					"textureWidth": 271,
+					"textureHeight": 271,
+					"width": 89,
+					"height": 89
+			}
+		]
+	]
+}

@@ -1,0 +1,38 @@
+{
+	"title": "Корпуса",
+	"icon":{
+		"item": "forestry:sturdy_machine"
+	},
+	"content": [
+		[
+			{
+				"text": "Корпуса - это прмоежуточные предметы крафта, используемые ля создания почти каждого механизма."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:sturdy_casing"
+				]
+			}
+		],[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:hardened_machine"
+					},
+					{
+						"item": "forestry:impregnated_casing"
+					}
+				]
+			},
+			{
+				"type": "fabricator",
+				"stack": {
+					"item": "forestry:flexible_casing"
+				}
+				
+			}
+		]
+	]
+}

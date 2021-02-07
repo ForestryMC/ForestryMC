@@ -1,0 +1,24 @@
+{
+	"title": "Alveary Sieve",
+	"icon":{
+		"item": "forestry:alveary.sieve"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:alveary_sieve"
+				]
+			},
+			{
+				"text": "The Alveary Sieve collects pollen from nearby trees that would've pollinated a other tree and stores it in its inventory. To use it, replace one of the blocks of the Alveary in the bottom two layers of the multiblock structure and place a"
+			}
+		],
+		[
+			{
+				"text": "Woven Silk in its left item slot."
+			}
+		]
+	]
+}

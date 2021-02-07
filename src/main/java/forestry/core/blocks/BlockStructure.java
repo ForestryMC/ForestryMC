@@ -48,35 +48,35 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (playerIn.isSneaking()) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) {
 			return false;
 		}
 
-		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
+		MultiblockTileEntityForestry<?> part = TileUtil.getTile(world, pos, MultiblockTileEntityForestry.class);
 		if (part == null) {
 			return false;
 		}
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
-		ItemStack heldItem = playerIn.getHeldItem(hand);
+		ItemStack heldItem = player.getHeldItem(hand);
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
 		if (heldItem.isEmpty()) {
 			if (controller != null) {
 				if (!controller.isAssembled()) {
 					String validationError = controller.getLastValidationError();
-					if (validationError != null) {
-						long tick = worldIn.getTotalWorldTime();
+					if (validationError != null && world.isRemote) {
+						long tick = world.getTotalWorldTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(new TextComponentString(validationError));
+							player.sendMessage(new TextComponentString(validationError));
 							previousMessageTick = tick;
 						}
 						return true;
 					}
 				}
 			} else {
-				playerIn.sendMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
+				player.sendMessage(new TextComponentTranslation("for.multiblock.error.notConnected"));
 				return true;
 			}
 		}
@@ -86,8 +86,8 @@ public abstract class BlockStructure extends BlockForestry {
 			return false;
 		}
 
-		if (!worldIn.isRemote) {
-			part.openGui(playerIn);
+		if (!world.isRemote) {
+			part.openGui(player);
 		}
 		return true;
 	}

@@ -1,0 +1,19 @@
+{
+	"title": "Электродвигатель",
+	"icon": {
+		"item": "forestry:engine_electrical"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:ic2_eletrical_engine"
+				]
+			},
+			{
+				"text": "Электродвигатель используется для преобразования EU из IndustrialCraft² в RF (ранее MJ1)). Двигатель производит 20 RF/тик потребляет 6 EU/тик, если не улучшен и принимает любое напряжение."
+			}
+		]
+	]
+}

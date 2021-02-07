@@ -1,0 +1,18 @@
+{
+	"title": "Вагонетка с пчелиным домиком",
+	"icon": {
+		"item": "forestry:cart.beehouse"
+	},
+	"content": [[
+		{
+			"text": "Одно из моих самых простых изобретений - это вагонетки с пчелиными домиками. Вы просто помещаете пчелиный домик или пасеку внутрь магонетки."
+		},
+		{
+			"type": "crafting",
+			"locations": [
+				"forestry:bee_house_minecart", 
+				"forestry:apiary_minecart"
+			]
+		}
+	]]
+}

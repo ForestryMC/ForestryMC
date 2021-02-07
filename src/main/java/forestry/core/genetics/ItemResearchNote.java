@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -162,10 +163,14 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.researchMutation(encoded);
 				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote"));
 
-				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote2",
-					TextFormatting.GRAY + species0.getAlleleName(),
-					TextFormatting.GRAY + species1.getAlleleName(),
-					TextFormatting.GREEN + speciesResult.getAlleleName()));
+				ITextComponent ts0 = new TextComponentTranslation(species0.getUnlocalizedName());
+				ts0.getStyle().setColor(TextFormatting.GRAY);
+				ITextComponent ts1 = new TextComponentTranslation(species1.getUnlocalizedName());
+				ts1.getStyle().setColor(TextFormatting.GRAY);
+				ITextComponent tsr = new TextComponentTranslation(speciesResult.getUnlocalizedName());
+				tsr.getStyle().setColor(TextFormatting.GREEN);
+
+				player.sendMessage(new TextComponentTranslation("for.chat.memorizednote2", ts0, ts1, tsr));
 
 				return true;
 			}

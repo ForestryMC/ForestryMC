@@ -1,0 +1,30 @@
+{
+	"title": "Болотная земля",
+	"icon":{
+		"item": "forestry:bog_earth"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:bucket_bog_earth",
+					"forestry:can_bog_earth",
+					"forestry:capsule_bog_earth",
+					"forestry:refractory_capsule_bog_earth"
+				]
+			},
+			{
+				"text": "Медленно превращается в торф, если оставить на неокоторое время у воды."
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:bog_earth"
+				}
+			}
+		]
+	]
+}

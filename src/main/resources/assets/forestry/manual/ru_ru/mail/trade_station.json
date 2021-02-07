@@ -1,0 +1,19 @@
+{
+	"title": "Торговая станция",
+	"icon":{
+		"item": "forestry:trade_station"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:trade_station"
+				]
+			},
+			{
+				"text": "Торговая станция позвооляет игрокам на сервере с лёгсоктью основать торговую сеть при помощи почтовой системы."
+			}
+		]
+	]
+}

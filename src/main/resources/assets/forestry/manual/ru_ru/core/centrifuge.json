@@ -1,0 +1,19 @@
+{
+	"title": "Центрифуга",
+	"icon": {
+		"item": "forestry:centrifuge"
+	},
+	"content": [
+		[
+			{
+				"text": "Центрифуга - это механизм, задача которого - извлечение различных продуктов пчёл из их медовых сот."
+			},
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:centrifuge"
+				]
+			}
+		]
+	]
+}

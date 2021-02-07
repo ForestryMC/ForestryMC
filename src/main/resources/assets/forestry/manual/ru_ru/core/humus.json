@@ -1,0 +1,28 @@
+{
+	"title": "Гумус",
+	"icon":{
+		"item": "forestry:humus"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:compost_humus",
+					"forestry:fertilizer_humus"
+				]
+			},
+			{
+				"text": "Обогащённая почва, которая может поддерживать рост посевов не нуждаясь в воде. Разлагается в песок со временем."
+			}
+		],
+		[
+			{
+				"type": "carpenter",
+				"stack": {
+					"item": "forestry:humus"
+				}
+			}
+		]
+	]
+}

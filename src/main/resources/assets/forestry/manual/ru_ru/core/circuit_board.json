@@ -1,0 +1,38 @@
+{
+	"title": "Печатная плата",
+	"icon":{
+		"item": "forestry:chipsets"
+	},
+	"content": [
+		[
+			{
+				"type": "carpenter",
+				"stacks": [
+					{
+						"item": "forestry:chipsets",
+						"data": 0,
+						"nbt": "{\"T\":0s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 1,
+						"nbt": "{\"T\":1s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 2,
+						"nbt": "{\"T\":2s}"
+					},
+					{
+						"item": "forestry:chipsets",
+						"data": 3,
+						"nbt": "{\"T\":3s}"
+					}
+				]
+			},
+			{
+				"text": "Печатные платы могут быть оснащены электронными лампами при помощи паяльника. По завершению они могут быть установлены в разъём в интерфейсе механизма. Используйте паяльник для изъятия из разъёма."
+			}
+		]
+	]
+}

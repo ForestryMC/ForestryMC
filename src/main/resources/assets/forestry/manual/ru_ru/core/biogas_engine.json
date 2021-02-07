@@ -1,0 +1,61 @@
+{
+	"title": "Биогазовый двигатель",
+	"icon": {
+		"item": "forestry:engine_biogas"
+	},
+	"content": [
+		[
+			{
+				"type": "crafting",
+				"locations": [
+					"forestry:biogas_engine"
+				]
+			},
+			{
+				"text": "Хотите избавиться от излишка саженцев?"
+			
+			},
+			{
+				"text": "Слишком много вёдер молока в ваших сундуках?",
+				"paragraph": true
+			},
+			{
+				"text": "Используйте биогазовый двигатель, чтобы запитать ваши фермы дерева!",
+				"paragraph": true
+			},
+			{
+				"text": "Биогазовый двигатель должен",
+				"paragraph": true
+			}
+		], 
+		[
+			{
+				"text": "быть активирован редстоун-сигналом, как и любой другий двигатель из BuildCraft. Однако, у биогазовых двигателей есть небольшая отличительная черта: Они не могут взорваться от перегрева, но требуют минимальную рабочую температуру. Вы можете залить до краёв биогазовый двигатель самым восхитительным топливом, но он откажется заводиться. Причина весьма проста и заклчючвется в том, что ему необходимо достигнуть некоторой температуры, преждче чем начать жечь топливо."
+			}
+		],
+		[
+			{
+				"text": "To start the engine when it's new or whenever it has cooled down - for example when it has used up all fuel and has idled for too long - you will need to dump lava into the secondary tank on the right hand side. The engine will then start to heat up and once it has reached minimum operating temperature it will start to produce energy. Producing energy generates itself heat, so after the initial warmup a"
+			}
+		],
+		[
+			{
+				"text": "running biogas engine will keep itself heated without using up any further lava from its supply. Also, if the activating redstone signal is interrupted, the burning of fuel will pause completely: fuel will not be lost, but if the Engine stays off for too long, it will need to consume some Lava to heat up again once the redstone signal is re-applied."
+			},
+			{
+				"text": "However there is one important exception: If you use just plain",
+				"paragraph": true
+			}
+		],
+		[
+			{
+				"text": "water or milk to power your engine, the engine will not generate enough heat to counter the natural heat dissipation. A biogas engine that uses those fuels will burn quite literally through it's whole lava supply, while one constantly supplied with fruit juice, liquid biomass, seed oil or liquid honey will happily chug along all day without so much as touching the lava. A water or milk"
+			}
+		],
+		[
+			{
+				"text": "fueled engine will invariably use up all the lava in the secondary tank and stop producing energy. However, you can pipe in lava using BuildCraft pipes if you choose to do so."
+			}
+		]
+	]
+}
