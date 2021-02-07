@@ -385,12 +385,6 @@ public class ModuleFactory extends BlankForestryModule {
 		if (!liquidIce.isEmpty()) {
 			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
 		}
-		// STILL
-		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
-		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
-		if (!biomass.isEmpty() && !ethanol.isEmpty()) {
-			RecipeManagers.stillManager.addRecipe(Constants.STILL_DESTILLATION_DURATION, biomass, ethanol);
-		}
 
 		// FERMENTER
 		// TODO: Re-enable

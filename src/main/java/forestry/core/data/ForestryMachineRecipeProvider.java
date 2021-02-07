@@ -29,11 +29,13 @@ import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.core.config.Constants;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
 import forestry.core.data.builder.MoistenerRecipeBuilder;
 import forestry.core.data.builder.SqueezerContainerRecipeBuilder;
+import forestry.core.data.builder.StillRecipeBuilder;
 import forestry.core.features.CoreItems;
 import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
@@ -55,6 +57,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		registerFermenter(consumer);
 		registerMoistener(consumer);
 		registerSqueezerContainer(consumer);
+		registerSqueezer(consumer);
+		registerStill(consumer);
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -320,5 +324,23 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setRemnants(CoreItems.REFRACTORY_WAX.stack())
 				.setRemnantsChance(0.10f)
 				.build(consumer, anonymous());
+	}
+
+	private void registerSqueezer(Consumer<IFinishedRecipe> consumer) {
+
+	}
+
+	private void registerStill(Consumer<IFinishedRecipe> consumer) {
+		// STILL
+		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
+		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
+
+		if (!biomass.isEmpty() && !ethanol.isEmpty()) {
+			new StillRecipeBuilder()
+					.setTimePerUnit(Constants.STILL_DESTILLATION_DURATION)
+					.setInput(biomass)
+					.setOutput(ethanol)
+					.build(consumer, anonymous());
+		}
 	}
 }

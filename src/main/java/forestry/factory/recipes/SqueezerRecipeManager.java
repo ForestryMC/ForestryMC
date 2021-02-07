@@ -32,8 +32,7 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 
 	@Override
 	public void addRecipe(int timePerItem, NonNullList<Ingredient> resources, FluidStack liquid, ItemStack remnants, int chance) {
-		ISqueezerRecipe recipe = new SqueezerRecipe(IForestryRecipe.anonymous(), timePerItem, resources, liquid, remnants, chance / 100.0f);
-		addRecipe(recipe);
+		addRecipe(new SqueezerRecipe(IForestryRecipe.anonymous(), timePerItem, resources, liquid, remnants, chance / 100.0f));
 	}
 
 	@Override
