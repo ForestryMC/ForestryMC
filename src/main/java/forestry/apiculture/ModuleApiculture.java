@@ -477,13 +477,6 @@ public class ModuleApiculture extends BlankForestryModule {
 				"#X#",
 				'#', CoreItems.BEESWAX.stack(),
 				'X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1));
-
-			// / FERMENTER
-			FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
-			FluidStack honey = ForestryFluids.HONEY.getFluid(1);
-			if (!shortMead.isEmpty() && !honey.isEmpty()) {
-				RecipeManagers.fermenterManager.addRecipe(ApicultureItems.HONEYDEW.stack(), 500, 1.0f, shortMead, honey);
-			}
 		}
 
 		// BREWING RECIPES

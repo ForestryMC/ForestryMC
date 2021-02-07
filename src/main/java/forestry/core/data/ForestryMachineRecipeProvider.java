@@ -18,10 +18,12 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.core.ForestryAPI;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
@@ -29,6 +31,7 @@ import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
+import forestry.core.data.builder.FermenterRecipeBuilder;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
@@ -222,5 +225,48 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setProduct(liquidGlassX4)
 				.setMeltingPoint(4800)
 				.build(consumer, anonymous());
+	}
+
+	private void register(Consumer<IFinishedRecipe> consumer) {
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.BROWN_MUSHROOM))
+				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setModifier(1.5f)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
+				.build(consumer, anonymous());
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.BROWN_MUSHROOM))
+				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setModifier(1.5f)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
+				.build(consumer, anonymous());
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.RED_MUSHROOM))
+				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setModifier(1.5f)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
+				.build(consumer, anonymous());
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.fromItems(Blocks.RED_MUSHROOM))
+				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setModifier(1.5f)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
+				.build(consumer, anonymous());
+
+		FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
+		FluidStack honey = ForestryFluids.HONEY.getFluid(1);
+
+		if (!shortMead.isEmpty() && !honey.isEmpty()) {
+			new FermenterRecipeBuilder()
+					.setResource(Ingredient.fromItems(ApicultureItems.HONEYDEW))
+					.setFermentationValue(500)
+					.setModifier(1.0f)
+					.setOutput(shortMead.getFluid())
+					.setFluidResource(honey);
+		}
 	}
 }
