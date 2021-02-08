@@ -1,0 +1,27 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 20,
+  "input": {
+    "item": "forestry:bee_comb_mellow"
+  },
+  "products": [
+    {
+      "chance": 0.6,
+      "item": {
+        "item": "forestry:honeydew"
+      }
+    },
+    {
+      "chance": 0.2,
+      "item": {
+        "item": "forestry:beeswax"
+      }
+    },
+    {
+      "chance": 0.3,
+      "item": {
+        "item": "minecraft:quartz"
+      }
+    }
+  ]
+}

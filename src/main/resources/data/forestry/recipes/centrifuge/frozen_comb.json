@@ -1,0 +1,33 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 20,
+  "input": {
+    "item": "forestry:bee_comb_frozen"
+  },
+  "products": [
+    {
+      "chance": 0.8,
+      "item": {
+        "item": "forestry:beeswax"
+      }
+    },
+    {
+      "chance": 0.7,
+      "item": {
+        "item": "forestry:honey_drop_honey"
+      }
+    },
+    {
+      "chance": 0.4,
+      "item": {
+        "item": "minecraft:snowball"
+      }
+    },
+    {
+      "chance": 0.2,
+      "item": {
+        "item": "forestry:pollen_cluster_crystalline"
+      }
+    }
+  ]
+}

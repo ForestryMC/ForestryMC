@@ -1,0 +1,10 @@
+{
+  "type": "forestry:moistener",
+  "time": 20000,
+  "resource": {
+    "item": "minecraft:stone_bricks"
+  },
+  "product": {
+    "item": "minecraft:mossy_stone_bricks"
+  }
+}

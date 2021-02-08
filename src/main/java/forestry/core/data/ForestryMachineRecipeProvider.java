@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 
 import net.minecraftforge.fluids.FluidAttributes;
@@ -48,8 +49,6 @@ import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 
-import static forestry.api.recipes.IForestryRecipe.anonymous;
-
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 	public ForestryMachineRecipeProvider(DataGenerator generatorIn) {
@@ -74,19 +73,19 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setTransferTime(1)
 				.setTempChange(-0.005f)
 				.setHumidChange(0.01f)
-				.build(consumer, anonymous());
+				.build(consumer, id("hygroregulator", "water"));
 		new HygroregulatorRecipeBuilder()
 				.setLiquid(new FluidStack(Fluids.LAVA, 1))
 				.setTransferTime(10)
 				.setTempChange(0.005f)
 				.setHumidChange(-0.01f)
-				.build(consumer, anonymous());
+				.build(consumer, id("hygroregulator", "lava"));
 		new HygroregulatorRecipeBuilder()
 				.setLiquid(ForestryFluids.ICE.getFluid(1))
 				.setTransferTime(10)
 				.setTempChange(-0.01f)
 				.setHumidChange(0.02f)
-				.build(consumer, anonymous());
+				.build(consumer, id("hygroregulator", "ice"));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -94,7 +93,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setProcessingTime(5)
 				.setInput(new ItemStack(Items.STRING))
 				.product(0.15F, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "string"));
 
 		ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
 
@@ -104,7 +103,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1))
 				.product(1.0f, CoreItems.BEESWAX.stack())
 				.product(0.9F, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "honey_comb"));
 
 		// Cocoa combs
 		new CentrifugeRecipeBuilder()
@@ -112,7 +111,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1))
 				.product(1.0f, CoreItems.BEESWAX.stack())
 				.product(0.5f, new ItemStack(Items.COCOA_BEANS))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "cocoa_comb"));
 
 		// Simmering combs
 		new CentrifugeRecipeBuilder()
@@ -120,7 +119,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1))
 				.product(1.0f, CoreItems.REFRACTORY_WAX.stack())
 				.product(0.7f, CoreItems.PHOSPHOR.stack(2))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "simmering_comb"));
 
 		// Stringy combs
 		new CentrifugeRecipeBuilder()
@@ -128,7 +127,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.STRINGY, 1))
 				.product(1.0f, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
 				.product(0.4f, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "stringy_comb"));
 
 		// Dripping combs
 		new CentrifugeRecipeBuilder()
@@ -136,7 +135,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.DRIPPING, 1))
 				.product(1.0f, ApicultureItems.HONEYDEW.stack())
 				.product(0.4f, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "dripping_comb"));
 
 		// Frozen combs
 		new CentrifugeRecipeBuilder()
@@ -146,7 +145,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.product(0.7f, honeyDrop)
 				.product(0.4f, new ItemStack(Items.SNOWBALL))
 				.product(0.2f, ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "frozen_comb"));
 
 		// Silky combs
 		new CentrifugeRecipeBuilder()
@@ -154,7 +153,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1))
 				.product(1.0f, honeyDrop)
 				.product(0.8f, ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "silky_comb"));
 
 		// Parched combs
 		new CentrifugeRecipeBuilder()
@@ -162,7 +161,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1))
 				.product(1.0f, CoreItems.BEESWAX.stack())
 				.product(0.9f, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "parched_comb"));
 
 		// Mysterious combs
 		new CentrifugeRecipeBuilder()
@@ -170,13 +169,13 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1))
 				.product(1.0f, ApicultureItems.PROPOLIS.stack(EnumPropolis.PULSATING, 1))
 				.product(0.4f, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "mysterious_comb"));
 
 		// Irradiated combs
 		new CentrifugeRecipeBuilder()
 				.setProcessingTime(20)
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.IRRADIATED, 1))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "irradiated_comb"));
 
 		// Powdery combs
 		new CentrifugeRecipeBuilder()
@@ -185,7 +184,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.product(0.2f, honeyDrop)
 				.product(0.2f, CoreItems.BEESWAX.stack())
 				.product(0.9f, new ItemStack(Items.GUNPOWDER))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "powdery_comb"));
 
 		// Wheaten Combs
 		new CentrifugeRecipeBuilder()
@@ -194,7 +193,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.product(0.2f, honeyDrop)
 				.product(0.2f, CoreItems.BEESWAX.stack())
 				.product(0.8f, new ItemStack(Items.WHEAT))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "wheaten_comb"));
 
 		// Mossy Combs
 		new CentrifugeRecipeBuilder()
@@ -202,7 +201,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1))
 				.product(1.0f, CoreItems.BEESWAX.stack())
 				.product(0.9f, honeyDrop)
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "mossy_comb"));
 
 		// Mellow Combs
 		new CentrifugeRecipeBuilder()
@@ -211,7 +210,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.product(0.6f, ApicultureItems.HONEYDEW.stack())
 				.product(0.2f, CoreItems.BEESWAX.stack())
 				.product(0.3f, new ItemStack(Items.QUARTZ))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "mellow_comb"));
 
 		// Silky Propolis
 		new CentrifugeRecipeBuilder()
@@ -219,7 +218,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setInput(ApicultureItems.PROPOLIS.stack(EnumPropolis.SILKY, 1))
 				.product(0.6f, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1))
 				.product(0.1f, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
-				.build(consumer, anonymous());
+				.build(consumer, id("centrifuge", "silky_propolis"));
 	}
 
 	private void registerFabricatorSmelting(Consumer<IFinishedRecipe> consumer) {
@@ -231,37 +230,37 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setResource(new ItemStack(Blocks.GLASS))
 				.setProduct(liquidGlassBucket)
 				.setMeltingPoint(1000)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "glass"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.GLASS_PANE))
 				.setProduct(liquidGlass375)
 				.setMeltingPoint(1000)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "glass_pane"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.SAND))
 				.setProduct(liquidGlassBucket)
 				.setMeltingPoint(3000)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "sand"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.RED_SAND))
 				.setProduct(liquidGlassBucket)
 				.setMeltingPoint(3000)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "red_sand"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.SANDSTONE))
 				.setProduct(liquidGlassX4)
 				.setMeltingPoint(4800)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "sandstone"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.SMOOTH_SANDSTONE))
 				.setProduct(liquidGlassX4)
 				.setMeltingPoint(4800)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "smooth_sandstone"));
 		new FabricatorSmeltingRecipeBuilder()
 				.setResource(new ItemStack(Blocks.CHISELED_SANDSTONE))
 				.setProduct(liquidGlassX4)
 				.setMeltingPoint(4800)
-				.build(consumer, anonymous());
+				.build(consumer, id("fabricator", "smelting", "chiseled_sandstone"));
 	}
 
 	private void registerFermenter(Consumer<IFinishedRecipe> consumer) {
@@ -273,28 +272,28 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
-				.build(consumer, anonymous());
+				.build(consumer, id("fermenter", "brown_mushroom_honey"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.BROWN_MUSHROOM))
 				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
-				.build(consumer, anonymous());
+				.build(consumer, id("fermenter", "brown_mushroom_juice"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.RED_MUSHROOM))
 				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
-				.build(consumer, anonymous());
+				.build(consumer, id("fermenter", "red_mushroom_honey"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.RED_MUSHROOM))
 				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
-				.build(consumer, anonymous());
+				.build(consumer, id("fermenter", "red_mushroom_juice"));
 
 		FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
 		FluidStack honey = ForestryFluids.HONEY.getFluid(1);
@@ -305,7 +304,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setModifier(1.0f)
 				.setOutput(shortMead.getFluid())
 				.setFluidResource(honey)
-				.build(consumer, anonymous());
+				.build(consumer, id("fermenter", "honeydew"));
 	}
 
 	private void registerMoistener(Consumer<IFinishedRecipe> consumer) {
@@ -313,22 +312,22 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setResource(Ingredient.fromItems(Items.WHEAT_SEEDS))
 				.setProduct(new ItemStack(Blocks.MYCELIUM))
 				.setTimePerItem(5000)
-				.build(consumer, anonymous());
+				.build(consumer, id("moistener", "mycelium"));
 		new MoistenerRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.COBBLESTONE))
 				.setProduct(new ItemStack(Blocks.MOSSY_COBBLESTONE))
 				.setTimePerItem(20000)
-				.build(consumer, anonymous());
+				.build(consumer, id("moistener", "mossy_cobblestone"));
 		new MoistenerRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.STONE_BRICKS))
 				.setProduct(new ItemStack(Blocks.MOSSY_STONE_BRICKS))
 				.setTimePerItem(20000)
-				.build(consumer, anonymous());
+				.build(consumer, id("moistener", "mossy_stone_bricks"));
 		new MoistenerRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.SPRUCE_LEAVES))
 				.setProduct(new ItemStack(Blocks.PODZOL))
 				.setTimePerItem(5000)
-				.build(consumer, anonymous());
+				.build(consumer, id("moistener", "podzol"));
 	}
 
 	private void registerSqueezerContainer(Consumer<IFinishedRecipe> consumer) {
@@ -337,19 +336,19 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.CAN))
 				.setRemnants(CoreItems.INGOT_TIN.stack())
 				.setRemnantsChance(0.05f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "container", "can"));
 		new SqueezerContainerRecipeBuilder()
 				.setProcessingTime(10)
 				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.CAPSULE))
 				.setRemnants(CoreItems.BEESWAX.stack())
 				.setRemnantsChance(0.10f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "container", "capsule"));
 		new SqueezerContainerRecipeBuilder()
 				.setProcessingTime(10)
 				.setEmptyContainer(FluidsItems.CONTAINERS.stack(EnumContainerType.REFRACTORY))
 				.setRemnants(CoreItems.REFRACTORY_WAX.stack())
 				.setRemnantsChance(0.10f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "container", "refractory"));
 	}
 
 	private void registerSqueezer(Consumer<IFinishedRecipe> consumer) {
@@ -362,13 +361,13 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setFluidOutput(honeyDropFluid)
 				.setRemnants(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
 				.setRemnantsChance(5 / 100f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "honey_drop"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(ApicultureItems.HONEYDEW)))
 				.setFluidOutput(honeyDropFluid)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "honey_dew"));
 
 		ItemStack phosphor = CoreItems.PHOSPHOR.stack(2);
 
@@ -379,7 +378,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					ingredients.add(Ingredient.fromItems(Blocks.SAND));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "lava_sand"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
@@ -388,7 +387,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					ingredients.add(Ingredient.fromItems(Blocks.RED_SAND));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "lava_red_sand"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
@@ -397,7 +396,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					ingredients.add(Ingredient.fromItems(Blocks.DIRT));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "lava_dirt"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
@@ -406,7 +405,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					ingredients.add(Ingredient.fromItems(Blocks.COBBLESTONE));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "lava_cobblestone"));
 
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
@@ -415,22 +414,22 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.WHEAT_SEEDS)))
 				.setFluidOutput(seedOil)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "wheat_seeds"));
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.PUMPKIN_SEEDS)))
 				.setFluidOutput(seedOil)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "pumpkin_seeds"));
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.MELON_SEEDS)))
 				.setFluidOutput(seedOil)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "melon_seeds"));
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.BEETROOT_SEEDS)))
 				.setFluidOutput(seedOil)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "beetroot_seeds"));
 
 		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
@@ -442,20 +441,20 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setFluidOutput(appleJuice)
 				.setRemnants(CoreItems.MULCH.stack())
 				.setRemnantsChance(appleMulchAmount / 100f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "apple"));
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.CARROT)))
 				.setFluidOutput(appleJuice)
 				.setRemnants(CoreItems.MULCH.stack())
 				.setRemnantsChance(appleMulchAmount / 100f)
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "carrot"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Blocks.CACTUS)))
 				.setFluidOutput(new FluidStack(Fluids.WATER, 500))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "cactus"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
@@ -464,13 +463,13 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					ingredients.add(Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 4)));
 				}))
 				.setFluidOutput(ForestryFluids.ICE.getFluid(4000))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "ice"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(8)
 				.setResources(NonNullList.withSize(1, Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING))))
 				.setFluidOutput(ForestryFluids.BIOMASS.getFluid(150))
-				.build(consumer, anonymous());
+				.build(consumer, id("squeezer", "biomass"));
 	}
 
 	private void registerStill(Consumer<IFinishedRecipe> consumer) {
@@ -481,6 +480,10 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setTimePerUnit(Constants.STILL_DESTILLATION_DURATION)
 				.setInput(biomass)
 				.setOutput(ethanol)
-				.build(consumer, anonymous());
+				.build(consumer, id("still", "ethanol"));
+	}
+
+	private static ResourceLocation id(String... path) {
+		return new ResourceLocation("forestry", String.join("/", path));
 	}
 }

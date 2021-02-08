@@ -1,0 +1,21 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 5,
+  "input": {
+    "item": "forestry:propolis_silky"
+  },
+  "products": [
+    {
+      "chance": 0.6,
+      "item": {
+        "item": "forestry:silk_wisp"
+      }
+    },
+    {
+      "chance": 0.1,
+      "item": {
+        "item": "forestry:propolis_normal"
+      }
+    }
+  ]
+}

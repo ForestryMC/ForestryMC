@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "minecraft:cactus"
+    }
+  ],
+  "output": {
+    "fluid": "minecraft:water",
+    "amount": 500
+  },
+  "remnant": {
+    "item": "minecraft:air"
+  },
+  "chance": 0.0
+}

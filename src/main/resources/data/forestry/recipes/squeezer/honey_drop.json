@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "forestry:honey_drop_honey"
+    }
+  ],
+  "output": {
+    "fluid": "forestry:honey",
+    "amount": 100
+  },
+  "remnant": {
+    "item": "forestry:propolis_normal"
+  },
+  "chance": 0.05
+}

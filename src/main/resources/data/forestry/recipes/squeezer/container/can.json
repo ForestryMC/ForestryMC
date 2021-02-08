@@ -1,0 +1,11 @@
+{
+  "type": "forestry:moistener",
+  "container": {
+    "item": "forestry:can"
+  },
+  "time": 10,
+  "remnants": {
+    "item": "forestry:ingot_tin"
+  },
+  "remnantsChance": 0.05
+}

@@ -1,0 +1,20 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "forestry:phosphor"
+    },
+    {
+      "item": "minecraft:dirt"
+    }
+  ],
+  "output": {
+    "fluid": "minecraft:lava",
+    "amount": 1600
+  },
+  "remnant": {
+    "item": "minecraft:air"
+  },
+  "chance": 0.0
+}

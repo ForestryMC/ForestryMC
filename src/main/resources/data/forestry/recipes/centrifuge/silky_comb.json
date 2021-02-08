@@ -1,0 +1,21 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 20,
+  "input": {
+    "item": "forestry:bee_comb_silky"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": {
+        "item": "forestry:honey_drop_honey"
+      }
+    },
+    {
+      "chance": 0.8,
+      "item": {
+        "item": "forestry:propolis_silky"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 20,
+  "input": {
+    "item": "forestry:bee_comb_simmering"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": {
+        "item": "forestry:refractory_wax"
+      }
+    },
+    {
+      "chance": 0.7,
+      "item": {
+        "item": "forestry:phosphor",
+        "count": 2
+      }
+    }
+  ]
+}

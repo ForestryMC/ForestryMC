@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "minecraft:melon_seeds"
+    }
+  ],
+  "output": {
+    "fluid": "forestry:seed_oil",
+    "amount": 10
+  },
+  "remnant": {
+    "item": "minecraft:air"
+  },
+  "chance": 0.0
+}

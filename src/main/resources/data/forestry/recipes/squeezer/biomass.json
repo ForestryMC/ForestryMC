@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "time": 8,
+  "resources": [
+    {
+      "item": "forestry:camouflaged_paneling"
+    }
+  ],
+  "output": {
+    "fluid": "forestry:biomass",
+    "amount": 150
+  },
+  "remnant": {
+    "item": "minecraft:air"
+  },
+  "chance": 0.0
+}

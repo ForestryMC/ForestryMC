@@ -1,0 +1,11 @@
+{
+  "type": "forestry:moistener",
+  "container": {
+    "item": "forestry:refractory"
+  },
+  "time": 10,
+  "remnants": {
+    "item": "forestry:refractory_wax"
+  },
+  "remnantsChance": 0.1
+}

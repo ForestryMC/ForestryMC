@@ -1,0 +1,17 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "forestry:honeydew"
+    }
+  ],
+  "output": {
+    "fluid": "forestry:honey",
+    "amount": 100
+  },
+  "remnant": {
+    "item": "minecraft:air"
+  },
+  "chance": 0.0
+}
