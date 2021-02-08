@@ -23,7 +23,7 @@ public class SqueezerRecipeBuilder {
 	private int processingTime;
 	private NonNullList<Ingredient> resources;
 	private FluidStack fluidOutput;
-	private ItemStack remnants;
+	private ItemStack remnants = ItemStack.EMPTY;
 	private float remnantsChance;
 
 	public SqueezerRecipeBuilder setProcessingTime(int processingTime) {

@@ -16,9 +16,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.Util;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,6 +38,7 @@ import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
 import forestry.core.data.builder.MoistenerRecipeBuilder;
 import forestry.core.data.builder.SqueezerContainerRecipeBuilder;
+import forestry.core.data.builder.SqueezerRecipeBuilder;
 import forestry.core.data.builder.StillRecipeBuilder;
 import forestry.core.features.CoreItems;
 import forestry.core.features.FluidsItems;
@@ -62,13 +66,11 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
-		// if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 		new CentrifugeRecipeBuilder()
 				.setProcessingTime(5)
 				.setInput(new ItemStack(Items.STRING))
 				.product(0.15F, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1))
 				.build(consumer, anonymous());
-		// }
 
 		ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
 
@@ -271,15 +273,13 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		FluidStack shortMead = ForestryFluids.SHORT_MEAD.getFluid(1);
 		FluidStack honey = ForestryFluids.HONEY.getFluid(1);
 
-		if (!shortMead.isEmpty() && !honey.isEmpty()) {
-			new FermenterRecipeBuilder()
-					.setResource(Ingredient.fromItems(ApicultureItems.HONEYDEW))
-					.setFermentationValue(500)
-					.setModifier(1.0f)
-					.setOutput(shortMead.getFluid())
-					.setFluidResource(honey)
-					.build(consumer, anonymous());
-		}
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.fromItems(ApicultureItems.HONEYDEW))
+				.setFermentationValue(500)
+				.setModifier(1.0f)
+				.setOutput(shortMead.getFluid())
+				.setFluidResource(honey)
+				.build(consumer, anonymous());
 	}
 
 	private void registerMoistener(Consumer<IFinishedRecipe> consumer) {
@@ -327,20 +327,134 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerSqueezer(Consumer<IFinishedRecipe> consumer) {
+		ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
+		FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
 
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromStacks(honeyDrop)))
+				.setFluidOutput(honeyDropFluid)
+				.setRemnants(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
+				.setRemnantsChance(5)
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(ApicultureItems.HONEYDEW)))
+				.setFluidOutput(honeyDropFluid)
+				.build(consumer, anonymous());
+
+		ItemStack phosphor = CoreItems.PHOSPHOR.stack(2);
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
+					ingredients.add(Ingredient.fromStacks(phosphor));
+					ingredients.add(Ingredient.fromItems(Blocks.SAND));
+				}))
+				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
+					ingredients.add(Ingredient.fromStacks(phosphor));
+					ingredients.add(Ingredient.fromItems(Blocks.RED_SAND));
+				}))
+				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
+					ingredients.add(Ingredient.fromStacks(phosphor));
+					ingredients.add(Ingredient.fromItems(Blocks.DIRT));
+				}))
+				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
+					ingredients.add(Ingredient.fromStacks(phosphor));
+					ingredients.add(Ingredient.fromItems(Blocks.COBBLESTONE));
+				}))
+				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
+				.build(consumer, anonymous());
+
+		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.WHEAT_SEEDS)))
+				.setFluidOutput(seedOil)
+				.build(consumer, anonymous());
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.PUMPKIN_SEEDS)))
+				.setFluidOutput(seedOil)
+				.build(consumer, anonymous());
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.MELON_SEEDS)))
+				.setFluidOutput(seedOil)
+				.build(consumer, anonymous());
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.BEETROOT_SEEDS)))
+				.setFluidOutput(seedOil)
+				.build(consumer, anonymous());
+
+		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
+		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+		FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.APPLE)))
+				.setFluidOutput(appleJuice)
+				.setRemnants(CoreItems.MULCH.stack())
+				.setRemnantsChance(appleMulchAmount)
+				.build(consumer, anonymous());
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.CARROT)))
+				.setFluidOutput(appleJuice)
+				.setRemnants(CoreItems.MULCH.stack())
+				.setRemnantsChance(appleMulchAmount)
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Blocks.CACTUS)))
+				.setFluidOutput(new FluidStack(Fluids.WATER, 500))
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(10)
+				.setResources(Util.make(NonNullList.create(), ingredients -> {
+					ingredients.add(Ingredient.fromItems(Items.SNOWBALL));
+					ingredients.add(Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 4)));
+				}))
+				.setFluidOutput(ForestryFluids.ICE.getFluid(4000))
+				.build(consumer, anonymous());
+
+		new SqueezerRecipeBuilder()
+				.setProcessingTime(8)
+				.setResources(NonNullList.withSize(1, Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING))))
+				.setFluidOutput(ForestryFluids.BIOMASS.getFluid(150))
+				.build(consumer, anonymous());
 	}
 
 	private void registerStill(Consumer<IFinishedRecipe> consumer) {
-		// STILL
 		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(Constants.STILL_DESTILLATION_INPUT);
 		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(Constants.STILL_DESTILLATION_OUTPUT);
 
-		if (!biomass.isEmpty() && !ethanol.isEmpty()) {
-			new StillRecipeBuilder()
-					.setTimePerUnit(Constants.STILL_DESTILLATION_DURATION)
-					.setInput(biomass)
-					.setOutput(ethanol)
-					.build(consumer, anonymous());
-		}
+		new StillRecipeBuilder()
+				.setTimePerUnit(Constants.STILL_DESTILLATION_DURATION)
+				.setInput(biomass)
+				.setOutput(ethanol)
+				.build(consumer, anonymous());
 	}
 }

@@ -23,8 +23,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -350,40 +348,6 @@ public class ModuleFactory extends BlankForestryModule {
 				//					"X",
 				//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
 			}
-		}
-
-		// / SQUEEZER
-		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
-		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
-		FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
-		if (!appleJuice.isEmpty()) {
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.APPLE), appleJuice,
-				CoreItems.MULCH.stack(), appleMulchAmount);
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.CARROT), appleJuice,
-				CoreItems.MULCH.stack(), appleMulchAmount);
-		}
-		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
-		if (!seedOil.isEmpty()) {
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.WHEAT_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.PUMPKIN_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.MELON_SEEDS), seedOil);
-			RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Items.BEETROOT_SEEDS), seedOil);
-		}
-
-		RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(Blocks.CACTUS), new FluidStack(Fluids.WATER, 500));
-
-		NonNullList<Ingredient> lavaRecipeResources = NonNullList.create();
-		lavaRecipeResources.add(Ingredient.fromStacks(CoreItems.PHOSPHOR.stack(2)));
-		lavaRecipeResources.add(Ingredient.fromItems(Blocks.COBBLESTONE));
-		RecipeManagers.squeezerManager.addRecipe(10, lavaRecipeResources, new FluidStack(Fluids.LAVA, 1600));
-
-		NonNullList<Ingredient> iceRecipeResources = NonNullList.create();
-		iceRecipeResources.add(Ingredient.fromItems(Items.SNOWBALL));
-		iceRecipeResources.add(Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.ICE_SHARD, 4)));
-		FluidStack liquidIce = ForestryFluids.ICE.getFluid(4000);
-		if (!liquidIce.isEmpty()) {
-			RecipeManagers.squeezerManager.addRecipe(10, iceRecipeResources, liquidIce);
 		}
 
 		// FERMENTER

@@ -32,7 +32,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -84,7 +83,6 @@ import forestry.apiculture.gui.GuiBeeHousing;
 import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.EnumHoneyComb;
-import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.network.PacketRegistryApiculture;
@@ -434,31 +432,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-
-			ItemStack honeyDrop = ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1);
-			// / SQUEEZER
-			FluidStack honeyDropFluid = ForestryFluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP);
-			if (!honeyDropFluid.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromStacks(honeyDrop), honeyDropFluid, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1), 5);
-				RecipeManagers.squeezerManager.addRecipe(10, Ingredient.fromItems(ApicultureItems.HONEYDEW), honeyDropFluid);
-			}
-
-			ItemStack phosphor = CoreItems.PHOSPHOR.stack(2);
-			NonNullList<Ingredient> lavaIngredients = NonNullList.create();
-			lavaIngredients.add(Ingredient.fromStacks(phosphor));
-			lavaIngredients.add(Ingredient.fromItems(Blocks.SAND));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
-
-			lavaIngredients = NonNullList.create();
-			lavaIngredients.add(Ingredient.fromStacks(phosphor));
-			lavaIngredients.add(Ingredient.fromItems(Blocks.RED_SAND));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 2000));
-
-			lavaIngredients = NonNullList.create();
-			lavaIngredients.add(Ingredient.fromStacks(phosphor));
-			lavaIngredients.add(Ingredient.fromItems(Blocks.DIRT));
-			RecipeManagers.squeezerManager.addRecipe(10, lavaIngredients, new FluidStack(Fluids.LAVA, 1600));
-
 			// / CARPENTER
 			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SCENTED_PANELING, 1),
 				" J ", "###", "WPW",

@@ -21,7 +21,6 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -71,7 +70,6 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
@@ -261,11 +259,6 @@ public class ModuleCore extends BlankForestryModule {
 					'X', OreDictUtil.INGOT_TIN,
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
-			// Camouflaged Paneling
-			FluidStack biomass = ForestryFluids.BIOMASS.getFluid(150);
-			if (!biomass.isEmpty()) {
-				RecipeManagers.squeezerManager.addRecipe(8, Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.CAMOUFLAGED_PANELING)), biomass);
-			}
 		}
 
 		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
