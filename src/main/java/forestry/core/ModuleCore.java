@@ -260,16 +260,6 @@ public class ModuleCore extends BlankForestryModule {
 					'R', OreDictUtil.DUST_REDSTONE,
 					'D', OreDictUtil.GEM_DIAMOND);
 		}
-
-		IHygroregulatorManager hygroManager = RecipeManagers.hygroregulatorManager;
-		if (hygroManager != null) {
-			hygroManager.addRecipe(new FluidStack(Fluids.WATER, 1), 1, -0.005f, 0.01f);
-			hygroManager.addRecipe(new FluidStack(Fluids.LAVA, 1), 10, 0.005f, -0.01f);
-			FluidStack ice = ForestryFluids.ICE.getFluid(1);
-			if (!ice.isEmpty()) {
-				hygroManager.addRecipe(ice, 10, -0.01f, 0.02f);
-			}
-		}
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public class SqueezerRecipeBuilder {
 			json.add("resources", resources);
 			json.add("output", RecipeSerializers.serializeFluid(fluidOutput));
 			json.add("remnant", RecipeSerializers.item(remnants));
-			json.addProperty("remnantChance", remnantsChance);
+			json.addProperty("chance", remnantsChance);
 		}
 
 		@Override

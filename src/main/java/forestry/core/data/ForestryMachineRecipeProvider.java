@@ -33,9 +33,11 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.core.config.Constants;
+import forestry.core.config.GameMode;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
+import forestry.core.data.builder.HygroregulatorRecipeBuilder;
 import forestry.core.data.builder.MoistenerRecipeBuilder;
 import forestry.core.data.builder.SqueezerContainerRecipeBuilder;
 import forestry.core.data.builder.SqueezerRecipeBuilder;
@@ -59,10 +61,32 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		registerCentrifuge(consumer);
 		registerFabricatorSmelting(consumer);
 		registerFermenter(consumer);
+		registerHygroregulator(consumer);
 		registerMoistener(consumer);
 		registerSqueezerContainer(consumer);
 		registerSqueezer(consumer);
 		registerStill(consumer);
+	}
+
+	private void registerHygroregulator(Consumer<IFinishedRecipe> consumer) {
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(new FluidStack(Fluids.WATER, 1))
+				.setTransferTime(1)
+				.setTempChange(-0.005f)
+				.setHumidChange(0.01f)
+				.build(consumer, anonymous());
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(new FluidStack(Fluids.LAVA, 1))
+				.setTransferTime(10)
+				.setTempChange(0.005f)
+				.setHumidChange(-0.01f)
+				.build(consumer, anonymous());
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(ForestryFluids.ICE.getFluid(1))
+				.setTransferTime(10)
+				.setTempChange(-0.01f)
+				.setHumidChange(0.02f)
+				.build(consumer, anonymous());
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
@@ -241,6 +265,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerFermenter(Consumer<IFinishedRecipe> consumer) {
+		ForestryAPI.activeMode = new GameMode("EASY");
+
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.fromItems(Blocks.BROWN_MUSHROOM))
 				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
@@ -335,7 +361,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setResources(NonNullList.withSize(1, Ingredient.fromStacks(honeyDrop)))
 				.setFluidOutput(honeyDropFluid)
 				.setRemnants(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
-				.setRemnantsChance(5)
+				.setRemnantsChance(5 / 100f)
 				.build(consumer, anonymous());
 
 		new SqueezerRecipeBuilder()
@@ -415,14 +441,14 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.APPLE)))
 				.setFluidOutput(appleJuice)
 				.setRemnants(CoreItems.MULCH.stack())
-				.setRemnantsChance(appleMulchAmount)
+				.setRemnantsChance(appleMulchAmount / 100f)
 				.build(consumer, anonymous());
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
 				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.CARROT)))
 				.setFluidOutput(appleJuice)
 				.setRemnants(CoreItems.MULCH.stack())
-				.setRemnantsChance(appleMulchAmount)
+				.setRemnantsChance(appleMulchAmount / 100f)
 				.build(consumer, anonymous());
 
 		new SqueezerRecipeBuilder()
