@@ -43,7 +43,7 @@ minecraft {
 	mappings channel: 'snapshot', version: mcp_mappings
 
 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-	
+
 	runs {
         client {
             workingDirectory project.file('run')
@@ -162,7 +162,7 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-	from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
+	// from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
 	classifier = 'sources'
 }
 

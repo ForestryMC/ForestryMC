@@ -15,8 +15,8 @@ import com.google.gson.JsonObject;
 import java.util.function.Consumer;
 
 import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
@@ -27,7 +27,7 @@ import forestry.factory.recipes.RecipeSerializers;
 public class FabricatorSmeltingRecipeBuilder {
 
 	private int meltingPoint;
-	private ItemStack resource;
+	private Ingredient resource;
 	private FluidStack product;
 
 	public FabricatorSmeltingRecipeBuilder setMeltingPoint(int meltingPoint) {
@@ -35,7 +35,7 @@ public class FabricatorSmeltingRecipeBuilder {
 		return this;
 	}
 
-	public FabricatorSmeltingRecipeBuilder setResource(ItemStack resource) {
+	public FabricatorSmeltingRecipeBuilder setResource(Ingredient resource) {
 		this.resource = resource;
 		return this;
 	}
@@ -52,10 +52,10 @@ public class FabricatorSmeltingRecipeBuilder {
 	public static class Result implements IFinishedRecipe {
 		private final ResourceLocation id;
 		private final int meltingPoint;
-		private final ItemStack resource;
+		private final Ingredient resource;
 		private final FluidStack product;
 
-		public Result(ResourceLocation id, int meltingPoint, ItemStack resource, FluidStack product) {
+		public Result(ResourceLocation id, int meltingPoint, Ingredient resource, FluidStack product) {
 			this.id = id;
 			this.meltingPoint = meltingPoint;
 			this.resource = resource;
@@ -65,7 +65,7 @@ public class FabricatorSmeltingRecipeBuilder {
 		@Override
 		public void serialize(JsonObject json) {
 			json.addProperty("melting", meltingPoint);
-			json.add("resource", RecipeSerializers.item(resource));
+			json.add("resource", resource.serialize());
 			json.add("product", RecipeSerializers.serializeFluid(product));
 		}
 

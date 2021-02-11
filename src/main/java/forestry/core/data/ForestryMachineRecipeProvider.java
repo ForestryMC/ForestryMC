@@ -24,6 +24,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -227,40 +228,25 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
 
 		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.GLASS))
+				.setResource(Ingredient.fromItems(Blocks.GLASS))
 				.setProduct(liquidGlassBucket)
 				.setMeltingPoint(1000)
 				.build(consumer, id("fabricator", "smelting", "glass"));
 		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.GLASS_PANE))
+				.setResource(Ingredient.fromItems(Blocks.GLASS_PANE))
 				.setProduct(liquidGlass375)
 				.setMeltingPoint(1000)
 				.build(consumer, id("fabricator", "smelting", "glass_pane"));
 		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.SAND))
+				.setResource(Ingredient.fromItems(Blocks.SAND, Blocks.RED_SAND))
 				.setProduct(liquidGlassBucket)
 				.setMeltingPoint(3000)
 				.build(consumer, id("fabricator", "smelting", "sand"));
 		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.RED_SAND))
-				.setProduct(liquidGlassBucket)
-				.setMeltingPoint(3000)
-				.build(consumer, id("fabricator", "smelting", "red_sand"));
-		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.SANDSTONE))
+				.setResource(Ingredient.fromItems(Blocks.SANDSTONE, Blocks.SMOOTH_SANDSTONE, Blocks.CHISELED_SANDSTONE))
 				.setProduct(liquidGlassX4)
 				.setMeltingPoint(4800)
 				.build(consumer, id("fabricator", "smelting", "sandstone"));
-		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.SMOOTH_SANDSTONE))
-				.setProduct(liquidGlassX4)
-				.setMeltingPoint(4800)
-				.build(consumer, id("fabricator", "smelting", "smooth_sandstone"));
-		new FabricatorSmeltingRecipeBuilder()
-				.setResource(new ItemStack(Blocks.CHISELED_SANDSTONE))
-				.setProduct(liquidGlassX4)
-				.setMeltingPoint(4800)
-				.build(consumer, id("fabricator", "smelting", "chiseled_sandstone"));
 	}
 
 	private void registerFermenter(Consumer<IFinishedRecipe> consumer) {
@@ -375,7 +361,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setProcessingTime(10)
 				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
 					ingredients.add(Ingredient.fromStacks(phosphor));
-					ingredients.add(Ingredient.fromItems(Blocks.SAND));
+					ingredients.add(Ingredient.fromItems(Blocks.SAND, Blocks.RED_SAND));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
 				.build(consumer, id("squeezer", "lava_sand"));
@@ -384,52 +370,19 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setProcessingTime(10)
 				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
 					ingredients.add(Ingredient.fromStacks(phosphor));
-					ingredients.add(Ingredient.fromItems(Blocks.RED_SAND));
-				}))
-				.setFluidOutput(new FluidStack(Fluids.LAVA, 2000))
-				.build(consumer, id("squeezer", "lava_red_sand"));
-
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
-					ingredients.add(Ingredient.fromStacks(phosphor));
-					ingredients.add(Ingredient.fromItems(Blocks.DIRT));
+					ingredients.add(Ingredient.fromItems(Blocks.DIRT, Blocks.COBBLESTONE));
 				}))
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
-				.build(consumer, id("squeezer", "lava_dirt"));
-
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(Util.make(NonNullList.create(), (ingredients) -> {
-					ingredients.add(Ingredient.fromStacks(phosphor));
-					ingredients.add(Ingredient.fromItems(Blocks.COBBLESTONE));
-				}))
-				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
-				.build(consumer, id("squeezer", "lava_cobblestone"));
+				.build(consumer, id("squeezer", "lava"));
 
 		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		FluidStack seedOil = ForestryFluids.SEED_OIL.getFluid(seedOilAmount);
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.WHEAT_SEEDS)))
+				.setResources(NonNullList.withSize(1, Ingredient.fromTag(Tags.Items.SEEDS)))
 				.setFluidOutput(seedOil)
-				.build(consumer, id("squeezer", "wheat_seeds"));
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.PUMPKIN_SEEDS)))
-				.setFluidOutput(seedOil)
-				.build(consumer, id("squeezer", "pumpkin_seeds"));
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.MELON_SEEDS)))
-				.setFluidOutput(seedOil)
-				.build(consumer, id("squeezer", "melon_seeds"));
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.BEETROOT_SEEDS)))
-				.setFluidOutput(seedOil)
-				.build(consumer, id("squeezer", "beetroot_seeds"));
+				.build(consumer, id("squeezer", "seeds"));
 
 		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
 		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
@@ -437,18 +390,11 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.APPLE)))
+				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.APPLE, Items.CARROT)))
 				.setFluidOutput(appleJuice)
 				.setRemnants(CoreItems.MULCH.stack())
 				.setRemnantsChance(appleMulchAmount / 100f)
-				.build(consumer, id("squeezer", "apple"));
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(10)
-				.setResources(NonNullList.withSize(1, Ingredient.fromItems(Items.CARROT)))
-				.setFluidOutput(appleJuice)
-				.setRemnants(CoreItems.MULCH.stack())
-				.setRemnantsChance(appleMulchAmount / 100f)
-				.build(consumer, id("squeezer", "carrot"));
+				.build(consumer, id("squeezer", "mulch"));
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
