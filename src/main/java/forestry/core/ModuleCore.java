@@ -38,6 +38,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -50,7 +51,6 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
-import forestry.api.recipes.IHygroregulatorManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
@@ -64,7 +64,6 @@ import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreItems;
-import forestry.core.fluids.ForestryFluids;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
@@ -255,10 +254,10 @@ public class ModuleCore extends BlankForestryModule {
 			// Portable ANALYZER
 			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, CoreItems.PORTABLE_ALYZER.stack(),
 					"X#X", "X#X", "RDR",
-					'#', OreDictUtil.PANE_GLASS,
+					'#', Tags.Items.GLASS_PANES,
 					'X', OreDictUtil.INGOT_TIN,
-					'R', OreDictUtil.DUST_REDSTONE,
-					'D', OreDictUtil.GEM_DIAMOND);
+					'R', Tags.Items.DUSTS_REDSTONE,
+					'D', Tags.Items.GEMS_DIAMOND);
 		}
 	}
 

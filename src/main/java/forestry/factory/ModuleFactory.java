@@ -26,6 +26,7 @@ import net.minecraft.item.Items;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -247,67 +248,67 @@ public class ModuleFactory extends BlankForestryModule {
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "ingotCopper"});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.TIN, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "ingotTin"});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BRONZE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "ingotBronze"});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.IRON, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
-				'X', "ingotIron"});
+				'#', Tags.Items.DUSTS_REDSTONE,
+				'X', Tags.Items.INGOTS_IRON});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
-				'X', "ingotGold"});
+				'#', Tags.Items.DUSTS_REDSTONE,
+				'X', Tags.Items.INGOTS_GOLD});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.DIAMOND, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
-				'X', "gemDiamond"});
+				'#', Tags.Items.DUSTS_REDSTONE,
+				'X', Tags.Items.GEMS_DIAMOND});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.OBSIDIAN, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', Blocks.OBSIDIAN});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BLAZE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', Items.BLAZE_POWDER});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.EMERALD, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
-				'X', "gemEmerald"});
+				'#', Tags.Items.DUSTS_REDSTONE,
+				'X', Tags.Items.GEMS_EMERALD});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.APATITE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "gemApatite"});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.LAPIS, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
-				'#', "dustRedstone",
+				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', new ItemStack(Items.LAPIS_LAZULI)});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.ENDER, 4), new Object[]{
 				" X ",
@@ -326,8 +327,8 @@ public class ModuleFactory extends BlankForestryModule {
 				"B B",
 				"#E#",
 				'#', OreDictUtil.INGOT_BRONZE,
-				'B', OreDictUtil.SLIMEBALL,
-				'E', "gemEmerald"});
+				'B', Tags.Items.SLIMEBALLS,
+				'E', Tags.Items.GEMS_EMERALD});
 		}
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
@@ -399,13 +400,13 @@ public class ModuleFactory extends BlankForestryModule {
 			"#X#",
 			"XYX", "#X#",
 			'#', Blocks.DIRT,
-			'X', "sand",
+			'X', Tags.Items.SAND,
 			'Y', CoreItems.MULCH);
 		RecipeManagers.carpenterManager.addRecipe(75, new FluidStack(Fluids.WATER, 5000), ItemStack.EMPTY, CoreItems.HARDENED_CASING.stack(),
 			"# #",
 			" Y ",
 			"# #",
-			'#', "gemDiamond",
+			'#', Tags.Items.GEMS_DIAMOND,
 			'Y', CoreItems.STURDY_CASING);
 
 		// / CHIPSETS
@@ -415,18 +416,18 @@ public class ModuleFactory extends BlankForestryModule {
 		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
 
 		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, basicCircuitboard,
-			"R R", "R#R", "R R", '#', "ingotTin", 'R', "dustRedstone");
+			"R R", "R#R", "R R", '#', "ingotTin", 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, enhancedCircuitboard,
-			"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', "dustRedstone");
+			"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, refinedCircuitboard,
-			"R#R", "R#R", "R#R", '#', "ingotIron", 'R', "dustRedstone");
+			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_IRON, 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, intricateCircuitboard,
-			"R#R", "R#R", "R#R", '#', "ingotGold", 'R', "dustRedstone");
+			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_GOLD, 'R', Tags.Items.DUSTS_REDSTONE);
 		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.SOLDERING_IRON.stack(),
-			" # ", "# #", "  B", '#', "ingotIron", 'B', "ingotBronze");
+			" # ", "# #", "  B", '#', Tags.Items.INGOTS_IRON, 'B', "ingotBronze");
 
 		// RAIN SUBSTRATES
 
