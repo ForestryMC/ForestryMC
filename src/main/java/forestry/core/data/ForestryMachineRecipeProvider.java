@@ -68,27 +68,6 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		registerStill(consumer);
 	}
 
-	private void registerHygroregulator(Consumer<IFinishedRecipe> consumer) {
-		new HygroregulatorRecipeBuilder()
-				.setLiquid(new FluidStack(Fluids.WATER, 1))
-				.setTransferTime(1)
-				.setTempChange(-0.005f)
-				.setHumidChange(0.01f)
-				.build(consumer, id("hygroregulator", "water"));
-		new HygroregulatorRecipeBuilder()
-				.setLiquid(new FluidStack(Fluids.LAVA, 1))
-				.setTransferTime(10)
-				.setTempChange(0.005f)
-				.setHumidChange(-0.01f)
-				.build(consumer, id("hygroregulator", "lava"));
-		new HygroregulatorRecipeBuilder()
-				.setLiquid(ForestryFluids.ICE.getFluid(1))
-				.setTransferTime(10)
-				.setTempChange(-0.01f)
-				.setHumidChange(0.02f)
-				.build(consumer, id("hygroregulator", "ice"));
-	}
-
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
 		new CentrifugeRecipeBuilder()
 				.setProcessingTime(5)
@@ -291,6 +270,27 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setOutput(shortMead.getFluid())
 				.setFluidResource(honey)
 				.build(consumer, id("fermenter", "honeydew"));
+	}
+
+	private void registerHygroregulator(Consumer<IFinishedRecipe> consumer) {
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(new FluidStack(Fluids.WATER, 1))
+				.setTransferTime(1)
+				.setTempChange(-0.005f)
+				.setHumidChange(0.01f)
+				.build(consumer, id("hygroregulator", "water"));
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(new FluidStack(Fluids.LAVA, 1))
+				.setTransferTime(10)
+				.setTempChange(0.005f)
+				.setHumidChange(-0.01f)
+				.build(consumer, id("hygroregulator", "lava"));
+		new HygroregulatorRecipeBuilder()
+				.setLiquid(ForestryFluids.ICE.getFluid(1))
+				.setTransferTime(10)
+				.setTempChange(-0.01f)
+				.setHumidChange(0.02f)
+				.build(consumer, id("hygroregulator", "ice"));
 	}
 
 	private void registerMoistener(Consumer<IFinishedRecipe> consumer) {
