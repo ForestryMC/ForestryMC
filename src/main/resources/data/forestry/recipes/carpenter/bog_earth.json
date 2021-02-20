@@ -1,0 +1,32 @@
+{
+  "type": "forestry:carpenter",
+  "time": 5,
+  "liquid": {
+    "fluid": "minecraft:water",
+    "amount": 1000
+  },
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "#X#",
+      "XYX",
+      "#X#"
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:dirt"
+      },
+      "X": {
+        "tag": "forge:sand"
+      },
+      "Y": {
+        "item": "forestry:mulch"
+      }
+    },
+    "result": {
+      "item": "forestry:bog_earth",
+      "count": 8
+    }
+  }
+}

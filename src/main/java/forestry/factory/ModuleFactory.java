@@ -43,21 +43,14 @@ import forestry.api.fuels.MoistenerFuel;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.apiculture.items.EnumHoneyDrop;
-import forestry.apiculture.items.EnumPollenCluster;
-import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
-import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
@@ -361,53 +354,11 @@ public class ModuleFactory extends BlankForestryModule {
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), ForestryFluids.BIOMASS);
 
 		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.SEED_OIL.getFluid(250), ItemStack.EMPTY, CoreItems.IMPREGNATED_CASING.stack(),
-			"###",
-			"# #",
-			"###",
-			'#', "logWood");
-		RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.SEED_OIL.getFluid(500), ItemStack.EMPTY,
-			CoreBlocks.BASE.get(BlockTypeCoreTesr.ESCRITOIRE).stack(),
-			"#  ",
-			"###",
-			"# #",
-			'#', "plankWood");
-
-		// RESOURCES
-		RecipeManagers.carpenterManager.addRecipe(10, ForestryFluids.SEED_OIL.getFluid(100), ItemStack.EMPTY,
-			CoreItems.STICK_IMPREGNATED.stack(2),
-			"#",
-			"#",
-			'#', "logWood");
-		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 250), ItemStack.EMPTY,
-			CoreItems.WOOD_PULP.stack(4),
-			"#",
-			'#', "logWood");
 		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 250), ItemStack.EMPTY,
 			new ItemStack(Items.PAPER, 1),
 			"#",
 			"#",
 			'#', "pulpWood");
-		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY,
-			CoreBlocks.HUMUS.stack(9),
-			"###",
-			"#X#",
-			"###",
-			'#', Blocks.DIRT,
-			'X', CoreItems.MULCH);
-		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY,
-			CoreBlocks.BOG_EARTH.stack(8),
-			"#X#",
-			"XYX", "#X#",
-			'#', Blocks.DIRT,
-			'X', Tags.Items.SAND,
-			'Y', CoreItems.MULCH);
-		RecipeManagers.carpenterManager.addRecipe(75, new FluidStack(Fluids.WATER, 5000), ItemStack.EMPTY, CoreItems.HARDENED_CASING.stack(),
-			"# #",
-			" Y ",
-			"# #",
-			'#', Tags.Items.GEMS_DIAMOND,
-			'Y', CoreItems.STURDY_CASING);
 
 		// / CHIPSETS
 		ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{});
@@ -429,39 +380,6 @@ public class ModuleFactory extends BlankForestryModule {
 		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.SOLDERING_IRON.stack(),
 			" # ", "# #", "  B", '#', Tags.Items.INGOTS_IRON, 'B', "ingotBronze");
 
-		// RAIN SUBSTRATES
-
-
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.IODINE_CHARGE.stack(),
-				"Z#Z",
-				"#Y#",
-				"X#X",
-				'#', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1),    //TODO was a tag before
-				'X', Items.GUNPOWDER,
-				'Y', FluidsItems.CONTAINERS.get(EnumContainerType.CAN),
-				'Z', ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY, 1));
-			RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.DISSIPATION_CHARGE, 1),
-				"Z#Z",
-				"#Y#",
-				"X#X",
-				'#', ApicultureItems.ROYAL_JELLY.stack(),
-				'X', Items.GUNPOWDER,
-				'Y', FluidsItems.CONTAINERS.get(EnumContainerType.CAN),
-				'Z', ApicultureItems.HONEYDEW.stack());
-		}
-
-		// Ender pearl
-		RecipeManagers.carpenterManager.addRecipe(100, ItemStack.EMPTY, new ItemStack(Items.ENDER_PEARL, 1), " # ", "###", " # ", '#',
-			CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.PULSATING_MESH, 1));
-
-		// Woven Silk
-		RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(Fluids.WATER, 500), ItemStack.EMPTY, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1),
-			"###",
-			"###",
-			"###",
-			'#', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1));
-
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.CARTON.stack(2),
 			" # ", "# #", " # ", '#', "pulpWood");
@@ -476,15 +394,6 @@ public class ModuleFactory extends BlankForestryModule {
 
 		RecipeManagers.carpenterManager.addRecipe(20, null, CoreItems.CARTON.stack(), CoreItems.KIT_SHOVEL.stack(),
 			new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
-
-		// Reclamation
-		ItemStack ingotBronze = CoreItems.INGOT_BRONZE.stack();
-		ingotBronze.setCount(2);
-		RecipeManagers.carpenterManager.addRecipe(ItemStack.EMPTY, ingotBronze, "#", '#', CoreItems.BROKEN_BRONZE_PICKAXE);
-
-		ingotBronze = ingotBronze.copy();
-		ingotBronze.setCount(1);
-		RecipeManagers.carpenterManager.addRecipe(ItemStack.EMPTY, ingotBronze, "#", '#', CoreItems.BROKEN_BRONZE_SHOVEL);
 
 		// Crating and uncrating
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {

@@ -1,9 +1,14 @@
 {
   "type": "forestry:fabricator_smelting",
   "melting": 3000,
-  "resource": {
-    "item": "minecraft:sand"
-  },
+  "resource": [
+    {
+      "item": "minecraft:sand"
+    },
+    {
+      "item": "minecraft:red_sand"
+    }
+  ],
   "product": {
     "fluid": "forestry:glass",
     "amount": 1000

@@ -5,9 +5,14 @@
     {
       "item": "forestry:phosphor"
     },
-    {
-      "item": "minecraft:sand"
-    }
+    [
+      {
+        "item": "minecraft:sand"
+      },
+      {
+        "item": "minecraft:red_sand"
+      }
+    ]
   ],
   "output": {
     "fluid": "minecraft:lava",

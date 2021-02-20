@@ -16,10 +16,12 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -29,13 +31,17 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.ForestryAPI;
+import forestry.apiculture.blocks.BlockTypeApiculture;
+import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
+import forestry.core.data.builder.CarpenterRecipeBuilder;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
@@ -44,6 +50,7 @@ import forestry.core.data.builder.MoistenerRecipeBuilder;
 import forestry.core.data.builder.SqueezerContainerRecipeBuilder;
 import forestry.core.data.builder.SqueezerRecipeBuilder;
 import forestry.core.data.builder.StillRecipeBuilder;
+import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
@@ -58,6 +65,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
+		registerCarpenter(consumer);
 		registerCentrifuge(consumer);
 		registerFabricatorSmelting(consumer);
 		registerFermenter(consumer);
@@ -66,6 +74,178 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		registerSqueezerContainer(consumer);
 		registerSqueezer(consumer);
 		registerStill(consumer);
+	}
+
+	private void registerCarpenter(Consumer<IFinishedRecipe> consumer) {
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(50)
+				.setLiquid(ForestryFluids.SEED_OIL.getFluid(250))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.IMPREGNATED_CASING)
+						.patternLine("###")
+						.patternLine("# #")
+						.patternLine("###")
+						.key('#', ItemTags.LOGS))
+				.build(consumer, id("carpenter", "impregnated_casing"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(50)
+				.setLiquid(ForestryFluids.SEED_OIL.getFluid(500))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreBlocks.BASE.get(BlockTypeCoreTesr.ESCRITOIRE).item())
+						.patternLine("#  ")
+						.patternLine("###")
+						.patternLine("# #")
+						.key('#', ItemTags.PLANKS))
+				.build(consumer, id("carpenter", "escritoire"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(50)
+				.setLiquid(ForestryFluids.SEED_OIL.getFluid(100))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.STICK_IMPREGNATED, 2)
+						.patternLine("#")
+						.patternLine("#")
+						.key('#', ItemTags.LOGS))
+				.build(consumer, id("carpenter", "impregnated_stick"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 250))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.WOOD_PULP, 4)
+						.patternLine("#E")
+						.key('#', ItemTags.LOGS)
+						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+				.build(consumer, id("carpenter", "wood_pulp"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreBlocks.HUMUS, 9)
+						.patternLine("###")
+						.patternLine("#X#")
+						.patternLine("###")
+						.key('#', Blocks.DIRT)
+						.key('X', CoreItems.MULCH))
+				.build(consumer, id("carpenter", "humus"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreBlocks.BOG_EARTH, 8)
+						.patternLine("#X#")
+						.patternLine("XYX")
+						.patternLine("#X#")
+						.key('#', Blocks.DIRT)
+						.key('X', Tags.Items.SAND)
+						.key('Y', CoreItems.MULCH))
+				.build(consumer, id("carpenter", "bog_earth"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(75)
+				.setLiquid(new FluidStack(Fluids.WATER, 5000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.HARDENED_CASING)
+						.patternLine("X X")
+						.patternLine(" Y ")
+						.patternLine("X X")
+						.key('X', Tags.Items.GEMS_DIAMOND)
+						.key('Y', CoreItems.STURDY_CASING))
+				.build(consumer, id("carpenter", "hardened_casing"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.IODINE_CHARGE)
+						.patternLine("Z#Z")
+						.patternLine("#Y#")
+						.patternLine("X#X")
+						.key('#', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL).getItem())
+						.key('X', Items.GUNPOWDER)
+						.key('Y', FluidsItems.CONTAINERS.get(EnumContainerType.CAN))
+						.key('Z', ApicultureItems.HONEY_DROPS.stack(EnumHoneyDrop.HONEY).getItem()))
+				.build(consumer, id("carpenter", "iodine_charge"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.DISSIPATION_CHARGE).getItem())
+						.patternLine("Z#Z")
+						.patternLine("#Y#")
+						.patternLine("X#X")
+						.key('#', ApicultureItems.ROYAL_JELLY)
+						.key('X', Items.GUNPOWDER)
+						.key('Y', FluidsItems.CONTAINERS.get(EnumContainerType.CAN))
+						.key('Z', ApicultureItems.HONEYDEW))
+				.build(consumer, id("carpenter", "dissipation_charge"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(100)
+				.setLiquid(null)
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.ENDER_PEARL)
+						.patternLine(" # ")
+						.patternLine("###")
+						.patternLine(" # ")
+						.key('#', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.PULSATING_MESH).getItem()))
+				.build(consumer, id("carpenter", "ender_pearl"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(10)
+				.setLiquid(new FluidStack(Fluids.WATER, 500))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK).getItem())
+						.patternLine("XXX")
+						.patternLine("XXX")
+						.patternLine("XXX")
+						.key('X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP).getItem()))
+				.build(consumer, id("carpenter", "woven_silk"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(null)
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 2)
+						.patternLine("#E")
+						.key('#', CoreItems.BRONZE_PICKAXE)
+						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+				.build(consumer, id("carpenter", "reclaim_bronze_pickaxe"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(null)
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 1)
+						.patternLine("#E")
+						.key('#', CoreItems.BRONZE_SHOVEL)
+						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+				.build(consumer, id("carpenter", "reclaim_bronze_shovel"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(50)
+				.setLiquid(ForestryFluids.HONEY.getFluid(500))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SCENTED_PANELING).getItem())
+						.patternLine(" J ")
+						.patternLine("###")
+						.patternLine("WPW")
+						.key('#', ItemTags.PLANKS)
+						.key('J', ApicultureItems.ROYAL_JELLY)
+						.key('W', CoreItems.BEESWAX)
+						.key('P', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL).getItem()))
+				.build(consumer, id("carpenter", "scented_paneling"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(30)
+				.setLiquid(new FluidStack(Fluids.WATER, 600))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY).getItem(), 24)
+						.patternLine(" X ")
+						.patternLine("###")
+						.patternLine("###")
+						.key('#', CoreItems.BEESWAX)
+						.key('X', Items.STRING))
+				.build(consumer, id("carpenter", "apiary_string"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(10)
+				.setLiquid(new FluidStack(Fluids.WATER, 200))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY).getItem(), 6)
+						.patternLine("#X#")
+						.key('#', CoreItems.BEESWAX)
+						.key('X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP).getItem()))
+				.build(consumer, id("carpenter", "apiary_silk_wisp"));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {

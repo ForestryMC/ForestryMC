@@ -5,13 +5,18 @@
     {
       "item": "forestry:phosphor"
     },
-    {
-      "item": "minecraft:red_sand"
-    }
+    [
+      {
+        "item": "minecraft:dirt"
+      },
+      {
+        "item": "minecraft:cobblestone"
+      }
+    ]
   ],
   "output": {
     "fluid": "minecraft:lava",
-    "amount": 2000
+    "amount": 1600
   },
   "remnant": {
     "item": "minecraft:air"

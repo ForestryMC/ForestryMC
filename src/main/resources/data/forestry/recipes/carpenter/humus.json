@@ -1,0 +1,29 @@
+{
+  "type": "forestry:carpenter",
+  "time": 5,
+  "liquid": {
+    "fluid": "minecraft:water",
+    "amount": 1000
+  },
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "###",
+      "#X#",
+      "###"
+    ],
+    "key": {
+      "#": {
+        "item": "minecraft:dirt"
+      },
+      "X": {
+        "item": "forestry:mulch"
+      }
+    },
+    "result": {
+      "item": "forestry:humus",
+      "count": 9
+    }
+  }
+}

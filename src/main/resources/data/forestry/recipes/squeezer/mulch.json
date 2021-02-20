@@ -2,9 +2,14 @@
   "type": "forestry:squeezer",
   "time": 10,
   "resources": [
-    {
-      "item": "minecraft:carrot"
-    }
+    [
+      {
+        "item": "minecraft:apple"
+      },
+      {
+        "item": "minecraft:carrot"
+      }
+    ]
   ],
   "output": {
     "fluid": "forestry:juice",

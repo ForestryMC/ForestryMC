@@ -1,0 +1,25 @@
+{
+  "type": "forestry:carpenter",
+  "time": 10,
+  "liquid": {
+    "fluid": "minecraft:water",
+    "amount": 500
+  },
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "XXX",
+      "XXX",
+      "XXX"
+    ],
+    "key": {
+      "X": {
+        "item": "forestry:silk_wisp"
+      }
+    },
+    "result": {
+      "item": "forestry:woven_silk"
+    }
+  }
+}

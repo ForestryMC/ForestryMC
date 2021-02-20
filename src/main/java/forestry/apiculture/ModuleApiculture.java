@@ -26,7 +26,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -44,7 +43,6 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fluids.FluidStack;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -58,13 +56,10 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
-import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
-import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
@@ -100,13 +95,10 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
-import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.Log;
-import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
@@ -431,27 +423,6 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void registerRecipes() {
-		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-			// / CARPENTER
-			RecipeManagers.carpenterManager.addRecipe(50, ForestryFluids.HONEY.getFluid(500), ItemStack.EMPTY, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SCENTED_PANELING, 1),
-				" J ", "###", "WPW",
-				'#', OreDictUtil.PLANK_WOOD,
-				'J', ApicultureItems.ROYAL_JELLY.stack(),
-				'W', CoreItems.BEESWAX.stack(),
-				'P', ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1));
-
-			RecipeManagers.carpenterManager.addRecipe(30, new FluidStack(Fluids.WATER, 600), ItemStack.EMPTY, ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY, 24),
-				" X ",
-				"###",
-				"###",
-				'#', CoreItems.BEESWAX.stack(),
-				'X', Items.STRING);
-			RecipeManagers.carpenterManager.addRecipe(10, new FluidStack(Fluids.WATER, 200), ItemStack.EMPTY, ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY, 6),
-				"#X#",
-				'#', CoreItems.BEESWAX.stack(),
-				'X', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1));
-		}
-
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
 			Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),

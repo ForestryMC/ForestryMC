@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import net.minecraft.advancements.criterion.ImpossibleTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -49,15 +50,11 @@ public class CarpenterRecipeBuilder {
 		return this;
 	}
 
-	public CarpenterRecipeBuilder recipe(Consumer<Consumer<IFinishedRecipe>> consumer) {
+	public CarpenterRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
-		consumer.accept(holder::set);
-		recipe = (ShapedRecipeBuilder.Result) holder.get();
+		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
+		this.recipe = (ShapedRecipeBuilder.Result) holder.get();
 		return this;
-	}
-
-	public void build(Consumer<IFinishedRecipe> consumer) {
-		build(consumer, recipe.getID());
 	}
 
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {

@@ -1,0 +1,20 @@
+{
+  "type": "forestry:carpenter",
+  "time": 5,
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "#E"
+    ],
+    "key": {
+      "#": {
+        "item": "forestry:bronze_shovel"
+      },
+      "E": []
+    },
+    "result": {
+      "item": "forestry:ingot_bronze"
+    }
+  }
+}

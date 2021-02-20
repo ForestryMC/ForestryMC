@@ -3,15 +3,12 @@
   "time": 10,
   "resources": [
     {
-      "item": "forestry:phosphor"
-    },
-    {
-      "item": "minecraft:dirt"
+      "tag": "forge:seeds"
     }
   ],
   "output": {
-    "fluid": "minecraft:lava",
-    "amount": 1600
+    "fluid": "forestry:seed_oil",
+    "amount": 10
   },
   "remnant": {
     "item": "minecraft:air"
