@@ -1,0 +1,28 @@
+{
+  "type": "forestry:fabricator",
+  "plan": [],
+  "molten": {
+    "fluid": "forestry:glass",
+    "amount": 500
+  },
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      " X ",
+      "#X#",
+      "XXX"
+    ],
+    "key": {
+      "#": {
+        "tag": "forge:dusts/redstone"
+      },
+      "X": {
+        "item": "minecraft:obsidian"
+      }
+    },
+    "result": {
+      "item": "forestry:electron_tube_obsidian",
+      "count": 4
+    }
+  }
+}

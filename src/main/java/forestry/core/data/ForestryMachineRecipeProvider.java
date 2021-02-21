@@ -465,7 +465,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.patternLine("XXX")
 						.key('#', Items.ENDER_EYE)
 						.key('X', Items.END_STONE))
-				.build(consumer, id("fabricator", "electron_tubes", "emerald"));
+				.build(consumer, id("fabricator", "electron_tubes", "ender"));
 		new FabricatorRecipeBuilder()
 				.setPlan(Ingredient.EMPTY)
 				.setMolten(liquidGlass)
@@ -475,7 +475,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.patternLine("XXX")
 						.key('#', Items.REPEATER)
 						.key('X', Items.REDSTONE_ORE))
-				.build(consumer, id("fabricator", "electron_tubes", "emerald"));
+				.build(consumer, id("fabricator", "electron_tubes", "orchid"));
 	}
 
 	private void registerFabricatorSmelting(Consumer<IFinishedRecipe> consumer) {

@@ -7,9 +7,7 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
@@ -29,18 +27,4 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 	 * @return A collection of recipes
 	 */
 	Collection<T> getRecipes(@Nullable RecipeManager recipeManager);
-
-	/**
-	 * A utility method to find all recipes in a {@link RecipeManager} of a given {@link IRecipeType type}
-	 *
-	 * @param recipeManager The recipe manager
-	 * @param type    The recipe type object
-	 * @param <T>     The recipe type
-	 * @return A collection of all recipes of this type in the given {@link RecipeManager}
-	 */
-	static <T extends IForestryRecipe> Collection<T> findRecipes(RecipeManager recipeManager, IRecipeType<T> type) {
-		return recipeManager.getRecipes(type).values().stream()
-				.map(r -> (T) r)
-				.collect(Collectors.toSet());
-	}
 }
