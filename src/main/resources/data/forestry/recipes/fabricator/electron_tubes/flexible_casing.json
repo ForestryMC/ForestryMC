@@ -1,0 +1,30 @@
+{
+  "type": "forestry:fabricator",
+  "plan": [],
+  "molten": {
+    "fluid": "forestry:glass",
+    "amount": 500
+  },
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "#E#",
+      "B B",
+      "#E#"
+    ],
+    "key": {
+      "#": {
+        "tag": "forge:ingots/bronze"
+      },
+      "B": {
+        "tag": "forge:slimeballs"
+      },
+      "E": {
+        "tag": "forge:gems/emerald"
+      }
+    },
+    "result": {
+      "item": "forestry:flexible_casing"
+    }
+  }
+}

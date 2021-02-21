@@ -48,13 +48,13 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
+import forestry.core.data.ForestryTags;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
 import forestry.core.items.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.OreDictUtil;
 import forestry.core.utils.datastructures.DummyMap;
 import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
@@ -233,41 +233,6 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		// / FABRICATOR
-		FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
-		if (!liquidGlass.isEmpty()) {
-			//TODO json
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.COPPER, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', "ingotCopper"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.TIN, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', "ingotTin"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BRONZE, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', "ingotBronze"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.APATITE, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', "gemApatite"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.FLEXIBLE_CASING.stack(), new Object[]{
-				"#E#",
-				"B B",
-				"#E#",
-				'#', OreDictUtil.INGOT_BRONZE,
-				'B', Tags.Items.SLIMEBALLS,
-				'E', Tags.Items.GEMS_EMERALD});
-		}
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
 			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
@@ -312,33 +277,20 @@ public class ModuleFactory extends BlankForestryModule {
 		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
 
 		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, basicCircuitboard,
-			"R R", "R#R", "R R", '#', "ingotTin", 'R', Tags.Items.DUSTS_REDSTONE);
+			"R R", "R#R", "R R", '#', ForestryTags.Items.INGOTS_TIN, 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, enhancedCircuitboard,
-			"R#R", "R#R", "R#R", '#', "ingotBronze", 'R', Tags.Items.DUSTS_REDSTONE);
+			"R#R", "R#R", "R#R", '#', ForestryTags.Items.INGOTS_BRONZE, 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, refinedCircuitboard,
 			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_IRON, 'R', Tags.Items.DUSTS_REDSTONE);
 
 		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, intricateCircuitboard,
 			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_GOLD, 'R', Tags.Items.DUSTS_REDSTONE);
-		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.SOLDERING_IRON.stack(),
-			" # ", "# #", "  B", '#', Tags.Items.INGOTS_IRON, 'B', "ingotBronze");
 
 		// Boxes
 		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.CARTON.stack(2),
 			" # ", "# #", " # ", '#', "pulpWood");
-
-		// Assembly Kits
-		RecipeManagers.carpenterManager.addRecipe(20, null, CoreItems.CARTON.stack(), CoreItems.KIT_PICKAXE.stack(), new Object[]{
-			"###",
-			" X ",
-			" X ",
-			'#', "ingotBronze",
-			'X', "stickWood"});
-
-		RecipeManagers.carpenterManager.addRecipe(20, null, CoreItems.CARTON.stack(), CoreItems.KIT_SHOVEL.stack(),
-			new Object[]{" # ", " X ", " X ", '#', "ingotBronze", 'X', "stickWood"});
 
 		// Crating and uncrating
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {

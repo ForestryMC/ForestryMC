@@ -18,7 +18,6 @@ import java.util.Set;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.command.CommandSource;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootFunctionType;
@@ -38,11 +37,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.InterModComms;
@@ -84,7 +81,6 @@ import forestry.core.utils.OreDictUtil;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
@@ -248,17 +244,6 @@ public class ModuleCore extends BlankForestryModule {
 		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1), CoreItems.INGOT_COPPER.stack(), 0.5f);
 		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1), CoreItems.INGOT_TIN.stack(), 0.5f);
 		// RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
-
-		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-			// / CARPENTER
-			// Portable ANALYZER
-			RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, CoreItems.PORTABLE_ALYZER.stack(),
-					"X#X", "X#X", "RDR",
-					'#', Tags.Items.GLASS_PANES,
-					'X', OreDictUtil.INGOT_TIN,
-					'R', Tags.Items.DUSTS_REDSTONE,
-					'D', Tags.Items.GEMS_DIAMOND);
-		}
 	}
 
 	@Override
