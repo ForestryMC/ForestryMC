@@ -43,6 +43,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.data.builder.CarpenterRecipeBuilder;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
+import forestry.core.data.builder.FabricatorRecipeBuilder;
 import forestry.core.data.builder.FabricatorSmeltingRecipeBuilder;
 import forestry.core.data.builder.FermenterRecipeBuilder;
 import forestry.core.data.builder.HygroregulatorRecipeBuilder;
@@ -56,6 +57,7 @@ import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumContainerType;
 import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.EnumElectronTube;
 
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 
@@ -67,6 +69,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		registerCarpenter(consumer);
 		registerCentrifuge(consumer);
+		registerFabricator(consumer);
 		registerFabricatorSmelting(consumer);
 		registerFermenter(consumer);
 		registerHygroregulator(consumer);
@@ -379,6 +382,101 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.product(0.6f, CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.SILK_WISP, 1))
 				.product(0.1f, ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL, 1))
 				.build(consumer, id("centrifuge", "silky_propolis"));
+	}
+
+	private void registerFabricator(Consumer<IFinishedRecipe> consumer) {
+		FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
+
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Tags.Items.INGOTS_IRON))
+				.build(consumer, id("fabricator", "electron_tubes", "iron"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.GOLD), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Tags.Items.INGOTS_GOLD))
+				.build(consumer, id("fabricator", "electron_tubes", "gold"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.DIAMOND), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Tags.Items.GEMS_DIAMOND))
+				.build(consumer, id("fabricator", "electron_tubes", "diamond"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.OBSIDIAN), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Blocks.OBSIDIAN))
+				.build(consumer, id("fabricator", "electron_tubes", "obsidian"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BLAZE), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Items.BLAZE_POWDER))
+				.build(consumer, id("fabricator", "electron_tubes", "blaze"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.EMERALD), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Tags.Items.GEMS_EMERALD))
+				.build(consumer, id("fabricator", "electron_tubes", "emerald"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.LAPIS), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Tags.Items.DUSTS_REDSTONE)
+						.key('X', Tags.Items.GEMS_LAPIS))
+				.build(consumer, id("fabricator", "electron_tubes", "lapis"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.ENDER), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Items.ENDER_EYE)
+						.key('X', Items.END_STONE))
+				.build(consumer, id("fabricator", "electron_tubes", "emerald"));
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.ELECTRON_TUBES.get(EnumElectronTube.ORCHID), 4)
+						.patternLine(" X ")
+						.patternLine("#X#")
+						.patternLine("XXX")
+						.key('#', Items.REPEATER)
+						.key('X', Blocks.REDSTONE_ORE))
+				.build(consumer, id("fabricator", "electron_tubes", "emerald"));
 	}
 
 	private void registerFabricatorSmelting(Consumer<IFinishedRecipe> consumer) {

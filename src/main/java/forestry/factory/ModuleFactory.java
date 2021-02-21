@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -255,66 +254,12 @@ public class ModuleFactory extends BlankForestryModule {
 				"XXX",
 				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "ingotBronze"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.IRON, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Tags.Items.INGOTS_IRON});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Tags.Items.INGOTS_GOLD});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.DIAMOND, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Tags.Items.GEMS_DIAMOND});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.OBSIDIAN, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Blocks.OBSIDIAN});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BLAZE, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Items.BLAZE_POWDER});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.EMERALD, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', Tags.Items.GEMS_EMERALD});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.APATITE, 4), new Object[]{
 				" X ",
 				"#X#",
 				"XXX",
 				'#', Tags.Items.DUSTS_REDSTONE,
 				'X', "gemApatite"});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.LAPIS, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', Tags.Items.DUSTS_REDSTONE,
-				'X', new ItemStack(Items.LAPIS_LAZULI)});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.ENDER, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', new ItemStack(Items.ENDER_EYE),
-				'X', new ItemStack(Blocks.END_STONE)});
-			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.ORCHID, 4), new Object[]{
-				" X ",
-				"#X#",
-				"XXX",
-				'#', new ItemStack(Items.REPEATER),
-				'X', new ItemStack(Blocks.REDSTONE_ORE)});
 			RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, CoreItems.FLEXIBLE_CASING.stack(), new Object[]{
 				"#E#",
 				"B B",
