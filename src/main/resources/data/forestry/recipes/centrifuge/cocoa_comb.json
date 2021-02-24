@@ -8,13 +8,15 @@
     {
       "chance": 1.0,
       "item": {
-        "item": "forestry:beeswax"
+        "id": "forestry:beeswax",
+        "Count": 1
       }
     },
     {
       "chance": 0.5,
       "item": {
-        "item": "minecraft:cocoa_beans"
+        "id": "minecraft:cocoa_beans",
+        "Count": 1
       }
     }
   ]

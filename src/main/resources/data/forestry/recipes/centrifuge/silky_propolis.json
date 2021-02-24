@@ -8,13 +8,15 @@
     {
       "chance": 0.6,
       "item": {
-        "item": "forestry:silk_wisp"
+        "id": "forestry:silk_wisp",
+        "Count": 1
       }
     },
     {
       "chance": 0.1,
       "item": {
-        "item": "forestry:propolis_normal"
+        "id": "forestry:propolis_normal",
+        "Count": 1
       }
     }
   ]

@@ -7,11 +7,12 @@
     }
   ],
   "output": {
-    "fluid": "minecraft:water",
-    "amount": 500
+    "FluidName": "minecraft:water",
+    "Amount": 500
   },
   "remnant": {
-    "item": "minecraft:air"
+    "id": "minecraft:air",
+    "Count": 1
   },
   "chance": 0.0
 }

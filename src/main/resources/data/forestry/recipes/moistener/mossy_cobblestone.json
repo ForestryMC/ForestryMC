@@ -5,6 +5,7 @@
     "item": "minecraft:cobblestone"
   },
   "product": {
-    "item": "minecraft:mossy_cobblestone"
+    "id": "minecraft:mossy_cobblestone",
+    "Count": 1
   }
 }

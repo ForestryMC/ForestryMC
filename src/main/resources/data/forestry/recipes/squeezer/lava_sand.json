@@ -5,6 +5,9 @@
     {
       "item": "forestry:phosphor"
     },
+    {
+      "item": "forestry:phosphor"
+    },
     [
       {
         "item": "minecraft:sand"
@@ -15,11 +18,12 @@
     ]
   ],
   "output": {
-    "fluid": "minecraft:lava",
-    "amount": 2000
+    "FluidName": "minecraft:lava",
+    "Amount": 2000
   },
   "remnant": {
-    "item": "minecraft:air"
+    "id": "minecraft:air",
+    "Count": 1
   },
   "chance": 0.0
 }

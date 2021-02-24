@@ -8,13 +8,15 @@
     {
       "chance": 1.0,
       "item": {
-        "item": "forestry:honeydew"
+        "id": "forestry:honeydew",
+        "Count": 1
       }
     },
     {
       "chance": 0.4,
       "item": {
-        "item": "forestry:honey_drop_honey"
+        "id": "forestry:honey_drop_honey",
+        "Count": 1
       }
     }
   ]

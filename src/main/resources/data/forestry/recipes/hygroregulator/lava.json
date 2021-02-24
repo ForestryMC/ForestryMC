@@ -1,8 +1,8 @@
 {
   "type": "forestry:hygroregulator",
   "liquid": {
-    "fluid": "minecraft:lava",
-    "amount": 1
+    "FluidName": "minecraft:lava",
+    "Amount": 1
   },
   "time": 10,
   "humidChange": -0.01,

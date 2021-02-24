@@ -5,6 +5,7 @@
     "item": "minecraft:spruce_leaves"
   },
   "product": {
-    "item": "minecraft:podzol"
+    "id": "minecraft:podzol",
+    "Count": 1
   }
 }

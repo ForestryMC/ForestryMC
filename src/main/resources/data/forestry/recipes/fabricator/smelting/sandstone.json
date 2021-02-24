@@ -13,7 +13,7 @@
     }
   ],
   "product": {
-    "fluid": "forestry:glass",
-    "amount": 4000
+    "FluidName": "forestry:glass",
+    "Amount": 4000
   }
 }

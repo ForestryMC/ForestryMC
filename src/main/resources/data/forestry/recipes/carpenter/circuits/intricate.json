@@ -1,34 +1,35 @@
 {
   "type": "forestry:carpenter",
-  "time": 100,
+  "time": 80,
   "liquid": {
     "FluidName": "minecraft:water",
-    "Amount": 2000
+    "Amount": 1000
   },
   "box": [],
   "recipe": {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "X#X",
-      "X#X",
-      "RDR"
+      "R#R",
+      "R#R",
+      "R#R"
     ],
     "key": {
       "#": {
-        "tag": "forge:glass_panes"
-      },
-      "X": {
-        "tag": "forge:ingots/tin"
+        "tag": "forge:ingots/gold"
       },
       "R": {
         "tag": "forge:dusts/redstone"
-      },
-      "D": {
-        "tag": "forge:gems/diamond"
       }
     },
     "result": {
-      "item": "forestry:portable_alyzer"
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "forestry:circuit_board_intricate",
+    "Count": 1,
+    "tag": {
+      "T": 3
     }
   }
 }

@@ -7,11 +7,12 @@
     }
   ],
   "output": {
-    "fluid": "forestry:honey",
-    "amount": 100
+    "FluidName": "forestry:honey",
+    "Amount": 100
   },
   "remnant": {
-    "item": "forestry:propolis_normal"
+    "id": "forestry:propolis_normal",
+    "Count": 1
   },
   "chance": 0.05
 }

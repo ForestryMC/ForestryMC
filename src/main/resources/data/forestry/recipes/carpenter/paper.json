@@ -9,17 +9,16 @@
   "recipe": {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "#E"
+      "#",
+      "#"
     ],
     "key": {
       "#": {
-        "tag": "minecraft:logs"
-      },
-      "E": []
+        "item": "forestry:wood_pulp"
+      }
     },
     "result": {
-      "item": "forestry:wood_pulp",
-      "count": 4
+      "item": "minecraft:paper"
     }
   }
 }

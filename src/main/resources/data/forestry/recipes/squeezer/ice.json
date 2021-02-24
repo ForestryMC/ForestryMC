@@ -7,14 +7,24 @@
     },
     {
       "item": "forestry:ice_shard"
+    },
+    {
+      "item": "forestry:ice_shard"
+    },
+    {
+      "item": "forestry:ice_shard"
+    },
+    {
+      "item": "forestry:ice_shard"
     }
   ],
   "output": {
-    "fluid": "forestry:ice",
-    "amount": 4000
+    "FluidName": "forestry:ice",
+    "Amount": 4000
   },
   "remnant": {
-    "item": "minecraft:air"
+    "id": "minecraft:air",
+    "Count": 1
   },
   "chance": 0.0
 }

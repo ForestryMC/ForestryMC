@@ -2,8 +2,8 @@
   "type": "forestry:carpenter",
   "time": 5,
   "liquid": {
-    "fluid": "minecraft:water",
-    "amount": 1000
+    "FluidName": "minecraft:water",
+    "Amount": 1000
   },
   "box": [],
   "recipe": {

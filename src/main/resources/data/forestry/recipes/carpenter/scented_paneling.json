@@ -2,8 +2,8 @@
   "type": "forestry:carpenter",
   "time": 50,
   "liquid": {
-    "fluid": "forestry:honey",
-    "amount": 500
+    "FluidName": "forestry:honey",
+    "Amount": 500
   },
   "box": [],
   "recipe": {

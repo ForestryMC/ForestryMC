@@ -1,8 +1,8 @@
 {
   "type": "forestry:hygroregulator",
   "liquid": {
-    "fluid": "forestry:ice",
-    "amount": 1
+    "FluidName": "forestry:ice",
+    "Amount": 1
   },
   "time": 10,
   "humidChange": 0.02,

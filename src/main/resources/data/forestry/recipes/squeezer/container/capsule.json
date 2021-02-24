@@ -1,11 +1,13 @@
 {
   "type": "forestry:moistener",
   "container": {
-    "item": "forestry:capsule"
+    "id": "forestry:capsule",
+    "Count": 1
   },
   "time": 10,
   "remnants": {
-    "item": "forestry:beeswax"
+    "id": "forestry:beeswax",
+    "Count": 1
   },
   "remnantsChance": 0.1
 }

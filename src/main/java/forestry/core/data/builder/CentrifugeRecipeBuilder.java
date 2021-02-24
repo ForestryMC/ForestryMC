@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -27,7 +28,7 @@ import forestry.factory.recipes.RecipeSerializers;
 public class CentrifugeRecipeBuilder {
 
 	private int processingTime;
-	private ItemStack input;
+	private Ingredient input;
 	private final NonNullList<ICentrifugeRecipe.Product> outputs = NonNullList.create();
 
 	public CentrifugeRecipeBuilder setProcessingTime(int processingTime) {
@@ -35,7 +36,7 @@ public class CentrifugeRecipeBuilder {
 		return this;
 	}
 
-	public CentrifugeRecipeBuilder setInput(ItemStack input) {
+	public CentrifugeRecipeBuilder setInput(Ingredient input) {
 		this.input = input;
 		return this;
 	}
@@ -52,10 +53,10 @@ public class CentrifugeRecipeBuilder {
 	public static class Result implements IFinishedRecipe {
 		private final ResourceLocation id;
 		private final int processingTime;
-		private final ItemStack input;
+		private final Ingredient input;
 		private final NonNullList<ICentrifugeRecipe.Product> outputs;
 
-		public Result(ResourceLocation id, int processingTime, ItemStack input, NonNullList<ICentrifugeRecipe.Product> outputs) {
+		public Result(ResourceLocation id, int processingTime, Ingredient input, NonNullList<ICentrifugeRecipe.Product> outputs) {
 			this.id = id;
 			this.processingTime = processingTime;
 			this.input = input;
@@ -65,7 +66,7 @@ public class CentrifugeRecipeBuilder {
 		@Override
 		public void serialize(JsonObject json) {
 			json.addProperty("time", processingTime);
-			json.add("input", RecipeSerializers.item(input));
+			json.add("input", input.serialize());
 
 			JsonArray products = new JsonArray();
 

@@ -7,11 +7,12 @@
     }
   ],
   "output": {
-    "fluid": "forestry:biomass",
-    "amount": 150
+    "FluidName": "forestry:biomass",
+    "Amount": 150
   },
   "remnant": {
-    "item": "minecraft:air"
+    "id": "minecraft:air",
+    "Count": 1
   },
   "chance": 0.0
 }

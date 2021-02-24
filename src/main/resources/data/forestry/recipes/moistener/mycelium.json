@@ -5,6 +5,7 @@
     "item": "minecraft:wheat_seeds"
   },
   "product": {
-    "item": "minecraft:mycelium"
+    "id": "minecraft:mycelium",
+    "Count": 1
   }
 }

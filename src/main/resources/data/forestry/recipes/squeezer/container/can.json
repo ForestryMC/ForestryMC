@@ -1,11 +1,13 @@
 {
   "type": "forestry:moistener",
   "container": {
-    "item": "forestry:can"
+    "id": "forestry:can",
+    "Count": 1
   },
   "time": 10,
   "remnants": {
-    "item": "forestry:ingot_tin"
+    "id": "forestry:ingot_tin",
+    "Count": 1
   },
   "remnantsChance": 0.05
 }

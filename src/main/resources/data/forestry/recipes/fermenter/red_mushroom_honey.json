@@ -7,7 +7,7 @@
   "modifier": 1.5,
   "output": "forestry:biomass",
   "fluidResource": {
-    "fluid": "forestry:honey",
-    "amount": 1
+    "FluidName": "forestry:honey",
+    "Amount": 1
   }
 }

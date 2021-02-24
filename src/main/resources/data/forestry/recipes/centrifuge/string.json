@@ -8,7 +8,8 @@
     {
       "chance": 0.15,
       "item": {
-        "item": "forestry:silk_wisp"
+        "id": "forestry:silk_wisp",
+        "Count": 1
       }
     }
   ]

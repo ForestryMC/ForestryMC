@@ -7,11 +7,12 @@
     }
   ],
   "output": {
-    "fluid": "forestry:seed_oil",
-    "amount": 10
+    "FluidName": "forestry:seed_oil",
+    "Amount": 10
   },
   "remnant": {
-    "item": "minecraft:air"
+    "id": "minecraft:air",
+    "Count": 1
   },
   "chance": 0.0
 }

@@ -2,11 +2,11 @@
   "type": "forestry:still",
   "time": 100,
   "input": {
-    "fluid": "forestry:biomass",
-    "amount": 10
+    "FluidName": "forestry:biomass",
+    "Amount": 10
   },
   "output": {
-    "fluid": "forestry:bio_ethanol",
-    "amount": 3
+    "FluidName": "forestry:bio_ethanol",
+    "Amount": 3
   }
 }

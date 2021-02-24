@@ -2,8 +2,8 @@
   "type": "forestry:fabricator",
   "plan": [],
   "molten": {
-    "fluid": "forestry:glass",
-    "amount": 500
+    "FluidName": "forestry:glass",
+    "Amount": 500
   },
   "recipe": {
     "type": "minecraft:crafting_shaped",

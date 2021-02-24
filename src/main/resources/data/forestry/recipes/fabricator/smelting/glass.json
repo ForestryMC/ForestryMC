@@ -5,7 +5,7 @@
     "item": "minecraft:glass"
   },
   "product": {
-    "fluid": "forestry:glass",
-    "amount": 1000
+    "FluidName": "forestry:glass",
+    "Amount": 1000
   }
 }

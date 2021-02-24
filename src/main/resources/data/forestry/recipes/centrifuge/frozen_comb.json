@@ -8,25 +8,29 @@
     {
       "chance": 0.8,
       "item": {
-        "item": "forestry:beeswax"
+        "id": "forestry:beeswax",
+        "Count": 1
       }
     },
     {
       "chance": 0.7,
       "item": {
-        "item": "forestry:honey_drop_honey"
+        "id": "forestry:honey_drop_honey",
+        "Count": 1
       }
     },
     {
       "chance": 0.4,
       "item": {
-        "item": "minecraft:snowball"
+        "id": "minecraft:snowball",
+        "Count": 1
       }
     },
     {
       "chance": 0.2,
       "item": {
-        "item": "forestry:pollen_cluster_crystalline"
+        "id": "forestry:pollen_cluster_crystalline",
+        "Count": 1
       }
     }
   ]

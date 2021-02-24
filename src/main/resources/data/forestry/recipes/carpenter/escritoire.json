@@ -2,8 +2,8 @@
   "type": "forestry:carpenter",
   "time": 50,
   "liquid": {
-    "fluid": "forestry:seed_oil",
-    "amount": 500
+    "FluidName": "forestry:seed_oil",
+    "Amount": 500
   },
   "box": [],
   "recipe": {

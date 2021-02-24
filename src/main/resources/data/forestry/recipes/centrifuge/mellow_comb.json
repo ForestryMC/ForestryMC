@@ -8,19 +8,22 @@
     {
       "chance": 0.6,
       "item": {
-        "item": "forestry:honeydew"
+        "id": "forestry:honeydew",
+        "Count": 1
       }
     },
     {
       "chance": 0.2,
       "item": {
-        "item": "forestry:beeswax"
+        "id": "forestry:beeswax",
+        "Count": 1
       }
     },
     {
       "chance": 0.3,
       "item": {
-        "item": "minecraft:quartz"
+        "id": "minecraft:quartz",
+        "Count": 1
       }
     }
   ]

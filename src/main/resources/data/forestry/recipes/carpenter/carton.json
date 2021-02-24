@@ -3,23 +3,24 @@
   "time": 5,
   "liquid": {
     "FluidName": "minecraft:water",
-    "Amount": 250
+    "Amount": 1000
   },
   "box": [],
   "recipe": {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-      "#E"
+      " # ",
+      "# #",
+      " # "
     ],
     "key": {
       "#": {
-        "tag": "minecraft:logs"
-      },
-      "E": []
+        "item": "forestry:wood_pulp"
+      }
     },
     "result": {
-      "item": "forestry:wood_pulp",
-      "count": 4
+      "item": "forestry:carton",
+      "count": 2
     }
   }
 }

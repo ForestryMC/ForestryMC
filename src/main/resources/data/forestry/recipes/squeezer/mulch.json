@@ -12,11 +12,12 @@
     ]
   ],
   "output": {
-    "fluid": "forestry:juice",
-    "amount": 200
+    "FluidName": "forestry:juice",
+    "Amount": 200
   },
   "remnant": {
-    "item": "forestry:mulch"
+    "id": "forestry:mulch",
+    "Count": 1
   },
   "chance": 0.2
 }

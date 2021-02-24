@@ -7,7 +7,7 @@
   "modifier": 1.0,
   "output": "forestry:short_mead",
   "fluidResource": {
-    "fluid": "forestry:honey",
-    "amount": 1
+    "FluidName": "forestry:honey",
+    "Amount": 1
   }
 }

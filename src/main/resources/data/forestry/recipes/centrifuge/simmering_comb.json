@@ -8,14 +8,15 @@
     {
       "chance": 1.0,
       "item": {
-        "item": "forestry:refractory_wax"
+        "id": "forestry:refractory_wax",
+        "Count": 1
       }
     },
     {
       "chance": 0.7,
       "item": {
-        "item": "forestry:phosphor",
-        "count": 2
+        "id": "forestry:phosphor",
+        "Count": 2
       }
     }
   ]
