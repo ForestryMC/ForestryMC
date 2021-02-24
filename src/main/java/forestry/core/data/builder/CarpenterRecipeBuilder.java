@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import net.minecraft.advancements.criterion.ImpossibleTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +35,8 @@ public class CarpenterRecipeBuilder {
 	private FluidStack liquid;
 	private Ingredient box;
 	private ShapedRecipeBuilder.Result recipe;
+	@Nullable
+	private ItemStack result;
 
 	public CarpenterRecipeBuilder setPackagingTime(int packagingTime) {
 		this.packagingTime = packagingTime;
@@ -57,8 +60,19 @@ public class CarpenterRecipeBuilder {
 		return this;
 	}
 
+	/**
+	 * In case the recipe should create an item stack, and not a basic item without NBT
+	 *
+	 * @param result The result to override {@link #recipe(ShapedRecipeBuilder)}
+	 * @return This builder for chaining
+	 */
+	public CarpenterRecipeBuilder override(ItemStack result) {
+		this.result = result;
+		return this;
+	}
+
 	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
-		consumer.accept(new Result(id, packagingTime, liquid, box, recipe));
+		consumer.accept(new Result(id, packagingTime, liquid, box, recipe, result));
 	}
 
 	public static class Result implements IFinishedRecipe {
@@ -68,13 +82,16 @@ public class CarpenterRecipeBuilder {
 		private final FluidStack liquid;
 		private final Ingredient box;
 		private final ShapedRecipeBuilder.Result recipe;
+		@Nullable
+		private final ItemStack result;
 
-		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipeBuilder.Result recipe) {
+		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipeBuilder.Result recipe, @Nullable ItemStack result) {
 			this.id = id;
 			this.packagingTime = packagingTime;
 			this.liquid = liquid;
 			this.box = box;
 			this.recipe = recipe;
+			this.result = result;
 		}
 
 		@Override
@@ -87,6 +104,10 @@ public class CarpenterRecipeBuilder {
 
 			json.add("box", box.serialize());
 			json.add("recipe", recipe.getRecipeJson());
+
+			if (result != null) {
+				json.add("result", RecipeSerializers.item(result));
+			}
 		}
 
 		@Override

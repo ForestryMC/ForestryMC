@@ -18,7 +18,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.IngredientElement;
 import forestry.core.gui.elements.TankElement;
-import forestry.factory.recipes.CarpenterRecipeManager;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
@@ -61,6 +60,6 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 				selectedElement.add(new IngredientElement(1 + x * 19, 3 + y * 19, ingredient));
 			}
 		}
-		selectedElement.item(71, 41, gridRecipe.getRecipeOutput());
+		selectedElement.item(71, 41, recipe.getResult());
 	}
 }

@@ -108,7 +108,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 
 		return getRecipes(recipeManager).stream()
 				.filter(recipe -> {
-					ItemStack o = recipe.getCraftingGridRecipe().getRecipeOutput();
+					ItemStack o = recipe.getResult();
 					return ItemStackUtil.isIdenticalItem(o, output);
 				})
 				.collect(Collectors.toList());

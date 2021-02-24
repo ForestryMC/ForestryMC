@@ -130,7 +130,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 
-				ItemStack craftingResult = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+				ItemStack craftingResult = currentRecipe.getResult();
 				craftPreviewInventory.setInventorySlotContents(0, craftingResult);
 			} else {
 				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
@@ -157,7 +157,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		if (currentRecipe != null) {
-			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+			ItemStack pendingProduct = currentRecipe.getResult();
 			InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true);
 		}
 		return true;
@@ -217,7 +217,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			hasLiquidResources = removeLiquidResources(false);
 			hasItemResources = removeItemResources(false);
 
-			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
+			ItemStack pendingProduct = currentRecipe.getResult();
 			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true, false);
 		}
 
