@@ -29,6 +29,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.circuits.ICircuit;
 import forestry.api.core.ForestryAPI;
 import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.features.ApicultureBlocks;
@@ -38,6 +39,8 @@ import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.core.blocks.BlockTypeCoreTesr;
+import forestry.core.circuits.EnumCircuitBoardType;
+import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
 import forestry.core.data.builder.CarpenterRecipeBuilder;
@@ -294,6 +297,80 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.key('#', Tags.Items.INGOTS_IRON)
 						.key('B', ForestryTags.Items.INGOTS_BRONZE))
 				.build(consumer, id("carpenter", "soldering_iron"));
+
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 250))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.PAPER)
+						.patternLine("#")
+						.patternLine("#")
+						.key('#', CoreItems.WOOD_PULP))
+				.build(consumer, id("carpenter", "paper"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(5)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.CARTON, 2)
+						.patternLine(" # ")
+						.patternLine("# #")
+						.patternLine(" # ")
+						.key('#', CoreItems.WOOD_PULP))
+				.build(consumer, id("carpenter", "carton"));
+
+		ItemStack basic = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{});
+		ItemStack enhanced = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{});
+		ItemStack refined = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{});
+		ItemStack intricate = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
+
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(20)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.override(basic)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.AIR)
+						.patternLine("R R")
+						.patternLine("R#R")
+						.patternLine("R R")
+						.key('#', ForestryTags.Items.INGOTS_TIN)
+						.key('R', Tags.Items.DUSTS_REDSTONE))
+				.build(consumer, id("carpenter", "circuits", "basic"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(40)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.override(enhanced)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.AIR)
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.key('#', ForestryTags.Items.INGOTS_BRONZE)
+						.key('R', Tags.Items.DUSTS_REDSTONE))
+				.build(consumer, id("carpenter", "circuits", "enhanced"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(80)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.override(refined)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.AIR)
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.key('#', Tags.Items.INGOTS_IRON)
+						.key('R', Tags.Items.DUSTS_REDSTONE))
+				.build(consumer, id("carpenter", "circuits", "refined"));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(80)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.override(intricate)
+				.recipe(ShapedRecipeBuilder.shapedRecipe(Items.AIR)
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.patternLine("R#R")
+						.key('#', Tags.Items.INGOTS_GOLD)
+						.key('R', Tags.Items.DUSTS_REDSTONE))
+				.build(consumer, id("carpenter", "circuits", "intricate"));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {

@@ -25,13 +25,11 @@ import net.minecraft.item.Items;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
-import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
@@ -44,11 +42,8 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
-import forestry.core.circuits.EnumCircuitBoardType;
-import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.data.ForestryTags;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.EnumCraftingMaterial;
@@ -263,35 +258,6 @@ public class ModuleFactory extends BlankForestryModule {
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_POTATO, 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), ForestryFluids.BIOMASS);
 
-		// / CARPENTER
-		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 250), ItemStack.EMPTY,
-			new ItemStack(Items.PAPER, 1),
-			"#",
-			"#",
-			'#', "pulpWood");
-
-		// / CHIPSETS
-		ItemStack basicCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[]{});
-		ItemStack enhancedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.ENHANCED, null, new ICircuit[]{});
-		ItemStack refinedCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{});
-		ItemStack intricateCircuitboard = ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.INTRICATE, null, new ICircuit[]{});
-
-		RecipeManagers.carpenterManager.addRecipe(20, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, basicCircuitboard,
-			"R R", "R#R", "R R", '#', ForestryTags.Items.INGOTS_TIN, 'R', Tags.Items.DUSTS_REDSTONE);
-
-		RecipeManagers.carpenterManager.addRecipe(40, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, enhancedCircuitboard,
-			"R#R", "R#R", "R#R", '#', ForestryTags.Items.INGOTS_BRONZE, 'R', Tags.Items.DUSTS_REDSTONE);
-
-		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, refinedCircuitboard,
-			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_IRON, 'R', Tags.Items.DUSTS_REDSTONE);
-
-		RecipeManagers.carpenterManager.addRecipe(80, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, intricateCircuitboard,
-			"R#R", "R#R", "R#R", '#', Tags.Items.INGOTS_GOLD, 'R', Tags.Items.DUSTS_REDSTONE);
-
-		// Boxes
-		RecipeManagers.carpenterManager.addRecipe(5, new FluidStack(Fluids.WATER, 1000), ItemStack.EMPTY, CoreItems.CARTON.stack(2),
-			" # ", "# #", " # ", '#', "pulpWood");
-
 		// Crating and uncrating
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {
 			ModuleCrates.createCrateRecipes();
@@ -317,4 +283,3 @@ public class ModuleFactory extends BlankForestryModule {
 		return true;
 	}
 }
-
