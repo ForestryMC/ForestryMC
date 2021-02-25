@@ -8,10 +8,10 @@ package forestry.api.recipes;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
@@ -33,7 +33,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	/**
 	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
 	 */
-	ShapedRecipe getCraftingGridRecipe();
+	ICraftingRecipe getCraftingGridRecipe();
 
 	/**
 	 * @return The crafting result of this recipe

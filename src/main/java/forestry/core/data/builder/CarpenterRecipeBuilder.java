@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import net.minecraft.advancements.criterion.ImpossibleTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
@@ -34,7 +35,7 @@ public class CarpenterRecipeBuilder {
 	@Nullable
 	private FluidStack liquid;
 	private Ingredient box;
-	private ShapedRecipeBuilder.Result recipe;
+	private IFinishedRecipe recipe;
 	@Nullable
 	private ItemStack result;
 
@@ -56,7 +57,14 @@ public class CarpenterRecipeBuilder {
 	public CarpenterRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
 		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
-		this.recipe = (ShapedRecipeBuilder.Result) holder.get();
+		this.recipe = holder.get();
+		return this;
+	}
+
+	public CarpenterRecipeBuilder recipe(ShapelessRecipeBuilder recipe) {
+		Holder<IFinishedRecipe> holder = new Holder<>();
+		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
+		this.recipe = holder.get();
 		return this;
 	}
 
@@ -81,11 +89,11 @@ public class CarpenterRecipeBuilder {
 		@Nullable
 		private final FluidStack liquid;
 		private final Ingredient box;
-		private final ShapedRecipeBuilder.Result recipe;
+		private final IFinishedRecipe recipe;
 		@Nullable
 		private final ItemStack result;
 
-		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipeBuilder.Result recipe, @Nullable ItemStack result) {
+		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, IFinishedRecipe recipe, @Nullable ItemStack result) {
 			this.id = id;
 			this.packagingTime = packagingTime;
 			this.liquid = liquid;

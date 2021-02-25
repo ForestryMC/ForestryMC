@@ -3,16 +3,12 @@
   "time": 5,
   "box": [],
   "recipe": {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-      "#E"
-    ],
-    "key": {
-      "#": {
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
         "item": "forestry:bronze_shovel"
-      },
-      "E": []
-    },
+      }
+    ],
     "result": {
       "item": "forestry:ingot_bronze"
     }

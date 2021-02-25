@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -48,7 +48,7 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	@Override
 	protected void onIndexUpdate(int index, ICarpenterRecipe recipe) {
 		selectedElement.add(new TankElement(91, 1, null, recipe.getFluidResource(), Constants.PROCESSOR_TANK_CAPACITY, CARPENTER_TANK_OVERLAY));
-		ShapedRecipe gridRecipe = recipe.getCraftingGridRecipe();
+		ICraftingRecipe gridRecipe = recipe.getCraftingGridRecipe();
 		NonNullList<Ingredient> ingredients = gridRecipe.getIngredients();
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {

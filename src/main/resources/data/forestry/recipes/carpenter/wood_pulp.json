@@ -7,16 +7,12 @@
   },
   "box": [],
   "recipe": {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-      "#E"
-    ],
-    "key": {
-      "#": {
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
         "tag": "minecraft:logs"
-      },
-      "E": []
-    },
+      }
+    ],
     "result": {
       "item": "forestry:wood_pulp",
       "count": 4

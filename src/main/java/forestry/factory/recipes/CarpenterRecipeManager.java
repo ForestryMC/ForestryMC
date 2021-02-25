@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -80,7 +80,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 			return false;
 		}
 
-		ShapedRecipe internal = recipe.getCraftingGridRecipe();
+		ICraftingRecipe internal = recipe.getCraftingGridRecipe();
 		return internal.matches(FakeCraftingInventory.of(craftingInventory), world);
 	}
 

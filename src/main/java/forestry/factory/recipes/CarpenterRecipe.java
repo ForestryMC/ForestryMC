@@ -16,10 +16,12 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SUpdateRecipesPacket;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -35,10 +37,10 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	@Nullable
 	private final FluidStack liquid;
 	private final Ingredient box;
-	private final ShapedRecipe recipe;
-	private ItemStack result;
+	private final ICraftingRecipe recipe;
+	private final ItemStack result;
 
-	public CarpenterRecipe(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ShapedRecipe recipe, @Nullable ItemStack result) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ICraftingRecipe recipe, @Nullable ItemStack result) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(recipe);
@@ -68,7 +70,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	public ShapedRecipe getCraftingGridRecipe() {
+	public ICraftingRecipe getCraftingGridRecipe() {
 		return recipe;
 	}
 
@@ -89,7 +91,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 			int packagingTime = JSONUtils.getInt(json, "time");
 			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid")) : null;
 			Ingredient box = RecipeSerializers.deserialize(json.get("box"));
-			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
+			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.deserializeRecipe(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getJsonObject(json, "result")) : internal.getRecipeOutput();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
@@ -100,7 +102,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 			int packagingTime = buffer.readVarInt();
 			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : null;
 			Ingredient box = Ingredient.read(buffer);
-			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
+			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.func_218772_c(buffer);
 			ItemStack result = buffer.readItemStack();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
@@ -118,7 +120,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 			}
 
 			recipe.box.write(buffer);
-			IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe.recipe);
+			SUpdateRecipesPacket.func_218771_a(recipe.recipe, buffer);
 			buffer.writeItemStack(recipe.result);
 		}
 	}

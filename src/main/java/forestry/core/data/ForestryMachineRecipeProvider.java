@@ -16,6 +16,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -68,6 +69,11 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
+	public String getName() {
+		return "Machine Recipes";
+	}
+
+	@Override
 	protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
 		registerCarpenter(consumer);
 		registerCentrifuge(consumer);
@@ -115,10 +121,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setPackagingTime(5)
 				.setLiquid(new FluidStack(Fluids.WATER, 250))
 				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.WOOD_PULP, 4)
-						.patternLine("#E")
-						.key('#', ItemTags.LOGS)
-						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
+				.recipe(ShapelessRecipeBuilder.shapelessRecipe(CoreItems.WOOD_PULP, 4)
+						.addIngredient(ItemTags.LOGS))
 				.build(consumer, id("carpenter", "wood_pulp"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(5)
@@ -204,19 +208,15 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setPackagingTime(5)
 				.setLiquid(null)
 				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 2)
-						.patternLine("#E")
-						.key('#', CoreItems.BRONZE_PICKAXE)
-						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
+				.recipe(ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_BRONZE, 2)
+						.addIngredient(CoreItems.BRONZE_PICKAXE))
 				.build(consumer, id("carpenter", "reclaim_bronze_pickaxe"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(5)
 				.setLiquid(null)
 				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 1)
-						.patternLine("#E")
-						.key('#', CoreItems.BRONZE_SHOVEL)
-						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
+				.recipe(ShapelessRecipeBuilder.shapelessRecipe(CoreItems.INGOT_BRONZE, 1)
+						.addIngredient(CoreItems.BRONZE_SHOVEL))
 				.build(consumer, id("carpenter", "reclaim_bronze_shovel"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(50)
