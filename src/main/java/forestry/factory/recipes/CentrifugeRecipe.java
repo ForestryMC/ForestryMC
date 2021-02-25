@@ -24,7 +24,6 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ICentrifugeRecipe;
@@ -87,12 +86,12 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		@Override
 		public CentrifugeRecipe read(ResourceLocation recipeId, JsonObject json) {
 			int processingTime = JSONUtils.getInt(json, "time");
-			Ingredient input = Ingredient.deserialize(json.get("input"));
+			Ingredient input = RecipeSerializers.deserialize(json.get("input"));
 			NonNullList<Product> outputs = NonNullList.create();
 
 			for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
 				float chance = JSONUtils.getInt(element.getAsJsonObject(), "chance");
-				ItemStack stack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(element.getAsJsonObject(), "item"), true);
+				ItemStack stack = RecipeSerializers.item(JSONUtils.getJsonObject(element.getAsJsonObject(), "item"));
 				outputs.add(new Product(chance, stack));
 			}
 

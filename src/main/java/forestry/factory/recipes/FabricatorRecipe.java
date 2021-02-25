@@ -67,7 +67,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 
 		@Override
 		public FabricatorRecipe read(ResourceLocation recipeId, JsonObject json) {
-			Ingredient plan = Ingredient.deserialize(json.get("plan"));
+			Ingredient plan = RecipeSerializers.deserialize(json.get("plan"));
 			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "molten"));
 			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
 

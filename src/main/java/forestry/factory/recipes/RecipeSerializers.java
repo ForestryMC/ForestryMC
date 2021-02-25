@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.PacketBuffer;
@@ -61,5 +63,13 @@ public class RecipeSerializers {
 
 	public static JsonObject item(ItemStack stack) {
 		return (JsonObject) Dynamic.convert(NBTDynamicOps.INSTANCE, JsonOps.INSTANCE, stack.serializeNBT());
+	}
+
+	public static Ingredient deserialize(JsonElement resource) {
+		if (resource.isJsonArray() && resource.getAsJsonArray().size() == 0) {
+			return Ingredient.EMPTY;
+		}
+
+		return Ingredient.deserialize(resource);
 	}
 }

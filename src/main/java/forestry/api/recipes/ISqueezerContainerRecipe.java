@@ -18,10 +18,10 @@ import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISqueezerContainerRecipe extends IForestryRecipe, ISqueezerRecipe {
 
-	IRecipeType<ISqueezerContainerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
+	IRecipeType<ISqueezerContainerRecipe> TYPE = RecipeManagers.create("forestry:squeezer_container");
 
 	class Companion {
-		@ObjectHolder("forestry:moistener")
+		@ObjectHolder("forestry:squeezer_container")
 		public static final IRecipeSerializer<ISqueezerContainerRecipe> SERIALIZER = null;
 	}
 

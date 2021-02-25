@@ -1,5 +1,5 @@
 {
-  "type": "forestry:moistener",
+  "type": "forestry:squeezer_container",
   "container": {
     "id": "forestry:capsule",
     "Count": 1

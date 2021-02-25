@@ -118,7 +118,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.WOOD_PULP, 4)
 						.patternLine("#E")
 						.key('#', ItemTags.LOGS)
-						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
 				.build(consumer, id("carpenter", "wood_pulp"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(5)
@@ -207,7 +207,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 2)
 						.patternLine("#E")
 						.key('#', CoreItems.BRONZE_PICKAXE)
-						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
 				.build(consumer, id("carpenter", "reclaim_bronze_pickaxe"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(5)
@@ -216,7 +216,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.recipe(ShapedRecipeBuilder.shapedRecipe(CoreItems.INGOT_BRONZE, 1)
 						.patternLine("#E")
 						.key('#', CoreItems.BRONZE_SHOVEL)
-						.key('E', Ingredient.EMPTY)) // Work around shaped recipes not wanting single item recipes
+						.key('E', Items.AIR)) // Work around shaped recipes not wanting single item recipes
 				.build(consumer, id("carpenter", "reclaim_bronze_shovel"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(50)

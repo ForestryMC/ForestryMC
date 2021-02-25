@@ -103,7 +103,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 		@Override
 		public FermenterRecipe read(ResourceLocation recipeId, JsonObject json) {
-			Ingredient resource = Ingredient.deserialize(json.get("resource"));
+			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
 			int fermentationValue = JSONUtils.getInt(json, "fermentationValue");
 			float modifier = JSONUtils.getFloat(json, "modifier");
 			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getString(json, "output")));

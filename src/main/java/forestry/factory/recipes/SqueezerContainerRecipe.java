@@ -21,7 +21,6 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -86,9 +85,9 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
 		@Override
 		public SqueezerContainerRecipe read(ResourceLocation recipeId, JsonObject json) {
-			ItemStack emptyContainer = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "container"), true);
+			ItemStack emptyContainer = RecipeSerializers.item(JSONUtils.getJsonObject(json, "container"));
 			int processingTime = JSONUtils.getInt(json, "time");
-			ItemStack remnants = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "remnants"), true);
+			ItemStack remnants = RecipeSerializers.item(JSONUtils.getJsonObject(json, "remnants"));
 			float remnantsChance = JSONUtils.getFloat(json, "remnantsChance");
 
 			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);

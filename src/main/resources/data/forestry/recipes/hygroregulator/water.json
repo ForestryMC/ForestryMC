@@ -6,5 +6,5 @@
   },
   "time": 1,
   "humidChange": 0.01,
-  "tempChance": -0.005
+  "tempChange": -0.005
 }

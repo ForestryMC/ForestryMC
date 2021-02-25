@@ -16,7 +16,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -68,8 +67,8 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 		@Override
 		public MoistenerRecipe read(ResourceLocation recipeId, JsonObject json) {
 			int timePerItem = JSONUtils.getInt(json, "time");
-			Ingredient resource = Ingredient.deserialize(json.get("resource"));
-			ItemStack product = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "product"));
+			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
+			ItemStack product = RecipeSerializers.item(JSONUtils.getJsonObject(json, "product"));
 
 			return new MoistenerRecipe(recipeId, resource, product, timePerItem);
 		}
