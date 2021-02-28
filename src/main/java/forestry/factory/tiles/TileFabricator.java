@@ -245,7 +245,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
 		} else {
-			hasRecipe = false;
+			IFabricatorSmeltingRecipe smelting = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(world.getRecipeManager(), getStackInSlot(InventoryFabricator.SLOT_METAL));
+			hasRecipe = smelting != null;
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
