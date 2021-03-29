@@ -43,7 +43,7 @@ minecraft {
 	mappings channel: 'snapshot', version: mcp_mappings
 
 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-	
+
 	runs {
         client {
             workingDirectory project.file('run')
@@ -55,7 +55,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -71,7 +71,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -86,10 +86,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'forestry', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -98,20 +98,11 @@ minecraft {
 }
 
 repositories {
-    maven {
-		//remove if mappings are moved to forge maven
-        url 'https://www.dogforce-games.com/maven/'
-    }
 	/*maven {
 		url = 'http://maven.mcmoddev.com'
 	}*/
 	maven {
-		name = "jei"
 		url "http://dvs1.progwml6.com/files/maven"
-	}
-	maven {
-		name = "patchouli"
-		url 'https://maven.blamejared.com'
 	}
 	/*maven {
 		name = "ic2"
@@ -133,8 +124,6 @@ dependencies {
 	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
 
 	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
-	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/
@@ -173,6 +162,7 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
+	// from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
 	classifier = 'sources'
 }
 

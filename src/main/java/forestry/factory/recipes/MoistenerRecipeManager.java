@@ -11,33 +11,34 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 
+import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.utils.ItemStackUtil;
 
-public class MoistenerRecipeManager implements IMoistenerManager {
+public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
 
-	private static final Set<IMoistenerRecipe> recipes = new HashSet<>();
+	public MoistenerRecipeManager() {
+		super(IMoistenerRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		IMoistenerRecipe recipe = new MoistenerRecipe(resource, product, timePerItem);
-		addRecipe(recipe);
+		addRecipe(new MoistenerRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), product, timePerItem));
 	}
 
-	public static boolean isResource(ItemStack resource) {
+	@Override
+	public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
 		if (resource.isEmpty()) {
 			return false;
 		}
 
-		for (IMoistenerRecipe rec : recipes) {
-			if (ItemStackUtil.isIdenticalItem(resource, rec.getResource())) {
+		for (IMoistenerRecipe rec : getRecipes(recipeManager)) {
+			if (rec.getResource().test(resource)) {
 				return true;
 			}
 		}
@@ -45,28 +46,14 @@ public class MoistenerRecipeManager implements IMoistenerManager {
 		return false;
 	}
 
+	@Override
 	@Nullable
-	public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
-		for (IMoistenerRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {
+	public IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
+		for (IMoistenerRecipe recipe : getRecipes(recipeManager)) {
+			if (recipe.getResource().test(item)) {
 				return recipe;
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public boolean addRecipe(IMoistenerRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IMoistenerRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IMoistenerRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
 	}
 }

@@ -11,27 +11,31 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
+import com.google.gson.JsonObject;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.core.utils.ItemStackUtil;
+import forestry.api.recipes.ISqueezerContainerRecipe;
 
 public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 
+	private final ResourceLocation id;
 	private final ItemStack emptyContainer;
 	private final int processingTime;
 	private final ItemStack remnants;
 	private final float remnantsChance;
 
-	public SqueezerContainerRecipe(ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+	public SqueezerContainerRecipe(ResourceLocation id, ItemStack emptyContainer, int processingTime, ItemStack remnants, float remnantsChance) {
+		this.id = id;
 		Preconditions.checkNotNull(emptyContainer);
 		Preconditions.checkArgument(!emptyContainer.isEmpty());
 		Preconditions.checkNotNull(remnants);
@@ -45,6 +49,11 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 	@Override
 	public ItemStack getEmptyContainer() {
 		return emptyContainer;
+	}
+
+	@Override
+	public NonNullList<Ingredient> getResources() {
+		return NonNullList.create();
 	}
 
 	@Override
@@ -62,21 +71,44 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		return remnantsChance;
 	}
 
-	//TODO optional might be nice here
 	@Override
-	@Nullable
-	public ISqueezerRecipe getSqueezerRecipe(ItemStack filledContainer) {
-		if (filledContainer.isEmpty()) {
-			return null;
-		}
-		LazyOptional<FluidStack> fluidOutput = FluidUtil.getFluidContained(filledContainer);
-
-		return fluidOutput.map(f -> {
-			ItemStack filledContainerCopy = ItemStackUtil.createCopyWithCount(filledContainer, 1);
-			NonNullList<ItemStack> input = NonNullList.create();
-			input.add(filledContainerCopy);
-			return new SqueezerRecipe(processingTime, input, f, remnants, remnantsChance);
-		}).orElse(null);
+	public FluidStack getFluidOutput() {
+		return FluidStack.EMPTY;
 	}
 
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerContainerRecipe> {
+
+		@Override
+		public SqueezerContainerRecipe read(ResourceLocation recipeId, JsonObject json) {
+			ItemStack emptyContainer = RecipeSerializers.item(JSONUtils.getJsonObject(json, "container"));
+			int processingTime = JSONUtils.getInt(json, "time");
+			ItemStack remnants = RecipeSerializers.item(JSONUtils.getJsonObject(json, "remnants"));
+			float remnantsChance = JSONUtils.getFloat(json, "remnantsChance");
+
+			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);
+		}
+
+		@Override
+		public SqueezerContainerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			ItemStack emptyContainer = buffer.readItemStack();
+			int processingTime = buffer.readVarInt();
+			ItemStack remnants = buffer.readItemStack();
+			float remnantsChance = buffer.readFloat();
+
+			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);
+		}
+
+		@Override
+		public void write(PacketBuffer buffer, SqueezerContainerRecipe recipe) {
+			buffer.writeItemStack(recipe.emptyContainer);
+			buffer.writeVarInt(recipe.processingTime);
+			buffer.writeItemStack(recipe.remnants);
+			buffer.writeFloat(recipe.remnantsChance);
+		}
+	}
 }

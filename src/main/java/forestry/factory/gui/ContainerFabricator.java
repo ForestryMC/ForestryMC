@@ -15,6 +15,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IntArray;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,6 +40,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 
 	public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
 		super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
+		trackIntArray(new IntArray(4));
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {

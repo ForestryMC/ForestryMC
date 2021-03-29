@@ -14,11 +14,12 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
-import net.minecraft.client.Minecraft;
+import forestry.core.utils.RecipeUtils;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
@@ -36,8 +37,10 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
+
 	private CraftingInventoryForestry craftMatrix = new CraftingInventoryForestry();
-	private List<IRecipe> recipes = new ArrayList<>();
+	private List<ICraftingRecipe> recipes = new ArrayList<>();
+	private final List<String> recipeNames = new ArrayList<>();
 	private int selectedRecipe;
 	private long lastUsed;
 	private boolean locked;
@@ -50,9 +53,12 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		read(nbt);
 	}
 
-	public MemorizedRecipe(CraftingInventoryForestry craftMatrix, List<IRecipe> recipes) {
+	public MemorizedRecipe(CraftingInventoryForestry craftMatrix, List<ICraftingRecipe> recipes) {
 		InventoryUtil.deepCopyInventoryContents(craftMatrix, this.craftMatrix);
 		this.recipes = recipes;
+		for (ICraftingRecipe recipe : recipes) {
+			recipeNames.add(recipe.getId().toString());
+		}
 	}
 
 	public CraftingInventoryForestry getCraftMatrix() {
@@ -81,15 +87,15 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return recipes.size() > 1;
 	}
 
-	public void removeRecipeConflicts() {
-		IRecipe recipe = getSelectedRecipe();
+	public void removeRecipeConflicts(World world) {
+		ICraftingRecipe recipe = getSelectedRecipe(world);
 		recipes.clear();
 		recipes.add(recipe);
 		selectedRecipe = 0;
 	}
 
-	public ItemStack getOutputIcon() {
-		IRecipe selectedRecipe = getSelectedRecipe();
+	public ItemStack getOutputIcon(World world) {
+		ICraftingRecipe selectedRecipe = getSelectedRecipe(world);
 		if (selectedRecipe != null) {
 			ItemStack recipeOutput = selectedRecipe.getCraftingResult(craftMatrix);
 			if (!recipeOutput.isEmpty()) {
@@ -99,10 +105,10 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return ItemStack.EMPTY;
 	}
 
-	public ItemStack getCraftingResult(CraftingInventory CraftingInventory, World world) {
-		IRecipe selectedRecipe = getSelectedRecipe();
-		if (selectedRecipe != null && selectedRecipe.matches(CraftingInventory, world)) {
-			ItemStack recipeOutput = selectedRecipe.getCraftingResult(CraftingInventory);
+	public ItemStack getCraftingResult(CraftingInventory inventory, World world) {
+		ICraftingRecipe selectedRecipe = getSelectedRecipe(world);
+		if (selectedRecipe != null && selectedRecipe.matches(inventory, world)) {
+			ItemStack recipeOutput = selectedRecipe.getCraftingResult(inventory);
 			if (!recipeOutput.isEmpty()) {
 				return recipeOutput;
 			}
@@ -110,8 +116,33 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return ItemStack.EMPTY;
 	}
 
+	public boolean hasRecipes() {
+		return (!recipes.isEmpty() || !recipeNames.isEmpty());
+	}
+
+	public boolean hasSelectedRecipe() {
+		return hasRecipes() && selectedRecipe >= 0 && recipeNames.size() > selectedRecipe && recipeNames.get(selectedRecipe) != null;
+	}
+
+	public List<ICraftingRecipe> getRecipes(@Nullable World world) {
+		if(recipes.isEmpty() && !recipeNames.isEmpty()) {
+			for(String recipeKey : recipeNames) {
+				ResourceLocation key = new ResourceLocation(recipeKey);
+				IRecipe<CraftingInventory> recipe = RecipeUtils.getRecipe(IRecipeType.CRAFTING, key, world);
+				if (recipe instanceof ICraftingRecipe) {
+					recipes.add((ICraftingRecipe) recipe);
+				}
+			}
+			if (selectedRecipe > recipes.size()) {
+				selectedRecipe = 0;
+			}
+		}
+		return recipes;
+	}
+
 	@Nullable
-	public IRecipe getSelectedRecipe() {
+	public ICraftingRecipe getSelectedRecipe(@Nullable World world) {
+		List<ICraftingRecipe> recipes = getRecipes(world);
 		if (recipes.isEmpty()) {
 			return null;
 		} else {
@@ -119,8 +150,8 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		}
 	}
 
-	public boolean hasRecipe(@Nullable IRecipe recipe) {
-		return this.recipes.contains(recipe);
+	public boolean hasRecipe(@Nullable ICraftingRecipe recipe, @Nullable World world) {
+		return getRecipes(world).contains(recipe);
 	}
 
 	public void updateLastUse(long lastUsed) {
@@ -139,7 +170,6 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		return locked;
 	}
 
-	//TODO use recipemanager, maybe AT method. Then just need the type and the recipe id.
 	//and type is always Crafting.
 	/* INbtWritable */
 	@Override
@@ -153,19 +183,14 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		}
 
 		recipes.clear();
+		recipeNames.clear();
 		ListNBT recipesNbt = compoundNBT.getList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
 		for (int i = 0; i < recipesNbt.size(); i++) {
 			String recipeKey = recipesNbt.getString(i);
-			ResourceLocation key = new ResourceLocation(recipeKey);
-			//TODO are we on server or client? Not sure how to access this on server...
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
-			IRecipe recipe = recipeMap.get(key);
-			if (recipe != null) {
-				recipes.add(recipe);
-			}
+			recipeNames.add(recipeKey);
 		}
 
-		if (selectedRecipe > recipes.size()) {
+		if (selectedRecipe > recipeNames.size()) {
 			selectedRecipe = 0;
 		}
 	}
@@ -178,9 +203,8 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		compoundNBT.putInt("SelectedRecipe", selectedRecipe);
 
 		ListNBT recipesNbt = new ListNBT();
-		for (IRecipe recipe : recipes) {
-			ResourceLocation recipeKey = recipe.getId();
-			recipesNbt.add(StringNBT.valueOf(recipeKey.toString()));
+		for (String recipeName : recipeNames) {
+			recipesNbt.add(StringNBT.valueOf(recipeName));
 		}
 		compoundNBT.put("Recipes", recipesNbt);
 
@@ -194,10 +218,9 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		data.writeBoolean(locked);
 		data.writeVarInt(selectedRecipe);
 
-		data.writeVarInt(recipes.size());
-		for (IRecipe recipe : recipes) {
-			ResourceLocation recipeId = recipe.getId();
-			data.writeString(recipeId.toString());
+		data.writeVarInt(recipeNames.size());
+		for (String recipeName : recipeNames) {
+			data.writeString(recipeName);
 		}
 	}
 
@@ -208,15 +231,11 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		selectedRecipe = data.readVarInt();
 
 		recipes.clear();
+		recipeNames.clear();
 		int recipeCount = data.readVarInt();
 		for (int i = 0; i < recipeCount; i++) {
 			String recipeId = data.readString();
-			//TODO sidedness issues
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
-			IRecipe recipe = recipeMap.get(new ResourceLocation(recipeId));
-			if (recipe != null) {
-				recipes.add(recipe);
-			}
+			recipeNames.add(recipeId);
 		}
 	}
 }

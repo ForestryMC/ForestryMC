@@ -13,18 +13,22 @@ package forestry.core.circuits;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.circuits.ISolderManager;
+import forestry.api.recipes.IForestryRecipe;
+import forestry.api.recipes.ISolderManager;
+import forestry.api.recipes.ISolderRecipe;
+import forestry.factory.recipes.AbstractCraftingProvider;
 
-public class SolderManager implements ISolderManager {
-	private static final List<CircuitRecipe> recipes = new ArrayList<>();
+public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> implements ISolderManager {
+
+	public SolderManager() {
+		super(ISolderRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ICircuitLayout layout, ItemStack resource, ICircuit circuit) {
@@ -32,26 +36,24 @@ public class SolderManager implements ISolderManager {
 		Preconditions.checkNotNull(resource, "resource may not be null");
 		Preconditions.checkNotNull(circuit, "circuit may not be null");
 
-		recipes.add(new CircuitRecipe(layout, resource, circuit));
+		addRecipe(new CircuitRecipe(IForestryRecipe.anonymous(), layout, resource, circuit));
 	}
 
-	public static Collection<CircuitRecipe> getRecipes() {
-		return recipes;
-	}
-
+	@Override
 	@Nullable
-	public static ICircuit getCircuit(ICircuitLayout layout, ItemStack resource) {
-		CircuitRecipe circuitRecipe = getMatchingRecipe(layout, resource);
+	public ICircuit getCircuit(@Nullable RecipeManager recipeManager, ICircuitLayout layout, ItemStack resource) {
+		ISolderRecipe circuitRecipe = getMatchingRecipe(recipeManager, layout, resource);
 		if (circuitRecipe == null) {
 			return null;
 		}
 		return circuitRecipe.getCircuit();
 	}
 
+	@Override
 	@Nullable
-	public static CircuitRecipe getMatchingRecipe(@Nullable ICircuitLayout layout, ItemStack resource) {
+	public ISolderRecipe getMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable ICircuitLayout layout, ItemStack resource) {
 		if (layout != null) {
-			for (CircuitRecipe recipe : recipes) {
+			for (ISolderRecipe recipe : getRecipes(recipeManager)) {
 				if (recipe.matches(layout, resource)) {
 					return recipe;
 				}

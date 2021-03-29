@@ -11,63 +11,45 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IFabricatorRecipe;
 
 public class FabricatorRecipe implements IFabricatorRecipe {
-	private final ItemStack plan;
-	private final FluidStack molten;
-	private final NonNullList<NonNullList<ItemStack>> ingredients;
-	private final NonNullList<String> oreDicts;
-	private final ItemStack result;
-	private final int width;
-	private final int height;
 
-	public FabricatorRecipe(ItemStack plan, FluidStack molten, ItemStack result, NonNullList<NonNullList<ItemStack>> ingredients, NonNullList<String> oreDicts, int width, int height) {
+	private final ResourceLocation id;
+	private final Ingredient plan;
+	private final FluidStack molten;
+	private final ShapedRecipe recipe;
+
+	public FabricatorRecipe(ResourceLocation id, Ingredient plan, FluidStack molten, ShapedRecipe recipe) {
+		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(plan);
 		Preconditions.checkNotNull(molten);
-		Preconditions.checkNotNull(result);
-		Preconditions.checkArgument(!result.isEmpty());
-		Preconditions.checkNotNull(ingredients);
-		Preconditions.checkNotNull(oreDicts);
-		Preconditions.checkArgument(width > 0);
-		Preconditions.checkArgument(height > 0);
+
+		this.id = id;
 		this.plan = plan;
 		this.molten = molten;
-		this.result = result;
-		this.ingredients = ingredients;
-		this.oreDicts = oreDicts;
-		this.width = width;
-		this.height = height;
+		this.recipe = recipe;
 	}
 
 	@Override
-	public NonNullList<NonNullList<ItemStack>> getIngredients() {
-		return ingredients;
+	public ResourceLocation getId() {
+		return id;
 	}
 
 	@Override
-	public NonNullList<String> getOreDicts() {
-		return oreDicts;
-	}
-
-	@Override
-	public int getWidth() {
-		return width;
-	}
-
-	@Override
-	public int getHeight() {
-		return height;
-	}
-
-	@Override
-	public ItemStack getPlan() {
+	public Ingredient getPlan() {
 		return plan;
 	}
 
@@ -77,7 +59,35 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
-		return result;
+	public ShapedRecipe getCraftingGridRecipe() {
+		return recipe;
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorRecipe> {
+
+		@Override
+		public FabricatorRecipe read(ResourceLocation recipeId, JsonObject json) {
+			Ingredient plan = RecipeSerializers.deserialize(json.get("plan"));
+			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "molten"));
+			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
+
+			return new FabricatorRecipe(recipeId, plan, molten, internal);
+		}
+
+		@Override
+		public FabricatorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			Ingredient plan = Ingredient.read(buffer);
+			FluidStack molten = buffer.readFluidStack();
+			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
+
+			return new FabricatorRecipe(recipeId, plan, molten, internal);
+		}
+
+		@Override
+		public void write(PacketBuffer buffer, FabricatorRecipe recipe) {
+			recipe.getPlan().write(buffer);
+			buffer.writeFluidStack(recipe.getLiquid());
+			IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe.getCraftingGridRecipe());
+		}
 	}
 }

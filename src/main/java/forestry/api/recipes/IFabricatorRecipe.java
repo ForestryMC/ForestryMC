@@ -5,12 +5,22 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
+
+	IRecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
+
+	class Companion {
+		@ObjectHolder("forestry:fabricator")
+		public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
+	}
 
 	/**
 	 * @return the molten liquid (and amount) required for this recipe.
@@ -18,30 +28,22 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	FluidStack getLiquid();
 
 	/**
-	 * @return the list of ingredients in the crafting grid to create this recipe.
-	 * Each inner list represents one slot's accepted ItemStacks
+	 * @return the plan for this recipe (the item in the top right slot)
 	 */
-	NonNullList<NonNullList<ItemStack>> getIngredients();
-
-	NonNullList<String> getOreDicts();
+	Ingredient getPlan();
 
 	/**
-	 * @return the width of ingredients in the crafting grid to create this recipe.
+	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the IFabricatorRecipe's output.
 	 */
-	int getWidth();
+	ShapedRecipe getCraftingGridRecipe();
 
-	/**
-	 * @return the height of ingredients in the crafting grid to create this recipe.
-	 */
-	int getHeight();
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
 
-	/**
-	 * @return the plan for this recipe (the item in the top right slot). may be an empty ItemStack
-	 */
-	ItemStack getPlan();
-
-	/**
-	 * @return the result of this recipe
-	 */
-	ItemStack getRecipeOutput();
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 }

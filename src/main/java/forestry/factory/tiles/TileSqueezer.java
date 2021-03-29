@@ -16,6 +16,7 @@ import java.io.IOException;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,7 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISpeedUpgradable;
 import forestry.core.config.Constants;
@@ -44,15 +46,15 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.StandardTank;
 import forestry.core.fluids.TankManager;
 import forestry.core.inventory.InventoryAdapter;
+import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
-import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerSqueezer;
 import forestry.factory.inventory.InventorySqueezer;
-import forestry.factory.recipes.SqueezerRecipeManager;
 
 public class TileSqueezer extends TilePowered implements ISocketable, ISidedInventory, ILiquidTankTile, ISpeedUpgradable {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
@@ -161,18 +163,35 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 
 	private boolean checkRecipe() {
 		ISqueezerRecipe matchingRecipe = null;
+
 		if (inventory.hasResources()) {
 			NonNullList<ItemStack> resources = inventory.getResources();
 
-			if (currentRecipe != null && ItemStackUtil.containsSets(currentRecipe.getResources(), resources, true, false) > 0) {
+			boolean containsSets = false;
+
+			if (currentRecipe != null) {
+				IInventory inventory = new InventoryMapper(this, InventorySqueezer.SLOT_RESOURCE_1, InventorySqueezer.SLOTS_RESOURCE_COUNT);
+				containsSets = InventoryUtil.consumeIngredients(inventory, currentRecipe.getResources(), null, false, false, false);
+			}
+
+			if (currentRecipe != null && containsSets) {
 				matchingRecipe = currentRecipe;
 			} else {
-				matchingRecipe = SqueezerRecipeManager.findMatchingRecipe(resources);
+				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
+			}
+
+			if (matchingRecipe == null) {
+				for (ItemStack resource : resources) {
+					if (matchingRecipe == null) {
+						matchingRecipe = RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getWorld().getRecipeManager(), resource);
+					}
+				}
 			}
 		}
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
+
 			if (currentRecipe != null) {
 				int recipeTime = currentRecipe.getProcessingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);

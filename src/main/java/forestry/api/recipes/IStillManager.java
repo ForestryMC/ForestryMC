@@ -5,6 +5,13 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+
+import java.util.Set;
+
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -28,4 +35,13 @@ public interface IStillManager extends ICraftingProvider<IStillRecipe> {
 	 * @param output        FluidStack representing the output liquid
 	 */
 	void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output);
+
+	@Nullable
+	IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item);
+
+	boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item);
+
+	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
+
+	Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager);
 }

@@ -17,6 +17,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
 import forestry.factory.recipes.CarpenterRecipeManager;
@@ -40,7 +41,7 @@ public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
 			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		} else if (slotIndex == SLOT_BOX) {
-			return CarpenterRecipeManager.isBox(itemStack);
+			return RecipeManagers.carpenterManager.isBox(tile.getWorld().getRecipeManager(), itemStack);
 		} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
 			return false;
 		}

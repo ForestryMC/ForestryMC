@@ -11,32 +11,31 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.utils.ItemStackUtil;
+import forestry.api.recipes.IForestryRecipe;
 
-public class FermenterRecipeManager implements IFermenterManager {
+public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterRecipe> implements IFermenterManager {
 
-	private static final Set<IFermenterRecipe> recipes = new TreeSet<>();
-	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
+	public FermenterRecipeManager() {
+		super(IFermenterRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(resource, fermentationValue, modifier, output.getFluid(), liquid);
-		addRecipe(recipe);
+		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid));
 	}
 
 	@Override
@@ -45,22 +44,37 @@ public class FermenterRecipeManager implements IFermenterManager {
 	}
 
 	@Override
-	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(resourceOreName, fermentationValue, modifier, output.getFluid(), liquid);
-		addRecipe(recipe);
+	public void addRecipe(int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), fermentationValue, modifier, output.getFluid(), liquid));
 	}
 
 	@Override
-	public void addRecipe(String resourceOreName, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resourceOreName, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
+	public void addRecipe(int fermentationValue, float modifier, FluidStack output) {
+		addRecipe(fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
 	}
 
+	@Override
+	public boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource) {
+		if (resource.isEmpty()) {
+			return false;
+		}
+
+		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
+			if (recipe.getResource().test(resource)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
 	@Nullable
-	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
+	public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
 		if (res.isEmpty()) {
 			return null;
 		}
-		for (IFermenterRecipe recipe : recipes) {
+		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, res, liqu)) {
 				return recipe;
 			}
@@ -68,9 +82,9 @@ public class FermenterRecipeManager implements IFermenterManager {
 		return null;
 	}
 
-	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
-		ItemStack resource = recipe.getResource();
-		if (!ItemStackUtil.isCraftingEquivalent(resource, res, recipe.getResourceOreName(), false)) {
+	public boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
+		Ingredient resource = recipe.getResource();
+		if (!resource.test(res)) {
 			return false;
 		}
 
@@ -78,43 +92,17 @@ public class FermenterRecipeManager implements IFermenterManager {
 		return liqu.isFluidEqual(fluid);
 	}
 
-	public static boolean isResource(ItemStack resource) {
-		if (resource.isEmpty()) {
-			return false;
-		}
-
-		for (IFermenterRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource, recipe.getResourceOreName(), false)) {
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getFluidResource().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 
 	@Override
-	public boolean addRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.add(liquid.getFluid());
-
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.add(output);
-
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.remove(liquid.getFluid());
-
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.remove(output);
-
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IFermenterRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
+	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
+		return getRecipes(recipeManager).stream()
+				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.collect(Collectors.toSet());
 	}
 }

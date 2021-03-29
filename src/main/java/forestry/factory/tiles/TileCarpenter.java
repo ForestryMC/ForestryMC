@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Optional;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,7 +24,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,6 +35,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -44,7 +45,6 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.RecipePair;
 import forestry.core.render.TankRenderInfo;
 import forestry.core.tiles.IItemStackDisplay;
 import forestry.core.tiles.ILiquidTankTile;
@@ -53,9 +53,9 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
-import forestry.factory.recipes.CarpenterRecipeManager;
 
 public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
+
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 2040;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
@@ -67,8 +67,6 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
-	@Nullable
-	private NonNullList<String> oreDicts;
 
 	private ItemStack getBoxStack() {
 		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
@@ -77,7 +75,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	public TileCarpenter() {
 		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(CarpenterRecipeManager.getRecipeFluids());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getWorld().getRecipeManager()));
 
 		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		craftPreviewInventory = new CraftResultInventory();
@@ -123,17 +121,16 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		//TODO optional could work quite well here
-		if (CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory) == null) {
-			RecipePair<ICarpenterRecipe> recipePair = CarpenterRecipeManager.findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
-			currentRecipe = recipePair.getRecipe();
-			oreDicts = recipePair.getOreDictEntries();
+		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory, world)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory, world);
+			currentRecipe = optional.orElse(null);
 
-			if (!recipePair.isEmpty() && currentRecipe != null) {
+			if (optional.isPresent()) {
 				int recipeTime = currentRecipe.getPackagingTime();
 				setTicksPerWorkCycle(recipeTime * TICKS_PER_RECIPE_TIME);
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 
-				ItemStack craftingResult = currentRecipe.getCraftingGridRecipe().getOutput();
+				ItemStack craftingResult = currentRecipe.getResult();
 				craftPreviewInventory.setInventorySlotContents(0, craftingResult);
 			} else {
 				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
@@ -160,7 +157,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		if (currentRecipe != null) {
-			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getOutput();
+			ItemStack pendingProduct = currentRecipe.getResult();
 			InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true);
 		}
 		return true;
@@ -172,7 +169,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		FluidStack fluid = currentRecipe.getFluidResource();
-		if (!fluid.isEmpty()) {
+		if (fluid != null && !fluid.isEmpty()) {
 			FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
 			if (!fluid.isFluidStackIdentical(drained)) {
 				return false;
@@ -190,7 +187,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return true;
 		}
 
-		if (!currentRecipe.getBox().isEmpty()) {
+		if (!currentRecipe.getBox().hasNoMatchingItems()) {
 			ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
 			if (box.isEmpty()) {
 				return false;
@@ -200,9 +197,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 		}
 
-		NonNullList<ItemStack> craftingSets = InventoryUtil.getStacks(craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
-		return InventoryUtil.removeSets(inventory, 1, craftingSets, oreDicts, null, true, false, doRemove);
+		return InventoryUtil.consumeIngredients(inventory, currentRecipe.getCraftingGridRecipe().getIngredients(), null, true, false, doRemove);
 	}
 
 	/* STATE INFORMATION */
@@ -221,7 +217,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			hasLiquidResources = removeLiquidResources(false);
 			hasItemResources = removeItemResources(false);
 
-			ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getOutput();
+			ItemStack pendingProduct = currentRecipe.getResult();
 			canAdd = InventoryUtil.tryAddStack(this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true, false);
 		}
 

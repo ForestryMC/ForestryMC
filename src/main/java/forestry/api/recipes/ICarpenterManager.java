@@ -6,9 +6,16 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -25,6 +32,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author SirSengir
  */
 public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
+
 	/**
 	 * Add a shaped recipe to the carpenter.
 	 *
@@ -54,4 +62,23 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
+
+	/**
+	 * Finds the matching recipe
+	 *
+	 * @param liquid    Present liquid
+	 * @param item      Present item
+	 * @param inventory Present inventory
+	 * @param world		Current world
+	 * @return An optional carpenter recipe if any matches
+	 */
+	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world);
+
+	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world);
+
+	boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource);
+
+	Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
+
+	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

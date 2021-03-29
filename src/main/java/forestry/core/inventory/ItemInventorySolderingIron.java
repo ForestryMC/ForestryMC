@@ -21,7 +21,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
-import forestry.core.circuits.CircuitRecipe;
+import forestry.api.recipes.ISolderRecipe;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
@@ -66,13 +66,12 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	private ICircuit[] getCircuits(boolean doConsume) {
-
 		ICircuit[] circuits = new ICircuit[ingredientSlotCount];
 
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
-				CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), ingredient);
+				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layouts.getCurrent(), ingredient);
 				if (recipe != null) {
 					if (doConsume) {
 						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
@@ -185,7 +184,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-			CircuitRecipe recipe = SolderManager.getMatchingRecipe(layouts.getCurrent(), itemStack);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layouts.getCurrent(), itemStack);
 			return recipe != null;
 		}
 		return false;

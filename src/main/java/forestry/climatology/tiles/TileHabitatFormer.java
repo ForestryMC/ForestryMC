@@ -40,6 +40,7 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.RecipeManagers;
 import forestry.climatology.features.ClimatologyTiles;
 import forestry.climatology.gui.ContainerHabitatFormer;
 import forestry.climatology.inventory.InventoryHabitatFormer;
@@ -70,7 +71,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(HygroregulatorManager.getRecipeFluids());
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
 		tankManager = new TankManager(this, resourceTank);
 		setTicksPerWorkCycle(10);
 		setEnergyPerWorkCycle(0);
@@ -127,7 +128,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 			int currentCost = getFluidCost(changedState);
 			if (!resourceTank.drain(currentCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 				IClimateState simulatedState = /*changedState.add(ClimateType.HUMIDITY, climateChange)*/
-					changedState.toImmutable().add(manipulator.addChange(true));
+						changedState.toImmutable().add(manipulator.addChange(true));
 				int fluidCost = getFluidCost(simulatedState);
 				if (!resourceTank.drain(fluidCost, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
 					cachedStack = resourceTank.drain(fluidCost, IFluidHandler.FluidAction.EXECUTE);
@@ -178,7 +179,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (fluid == null) {
 			return 0;
 		}
-		IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(fluid);
+		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
 		if (recipe == null) {
 			return 0;
 		}
@@ -194,7 +195,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
 			if (fluid != null) {
-				IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(fluid);
+				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
 				if (recipe != null) {
 					return recipe.getHumidChange() / transformer.getSpeedModifier();
 				}
@@ -202,7 +203,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		}
 		float fluidChange = 0.0F;
 		if (cachedStack != null) {
-			IHygroregulatorRecipe recipe = HygroregulatorManager.findMatchingRecipe(cachedStack);
+			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, cachedStack);
 			if (recipe != null) {
 				fluidChange = Math.abs(recipe.getTempChange());
 			}

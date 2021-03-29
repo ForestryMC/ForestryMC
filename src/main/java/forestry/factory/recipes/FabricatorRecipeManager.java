@@ -10,56 +10,51 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.recipes.RecipePair;
-import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class FabricatorRecipeManager implements IFabricatorManager {
+public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
 
-	private static final Set<IFabricatorRecipe> recipes = new HashSet<>();
+	public FabricatorRecipeManager() {
+		super(IFabricatorRecipe.TYPE);
+	}
 
 	@Override
 	public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-		//TODO json
-		//		ShapedRecipeCustom patternRecipe = new ShapedRecipeCustom(result, pattern);
-		//		NonNullList<NonNullList<ItemStack>> ingredients = patternRecipe.getRawIngredients();
-		//
-		//		IFabricatorRecipe recipe = new FabricatorRecipe(plan, molten, result, ingredients, patternRecipe.getOreDicts(), patternRecipe.getWidth(), patternRecipe.getHeight());
-		//		addRecipe(recipe);
+		// TODO: json
 	}
 
-	public static RecipePair<IFabricatorRecipe> findMatchingRecipe(ItemStack plan, IInventory resources) {
-		ItemStack[][] gridResources = RecipeUtil.getResources(resources);
-
-		for (IFabricatorRecipe recipe : recipes) {
-			if (!recipe.getPlan().isEmpty() && !ItemStackUtil.isCraftingEquivalent(recipe.getPlan(), plan)) {
-				continue;
-			}
-			String[][] oreDicts = RecipeUtil.matches(recipe.getIngredients(), recipe.getOreDicts(), recipe.getWidth(), recipe.getHeight(), gridResources);
-			if (oreDicts != null) {
-				return new RecipePair<>(recipe, oreDicts);
+	@Override
+	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
+		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
+			if (fluidStack.containsFluid(recipe.getLiquid())
+					&& recipe.getPlan().test(plan)
+					&& recipe.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)) {
+				return Optional.of(recipe);
 			}
 		}
 
-		return RecipePair.EMPTY;
+		return Optional.empty();
 	}
 
-	public static boolean isPlan(ItemStack plan) {
-		for (IFabricatorRecipe recipe : recipes) {
-			if (ItemStackUtil.isIdenticalItem(recipe.getPlan(), plan)) {
+	@Override
+	public boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan) {
+		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
+			if (recipe.getPlan().test(plan)) {
 				return true;
 			}
 		}
@@ -68,28 +63,14 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 	}
 
 	@Override
-	public boolean addRecipe(IFabricatorRecipe recipe) {
-		return recipes.add(recipe);
-	}
-
-	@Override
-	public boolean removeRecipe(IFabricatorRecipe recipe) {
-		return recipes.remove(recipe);
-	}
-
-	@Override
-	public Set<IFabricatorRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
-
-	public static Collection<IFabricatorRecipe> getRecipes(ItemStack itemStack) {
-		if (itemStack.isEmpty()) {
+	public Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
+		if (output.isEmpty()) {
 			return Collections.emptyList();
 		}
 
-		return recipes.stream().filter(recipe -> {
-			ItemStack output = recipe.getRecipeOutput();
-			return ItemStackUtil.isIdenticalItem(itemStack, output);
+		return getRecipes(recipeManager).stream().filter(recipe -> {
+			ItemStack o = recipe.getCraftingGridRecipe().getRecipeOutput();
+			return ItemStackUtil.isIdenticalItem(output, o);
 		}).collect(Collectors.toList());
 	}
 }
