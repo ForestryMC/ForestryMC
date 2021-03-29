@@ -11,48 +11,52 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
+import com.google.gson.JsonObject;
 
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IFermenterRecipe;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
-	private final ItemStack resource;
-	@Nullable
-	private final String resourceOreName;
+	private final ResourceLocation id;
+	private final Ingredient resource;
 	private final int fermentationValue;
 	private final float modifier;
 	private final Fluid output;
 	private final FluidStack fluidResource;
 
-	public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+	public FermenterRecipe(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
+		Preconditions.checkArgument(!resource.hasNoMatchingItems(), "Fermenter Resource item cannot be empty!");
 		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
 		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
+		this.id = id;
 		this.resource = resource;
-		this.resourceOreName = null;
 		this.fermentationValue = fermentationValue;
 		this.modifier = modifier;
 		this.output = output;
 		this.fluidResource = fluidResource;
 	}
 
-	public FermenterRecipe(String resourceOreName, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
-		Preconditions.checkNotNull(resourceOreName, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resourceOreName.isEmpty(), "Fermenter Resource ore name cannot be empty!");
-		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
-		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
+	public FermenterRecipe(ResourceLocation id, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
+		Preconditions.checkNotNull(output, "Fermenter output cannot be null!");
+		Preconditions.checkNotNull(fluidResource, "Fermenter liquid cannot be null!");
 
-		this.resource = ItemStack.EMPTY;
-		this.resourceOreName = resourceOreName;
+		this.id = id;
+		this.resource = Ingredient.EMPTY;
 		this.fermentationValue = fermentationValue;
 		this.modifier = modifier;
 		this.output = output;
@@ -61,14 +65,8 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 
 	@Override
-	public ItemStack getResource() {
+	public Ingredient getResource() {
 		return resource;
-	}
-
-	@Nullable
-	@Override
-	public String getResourceOreName() {
-		return resourceOreName;
 	}
 
 	@Override
@@ -93,6 +91,45 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 	@Override
 	public int compareTo(IFermenterRecipe o) {
-		return !resource.isEmpty() ? -1 : 1;
+		return !resource.hasNoMatchingItems() ? -1 : 1;
+	}
+
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FermenterRecipe> {
+
+		@Override
+		public FermenterRecipe read(ResourceLocation recipeId, JsonObject json) {
+			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
+			int fermentationValue = JSONUtils.getInt(json, "fermentationValue");
+			float modifier = JSONUtils.getFloat(json, "modifier");
+			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getString(json, "output")));
+			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "fluidResource"));
+
+			return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
+		}
+
+		@Override
+		public FermenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			Ingredient resource = Ingredient.read(buffer);
+			int fermentationValue = buffer.readVarInt();
+			float modifier = buffer.readFloat();
+			Fluid output = ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation());
+			FluidStack fluidResource = FluidStack.readFromPacket(buffer);
+
+			return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
+		}
+
+		@Override
+		public void write(PacketBuffer buffer, FermenterRecipe recipe) {
+			recipe.resource.write(buffer);
+			buffer.writeVarInt(recipe.fermentationValue);
+			buffer.writeFloat(recipe.modifier);
+			buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(recipe.output));
+			recipe.fluidResource.writeToPacket(buffer);
+		}
 	}
 }

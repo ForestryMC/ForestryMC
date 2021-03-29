@@ -1,0 +1,18 @@
+{
+  "type": "forestry:squeezer",
+  "time": 10,
+  "resources": [
+    {
+      "item": "forestry:fruit_lemon"
+    }
+  ],
+  "output": {
+    "FluidName": "forestry:juice",
+    "Amount": 400
+  },
+  "remnant": {
+    "id": "forestry:mulch",
+    "Count": 1
+  },
+  "chance": 1.0
+}

@@ -23,9 +23,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,6 +39,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -50,7 +53,19 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.IFabricatorRecipe;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IHygroregulatorRecipe;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.api.recipes.ISolderRecipe;
+import forestry.api.recipes.ISqueezerContainerRecipe;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.IStillRecipe;
 import forestry.core.EventHandlerCore;
+import forestry.core.circuits.CircuitRecipe;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
@@ -63,6 +78,7 @@ import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootTableProvider;
+import forestry.core.data.ForestryMachineRecipeProvider;
 import forestry.core.data.ForestryRecipeProvider;
 import forestry.core.data.WoodBlockModelProvider;
 import forestry.core.data.WoodBlockStateProvider;
@@ -79,11 +95,21 @@ import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
 import forestry.core.recipes.FallbackIngredient;
+import forestry.core.recipes.HygroregulatorRecipe;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ForgeUtils;
+import forestry.factory.recipes.CarpenterRecipe;
+import forestry.factory.recipes.CentrifugeRecipe;
+import forestry.factory.recipes.FabricatorRecipe;
+import forestry.factory.recipes.FabricatorSmeltingRecipe;
+import forestry.factory.recipes.FermenterRecipe;
+import forestry.factory.recipes.MoistenerRecipe;
+import forestry.factory.recipes.SqueezerContainerRecipe;
+import forestry.factory.recipes.SqueezerRecipe;
+import forestry.factory.recipes.StillRecipe;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ForestryModules;
 import forestry.modules.ModuleManager;
@@ -237,6 +263,7 @@ public class Forestry {
 			generator.addProvider(new ForestryBlockModelProvider(generator));
 			generator.addProvider(new ForestryItemModelProvider(generator));
 			generator.addProvider(new ForestryRecipeProvider(generator));
+			generator.addProvider(new ForestryMachineRecipeProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {
@@ -296,10 +323,27 @@ public class Forestry {
 
 		@SubscribeEvent
 		public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
+			IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
 			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
 			CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
+
+			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
+			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
+			register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
+			register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
+			register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
+			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
+			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
+			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
+			register(registry, ISqueezerContainerRecipe.TYPE, new SqueezerContainerRecipe.Serializer());
+			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
+			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
 		}
 
+		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
+			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+		}
 	}
 
 	//split

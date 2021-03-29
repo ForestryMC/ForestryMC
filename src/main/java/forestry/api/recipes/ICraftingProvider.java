@@ -5,11 +5,15 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
+import net.minecraft.item.crafting.RecipeManager;
+
 public interface ICraftingProvider<T extends IForestryRecipe> {
+
 	/**
-	 * Add a new recipe to the crafting provider.
+	 * Add a new recipe to the crafting provider for all worlds.
 	 *
 	 * @return <tt>true</tt> if this collection changed as a result of the call
 	 * @since Forestry 4.1.0
@@ -17,16 +21,10 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 	boolean addRecipe(T recipe);
 
 	/**
-	 * Remove a specific recipe from the crafting provider.
+	 * Gets a collection of all currently registered recipes which this provider supports
 	 *
-	 * @return <tt>true</tt> if an element was removed as a result of this call
-	 * @since Forestry 4.1.0
+	 * @param recipeManager The recipe manager to use
+	 * @return A collection of recipes
 	 */
-	boolean removeRecipe(T recipe);
-
-	/**
-	 * @return an unmodifiable collection of all recipes registered to the crafting provider.
-	 * @since Forestry 4.1.0
-	 */
-	Collection<T> recipes();
+	Collection<T> getRecipes(@Nullable RecipeManager recipeManager);
 }

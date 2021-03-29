@@ -6,16 +6,27 @@
 package forestry.api.recipes;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISqueezerRecipe extends IForestryRecipe {
+
+	IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
+
+	class Companion {
+		@ObjectHolder("forestry:squeezer")
+		public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
+	}
 
 	/**
 	 * @return item stacks representing the required resources for one process. Stack size will be taken into account.
 	 */
-	NonNullList<ItemStack> getResources();
+	NonNullList<Ingredient> getResources();
 
 	/**
 	 * @return Number of work cycles required to squeeze one set of resources.
@@ -37,4 +48,13 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	 */
 	FluidStack getFluidOutput();
 
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
+
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 }

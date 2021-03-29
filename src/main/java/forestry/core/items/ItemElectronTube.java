@@ -92,7 +92,7 @@ public class ItemElectronTube extends ItemOverlay {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
 		Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
 		for (ICircuitLayout circuitLayout : allLayouts) {
-			ICircuit circuit = SolderManager.getCircuit(circuitLayout, itemStack);
+			ICircuit circuit = ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack);
 			if (circuit != null) {
 				circuits.put(circuitLayout, circuit);
 			}

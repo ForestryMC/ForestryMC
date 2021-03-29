@@ -11,29 +11,46 @@
 package forestry.factory.recipes;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.JsonObject;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SUpdateRecipesPacket;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.core.recipes.ShapedRecipeCustom;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 
+	private final ResourceLocation id;
 	private final int packagingTime;
+	@Nullable
 	private final FluidStack liquid;
-	private final ItemStack box;
-	private final ShapedRecipeCustom internal;
+	private final Ingredient box;
+	private final ICraftingRecipe recipe;
+	private final ItemStack result;
 
-	public CarpenterRecipe(int packagingTime, FluidStack liquid, ItemStack box, ShapedRecipeCustom internal) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ICraftingRecipe recipe, @Nullable ItemStack result) {
+		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
-		Preconditions.checkNotNull(internal);
+		Preconditions.checkNotNull(recipe);
+
+		this.id = id;
 		this.packagingTime = packagingTime;
 		this.liquid = liquid;
 		this.box = box;
-		this.internal = internal;
+		this.recipe = recipe;
+		this.result = result != null ? result : recipe.getRecipeOutput();
 	}
 
 	@Override
@@ -42,17 +59,69 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	public ItemStack getBox() {
+	public Ingredient getBox() {
 		return box;
 	}
 
 	@Override
+	@Nullable
 	public FluidStack getFluidResource() {
 		return liquid;
 	}
 
 	@Override
-	public IDescriptiveRecipe getCraftingGridRecipe() {
-		return internal;
+	public ICraftingRecipe getCraftingGridRecipe() {
+		return recipe;
+	}
+
+	@Override
+	public ItemStack getResult() {
+		return result;
+	}
+
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CarpenterRecipe> {
+
+		@Override
+		public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
+			int packagingTime = JSONUtils.getInt(json, "time");
+			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid")) : null;
+			Ingredient box = RecipeSerializers.deserialize(json.get("box"));
+			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.deserializeRecipe(recipeId, JSONUtils.getJsonObject(json, "recipe"));
+			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getJsonObject(json, "result")) : internal.getRecipeOutput();
+
+			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
+		}
+
+		@Override
+		public CarpenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			int packagingTime = buffer.readVarInt();
+			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : null;
+			Ingredient box = Ingredient.read(buffer);
+			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.func_218772_c(buffer);
+			ItemStack result = buffer.readItemStack();
+
+			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
+		}
+
+		@Override
+		public void write(PacketBuffer buffer, CarpenterRecipe recipe) {
+			buffer.writeVarInt(recipe.packagingTime);
+
+			if (recipe.liquid != null) {
+				buffer.writeBoolean(true);
+				recipe.liquid.writeToPacket(buffer);
+			} else {
+				buffer.writeBoolean(false);
+			}
+
+			recipe.box.write(buffer);
+			SUpdateRecipesPacket.func_218771_a(recipe.recipe, buffer);
+			buffer.writeItemStack(recipe.result);
+		}
 	}
 }

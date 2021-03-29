@@ -5,11 +5,25 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ObjectHolder;
 
 public interface ICarpenterRecipe extends IForestryRecipe {
+
+	IRecipeType<ICarpenterRecipe> TYPE = RecipeManagers.create("forestry:carpenter");
+
+	class Companion {
+		@ObjectHolder("forestry:carpenter")
+		public static final IRecipeSerializer<ICarpenterRecipe> SERIALIZER = null;
+	}
 
 	/**
 	 * @return Number of work cycles required to craft the recipe once.
@@ -19,17 +33,32 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	/**
 	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
 	 */
-	IDescriptiveRecipe getCraftingGridRecipe();
+	ICraftingRecipe getCraftingGridRecipe();
+
+	/**
+	 * @return The crafting result of this recipe
+	 */
+	ItemStack getResult();
 
 	/**
 	 * @return the box required for this recipe. return empty stack if there is no required box.
 	 * Examples of boxes are the Forestry cartons and crates.
 	 */
-	ItemStack getBox();
+	Ingredient getBox();
 
 	/**
 	 * @return the fluid required for this recipe. return null if there is no required fluid.
 	 */
+	@Nullable
 	FluidStack getFluidResource();
 
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
+
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
 }

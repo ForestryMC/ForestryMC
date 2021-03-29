@@ -5,7 +5,12 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
+import javax.annotation.Nullable;
+import java.util.Set;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -54,7 +59,6 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	/**
 	 * Add a recipe to the fermenter
 	 *
-	 * @param resource          String representing the resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
 	 * @param fermentationValue Value of the given resource, i.e. how much needs
 	 *                          to be fermented for the output to be deposited into the product tank.
 	 * @param modifier          Modifies the amount of liquid output per work cycle.
@@ -64,12 +68,11 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 * @param liquid            LiquidStack representing resource liquid and amount.
 	 * @throws NullPointerException if resource, output or liquid is null
 	 */
-	void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
+	void addRecipe(int fermentationValue, float modifier, FluidStack output, FluidStack liquid);
 
 	/**
 	 * Add a recipe to the fermenter. Defaults to water as input liquid.
 	 *
-	 * @param resource          String representing the resource as a {@link net.minecraftforge.oredict.OreDictionary} name.
 	 * @param modifier          Modifies the amount of liquid output per work cycle.
 	 *                          (water = 1.0f, honey = 1.5f)
 	 * @param fermentationValue Value of the given resource, i.e. how much needs
@@ -78,5 +81,14 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 	 *                          determined by fermentationValue*modifier.
 	 * @throws NullPointerException if resource, output or liquid is null
 	 */
-	void addRecipe(String resource, int fermentationValue, float modifier, FluidStack output);
+	void addRecipe(int fermentationValue, float modifier, FluidStack output);
+
+	boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource);
+
+	@Nullable
+	IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu);
+
+	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
+
+	Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager);
 }

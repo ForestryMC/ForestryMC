@@ -43,7 +43,7 @@ minecraft {
 	mappings channel: 'snapshot', version: mcp_mappings
 
 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-	
+
 	runs {
         client {
             workingDirectory project.file('run')
@@ -55,7 +55,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -71,7 +71,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -86,10 +86,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'forestry', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                forestry {
                     source sourceSets.main
                 }
             }
@@ -162,7 +162,7 @@ jar {
 }
 
 task sourcesJar(type: Jar) {
-	from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
+	// from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
 	classifier = 'sources'
 }
 

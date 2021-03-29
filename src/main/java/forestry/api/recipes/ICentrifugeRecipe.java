@@ -5,18 +5,29 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
+import net.minecraftforge.registries.ObjectHolder;
+
 public interface ICentrifugeRecipe extends IForestryRecipe {
+
+	IRecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");
+
+	class Companion {
+		@ObjectHolder("forestry:centrifuge")
+		public static final IRecipeSerializer<ICentrifugeRecipe> SERIALIZER = null;
+	}
 
 	/**
 	 * The item for this recipe to match against.
 	 **/
-	ItemStack getInput();
+	Ingredient getInput();
 
 	/**
 	 * The time it takes to process one item. Default is 20.
@@ -32,5 +43,33 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	 * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],
 	 * to help mods that display recipes
 	 **/
-	Map<ItemStack, Float> getAllProducts();
+	NonNullList<Product> getAllProducts();
+
+	@Override
+	default IRecipeType<?> getType() {
+		return TYPE;
+	}
+
+	@Override
+	default IRecipeSerializer<?> getSerializer() {
+		return Companion.SERIALIZER;
+	}
+
+	class Product {
+		private final float probability;
+		private final ItemStack stack;
+
+		public Product(float probability, ItemStack stack) {
+			this.probability = probability;
+			this.stack = stack;
+		}
+
+		public float getProbability() {
+			return probability;
+		}
+
+		public ItemStack getStack() {
+			return stack;
+		}
+	}
 }

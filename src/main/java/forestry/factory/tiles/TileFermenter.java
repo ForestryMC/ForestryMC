@@ -37,6 +37,7 @@ import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IVariableFermentable;
+import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.fluids.FilteredTank;
@@ -74,11 +75,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, false);
-		resourceTank.setFilters(FermenterRecipeManager.recipeFluidInputs);
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
+		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidInputs(world.getRecipeManager()));
 
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-		productTank.setFilters(FermenterRecipeManager.recipeFluidOutputs);
+		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidOutputs(world.getRecipeManager()));
 
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
@@ -169,7 +170,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		FluidStack fluid = resourceTank.getFluid();
 
 		if (!fluid.isEmpty()) {
-			currentRecipe = FermenterRecipeManager.findMatchingRecipe(resource, fluid);
+			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(getWorld().getRecipeManager(), resource, fluid);
 		}
 
 		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
