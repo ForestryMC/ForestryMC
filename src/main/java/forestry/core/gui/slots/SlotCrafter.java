@@ -56,7 +56,7 @@ public class SlotCrafter extends SlotCrafting {
 
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		if (!crafter.onCraftingStart(player)) {
+		if (itemStack == null || !crafter.onCraftingStart(player)) {
 			return;
 		}
 
