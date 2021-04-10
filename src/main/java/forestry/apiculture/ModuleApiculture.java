@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -34,7 +33,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -61,6 +60,7 @@ import forestry.api.storage.StorageManager;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureContainers;
+import forestry.apiculture.features.ApicultureFeatures;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.flowers.FlowerRegistry;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -85,7 +85,6 @@ import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.villagers.RegisterVillager;
-import forestry.apiculture.worldgen.HiveDecorator;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
 import forestry.apiculture.worldgen.HiveRegistry;
@@ -149,6 +148,11 @@ public class ModuleApiculture extends BlankForestryModule {
 			RegisterVillager.Registers.POINTS_OF_INTEREST.register(modEventBus);
 			RegisterVillager.Registers.PROFESSIONS.register(modEventBus);
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+		}
+
+		if (Config.getBeehivesAmount() > 0.0) {
+			modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
+			//MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 		}
 	}
 
@@ -526,34 +530,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerApiculture();
-	}
-
-	@Override
-	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-							  boolean hasVillageGenerated) {
-		//TODO: Fix if dimensions are more integrated into forge
-		/*if (!world.func_230315_m_() != DimensionType..getType().equals(DimensionType.OVERWORLD)) {
-			return;
-		}*/
-		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
-		}
-	}
-
-	@Override
-	public void decorateBiome(World world, Random rand, BlockPos pos) {
-		if (Config.getBeehivesAmount() > 0.0) {
-			int chunkX = pos.getX() >> 4;
-			int chunkZ = pos.getZ() >> 4;
-			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
-		}
-	}
-
-	@Override
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (Config.getBeehivesAmount() > 0.0) {
-			HiveDecorator.decorateHives(world, rand, chunkX, chunkZ);
-		}
 	}
 
 	@Override

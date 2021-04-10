@@ -25,8 +25,6 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
@@ -273,33 +271,33 @@ public class ModuleArboriculture extends BlankForestryModule {
 		}
 	}
 
-	@SubscribeEvent
-	public void onHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
-		//		BlockState state = event.getState();
-		//		Block block = state.getBlock();
-		//		if (block instanceof LeavesBlock && !(block instanceof BlockForestryLeaves)) {
-		//			PlayerEntity player = event.getHarvester();
-		//			if (player != null) {
-		//				ItemStack harvestingTool = player.getHeldItemMainhand();
-		//				if (harvestingTool.getItem() instanceof IToolGrafter) {
-		//					if (event.getDrops().isEmpty()) {
-		//						World world = event.getWorld();
-		//						Item itemDropped = block.getItemDropped(state, world.rand, 3);
+	//@SubscribeEvent
+	//public void onHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
+	//		BlockState state = event.getState();
+	//		Block block = state.getBlock();
+	//		if (block instanceof LeavesBlock && !(block instanceof BlockForestryLeaves)) {
+	//			PlayerEntity player = event.getHarvester();
+	//			if (player != null) {
+	//				ItemStack harvestingTool = player.getHeldItemMainhand();
+	//				if (harvestingTool.getItem() instanceof IToolGrafter) {
+	//					if (event.getDrops().isEmpty()) {
+	//						World world = event.getWorld();
+	//						Item itemDropped = block.getItemDropped(state, world.rand, 3);
 		//						if (itemDropped != Items.AIR) {
 		//							event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
 		//						}
 		//					}
-		//
-		//					harvestingTool.damageItem(1, player, (entity) -> {
-		//						entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
-		//					});
-		//					if (harvestingTool.isEmpty()) {
-		//						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, Hand.MAIN_HAND);
-		//					}
-		//				}
-		//			}
-		//		}
-	}
+	//
+	//					harvestingTool.damageItem(1, player, (entity) -> {
+	//						entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
+	//					});
+	//					if (harvestingTool.isEmpty()) {
+	//						net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, Hand.MAIN_HAND);
+	//					}
+	//				}
+	//			}
+	//		}
+	//}
 
 	@Override
 	public ISidedModuleHandler getModuleHandler() {

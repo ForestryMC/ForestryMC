@@ -5,13 +5,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.47"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.66"
     }
 }
 
 plugins {
-	id "com.matthewprenger.cursegradle" version "1.0.9"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'idea'
@@ -40,7 +40,7 @@ compileJava {
 }
 
 minecraft {
-	mappings channel: 'snapshot', version: mcp_mappings
+	mappings channel: 'official', version: mcp_mappings
 
 	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -97,6 +97,8 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 repositories {
 	/*maven {
 		url = 'http://maven.mcmoddev.com'
@@ -127,8 +129,8 @@ dependencies {
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 configurations {
@@ -176,6 +178,8 @@ task apiJar(type: Jar) {
 	classifier = 'api'
 }
 
+jar.finalizedBy('reobfJar')
+
 artifacts {
 	archives sourcesJar
 	archives apiJar
@@ -198,7 +202,7 @@ def getBuildNumber() {
 }
 
 task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-	filePath = "changelog.html"
+	file = new File("changelog.html")
 	untaggedName = "Current release ${project.version}"
 	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
 	toRef = "HEAD"
