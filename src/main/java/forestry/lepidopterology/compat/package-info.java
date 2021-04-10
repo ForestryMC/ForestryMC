@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package forestry.factory.recipes.jei.still;
+package forestry.lepidopterology.compat;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

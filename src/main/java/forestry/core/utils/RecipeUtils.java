@@ -1,25 +1,22 @@
 package forestry.core.utils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.PlayerEntity;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import net.minecraftforge.api.distmarker.Dist;
+
+import net.minecraftforge.fml.DistExecutor;
 
 public final class RecipeUtils {
     private RecipeUtils() {
@@ -42,10 +39,14 @@ public final class RecipeUtils {
 
     public static <C extends IInventory, T extends IRecipe<C>> List<T> getRecipes(IRecipeType<T> recipeType, C inventory, @Nullable World world) {
         RecipeManager manager = getRecipeManager(world);
-        if(manager == null || world == null){
+        if (manager == null || world == null) {
             return Collections.emptyList();
         }
         return manager.getRecipes(recipeType, inventory, world);
+    }
+
+    public static List<ICraftingRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {
+        return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
     }
 
 }

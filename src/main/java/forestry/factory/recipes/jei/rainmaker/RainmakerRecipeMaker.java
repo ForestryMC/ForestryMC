@@ -1,15 +1,18 @@
 package forestry.factory.recipes.jei.rainmaker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import forestry.api.fuels.FuelManager;
+import forestry.api.fuels.RainSubstrate;
+
 public class RainmakerRecipeMaker {
+	public static List<RainmakerRecipeWrapper> getRecipes() {
+		List<RainmakerRecipeWrapper> recipes = new ArrayList<>();
+		for (RainSubstrate substrate : FuelManager.rainSubstrate.values()) {
+			recipes.add(new RainmakerRecipeWrapper(substrate));
+		}
 
-	private RainmakerRecipeMaker() {
+		return recipes;
 	}
-
-	//	public static List<RainmakerRecipeWrapper> getRecipes() {
-	//		List<RainmakerRecipeWrapper> recipes = new ArrayList<>();
-	//		for (RainSubstrate substrate : FuelManager.rainSubstrate.values()) {
-	//			recipes.add(new RainmakerRecipeWrapper(substrate));
-	//		}
-	//		return recipes;
-	//	}
 }

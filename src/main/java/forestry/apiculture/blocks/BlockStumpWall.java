@@ -17,6 +17,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
@@ -44,7 +45,7 @@ public class BlockStumpWall extends WallTorchBlock {
 			BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).with(HORIZONTAL_FACING, state.get(HORIZONTAL_FACING));
 			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
-			tc.setColour(16777215); // default to white
+			tc.setColour(DyeColor.WHITE.getColorValue()); // default to white
 			tc.setLit(true);
 			worldIn.setTileEntity(pos, tc);
 			return ActionResultType.SUCCESS;
@@ -55,5 +56,6 @@ public class BlockStumpWall extends WallTorchBlock {
 
 	@Override
 	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		// Empty for remove flame particles
 	}
 }

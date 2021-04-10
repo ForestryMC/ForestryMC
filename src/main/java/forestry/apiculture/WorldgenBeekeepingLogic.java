@@ -33,7 +33,7 @@ import forestry.core.utils.TickHelper;
 
 public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	private final TileHive housing;
-	private IEffectData[] effectData = new IEffectData[2];
+	private final IEffectData[] effectData = new IEffectData[2];
 	private final HasFlowersCache hasFlowersCache = new HasFlowersCache(2);
 	private final TickHelper tickHelper = new TickHelper();
 

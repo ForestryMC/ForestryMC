@@ -38,7 +38,6 @@ import net.minecraft.world.gen.ChunkGenerator;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -339,7 +338,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerAcceptableFlower(Blocks.CHORUS_PLANT, FlowerManager.FlowerTypeEnd);
 		flowerRegistry.registerAcceptableFlower(Blocks.CHORUS_FLOWER, FlowerManager.FlowerTypeEnd);
 		flowerRegistry.registerAcceptableFlower(Blocks.VINE, FlowerManager.FlowerTypeJungle);
-		flowerRegistry.registerAcceptableFlower(Blocks.GRASS, FlowerManager.FlowerTypeJungle);
+		flowerRegistry.registerAcceptableFlower(Blocks.FERN, FlowerManager.FlowerTypeJungle);
 		flowerRegistry.registerAcceptableFlower(Blocks.WHEAT, FlowerManager.FlowerTypeWheat);
 		flowerRegistry.registerAcceptableFlower(Blocks.PUMPKIN_STEM, FlowerManager.FlowerTypeGourd);
 		flowerRegistry.registerAcceptableFlower(Blocks.MELON_STEM, FlowerManager.FlowerTypeGourd);
@@ -347,9 +346,9 @@ public class ModuleApiculture extends BlankForestryModule {
 		flowerRegistry.registerAcceptableFlower(Blocks.CACTUS, FlowerManager.FlowerTypeCacti);
 
 		Block[] standardFlowers = new Block[]{
-			Blocks.DANDELION,
-			Blocks.POPPY,
-			Blocks.BLUE_ORCHID,
+				Blocks.DANDELION,
+				Blocks.POPPY,
+				Blocks.BLUE_ORCHID,
 			Blocks.ALLIUM,
 			Blocks.AZURE_BLUET,
 			Blocks.RED_TULIP,
@@ -634,7 +633,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, World world, BlockPos pos, String flowerType) {
 			Biome biomeGenForCoords = world.getBiome(pos);
-			return BiomeDictionary.hasType(biomeGenForCoords, BiomeDictionary.Type.END);
+			return Biome.Category.THEEND == biomeGenForCoords.getCategory();
 		}
 	}
 }

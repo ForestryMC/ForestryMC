@@ -53,7 +53,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
-import forestry.factory.recipes.MoistenerRecipeManager;
 
 public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
 	private final FilteredTank resourceTank;
@@ -429,7 +428,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 			if (FuelManager.moistenerResource.containsKey(inventory.getStackInSlot(i))) {
 				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getStackInSlot(i));
-				if (res.getItem().isItemEqual(inventory.getStackInSlot(i))) {
+				if (res.getResource().test(inventory.getStackInSlot(i))) {
 					max += 64;
 					avail += inventory.getStackInSlot(i).getCount();
 				}

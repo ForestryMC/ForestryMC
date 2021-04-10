@@ -1,6 +1,7 @@
 package forestry.apiculture;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.Set;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.apiculture.hives.IHiveRegistry;
@@ -19,7 +19,7 @@ public class HiveConfig {
 	private static final Map<IHiveRegistry.HiveType, HiveConfig> configs = new EnumMap<>(IHiveRegistry.HiveType.class);
 	private static final String CATEGORY = "world.generate.beehives.blacklist";
 
-	private final Set<BiomeDictionary.Type> blacklistedTypes = new HashSet<>();
+	private final Set<Biome.Category> blacklistedTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 
 	private static final Set<ResourceLocation> blacklistedDims = new HashSet<>();
@@ -47,10 +47,10 @@ public class HiveConfig {
 
 	public HiveConfig(String[] entries) {
 		for (String entry : entries) {
-			BiomeDictionary.Type type = BiomeDictionary.Type.getType(entry);
+			Biome.Category category = Biome.Category.valueOf(entry);
 			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(entry));
-			if (type != null) {
-				blacklistedTypes.add(type);
+			if (category != null) {
+				blacklistedTypes.add(category);
 			} else if (biome != null) {
 				blacklistedBiomes.add(biome);
 			}
@@ -75,7 +75,7 @@ public class HiveConfig {
 		if (blacklistedBiomes.contains(biome)) {
 			return true;
 		}
-		return BiomeDictionary.getTypes(biome).stream().anyMatch(blacklistedTypes::contains);
+		return Arrays.stream(Biome.Category.values()).anyMatch(blacklistedTypes::contains);
 	}
 
 	public static boolean isDimAllowed(ResourceLocation dimId) {        //blacklist has priority

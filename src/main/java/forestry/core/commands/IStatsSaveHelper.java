@@ -23,6 +23,7 @@ public interface IStatsSaveHelper {
 
 	String getUnlocalizedSaveStatsString();
 
+	//TODO: Use TextComponents
 	void addExtraInfo(Collection<String> statistics, IBreedingTracker breedingTracker);
 
 	Collection<? extends IAlleleForestrySpecies> getSpecies();
