@@ -1,9 +1,8 @@
 package forestry.api.genetics.alyzer;
 
+import forestry.apiculture.genetics.IGeneticTooltipProvider;
+
 import genetics.api.individual.IIndividual;
 
-import forestry.apiculture.genetics.IOrganismTooltipProvider;
-
-public interface IAlleleDisplayHandler<I extends IIndividual> extends IOrganismTooltipProvider<I>,
-	IAlyzerDisplayProvider<I> {
+public interface IAlleleDisplayHandler<I extends IIndividual> extends IGeneticTooltipProvider<I>, IAlyzerDisplayProvider<I> {
 }

@@ -38,8 +38,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import genetics.api.GeneticHelper;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -59,6 +57,9 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.ResourceUtil;
 
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganismType;
+
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable, IColoredItem {
 
 	private final EnumGermlingType type;
@@ -66,6 +67,11 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	public ItemGermlingGE(EnumGermlingType type) {
 		super(new Item.Properties().group(ItemGroups.tabArboriculture));
 		this.type = type;
+	}
+
+	@Override
+	protected final IOrganismType getType() {
+		return type;
 	}
 
 	@Override

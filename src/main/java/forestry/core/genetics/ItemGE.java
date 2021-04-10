@@ -26,11 +26,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.core.tooltips.ToolTip;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.apiculture.DisplayHelper;
+import forestry.core.items.ItemForestry;
+
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
-
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.items.ItemForestry;
+import genetics.api.organism.IOrganismType;
 
 public abstract class ItemGE extends ItemForestry {
 	protected ItemGE(Item.Properties properties) {
@@ -39,10 +42,13 @@ public abstract class ItemGE extends ItemForestry {
 
 	protected abstract IAlleleForestrySpecies getSpecies(ItemStack itemStack);
 
+	protected abstract IOrganismType getType();
+
 	@Override
 	public boolean isDamageable() {
 		return false;
 	}
+
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
@@ -64,7 +70,14 @@ public abstract class ItemGE extends ItemForestry {
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (Screen.hasShiftDown()) {
-				individual.addTooltip(list);
+				ToolTip toolTip = new ToolTip();
+				DisplayHelper.getInstance()
+						.getTooltips(individual.getRoot().getUID(), getType())
+						.forEach((provider) -> provider.addTooltip(toolTip, individual.getGenome(), individual));
+				list.addAll(toolTip.getLines());
+				if (toolTip.isEmpty()) {
+					individual.addTooltip(list);
+				}
 			} else {
 				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
 			}

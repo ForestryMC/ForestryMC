@@ -23,8 +23,6 @@ import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 
-import genetics.Log;
-
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
@@ -44,6 +42,8 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IModFeature;
+
+import genetics.Log;
 
 public class ForestryBlockLootTables extends BlockLootTables {
 	private Set<Block> knownBlocks = new HashSet<>();
@@ -167,7 +167,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
 
 	public void registerEmptyTables(Block... blocks) {
 		for (Block block : blocks) {
-			registerLootTable(block, func_218482_a());
+			registerLootTable(block, blockNoDrop());
 		}
 	}
 }

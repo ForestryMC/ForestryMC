@@ -7,6 +7,29 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.genetics.BeeChromosomes;
+import forestry.api.apiculture.genetics.EnumBeeType;
+import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
+import forestry.api.apiculture.genetics.IBee;
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IResearchHandler;
+import forestry.apiculture.features.ApicultureItems;
+import forestry.apiculture.genetics.BeeBranchDefinition;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.genetics.BeeDisplayHandler;
+import forestry.apiculture.genetics.BeeHelper;
+import forestry.apiculture.genetics.BeeRoot;
+import forestry.apiculture.genetics.BeekeepingMode;
+import forestry.apiculture.genetics.alleles.AlleleEffects;
+import forestry.apiculture.items.ItemHoneyComb;
+import forestry.core.config.Constants;
+import forestry.core.genetics.alleles.EnumAllele;
+import forestry.core.genetics.root.IResearchPlugin;
+import forestry.core.genetics.root.ResearchHandler;
+import forestry.core.items.ItemOverlay;
+import forestry.core.utils.ItemStackUtil;
+
 import genetics.api.GeneticPlugin;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticApiInstance;
@@ -24,28 +47,6 @@ import genetics.api.root.IIndividualRootBuilder;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.IRootManager;
 import genetics.api.root.components.ComponentKeys;
-
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.EnumBeeType;
-import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
-import forestry.api.apiculture.genetics.IBee;
-import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IResearchHandler;
-import forestry.apiculture.features.ApicultureItems;
-import forestry.apiculture.genetics.BeeBranchDefinition;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.genetics.BeeHelper;
-import forestry.apiculture.genetics.BeeRoot;
-import forestry.apiculture.genetics.BeekeepingMode;
-import forestry.apiculture.genetics.alleles.AlleleEffects;
-import forestry.apiculture.items.ItemHoneyComb;
-import forestry.core.config.Constants;
-import forestry.core.genetics.alleles.EnumAllele;
-import forestry.core.genetics.root.IResearchPlugin;
-import forestry.core.genetics.root.ResearchHandler;
-import forestry.core.items.ItemOverlay;
-import forestry.core.utils.ItemStackUtil;
 
 @GeneticPlugin(modId = Constants.MOD_ID)
 public class BeePlugin implements IGeneticPlugin {
@@ -148,5 +149,7 @@ public class BeePlugin implements IGeneticPlugin {
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hard);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.hardcore);
 		BeeManager.beeRoot.registerBeekeepingMode(BeekeepingMode.insane);
+
+		BeeDisplayHandler.init(DisplayHelper.getInstance());
 	}
 }

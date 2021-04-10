@@ -197,7 +197,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	private static boolean isNearFire(World world, int x, int y, int z) {
 		AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 		// Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
-		return BlockPos.func_239581_a_(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
+		return BlockPos.getAllInBox(boundingBox.shrink(0.001D)).noneMatch((pos) -> {
 			BlockState state = world.getBlockState(pos);
 			return state.isIn(BlockTags.FIRE) || state.isIn(Blocks.LAVA) || state.isBurning(world, pos);
 		});

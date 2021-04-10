@@ -48,7 +48,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().gameSettings.field_238330_f_ == GraphicsFanciness.FANCY;
+		return Minecraft.getInstance().gameSettings.graphicFanciness == GraphicsFanciness.FANCY;
 	}
 
 

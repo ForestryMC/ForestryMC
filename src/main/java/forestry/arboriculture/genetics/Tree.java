@@ -37,17 +37,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeMatcher;
-import genetics.api.individual.Individual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-
-import genetics.individual.Genome;
-
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -62,6 +51,16 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.core.config.Config;
 import forestry.core.genetics.TemplateMatcher;
+
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeMatcher;
+import genetics.api.individual.Individual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
+import genetics.individual.Genome;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -232,7 +231,6 @@ public class Tree extends Individual implements ITree, IPlantable {
 			list.add(new StringTextComponent("<").appendSibling(new TranslationTextComponent("for.gui.unknown")).appendText(">"));
 			return;
 		}
-		Butterfly
 
 		// You analyzed it? Juicy tooltip coming up!
 		IAlleleTreeSpecies primary = genome.getActiveAllele(TreeChromosomes.SPECIES);

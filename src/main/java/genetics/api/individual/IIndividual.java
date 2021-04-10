@@ -24,6 +24,7 @@ public interface IIndividual {
 	 *
 	 * @param tooltip
 	 */
+	@Deprecated
 	void addTooltip(List<ITextComponent> tooltip);
 
 	/**

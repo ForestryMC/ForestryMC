@@ -2,19 +2,12 @@ package forestry.apiculture.genetics;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Rarity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeAllele;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IChromosomeValue;
-import genetics.api.individual.IGenome;
-import genetics.api.organism.IOrganismType;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -31,50 +24,76 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.Translator;
 
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeAllele;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IChromosomeValue;
+import genetics.api.individual.IGenome;
+import genetics.api.organism.IOrganismType;
+
 public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
-	SPECIES(BeeChromosomes.SPECIES, 0) {
+	GENERATIONS(-1) {
+		@Override
+		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
+			int generation = individual.getGeneration();
+			if (generation > 0) {
+				Rarity rarity;
+				if (generation >= 1000) {
+					rarity = Rarity.EPIC;
+				} else if (generation >= 100) {
+					rarity = Rarity.RARE;
+				} else if (generation >= 10) {
+					rarity = Rarity.UNCOMMON;
+				} else {
+					rarity = Rarity.COMMON;
+				}
+				toolTip.translated("for.gui.beealyzer.generations", generation).style(rarity.color);
+			}
+		}
+	}, SPECIES(BeeChromosomes.SPECIES, 0) {
 		@Override
 		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
 			IOrganismType organismType = helper.getOrganismType();
-			ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
-			ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, genome.getActiveAllele(BeeChromosomes.SPECIES));
+			ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, getActiveAllele(genome));
+			ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, getActiveAllele(genome));
 
 			helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
 		}
 	},
-	SPEED(BeeChromosomes.SPEED, -1, 1) {
+	SPEED(BeeChromosomes.SPEED, 2, 1) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
-			IAllele speedAllele = getActiveAllele(genome);
+			IAlleleValue<Integer> speedAllele = getActive(genome);
 			TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." +
-				speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
+					speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
 			if (ResourceUtil.canTranslate(customSpeed)) {
 				toolTip.singleLine()
-					.add(customSpeed)
-					.style(TextFormatting.GRAY)
-					.create();
+						.add(customSpeed)
+						.style(TextFormatting.GRAY)
+						.create();
 			} else {
 				toolTip.singleLine()
-					.add(speedAllele.getDisplayName())
-					.text(" ")
-					.translated("for.gui.worker")
-					.style(TextFormatting.GRAY)
-					.create();
+						.add(speedAllele.getDisplayName())
+						.text(" ")
+						.translated("for.gui.worker")
+						.style(TextFormatting.GRAY)
+						.create();
 			}
 		}
 	},
-	LIFESPAN(BeeChromosomes.LIFESPAN, -1, 0) {
+	LIFESPAN(BeeChromosomes.LIFESPAN, 1, 0) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			toolTip.singleLine()
-				.add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
-				.text(" ")
-				.translated("for.gui.life")
-				.style(TextFormatting.GRAY)
-				.create();
+					.add(genome.getActiveAllele(BeeChromosomes.LIFESPAN).getDisplayName())
+					.text(" ")
+					.translated("for.gui.life")
+					.style(TextFormatting.GRAY)
+					.create();
 		}
 	},
-	FERTILITY(BeeChromosomes.FERTILITY, -1, "fertility") {
+	FERTILITY(BeeChromosomes.FERTILITY, 5, "fertility") {
 		@Override
 		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
 			super.drawAlyzer(helper, genome, mouseX, mouseY, transform);
@@ -90,40 +109,40 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
-			IAlleleValue<EnumTolerance> tempToleranceAllele = getActiveAllele(genome);
+			IAlleleValue<EnumTolerance> tempToleranceAllele = getActive(genome);
 			ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getTemperature());
 			toolTip.singleLine()
-				.text("T: ")
-				.add(caption)
-				.text(" / ")
-				.add(tempToleranceAllele.getDisplayName())
-				.style(TextFormatting.GREEN)
-				.create();
+					.text("T: ")
+					.add(caption)
+					.text(" / ")
+					.add(tempToleranceAllele.getDisplayName())
+					.style(TextFormatting.GREEN)
+					.create();
 		}
 	},
 	HUMIDITY_TOLERANCE(BeeChromosomes.HUMIDITY_TOLERANCE, -1, 3) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAlleleBeeSpecies primary = genome.getActiveAllele(BeeChromosomes.SPECIES);
-			IAlleleValue<EnumTolerance> humidToleranceAllele = getActiveAllele(genome);
+			IAlleleValue<EnumTolerance> humidToleranceAllele = getActive(genome);
 			ITextComponent caption = AlleleManager.climateHelper.toDisplay(primary.getHumidity());
 			toolTip.singleLine()
-				.text("H: ")
-				.add(caption)
-				.text(" / ")
-				.add(humidToleranceAllele.getDisplayName())
-				.style(TextFormatting.GREEN)
-				.create();
+					.text("H: ")
+					.add(caption)
+					.text(" / ")
+					.add(humidToleranceAllele.getDisplayName())
+					.style(TextFormatting.GREEN)
+					.create();
 		}
 	},
-	FLOWER_PROVIDER(BeeChromosomes.FLOWER_PROVIDER, -1, 4, "flowers") {
+	FLOWER_PROVIDER(BeeChromosomes.FLOWER_PROVIDER, 4, 4, "flowers") {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAlleleFlowers flowers = getActiveAllele(genome);
 			toolTip.add(flowers.getProvider().getDescription(), TextFormatting.GRAY);
 		}
 	},
-	FLOWERING(BeeChromosomes.FLOWERING, -1, -1, "pollination"),
+	FLOWERING(BeeChromosomes.FLOWERING, 3, -1, "pollination"),
 	NEVER_SLEEPS(BeeChromosomes.NEVER_SLEEPS, -1, 5) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
@@ -139,8 +158,9 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 				toolTip.translated("for.gui.flyer.tooltip").style(TextFormatting.WHITE);
 			}
 		}
-	};
-
+	},
+	TERRITORY(BeeChromosomes.TERRITORY, 6, "area"),
+	EFFECT(BeeChromosomes.EFFECT, 7, "effect");
 
 	final IChromosomeType type;
 	@Nullable
@@ -160,6 +180,13 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		this(type, alyzerIndex, -1, alyzerCaption);
 	}
 
+	BeeDisplayHandler(int tooltipIndex) {
+		this.type = null;
+		this.alyzerCaption = "";
+		this.alyzerIndex = -1;
+		this.tooltipIndex = tooltipIndex;
+	}
+
 	BeeDisplayHandler(IChromosomeType type, int alyzerIndex, int tooltipIndex, @Nullable String alyzerCaption) {
 		this.type = type;
 		this.alyzerCaption = alyzerCaption;
@@ -172,6 +199,10 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 			int tooltipIndex = handler.tooltipIndex;
 			if (tooltipIndex >= 0) {
 				helper.addTooltip(handler, BeeRoot.UID, tooltipIndex * 10);
+			}
+			int alyzerIndex = handler.alyzerIndex;
+			if (alyzerIndex >= 0) {
+				helper.addAlyzer(handler, BeeRoot.UID, alyzerIndex * 10);
 			}
 		}
 	}

@@ -2,14 +2,17 @@ package forestry.api.genetics.alyzer;
 
 import java.util.function.Predicate;
 
+import forestry.apiculture.genetics.IGeneticTooltipProvider;
+
+import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 
-import forestry.apiculture.genetics.IOrganismTooltipProvider;
-
 public interface IAlleleDisplayHelper {
-	default void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int info) {
-		addTooltip(provider, rootUID, info, (organismType) -> true);
-	}
+	void addTooltip(IGeneticTooltipProvider<? extends IIndividual> provider, String rootUID, int orderingInfo);
 
-	void addTooltip(IOrganismTooltipProvider<?> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
+	void addTooltip(IGeneticTooltipProvider<? extends IIndividual> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
+
+	void addAlyzer(IAlyzerDisplayProvider<? extends IIndividual> provider, String rootUID, int orderingInfo);
+
+	void addAlyzer(IAlyzerDisplayProvider<? extends IIndividual> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
 }
