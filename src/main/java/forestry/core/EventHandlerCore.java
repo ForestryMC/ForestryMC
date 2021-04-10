@@ -37,19 +37,19 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-
 import forestry.api.core.ISpriteRegistry;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
-import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.villagers.RegisterVillager;
 import forestry.core.config.Constants;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.render.TextureManagerForestry;
 import forestry.modules.ModuleManager;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
 
 public class EventHandlerCore {
 
@@ -158,13 +158,12 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public void handleVillagerAI(EntityJoinWorldEvent event) {
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 		if ((entity instanceof VillagerEntity)) {
 			VillagerEntity villager = (VillagerEntity) entity;
-			//TODO - not sure this is quite right
 			VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
-			if (ModuleApiculture.villagerApiarist != null && prof == ModuleApiculture.villagerApiarist) {
+			if (prof.getRegistryName().equals(RegisterVillager.BEEKEEPER)) {
 				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));
 			}
 		}

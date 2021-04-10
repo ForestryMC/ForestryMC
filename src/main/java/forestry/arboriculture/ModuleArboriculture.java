@@ -30,6 +30,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
@@ -44,6 +45,7 @@ import forestry.arboriculture.genetics.TreeMutationFactory;
 import forestry.arboriculture.network.PacketRegistryArboriculture;
 import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
+import forestry.arboriculture.villagers.RegisterVillager;
 import forestry.core.ModuleCore;
 import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
@@ -72,8 +74,14 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public static VillagerProfession villagerArborist;
 
 	public ModuleArboriculture() {
-		proxy = DistExecutor.runForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
+		proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
 		ForgeUtils.registerSubscriber(this);
+
+		if (Config.enableVillagers) {
+			RegisterVillager.Registers.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
+			RegisterVillager.Registers.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+		}
 	}
 
 	@Override
