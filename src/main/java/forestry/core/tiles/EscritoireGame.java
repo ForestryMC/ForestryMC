@@ -19,10 +19,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.individual.IIndividual;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.ForestryComponentKeys;
@@ -30,6 +26,9 @@ import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	private static final Random rand = new Random();
@@ -132,7 +131,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 
 		int revealCount = getSampleSize(slotCount);
 		for (int i = 0; i < revealCount; i++) {
-			ItemStack sample = inventory.decrStackSize(startSlot + i, 1);
+			ItemStack sample = inventory.removeItem(startSlot + i, 1);
 			if (!sample.isEmpty()) {
 				if (rand.nextFloat() < handler.getResearchSuitability(species, sample)) {
 					gameBoard.probe();

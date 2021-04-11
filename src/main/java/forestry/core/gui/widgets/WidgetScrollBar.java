@@ -112,7 +112,7 @@ public class WidgetScrollBar extends Widget {
 		if (!isVisible()) {
 			return;
 		}
-		boolean mouseDown = Minecraft.getInstance().mouseHelper.isLeftDown();
+		boolean mouseDown = Minecraft.getInstance().mouseHandler.isLeftPressed();
 
 		if (listener == null || listener.isFocused(mouseX, mouseY)) {
 			//			int wheel = Mouse.getDWheel();    //TODO - dwheel. Maybe need to hook into forge events now?

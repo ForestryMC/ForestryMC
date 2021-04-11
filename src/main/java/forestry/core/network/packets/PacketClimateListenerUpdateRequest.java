@@ -36,7 +36,7 @@ public class PacketClimateListenerUpdateRequest extends ForestryPacket implement
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			TileEntity tileEntity = player.world.getTileEntity(pos);
+			TileEntity tileEntity = player.level.getBlockEntity(pos);
 			if (tileEntity != null) {
 				LazyOptional<IClimateListener> listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
 				listener.ifPresent(l -> l.syncToClient(player));

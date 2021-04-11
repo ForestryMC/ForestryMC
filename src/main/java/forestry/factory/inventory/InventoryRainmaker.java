@@ -29,10 +29,10 @@ public class InventoryRainmaker extends InventoryAdapterTile<TileMillRainmaker> 
 		if (slotIndex == SLOT_SUBSTRATE) {
 			if (FuelManager.rainSubstrate.containsKey(itemStack) && tile.charge == 0 && tile.progress == 0) {
 				RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-				if (tile.getWorld().isRaining() && substrate.isReverse()) {
+				if (tile.getLevel().isRaining() && substrate.isReverse()) {
 					return true;
 				} else {
-					return !tile.getWorld().isRaining() && !substrate.isReverse();
+					return !tile.getLevel().isRaining() && !substrate.isReverse();
 				}
 			}
 		}
@@ -41,10 +41,10 @@ public class InventoryRainmaker extends InventoryAdapterTile<TileMillRainmaker> 
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+	public void setItem(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_SUBSTRATE) {
 			RainSubstrate substrate = FuelManager.rainSubstrate.get(itemStack);
-			if (substrate != null && substrate.getItem().isItemEqual(itemStack)) {
+			if (substrate != null && substrate.getItem().sameItem(itemStack)) {
 				tile.addCharge(substrate);
 			}
 		}

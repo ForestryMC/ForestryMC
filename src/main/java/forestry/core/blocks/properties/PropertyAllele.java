@@ -14,11 +14,10 @@ import java.util.Optional;
 
 import net.minecraft.state.Property;
 
-import genetics.api.alleles.IAllele;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.genetics.alleles.IAlleleProperty;
+
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Property<A> {
 
@@ -27,7 +26,7 @@ public abstract class PropertyAllele<A extends IAlleleProperty<A>> extends Prope
 	}
 
 	@Override
-	public Optional<A> parseValue(String value) {
+	public Optional<A> getValue(String value) {
 		IAllele allele = AlleleUtils.getAlleleOrNull(value);
 		Class<A> valueClass = getValueClass();
 		if (valueClass.isInstance(allele)) {

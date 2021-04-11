@@ -34,7 +34,7 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 	public FabricatorSmeltingRecipe(ResourceLocation id, Ingredient resource, FluidStack molten, int meltingPoint) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resource);
-		Preconditions.checkArgument(!resource.hasNoMatchingItems());
+		Preconditions.checkArgument(!resource.isEmpty());
 		Preconditions.checkNotNull(molten);
 
 		this.id = id;
@@ -66,17 +66,17 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorSmeltingRecipe> {
 
 		@Override
-		public FabricatorSmeltingRecipe read(ResourceLocation recipeId, JsonObject json) {
+		public FabricatorSmeltingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			FluidStack product = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "product"));
-			int meltingPoint = JSONUtils.getInt(json, "melting");
+			FluidStack product = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "product"));
+			int meltingPoint = JSONUtils.getAsInt(json, "melting");
 
 			return new FabricatorSmeltingRecipe(recipeId, resource, product, meltingPoint);
 		}
 
 		@Override
-		public FabricatorSmeltingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			Ingredient resource = Ingredient.read(buffer);
+		public FabricatorSmeltingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			Ingredient resource = Ingredient.fromNetwork(buffer);
 			FluidStack product = FluidStack.readFromPacket(buffer);
 			int meltingPoint = buffer.readVarInt();
 
@@ -84,8 +84,8 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, FabricatorSmeltingRecipe recipe) {
-			recipe.resource.write(buffer);
+		public void toNetwork(PacketBuffer buffer, FabricatorSmeltingRecipe recipe) {
+			recipe.resource.toNetwork(buffer);
 			recipe.product.writeToPacket(buffer);
 			buffer.writeVarInt(recipe.meltingPoint);
 		}

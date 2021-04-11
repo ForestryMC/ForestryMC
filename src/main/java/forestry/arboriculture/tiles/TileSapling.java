@@ -35,6 +35,7 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.arboriculture.worldgen.FeatureArboriculture;
+import forestry.core.utils.WorldUtils;
 import forestry.core.worldgen.FeatureBase;
 
 public class TileSapling extends TileTreeContainer {
@@ -48,15 +49,15 @@ public class TileSapling extends TileTreeContainer {
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		timesTicked = compoundNBT.getInt("TT");
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		compoundNBT.putInt("TT", timesTicked);
 		return compoundNBT;
@@ -81,16 +82,16 @@ public class TileSapling extends TileTreeContainer {
 			return false;
 		}
 
-		int maturity = getRequiredMaturity(world, tree);
+		int maturity = getRequiredMaturity(level, tree);
 		if (timesTicked < maturity) {
 			return true;
 		}
 
-		Feature generator = tree.getTreeGenerator(world, getPos(), true);
+		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), true);
 		if (generator instanceof FeatureArboriculture) {
 			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
-			arboricultureGenerator.preGenerate(world, rand, getPos());
-			return arboricultureGenerator.getValidGrowthPos(world, getPos()) != null;
+			arboricultureGenerator.preGenerate(level, rand, getBlockPos());
+			return arboricultureGenerator.getValidGrowthPos(level, getBlockPos()) != null;
 		} else {
 			return true;
 		}
@@ -103,7 +104,7 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		int maturity = getRequiredMaturity(world, tree);
+		int maturity = getRequiredMaturity(level, tree);
 		if (timesTicked < maturity) {
 			if (bonemealed) {
 				timesTicked = maturity;
@@ -111,16 +112,16 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		Feature generator = tree.getTreeGenerator(world, getPos(), bonemealed);
+		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof FeatureBase) {
-			generated = ((FeatureBase) generator).place(world, random, getPos(), false);
+			generated = ((FeatureBase) generator).place(level, random, getBlockPos(), false);
 		} else {
-			generated = generator.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), random, getPos(), IFeatureConfig.NO_FEATURE_CONFIG);
+			generated = generator.place((ServerWorld) level, ((ServerChunkProvider) level.getChunkSource()).getGenerator(), random, getBlockPos(), IFeatureConfig.NONE);
 		}
 
 		if (generated) {
-			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(world, getOwnerHandler().getOwner());
+			IBreedingTracker breedingTracker = TreeManager.treeRoot.getBreedingTracker(level, getOwnerHandler().getOwner());
 			breedingTracker.registerBirth(tree);
 		}
 	}

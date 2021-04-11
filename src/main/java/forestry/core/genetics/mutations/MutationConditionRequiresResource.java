@@ -25,13 +25,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.tiles.TileUtil;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -43,10 +43,10 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 		for (ItemStack ore : new ItemStack[0]) {//TODO oredictionary OreDictionary.getOres(oreDictName)) {
 			if (!ore.isEmpty()) {
 				Item oreItem = ore.getItem();
-				Block oreBlock = Block.getBlockFromItem(oreItem);
+				Block oreBlock = Block.byItem(oreItem);
 				//TODO - tag or state, Blocks,AIR doesn't cover everything any more
 				if (oreBlock != Blocks.AIR) {
-					this.acceptedBlockStates.addAll(oreBlock.getStateContainer().getValidStates());
+					this.acceptedBlockStates.addAll(oreBlock.getStateDefinition().getPossibleStates());
 				}
 			}
 		}
@@ -61,7 +61,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		TileEntity tile;
 		do {
-			pos = pos.down();
+			pos = pos.below();
 			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing);
 

@@ -19,7 +19,7 @@ public class MultiblockEventHandler {
 		IChunk chunk = loadEvent.getChunk();
 		IWorld world = loadEvent.getWorld();
 		//TODO - check right x part of chunk
-		MultiblockRegistry.onChunkLoaded(world, chunk.getPos().getRegionCoordX(), chunk.getPos().getRegionCoordZ());
+		MultiblockRegistry.onChunkLoaded(world, chunk.getPos().getRegionX(), chunk.getPos().getRegionZ());
 	}
 
 	// Cleanup, for nice memory usageness

@@ -23,8 +23,8 @@ public class GuiMailbox extends GuiForestry<ContainerMailbox> {
 	public GuiMailbox(ContainerMailbox container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + "/mailbox.png", container, inv, title);
 		this.tile = container.getTile();
-		this.xSize = 230;
-		this.ySize = 227;
+		this.imageWidth = 230;
+		this.imageHeight = 227;
 	}
 
 	@Override

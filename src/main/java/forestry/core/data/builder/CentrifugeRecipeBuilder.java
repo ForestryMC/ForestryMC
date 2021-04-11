@@ -64,9 +64,9 @@ public class CentrifugeRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.addProperty("time", processingTime);
-			json.add("input", input.serialize());
+			json.add("input", input.toJson());
 
 			JsonArray products = new JsonArray();
 
@@ -81,22 +81,22 @@ public class CentrifugeRecipeBuilder {
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ICentrifugeRecipe.Companion.SERIALIZER;
 		}
 
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

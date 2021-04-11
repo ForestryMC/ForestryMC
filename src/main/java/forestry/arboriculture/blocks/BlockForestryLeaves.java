@@ -55,11 +55,11 @@ import forestry.core.utils.NetworkUtil;
 public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
 
 	public BlockForestryLeaves() {
-		super(Block.Properties.create(Material.LEAVES)
-			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT)
-			.tickRandomly()
-			.notSolid());
+		super(Block.Properties.of(Material.LEAVES)
+				.strength(0.2f)
+				.sound(SoundType.GRASS)
+				.randomTicks()
+				.noOcclusion());
 	}
 
 	@Override
@@ -124,12 +124,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
-			ItemStack heldItem = player.getHeldItem(hand);
-			ItemStack otherHand = player.getHeldItem(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
+			ItemStack heldItem = player.getItemInHand(hand);
+			ItemStack otherHand = player.getItemInHand(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
 			if (heldItem.isEmpty() && otherHand.isEmpty()) {
 				if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
 					PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
@@ -153,18 +153,18 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	/* IGrowable */
 
 	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		return leafTile != null && leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
 	}
 
 	@Override
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);

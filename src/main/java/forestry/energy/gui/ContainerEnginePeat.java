@@ -25,7 +25,7 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
 	//TODO dedupe
 	public static ContainerEnginePeat fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEnginePeat tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEnginePeat.class);
+		TileEnginePeat tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileEnginePeat.class);
 		return new ContainerEnginePeat(windowId, inv, tile);
 	}
 
@@ -41,8 +41,8 @@ public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}

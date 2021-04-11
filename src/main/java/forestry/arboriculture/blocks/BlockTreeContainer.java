@@ -23,13 +23,14 @@ import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
 
 //TODO inline?
+
 public abstract class BlockTreeContainer extends ContainerBlock {
 
 	protected BlockTreeContainer(Properties properties) {
 		super(properties
-			.tickRandomly()
-			.sound(SoundType.PLANT)
-			.doesNotBlockMovement());
+				.randomTicks()
+				.sound(SoundType.GRASS)
+				.noCollission());
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public abstract class BlockTreeContainer extends ContainerBlock {
 	}
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 }

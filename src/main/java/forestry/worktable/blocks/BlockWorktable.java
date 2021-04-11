@@ -19,6 +19,6 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockWorktable extends BlockBase<BlockTypeWorktable> {
 	public BlockWorktable(BlockTypeWorktable worktable) {
-		super(worktable, Block.Properties.create(Material.IRON).harvestLevel(0).harvestTool(ToolType.PICKAXE));
+		super(worktable, Block.Properties.of(Material.METAL).harvestLevel(0).harvestTool(ToolType.PICKAXE));
 	}
 }

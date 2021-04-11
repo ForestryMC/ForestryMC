@@ -35,7 +35,7 @@ public class ItemHandlerFilter implements IItemHandler {
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 		ItemStack remaining = stack;
 		for (Direction facing : filter.getValidDirections(stack, facing)) {
-			remaining = itemHandler.insertItem(facing.getIndex(), stack, simulate);
+			remaining = itemHandler.insertItem(facing.get3DDataValue(), stack, simulate);
 			if (remaining.isEmpty()) {
 				return ItemStack.EMPTY;
 			}

@@ -42,7 +42,7 @@ public abstract class FarmableBase implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(germling, itemstack);
+		return ItemStack.isSame(germling, itemstack);
 	}
 
 	@Override

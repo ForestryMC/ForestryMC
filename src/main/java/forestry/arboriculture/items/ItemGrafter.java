@@ -43,32 +43,32 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 
 	public ItemGrafter(int maxDamage) {
 		super(ItemStack.EMPTY, (new Item.Properties())
-			.maxDamage(maxDamage)
-			.group(ItemGroups.tabArboriculture)
+				.durability(maxDamage)
+				.tab(ItemGroups.tabArboriculture)
 			.addToolType(GRAFTER, 3));
 		setEfficiencyOnProperMaterial(4.0f);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+		super.appendHoverText(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("item.forestry.uses", stack.getMaxDamage() + 1).withStyle(TextFormatting.GRAY));
 		}
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState state) {
+	public boolean isCorrectToolForDrops(BlockState state) {
 		Block block = state.getBlock();
 		return block instanceof LeavesBlock ||
-			state.getMaterial() == Material.LEAVES ||
-			block.isIn(BlockTags.LEAVES) ||
-			super.canHarvestBlock(state);
+				state.getMaterial() == Material.LEAVES ||
+				block.is(BlockTags.LEAVES) ||
+				super.isCorrectToolForDrops(state);
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
 		return true;
 	}
 

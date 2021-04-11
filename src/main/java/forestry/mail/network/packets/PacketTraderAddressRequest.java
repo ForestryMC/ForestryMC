@@ -26,7 +26,7 @@ public class PacketTraderAddressRequest extends ForestryPacket implements IFores
 	private final String addressName;
 
 	public PacketTraderAddressRequest(TileTrader tile, String addressName) {
-		this.pos = tile.getPos();
+		this.pos = tile.getBlockPos();
 		this.addressName = addressName;
 	}
 
@@ -38,7 +38,7 @@ public class PacketTraderAddressRequest extends ForestryPacket implements IFores
 	@Override
 	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
-		data.writeString(addressName);
+		data.writeUtf(addressName);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
@@ -46,9 +46,9 @@ public class PacketTraderAddressRequest extends ForestryPacket implements IFores
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			String addressName = data.readString();
+			String addressName = data.readUtf();
 
-			TileUtil.actOnTile(player.world, pos, TileTrader.class, tile -> tile.handleSetAddressRequest(addressName));
+			TileUtil.actOnTile(player.level, pos, TileTrader.class, tile -> tile.handleSetAddressRequest(addressName));
 		}
 	}
 }

@@ -23,24 +23,16 @@ import net.minecraft.item.Items;
 import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraftforge.fml.InterModComms;
 
@@ -51,7 +43,6 @@ import forestry.api.multiblock.MultiblockManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.api.storage.ICrateRegistry;
 import forestry.api.storage.StorageManager;
-import forestry.core.blocks.EnumResourceType;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
@@ -120,11 +111,11 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
-		ScreenManager.registerFactory(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
-		ScreenManager.registerFactory(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
-		ScreenManager.registerFactory(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
-		ScreenManager.registerFactory(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
+		ScreenManager.register(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
+		ScreenManager.register(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
+		ScreenManager.register(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
+		ScreenManager.register(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
+		ScreenManager.register(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
 	}
 
 
@@ -149,15 +140,6 @@ public class ModuleCore extends BlankForestryModule {
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
-
-		for (Biome biome : ForgeRegistries.BIOMES) {
-			if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(biome, BiomeDictionary.Type.END)) {
-				continue;
-			}
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(4, 56, 0, 184))));
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 32, 0, 76))));
-			biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 16, 0, 76))));
-		}
 	}
 
 	@Override

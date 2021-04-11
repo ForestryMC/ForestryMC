@@ -70,8 +70,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	private final ParticleHelper.Callback particleCallback;
 
 	public BlockBase(P blockType, Block.Properties properties) {
-		super(properties.setOpaque((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+		super(properties.isRedstoneConductor((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 
 		this.blockType = blockType;
 		blockType.getMachineProperties().setBlock(this);
@@ -84,22 +84,22 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}
 
 	@Override
-	public int getOpacity(BlockState state, IBlockReader world, BlockPos pos) {
-		return (!hasTESR && !hasCustom) ? super.getOpacity(state, world, pos) : 0;
+	public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos) {
+		return (!hasTESR && !hasCustom) ? super.getLightBlock(state, world, pos) : 0;
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 	}
 
 	public BlockBase(P blockType, Material material) {
-		this(blockType, Block.Properties.create(material));
+		this(blockType, Block.Properties.of(material));
 	}
 
 	public BlockBase(P blockType) {
-		this(blockType, Material.IRON);
+		this(blockType, Material.METAL);
 	}
 
 
@@ -110,7 +110,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}*/
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		if (hasTESR) {
 			return BlockRenderType.ENTITYBLOCK_ANIMATED;
 		} else {
@@ -141,20 +141,20 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 	/* INTERACTION */
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile == null) {
 			return ActionResultType.FAIL;
 		}
 		if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
-			if (!playerIn.isSneaking()) { //isSneaking
-				if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getFace())) {
+			if (!playerIn.isShiftKeyDown()) { //isSneaking
+				if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getDirection())) {
 					return ActionResultType.SUCCESS;
 				}
 			}
 
-			if (!worldIn.isRemote) {
+			if (!worldIn.isClientSide) {
 				ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
 				tile.openGui(sPlayer, pos);
 			}
@@ -165,14 +165,14 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	//TODO think this is the correct method
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		super.onBlockHarvested(world, pos, state, player);
-		if (world.isRemote) {
+	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.playerWillDestroy(world, pos, state, player);
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -185,13 +185,13 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 			((TileForestry) tile).onRemoval();
 		}
 		if (tile instanceof ISocketable) {
-			InventoryUtil.dropSockets((ISocketable) tile, tile.getWorld(), tile.getPos());
+			InventoryUtil.dropSockets((ISocketable) tile, tile.getLevel(), tile.getBlockPos());
 		}
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		if (world.isRemote) {
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -218,8 +218,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		Direction facing = state.get(FACING);
-		return state.with(FACING, rot.rotate(facing));
+		Direction facing = state.getValue(FACING);
+		return state.setValue(FACING, rot.rotate(facing));
 	}
 
 	/* Particles */
@@ -229,7 +229,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			if (target.getType() == RayTraceResult.Type.BLOCK) {
 				BlockRayTraceResult result = (BlockRayTraceResult) target;
-				return ParticleHelper.addBlockHitEffects(world, result.getPos(), result.getFace(), effectRenderer, particleCallback);
+				return ParticleHelper.addBlockHitEffects(world, result.getBlockPos(), result.getDirection(), effectRenderer, particleCallback);
 			}
 		}
 		return false;

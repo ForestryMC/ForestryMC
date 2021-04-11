@@ -57,9 +57,9 @@ import forestry.modules.ModuleHelper;
 @OnlyIn(Dist.CLIENT)
 public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static final Gson GSON = new GsonBuilder()
-		.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
-		.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
-		.registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.getString(json, "location")))
+			.registerTypeAdapter(BookContent.class, new BookContentDeserializer())
+			.registerTypeAdapter(BookCategory.class, new BookCategoryDeserializer())
+			.registerTypeAdapter(ResourceLocation.class, (JsonDeserializer<ResourceLocation>) (json, typeOfT, context) -> new ResourceLocation(JSONUtils.convertToString(json, "location")))
 		.registerTypeAdapter(ItemStack.class, (JsonDeserializer<ItemStack>) (json, typeOfT, context) -> JsonUtil.deserializeItemStack(json.getAsJsonObject(), ItemStack.EMPTY))
 		.registerTypeAdapter(Entries.class, new EntriesDeserializer())
 		.create();
@@ -127,7 +127,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 	public static IResource getResource(String path) {
 		IResource resource;
 		if (!path.contains(":")) {
-			Language currentLanguage = Minecraft.getInstance().getLanguageManager().getCurrentLanguage();
+			Language currentLanguage = Minecraft.getInstance().getLanguageManager().getSelected();
 			String lang = currentLanguage.getCode();
 
 			ResourceLocation location = new ResourceLocation(String.format(BOOK_LOCATION_LANG, lang, path));

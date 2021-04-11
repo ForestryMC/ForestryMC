@@ -30,16 +30,16 @@ public class FarmLogicRedOrchid extends FarmLogicHomogeneous {
 	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 
 			BlockState state = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+			if (!world.isEmptyBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			BlockPos soilPos = position.down();
+			BlockPos soilPos = position.below();
 			BlockState blockState = world.getBlockState(soilPos);
 			if (!isAcceptedSoil(blockState)) {
 				continue;

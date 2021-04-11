@@ -11,12 +11,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.core.gui.elements.Window;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
-
-import org.lwjgl.glfw.GLFW;
 
 /**
  * GuiScreen implementation of a gui that contains {@link IGuiElement}s.
@@ -61,7 +61,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		PlayerInventory playerInv = minecraft.player.inventory;
 
-		if (playerInv.getItemStack().isEmpty()) {
+		if (playerInv.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);
 			RenderSystem.pushMatrix();
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
@@ -88,10 +88,10 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
 		if (key == GLFW.GLFW_KEY_ESCAPE) {    //TODO - keybinds?
-			this.minecraft.displayGuiScreen(null);
+			this.minecraft.setScreen(null);
 
-			if (this.minecraft.currentScreen == null) {
-				this.minecraft.setGameFocused(true);
+			if (this.minecraft.screen == null) {
+				this.minecraft.setWindowActive(true);
 			}
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();

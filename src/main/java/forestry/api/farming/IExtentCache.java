@@ -64,7 +64,7 @@ public interface IExtentCache {
 	 */
 	default BlockPos getValidPosition(FarmDirection direction, BlockPos pos, int maxExtend, BlockPos baseLocation) {
 		int extent = getValidExtent(direction, pos, maxExtend);
-		return baseLocation.offset(direction.getFacing(), extent);
+		return baseLocation.relative(direction.getFacing(), extent);
 	}
 
 	/**

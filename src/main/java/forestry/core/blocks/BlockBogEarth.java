@@ -39,40 +39,40 @@ public class BlockBogEarth extends Block {
 	public static final IntegerProperty MATURITY = IntegerProperty.create("maturity", 0, maturityDelimiter);
 
 	public BlockBogEarth() {
-		super(Block.Properties.create(Material.EARTH)
-			.tickRandomly()
-			.hardnessAndResistance(0.5f)
-			.sound(SoundType.GROUND)
-			.harvestTool(ToolType.SHOVEL)
-			.harvestLevel(0));
+		super(Block.Properties.of(Material.DIRT)
+				.randomTicks()
+				.strength(0.5f)
+				.sound(SoundType.GRAVEL)
+				.harvestTool(ToolType.SHOVEL)
+				.harvestLevel(0));
 
-		setDefaultState(this.getStateContainer().getBaseState().with(MATURITY, 0));
+		registerDefaultState(this.getStateDefinition().any().setValue(MATURITY, 0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(MATURITY);
 	}
 
 	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-		if (world.isRemote || world.rand.nextInt(13) != 0) {
+		if (world.isClientSide || world.random.nextInt(13) != 0) {
 			return;
 		}
 
-		int maturity = state.get(MATURITY);
+		int maturity = state.getValue(MATURITY);
 		if (isMoistened(world, pos)) {
 			if (maturity == maturityDelimiter - 1) {
-				world.setBlockState(pos, CoreBlocks.PEAT.defaultState(), Constants.FLAG_BLOCK_SYNC);
+				world.setBlock(pos, CoreBlocks.PEAT.defaultState(), Constants.FLAG_BLOCK_SYNC);
 			} else {
-				world.setBlockState(pos, state.with(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
+				world.setBlock(pos, state.setValue(MATURITY, maturity + 1), Constants.FLAG_BLOCK_SYNC);
 			}
 		}
 	}
 
 	private static boolean isMoistened(World world, BlockPos pos) {
-		for (BlockPos waterPos : BlockPos.getAllInBoxMutable(pos.add(-2, -2, -2), pos.add(2, 2, 2))) {
+		for (BlockPos waterPos : BlockPos.betweenClosed(pos.offset(-2, -2, -2), pos.offset(2, 2, 2))) {
 			BlockState blockState = world.getBlockState(waterPos);
 			Block block = blockState.getBlock();
 			if (block == Blocks.WATER) {

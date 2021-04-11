@@ -38,14 +38,14 @@ public class SlotLockable extends SlotForestry {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack par1ItemStack) {
-		return !locked && super.isItemValid(par1ItemStack);
+	public boolean mayPlace(ItemStack par1ItemStack) {
+		return !locked && super.mayPlace(par1ItemStack);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i) {
+	public ItemStack remove(int i) {
 		if (!locked) {
-			return super.decrStackSize(i);
+			return super.remove(i);
 		}
 		return ItemStack.EMPTY;
 	}

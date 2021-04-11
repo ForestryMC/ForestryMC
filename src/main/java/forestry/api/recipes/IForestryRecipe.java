@@ -32,19 +32,19 @@ public interface IForestryRecipe extends IRecipe<IInventory> {
 
 	@Deprecated
 	@Override
-	default ItemStack getCraftingResult(IInventory inv) {
+	default ItemStack assemble(IInventory inv) {
 		return ItemStack.EMPTY;
 	}
 
 	@Deprecated
 	@Override
-	default boolean canFit(int width, int height) {
+	default boolean canCraftInDimensions(int width, int height) {
 		return false;
 	}
 
 	@Deprecated
 	@Override
-	default ItemStack getRecipeOutput() {
+	default ItemStack getResultItem() {
 		return ItemStack.EMPTY;
 	}
 
@@ -62,7 +62,7 @@ public interface IForestryRecipe extends IRecipe<IInventory> {
 
 	@Deprecated
 	@Override
-	default boolean isDynamic() {
+	default boolean isSpecial() {
 		return true;
 	}
 
@@ -74,7 +74,7 @@ public interface IForestryRecipe extends IRecipe<IInventory> {
 
 	@Deprecated
 	@Override
-	default ItemStack getIcon() {
+	default ItemStack getToastSymbol() {
 		return ItemStack.EMPTY;
 	}
 	// </editor-fold>

@@ -34,13 +34,13 @@ import forestry.factory.tiles.TileFabricator;
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
 
 	public static ContainerFabricator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileFabricator tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFabricator.class);
+		TileFabricator tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFabricator.class);
 		return new ContainerFabricator(windowId, inv, tile);    //TODO nullability.
 	}
 
 	public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
 		super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
-		trackIntArray(new IntArray(4));
+		addDataSlots(new IntArray(4));
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
@@ -73,17 +73,17 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
+	public void setData(int messageId, int data) {
+		super.setData(messageId, data);
 
 		tile.getGUINetworkData(messageId, data);
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
-		for (IContainerListener crafter : listeners) {
+		for (IContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

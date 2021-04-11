@@ -35,7 +35,6 @@ import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.ItemGroupForestry;
-import forestry.core.circuits.SolderManager;
 import forestry.core.config.Config;
 import forestry.core.utils.ItemTooltipUtil;
 
@@ -54,14 +53,14 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
 			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(new StringTextComponent(circuitLayoutName).mergeStyle(TextFormatting.WHITE, TextFormatting.UNDERLINE));
+					list.add(new StringTextComponent(circuitLayoutName).withStyle(TextFormatting.WHITE, TextFormatting.UNDERLINE));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -71,14 +70,14 @@ public class ItemElectronTube extends ItemOverlay {
 			}
 		} else {
 			list.add(new StringTextComponent("<")
-				.append(new TranslationTextComponent("for.gui.noeffect")
-					.appendString(">").mergeStyle(TextFormatting.GRAY)));
+					.append(new TranslationTextComponent("for.gui.noeffect")
+							.append(">").withStyle(TextFormatting.GRAY)));
 		}
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			if (Config.isDebug || !this.getType().isSecret()) {
 				ItemStack stack = new ItemStack(this);
 				if (!getCircuits(stack).isEmpty()) {

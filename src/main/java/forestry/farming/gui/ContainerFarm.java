@@ -28,7 +28,7 @@ import forestry.farming.tiles.TileFarm;
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
 	public static ContainerFarm fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileFarm tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFarm.class);
+		TileFarm tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFarm.class);
 		return new ContainerFarm(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -70,8 +70,8 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}

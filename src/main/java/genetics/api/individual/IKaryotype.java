@@ -55,6 +55,8 @@ public interface IKaryotype extends Iterable<IChromosomeType> {
 	 */
 	IAlleleTemplate getDefaultTemplate();
 
+	int size();
+
 	/*
 	 * @return The default template as a IGenome.
 	 */

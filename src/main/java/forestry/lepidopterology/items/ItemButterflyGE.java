@@ -67,7 +67,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	private final EnumFlutterType type;
 
 	public ItemButterflyGE(EnumFlutterType type) {
-		super(new Properties().group(ItemGroups.tabLepidopterology));
+		super(new Properties().tab(ItemGroups.tabLepidopterology));
 		this.type = type;
 		/*ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
 		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)this.attackDamage, AttributeModifier.Operation.ADDITION));
@@ -90,8 +90,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}
@@ -129,7 +129,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (type != EnumFlutterType.BUTTERFLY) {
 			return false;
 		}
-		if (entityItem.world.isRemote || entityItem.ticksExisted < 80) {
+		if (entityItem.level.isClientSide || entityItem.tickCount < 80) {
 			return false;
 		}
 		if (rand.nextInt(24) != 0) {
@@ -141,7 +141,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
-		if (butterfly.canTakeFlight(entityItem.world, entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ())) {
+		if (butterfly.canTakeFlight(entityItem.level, entityItem.getX(), entityItem.getY(), entityItem.getZ())) {
 			return false;
 		}
 
@@ -149,8 +149,8 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 			return false;
 		}
 
-		EntityUtil.spawnEntity(entityItem.world,
-			EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.world, butterfly, entityItem.getPosition()), entityItem.getPosX(), entityItem.getPosY(), entityItem.getPosZ());
+		EntityUtil.spawnEntity(entityItem.level,
+				EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), entityItem.level, butterfly, entityItem.blockPosition()), entityItem.getX(), entityItem.getY(), entityItem.getZ());
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {
@@ -210,15 +210,15 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	//	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
 		PlayerEntity player = context.getPlayer();
-		BlockPos pos = context.getPos();
-		if (world.isRemote) {
+		BlockPos pos = context.getClickedPos();
+		if (world.isClientSide) {
 			return ActionResultType.PASS;
 		}
 
-		ItemStack stack = player.getHeldItem(context.getHand());
+		ItemStack stack = player.getItemInHand(context.getHand());
 
 		IButterfly flutter = ButterflyManager.butterflyRoot.getTypes().createIndividual(stack).orElse(null);
 
@@ -300,14 +300,14 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		if (itemstack.getTag() == null) {
-			return super.getDisplayName(itemstack);
+			return super.getName(itemstack);
 		}
 
 		IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
 		String customKey = "for.butterflies.custom." + type.getName() + "."
-			+ individual.getGenome().getPrimary().getLocalisationKey().replace("butterflies.species.", "");
+				+ individual.getGenome().getPrimary().getLocalisationKey().replace("butterflies.species.", "");
 		return ResourceUtil.tryTranslate(customKey, () -> {
 			ITextComponent speciesString = individual.getDisplayName();
 			ITextComponent typeString = new TranslationTextComponent("for.butterflies.grammar." + type.getName() + ".type");

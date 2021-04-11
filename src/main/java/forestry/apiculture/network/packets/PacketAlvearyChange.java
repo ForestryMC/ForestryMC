@@ -46,7 +46,7 @@ public class PacketAlvearyChange extends ForestryPacket implements IForestryPack
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			TileUtil.actOnTile(player.world, pos, IMultiblockComponent.class, tile -> tile.getMultiblockLogic().getController().reassemble());
+			TileUtil.actOnTile(player.level, pos, IMultiblockComponent.class, tile -> tile.getMultiblockLogic().getController().reassemble());
 		}
 	}
 }

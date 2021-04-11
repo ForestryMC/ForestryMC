@@ -21,37 +21,37 @@ public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
 	}
 
 	default I style(TextFormatting... formatting) {
-		applyFormatting((component) -> component.mergeStyle(formatting));
+		applyFormatting((component) -> component.withStyle(formatting));
 		return cast();
 	}
 
 	default I style(TextFormatting formatting) {
-		applyFormatting((component) -> component.mergeStyle(formatting));
+		applyFormatting((component) -> component.withStyle(formatting));
 		return cast();
 	}
 
 	default I style(Style style) {
-		applyFormatting((component) -> component.mergeStyle(style));
+		applyFormatting((component) -> component.withStyle(style));
 		return cast();
 	}
 
 	default I add(ITextComponent line, TextFormatting format) {
 		if (line instanceof IFormattableTextComponent) {
-			((IFormattableTextComponent) line).mergeStyle(format);
+			((IFormattableTextComponent) line).withStyle(format);
 		}
 		return add(line);
 	}
 
 	default I add(ITextComponent line, TextFormatting... format) {
 		if (line instanceof IFormattableTextComponent) {
-			((IFormattableTextComponent) line).mergeStyle(format);
+			((IFormattableTextComponent) line).withStyle(format);
 		}
 		return add(line);
 	}
 
 	default I add(ITextComponent line, Style style) {
 		if (line instanceof IFormattableTextComponent) {
-			((IFormattableTextComponent) line).mergeStyle(style);
+			((IFormattableTextComponent) line).withStyle(style);
 		}
 		return add(line);
 	}

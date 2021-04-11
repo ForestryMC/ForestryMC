@@ -34,10 +34,10 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack itemstack) {
+	public boolean mayPlace(ItemStack itemstack) {
 		int slotIndex = getSlotIndex();
 		return !filterSlotDelegate.isLocked(slotIndex) &&
-			(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
+				(itemstack.isEmpty() || filterSlotDelegate.canSlotAccept(slotIndex, itemstack));
 	}
 
 	public SlotFiltered setBlockedTexture(String ident) {
@@ -53,8 +53,8 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
 	@Nullable
 	@Override
 	public ResourceLocation getBackgroundTexture() {
-		ItemStack stack = getStack();
-		if (!isItemValid(stack)) {
+		ItemStack stack = getItem();
+		if (!mayPlace(stack)) {
 			return blockedTexture;
 		} else if (backgroundTexture != null) {
 			return backgroundTexture;

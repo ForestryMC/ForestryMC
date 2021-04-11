@@ -39,7 +39,7 @@ public class JeiUtil {
 
 	public static void addDescription(IRecipeRegistration registry, Block... blocks) {
 		for (Block block : blocks) {
-			Item item = Item.getItemFromBlock(block);
+			Item item = Item.byBlock(block);
 			if (item != Items.AIR) {
 				addDescription(registry, item);
 			} else {

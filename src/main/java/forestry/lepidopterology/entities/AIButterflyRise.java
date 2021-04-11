@@ -16,17 +16,17 @@ public class AIButterflyRise extends AIButterflyMovement {
 
 	public AIButterflyRise(EntityButterfly entity) {
 		super(entity);
-		setMutexFlags(EnumSet.of(Flag.JUMP));
+		setFlags(EnumSet.of(Flag.JUMP));
 		//		setMutexBits(1);	TODO mutex
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (entity.getDestination() != null) {
 			return false;
 		}
 
-		if (!entity.collidedHorizontally && entity.getRNG().nextInt(64) != 0) {
+		if (!entity.horizontalCollision && entity.getRandom().nextInt(64) != 0) {
 			return false;
 		}
 
@@ -44,7 +44,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (entity.getState() != EnumButterflyState.RISING) {
 			return false;
 		}
@@ -57,7 +57,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.getPositionVec()) > 2.0f) {
+		if (entity.getDestination().distanceToSqr(entity.position()) > 2.0f) {
 			return true;
 		}
 
@@ -69,7 +69,7 @@ public class AIButterflyRise extends AIButterflyMovement {
 	public void tick() {
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
-		} else if (entity.collidedVertically && entity.getRNG().nextInt(62) == 0) {
+		} else if (entity.verticalCollision && entity.getRandom().nextInt(62) == 0) {
 			flightTarget = null;
 		}
 

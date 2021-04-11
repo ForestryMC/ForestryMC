@@ -56,9 +56,9 @@ public class FarmTarget {
 		}
 
 		BlockPos.Mutable position = new BlockPos.Mutable();
-		position.setPos(platformPosition);
+		position.set(platformPosition);
 		for (extent = 0; extent < limit; extent++) {
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 			if (!housing.isValidPlatform(world, position)) {

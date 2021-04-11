@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -35,14 +36,14 @@ public class InventoryStill extends InventoryAdapterTile<TileStill> {
 		if (slotIndex == SLOT_RESOURCE) {
 			return FluidHelper.isFillableEmptyContainer(itemStack);
 		} else if (slotIndex == SLOT_CAN) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

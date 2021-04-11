@@ -28,15 +28,6 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 import com.mojang.authlib.GameProfile;
 
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IGenome;
-import genetics.api.root.ITemplateContainer;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.ComponentKeys;
-import genetics.api.root.components.IRootComponent;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumLeafType;
@@ -101,8 +92,16 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.TemplateMatcher;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
-import forestry.core.utils.RenderUtil;
 import forestry.modules.features.FeatureBlockGroup;
+
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IGenome;
+import genetics.api.root.ITemplateContainer;
+import genetics.api.root.components.ComponentKey;
+import genetics.api.root.components.ComponentKeys;
+import genetics.api.root.components.IRootComponent;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSubtype {
 	Oak(TreeBranchDefinition.QUERCUS, "appleOak", "robur", false, EnumLeafType.DECIDUOUS, new Color(4764952), new Color(4764952).brighter(), EnumVanillaWoodType.OAK) {
@@ -1003,7 +1002,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	private IGenome genome;
 
 	TreeDefinition(TreeBranchDefinition branch, String speciesName, String binomial, boolean dominant, EnumLeafType leafType, Color primary, Color secondary, IWoodType woodType) {
-		String uid = "tree_" + getString();
+		String uid = "tree_" + getSerializedName();
 		String unlocalizedDescription = "for.description.tree" + this;
 		String unlocalizedName = "for.trees.species." + speciesName;
 
@@ -1013,7 +1012,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 		IGermlingModelProvider germlingIconProvider = ModelProviderFactory.create(woodType, uid, leafIconProvider);
 
 		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(Constants.MOD_ID, uid, speciesName)
-			.setDescriptionKey(unlocalizedDescription)
+				.setDescriptionKey(unlocalizedDescription)
 			.setTranslationKey(unlocalizedName)
 			.setDominant(dominant)
 			.setBranch(branch.getBranch())
@@ -1042,7 +1041,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 		BlockState logBlock = TreeManager.woodAccess.getBlock(woodType, WoodBlockKind.LOG, fireproof);
 
 		Direction.Axis axis = facing.getAxis();
-		return world.setBlockState(pos, logBlock.with(RotatedPillarBlock.AXIS, axis), 19);
+		return world.setBlock(pos, logBlock.setValue(RotatedPillarBlock.AXIS, axis), 19);
 	}
 
 	@Override
@@ -1057,17 +1056,17 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 				leavesGroup = ArboricultureBlocks.LEAVES_DEFAULT;
 			}
 			defaultLeaves = leavesGroup.get(this).defaultState();
-			return world.setBlockState(pos, defaultLeaves, 19);
+			return world.setBlock(pos, defaultLeaves, 19);
 		} else {
 			BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
-			boolean placed = world.setBlockState(pos, leaves, 19);
+			boolean placed = world.setBlock(pos, leaves, 19);
 			if (!placed) {
 				return false;
 			}
 
 			TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
 			if (tileLeaves == null) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 19);
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
 				return false;
 			}
 
@@ -1075,8 +1074,6 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 				tileLeaves.getOwnerHandler().setOwner(owner);
 			}
 			tileLeaves.setTree(new Tree(genome));
-
-			RenderUtil.markForUpdate(pos);
 			return true;
 		}
 	}
@@ -1146,7 +1143,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 }

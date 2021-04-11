@@ -25,8 +25,8 @@ public abstract class GuiForestryTitled<C extends Container> extends GuiForestry
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		textLayout.line = 6;
 		if (centeredTitle()) {

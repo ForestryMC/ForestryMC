@@ -37,21 +37,21 @@ public class GuiButtonSubEntry extends Button {
 		}
 		boolean active = subEntry == selectedEntry;
 		TextureManager manager = Minecraft.getInstance().textureManager;
-		manager.bindTexture(GuiForesterBook.TEXTURE);
-		GlStateManager.pushMatrix();
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		manager.bind(GuiForesterBook.TEXTURE);
+		GlStateManager._pushMatrix();
+		GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		blit(transform, x, y, 48 + (active ? 24 : 0), 201, 24, 21);
 
-		GlStateManager.translatef(x + 8.0F, y + 4.0F, getBlitOffset());    //TODO
-		GlStateManager.scalef(0.85F, 0.85F, 0.85F);
+		GlStateManager._translatef(x + 8.0F, y + 4.0F, getBlitOffset());    //TODO
+		GlStateManager._scalef(0.85F, 0.85F, 0.85F);
 		//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
-		GlStateManager.enableRescaleNormal();
+		GlStateManager._enableRescaleNormal();
 
-		GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, subEntry.getStack(), 0, 0);
+		GuiUtil.drawItemStack(Minecraft.getInstance().font, subEntry.getStack(), 0, 0);
 
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.popMatrix();
+		RenderHelper.turnOff();
+		GlStateManager._popMatrix();
 	}
 
 	public List<ITextComponent> getToolTip() {

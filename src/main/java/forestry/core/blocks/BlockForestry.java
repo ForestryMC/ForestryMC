@@ -33,12 +33,12 @@ public abstract class BlockForestry extends Block {
 
 	protected BlockForestry(Block.Properties properties) {
 		super(properties
-			.hardnessAndResistance(1.5f));
+				.strength(1.5f));
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		if (world.isRemote) {
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+		if (world.isClientSide) {
 			return;
 		}
 

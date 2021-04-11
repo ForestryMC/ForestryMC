@@ -30,7 +30,7 @@ public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalis
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return true;
 	}
 }

@@ -37,7 +37,7 @@ public enum BlockTypeApiculture implements IBlockType {
 	}
 
 	@Override
-	public String getString() {
-		return getMachineProperties().getString();
+	public String getSerializedName() {
+		return getMachineProperties().getSerializedName();
 	}
 }

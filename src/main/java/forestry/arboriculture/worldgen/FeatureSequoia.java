@@ -44,7 +44,7 @@ public class FeatureSequoia extends FeatureTree {
 			if (branchLength > 4) {
 				branchLength = 4;
 			}
-			branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, yBranch, 0), girth, 0.05f, 0.25f, branchLength, 1, 0.5f));
+			branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, yBranch, 0), girth, 0.05f, 0.25f, branchLength, 1, 0.5f));
 		}
 		return branchCoords;
 	}
@@ -57,15 +57,15 @@ public class FeatureSequoia extends FeatureTree {
 
 		int leafSpawn = height + 2;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		int topHeight = height / 3 + rand.nextInt(height / 6);
 		while (leafSpawn > topHeight) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		}
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 	}
 }

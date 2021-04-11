@@ -21,8 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModelProvider;
@@ -39,6 +37,8 @@ import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, ISetupListener {
 	private final IBeeModelProvider beeModelProvider;

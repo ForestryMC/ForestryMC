@@ -42,12 +42,12 @@ public class PacketSolderingIronClick extends ForestryPacket implements IForestr
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			int slot = data.readVarInt();
 
-			if (!(player.openContainer instanceof IContainerSocketed)) {
+			if (!(player.containerMenu instanceof IContainerSocketed)) {
 				return;
 			}
-			ItemStack itemstack = player.inventory.getItemStack();
+			ItemStack itemstack = player.inventory.getCarried();
 
-			((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(slot, player, itemstack);
+			((IContainerSocketed) player.containerMenu).handleSolderingIronClickServer(slot, player, itemstack);
 		}
 	}
 }

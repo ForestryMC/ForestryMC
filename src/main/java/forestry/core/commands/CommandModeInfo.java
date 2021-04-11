@@ -47,7 +47,7 @@ public class CommandModeInfo implements Command<CommandSource> {
 
 
 		Style green = Style.EMPTY;
-		green.setFormatting(TextFormatting.GREEN);
+		green.withColor(TextFormatting.GREEN);
 		CommandHelpers.sendLocalizedChatMessage(ctxContext.getSource(), green, modeName);
 
 		for (String desc : modeHelper.getDescription(modeName)) {

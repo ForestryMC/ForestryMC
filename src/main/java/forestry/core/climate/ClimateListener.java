@@ -65,7 +65,7 @@ public class ClimateListener implements IClimateListener {
 			if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
 				World worldObj = getWorldObj();
 				BlockPos coordinates = getCoordinates();
-				ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.rand);
+				ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.random);
 			}
 		}
 		if (needsClimateUpdate) {
@@ -102,7 +102,7 @@ public class ClimateListener implements IClimateListener {
 
 	private IClimateState getState(boolean update, boolean syncToClient) {
 		World worldObj = getWorldObj();
-		if (!worldObj.isRemote && update) {
+		if (!worldObj.isClientSide && update) {
 			updateState(syncToClient);
 		}
 		return cachedState;
@@ -179,7 +179,7 @@ public class ClimateListener implements IClimateListener {
 	public void syncToClient() {
 		if (!cachedState.equals(cachedClientState)) {
 			World worldObj = getWorldObj();
-			if (!worldObj.isRemote) {
+			if (!worldObj.isClientSide) {
 				BlockPos coordinates = getCoordinates();
 				if (locationProvider instanceof Entity) {
 					NetworkUtil.sendNetworkPacket(new PacketClimateListenerUpdateEntity((Entity) locationProvider, cachedState), coordinates, worldObj);
@@ -194,7 +194,7 @@ public class ClimateListener implements IClimateListener {
 	@Override
 	public void syncToClient(ServerPlayerEntity player) {
 		World worldObj = getWorldObj();
-		if (!worldObj.isRemote) {
+		if (!worldObj.isClientSide) {
 			IClimateState climateState = getState(true, false);
 			if (locationProvider instanceof Entity) {
 				NetworkUtil.sendToPlayer(new PacketClimateListenerUpdateEntity((Entity) locationProvider, climateState), player);
@@ -225,7 +225,7 @@ public class ClimateListener implements IClimateListener {
 		this.world = null;
 		this.pos = null;
 		World worldObj = getWorldObj();
-		if (!worldObj.isRemote) {
+		if (!worldObj.isClientSide) {
 			updateState(true);
 		}
 	}
@@ -237,8 +237,8 @@ public class ClimateListener implements IClimateListener {
 			this.pos = provider.getCoordinates();
 		} else if ((this.locationProvider instanceof TileEntity)) {
 			TileEntity provider = (TileEntity) this.locationProvider;
-			this.world = provider.getWorld();
-			this.pos = provider.getPos();
+			this.world = provider.getLevel();
+			this.pos = provider.getBlockPos();
 		} else {
 			throw new IllegalStateException("no / incompatible location provider");
 		}

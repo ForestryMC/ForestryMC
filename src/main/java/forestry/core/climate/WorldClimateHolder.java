@@ -58,7 +58,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void load(CompoundNBT nbt) {
 		transformers.clear();
 		ListNBT transformerData = nbt.getList(TRANSFORMERS_KEY, Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < transformerData.size(); i++) {
@@ -76,7 +76,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundNBT save(CompoundNBT compound) {
 		ListNBT transformerData = new ListNBT();
 		for (Map.Entry<Long, TransformerData> entry : transformers.long2ObjectEntrySet()) {
 			TransformerData data = entry.getValue();
@@ -150,7 +150,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public void updateTransformer(IClimateTransformer transformer) {
 		BlockPos position = transformer.getCoordinates();
-		long longPos = position.toLong();
+		long longPos = position.asLong();
 		TransformerData data = transformers.get(longPos);
 		if (data != null) {
 			boolean needChunkUpdate = data.range != transformer.getRange() || data.circular != transformer.isCircular() || data.chunks.length == 0;
@@ -174,7 +174,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 
 	private long[] updateTransformerChunks(IClimateTransformer transformer, boolean forceDirty) {
 		BlockPos transformerPos = transformer.getCoordinates();
-		long longPos = transformerPos.toLong();
+		long longPos = transformerPos.asLong();
 		int range = transformer.getRange();
 		Set<Long> chunkSet = new HashSet<>();
 		for (int x = transformerPos.getX() - range; x <= transformerPos.getX() + range; x += 16) {
@@ -195,13 +195,13 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	@Override
 	public void removeTransformer(IClimateTransformer transformer) {
 		removeTransformerChunks(transformer);
-		transformers.remove(transformer.getCoordinates().toLong());
+		transformers.remove(transformer.getCoordinates().asLong());
 		setDirty(true);
 	}
 
 	private void removeTransformerChunks(IClimateTransformer transformer) {
 		BlockPos transformerPos = transformer.getCoordinates();
-		long longPos = transformerPos.toLong();
+		long longPos = transformerPos.asLong();
 		TransformerData data = transformers.get(longPos);
 		if (data == null) {
 			return;
@@ -223,7 +223,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 
 	@Override
 	public boolean isPositionInTransformerRange(long position, Position2D blockPos) {
-		BlockPos pos = BlockPos.fromLong(position);
+		BlockPos pos = BlockPos.of(position);
 		int range = getRange(position);
 		if (isCircular(position)) {
 			double distance = Math.round(blockPos.getDistance(pos));

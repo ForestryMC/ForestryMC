@@ -40,7 +40,7 @@ public class ItemForestry extends Item {
 	}
 
 	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
-		this(properties.group(creativeTab));
+		this(properties.tab(creativeTab));
 	}
 
 	public ItemForestry(Item.Properties properties) {
@@ -60,8 +60,8 @@ public class ItemForestry extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+		super.appendHoverText(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 

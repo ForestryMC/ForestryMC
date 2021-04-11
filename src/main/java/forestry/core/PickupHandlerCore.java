@@ -16,13 +16,12 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
+
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
 
 public class PickupHandlerCore implements IPickupHandler {
 
@@ -39,7 +38,7 @@ public class PickupHandlerCore implements IPickupHandler {
 			Optional<IIndividual> optionalIndividual = root.create(itemstack);
 			if (optionalIndividual.isPresent()) {
 				IIndividual individual = optionalIndividual.get();
-				IBreedingTracker tracker = root.getBreedingTracker(entityitem.world, PlayerEntity.getGameProfile());
+				IBreedingTracker tracker = root.getBreedingTracker(entityitem.level, PlayerEntity.getGameProfile());
 				tracker.registerPickup(individual);
 			}
 		}

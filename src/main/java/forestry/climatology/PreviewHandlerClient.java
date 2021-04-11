@@ -54,20 +54,20 @@ public class PreviewHandlerClient {
 		if (player == null) {
 			return;
 		}
-		World world = player.world;
+		World world = player.level;
 		tickHelper.onTick();
 		if (tickHelper.updateOnInterval(100)) {
-			ItemStack stack = player.getHeldItem(Hand.MAIN_HAND);
+			ItemStack stack = player.getItemInHand(Hand.MAIN_HAND);
 			if (stack.isEmpty()
-				|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
-				|| !ItemHabitatScreen.isValid(stack, player.world)
-				|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
+					|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
+					|| !ItemHabitatScreen.isValid(stack, player.level)
+					|| !ItemHabitatScreen.isPreviewModeActive(stack)) {
 				renderer.clearPreview();
 				return;
 			}
 			BlockPos currentPos = ItemHabitatScreen.getPosition(stack);
 			if (currentPos == null
-				|| player.getDistanceSq(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
+					|| player.distanceToSqr(currentPos.getX(), currentPos.getY(), currentPos.getZ()) > 128 * 128F) {
 				renderer.clearPreview();
 				return;
 			}
@@ -89,7 +89,7 @@ public class PreviewHandlerClient {
 
 	private class PreviewRenderer {
 		private final Set<BlockPos> previewPositions = new HashSet<>();
-		private final AxisAlignedBB boundingBox = VoxelShapes.fullCube().getBoundingBox().shrink(0.125F);
+		private final AxisAlignedBB boundingBox = VoxelShapes.block().bounds().deflate(0.125F);
 		private boolean addedToBus = false;
 		@Nullable
 		private BlockPos previewOrigin = null;
@@ -101,10 +101,10 @@ public class PreviewHandlerClient {
 			BlockPos center = new BlockPos(0, 0, 0);
 			for (int x = -range; x <= range; x++) {
 				for (int y = -range; y <= range; y++) {
-					BlockPos position = centerPosition.add(x, 0, y);
+					BlockPos position = centerPosition.offset(x, 0, y);
 					boolean valid;
 					if (circular) {
-						double distance = Math.round(Math.sqrt(center.distanceSq(x, 0, y, true)));
+						double distance = Math.round(Math.sqrt(center.distSqr(x, 0, y, true)));
 						valid = distance <= range && distance > (range - 1);
 					} else {
 						valid = !(!(x == -range || x == range) && !(y == -range || y == range));
@@ -154,9 +154,9 @@ public class PreviewHandlerClient {
 			}
 			float partialTicks = event.getPartialTicks();
 			PlayerEntity player = Minecraft.getInstance().player;
-			double playerX = player.lastTickPosX + (player.getPosX() - player.lastTickPosX) * partialTicks;
-			double playerY = player.lastTickPosY + (player.getPosY() - player.lastTickPosY) * partialTicks;
-			double playerZ = player.lastTickPosZ + (player.getPosZ() - player.lastTickPosZ) * partialTicks;
+			double playerX = player.xOld + (player.getX() - player.xOld) * partialTicks;
+			double playerY = player.yOld + (player.getY() - player.yOld) * partialTicks;
+			double playerZ = player.zOld + (player.getZ() - player.zOld) * partialTicks;
 			RenderSystem.pushMatrix();
 			RenderSystem.translated(-playerX, -playerY, -playerZ);
 			RenderSystem.enableBlend();
@@ -165,7 +165,7 @@ public class PreviewHandlerClient {
 			RenderSystem.disableDepthTest();
 
 			for (BlockPos position : previewPositions) {
-				AxisAlignedBB boundingBox = this.boundingBox.offset(position);
+				AxisAlignedBB boundingBox = this.boundingBox.move(position);
 				//				WorldRenderer.renderFilledBox(boundingBox, 0.75F, 0.5F, 0.0F, 0.45F);
 				//TODO rendering
 			}

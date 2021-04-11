@@ -1,8 +1,6 @@
 package forestry.core.utils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.IServerWorldInfo;
@@ -29,7 +27,7 @@ public final class WorldUtils {
 	}
 
 	public static IServerWorldInfo getServerInfo(World world) {
-		IWorldInfo info = world.getWorldInfo();
+		IWorldInfo info = world.getLevelData();
 		if (!(info instanceof ServerWorldInfo)) {
 			throw new IllegalStateException("Failed to cast the world to its server version.");
 		}

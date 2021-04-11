@@ -44,7 +44,7 @@ public final class CommandModeSet implements Command<CommandSource> {
 
 	@Override
 	public int run(CommandContext<CommandSource> ctx) {
-		World world = ctx.getSource().getWorld();
+		World world = ctx.getSource().getLevel();
 
 		String modeName = ctx.getArgument("name", String.class);
 

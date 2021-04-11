@@ -53,7 +53,7 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 		for (int i = indexStart; i < maxIndex; i++) {
 			IBookEntry entry = entries.get(i);
 			addButton(new GuiButtonEntry(guiLeft + xStart, guiTop + yStart + yOffset, entry, this::actionPerformed));
-			yOffset += Minecraft.getInstance().fontRenderer.FONT_HEIGHT + 2;
+			yOffset += Minecraft.getInstance().font.lineHeight + 2;
 		}
 	}
 
@@ -77,12 +77,12 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 			displayCategories();
 		} else if (button instanceof GuiButtonEntry) {
 			GuiButtonEntry entry = (GuiButtonEntry) button;
-			Minecraft.getInstance().displayGuiScreen(new GuiForestryBookPages(book, category, entry.entry, null));
+			Minecraft.getInstance().setScreen(new GuiForestryBookPages(book, category, entry.entry, null));
 		}
 	}
 
 	private void displayCategories() {
-		Minecraft.getInstance().displayGuiScreen(new GuiForestryBookCategories(book));
+		Minecraft.getInstance().setScreen(new GuiForestryBookCategories(book));
 	}
 
 	@Override

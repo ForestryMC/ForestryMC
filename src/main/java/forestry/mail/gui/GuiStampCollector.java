@@ -23,8 +23,8 @@ public class GuiStampCollector extends GuiForestry<ContainerStampCollector> {
 	public GuiStampCollector(ContainerStampCollector container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", container, inv, title);
 		this.tile = container.getTile();
-		this.xSize = 176;
-		this.ySize = 193;
+		this.imageWidth = 176;
+		this.imageHeight = 193;
 	}
 
 	@Override

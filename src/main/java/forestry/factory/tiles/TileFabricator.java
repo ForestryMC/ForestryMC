@@ -72,7 +72,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));
 
-		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, true).setFilters(() -> RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(getWorld().getRecipeManager()));
+		moltenTank = new FilteredTank(8 * FluidAttributes.BUCKET_VOLUME, false, true).setFilters(() -> RecipeManagers.fabricatorSmeltingManager.getRecipeFluids(getLevel().getRecipeManager()));
 
 		tankManager = new TankManager(this, moltenTank);
 	}
@@ -80,8 +80,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		compound = super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		compound = super.save(compound);
 
 		compound.putInt("Heat", heat);
 		tankManager.write(compound);
@@ -90,8 +90,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		super.read(state, compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 
 		heat = compound.getInt("Heat");
 		tankManager.read(compound);
@@ -137,19 +137,19 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private void trySmelting() {
 		IInventoryAdapter inventory = getInternalInventory();
 
-		ItemStack smeltResource = inventory.getStackInSlot(InventoryFabricator.SLOT_METAL);
+		ItemStack smeltResource = inventory.getItem(InventoryFabricator.SLOT_METAL);
 		if (smeltResource.isEmpty()) {
 			return;
 		}
 
-		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getWorld().getRecipeManager(), smeltResource);
+		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), smeltResource);
 		if (smelt == null || smelt.getMeltingPoint() > heat) {
 			return;
 		}
 
 		FluidStack smeltFluid = smelt.getProduct();
 		if (moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.SIMULATE) == smeltFluid.getAmount()) {
-			this.decrStackSize(InventoryFabricator.SLOT_METAL, 1);
+			this.removeItem(InventoryFabricator.SLOT_METAL, 1);
 			moltenTank.fillInternal(smeltFluid, IFluidHandler.FluidAction.EXECUTE);
 			meltingPoint = smelt.getMeltingPoint();
 		}
@@ -169,9 +169,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private Optional<IFabricatorRecipe> getRecipe() {
 		IInventoryAdapter inventory = getInternalInventory();
-		ItemStack plan = inventory.getStackInSlot(InventoryFabricator.SLOT_PLAN);
+		ItemStack plan = inventory.getItem(InventoryFabricator.SLOT_PLAN);
 		FluidStack liquid = moltenTank.getFluid();
-		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), world, liquid, plan, craftingInventory);
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(level.getRecipeManager(), level, liquid, plan, craftingInventory);
 		IFabricatorRecipe recipe = recipePair.orElse(null);
 		if (!liquid.isEmpty() && recipe != null && !liquid.containsFluid(recipe.getLiquid())) {
 			return Optional.empty();
@@ -185,14 +185,14 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return ItemStack.EMPTY;
 		}
 
-		return myRecipe.getCraftingGridRecipe().getRecipeOutput().copy();
+		return myRecipe.getCraftingGridRecipe().getResultItem().copy();
 	}
 
 	/* ISlotPickupWatcher */
 	@Override
 	public void onTake(int slotIndex, PlayerEntity player) {
 		if (slotIndex == InventoryFabricator.SLOT_RESULT) {
-			decrStackSize(InventoryFabricator.SLOT_RESULT, 1);
+			removeItem(InventoryFabricator.SLOT_RESULT, 1);
 		}
 	}
 
@@ -200,7 +200,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		Optional<IFabricatorRecipe> myRecipePair = getRecipe();
 		ItemStack craftResult = getResult(myRecipePair);
 		IFabricatorRecipe myRecipe = myRecipePair.orElse(null);
-		if (myRecipe != null && !craftResult.isEmpty() && getStackInSlot(InventoryFabricator.SLOT_RESULT).isEmpty()) {
+		if (myRecipe != null && !craftResult.isEmpty() && getItem(InventoryFabricator.SLOT_RESULT).isEmpty()) {
 			FluidStack liquid = myRecipe.getLiquid();
 
 			// Remove resources
@@ -211,15 +211,15 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 					moltenTank.drain(liquid.getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
 					// Damage plan
-					if (!getStackInSlot(InventoryFabricator.SLOT_PLAN).isEmpty()) {
-						Item planItem = getStackInSlot(InventoryFabricator.SLOT_PLAN).getItem();
+					if (!getItem(InventoryFabricator.SLOT_PLAN).isEmpty()) {
+						Item planItem = getItem(InventoryFabricator.SLOT_PLAN).getItem();
 						if (planItem instanceof ICraftingPlan) {
-							ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(getStackInSlot(InventoryFabricator.SLOT_PLAN), craftResult);
-							setInventorySlotContents(InventoryFabricator.SLOT_PLAN, planUsed);
+							ItemStack planUsed = ((ICraftingPlan) planItem).planUsed(getItem(InventoryFabricator.SLOT_PLAN), craftResult);
+							setItem(InventoryFabricator.SLOT_PLAN, planUsed);
 						}
 					}
 
-					setInventorySlotContents(InventoryFabricator.SLOT_RESULT, craftResult);
+					setItem(InventoryFabricator.SLOT_RESULT, craftResult);
 				}
 			}
 		}
@@ -236,8 +236,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		boolean hasLiquidResources = true;
 		boolean hasResources = true;
 
-		ItemStack plan = getStackInSlot(InventoryFabricator.SLOT_PLAN);
-		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(world.getRecipeManager(), world, moltenTank.getFluid(), plan, craftingInventory);
+		ItemStack plan = getItem(InventoryFabricator.SLOT_PLAN);
+		Optional<IFabricatorRecipe> recipePair = RecipeManagers.fabricatorManager.findMatchingRecipe(level.getRecipeManager(), level, moltenTank.getFluid(), plan, craftingInventory);
 		if (recipePair.isPresent()) {
 			IFabricatorRecipe recipe = recipePair.orElse(null);
 			hasResources = removeFromInventory(recipe, false);
@@ -245,7 +245,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
 		} else {
-			IFabricatorSmeltingRecipe smelting = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(world.getRecipeManager(), getStackInSlot(InventoryFabricator.SLOT_METAL));
+			IFabricatorSmeltingRecipe smelting = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(level.getRecipeManager(), getItem(InventoryFabricator.SLOT_METAL));
 			hasRecipe = smelting != null;
 		}
 
@@ -262,8 +262,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	private int getMeltingPoint() {
-		if (!this.getStackInSlot(InventoryFabricator.SLOT_METAL).isEmpty()) {
-			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getWorld().getRecipeManager(), this.getStackInSlot(InventoryFabricator.SLOT_METAL));
+		if (!this.getItem(InventoryFabricator.SLOT_METAL).isEmpty()) {
+			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), this.getItem(InventoryFabricator.SLOT_METAL));
 			if (smelt != null) {
 				return smelt.getMeltingPoint();
 			}
@@ -294,8 +294,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendWindowProperty(container, 0, heat);
-		iCrafting.sendWindowProperty(container, 1, getMeltingPoint());
+		iCrafting.setContainerData(container, 0, heat);
+		iCrafting.setContainerData(container, 1, getMeltingPoint());
 	}
 
 	/**

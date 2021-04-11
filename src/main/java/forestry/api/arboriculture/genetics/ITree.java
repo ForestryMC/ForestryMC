@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
@@ -22,12 +23,12 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
-
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.products.IProductList;
+
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
 
 public interface ITree extends IIndividual, ITreeGenData {
 
@@ -83,7 +84,7 @@ public interface ITree extends IIndividual, ITreeGenData {
 	@Override
 	int getGirth();
 
-	Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed);
+	Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed);
 
 	@Override
 	ITree copy();

@@ -27,15 +27,15 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", container, inventory, title);
 
 		this.tile = container.getTile();
-		this.ySize = 218;
+		this.imageHeight = 218;
 		this.widgetManager.add(new TankWidget(this.widgetManager, 150, 17, 0));
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 		int progressScaled = tile.getProgressScaled(16);
-		blit(transform, guiLeft + 98, guiTop + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
+		blit(transform, leftPos + 98, topPos + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);
 	}
 
 	@Override

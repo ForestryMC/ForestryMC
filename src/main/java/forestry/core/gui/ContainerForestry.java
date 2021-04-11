@@ -70,7 +70,7 @@ public abstract class ContainerForestry extends Container {
 	//	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
 		if (!canAccess(player)) {
 			return ItemStack.EMPTY;
 		}
@@ -93,7 +93,7 @@ public abstract class ContainerForestry extends Container {
 		}
 
 		transferCount = 0;
-		return super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
+		return super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
 	public Slot getForestrySlot(int slot) {
@@ -101,14 +101,14 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	@Override
-	public final ItemStack transferStackInSlot(PlayerEntity player, int slotIndex) {
+	public final ItemStack quickMoveStack(PlayerEntity player, int slotIndex) {
 		if (!canAccess(player)) {
 			return ItemStack.EMPTY;
 		}
 
 		if (transferCount < 64) {
 			transferCount++;
-			return SlotUtil.transferStackInSlot(inventorySlots, player, slotIndex);
+			return SlotUtil.transferStackInSlot(slots, player, slotIndex);
 		}
 		return ItemStack.EMPTY;
 	}
@@ -116,7 +116,7 @@ public abstract class ContainerForestry extends Container {
 	protected abstract boolean canAccess(PlayerEntity player);
 
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
-		for (IContainerListener listener : listeners) {
+		for (IContainerListener listener : containerListeners) {
 			if (listener instanceof PlayerEntity) {
 				NetworkUtil.sendToPlayer(packet, (PlayerEntity) listener);
 			}

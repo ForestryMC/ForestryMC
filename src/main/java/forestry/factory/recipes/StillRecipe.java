@@ -64,16 +64,16 @@ public class StillRecipe implements IStillRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<StillRecipe> {
 
 		@Override
-		public StillRecipe read(ResourceLocation recipeId, JsonObject json) {
-			int timePerUnit = JSONUtils.getInt(json, "time");
-			FluidStack input = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "input"));
-			FluidStack output = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "output"));
+		public StillRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			int timePerUnit = JSONUtils.getAsInt(json, "time");
+			FluidStack input = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "input"));
+			FluidStack output = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "output"));
 
 			return new StillRecipe(recipeId, timePerUnit, input, output);
 		}
 
 		@Override
-		public StillRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+		public StillRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			int timePerUnit = buffer.readVarInt();
 			FluidStack input = FluidStack.readFromPacket(buffer);
 			FluidStack output = FluidStack.readFromPacket(buffer);
@@ -82,7 +82,7 @@ public class StillRecipe implements IStillRecipe {
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, StillRecipe recipe) {
+		public void toNetwork(PacketBuffer buffer, StillRecipe recipe) {
 			buffer.writeVarInt(recipe.timePerUnit);
 			recipe.input.writeToPacket(buffer);
 			recipe.output.writeToPacket(buffer);

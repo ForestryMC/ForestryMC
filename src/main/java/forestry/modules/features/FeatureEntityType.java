@@ -43,7 +43,7 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 
 	@Override
 	public EntityType.Builder<T> getEntityTypeConstructor() {
-		return consumer.apply(EntityType.Builder.create(factory, classification));
+		return consumer.apply(EntityType.Builder.of(factory, classification));
 	}
 
 	@Override

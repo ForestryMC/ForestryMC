@@ -44,20 +44,20 @@ public abstract class ContainerLiquidTanks<T extends TileEntity & ILiquidTankTil
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		tile.getTankManager().sendTankUpdate(this, listeners);
+	public void broadcastChanges() {
+		super.broadcastChanges();
+		tile.getTankManager().sendTankUpdate(this, containerListeners);
 	}
 
 	@Override
-	public void addListener(IContainerListener crafting) {
-		super.addListener(crafting);
+	public void addSlotListener(IContainerListener crafting) {
+		super.addSlotListener(crafting);
 		tile.getTankManager().containerAdded(this, crafting);
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity PlayerEntity) {
-		super.onContainerClosed(PlayerEntity);
+	public void removed(PlayerEntity PlayerEntity) {
+		super.removed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
 	}
 

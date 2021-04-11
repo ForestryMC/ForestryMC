@@ -16,6 +16,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
@@ -28,24 +29,25 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import genetics.commands.SpeciesNotFoundException;
 import forestry.core.utils.BlockUtil;
+import forestry.core.utils.WorldUtils;
 import forestry.core.worldgen.FeatureBase;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
+import genetics.commands.SpeciesNotFoundException;
 import genetics.utils.AlleleUtils;
 
 public final class TreeGenHelper {
 
 	public static Feature<NoFeatureConfig> getWorldGen(ResourceLocation treeName, PlayerEntity player, BlockPos pos) throws SpeciesNotFoundException {
 		IGenome treeGenome = getTreeGenome(treeName);
-		ITree tree = TreeManager.treeRoot.getTree(player.world, treeGenome);
-		return tree.getTreeGenerator(player.world, pos, true);
+		ITree tree = TreeManager.treeRoot.getTree(player.level, treeGenome);
+		return tree.getTreeGenerator(WorldUtils.asServer(player.level), pos, true);
 	}
 
 	public static <FC extends IFeatureConfig> boolean generateTree(Feature<FC> feature, ChunkGenerator generator, World world, BlockPos pos, FC config) {
-		if (pos.getY() > 0 && world.isAirBlock(pos.down())) {
+		if (pos.getY() > 0 && world.isEmptyBlock(pos.below())) {
 			pos = BlockUtil.getNextSolidDownPos(world, pos);
 		} else {
 			pos = BlockUtil.getNextReplaceableUpPos(world, pos);
@@ -57,24 +59,23 @@ public final class TreeGenHelper {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (feature instanceof FeatureBase) {
-				return ((FeatureBase) feature).place(world, world.rand, pos, true);
+				return ((FeatureBase) feature).place(world, world.random, pos, true);
 			} else {
-				return feature.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), generator, world.rand, pos, config);
+				return feature.place((ServerWorld) world, generator, world.random, pos, config);
 			}
 		}
 		return false;
 	}
 
-	public static boolean generateTree(ITree tree, World world, BlockPos pos) {
+	public static boolean generateTree(ITree tree, ISeedReader world, BlockPos pos) {
 		Feature<NoFeatureConfig> gen = tree.getTreeGenerator(world, pos, true);
-		ChunkGenerator generator = ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator();
 
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canPlaceTree(blockState, world, pos)) {
 			if (gen instanceof FeatureBase) {
-				return ((FeatureBase) gen).place(world, world.rand, pos, true);
+				return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
 			} else {
-                return gen.func_230362_a_((ServerWorld) world, ((ServerWorld) world).func_241112_a_(), ((ServerChunkProvider) world.getChunkProvider()).getChunkGenerator(), world.rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
+				return gen.place((ServerWorld) world, ((ServerChunkProvider) world.getChunkSource()).getGenerator(), world.getRandom(), pos, IFeatureConfig.NONE);
 			}
 		}
 		return false;

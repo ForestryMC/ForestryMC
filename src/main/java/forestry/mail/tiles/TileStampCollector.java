@@ -41,12 +41,12 @@ public class TileStampCollector extends TileBase implements IInventory {
 		ItemStack stamp = null;
 
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER).isEmpty()) {
-			stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(1);
+		if (inventory.getItem(InventoryStampCollector.SLOT_FILTER).isEmpty()) {
+			stamp = PostManager.postRegistry.getPostOffice((ServerWorld) level).getAnyStamp(1);
 		} else {
-			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
+			ItemStack filter = inventory.getItem(InventoryStampCollector.SLOT_FILTER);
 			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) world).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+				stamp = PostManager.postRegistry.getPostOffice((ServerWorld) level).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
 			}
 		}
 

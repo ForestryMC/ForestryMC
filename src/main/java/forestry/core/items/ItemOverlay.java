@@ -33,20 +33,20 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
 		super((new Item.Properties())
-			.group(tab)
-			.group(ItemGroupForestry.tabForestry));
+				.tab(tab)
+				.tab(ItemGroupForestry.tabForestry));
 
 		this.overlay = overlay;
 	}
 
 	@Override
-	public boolean isDamageable() {
+	public boolean canBeDepleted() {
 		return false;
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			if (Config.isDebug || !overlay.isSecret()) {
 				subItems.add(new ItemStack(this));
 			}

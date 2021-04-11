@@ -37,7 +37,7 @@ public enum EnumCircuitBoardType implements IItemSubtype {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name;
 	}
 

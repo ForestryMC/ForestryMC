@@ -78,16 +78,16 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		energyManager.read(compoundNBT);
 		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		energyManager.write(compoundNBT);
 		compoundNBT.putInt("Heating", workingTime);
 		return compoundNBT;
@@ -120,14 +120,14 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 		this.active = active;
 
-		if (world != null) {
-			if (world.isRemote) {
+		if (level != null) {
+			if (level.isClientSide) {
 				//TODO
-				BlockPos pos = getPos();
-				Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+				BlockPos pos = getBlockPos();
+				Minecraft.getInstance().levelRenderer.setSectionDirty(pos.getX(), pos.getY(), pos.getZ());
 				//				world.markForRerender(getPos());
 			} else {
-				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+				NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), worldPosition, level);
 			}
 		}
 	}

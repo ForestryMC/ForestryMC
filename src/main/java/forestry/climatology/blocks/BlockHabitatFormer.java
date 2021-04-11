@@ -33,7 +33,7 @@ import forestry.core.tiles.TileUtil;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
 	public BlockHabitatFormer() {
-		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
+		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.of(Material.METAL).strength(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
 	}
 
 	@OnlyIn(Dist.CLIENT)

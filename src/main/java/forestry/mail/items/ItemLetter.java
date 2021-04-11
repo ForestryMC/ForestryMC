@@ -48,7 +48,7 @@ public class ItemLetter extends ItemWithGui {
 		FRESH, STAMPED, OPENED, EMPTIED;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -57,7 +57,7 @@ public class ItemLetter extends ItemWithGui {
 		EMPTY, SMALL, BIG;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -67,8 +67,8 @@ public class ItemLetter extends ItemWithGui {
 
 	public ItemLetter(Size size, State state) {
 		super((new Item.Properties())
-			.group(ItemGroupForestry.tabForestry)
-			.maxStackSize(64));
+				.tab(ItemGroupForestry.tabForestry)
+				.stacksTo(64));
 		this.size = size;
 		this.state = state;
 	}
@@ -82,31 +82,31 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public String getTranslationKey() {
+	public String getDescriptionId() {
 		return "item.forestry.letter";
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		if (heldItem.getCount() == 1) {
-			return super.onItemRightClick(worldIn, playerIn, handIn);
+			return super.use(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"), Util.DUMMY_UUID);
-			return ActionResult.resultFail(heldItem);
+			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"), Util.NIL_UUID);
+			return ActionResult.fail(heldItem);
 		}
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 
 		CompoundNBT compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
 			list.add(new StringTextComponent("<")
-				.append(new TranslationTextComponent("for.gui.blank").appendString(">"))
-				.mergeStyle(TextFormatting.GRAY));
+					.append(new TranslationTextComponent("for.gui.blank").append(">"))
+					.withStyle(TextFormatting.GRAY));
 			return;
 		}
 
@@ -115,8 +115,8 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> stacks) {
-		if (isInGroup(group) && state == State.FRESH && size == Size.EMPTY) {
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
+		if (allowdedIn(group) && state == State.FRESH && size == Size.EMPTY) {
 			stacks.add(new ItemStack(this));
 		}
 	}

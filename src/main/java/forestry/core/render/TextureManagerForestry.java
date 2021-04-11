@@ -93,7 +93,7 @@ public class TextureManagerForestry implements ITextureManager {
 	public void bindGuiTextureMap() {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		ResourceLocation guiTextureMap = getGuiTextureMap();
-		textureManager.bindTexture(guiTextureMap);
+		textureManager.bind(guiTextureMap);
 	}
 
 	public void registerBlock(Block block) {

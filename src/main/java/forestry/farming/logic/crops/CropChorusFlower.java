@@ -7,13 +7,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.event.ForgeEventFactory;
-
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
 public class CropChorusFlower extends Crop {
-	private static final BlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.getDefaultState();
+	private static final BlockState BLOCK_STATE = Blocks.CHORUS_FLOWER.defaultBlockState();
 
 	public CropChorusFlower(World world, BlockPos position) {
 		super(world, position);
@@ -28,9 +26,10 @@ public class CropChorusFlower extends Crop {
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		NonNullList<ItemStack> harvested = NonNullList.create();
 		harvested.add(new ItemStack(Blocks.CHORUS_FLOWER));
-		float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, BLOCK_STATE, 0, 1.0F, false, null);
-
-		harvested.removeIf(next -> world.rand.nextFloat() > chance);
+		//TODO: Fix dropping
+		//float chance = ForgeEventFactory.fireBlockHarvesting(harvested, world, pos, BLOCK_STATE, 0, 1.0F, false, null);
+		float chance = 1.0F;
+		harvested.removeIf(next -> world.random.nextFloat() > chance);
 
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, BLOCK_STATE);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);

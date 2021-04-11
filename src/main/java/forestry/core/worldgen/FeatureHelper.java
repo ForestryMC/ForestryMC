@@ -30,7 +30,7 @@ import forestry.core.utils.VectUtil;
 public class FeatureHelper {
 
 	public static boolean addBlock(IWorld world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode) {
-		if (!world.isBlockLoaded(pos)) {
+		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
 
@@ -46,7 +46,7 @@ public class FeatureHelper {
 	 * Uses centerPos and girth of a tree to calculate the center
 	 */
 	public static void generateCylinderFromTreeStartPos(IWorld world, ITreeBlockType block, BlockPos startPos, int girth, float radius, int height, EnumReplaceMode replace) {
-		generateCylinderFromPos(world, block, startPos.add(girth / 2, 0, girth / 2), radius, height, replace);
+		generateCylinderFromPos(world, block, startPos.offset(girth / 2, 0, girth / 2), radius, height, replace);
 	}
 
 	/**
@@ -57,9 +57,9 @@ public class FeatureHelper {
 		for (int x = 0; x < radius * 2 + 1; x++) {
 			for (int y = height - 1; y >= 0; y--) { // generating top-down is faster for lighting calculations
 				for (int z = 0; z < radius * 2 + 1; z++) {
-					BlockPos position = start.add(x, y, z);
+					BlockPos position = start.offset(x, y, z);
 					Vector3i treeCenter = new Vector3i(center.getX(), position.getY(), center.getZ());
-					if (position.distanceSq(treeCenter) <= radius * radius + 0.01) {
+					if (position.distSqr(treeCenter) <= radius * radius + 0.01) {
 						Direction direction = VectUtil.direction(position, treeCenter);
 						block.setDirection(direction);
 						addBlock(world, position, block, replace);
@@ -70,7 +70,7 @@ public class FeatureHelper {
 	}
 
 	public static void generateCircleFromTreeStartPos(IWorld world, Random rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
-		generateCircle(world, rand, startPos.add(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace);
+		generateCircle(world, rand, startPos.offset(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace);
 	}
 
 	public static void generateCircle(IWorld world, Random rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
@@ -86,7 +86,7 @@ public class FeatureHelper {
 						continue;
 					}
 
-					double distance = mutablePos.setPos(x, y, z).distanceSq(center.getX(), y, center.getZ(), false);
+					double distance = mutablePos.set(x, y, z).distSqr(center.getX(), y, center.getZ(), false);
 					if ((radius - width - 0.01) * (radius - width - 0.01) < distance && distance <= (radius + 0.01) * (radius + 0.01)) {
 						addBlock(world, new BlockPos(x, y, z), block, replace);
 					}
@@ -96,7 +96,7 @@ public class FeatureHelper {
 	}
 
 	public static void generateSphereFromTreeStartPos(IWorld world, BlockPos startPos, int girth, int radius, ITreeBlockType block, EnumReplaceMode replace) {
-		generateSphere(world, startPos.add(girth / 2, 0, girth / 2), radius, block, replace);
+		generateSphere(world, startPos.offset(girth / 2, 0, girth / 2), radius, block, replace);
 	}
 
 	public static void generateSphere(IWorld world, BlockPos center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
@@ -107,7 +107,7 @@ public class FeatureHelper {
 			for (int y = start.getY() + area.getY() - 1; y >= start.getY(); y--) { // generating top-down is faster for lighting calculations
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 					//center.getDistance(x, y, z) <= radius + 0.01
-					if (center.withinDistance(mutablePos.setPos(x, y, z), radius + 0.01)) {
+					if (center.closerThan(mutablePos.set(x, y, z), radius + 0.01)) {
 						addBlock(world, mutablePos, block, replace);
 					}
 				}
@@ -140,8 +140,8 @@ public class FeatureHelper {
 		int leanZ = 0;
 
 		if (leanDirection != null) {
-			leanX = leanDirection.getXOffset();
-			leanZ = leanDirection.getZOffset();
+			leanX = leanDirection.getStepX();
+			leanZ = leanDirection.getStepZ();
 		}
 
 		for (int x = 0; x < girth; x++) {
@@ -163,12 +163,12 @@ public class FeatureHelper {
 							if (leanDirection != null) {
 								wood.setDirection(leanDirection);
 							}
-							addBlock(world, startPos.add(x + xOffset, y - 1, z + zOffset), wood, EnumReplaceMode.ALL);
+							addBlock(world, startPos.offset(x + xOffset, y - 1, z + zOffset), wood, EnumReplaceMode.ALL);
 							wood.setDirection(Direction.UP);
 						}
 					}
 
-					BlockPos pos = startPos.add(x + xOffset, y, z + zOffset);
+					BlockPos pos = startPos.offset(x + xOffset, y, z + zOffset);
 					addBlock(world, pos, wood, EnumReplaceMode.ALL);
 					addVines(world, rand, pos, vinesChance);
 
@@ -188,19 +188,19 @@ public class FeatureHelper {
 		}
 
 		if (rand.nextFloat() < chance) {
-			BlockState blockState = Blocks.VINE.getDefaultState().with(VineBlock.EAST, true);
+			BlockState blockState = Blocks.VINE.defaultBlockState().setValue(VineBlock.EAST, true);
 			addBlock(world, pos.west(), new TreeBlockType(blockState), EnumReplaceMode.AIR);
 		}
 		if (rand.nextFloat() < chance) {
-			BlockState blockState = Blocks.VINE.getDefaultState().with(VineBlock.WEST, true);
+			BlockState blockState = Blocks.VINE.defaultBlockState().setValue(VineBlock.WEST, true);
 			addBlock(world, pos.east(), new TreeBlockType(blockState), EnumReplaceMode.AIR);
 		}
 		if (rand.nextFloat() < chance) {
-			BlockState blockState = Blocks.VINE.getDefaultState().with(VineBlock.SOUTH, true);
+			BlockState blockState = Blocks.VINE.defaultBlockState().setValue(VineBlock.SOUTH, true);
 			addBlock(world, pos.north(), new TreeBlockType(blockState), EnumReplaceMode.AIR);
 		}
 		if (rand.nextFloat() < chance) {
-			BlockState blockState = Blocks.VINE.getDefaultState().with(VineBlock.NORTH, true);
+			BlockState blockState = Blocks.VINE.defaultBlockState().setValue(VineBlock.NORTH, true);
 			addBlock(world, pos.south(), new TreeBlockType(blockState), EnumReplaceMode.AIR);
 		}
 	}
@@ -214,10 +214,10 @@ public class FeatureHelper {
 						continue;
 					}
 
-					trySpawnFruitBlock(tree, world, rand, startPos.add(x + 1, y, z), replaceMode);
-					trySpawnFruitBlock(tree, world, rand, startPos.add(x - 1, y, z), replaceMode);
-					trySpawnFruitBlock(tree, world, rand, startPos.add(x, y, z + 1), replaceMode);
-					trySpawnFruitBlock(tree, world, rand, startPos.add(x, y, z - 1), replaceMode);
+					trySpawnFruitBlock(tree, world, rand, startPos.offset(x + 1, y, z), replaceMode);
+					trySpawnFruitBlock(tree, world, rand, startPos.offset(x - 1, y, z), replaceMode);
+					trySpawnFruitBlock(tree, world, rand, startPos.offset(x, y, z + 1), replaceMode);
+					trySpawnFruitBlock(tree, world, rand, startPos.offset(x, y, z - 1), replaceMode);
 				}
 			}
 		}
@@ -245,7 +245,7 @@ public class FeatureHelper {
 				int stemHeight = rand.nextInt(Math.round(height * maxHeight));
 				if (rand.nextFloat() < chance) {
 					for (int y = 0; y < stemHeight; y++) {
-						addBlock(world, startPos.add(x, y, z), wood, EnumReplaceMode.SOFT);
+						addBlock(world, startPos.offset(x, y, z), wood, EnumReplaceMode.SOFT);
 					}
 				}
 			}
@@ -263,13 +263,13 @@ public class FeatureHelper {
 
 			BlockPos branchStart = startPos;
 
-			int offsetX = branchDirection.getXOffset();
-			int offsetZ = branchDirection.getZOffset();
+			int offsetX = branchDirection.getStepX();
+			int offsetZ = branchDirection.getStepZ();
 			if (offsetX > 0) {
-				branchStart = branchStart.add(girth - 1, 0, 0);
+				branchStart = branchStart.offset(girth - 1, 0, 0);
 			}
 			if (offsetZ > 0) {
-				branchStart = branchStart.add(0, 0, girth - 1);
+				branchStart = branchStart.offset(0, 0, girth - 1);
 			}
 
 			for (int i = 0; i < count; i++) {
@@ -310,7 +310,7 @@ public class FeatureHelper {
 						}
 					}
 
-					BlockPos pos = branchStart.add(x, y, z);
+					BlockPos pos = branchStart.offset(x, y, z);
 					if (addBlock(world, pos, wood, EnumReplaceMode.SOFT)) {
 						branchEnd = pos;
 					} else {
@@ -331,7 +331,7 @@ public class FeatureHelper {
 		AIR {
 			@Override
 			public boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
-				return world.isAirBlock(pos);
+				return world.isEmptyBlock(pos);
 			}
 		},
 		ALL {
@@ -345,7 +345,7 @@ public class FeatureHelper {
 			public boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
 				if (world instanceof World) {
 					BlockItemUseContext context = new DirectionalPlaceContext((World) world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP);
-					return blockState.isReplaceable(context);
+					return blockState.canBeReplaced(context);
 				}
 				return blockState.getMaterial().isReplaceable();
 			}

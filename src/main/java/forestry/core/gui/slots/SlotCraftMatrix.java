@@ -31,9 +31,9 @@ public class SlotCraftMatrix extends SlotForestry {
 	}
 
 	@Override
-	public void onSlotChanged() {
-		super.onSlotChanged();
-		eventHandler.onCraftMatrixChanged(inventory, slot);
+	public void setChanged() {
+		super.setChanged();
+		eventHandler.onCraftMatrixChanged(container, slot);
 	}
 
 }

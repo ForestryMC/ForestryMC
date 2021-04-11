@@ -40,8 +40,8 @@ public class ItemArmorNaturalist extends ArmorItem {
 
 	public ItemArmorNaturalist() {
 		super(ArmorMaterial.LEATHER, EquipmentSlotType.HEAD, (new Item.Properties())
-			.maxDamage(100)
-			.group(ItemGroupForestry.tabForestry));
+				.durability(100)
+				.tab(ItemGroupForestry.tabForestry));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ItemArmorNaturalist extends ArmorItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 

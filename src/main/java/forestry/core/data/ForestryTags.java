@@ -23,15 +23,15 @@ public class ForestryTags {
 		public static final ITag.INamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
 
 		private static ITag.INamedTag<Block> tag(String name) {
-			return BlockTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
+			return BlockTags.bind(Constants.MOD_ID + ":" + name);
 		}
 
 		private static ITag.INamedTag<Block> forgeTag(String name) {
-			return BlockTags.makeWrapperTag("forge:" + name);
+			return BlockTags.bind("forge:" + name);
 		}
 
 		private static ITag.INamedTag<Block> vanillaTag(String name) {
-			return BlockTags.makeWrapperTag(name);
+			return BlockTags.bind(name);
 		}
 
 		private Blocks() {
@@ -75,15 +75,15 @@ public class ForestryTags {
 		public static final ITag.INamedTag<Item> FRUITS = tag("forestry_fruits");
 
 		private static ITag.INamedTag<Item> tag(String name) {
-			return ItemTags.makeWrapperTag(Constants.MOD_ID + ":" + name);
+			return ItemTags.bind(Constants.MOD_ID + ":" + name);
 		}
 
 		private static ITag.INamedTag<Item> forgeTag(String name) {
-			return ItemTags.makeWrapperTag("forge:" + name);
+			return ItemTags.bind("forge:" + name);
 		}
 
 		private static ITag.INamedTag<Item> vanillaTag(String name) {
-			return ItemTags.makeWrapperTag(name);
+			return ItemTags.bind(name);
 		}
 
 		private Items() {

@@ -81,12 +81,12 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		TextureManager manager = this.minecraft.textureManager;
 
-		manager.bindTexture(TEXTURE);
+		manager.bind(TEXTURE);
 		blit(transform, guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
 
 		super.render(transform, mouseX, mouseY, partialTicks);
 
-		boolean unicode = minecraft.fontRenderer.getBidiFlag();
+		boolean unicode = minecraft.font.isBidirectional();
 		//minecraft.fontRenderer.setBidiFlag(true);
 		//TODO textcomponent
 		//drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
@@ -103,11 +103,11 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		super.drawTooltips(transform, mouseY, mouseX);
 		PlayerInventory playerInv = minecraft.player.inventory;
 
-		if (playerInv.getItemStack().isEmpty()) {
+		if (playerInv.getCarried().isEmpty()) {
 			List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
-				MainWindow mainWindow = getMC().getMainWindow();
-				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getScaledWidth(), mainWindow.getScaledHeight(), -1, getMC().fontRenderer);
+				MainWindow mainWindow = getMC().getWindow();
+				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getGuiScaledWidth(), mainWindow.getGuiScaledHeight(), -1, getMC().font);
 			}
 		}
 	}

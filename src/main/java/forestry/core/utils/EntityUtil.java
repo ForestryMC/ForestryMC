@@ -34,13 +34,13 @@ public abstract class EntityUtil {
 	}
 
 	public static <T extends MobEntity> T spawnEntity(World world, T living, double x, double y, double z) {
-		living.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0f), 0.0f);
-		living.rotationYawHead = living.rotationYaw;
-		living.renderYawOffset = living.rotationYaw;
-		DifficultyInstance diff = world.getDifficultyForLocation(new BlockPos(x, y, z));
+		living.moveTo(x, y, z, MathHelper.wrapDegrees(world.random.nextFloat() * 360.0f), 0.0f);
+		living.yHeadRot = living.yRot;
+		living.yBodyRot = living.yRot;
+		DifficultyInstance diff = world.getCurrentDifficultyAt(new BlockPos(x, y, z));
 		//TODO - check SpawnReason
-		living.onInitialSpawn(world, diff, SpawnReason.MOB_SUMMONED, null, null);
-		world.addEntity(living);
+		living.finalizeSpawn(WorldUtils.asServer(world), diff, SpawnReason.MOB_SUMMONED, null, null);
+		world.addFreshEntity(living);
 		//TODO - right sound?
 		living.playAmbientSound();
 		return living;

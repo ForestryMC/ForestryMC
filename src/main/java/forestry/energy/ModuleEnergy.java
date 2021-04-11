@@ -41,10 +41,10 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(EnergyContainers.ENGINE_ELECTRIC.containerType(), GuiEngineElectric::new);
-		ScreenManager.registerFactory(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
-		ScreenManager.registerFactory(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
-		ScreenManager.registerFactory(EnergyContainers.GENERATOR.containerType(), GuiGenerator::new);
+		ScreenManager.register(EnergyContainers.ENGINE_ELECTRIC.containerType(), GuiEngineElectric::new);
+		ScreenManager.register(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
+		ScreenManager.register(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
+		ScreenManager.register(EnergyContainers.GENERATOR.containerType(), GuiGenerator::new);
 	}
 
 }

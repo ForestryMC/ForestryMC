@@ -50,7 +50,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		this.liquid = liquid;
 		this.box = box;
 		this.recipe = recipe;
-		this.result = result != null ? result : recipe.getRecipeOutput();
+		this.result = result != null ? result : recipe.getResultItem();
 	}
 
 	@Override
@@ -87,29 +87,29 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CarpenterRecipe> {
 
 		@Override
-		public CarpenterRecipe read(ResourceLocation recipeId, JsonObject json) {
-			int packagingTime = JSONUtils.getInt(json, "time");
-			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid")) : null;
+		public CarpenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			int packagingTime = JSONUtils.getAsInt(json, "time");
+			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid")) : null;
 			Ingredient box = RecipeSerializers.deserialize(json.get("box"));
-			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.deserializeRecipe(recipeId, JSONUtils.getJsonObject(json, "recipe"));
-			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getJsonObject(json, "result")) : internal.getRecipeOutput();
+			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.fromJson(recipeId, JSONUtils.getAsJsonObject(json, "recipe"));
+			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "result")) : internal.getResultItem();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
 		}
 
 		@Override
-		public CarpenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+		public CarpenterRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			int packagingTime = buffer.readVarInt();
 			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : null;
-			Ingredient box = Ingredient.read(buffer);
-			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.func_218772_c(buffer);
-			ItemStack result = buffer.readItemStack();
+			Ingredient box = Ingredient.fromNetwork(buffer);
+			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.fromNetwork(buffer);
+			ItemStack result = buffer.readItem();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, CarpenterRecipe recipe) {
+		public void toNetwork(PacketBuffer buffer, CarpenterRecipe recipe) {
 			buffer.writeVarInt(recipe.packagingTime);
 
 			if (recipe.liquid != null) {
@@ -119,9 +119,9 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 				buffer.writeBoolean(false);
 			}
 
-			recipe.box.write(buffer);
-			SUpdateRecipesPacket.func_218771_a(recipe.recipe, buffer);
-			buffer.writeItemStack(recipe.result);
+			recipe.box.toNetwork(buffer);
+			SUpdateRecipesPacket.toNetwork(recipe.recipe, buffer);
+			buffer.writeItem(recipe.result);
 		}
 	}
 }

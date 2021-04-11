@@ -49,14 +49,14 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Constructors */
 	public GuiDatabase(ContainerDatabase container, PlayerInventory inv, ITextComponent title) {
-		super(Constants.TEXTURE_PATH_GUI + "/database_inventory.png", container, inv, container.getTile(), 7, 140, 20, true, container.getTile().getInternalInventory().getSizeInventory(), 0);
+		super(Constants.TEXTURE_PATH_GUI + "/database_inventory.png", container, inv, container.getTile(), 7, 140, 20, true, container.getTile().getInternalInventory().getContainerSize(), 0);
 		this.tile = container.getTile();
 
 		slots = new ArrayList<>();
-		xSize = 218;
-		ySize = 202;
+		imageWidth = 218;
+		imageHeight = 202;
 		//Start at index 36, because all slots before 36 are player inventory slots
-		Iterator<Slot> slotIterator = container.inventorySlots.listIterator(ContainerForestry.PLAYER_INV_SLOTS);
+		Iterator<Slot> slotIterator = container.slots.listIterator(ContainerForestry.PLAYER_INV_SLOTS);
 		while (slotIterator.hasNext()) {
 			Slot slot = slotIterator.next();
 			if (slot instanceof SlotFilteredInventory) {
@@ -70,7 +70,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 			widgetManager.add(slot);
 		}
 		widgetManager.add(this.scrollBar = new WidgetScrollBar(widgetManager, 196, 19, 12, 90, SCROLLBAR_SLIDER));
-		this.scrollBar.setParameters(this, 0, tile.getSizeInventory() / 4 - 6, 1);
+		this.scrollBar.setParameters(this, 0, tile.getContainerSize() / 4 - 6, 1);
 		analyzer.init();
 		analyzer.setSelectedSlot(-1);
 	}
@@ -109,8 +109,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 			sorted.clear();
 			List<DatabaseItem> items = new ArrayList<>();
 			boolean firstEmpty = false;
-			for (int invIndex = 0; invIndex < tile.getSizeInventory(); invIndex++) {
-				ItemStack stack = tile.getStackInSlot(invIndex).copy();
+			for (int invIndex = 0; invIndex < tile.getContainerSize(); invIndex++) {
+				ItemStack stack = tile.getItem(invIndex).copy();
 				if (!stack.isEmpty()) {
 					items.add(new DatabaseItem(stack, invIndex));
 					continue;
@@ -145,14 +145,14 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		int slotStart = currentRow * 4;
 		//The inventory index of the last slot.
 		int slotEnd = (currentRow + 6) * 4;
-		if (slotEnd > tile.getSizeInventory()) {
-			slotEnd = tile.getSizeInventory();
+		if (slotEnd > tile.getContainerSize()) {
+			slotEnd = tile.getContainerSize();
 		}
 		//The row of the first slot
 		byte startRow = (byte) (currentRow % 2);
 		//The index of the empty slot in the list.
 		int emptySlot = sorted.size() - 1;
-		for (int invIndex = 0; invIndex < tile.getSizeInventory(); invIndex++) {
+		for (int invIndex = 0; invIndex < tile.getContainerSize(); invIndex++) {
 			if (invIndex >= slotStart && invIndex < slotEnd) {
 				int x = invIndex % 4;
 				int y = invIndex / 4 - currentRow;
@@ -192,19 +192,19 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	public void init() {
 		super.init();
 
-		this.searchField = new TextFieldWidget(this.minecraft.fontRenderer, this.guiLeft + 101, this.guiTop + 6, 80, this.minecraft.fontRenderer.FONT_HEIGHT, null);
-		this.searchField.setMaxStringLength(50);
-		this.searchField.setEnableBackgroundDrawing(false);
+		this.searchField = new TextFieldWidget(this.minecraft.font, this.leftPos + 101, this.topPos + 6, 80, this.minecraft.font.lineHeight, null);
+		this.searchField.setMaxLength(50);
+		this.searchField.setBordered(false);
 		this.searchField.setTextColor(16777215);
 
-		addButton(new GuiDatabaseButton<>(guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
+		addButton(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
 		updateViewedItems();
 	}
 
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-		String searchText = searchField != null ? searchField.getText() : "";
+		String searchText = searchField != null ? searchField.getValue() : "";
 		updateItems(searchText);
 		super.render(transform, mouseX, mouseY, partialTicks);
 	}
@@ -237,8 +237,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		if (searchField != null) {
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -252,7 +252,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	protected void drawBackground(MatrixStack transform) {
 		bindTexture(textureFile);
 
-		blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
+		blit(transform, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 
 	@Override
@@ -317,7 +317,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	@Override
 	public boolean isFocused(int mouseX, int mouseY) {
-		return isPointInRegion(0, 0, xSize, ySize, mouseX + guiLeft, mouseY + guiTop);
+		return isHovering(0, 0, imageWidth, imageHeight, mouseX + leftPos, mouseY + topPos);
 	}
 
 	/* Methods - Implement ISlotChangeWatcher */

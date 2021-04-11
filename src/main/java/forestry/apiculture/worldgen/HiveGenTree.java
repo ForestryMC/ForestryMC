@@ -20,14 +20,14 @@ public class HiveGenTree extends HiveGen {
 
 	@Override
 	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-		BlockPos posAbove = pos.up();
+		BlockPos posAbove = pos.above();
 		BlockState blockStateAbove = world.getBlockState(posAbove);
 		if (!isTreeBlock(blockStateAbove, world, posAbove)) {
 			return false;
 		}
 
 		// not a good location if right on top of something
-		BlockPos posBelow = pos.down();
+		BlockPos posBelow = pos.below();
 		BlockState blockStateBelow = world.getBlockState(posBelow);
 		return canReplace(blockStateBelow, world, posBelow);
 	}
@@ -35,7 +35,7 @@ public class HiveGenTree extends HiveGen {
 	@Override
 	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
 		// get top leaf block
-		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).down();
+		final BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).below();
 		if (topPos.getY() <= 0) {
 			return null;
 		}
@@ -47,13 +47,13 @@ public class HiveGenTree extends HiveGen {
 
 		// get to the bottom of the leaves
 		final BlockPos.Mutable pos = new BlockPos.Mutable();
-		pos.setPos(topPos);
+		pos.set(topPos);
 		do {
 			pos.move(Direction.DOWN);
 			blockState = world.getBlockState(pos);
 		} while (isTreeBlock(blockState, world, pos));
 
-		return pos.toImmutable();
+		return pos.immutable();
 	}
 
 }

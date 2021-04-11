@@ -32,13 +32,13 @@ public class ClimateHandlerClient {
 			return;
 		}
 		PlayerEntity player = event.player;
-		World world = player.world;
-		BlockPos pos = player.getPosition();
+		World world = player.level;
+		BlockPos pos = player.blockPosition();
 		if (currentState.isPresent()) {
-			int x = world.rand.nextInt(11) - 5;
-			int y = world.rand.nextInt(5) - 1;
-			int z = world.rand.nextInt(11) - 5;
-			ParticleRender.addClimateParticles(world, pos.add(x, y, z), world.rand, currentState.getTemperatureEnum(), currentState.getHumidityEnum());
+			int x = world.random.nextInt(11) - 5;
+			int y = world.random.nextInt(5) - 1;
+			int z = world.random.nextInt(11) - 5;
+			ParticleRender.addClimateParticles(world, pos.offset(x, y, z), world.random, currentState.getTemperatureEnum(), currentState.getHumidityEnum());
 		}
 	}
 }

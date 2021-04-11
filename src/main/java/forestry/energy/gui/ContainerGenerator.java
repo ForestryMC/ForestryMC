@@ -25,7 +25,7 @@ public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 
 	//TODO dedupe
 	public static ContainerGenerator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEuGenerator tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEuGenerator.class);
+		TileEuGenerator tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileEuGenerator.class);
 		return new ContainerGenerator(windowId, inv, tile);
 	}
 
@@ -36,8 +36,8 @@ public class ContainerGenerator extends ContainerLiquidTanks<TileEuGenerator> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}

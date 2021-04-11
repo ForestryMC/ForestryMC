@@ -29,7 +29,7 @@ public class FermenterRecipeMaker {
 	}
 
 	private static void addWrapperToList(IStackHelper stackHelper, IFermenterRecipe recipe, Ingredient resource, List<FermenterRecipeWrapper> recipes) {
-		Stream<ItemStack> itemStacks = Arrays.stream(resource.getMatchingStacks());
+		Stream<ItemStack> itemStacks = Arrays.stream(resource.getItems());
 		itemStacks.forEach(stack -> recipes.add(new FermenterRecipeWrapper(recipe, stack)));
 	}
 }

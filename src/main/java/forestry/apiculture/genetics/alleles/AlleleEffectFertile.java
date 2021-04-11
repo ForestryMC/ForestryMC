@@ -21,10 +21,10 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.common.IPlantable;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectFertile extends AlleleEffectThrottled {
 
@@ -41,18 +41,18 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		BlockPos housingCoordinates = housing.getCoordinates();
 		Vector3i area = getModifiedArea(genome, housing);
 
-		int blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-		int blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+		int blockX = getRandomOffset(world.random, housingCoordinates.getX(), area.getX());
+		int blockZ = getRandomOffset(world.random, housingCoordinates.getZ(), area.getZ());
 		int blockMaxY = housingCoordinates.getY() + area.getY() / 2 + 1;
 		int blockMinY = housingCoordinates.getY() - area.getY() / 2 - 1;
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			if (world.getChunkProvider().getChunk(blockX >> 4, blockZ >> 4, false) != null) {
+			if (world.getChunkSource().getChunk(blockX >> 4, blockZ >> 4, false) != null) {
 				if (tryTickColumn(world, blockX, blockZ, blockMaxY, blockMinY)) {
 					break;
 				}
-				blockX = getRandomOffset(world.rand, housingCoordinates.getX(), area.getX());
-				blockZ = getRandomOffset(world.rand, housingCoordinates.getZ(), area.getZ());
+				blockX = getRandomOffset(world.random, housingCoordinates.getX(), area.getX());
+				blockZ = getRandomOffset(world.random, housingCoordinates.getZ(), area.getZ());
 			}
 		}
 
@@ -67,8 +67,8 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		for (int y = maxY; y >= minY; --y) {
 			BlockState state = world.getBlockState(new BlockPos(x, y, z));
 			Block block = state.getBlock();
-			if (block.ticksRandomly(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
-				world.getPendingBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
+			if (block.isRandomlyTicking(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+				world.getBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
 				return true;
 			}
 		}

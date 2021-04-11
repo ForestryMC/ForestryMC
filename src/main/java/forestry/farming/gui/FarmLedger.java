@@ -53,7 +53,7 @@ public class FarmLedger extends Ledger {
 
 		// Draw icon
 		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("item/water_bucket");
-		drawSprite(transform, textureAtlasSprite, xIcon, y, AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+		drawSprite(transform, textureAtlasSprite, xIcon, y, AtlasTexture.LOCATION_BLOCKS);
 		y += 4;
 
 		if (!isFullyOpened()) {

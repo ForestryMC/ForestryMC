@@ -24,13 +24,13 @@ public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<
 	@Override
 	public ItemStack createStack(I individual) {
 		ItemStack itemStack = stack.get();
-		itemStack.setTagInfo(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
+		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
 		return itemStack;
 	}
 
 	@Override
 	public Optional<I> createIndividual(ItemStack itemStack) {
-		CompoundNBT tagCompound = itemStack.getChildTag(INDIVIDUAL_KEY);
+		CompoundNBT tagCompound = itemStack.getTagElement(INDIVIDUAL_KEY);
 		if (tagCompound == null || !optionalRoot.isPresent()) {
 			return Optional.empty();
 		}
@@ -40,17 +40,17 @@ public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<
 
 	@Override
 	public boolean setIndividual(ItemStack itemStack, I individual) {
-		itemStack.setTagInfo(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
+		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
 		return true;
 	}
 
 	@Override
 	public void setIndividualData(ItemStack itemStack, CompoundNBT compound) {
-		itemStack.setTagInfo(INDIVIDUAL_KEY, compound);
+		itemStack.addTagElement(INDIVIDUAL_KEY, compound);
 	}
 
 	@Override
 	public CompoundNBT getIndividualData(ItemStack itemStack) {
-		return itemStack.getChildTag(INDIVIDUAL_KEY);
+		return itemStack.getTagElement(INDIVIDUAL_KEY);
 	}
 }

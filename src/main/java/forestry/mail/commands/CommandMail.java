@@ -52,8 +52,8 @@ public class CommandMail {
 		}
 
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
-			ServerPlayerEntity player = context.getSource().asPlayer();
-			ServerWorld world = (ServerWorld) player.world;
+			ServerPlayerEntity player = context.getSource().getPlayerOrException();
+			ServerWorld world = (ServerWorld) player.level;
 			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(world).getActiveTradeStations(world).values()) {
 				CommandHelpers.sendChatMessage(context.getSource(), makeTradeListEntry(trade.getTradeInfo()));
 			}
@@ -66,13 +66,13 @@ public class CommandMail {
 
 			String tradegood = "[ ? ]";
 			if (!info.getTradegood().isEmpty()) {
-				tradegood = info.getTradegood().getCount() + "x" + info.getTradegood().getDisplayName();
+				tradegood = info.getTradegood().getCount() + "x" + info.getTradegood().getHoverName();
 			}
 			String demand = "[ ? ]";
 			if (!info.getRequired().isEmpty()) {
 				demand = "";
 				for (ItemStack dmd : info.getRequired()) {
-					demand = StringUtil.append(", ", demand, dmd.getCount() + "x" + dmd.getDisplayName());
+					demand = StringUtil.append(", ", demand, dmd.getCount() + "x" + dmd.getHoverName());
 				}
 			}
 
@@ -86,23 +86,23 @@ public class CommandMail {
         }
 
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
-            ServerPlayerEntity player = context.getSource().asPlayer();
+			ServerPlayerEntity player = context.getSource().getPlayerOrException();
 
-			World world = player.getEntityWorld();
+			World world = player.getCommandSenderWorld();
 
 			MailAddress address = new MailAddress(player.getGameProfile());
 			ITradeStation trade = PostManager.postRegistry.getTradeStation((ServerWorld) world, address);
 
 			if (trade == null) {
 				Style red = Style.EMPTY;
-				red.setFormatting(TextFormatting.RED);
+				red.withColor(TextFormatting.RED);
 				CommandHelpers.sendLocalizedChatMessage(context.getSource(), red, "for.chat.command.forestry.mail.virtualize.no_tradestation", player.getDisplayName());
 				return 0;
 			}
 
 			trade.setVirtual(!trade.isVirtual());
 			Style green = Style.EMPTY;
-			green.setFormatting(TextFormatting.GREEN);
+			green.withColor(TextFormatting.GREEN);
 			CommandHelpers.sendLocalizedChatMessage(context.getSource(), green, "for.chat.command.forestry.mail.virtualize.set", trade.getAddress().getName(), trade.isVirtual());
 
 			return 1;

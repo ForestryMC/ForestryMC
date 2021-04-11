@@ -39,20 +39,20 @@ import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
 public class BlockCocoon extends Block {
-	public static final VoxelShape BOUNDING_BOX = Block.makeCuboidShape(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
+	public static final VoxelShape BOUNDING_BOX = Block.box(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
 	public BlockCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-			.tickRandomly()
-			.sound(SoundType.GROUND));
+		super(Block.Properties.of(MaterialCocoon.INSTANCE)
+				.randomTicks()
+				.sound(SoundType.GRAVEL));
 		//		setCreativeTab(null);
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-			.with(AlleleButterflyCocoon.AGE, 0));
+		registerDefaultState(this.getStateDefinition().any().setValue(COCOON, ButterflyAlleles.cocoonDefault)
+				.setValue(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
 
@@ -104,11 +104,11 @@ public class BlockCocoon extends Block {
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
 			return state;
 		}
-		return Blocks.AIR.getDefaultState();
+		return Blocks.AIR.defaultBlockState();
 	}
 
 	@Override

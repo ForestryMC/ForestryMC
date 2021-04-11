@@ -137,13 +137,13 @@ public abstract class InventoryUtil {
 	}
 
 	private static boolean consumeItems(IInventory inventory, int[] consumeStacks, @Nullable PlayerEntity player, boolean stowContainer) {
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
 			int count = consumeStacks[i];
 			if (count <= 0) {
 				continue;
 			}
-			ItemStack oldStack = inventory.getStackInSlot(i);
-			ItemStack removed = inventory.decrStackSize(i, count);
+			ItemStack oldStack = inventory.getItem(i);
+			ItemStack removed = inventory.removeItem(i, count);
 
 			if (stowContainer && oldStack.getItem().hasContainerItem(oldStack)) {
 				stowContainerItem(removed, inventory, i, player);
@@ -205,11 +205,11 @@ public abstract class InventoryUtil {
 	 * Private Helper for removeSetsFromInventory. Assumes removal is possible.
 	 */
 	private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, @Nullable PlayerEntity player, boolean stowContainer, boolean craftingTools) {
-		for (int j = 0; j < inventory.getSizeInventory(); j++) {
-			ItemStack stackInSlot = inventory.getStackInSlot(j);
+		for (int j = 0; j < inventory.getContainerSize(); j++) {
+			ItemStack stackInSlot = inventory.getItem(j);
 			if (!stackInSlot.isEmpty()) {
 				if (ItemStackUtil.isCraftingEquivalent(stackToRemove, stackInSlot, craftingTools)) {
-					ItemStack removed = inventory.decrStackSize(j, stackToRemove.getCount());
+					ItemStack removed = inventory.removeItem(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 
 					if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
@@ -228,7 +228,7 @@ public abstract class InventoryUtil {
 	/* CONTAINS */
 
 	public static boolean contains(IInventory inventory, NonNullList<ItemStack> query) {
-		return contains(inventory, query, 0, inventory.getSizeInventory());
+		return contains(inventory, query, 0, inventory.getContainerSize());
 	}
 
 	public static boolean contains(IInventory inventory, NonNullList<ItemStack> query, int startSlot, int slots) {
@@ -238,7 +238,7 @@ public abstract class InventoryUtil {
 
 	public static boolean isEmpty(IInventory inventory, int slotStart, int slotCount) {
 		for (int i = slotStart; i < slotStart + slotCount; i++) {
-			if (!inventory.getStackInSlot(i).isEmpty()) {
+			if (!inventory.getItem(i).isEmpty()) {
 				return false;
 			}
 		}
@@ -246,9 +246,9 @@ public abstract class InventoryUtil {
 	}
 
 	public static NonNullList<ItemStack> getStacks(IInventory inventory) {
-		NonNullList<ItemStack> stacks = NonNullList.withSize(inventory.getSizeInventory(), ItemStack.EMPTY);
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			stacks.set(i, inventory.getStackInSlot(i));
+		NonNullList<ItemStack> stacks = NonNullList.withSize(inventory.getContainerSize(), ItemStack.EMPTY);
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			stacks.set(i, inventory.getItem(i));
 		}
 		return stacks;
 	}
@@ -256,7 +256,7 @@ public abstract class InventoryUtil {
 	public static NonNullList<ItemStack> getStacks(IInventory inventory, int slot1, int length) {
 		NonNullList<ItemStack> result = NonNullList.withSize(length, ItemStack.EMPTY);
 		for (int i = slot1; i < slot1 + length; i++) {
-			result.set(i - slot1, inventory.getStackInSlot(i));
+			result.set(i - slot1, inventory.getItem(i));
 		}
 		return result;
 	}
@@ -277,11 +277,11 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean tryAddStack(IInventory inventory, ItemStack stack, boolean all) {
-		return tryAddStack(inventory, stack, 0, inventory.getSizeInventory(), all, true);
+		return tryAddStack(inventory, stack, 0, inventory.getContainerSize(), all, true);
 	}
 
 	public static boolean tryAddStack(IInventory inventory, ItemStack stack, boolean all, boolean doAdd) {
-		return tryAddStack(inventory, stack, 0, inventory.getSizeInventory(), all, doAdd);
+		return tryAddStack(inventory, stack, 0, inventory.getContainerSize(), all, doAdd);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static int addStack(IInventory inventory, ItemStack stack, boolean doAdd) {
-		return addStack(inventory, stack, 0, inventory.getSizeInventory(), doAdd);
+		return addStack(inventory, stack, 0, inventory.getContainerSize(), doAdd);
 	}
 
 	public static int addStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean doAdd) {
@@ -315,7 +315,7 @@ public abstract class InventoryUtil {
 		// Add to existing stacks first
 		for (int i = startSlot; i < startSlot + slots; i++) {
 
-			ItemStack inventoryStack = inventory.getStackInSlot(i);
+			ItemStack inventoryStack = inventory.getItem(i);
 			// Empty slot. Add
 			if (inventoryStack.isEmpty()) {
 				continue;
@@ -325,10 +325,10 @@ public abstract class InventoryUtil {
 			if (!inventoryStack.isStackable()) {
 				continue;
 			}
-			if (!inventoryStack.isItemEqual(stack)) {
+			if (!inventoryStack.sameItem(stack)) {
 				continue;
 			}
-			if (!ItemStack.areItemStackTagsEqual(inventoryStack, stack)) {
+			if (!ItemStack.tagMatches(inventoryStack, stack)) {
 				continue;
 			}
 
@@ -359,10 +359,10 @@ public abstract class InventoryUtil {
 		}
 
 		for (int i = startSlot; i < startSlot + slots; i++) {
-			if (inventory.getStackInSlot(i).isEmpty()) {
+			if (inventory.getItem(i).isEmpty()) {
 				if (doAdd) {
-					inventory.setInventorySlotContents(i, stack.copy());
-					inventory.getStackInSlot(i).setCount(stack.getCount() - added);
+					inventory.setItem(i, stack.copy());
+					inventory.getItem(i).setCount(stack.getCount() - added);
 				}
 				return stack.getCount();
 			}
@@ -372,7 +372,7 @@ public abstract class InventoryUtil {
 	}
 
 	public static boolean stowInInventory(ItemStack itemstack, IInventory inventory, boolean doAdd) {
-		return stowInInventory(itemstack, inventory, doAdd, 0, inventory.getSizeInventory());
+		return stowInInventory(itemstack, inventory, doAdd, 0, inventory.getContainerSize());
 	}
 
 	public static boolean stowInInventory(ItemStack itemstack, IInventory inventory, boolean doAdd, int slot1, int count) {
@@ -380,12 +380,12 @@ public abstract class InventoryUtil {
 		boolean added = false;
 
 		for (int i = slot1; i < slot1 + count; i++) {
-			ItemStack inventoryStack = inventory.getStackInSlot(i);
+			ItemStack inventoryStack = inventory.getItem(i);
 
 			// Grab those free slots
 			if (inventoryStack.isEmpty()) {
 				if (doAdd) {
-					inventory.setInventorySlotContents(i, itemstack.copy());
+					inventory.setItem(i, itemstack.copy());
 					itemstack.setCount(0);
 				}
 				return true;
@@ -397,10 +397,10 @@ public abstract class InventoryUtil {
 			}
 
 			// Not same type
-			if (!inventoryStack.isItemEqual(itemstack)) {
+			if (!inventoryStack.sameItem(itemstack)) {
 				continue;
 			}
-			if (!ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
+			if (!ItemStack.tagMatches(inventoryStack, itemstack)) {
 				continue;
 			}
 
@@ -436,32 +436,32 @@ public abstract class InventoryUtil {
 		if (!container.isEmpty()) {
 			if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
 				if (!tryAddStack(stowing, container, true) && player != null) {
-					player.dropItem(container, true);
+					player.drop(container, true);
 				}
 			}
 		}
 	}
 
 	public static void deepCopyInventoryContents(IInventory source, IInventory destination) {
-		if (source.getSizeInventory() != destination.getSizeInventory()) {
+		if (source.getContainerSize() != destination.getContainerSize()) {
 			throw new IllegalArgumentException("Inventory sizes do not match. Source: " + source + ", Destination: " + destination);
 		}
 
-		for (int i = 0; i < source.getSizeInventory(); i++) {
-			ItemStack stack = source.getStackInSlot(i);
+		for (int i = 0; i < source.getContainerSize(); i++) {
+			ItemStack stack = source.getItem(i);
 			if (!stack.isEmpty()) {
 				stack = stack.copy();
 			}
-			destination.setInventorySlotContents(i, stack);
+			destination.setItem(i, stack);
 		}
 	}
 
 	public static void dropInventory(IInventory inventory, World world, double x, double y, double z) {
 		// Release inventory
-		for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-			ItemStack itemstack = inventory.getStackInSlot(slot);
+		for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+			ItemStack itemstack = inventory.getItem(slot);
 			dropItemStackFromInventory(itemstack, world, x, y, z);
-			inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
+			inventory.setItem(slot, ItemStack.EMPTY);
 		}
 	}
 
@@ -486,12 +486,12 @@ public abstract class InventoryUtil {
 			return;
 		}
 
-		float f = world.rand.nextFloat() * 0.8F + 0.1F;
-		float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-		float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
+		float f = world.random.nextFloat() * 0.8F + 0.1F;
+		float f1 = world.random.nextFloat() * 0.8F + 0.1F;
+		float f2 = world.random.nextFloat() * 0.8F + 0.1F;
 
 		while (!itemStack.isEmpty()) {
-			int stackPartial = world.rand.nextInt(21) + 10;
+			int stackPartial = world.random.nextInt(21) + 10;
 			if (stackPartial > itemStack.getCount()) {
 				stackPartial = itemStack.getCount();
 			}
@@ -499,8 +499,8 @@ public abstract class InventoryUtil {
 			ItemEntity entityitem = new ItemEntity(world, x + f, y + f1, z + f2, drop);
 			double accel = 0.05D;
 			//TODO - hopefully correct I think
-			entityitem.setVelocity(world.rand.nextGaussian() * accel, world.rand.nextGaussian() * accel + 0.2F, world.rand.nextGaussian() * accel);
-			world.addEntity(entityitem);
+			entityitem.lerpMotion(world.random.nextGaussian() * accel, world.random.nextGaussian() * accel + 0.2F, world.random.nextGaussian() * accel);
+			world.addFreshEntity(entityitem);
 		}
 	}
 
@@ -519,17 +519,17 @@ public abstract class InventoryUtil {
 		for (int j = 0; j < nbttaglist.size(); ++j) {
 			CompoundNBT compoundNBT2 = nbttaglist.getCompound(j);
 			int index = compoundNBT2.getInt("Slot");
-			inventory.setInventorySlotContents(index, ItemStack.read(compoundNBT2));
+			inventory.setItem(index, ItemStack.of(compoundNBT2));
 		}
 	}
 
 	public static void writeToNBT(IInventory inventory, String name, CompoundNBT compoundNBT) {
 		ListNBT nbttaglist = new ListNBT();
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (!inventory.getStackInSlot(i).isEmpty()) {
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			if (!inventory.getItem(i).isEmpty()) {
 				CompoundNBT compoundNBT2 = new CompoundNBT();
 				compoundNBT2.putInt("Slot", i);
-				inventory.getStackInSlot(i).write(compoundNBT2);
+				inventory.getItem(i).save(compoundNBT2);
 				nbttaglist.add(compoundNBT2);
 			}
 		}

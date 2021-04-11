@@ -48,8 +48,8 @@ public class SlotWatched extends SlotForestry {
 	}
 
 	@Override
-	public void onSlotChanged() {
-		super.onSlotChanged();
-		changeWatcher.onSlotChanged(inventory, getSlotIndex());
+	public void setChanged() {
+		super.setChanged();
+		changeWatcher.onSlotChanged(container, getSlotIndex());
 	}
 }

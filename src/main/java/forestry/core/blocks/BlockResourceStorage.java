@@ -9,10 +9,10 @@ public class BlockResourceStorage extends Block {
 	private EnumResourceType type;
 
 	public BlockResourceStorage(EnumResourceType type) {
-		super(Block.Properties.create(Material.IRON)
-			.hardnessAndResistance(3f, 5f)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(0));
+		super(Block.Properties.of(Material.METAL)
+				.strength(3f, 5f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 		this.type = type;
 	}
 

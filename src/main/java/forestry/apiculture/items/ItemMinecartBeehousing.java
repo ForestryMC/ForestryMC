@@ -40,7 +40,7 @@ public class ItemMinecartBeehousing extends MinecartItem {
 		APIARY;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return toString().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -48,17 +48,17 @@ public class ItemMinecartBeehousing extends MinecartItem {
 	private final Type type;
 
 	public ItemMinecartBeehousing(Type type) {
-		super(null, (new Item.Properties()).maxDamage(0).group(ItemGroups.tabApiculture));
+		super(null, (new Item.Properties()).durability(0).tab(ItemGroups.tabApiculture));
 		this.type = type;
 
-		DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
+		DispenserBlock.DISPENSER_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
 	}
 
 	//TODO world.addEntity returns successfully here but nothing ever appears in the world
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+	public ActionResultType useOn(ItemUseContext context) {
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		PlayerEntity player = context.getPlayer();
 		BlockState blockstate = world.getBlockState(pos);
 
@@ -66,9 +66,9 @@ public class ItemMinecartBeehousing extends MinecartItem {
 			return ActionResultType.PASS;
 		}
 
-		ItemStack stack = player.getHeldItem(context.getHand());
+		ItemStack stack = player.getItemInHand(context.getHand());
 
-		if (!context.getWorld().isRemote) {
+		if (!context.getLevel().isClientSide) {
 			RailShape railshape = blockstate.getBlock() instanceof AbstractRailBlock ? ((AbstractRailBlock) blockstate.getBlock()).getRailDirection(blockstate, world, pos, null) : RailShape.NORTH_SOUTH;
 			double offset = 0.0D;
 			if (railshape.isAscending()) {
@@ -86,19 +86,19 @@ public class ItemMinecartBeehousing extends MinecartItem {
 
 			minecart.getOwnerHandler().setOwner(player.getGameProfile());
 
-			if (stack.hasDisplayName()) {
-				minecart.setCustomName(stack.getDisplayName());
+			if (stack.hasCustomHoverName()) {
+				minecart.setCustomName(stack.getHoverName());
 			}
 
-			world.addEntity(minecart);
+			world.addFreshEntity(minecart);
 		}
 
 		stack.shrink(1);
-		return ActionResultType.func_233537_a_(world.isRemote);
+		return ActionResultType.sidedSuccess(world.isClientSide);
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack stack) {
-		return "cart." + type.getString();
+	public String getDescriptionId(ItemStack stack) {
+		return "cart." + type.getSerializedName();
 	}
 }

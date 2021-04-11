@@ -37,8 +37,8 @@ public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInve
 	}
 
 	public static ContainerNaturalistBackpack fromNetwork(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
-		ItemStack parent = extraData.readItemStack();
-		ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItemStack().getItem();    //TODO this is b it ugly
+		ItemStack parent = extraData.readItem();
+		ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItem().getItem();    //TODO this is b it ugly
 		ItemInventoryBackpackPaged paged = new ItemInventoryBackpackPaged(playerInventory.player, Constants.SLOTS_BACKPACK_APIARIST, parent, backpack);
 		int page = extraData.readVarInt();
 		return new ContainerNaturalistBackpack(windowId, playerInventory, paged, page);

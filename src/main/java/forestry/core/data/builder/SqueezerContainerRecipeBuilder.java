@@ -60,7 +60,7 @@ public class SqueezerContainerRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.add("container", RecipeSerializers.item(emptyContainer));
 			json.addProperty("time", processingTime);
 			json.add("remnants", RecipeSerializers.item(remnants));
@@ -68,24 +68,24 @@ public class SqueezerContainerRecipeBuilder {
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ISqueezerContainerRecipe.Companion.SERIALIZER;
 		}
 
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

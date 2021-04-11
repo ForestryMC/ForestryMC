@@ -14,7 +14,7 @@ public class MultiblockClientTickHandler {
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
-			MultiblockRegistry.tickStart(Minecraft.getInstance().world);
+			MultiblockRegistry.tickStart(Minecraft.getInstance().level);
 		}
 	}
 }

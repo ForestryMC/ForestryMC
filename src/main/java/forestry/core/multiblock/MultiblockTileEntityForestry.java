@@ -53,8 +53,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 
 		if (data.contains("owner")) {
 			CompoundNBT ownerNbt = data.getCompound("owner");
@@ -65,8 +65,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		data = super.save(data);
 
 		if (this.owner != null) {
 			CompoundNBT nbt = new CompoundNBT();
@@ -93,53 +93,53 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
+	public final int getContainerSize() {
+		return getInternalInventory().getContainerSize();
 	}
 
 	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
+	public final ItemStack getItem(int slotIndex) {
+		return getInternalInventory().getItem(slotIndex);
 	}
 
 	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
+	public final ItemStack removeItem(int slotIndex, int amount) {
+		return getInternalInventory().removeItem(slotIndex, amount);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return getInternalInventory().removeItemNoUpdate(slotIndex);
 	}
 
 	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+	public final void setItem(int slotIndex, ItemStack itemstack) {
+		getInternalInventory().setItem(slotIndex, itemstack);
 	}
 
 	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
+	public final int getMaxStackSize() {
+		return getInternalInventory().getMaxStackSize();
 	}
 
 	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
+	public final void startOpen(PlayerEntity player) {
+		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
+	public final void stopOpen(PlayerEntity player) {
+		getInternalInventory().stopOpen(player);
 	}
 
 	@Override
-	public final boolean isUsableByPlayer(PlayerEntity player) {
-		return getInternalInventory().isUsableByPlayer(player);
+	public final boolean stillValid(PlayerEntity player) {
+		return getInternalInventory().stillValid(player);
 	}
 
 	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
+		return getInternalInventory().canPlaceItem(slotIndex, itemStack);
 	}
 
 	@Override
@@ -152,13 +152,13 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return allowsAutomation() && getInternalInventory().canInsertItem(slotIndex, itemStack, side);
+	public final boolean canPlaceItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return allowsAutomation() && getInternalInventory().canPlaceItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return allowsAutomation() && getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	public final boolean canTakeItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return allowsAutomation() && getInternalInventory().canTakeItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	/* ILocatable */
 	@Override
 	public final World getWorldObj() {
-		return world;
+		return level;
 	}
 
 	/* IMultiblockComponent */
@@ -191,7 +191,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 
 	@Override
-	public void clear() {
-		getInternalInventory().clear();
+	public void clearContent() {
+		getInternalInventory().clearContent();
 	}
 }

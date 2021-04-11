@@ -55,37 +55,37 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, Direction direction) {
+	public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return 0;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int p_70301_1_) {
+	public ItemStack getItem(int p_70301_1_) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+	public ItemStack removeItem(int p_70298_1_, int p_70298_2_) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+	public void setItem(int p_70299_1_, ItemStack p_70299_2_) {
 
 	}
 
@@ -106,32 +106,32 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	//	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 0;
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+	public boolean canPlaceItem(int p_94041_1_, ItemStack p_94041_2_) {
 		return false;
 	}
 
@@ -161,7 +161,7 @@ public class FakeInventoryAdapter implements IInventoryAdapter {
 	//	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 	}
 
 }

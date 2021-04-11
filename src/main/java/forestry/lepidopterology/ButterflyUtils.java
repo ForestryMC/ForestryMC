@@ -26,7 +26,7 @@ public class ButterflyUtils {
 			return false;
 		}
 
-		if (world.isAirBlock(pos)) {
+		if (world.isEmptyBlock(pos)) {
 			return attemptButterflySpawn(world, butterfly, pos);
 		}
 		return false;
@@ -36,7 +36,7 @@ public class ButterflyUtils {
 		if (false) {//TODO world.countEntities(EntityButterfly.class) > ModuleLepidopterology.spawnConstraint) {
 			return false;
 		}
-		if (world.isAirBlock(pos)) {
+		if (world.isEmptyBlock(pos)) {
 			return attemptButterflySpawn(world, butterfly, pos);
 		}
 		return false;

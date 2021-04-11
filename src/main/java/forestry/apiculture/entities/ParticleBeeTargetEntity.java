@@ -28,21 +28,21 @@ public class ParticleBeeTargetEntity extends SpriteTexturedParticle {
 		this.origin = origin;
 		this.entity = entity;
 
-		this.motionX = (entity.getPosX() - this.posX) * 0.015;
-		this.motionY = (entity.getPosY() + 1.62F - this.posY) * 0.015;
-		this.motionZ = (entity.getPosZ() - this.posZ) * 0.015;
+		this.xd = (entity.getX() - this.x) * 0.015;
+		this.yd = (entity.getY() + 1.62F - this.y) * 0.015;
+		this.zd = (entity.getZ() - this.z) * 0.015;
 
-		particleRed = (color >> 16 & 255) / 255.0F;
-		particleGreen = (color >> 8 & 255) / 255.0F;
-		particleBlue = (color & 255) / 255.0F;
+		rCol = (color >> 16 & 255) / 255.0F;
+		gCol = (color >> 8 & 255) / 255.0F;
+		bCol = (color & 255) / 255.0F;
 
 		this.setSize(0.1F, 0.1F);
-		this.particleScale *= 0.2F;
-		this.maxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
+		this.quadSize *= 0.2F;
+		this.lifetime = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
-		this.motionX *= 0.9D;
-		this.motionY *= 0.9D;
-		this.motionZ *= 0.9D;
+		this.xd *= 0.9D;
+		this.yd *= 0.9D;
+		this.zd *= 0.9D;
 	}
 
 	/**
@@ -50,55 +50,55 @@ public class ParticleBeeTargetEntity extends SpriteTexturedParticle {
 	 */
 	@Override
 	public void tick() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.move(this.motionX, this.motionY, this.motionZ);
+		this.xo = this.x;
+		this.yo = this.y;
+		this.zo = this.z;
+		this.move(this.xd, this.yd, this.zd);
 
-		if (this.age == this.maxAge / 2) {
-			this.motionX = (origin.x - this.posX) * 0.03;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionZ = (origin.z - this.posZ) * 0.03;
+		if (this.age == this.lifetime / 2) {
+			this.xd = (origin.x - this.x) * 0.03;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.zd = (origin.z - this.z) * 0.03;
 		}
 
-		if (this.age < this.maxAge * 0.5) {
+		if (this.age < this.lifetime * 0.5) {
 			// fly near the entity
-			this.motionX = (entity.getPosX() - this.posX) * 0.09;
-			this.motionX = (this.motionX + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionY = (entity.getPosY() + 1.62F - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.4 * (-0.5 + rand.nextFloat())) / 4;
-			this.motionZ = (entity.getPosZ() - this.posZ) * 0.09;
-			this.motionZ = (this.motionZ + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-		} else if (this.age < this.maxAge * 0.75) {
+			this.xd = (entity.getX() - this.x) * 0.09;
+			this.xd = (this.xd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+			this.yd = (entity.getY() + 1.62F - this.y) * 0.03;
+			this.yd = (this.yd + 0.4 * (-0.5 + random.nextFloat())) / 4;
+			this.zd = (entity.getZ() - this.z) * 0.09;
+			this.zd = (this.zd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+		} else if (this.age < this.lifetime * 0.75) {
 			// venture back
-			this.motionX *= 0.95;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.95;
+			this.xd *= 0.95;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.yd = (this.yd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+			this.zd *= 0.95;
 		} else {
 			// get to origin
-			this.motionX = (origin.x - this.posX) * 0.03;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ = (origin.z - this.posZ) * 0.03;
+			this.xd = (origin.x - this.x) * 0.03;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.yd = (this.yd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+			this.zd = (origin.z - this.z) * 0.03;
 		}
 
-		if (this.age++ >= this.maxAge) {
-			this.setExpired();
+		if (this.age++ >= this.lifetime) {
+			this.remove();
 		}
 	}
 
 	// avoid calculating lighting for bees, it is too much processing
 	@Override
-	public int getBrightnessForRender(float partialTick) {
+	public int getLightColor(float partialTick) {
 		return 15728880;
 	}
 
 	// avoid calculating collisions
 	@Override
 	public void move(double x, double y, double z) {
-		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
-		this.resetPositionToBB();
+		this.setBoundingBox(this.getBoundingBox().move(x, y, z));
+		this.setLocationFromBoundingbox();
 	}
 
 

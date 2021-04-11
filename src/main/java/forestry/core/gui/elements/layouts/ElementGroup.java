@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
@@ -111,6 +112,11 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	@Override
 	public ILabelElement label(ITextProperties component) {
 		return add(new LabelElement(component));
+	}
+
+	@Override
+	public ILabelElement label(IReorderingProcessor component) {
+		return add(new LabelElement.Processor(component));
 	}
 
 	@Override

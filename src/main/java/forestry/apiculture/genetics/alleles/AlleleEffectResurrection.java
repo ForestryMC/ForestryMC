@@ -23,12 +23,12 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.ItemStackUtil;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
@@ -50,7 +50,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
 
 		private boolean spawnAndTransform(ItemEntity entity) {
-			T spawnedEntity = EntityUtil.spawnEntity(entity.world, this.risen, entity.getPosX(), entity.getPosY(), entity.getPosZ());
+			T spawnedEntity = EntityUtil.spawnEntity(entity.level, this.risen, entity.getX(), entity.getY(), entity.getZ());
 			if (spawnedEntity != null) {
 				this.risenTransformer.accept(spawnedEntity);
 				return true;

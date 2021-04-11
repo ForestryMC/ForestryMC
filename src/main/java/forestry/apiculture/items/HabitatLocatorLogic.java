@@ -18,11 +18,13 @@ import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
@@ -34,21 +36,28 @@ public class HabitatLocatorLogic {
 	private static final int spacing = 20;
 	private static final int minBiomeRadius = 8;
 
-	private static final Set<Biome> waterBiomes = new HashSet<>();
-	private static final Set<Biome> netherBiomes = new HashSet<>();
-	private static final Set<Biome> endBiomes = new HashSet<>();
+	private static final Set<ResourceLocation> waterBiomes = new HashSet<>();
+	private static final Set<ResourceLocation> netherBiomes = new HashSet<>();
+	private static final Set<ResourceLocation> endBiomes = new HashSet<>();
 
-	static {
-		waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.BEACH));
-		waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.OCEAN));
-		waterBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.RIVER));
-
-		netherBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.NETHER));
-
-		endBiomes.addAll(BiomeDictionary.getBiomes(BiomeDictionary.Type.END));
+	@SubscribeEvent
+	static void onBiomeLoaded(BiomeLoadingEvent event) {
+		switch (event.getCategory()) {
+			case BEACH:
+			case RIVER:
+			case OCEAN:
+				waterBiomes.add(event.getName());
+				break;
+			case NETHER:
+				netherBiomes.add(event.getName());
+				break;
+			case THEEND:
+				endBiomes.add(event.getName());
+				break;
+		}
 	}
 
-	private Set<Biome> targetBiomes = new HashSet<>();
+	private Set<ResourceLocation> targetBiomes = new HashSet<>();
 	private boolean biomeFound = false;
 	private int searchRadiusIteration = 0;
 	private int searchAngleIteration = 0;
@@ -59,7 +68,7 @@ public class HabitatLocatorLogic {
 		return biomeFound;
 	}
 
-	public Set<Biome> getTargetBiomes() {
+	public Set<ResourceLocation> getTargetBiomes() {
 		return targetBiomes;
 	}
 
@@ -68,19 +77,19 @@ public class HabitatLocatorLogic {
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
-		this.searchCenter = player.getPosition();
+		this.searchCenter = player.blockPosition();
 
-		Biome currentBiome = player.world.getBiome(searchCenter);
+		Biome currentBiome = player.level.getBiome(searchCenter);
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
-		if (player.world.isRemote) {
+		if (player.level.isClientSide) {
 			//TextureHabitatLocator.getInstance().setTargetCoordinates(null);//TODO: TextureHabitatLocator
 		}
 	}
 
 	public void onUpdate(World world, Entity player) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -103,15 +112,15 @@ public class HabitatLocatorLogic {
 	}
 
 	@Nullable
-	private BlockPos findNearestBiome(Entity player, Collection<Biome> biomesToSearch) {
+	private BlockPos findNearestBiome(Entity player, Collection<ResourceLocation> biomesToSearch) {
 		if (searchCenter == null) {
 			return null;
 		}
 
-		BlockPos playerPos = player.getPosition();
+		BlockPos playerPos = player.blockPosition();
 
 		// If we are in a valid spot, we point to ourselves.
-		BlockPos coordinates = getChunkCoordinates(playerPos, player.world, biomesToSearch);
+		BlockPos coordinates = getChunkCoordinates(playerPos, player.level, biomesToSearch);
 		if (coordinates != null) {
 			searchAngleIteration = 0;
 			searchRadiusIteration = 0;
@@ -145,9 +154,9 @@ public class HabitatLocatorLogic {
 
 			int xOffset = Math.round((float) (radius * Math.cos(angle)));
 			int zOffset = Math.round((float) (radius * Math.sin(angle)));
-			BlockPos pos = searchCenter.add(xOffset, 0, zOffset);
+			BlockPos pos = searchCenter.offset(xOffset, 0, zOffset);
 
-			coordinates = getChunkCoordinates(pos, player.world, biomesToSearch);
+			coordinates = getChunkCoordinates(pos, player.level, biomesToSearch);
 			if (coordinates != null) {
 				searchAngleIteration = 0;
 				searchRadiusIteration = 0;
@@ -159,48 +168,47 @@ public class HabitatLocatorLogic {
 	}
 
 	@Nullable
-	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<Biome> biomesToSearch) {
+	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<ResourceLocation> biomesToSearch) {
 		Biome biome;
 
 		biome = world.getBiome(pos);
-		if (!biomesToSearch.contains(biome)) {
+		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.add(-minBiomeRadius, 0, 0));
-		if (!biomesToSearch.contains(biome)) {
+		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0));
+		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.add(minBiomeRadius, 0, 0));
-		if (!biomesToSearch.contains(biome)) {
+		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0));
+		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.add(0, 0, -minBiomeRadius));
-		if (!biomesToSearch.contains(biome)) {
+		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius));
+		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.add(0, 0, minBiomeRadius));
-		if (!biomesToSearch.contains(biome)) {
+		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius));
+		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
 		return pos;
 	}
 
-	private static void removeInvalidBiomes(Biome currentBiome, Set<Biome> biomesToSearch) {
-
+	private static void removeInvalidBiomes(Biome currentBiome, Set<ResourceLocation> biomesToSearch) {
 		biomesToSearch.removeAll(waterBiomes);
 
-		if (BiomeDictionary.hasType(currentBiome, BiomeDictionary.Type.NETHER)) {
+		if (currentBiome.getBiomeCategory() == Biome.Category.NETHER) {
 			biomesToSearch.retainAll(netherBiomes);
 		} else {
 			biomesToSearch.removeAll(netherBiomes);
 		}
 
-		if (BiomeDictionary.hasType(currentBiome, BiomeDictionary.Type.END)) {
+		if (currentBiome.getBiomeCategory() == Biome.Category.THEEND) {
 			biomesToSearch.retainAll(endBiomes);
 		} else {
 			biomesToSearch.removeAll(endBiomes);

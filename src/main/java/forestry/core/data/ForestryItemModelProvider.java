@@ -50,7 +50,7 @@ public class ForestryItemModelProvider extends ModelProvider {
 
 		for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
 			Block block = cell.getValue().block();
-			registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getString()));
+			registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getSerializedName()));
 		}
 	}
 }

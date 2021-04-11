@@ -39,6 +39,7 @@ import forestry.core.network.packets.PacketActiveUpdate;
 import forestry.core.tiles.IActivatable;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.WorldUtils;
 
 public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
 
@@ -88,7 +89,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		}
 
 		// Try to spawn princess
-		if (world.rand.nextInt(1000) >= chance) {
+		if (level.random.nextInt(1000) >= chance) {
 			return;
 		}
 
@@ -119,11 +120,11 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	private int consumeInducerAndGetChance() {
-		for (int slotIndex = 0; slotIndex < getSizeInventory(); slotIndex++) {
-			ItemStack stack = getStackInSlot(slotIndex);
+		for (int slotIndex = 0; slotIndex < getContainerSize(); slotIndex++) {
+			ItemStack stack = getItem(slotIndex);
 			for (Entry<ItemStack, Integer> entry : BeeManager.inducers.entrySet()) {
 				if (ItemStackUtil.isIdenticalItem(entry.getKey(), stack)) {
-					decrStackSize(slotIndex, 1);
+					removeItem(slotIndex, 1);
 					return entry.getValue();
 				}
 			}
@@ -138,10 +139,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 		HiveDescriptionSwarmer hiveDescription = new HiveDescriptionSwarmer(toSpawn);
 		Hive hive = new Hive(hiveDescription);
 
-		int x = getPos().getX() + world.rand.nextInt(40 * 2) - 40;
-		int z = getPos().getZ() + world.rand.nextInt(40 * 2) - 40;
+		int x = getBlockPos().getX() + level.random.nextInt(40 * 2) - 40;
+		int z = getBlockPos().getZ() + level.random.nextInt(40 * 2) - 40;
 
-		if (HiveDecorator.tryGenHive(world, world.rand, x, z, hive)) {
+		if (HiveDecorator.tryGenHive(WorldUtils.asServer(level), level.random, x, z, hive)) {
 			pendingSpawns.pop();
 		}
 	}
@@ -162,21 +163,21 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		setActive(compoundNBT.getBoolean("Active"));
 
 		ListNBT nbttaglist = compoundNBT.getList("PendingSpawns", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
 			CompoundNBT compoundNBT1 = nbttaglist.getCompound(i);
-			pendingSpawns.add(ItemStack.read(compoundNBT1));
+			pendingSpawns.add(ItemStack.of(compoundNBT1));
 		}
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		compoundNBT.putBoolean("Active", active);
 
 		ListNBT nbttaglist = new ListNBT();
@@ -185,7 +186,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 			if (offspring[i] != null) {
 				CompoundNBT compoundNBT1 = new CompoundNBT();
 				compoundNBT1.putByte("Slot", (byte) i);
-				offspring[i].write(compoundNBT1);
+				offspring[i].save(compoundNBT1);
 				nbttaglist.add(compoundNBT1);
 			}
 		}
@@ -206,8 +207,8 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 
 		this.active = active;
 
-		if (world != null && !world.isRemote) {
-			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+		if (level != null && !level.isClientSide) {
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), worldPosition, level);
 		}
 	}
 

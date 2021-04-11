@@ -33,7 +33,7 @@ public class InventoryEnginePeat extends InventoryAdapterTile<TileEnginePeat> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_WASTE_1, SLOT_WASTE_COUNT);
 	}
 }

@@ -58,7 +58,7 @@ public class RecipeSerializers {
 	}
 
 	public static ItemStack item(JsonObject object) {
-		return ItemStack.read((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object));
+		return ItemStack.of((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object));
 	}
 
 	public static JsonObject item(ItemStack stack) {
@@ -70,6 +70,6 @@ public class RecipeSerializers {
 			return Ingredient.EMPTY;
 		}
 
-		return Ingredient.deserialize(resource);
+		return Ingredient.fromJson(resource);
 	}
 }

@@ -45,9 +45,9 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public void putStack(ItemStack itemStack) {
+	public void set(ItemStack itemStack) {
 		if (!isPhantom() || canAdjustPhantom()) {
-			super.putStack(itemStack);
+			super.set(itemStack);
 		}
 	}
 
@@ -70,7 +70,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity stack) {
+	public boolean mayPickup(PlayerEntity stack) {
 		return !isPhantom();
 	}
 
@@ -79,9 +79,9 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public int getSlotStackLimit() {
+	public int getMaxStackSize() {
 		if (stackLimit < 0) {
-			return super.getSlotStackLimit();
+			return super.getMaxStackSize();
 		} else {
 			return stackLimit;
 		}
@@ -98,11 +98,11 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
 	@Override
 	public boolean isToolTipVisible() {
-		return getStack().isEmpty();
+		return getItem().isEmpty();
 	}
 
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= xPos && mouseX <= xPos + 16 && mouseY >= yPos && mouseY <= yPos + 16;
+		return mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16;
 	}
 }

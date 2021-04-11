@@ -46,15 +46,15 @@ public class ForestryLootTableProvider implements IDataProvider {
 	 * Performs this provider's action.
 	 */
 	@Override
-	public void act(DirectoryCache cache) {
+	public void run(DirectoryCache cache) {
 		Path path = this.dataGenerator.getOutputFolder();
 		Map<ResourceLocation, LootTable> map = Maps.newHashMap();
 		tables.forEach((entry) -> entry.getFirst().get().accept((location, builder) -> {
-			if (map.put(location, builder.setParameterSet(entry.getSecond()).build()) != null) {
+			if (map.put(location, builder.setParamSet(entry.getSecond()).build()) != null) {
 				throw new IllegalStateException("Duplicate loot table " + location);
 			}
 		}));
-		ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.GENERIC, (location) -> null, map::get);
+		ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.ALL_PARAMS, (location) -> null, map::get);
 
 		validate(map, validationtracker);
 
@@ -67,7 +67,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 				Path path1 = getPath(path, location);
 
 				try {
-					IDataProvider.save(GSON, cache, LootTableManager.toJson(table), path1);
+					IDataProvider.save(GSON, cache, LootTableManager.serialize(table), path1);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save loot table {}", path1, ioexception);
 				}
@@ -77,11 +77,11 @@ public class ForestryLootTableProvider implements IDataProvider {
 	}
 
 	protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker tracker) {
-		/*for (ResourceLocation resourcelocation : Sets.difference(LootTables.func_215796_a(), map.keySet())) {
-			validationtracker.func_227530_a_("Missing built-in table: " + resourcelocation);
+		/*for (ResourceLocation resourcelocation : Sets.difference(LootTables.all(), map.keySet())) {
+			validationtracker.reportProblem("Missing built-in table: " + resourcelocation);
 		}*/
 
-		map.forEach((location, loot) -> LootTableManager.func_227508_a_(tracker, location, loot));
+		map.forEach((location, loot) -> LootTableManager.validate(tracker, location, loot));
 	}
 
 	private static Path getPath(Path path, ResourceLocation id) {

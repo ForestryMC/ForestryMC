@@ -72,15 +72,15 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	// / SAVING / LOADING
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		//		if (ic2EnergySink != null) {
 		//			ic2EnergySink.read(compoundNBT);
 		//		}
 		sockets.read(compoundNBT);
 
-		ItemStack chip = sockets.getStackInSlot(0);
+		ItemStack chip = sockets.getItem(0);
 		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
@@ -91,8 +91,8 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 
 	@Nonnull
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		//		if (ic2EnergySink != null) {
 		//			ic2EnergySink.write(compoundNBT);
@@ -174,7 +174,7 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 			return;
 		}
 
-		if (!getStackInSlot(InventoryEngineElectric.SLOT_BATTERY).isEmpty()) {
+		if (!getItem(InventoryEngineElectric.SLOT_BATTERY).isEmpty()) {
 			replenishFromBattery(InventoryEngineElectric.SLOT_BATTERY);
 		}
 
@@ -265,12 +265,12 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 	/* ISocketable */
 	@Override
 	public int getSocketCount() {
-		return sockets.getSizeInventory();
+		return sockets.getContainerSize();
 	}
 
 	@Override
 	public ItemStack getSocket(int slot) {
-		return sockets.getStackInSlot(slot);
+		return sockets.getItem(slot);
 	}
 
 	@Override
@@ -280,16 +280,16 @@ public class TileEngineElectric extends TileEngine implements ISocketable, IInve
 		}
 
 		//Dispose correctly of old chipsets
-		if (!sockets.getStackInSlot(slot).isEmpty()) {
-			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+		if (!sockets.getItem(slot).isEmpty()) {
+			if (ChipsetManager.circuitRegistry.isChipset(sockets.getItem(slot))) {
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getItem(slot));
 				if (chipset != null) {
 					chipset.onRemoval(this);
 				}
 			}
 		}
 
-		sockets.setInventorySlotContents(slot, stack);
+		sockets.setItem(slot, stack);
 		if (stack.isEmpty()) {
 			return;
 		}

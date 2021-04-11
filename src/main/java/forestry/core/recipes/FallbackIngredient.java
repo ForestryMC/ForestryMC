@@ -36,19 +36,19 @@ public class FallbackIngredient extends Ingredient {
 	private final Ingredient fallback;
 
 	public static Ingredient fromItems(IItemProvider primary, IItemProvider fallback) {
-		return fromIngredients(Ingredient.fromItems(primary), Ingredient.fromItems(fallback));
+		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
 	public static Ingredient fromStacks(ItemStack primary, ItemStack fallback) {
-		return fromIngredients(Ingredient.fromStacks(primary), Ingredient.fromStacks(fallback));
+		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
 	public static Ingredient fromTag(ITag<Item> primary, ItemStack fallback) {
-		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromStacks(fallback));
+		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
 	public static Ingredient fromTag(ITag<Item> primary, ITag<Item> fallback) {
-		return fromIngredients(Ingredient.fromTag(primary), Ingredient.fromTag(fallback));
+		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
 	public static Ingredient fromIngredients(Ingredient primary, Ingredient fallback) {
@@ -62,10 +62,10 @@ public class FallbackIngredient extends Ingredient {
 	}
 
 	@Override
-	public JsonElement serialize() {
+	public JsonElement toJson() {
 		JsonObject jsonobject = new JsonObject();
-		jsonobject.add("primary", primary.serialize());
-		jsonobject.add("fallback", fallback.serialize());
+		jsonobject.add("primary", primary.toJson());
+		jsonobject.add("fallback", fallback.toJson());
 		return jsonobject;
 	}
 
@@ -77,12 +77,12 @@ public class FallbackIngredient extends Ingredient {
 
 		@Override
 		public Ingredient parse(PacketBuffer buffer) {
-			return Ingredient.read(buffer);
+			return Ingredient.fromNetwork(buffer);
 		}
 
 		@Override
 		public void write(PacketBuffer buffer, Ingredient ingredient) {
-			ingredient.write(buffer);
+			ingredient.toNetwork(buffer);
 		}
 
 		@Nonnull
@@ -90,7 +90,7 @@ public class FallbackIngredient extends Ingredient {
 		public Ingredient parse(JsonObject json) {
 			Ingredient ret;
 			try {
-				JsonArray arr = JSONUtils.getJsonArray(json, "primary");
+				JsonArray arr = JSONUtils.getAsJsonArray(json, "primary");
 				List<Ingredient> ingredientList = new ArrayList<>();
 				for (JsonElement element : arr) {
 					if (!(element instanceof JsonObject)) {
@@ -103,8 +103,8 @@ public class FallbackIngredient extends Ingredient {
 			} catch (JsonSyntaxException e) {
 				ret = Ingredient.EMPTY;    //throws exception if item doesn't exist
 			}
-			if (ret.getMatchingStacks().length == 0) {
-				JsonArray fallbackArr = JSONUtils.getJsonArray(json, "fallback");
+			if (ret.getItems().length == 0) {
+				JsonArray fallbackArr = JSONUtils.getAsJsonArray(json, "fallback");
 				List<Ingredient> ingredients = new ArrayList<>();
 				for (JsonElement element : fallbackArr) {
 					if (!(element instanceof JsonObject)) {

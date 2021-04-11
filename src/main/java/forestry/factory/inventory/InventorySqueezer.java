@@ -50,7 +50,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 				return false;
 			}
 
-			RecipeManager recipeManager = tile.getWorld().getRecipeManager();
+			RecipeManager recipeManager = tile.getLevel().getRecipeManager();
 			return RecipeManagers.squeezerManager.canUse(recipeManager, itemStack) || RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(recipeManager, itemStack) != null;
 		}
 
@@ -58,7 +58,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_REMNANT || slotIndex == SLOT_CAN_OUTPUT;
 	}
 
@@ -80,7 +80,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	}
 
 	public void fillContainers(FluidStack fluidStack, TankManager tankManager) {
-		if (getStackInSlot(SLOT_CAN_INPUT).isEmpty()) {
+		if (getItem(SLOT_CAN_INPUT).isEmpty()) {
 			return;
 		}
 		FluidHelper.fillContainers(tankManager, this, SLOT_CAN_INPUT, SLOT_CAN_OUTPUT, fluidStack.getFluid(), true);

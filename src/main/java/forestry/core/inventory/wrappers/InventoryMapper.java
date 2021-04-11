@@ -28,11 +28,11 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 	private int stackSizeLimit = -1;
 
 	public InventoryMapper(IInventory inv) {
-		this(inv, 0, inv.getSizeInventory(), true);
+		this(inv, 0, inv.getContainerSize(), true);
 	}
 
 	public InventoryMapper(IInventory inv, boolean checkItems) {
-		this(inv, 0, inv.getSizeInventory(), checkItems);
+		this(inv, 0, inv.getContainerSize(), checkItems);
 	}
 
 	/**
@@ -60,23 +60,23 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return size;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inv.getStackInSlot(start + slot);
+	public ItemStack getItem(int slot) {
+		return inv.getItem(start + slot);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		return inv.decrStackSize(start + slot, amount);
+	public ItemStack removeItem(int slot, int amount) {
+		return inv.removeItem(start + slot, amount);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		inv.setInventorySlotContents(start + slot, itemstack);
+	public void setItem(int slot, ItemStack itemstack) {
+		inv.setItem(start + slot, itemstack);
 	}
 
 	public void setStackSizeLimit(int limit) {
@@ -84,13 +84,13 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return stackSizeLimit > 0 ? stackSizeLimit : inv.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return stackSizeLimit > 0 ? stackSizeLimit : inv.getMaxStackSize();
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return !checkItems() || inv.canPlaceItem(start + slot, stack);
 	}
 
 }

@@ -54,14 +54,14 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
 
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());    //TODO - removing false OK?
-		markDirty();
+		level.updateNeighborsAt(getBlockPos(), level.getBlockState(worldPosition).getBlock());    //TODO - removing false OK?
+		setChanged();
 	}
 
 	@Override
 	public void onMachineBroken() {
-		world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(pos).getBlock());
-		markDirty();
+		level.updateNeighborsAt(getBlockPos(), level.getBlockState(worldPosition).getBlock());
+		setChanged();
 	}
 
 	@Override

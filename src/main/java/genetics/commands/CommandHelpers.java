@@ -21,13 +21,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 public class CommandHelpers {
 
 	public static void sendLocalizedChatMessage(CommandSource sender, String locTag, Object... args) {
-		sender.sendFeedback(new TranslationTextComponent(locTag, args), false);
+		sender.sendSuccess(new TranslationTextComponent(locTag, args), false);
 	}
 
 	public static void sendLocalizedChatMessage(CommandSource sender, Style chatStyle, String locTag, Object... args) {
 		TranslationTextComponent chat = new TranslationTextComponent(locTag, args);
 		chat.setStyle(chatStyle);
-		sender.sendFeedback(chat, false);
+		sender.sendSuccess(chat, false);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class CommandHelpers {
 	 * Messages will not be localized properly if you use StringUtil.localize().
 	 */
 	public static void sendChatMessage(CommandSource sender, String message) {
-		sender.sendFeedback(new StringTextComponent(message), false);
+		sender.sendSuccess(new StringTextComponent(message), false);
 	}
 
 }

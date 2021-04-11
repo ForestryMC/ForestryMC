@@ -21,20 +21,20 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	public TextEditElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
 		//TODO - title
-		field = new TextFieldWidget(Minecraft.getInstance().fontRenderer, 0, 0, width, height, null);
-		field.setEnableBackgroundDrawing(false);
+		field = new TextFieldWidget(Minecraft.getInstance().font, 0, 0, width, height, null);
+		field.setBordered(false);
 		this.addSelfEventHandler(GuiEvent.KeyEvent.class, event -> {
-			String oldText = field.getText();
+			String oldText = field.getValue();
 			this.field.keyPressed(event.getKeyCode(), event.getScanCode(), event.getModifiers());
-			final String text = field.getText();
+			final String text = field.getValue();
 			if (!text.equals(oldText)) {
 				postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
 			}
 		});
 		this.addSelfEventHandler(GuiEvent.CharEvent.class, event -> {
-			String oldText = field.getText();
+			String oldText = field.getValue();
 			this.field.charTyped(event.getCharacter(), event.getModifiers());
-			final String text = field.getText();
+			final String text = field.getValue();
 			if (!text.equals(oldText)) {
 				postEvent(new TextEditEvent(this, text, oldText), GuiEventDestination.ALL);
 			}
@@ -44,29 +44,29 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 			this.field.mouseClicked(windowElement.getRelativeMouseX(this), windowElement.getRelativeMouseY(this), event.getButton());
 		});
 		//TODO - method protected so maybe AT the field itself?
-		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocused2(true));
-		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.setFocused2(false));
+		this.addSelfEventHandler(ElementEvent.GainFocus.class, event -> this.field.setFocus(true));
+		this.addSelfEventHandler(ElementEvent.LoseFocus.class, event -> this.field.setFocus(false));
 	}
 
 	public TextEditElement setMaxLength(int maxLength) {
-		field.setMaxStringLength(maxLength);
+		field.setMaxLength(maxLength);
 		return this;
 	}
 
 	public TextEditElement setValidator(Predicate<String> validator) {
-		field.setValidator(validator);
+		field.setFilter(validator);
 		return this;
 	}
 
 	@Override
 	public String getValue() {
-		return field.getText();
+		return field.getValue();
 	}
 
 	@Override
 	public void setValue(String value) {
-		if (!field.getText().equals(value)) {
-			field.setText(value);
+		if (!field.getValue().equals(value)) {
+			field.setValue(value);
 		}
 	}
 

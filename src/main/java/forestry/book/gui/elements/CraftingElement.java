@@ -29,7 +29,7 @@ public class CraftingElement extends SelectionElement<IRecipe> {
 	protected void onIndexUpdate(int index, IRecipe recipe) {
 		NonNullList<Ingredient> ingredients = recipe.getIngredients();
 		//Output
-		selectedElement.item(81, 21, recipe.getRecipeOutput());
+		selectedElement.item(81, 21, recipe.getResultItem());
 		//Grid
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {

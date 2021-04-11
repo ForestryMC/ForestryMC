@@ -20,13 +20,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.WorldUtils;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	private static final int ignitionChance = 50;
@@ -59,11 +59,11 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 				duration = 350;
 			}
 
-			if (world.rand.nextInt(1000) >= chance) {
+			if (world.random.nextInt(1000) >= chance) {
 				continue;
 			}
 
-			entity.setFire(duration);
+			entity.setSecondsOnFire(duration);
 		}
 
 		return storedData;
@@ -73,7 +73,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
-		if (world.rand.nextInt(2) != 0) {
+		if (world.random.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();

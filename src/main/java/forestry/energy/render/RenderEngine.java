@@ -56,45 +56,45 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		int textureHeight = 32;
 		boiler = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
-		boiler.rotationPointX = 8;
-		boiler.rotationPointY = 8;
-		boiler.rotationPointZ = 8;
+		boiler.x = 8;
+		boiler.y = 8;
+		boiler.z = 8;
 
 		trunk = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		trunk.addBox(-4F, -4F, -4F, 8, 12, 8);
-		trunk.rotationPointX = 8F;
-		trunk.rotationPointY = 8F;
-		trunk.rotationPointZ = 8F;
+		trunk.x = 8F;
+		trunk.y = 8F;
+		trunk.z = 8F;
 
 		piston = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		piston.addBox(-6F, -2, -6F, 12, 4, 12);
-		piston.rotationPointX = 8F;
-		piston.rotationPointY = 8F;
-		piston.rotationPointZ = 8F;
+		piston.x = 8F;
+		piston.y = 8F;
+		piston.z = 8F;
 
 		extension = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		extension.addBox(-5F, -3, -5F, 10, 2, 10);
-		extension.rotationPointX = 8F;
-		extension.rotationPointY = 8F;
-		extension.rotationPointZ = 8F;
+		extension.x = 8F;
+		extension.y = 8F;
+		extension.z = 8F;
 
 		textures = new ResourceLocation[]{
-			new ForestryResource(baseTexture + "base.png"),
-			new ForestryResource(baseTexture + "piston.png"),
-			new ForestryResource(baseTexture + "extension.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_highest.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
+				new ForestryResource(baseTexture + "base.png"),
+				new ForestryResource(baseTexture + "piston.png"),
+				new ForestryResource(baseTexture + "extension.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_highest.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
 	}
 
 	@Override
 	public void renderTile(TileEngine tile, RenderHelper helper) {
 		World worldObj = tile.getWorldObj();
-		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
-			Direction facing = blockState.get(BlockBase.FACING);
+			Direction facing = blockState.getValue(BlockBase.FACING);
 			render(tile.getTemperatureState(), tile.progress, facing, helper);
 		}
 	}
@@ -118,7 +118,7 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		float tfactor = step / 16;
 
 		Vector3f rotation = new Vector3f(0, 0, 0);
-		float[] translate = {orientation.getXOffset(), orientation.getYOffset(), orientation.getZOffset()};
+		float[] translate = {orientation.getStepX(), orientation.getStepY(), orientation.getStepZ()};
 
 		switch (orientation) {
 			case EAST:

@@ -26,29 +26,29 @@ public class ItemBlockWallForestry<B extends Block, W extends Block> extends Ite
 	}
 
 	@Nullable
-	protected BlockState getStateForPlacement(BlockItemUseContext context) {
+	protected BlockState getPlacementState(BlockItemUseContext context) {
 		BlockState blockstate = this.wallBlock.getStateForPlacement(context);
 		BlockState blockstate1 = null;
-		IWorldReader iworldreader = context.getWorld();
-		BlockPos blockpos = context.getPos();
+		IWorldReader iworldreader = context.getLevel();
+		BlockPos blockpos = context.getClickedPos();
 
 		for (Direction direction : context.getNearestLookingDirections()) {
 			if (direction != Direction.UP) {
 				BlockState blockstate2 = direction == Direction.DOWN ? this.getBlock().getStateForPlacement(context) : blockstate;
-				if (blockstate2 != null && blockstate2.isValidPosition(iworldreader, blockpos)) {
+				if (blockstate2 != null && blockstate2.canSurvive(iworldreader, blockpos)) {
 					blockstate1 = blockstate2;
 					break;
 				}
 			}
 		}
 
-		return blockstate1 != null && iworldreader.func_226663_a_(blockstate1, blockpos, ISelectionContext.dummy()) ? blockstate1 : null;
+		return blockstate1 != null && iworldreader.isUnobstructed(blockstate1, blockpos, ISelectionContext.empty()) ? blockstate1 : null;
 	}
 
 	@Override
-	public void addToBlockToItemMap(Map<Block, Item> blockToItemMap, Item itemIn) {
-		super.addToBlockToItemMap(blockToItemMap, itemIn);
-		blockToItemMap.put(this.wallBlock, itemIn);
+	public void registerBlocks(Map<Block, Item> blockToItemMap, Item item) {
+		super.registerBlocks(blockToItemMap, item);
+		blockToItemMap.put(this.wallBlock, item);
 	}
 
 	@Override

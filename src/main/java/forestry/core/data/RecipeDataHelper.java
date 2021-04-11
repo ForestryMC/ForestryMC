@@ -44,7 +44,7 @@ public class RecipeDataHelper {
 
 		IFinishedRecipe finishedRecipe = finishedRecipeHolder.get();
 		builder.addRecipe(finishedRecipe);
-		builder.build(consumer, id == null ? finishedRecipe.getID() : id);
+		builder.build(consumer, id == null ? finishedRecipe.getId() : id);
 	}
 
 	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, String... moduleUIDs) {

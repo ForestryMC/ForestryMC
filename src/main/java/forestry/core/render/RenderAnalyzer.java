@@ -38,34 +38,34 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 		int textureHeight = 32;
 
 		textures = new ResourceLocation[]{
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
-			new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
 		};
 
 		pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
-		pedestal.setRotationPoint(8, 8, 8);
+		pedestal.setPos(8, 8, 8);
 
 		cover = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		cover.addBox(-8F, -8F, -8F, 16, 1, 16);
-		cover.setRotationPoint(8, 8, 8);
+		cover.setPos(8, 8, 8);
 
 		tower1 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		tower1.addBox(-8, -7, -7, 2, 14, 14);
-		tower1.setRotationPoint(8, 8, 8);
+		tower1.setPos(8, 8, 8);
 
 		tower2 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		tower2.addBox(6, -7, -7, 2, 14, 14);
-		tower2.setRotationPoint(8, 8, 8);
+		tower2.setPos(8, 8, 8);
 	}
 
 	@Override
 	public void renderTile(TileAnalyzer tile, RenderHelper helper) {
 		World worldObj = tile.getWorldObj();
-		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
-			Direction facing = blockState.get(BlockBase.FACING);
+			Direction facing = blockState.getValue(BlockBase.FACING);
 			render(tile.getIndividualOnDisplay(), worldObj, facing, helper);
 		}
 	}

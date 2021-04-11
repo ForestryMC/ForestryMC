@@ -26,7 +26,7 @@ public class FarmableVanillaMushroom extends FarmableBase {
 	private final Block hugeMushroomBlock;
 
 	public FarmableVanillaMushroom(ItemStack mushroom, BlockState plantedMushroom, Block hugeMushroomBlock) {
-		super(mushroom, plantedMushroom, hugeMushroomBlock.getDefaultState(), false);
+		super(mushroom, plantedMushroom, hugeMushroomBlock.defaultBlockState(), false);
 		this.hugeMushroomBlock = hugeMushroomBlock;
 	}
 
@@ -41,7 +41,7 @@ public class FarmableVanillaMushroom extends FarmableBase {
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		if (!plantedState.isValidPosition(world, pos)) {
+		if (!plantedState.canSurvive(world, pos)) {
 			return false;
 		}
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);

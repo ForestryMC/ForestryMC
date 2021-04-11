@@ -66,7 +66,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 	}
 
 	public String getTranslationKey() {
-		return block == null ? "block." + Constants.MOD_ID + ":" + identifier : block.getTranslationKey();
+		return block == null ? "block." + Constants.MOD_ID + ":" + identifier : block.getDescriptionId();
 	}
 
 	@Override
@@ -96,12 +96,12 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 
 	@Override
 	public BlockState defaultState() {
-		return block().getDefaultState();
+		return block().defaultBlockState();
 	}
 
 	@Override
 	public <V extends Comparable<V>> BlockState with(Property<V> property, V value) {
-		return defaultState().with(property, value);
+		return defaultState().setValue(property, value);
 	}
 
 	@Nullable

@@ -19,13 +19,12 @@ import net.minecraft.world.FoliageColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-
-import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -41,6 +40,8 @@ import forestry.core.config.Constants;
 import forestry.core.models.ClientManager;
 import forestry.modules.IClientModuleHandler;
 
+import genetics.utils.AlleleUtils;
+
 @OnlyIn(Dist.CLIENT)
 public class ProxyArboricultureClient extends ProxyArboriculture implements IClientModuleHandler {
 
@@ -55,22 +56,22 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public int getFoliageColorDefault() {
-		return FoliageColors.getDefault();
+		return FoliageColors.getDefaultColor();
 	}
 
 	@Override
 	public int getFoliageColorBirch() {
-		return FoliageColors.getBirch();
+		return FoliageColors.getBirchColor();
 	}
 
 	@Override
 	public int getFoliageColorSpruce() {
-		return FoliageColors.getSpruce();
+		return FoliageColors.getEvergreenColor();
 	}
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
 			return;
 		}
 		TextureLeaves.registerAllSprites(event);
@@ -91,20 +92,24 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
 		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
 
 		// fruit overlays require CUTOUT_MIPPED, even in Fast graphics
-		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.getCutoutMipped());
-		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.getCutout());
-		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getTranslucent()));
+		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());
+		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.cutout());
+		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.translucent()));
 
 		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
 			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
 			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
 		});
+	}
+
+	@Override
+	public void registerModels(ModelRegistryEvent event) {
+		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
 	}
 }

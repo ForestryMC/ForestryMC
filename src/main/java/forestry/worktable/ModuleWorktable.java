@@ -20,7 +20,7 @@ public class ModuleWorktable extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
+		ScreenManager.register(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
 	}
 
 	@Override

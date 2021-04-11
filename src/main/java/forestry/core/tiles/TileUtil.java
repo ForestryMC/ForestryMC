@@ -35,12 +35,12 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 public abstract class TileUtil {
 
 	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
-		BlockPos pos = tile.getPos();
-		World world = tile.getWorld();
+		BlockPos pos = tile.getBlockPos();
+		World world = tile.getLevel();
 
 		return !tile.isRemoved() &&
-			getTile(world, pos) == tile &&
-			player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+				getTile(world, pos) == tile &&
+				player.distanceToSqr(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
 	}
 
 	/**
@@ -52,9 +52,9 @@ public abstract class TileUtil {
 	public static TileEntity getTile(IBlockReader world, BlockPos pos) {
 		if (world instanceof Region) {
 			Region chunkCache = (Region) world;
-			return chunkCache.getTileEntity(pos);
+			return chunkCache.getBlockEntity(pos);
 		} else {
-			return world.getTileEntity(pos);
+			return world.getBlockEntity(pos);
 		}
 	}
 
@@ -130,7 +130,7 @@ public abstract class TileUtil {
 	}
 
 	public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity == null) {
 			return LazyOptional.empty();
 		}

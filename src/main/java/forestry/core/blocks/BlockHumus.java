@@ -30,25 +30,25 @@ public class BlockHumus extends Block {
 	public static final IntegerProperty DEGRADE = IntegerProperty.create("degrade", 0, degradeDelimiter); // degradation level of humus
 
 	public BlockHumus() {
-		super(Block.Properties.create(Material.EARTH)
-			.tickRandomly()
-			.hardnessAndResistance(0.5f)
-			.sound(SoundType.GROUND)
-			.harvestTool(ToolType.SHOVEL)
-			.harvestLevel(0));
+		super(Block.Properties.of(Material.DIRT)
+				.randomTicks()
+				.strength(0.5f)
+				.sound(SoundType.GRAVEL)
+				.harvestTool(ToolType.SHOVEL)
+				.harvestLevel(0));
 
-		setDefaultState(this.getStateContainer().getBaseState().with(DEGRADE, 0));
+		registerDefaultState(this.getStateDefinition().any().setValue(DEGRADE, 0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(DEGRADE);
 	}
 
 	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-		if (world.isRemote || world.rand.nextInt(140) != 0) {
+		if (world.isClientSide || world.random.nextInt(140) != 0) {
 			return;
 		}
 
@@ -63,10 +63,10 @@ public class BlockHumus extends Block {
 				if (i == 0 && j == 0) {
 					continue; // We are not returning true if we are the base of a sapling.
 				}
-				BlockPos blockPos = pos.add(i, 1, j);
+				BlockPos blockPos = pos.offset(i, 1, j);
 				BlockState state = world.getBlockState(blockPos);
 				Block block = state.getBlock();
-				if (block.isIn(BlockTags.LOGS) || block instanceof IGrowable) {
+				if (block.is(BlockTags.LOGS) || block instanceof IGrowable) {
 					return true;
 				}
 			}
@@ -81,13 +81,13 @@ public class BlockHumus extends Block {
 	private static void degradeSoil(World world, final BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 
-		int degrade = blockState.get(DEGRADE);
+		int degrade = blockState.getValue(DEGRADE);
 		degrade++;
 
 		if (degrade >= degradeDelimiter) {
-			world.setBlockState(pos, Blocks.SAND.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos, Blocks.SAND.defaultBlockState(), Constants.FLAG_BLOCK_SYNC);
 		} else {
-			world.setBlockState(pos, blockState.with(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos, blockState.setValue(DEGRADE, degrade), Constants.FLAG_BLOCK_SYNC);
 		}
 		//TODO: Is this still needed ? Should now be marked with setBlockState
 		RenderUtil.markForUpdate(pos);

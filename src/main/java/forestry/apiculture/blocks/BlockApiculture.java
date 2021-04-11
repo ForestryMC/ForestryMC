@@ -19,6 +19,6 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockApiculture extends BlockBase<BlockTypeApiculture> {
 	public BlockApiculture(BlockTypeApiculture type) {
-		super(type, Block.Properties.create(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
+		super(type, Block.Properties.of(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
 	}
 }

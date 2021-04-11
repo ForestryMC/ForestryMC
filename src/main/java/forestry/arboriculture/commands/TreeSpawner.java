@@ -16,20 +16,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.core.utils.WorldUtils;
+
 import genetics.commands.SpeciesNotFoundException;
 
 public class TreeSpawner implements ITreeSpawner {
 
 	@Override
 	public int spawn(CommandSource source, ITree tree, PlayerEntity player) throws SpeciesNotFoundException {
-		Vector3d look = player.getLookVec();
+		Vector3d look = player.getLookAngle();
 
-		int x = (int) Math.round(player.getPosX() + 3 * look.x);
-		int y = (int) Math.round(player.getPosY());
-		int z = (int) Math.round(player.getPosZ() + 3 * look.z);
+		int x = (int) Math.round(player.getX() + 3 * look.x);
+		int y = (int) Math.round(player.getY());
+		int z = (int) Math.round(player.getZ() + 3 * look.z);
 		BlockPos pos = new BlockPos(x, y, z);
 
-		TreeGenHelper.generateTree(tree, player.world, pos);
+		TreeGenHelper.generateTree(tree, WorldUtils.asServer(player.level), pos);
 		return 1;
 	}
 }

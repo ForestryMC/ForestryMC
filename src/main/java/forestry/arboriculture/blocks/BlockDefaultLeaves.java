@@ -18,14 +18,14 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
+
+import genetics.api.individual.IGenome;
 
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
@@ -35,11 +35,11 @@ public class BlockDefaultLeaves extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeaves(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES)
-			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT)
-			.tickRandomly()
-			.notSolid());
+		super(Block.Properties.of(Material.LEAVES)
+				.strength(0.2f)
+				.sound(SoundType.GRASS)
+				.randomTicks()
+				.noOcclusion());
 		this.definition = definition;
 	}
 

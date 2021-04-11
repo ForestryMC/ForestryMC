@@ -8,13 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.gui.elements.GuiElementFactory;
@@ -23,6 +16,13 @@ import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.gui.elements.lib.IElementLayoutHelper;
 import forestry.core.utils.Translator;
+
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
 
 public class MutationsTab extends DatabaseTab {
 	public MutationsTab(Supplier<ItemStack> stackSupplier) {
@@ -39,7 +39,7 @@ public class MutationsTab extends DatabaseTab {
 		//TODO This will crash because use clientside player so have clientside world. Not sure how else to handle world saved data
 		//TODO check map code?
 		PlayerEntity player = Minecraft.getInstance().player;
-		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.level, player.getGameProfile());
 
 		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
 		Collection<? extends IMutation> mutations = getValidMutations(mutationContainer.getCombinations(species));

@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
@@ -48,17 +49,21 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().gameSettings.graphicFanciness == GraphicsFanciness.FANCY;
+		return Minecraft.getInstance().options.graphicsMode == GraphicsFanciness.FANCY;
 	}
 
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
 		for (EnumContainerType type : EnumContainerType.values()) {
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_empty", "inventory"));
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getString() + "_filled", "inventory"));
+			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
+			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
 		}
-		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+	}
+
+	@Override
+	public void registerModels(ModelRegistryEvent event) {
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
 	}
 

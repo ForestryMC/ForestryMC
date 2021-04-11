@@ -16,9 +16,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -210,7 +210,7 @@ public abstract class Ledger {
 
 		RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
 
-		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		Minecraft.getInstance().getTextureManager().bind(texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -230,7 +230,7 @@ public abstract class Ledger {
 
 	protected void drawSprite(MatrixStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
-		Minecraft.getInstance().getTextureManager().bindTexture(textureMap);
+		Minecraft.getInstance().getTextureManager().bind(textureMap);
 		AbstractGui.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}
 
@@ -253,22 +253,21 @@ public abstract class Ledger {
 	protected int drawSplitText(MatrixStack transform, String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
 		Minecraft minecraft = Minecraft.getInstance();
-		List<ITextProperties> strings = minecraft.fontRenderer.func_238425_b_(new StringTextComponent(string), width);
-		for (ITextProperties obj : strings) {
-			String s = obj.getString();
+		List<IReorderingProcessor> strings = minecraft.font.split(new StringTextComponent(string), width);
+		for (IReorderingProcessor obj : strings) {
 			if (shadow) {
-				minecraft.fontRenderer.drawStringWithShadow(transform, s, x, y, color);
+				minecraft.font.drawShadow(transform, obj, x, y, color);
 			} else {
-				minecraft.fontRenderer.drawString(transform, s, x, y, color);
+				minecraft.font.draw(transform, obj, x, y, color);
 			}
-			y += minecraft.fontRenderer.FONT_HEIGHT;
+			y += minecraft.font.lineHeight;
 		}
 		return y - originalY;
 	}
 
 	protected int drawText(MatrixStack transform, String string, int x, int y) {
 		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.fontRenderer.drawString(transform, string, x, y, fontColorText);
-		return minecraft.fontRenderer.FONT_HEIGHT;
+		minecraft.font.draw(transform, string, x, y, fontColorText);
+		return minecraft.font.lineHeight;
 	}
 }

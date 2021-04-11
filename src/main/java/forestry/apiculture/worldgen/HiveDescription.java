@@ -22,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
@@ -67,15 +65,15 @@ public enum HiveDescription implements IHiveDescription {
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
-			return BiomeDictionary.hasType(biome, BiomeDictionary.Type.END);
+			return biome.getBiomeCategory() == Biome.Category.THEEND;
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW)) {
 		@Override
 		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
-			BlockPos posAbove = pos.up();
-			if (world.isAirBlock(posAbove)) {
-				world.setBlockState(posAbove, Blocks.SNOW.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			BlockPos posAbove = pos.above();
+			if (world.isEmptyBlock(posAbove)) {
+				world.setBlock(posAbove, Blocks.SNOW.defaultBlockState(), Constants.FLAG_BLOCK_SYNC);
 			}
 
 			postGenFlowers(world, rand, pos, flowerStates);
@@ -93,13 +91,13 @@ public enum HiveDescription implements IHiveDescription {
 	private static final IHiveGen groundGen = HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS, Blocks.SNOW, Blocks.SAND, Blocks.SANDSTONE);
 	private static final List<BlockState> flowerStates = new ArrayList<>();
 	private static final List<BlockState> mushroomStates = new ArrayList<>();
-	private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.getDefaultState());
+	private static final List<BlockState> cactusStates = Collections.singletonList(Blocks.CACTUS.defaultBlockState());
 
 	static {
-		flowerStates.addAll(Blocks.POPPY.getStateContainer().getValidStates());
-		flowerStates.addAll(Blocks.DANDELION.getStateContainer().getValidStates());
-		mushroomStates.add(Blocks.RED_MUSHROOM.getDefaultState());
-		mushroomStates.add(Blocks.BROWN_MUSHROOM.getDefaultState());
+		flowerStates.addAll(Blocks.POPPY.getStateDefinition().getPossibleStates());
+		flowerStates.addAll(Blocks.DANDELION.getStateDefinition().getPossibleStates());
+		mushroomStates.add(Blocks.RED_MUSHROOM.defaultBlockState());
+		mushroomStates.add(Blocks.BROWN_MUSHROOM.defaultBlockState());
 	}
 
 	private final BlockState blockState;
@@ -159,8 +157,8 @@ public enum HiveDescription implements IHiveDescription {
 		for (int i = 0; i < 10; i++) {
 			int xOffset = rand.nextInt(8) - 4;
 			int zOffset = rand.nextInt(8) - 4;
-			BlockPos blockPos = hivePos.add(xOffset, 0, zOffset);
-			if ((xOffset == 0 && zOffset == 0) || !world.isBlockLoaded(blockPos)) {
+			BlockPos blockPos = hivePos.offset(xOffset, 0, zOffset);
+			if ((xOffset == 0 && zOffset == 0) || !world.hasChunkAt(blockPos)) {
 				continue;
 			}
 
@@ -171,11 +169,11 @@ public enum HiveDescription implements IHiveDescription {
 
 			BlockState state = flowerStates.get(rand.nextInt(flowerStates.size()));
 			Block block = state.getBlock();
-			if (!block.getDefaultState().isValidPosition(world, blockPos)) {
+			if (!block.defaultBlockState().canSurvive(world, blockPos)) {
 				continue;
 			}
 
-			world.setBlockState(blockPos, state, Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(blockPos, state, Constants.FLAG_BLOCK_SYNC);
 			plantedCount++;
 
 			if (plantedCount >= 3) {

@@ -78,9 +78,9 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 		super(original);
 		this.override = new TRSROverride(this);
 
-		this.faceOffset = 4 + Direction.NORTH.getHorizontalIndex() - facing.getHorizontalIndex();
+		this.faceOffset = 4 + Direction.NORTH.get2DDataValue() - facing.get2DDataValue();
 
-		double r = Math.PI * (360 - facing.getOpposite().getHorizontalIndex() * 90) / 180d;
+		double r = Math.PI * (360 - facing.getOpposite().get2DDataValue() * 90) / 180d;
 		this.transformation = new TransformationMatrix(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
 	}
 
@@ -89,14 +89,14 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData data) {
 		// transform quads obtained from parent
 		ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
-		if (!this.originalModel.isBuiltInRenderer()) {
+		if (!this.originalModel.isCustomRenderer()) {
 			try {
 				// adjust side to facing-rotation
-				if (side != null && side.getHorizontalIndex() > -1) {
-					side = Direction.byHorizontalIndex((side.getHorizontalIndex() + this.faceOffset) % 4);
+				if (side != null && side.get2DDataValue() > -1) {
+					side = Direction.from2DDataValue((side.get2DDataValue() + this.faceOffset) % 4);
 				}
 				for (BakedQuad quad : this.originalModel.getQuads(state, side, rand, data)) {
-					Transformer transformer = new Transformer(this.transformation, quad.func_187508_a());
+					Transformer transformer = new Transformer(this.transformation, quad.getSprite());
 					quad.pipe(transformer);
 					builder.add(transformer.build());
 				}
@@ -128,8 +128,8 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
 		@Nonnull
 		@Override
-		public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-			IBakedModel baked = this.model.originalModel.getOverrides().func_239290_a_(originalModel, stack, world, entity);
+		public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+			IBakedModel baked = this.model.originalModel.getOverrides().resolve(originalModel, stack, world, entity);
 			if (baked == null) {
 				baked = originalModel;
 			}
@@ -161,18 +161,18 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 				Vector4f vec = new Vector4f(data[0], data[1], data[2], 1f);
 				vec.transform(this.transformation);
 				data = new float[4];
-				data[0] = vec.getX();
-				data[1] = vec.getY();
-				data[2] = vec.getZ();
-				data[3] = vec.getW();
+				data[0] = vec.x();
+				data[1] = vec.y();
+				data[2] = vec.z();
+				data[3] = vec.w();
 			} else if (usage == VertexFormatElement.Usage.NORMAL && data.length >= 3) {
 				Vector3f vec = new Vector3f(data);
 				vec.transform(this.normalTransformation);
 				vec.normalize();
 				data = new float[4];
-				data[0] = vec.getX();
-				data[1] = vec.getY();
-				data[2] = vec.getZ();
+				data[0] = vec.x();
+				data[1] = vec.y();
+				data[2] = vec.z();
 			}
 			super.put(element, data);
 		}

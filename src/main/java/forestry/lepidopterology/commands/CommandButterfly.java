@@ -21,13 +21,14 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import genetics.commands.PermLevel;
 import forestry.lepidopterology.features.LepidopterologyEntities;
+
+import genetics.commands.PermLevel;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class  CommandButterfly {
+public class CommandButterfly {
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("butterfly")
 				.then(CommandButterflyKill.register());
@@ -40,11 +41,11 @@ public class  CommandButterfly {
 
 		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
 			int killCount = 0;
-			for (Entity butterfly : context.getSource().asPlayer().getServerWorld().getEntities(LepidopterologyEntities.BUTTERFLY.entityType(), EntityPredicates.IS_ALIVE)) {
+			for (Entity butterfly : context.getSource().getPlayerOrException().getLevel().getEntities(LepidopterologyEntities.BUTTERFLY.entityType(), EntityPredicates.ENTITY_STILL_ALIVE)) {
 				butterfly.remove();
 				killCount++;
 			}
-			context.getSource().sendFeedback(new TranslationTextComponent("for.chat.command.forestry.butterfly.kill.response", killCount), true);
+			context.getSource().sendSuccess(new TranslationTextComponent("for.chat.command.forestry.butterfly.kill.response", killCount), true);
 
 			return killCount;
 		}

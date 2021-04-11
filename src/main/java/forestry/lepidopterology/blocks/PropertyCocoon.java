@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import genetics.utils.AlleleUtils;
-
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.core.blocks.properties.PropertyAllele;
+
+import genetics.utils.AlleleUtils;
 
 public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	private static final Map<String, IAlleleButterflyCocoon> namesMap = new HashMap<>();
@@ -34,7 +34,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	}
 
 	@Override
-	public Collection<IAlleleButterflyCocoon> getAllowedValues() {
+	public Collection<IAlleleButterflyCocoon> getPossibleValues() {
 		return AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON);
 	}
 
@@ -44,7 +44,7 @@ public class PropertyCocoon extends PropertyAllele<IAlleleButterflyCocoon> {
 	}
 
 	@Override
-	public Optional<IAlleleButterflyCocoon> parseValue(String value) {
+	public Optional<IAlleleButterflyCocoon> getValue(String value) {
 		if (namesMap.isEmpty()) {
 			// Using the stream here so we can save one 'collect' call in 'getRegisteredAlleles()'
 			AlleleUtils.filteredStream(ButterflyChromosomes.COCOON).forEach(cocoon -> {

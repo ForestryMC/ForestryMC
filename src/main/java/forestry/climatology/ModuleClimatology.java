@@ -49,7 +49,7 @@ public class ModuleClimatology extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
+		ScreenManager.register(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public abstract class PlayerUtil {
 	}
 
 	public static boolean actOnServer(PlayerEntity player, Consumer<ServerPlayerEntity> action) {
-		if (player.world.isRemote || !(player instanceof ServerPlayerEntity)) {
+		if (player.level.isClientSide || !(player instanceof ServerPlayerEntity)) {
 			return false;
 		}
 		action.accept(asServer(player));
@@ -84,7 +84,7 @@ public abstract class PlayerUtil {
 			}
 		}
 
-		PlayerEntity player = world.getPlayerByUuid(profile.getId());
+		PlayerEntity player = world.getPlayerByUUID(profile.getId());
 		if (player == null && world instanceof ServerWorld) {
 			player = FakePlayerFactory.get((ServerWorld) world, profile);
 		}

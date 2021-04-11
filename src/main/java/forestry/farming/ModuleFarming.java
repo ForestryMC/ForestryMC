@@ -83,7 +83,7 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(FarmingContainers.FARM.containerType(), GuiFarm::new);
+		ScreenManager.register(FarmingContainers.FARM.containerType(), GuiFarm::new);
 	}
 
 	@Override
@@ -96,10 +96,10 @@ public class ModuleFarming extends BlankForestryModule {
 		}
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-			new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
-			new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.BEETROOT_AGE, 3, 0));
+				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.AGE, 3, 0));
 
 		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
 		registry.registerFarmables(ForestryFarmIdentifier.SHROOM, new FarmableVanillaMushroom(new ItemStack(Blocks.BROWN_MUSHROOM), plantedBrownMushroom, Blocks.BROWN_MUSHROOM_BLOCK));

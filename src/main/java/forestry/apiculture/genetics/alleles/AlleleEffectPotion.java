@@ -26,12 +26,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
@@ -47,7 +47,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		this.chance = chance;
 
 		Collection<EffectInstance> potionEffects = Collections.singleton(new EffectInstance(potion, 1, 0));
-		this.potionFXColor = PotionUtils.getPotionColorFromEffectList(potionEffects);
+		this.potionFXColor = PotionUtils.getColor(potionEffects);
 	}
 
 	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration) {
@@ -59,12 +59,12 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 		World world = housing.getWorldObj();
 		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
 		for (LivingEntity entity : entities) {
-			if (world.rand.nextFloat() >= chance) {
+			if (world.random.nextFloat() >= chance) {
 				continue;
 			}
 
 			int dur = this.duration;
-			if (potion.getEffectType() == EffectType.HARMFUL) {
+			if (potion.getCategory() == EffectType.HARMFUL) {
 				// Entities are not attacked if they wear a full set of apiarist's armor.
 				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 				if (count >= 4) {
@@ -83,7 +83,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 				}
 			}
 
-			entity.addPotionEffect(new EffectInstance(potion, dur, 0));
+			entity.addEffect(new EffectInstance(potion, dur, 0));
 		}
 
 		return storedData;
@@ -93,7 +93,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		if (world.rand.nextBoolean()) {
+		if (world.random.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
 			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();

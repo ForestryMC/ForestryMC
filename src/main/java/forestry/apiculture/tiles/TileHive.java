@@ -45,9 +45,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -76,6 +73,9 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
+
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IGenome;
 
 public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
@@ -108,7 +108,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		}
 		tickHelper.onTick();
 
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			if (active && tickHelper.updateOnInterval(4)) {
 				if (beeLogic.canDoBeeFX()) {
 					beeLogic.doBeeFX();
@@ -120,9 +120,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 			if (tickHelper.updateOnInterval(angry ? 10 : 200)) {
 				if (calmTime == 0) {
 					if (canWork) {
-						if (angry && ModuleApiculture.hiveDamageOnAttack && (world.getWorldInfo().getDifficulty() != Difficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
+						if (angry && ModuleApiculture.hiveDamageOnAttack && (level.getLevelData().getDifficulty() != Difficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
 							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
-							List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, boundingBox, beeTargetPredicate);
+							List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								LivingEntity entity = entities.get(0);
@@ -145,7 +145,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	public IBee getContainedBee() {
 		if (this.containedBee == null) {
 			IGenome beeGenome = null;
-			ItemStack containedBee = contained.getStackInSlot(0);
+			ItemStack containedBee = contained.getItem(0);
 			if (!containedBee.isEmpty()) {
 				Optional<IBee> optionalBee = BeeManager.beeRoot.create(containedBee);
 				if (optionalBee.isPresent()) {
@@ -166,16 +166,13 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Nullable
 	private IGenome getGenomeFromBlock() {
-		if (world.isBlockLoaded(pos)) {
-			BlockState blockState = world.getBlockState(pos);
+		if (level.hasChunkAt(worldPosition)) {
+			BlockState blockState = level.getBlockState(worldPosition);
 			Block block = blockState.getBlock();
 			if (block instanceof BlockBeeHive) {
 				IHiveRegistry.HiveType hiveType = ((BlockBeeHive) block).getType();
 				String speciesUid = hiveType.getSpeciesUid();
-				IAllele[] template = BeeManager.beeRoot.getTemplates().getTemplate(speciesUid);
-				if (template != null) {
-					return BeeManager.beeRoot.getKaryotype().templateAsGenome(template);
-				}
+				return GeneticHelper.genomeFromTemplate(speciesUid, BeeManager.beeRootDefinition);
 			}
 		}
 		return null;
@@ -188,16 +185,16 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		contained.read(compoundNBT);
 		beeLogic.read(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		contained.write(compoundNBT);
 		beeLogic.write(compoundNBT);
 		return compoundNBT;
@@ -238,13 +235,13 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	private static void attack(LivingEntity entity, int maxDamage) {
-		double attackAmount = entity.world.rand.nextDouble() / 2.0 + 0.5;
+		double attackAmount = entity.level.random.nextDouble() / 2.0 + 0.5;
 		int damage = (int) (attackAmount * maxDamage);
 		if (damage > 0) {
 			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.damageType), true);
-			if (entity.world.rand.nextInt(4) >= count) {
-				entity.attackEntityFrom(damageSourceBeeHive, damage);
+			int count = BeeManager.armorApiaristHelper.wearsItems(entity, new ResourceLocation(damageSourceBeeHive.msgId), true);
+			if (entity.level.random.nextInt(4) >= count) {
+				entity.hurt(damageSourceBeeHive, damage);
 			}
 		}
 	}
@@ -261,15 +258,15 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		}
 		this.active = active;
 
-		if (!world.isRemote) {
-			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+		if (!level.isClientSide) {
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), worldPosition, level);
 		}
 	}
 
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(worldPosition, 0, getUpdateTag());
 	}
 
 
@@ -292,7 +289,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	@OnlyIn(Dist.CLIENT)
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
@@ -319,7 +316,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPos());
+		return EnumTemperature.getFromBiome(getBiome(), getBlockPos());
 	}
 
 	@Override
@@ -330,7 +327,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	public int getBlockLightValue() {
-		return getWorld().isDaytime() ? 15 : 0; // hives may have the sky obstructed but should still be active
+		return getLevel().isDay() ? 15 : 0; // hives may have the sky obstructed but should still be active
 	}
 
 	@Override
@@ -340,17 +337,17 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	public boolean isRaining() {
-		return world.isRainingAt(getPos().up());
+		return level.isRainingAt(getBlockPos().above());
 	}
 
 	@Override
 	public World getWorldObj() {
-		return world;
+		return level;
 	}
 
 	@Override
 	public Biome getBiome() {
-		return getWorld().getBiome(getPos());
+		return getLevel().getBiome(getBlockPos());
 	}
 
 	@Override
@@ -361,7 +358,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	public Vector3d getBeeFXCoordinates() {
-		BlockPos pos = getPos();
+		BlockPos pos = getBlockPos();
 		return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
 	}
 
@@ -372,7 +369,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	public BlockPos getCoordinates() {
-		return getPos();
+		return getBlockPos();
 	}
 
 	private static class BeeTargetPredicate implements Predicate<LivingEntity> {
@@ -387,7 +384,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		public boolean apply(@Nullable LivingEntity input) {
 			if (input != null && input.isAlive() && !input.isInvisible()) {
 				if (input instanceof PlayerEntity) {
-					return EntityPredicates.CAN_AI_TARGET.test(input);
+					return EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(input);
 				} else if (hive.isAngry()) {
 					return true;
 				} else if (input instanceof IMob) {

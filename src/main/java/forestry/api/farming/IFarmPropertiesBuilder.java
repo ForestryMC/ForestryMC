@@ -36,7 +36,7 @@ public interface IFarmPropertiesBuilder {
 	IFarmPropertiesBuilder setWindfallPredicate(Predicate<ItemStack> isWindfall);*/
 
 	default IFarmPropertiesBuilder addSoil(Block block) {
-		return addSoil(new ItemStack(block), block.getDefaultState());
+		return addSoil(new ItemStack(block), block.defaultBlockState());
 	}
 
 	IFarmPropertiesBuilder addSoil(ItemStack resource, BlockState soilState);

@@ -36,7 +36,7 @@ public class FeatureEbony extends FeatureTree {
 			for (int z = 0; z < girth; z++) {
 				if (rand.nextFloat() < 0.6f) {
 					for (int y = 0; y < height; y++) {
-						FeatureHelper.addBlock(world, startPos.add(x, y, z), wood, FeatureHelper.EnumReplaceMode.ALL);
+						FeatureHelper.addBlock(world, startPos.offset(x, y, z), wood, FeatureHelper.EnumReplaceMode.ALL);
 						if (y > height / 2 && rand.nextFloat() < 0.1f * (10 / height)) {
 							break;
 						}
@@ -44,7 +44,7 @@ public class FeatureEbony extends FeatureTree {
 					trunksGenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						world.setBlockState(new BlockPos(x, i, z), Blocks.AIR.getDefaultState(), 18);
+						world.setBlock(new BlockPos(x, i, z), Blocks.AIR.defaultBlockState(), 18);
 					}
 				}
 			}
@@ -69,7 +69,7 @@ public class FeatureEbony extends FeatureTree {
 			int x_off = rand.nextInt(girth);
 			int y_off = rand.nextInt(girth);
 
-			BlockPos center = startPos.add(x_off, h, y_off);
+			BlockPos center = startPos.offset(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(girth);
 			FeatureHelper.generateSphere(world, center, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
 		}

@@ -60,8 +60,8 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> CARTON = REGISTRY.item(ItemForestry::new, "carton");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_PICKAXE = REGISTRY.item(ItemForestry::new, "broken_bronze_pickaxe");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_SHOVEL = REGISTRY.item(ItemForestry::new, "broken_bronze_shovel");
-	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).maxDamage(200).group(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
-	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).maxDamage(200).group(ItemGroupForestry.tabForestry)), "bronze_shovel");
+	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).durability(200).tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
+	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).durability(200).tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_SHOVEL = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_SHOVEL.stack()), "kit_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_PICKAXE = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_PICKAXE.stack()), "kit_pickaxe");
 

@@ -141,16 +141,16 @@ public class FarmHelper {
 			targets.put(farmSide, farmSideTargets);
 
 			BlockPos targetLocation = FarmHelper.getFarmMultiblockCorner(targetStart, farmSide, layoutDirection, minFarmCoord, maxFarmCoord);
-			BlockPos firstLocation = targetLocation.offset(farmSide.getFacing());
+			BlockPos firstLocation = targetLocation.relative(farmSide.getFacing());
 			BlockPos firstGroundPosition = getGroundPosition(world, farmHousing, firstLocation);
 			if (firstGroundPosition != null) {
 				int groundHeight = firstGroundPosition.getY();
 
 				for (int i = 0; i < allowedExtent; i++) {
-					targetLocation = targetLocation.offset(farmSide.getFacing());
+					targetLocation = targetLocation.relative(farmSide.getFacing());
 					BlockPos groundLocation = new BlockPos(targetLocation.getX(), groundHeight, targetLocation.getZ());
 
-					if (!world.isBlockLoaded(groundLocation) || !farmHousing.isValidPlatform(world, groundLocation)) {
+					if (!world.hasChunkAt(groundLocation) || !farmHousing.isValidPlatform(world, groundLocation)) {
 						break;
 					}
 
@@ -168,13 +168,13 @@ public class FarmHelper {
 
 	@Nullable
 	private static BlockPos getGroundPosition(World world, IFarmHousing farmHousing, BlockPos targetPosition) {
-		if (!world.isBlockLoaded(targetPosition)) {
+		if (!world.hasChunkAt(targetPosition)) {
 			return null;
 		}
 
 		for (int yOffset = 2; yOffset > -4; yOffset--) {
-			BlockPos position = targetPosition.add(0, yOffset, 0);
-			if (world.isBlockLoaded(position) && farmHousing.isValidPlatform(world, position)) {
+			BlockPos position = targetPosition.offset(0, yOffset, 0);
+			if (world.hasChunkAt(position) && farmHousing.isValidPlatform(world, position)) {
 				return position;
 			}
 		}
@@ -204,7 +204,7 @@ public class FarmHelper {
 	}
 
 	public static boolean cultivateTarget(World world, IFarmHousing farmHousing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		BlockPos targetPosition = target.getStart().add(0, target.getYOffset(), 0);
+		BlockPos targetPosition = target.getStart().offset(0, target.getYOffset(), 0);
 		if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : farmListeners) {
 				listener.hasCultivated(logic, targetPosition, target.getDirection(), target.getExtent());
@@ -227,7 +227,7 @@ public class FarmHelper {
 	}
 
 	public static Collection<ICrop> harvestTarget(World world, IFarmHousing housing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
-		BlockPos pos = target.getStart().add(0, target.getYOffset(), 0);
+		BlockPos pos = target.getStart().offset(0, target.getYOffset(), 0);
 		Collection<ICrop> harvested = logic.harvest(world, housing, target.getDirection(), target.getExtent(), pos);
 		if (!harvested.isEmpty()) {
 			// Let event handlers know.

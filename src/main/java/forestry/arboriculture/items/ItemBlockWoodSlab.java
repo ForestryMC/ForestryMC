@@ -13,11 +13,11 @@ import forestry.arboriculture.blocks.BlockForestrySlab;
 public class ItemBlockWoodSlab extends BlockItem {
 
 	public ItemBlockWoodSlab(BlockForestrySlab block) {
-		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
+		super(block, new Item.Properties().tab(ItemGroups.tabArboriculture));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		BlockForestrySlab wood = (BlockForestrySlab) getBlock();
 		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);

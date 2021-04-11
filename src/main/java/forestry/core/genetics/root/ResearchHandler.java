@@ -12,6 +12,13 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
+import forestry.api.genetics.ForestryComponentKeys;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.IResearchHandler;
+import forestry.api.genetics.alleles.AlleleManager;
+import forestry.core.utils.ItemStackUtil;
+
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
@@ -19,13 +26,6 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
-
-import forestry.api.genetics.ForestryComponentKeys;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.IResearchHandler;
-import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.utils.ItemStackUtil;
 
 public class ResearchHandler<I extends IIndividual> implements IResearchHandler<I> {
 	private final Map<ItemStack, Float> catalysts = new LinkedHashMap<>();
@@ -86,7 +86,7 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
 	@Override
 	public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel) {
 		NonNullList<ItemStack> bounty = NonNullList.create();
-		if (world.rand.nextFloat() < bountyLevel / 16.0f) {
+		if (world.random.nextFloat() < bountyLevel / 16.0f) {
 			IMutationContainer<I, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
 			List<? extends IMutation> allMutations = container.getCombinations(species);
 			if (!allMutations.isEmpty()) {
@@ -100,9 +100,9 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
 
 				IMutation chosenMutation;
 				if (!unresearchedMutations.isEmpty()) {
-					chosenMutation = unresearchedMutations.get(world.rand.nextInt(unresearchedMutations.size()));
+					chosenMutation = unresearchedMutations.get(world.random.nextInt(unresearchedMutations.size()));
 				} else {
-					chosenMutation = allMutations.get(world.rand.nextInt(allMutations.size()));
+					chosenMutation = allMutations.get(world.random.nextInt(allMutations.size()));
 				}
 
 				ItemStack researchNote = AlleleManager.geneticRegistry.getMutationNoteStack(gameProfile, chosenMutation);

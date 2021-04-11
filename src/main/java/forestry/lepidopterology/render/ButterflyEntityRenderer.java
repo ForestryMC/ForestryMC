@@ -32,17 +32,17 @@ public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, Butter
 			return;
 		}
 
-		entityModel.setScale(entity.getSize());
+		model.setScale(entity.getSize());
 		super.render(entity, entityYaw, partialTickTime, transform, buffer, packedLight);
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(EntityButterfly entity) {
+	public ResourceLocation getTextureLocation(EntityButterfly entity) {
 		return entity.getTexture();
 	}
 
 	@Override
-	protected float handleRotationFloat(EntityButterfly entity, float partialTickTime) {
+	protected float getBob(EntityButterfly entity, float partialTickTime) {
 		return entity.getWingFlap(partialTickTime);
 	}
 

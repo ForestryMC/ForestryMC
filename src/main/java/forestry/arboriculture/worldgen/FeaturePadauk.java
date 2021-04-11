@@ -60,9 +60,9 @@ public class FeaturePadauk extends FeatureTree {
 
 						wood.setDirection(directionValue);
 						if (directionValue == Direction.NORTH) {
-							FeatureHelper.addBlock(world, startPos.add(0, branchSpawnY, j * offsetValue), wood, FeatureHelper.EnumReplaceMode.ALL);
+							FeatureHelper.addBlock(world, startPos.offset(0, branchSpawnY, j * offsetValue), wood, FeatureHelper.EnumReplaceMode.ALL);
 						} else if (directionValue == Direction.EAST) {
-							FeatureHelper.addBlock(world, startPos.add(j * offsetValue, branchSpawnY, 0), wood, FeatureHelper.EnumReplaceMode.ALL);
+							FeatureHelper.addBlock(world, startPos.offset(j * offsetValue, branchSpawnY, 0), wood, FeatureHelper.EnumReplaceMode.ALL);
 						}
 					}
 				}
@@ -75,9 +75,9 @@ public class FeaturePadauk extends FeatureTree {
 	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 3f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 3f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		int count = 0;
 		int max = 3;
@@ -86,7 +86,7 @@ public class FeaturePadauk extends FeatureTree {
 
 		while (leafSpawn > 3 && count < canopyHeight) {
 			int yCenter = leafSpawn--;
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, yCenter, 0), girth, 4.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, yCenter, 0), girth, 4.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 			count++;
 		}
 	}

@@ -19,7 +19,7 @@ public class ModuleDatabase extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(DatabaseContainers.DATABASE.containerType(), GuiDatabase::new);
+		ScreenManager.register(DatabaseContainers.DATABASE.containerType(), GuiDatabase::new);
 	}
 
 	@Override

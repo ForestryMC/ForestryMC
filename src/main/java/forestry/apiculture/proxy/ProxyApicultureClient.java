@@ -50,12 +50,12 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 	public void setupClient(FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
-		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutout()));
+		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutout()));
 	}
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (!event.getMap().getTextureLocation().equals(AtlasTexture.LOCATION_PARTICLES_TEXTURE)) {
+		if (!event.getMap().location().equals(AtlasTexture.LOCATION_PARTICLES)) {
 			return;
 		}
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
@@ -67,7 +67,7 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
 		AtlasTexture map = event.getMap();
-		if (!map.getTextureLocation().equals(AtlasTexture.LOCATION_PARTICLES_TEXTURE)) {
+		if (!map.location().equals(AtlasTexture.LOCATION_PARTICLES)) {
 			return;
 		}
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {

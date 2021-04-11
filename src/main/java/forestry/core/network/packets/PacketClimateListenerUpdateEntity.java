@@ -40,7 +40,7 @@ public class PacketClimateListenerUpdateEntity extends ForestryPacket implements
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			Entity entity = data.readEntityById(player.world);
+			Entity entity = data.readEntityById(player.level);
 			IClimateState state = data.readClimateState();
 			if (entity != null) {
 				LazyOptional<IClimateListener> listener = entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);

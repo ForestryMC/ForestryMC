@@ -16,16 +16,16 @@ public class BlockAsh extends Block {
 	public static final IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 63);
 
 	public BlockAsh() {
-		super(Block.Properties.create(Material.EARTH, MaterialColor.BLACK).sound(SoundType.SAND).harvestTool(ToolType.SHOVEL).harvestLevel(0));
+		super(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_BLACK).sound(SoundType.SAND).harvestTool(ToolType.SHOVEL).harvestLevel(0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AMOUNT);
 	}
 
 	@Override
-	public PushReaction getPushReaction(BlockState state) {
+	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.DESTROY;
 	}
 

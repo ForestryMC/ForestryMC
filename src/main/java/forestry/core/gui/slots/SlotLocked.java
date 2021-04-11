@@ -29,12 +29,12 @@ public class SlotLocked extends SlotForestry {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack par1ItemStack) {
+	public boolean mayPlace(ItemStack par1ItemStack) {
 		return false;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i) {
+	public ItemStack remove(int i) {
 		return ItemStack.EMPTY;
 	}
 }

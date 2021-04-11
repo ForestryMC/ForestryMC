@@ -22,7 +22,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.StructureManager;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -37,7 +36,7 @@ import forestry.core.utils.Log;
 
 public class HiveDecorator extends Feature<NoFeatureConfig> {
 	public HiveDecorator() {
-		super(NoFeatureConfig.field_236558_a_);
+		super(NoFeatureConfig.CODEC);
 	}
 
 	private static boolean decorateHivesDebug(ISeedReader world, Random rand, BlockPos pos, List<Hive> hives) {
@@ -90,7 +89,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 	private static boolean setHive(ISeedReader world, Random rand, BlockPos pos, Hive hive) {
 		BlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
-		boolean placed = world.setBlockState(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
+		boolean placed = world.setBlock(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
 		if (!placed) {
 			return false;
 		}
@@ -101,7 +100,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 			return false;
 		}
 
-		hiveBlock.onBlockAdded(state, world.getWorld(), pos, hiveState, false);
+		hiveBlock.onPlace(state, world.getLevel(), pos, hiveState, false);
 
 		if (!Config.generateBeehivesDebug) {
 			hive.postGen(world, rand, pos);
@@ -109,15 +108,14 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 
 		if (Config.logHivePlacement) {
 			//getCoordinatesAsString
-			Log.info("Placed {} at {}", hive.toString(), pos.func_229422_x_());
+			Log.info("Placed {} at {}", hive.toString(), pos.toShortString());
 		}
 
 		return true;
 	}
 
-	//generate
 	@Override
-	public boolean func_230362_a_(ISeedReader seedReader, StructureManager structureManager, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {

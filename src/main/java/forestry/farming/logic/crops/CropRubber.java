@@ -49,7 +49,7 @@ public class CropRubber extends CropDestroy {
 				String valueDryString = valueWetString.replace("wet", "dry");
 				Property<?> property = wetPropertyEntry.getKey();
 				if (property instanceof BooleanProperty && property.getName().equals("hassap")) {
-					return sappyState.with(BooleanProperty.create("hassap"), false);
+					return sappyState.setValue(BooleanProperty.create("hassap"), false);
 				}
 
 				//TODO - I think this works
@@ -60,7 +60,7 @@ public class CropRubber extends CropDestroy {
 			}
 		}
 
-		return sappyState.getBlock().getDefaultState();
+		return sappyState.getBlock().defaultBlockState();
 	}
 
 	public static boolean hasRubberToHarvest(BlockState blockState) {
@@ -73,15 +73,15 @@ public class CropRubber extends CropDestroy {
 				}
 			}
 		} else if (false) {//PluginTechReborn.RUBBER_WOOD != null && ItemStackUtil.equals(block, PluginTechReborn.RUBBER_WOOD)) {
-			return blockState.get(BooleanProperty.create("hassap"));
+			return blockState.getValue(BooleanProperty.create("hassap"));
 		}
 		return false;
 	}
 
 	@Nullable
 	private static <T extends Comparable<T>> BlockState getStateWithValue(BlockState baseState, Property<T> property, String valueString) {
-		Optional<T> value = property.parseValue(valueString);
-		return value.map(t -> baseState.with(property, t)).orElse(null);
+		Optional<T> value = property.getValue(valueString);
+		return value.map(t -> baseState.setValue(property, t)).orElse(null);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class CropRubber extends CropDestroy {
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
+		world.setBlock(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		return harvested;
 	}
 

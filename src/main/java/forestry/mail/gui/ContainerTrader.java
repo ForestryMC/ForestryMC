@@ -26,7 +26,7 @@ import forestry.mail.tiles.TileTrader;
 public class ContainerTrader extends ContainerTile<TileTrader> {
 
 	public static ContainerTrader fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
+		TileTrader tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileTrader.class);
 		return new ContainerTrader(windowId, inv, tile);    //TODO nullability.
 	}
 

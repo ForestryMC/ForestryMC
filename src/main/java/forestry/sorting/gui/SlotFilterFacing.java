@@ -15,7 +15,7 @@ public class SlotFilterFacing extends Slot implements ISlotTextured {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 		return false;
 	}
 

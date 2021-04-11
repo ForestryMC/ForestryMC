@@ -73,16 +73,16 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		beeLogic.write(compoundNBT);
 		ownerHandler.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		beeLogic.read(compoundNBT);
 		ownerHandler.read(compoundNBT);
 	}
@@ -145,7 +145,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 			beeLogic.doBeeFX();
 
 			if (updateOnInterval(50)) {
-				doPollenFX(world, getPos().getX(), getPos().getY(), getPos().getZ());
+				doPollenFX(level, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ());
 			}
 		}
 		climateListener.updateClientSide(true);
@@ -157,8 +157,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 		double fxY = yCoord + 0.25F;
 		double fxZ = zCoord + 0.5F;
 		float distanceFromCenter = 0.6F;
-		float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
-		float upSpread = world.rand.nextFloat() * 6F / 16F;
+		float leftRightSpreadFromCenter = distanceFromCenter * (world.random.nextFloat() - 0.5F);
+		float upSpread = world.random.nextFloat() * 6F / 16F;
 		fxY += upSpread;
 
 		ParticleRender.addEntityHoneyDustFX(world, fxX - distanceFromCenter, fxY, fxZ + leftRightSpreadFromCenter);
@@ -192,23 +192,23 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public Biome getBiome() {
-		return world.getBiome(getPos());
+		return level.getBiome(getBlockPos());
 	}
 
 	//TODO check this call
 	@Override
 	public int getBlockLightValue() {
-		return world.getLight(getPos().up());
+		return level.getMaxLocalRawBrightness(getBlockPos().above());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return world.canBlockSeeSky(getPos().up());
+		return level.canSeeSkyFromBelowWater(getBlockPos().above());
 	}
 
 	@Override
 	public boolean isRaining() {
-		return world.isRainingAt(getPos().up());
+		return level.isRainingAt(getBlockPos().above());
 	}
 
 	@Override
@@ -218,6 +218,6 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	public Vector3d getBeeFXCoordinates() {
-		return new Vector3d(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5);
+		return new Vector3d(getBlockPos().getX() + 0.5, getBlockPos().getY() + 0.5, getBlockPos().getZ() + 0.5);
 	}
 }

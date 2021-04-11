@@ -31,27 +31,27 @@ public class TileCandle extends TileEntity {
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT tag = super.getUpdateTag();
-		return write(tag);
+		return save(tag);
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
 		super.handleUpdateTag(state, tag);
-		read(state, tag);
+		load(state, tag);
 	}
 
 	public void onPacketUpdate(int colour, boolean isLit) {
@@ -60,15 +60,15 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT tagRoot) {
-		super.read(state, tagRoot);
+	public void load(BlockState state, CompoundNBT tagRoot) {
+		super.load(state, tagRoot);
 		colour = tagRoot.getInt("colour");
 		lit = tagRoot.getBoolean("lit");
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT tagRoot) {
-		tagRoot = super.write(tagRoot);
+	public CompoundNBT save(CompoundNBT tagRoot) {
+		tagRoot = super.save(tagRoot);
 		tagRoot.putInt("colour", this.colour);
 		tagRoot.putBoolean("lit", this.lit);
 		return tagRoot;

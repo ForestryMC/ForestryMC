@@ -27,7 +27,7 @@ public class HiveGenGround extends HiveGen {
 
 	public HiveGenGround(Block... groundBlocks) {
 		for (Block block : groundBlocks) {
-			BlockState blockState = block.getDefaultState();
+			BlockState blockState = block.defaultBlockState();
 			Material blockMaterial = blockState.getMaterial();
 			groundMaterials.add(blockMaterial);
 		}
@@ -35,7 +35,7 @@ public class HiveGenGround extends HiveGen {
 
 	@Override
 	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-		BlockState groundBlockState = world.getBlockState(pos.down());
+		BlockState groundBlockState = world.getBlockState(pos.below());
 		Material groundBlockMaterial = groundBlockState.getMaterial();
 		return groundMaterials.contains(groundBlockMaterial);
 	}
@@ -43,13 +43,13 @@ public class HiveGenGround extends HiveGen {
 	@Override
 	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
 		// get to the ground
-		final BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
+		final BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
 
 		final BlockPos.Mutable pos = new BlockPos.Mutable();
-		pos.setPos(topPos);
+		pos.set(topPos);
 
 		BlockState blockState = world.getBlockState(pos);
 		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {
@@ -60,6 +60,6 @@ public class HiveGenGround extends HiveGen {
 			blockState = world.getBlockState(pos);
 		}
 
-		return pos.up();
+		return pos.above();
 	}
 }

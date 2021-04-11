@@ -96,17 +96,17 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
 
 	@Override
 	public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		fontRenderer.func_238422_b_(matrixStack, circuit.getDisplayName(), (float) (recipeWidth - fontRenderer.getStringWidth(circuit.getDisplayName().getString())) / 2, 3, Color.darkGray.getRGB());
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		fontRenderer.draw(matrixStack, circuit.getDisplayName(), (float) (recipeWidth - fontRenderer.width(circuit.getDisplayName().getString())) / 2, 3, Color.darkGray.getRGB());
 
 		ITextComponent soilName = new TranslationTextComponent("for.jei.farming.soil");
-		fontRenderer.func_238422_b_(matrixStack, soilName, 18 - (float) (fontRenderer.getStringWidth(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
+		fontRenderer.draw(matrixStack, soilName, 18 - (float) (fontRenderer.width(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
 
 		ITextComponent germlingsName = new TranslationTextComponent("for.jei.farming.germlings");
-		fontRenderer.func_238422_b_(matrixStack, germlingsName, (float) (recipeWidth - fontRenderer.getStringWidth(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
+		fontRenderer.draw(matrixStack, germlingsName, (float) (recipeWidth - fontRenderer.width(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
 
-		//TODO: func_243248_b
+		//TODO: draw
 		ITextComponent productsName = new TranslationTextComponent("for.jei.farming.products");
-		fontRenderer.func_238422_b_(matrixStack, productsName, 126 - (float) (fontRenderer.getStringWidth(productsName.getString())) / 2, 45, Color.darkGray.getRGB());
+		fontRenderer.draw(matrixStack, productsName, 126 - (float) (fontRenderer.width(productsName.getString())) / 2, 45, Color.darkGray.getRGB());
 	}
 }

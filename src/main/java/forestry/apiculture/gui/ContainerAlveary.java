@@ -28,7 +28,7 @@ import forestry.core.tiles.TileUtil;
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
 	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileAlveary tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlveary.class);
+		TileAlveary tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlveary.class);
 		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -37,7 +37,7 @@ public class ContainerAlveary extends ContainerTile<TileAlveary> {
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();
-		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getLevel(), tile.getBlockPos());
 		if (playerInv.player instanceof ServerPlayerEntity) {
 			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
 		}
@@ -46,8 +46,8 @@ public class ContainerAlveary extends ContainerTile<TileAlveary> {
 	private int beeProgress = -1;
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
 		if (this.beeProgress != beeProgress) {

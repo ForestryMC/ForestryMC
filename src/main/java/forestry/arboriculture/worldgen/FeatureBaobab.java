@@ -31,12 +31,12 @@ public class FeatureBaobab extends FeatureTree {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height - 1, girth, 0, 0, null, 0);
 
 		if (rand.nextFloat() < 0.3f) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, wood, startPos.add(0, height - 1, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, wood, startPos.offset(0, height - 1, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		} else if (rand.nextBoolean()) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, wood, startPos.add(0, height - 1, girth / 2), girth, girth - 1, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, wood, startPos.offset(0, height - 1, girth / 2), girth, girth - 1, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		}
 
-		return FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, height - 2, 0), girth, 0, 0.5f, 4, 6, 1.0f);
+		return FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, height - 2, 0), girth, 0, 0.5f, 4, 6, 1.0f);
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class FeatureBaobab extends FeatureTree {
 
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 2f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, 1f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		// Add tree top
 		for (int times = 0; times < height / 2; times++) {
@@ -61,7 +61,7 @@ public class FeatureBaobab extends FeatureTree {
 			int x_off = -girth + rand.nextInt(2 * girth);
 			int y_off = -girth + rand.nextInt(2 * girth);
 
-			BlockPos center = startPos.add(x_off, h, y_off);
+			BlockPos center = startPos.offset(x_off, h, y_off);
 			int radius = 1;
 			if (girth > 1) {
 				radius += rand.nextInt(girth - 1);
@@ -79,7 +79,7 @@ public class FeatureBaobab extends FeatureTree {
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
 
-			BlockPos center = startPos.add(x_off, h, y_off);
+			BlockPos center = startPos.offset(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(2);
 			FeatureHelper.generateSphere(world, center, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
 		}

@@ -40,7 +40,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
 		this.delegate = container.getDelegate();
-		this.ySize = 190;
+		this.imageHeight = 190;
 
 		for (int i = 0; i < 2; i++) {
 			Slot queenSlot = container.getForestrySlot(1 + i);
@@ -53,17 +53,17 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		bindTexture(textureFile);
-		drawHealthMeter(transform, guiLeft + 20, guiTop + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
+		drawHealthMeter(transform, leftPos + 20, topPos + 37, delegate.getHealthScaled(46), EnumTankLevel.rateTankLevel(delegate.getHealthScaled(100)));
 	}
 
 	@Override
 	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
 		Slot slot = container.getForestrySlot(1 + selectedSlot);
-		SELECTED_COMB_SLOT.draw(transform, guiTop + slot.yPos - 3, guiLeft + slot.xPos - 3);
+		SELECTED_COMB_SLOT.draw(transform, topPos + slot.y - 3, leftPos + slot.x - 3);
 	}
 
 	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
@@ -84,7 +84,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	@Override
 	public ItemStack getSpecimen(int index) {
 		Slot slot = container.getForestrySlot(getSelectedSlot(index));
-		return slot.getStack();
+		return slot.getItem();
 	}
 
 	@Override

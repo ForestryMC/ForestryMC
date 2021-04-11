@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -21,7 +22,6 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
-import forestry.factory.recipes.MoistenerRecipeManager;
 import forestry.factory.tiles.TileMoistener;
 
 public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
@@ -40,7 +40,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			return RecipeManagers.moistenerManager.isResource(tile.getWorld().getRecipeManager(), itemStack);
+			return RecipeManagers.moistenerManager.isResource(tile.getLevel().getRecipeManager(), itemStack);
 		}
 
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_STASH_1, SLOT_STASH_COUNT)) {
@@ -48,7 +48,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 		}
 
 		if (slotIndex == SLOT_PRODUCT) {
-			LazyOptional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluidCap = FluidUtil.getFluidContained(itemStack);
 			return fluidCap.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);    //TODO very common pattern. Create Helper?
 		}
 
@@ -56,7 +56,7 @@ public class InventoryMoistener extends InventoryAdapterTile<TileMoistener> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		if (slotIndex == SLOT_PRODUCT) {
 			return true;
 		}

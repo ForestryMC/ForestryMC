@@ -22,7 +22,7 @@ import forestry.core.tiles.TileUtil;
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
 	public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySwarmer.class);
+		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlvearySwarmer.class);
 		return new ContainerAlvearySwarmer(windowId, inv, tile);    //TODO nullability.
 	}
 

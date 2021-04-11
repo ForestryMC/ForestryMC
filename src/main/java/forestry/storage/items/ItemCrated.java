@@ -51,28 +51,28 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
-		if (!worldIn.isRemote) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack heldItem = playerIn.getItemInHand(handIn);
+		if (!worldIn.isClientSide) {
 			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.resultPass(heldItem);
+				return ActionResult.pass(heldItem);
 			}
 
 			heldItem.shrink(1);
 
 			ItemStack dropStack = contained.copy();
 			dropStack.setCount(9);
-			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), 40);
+			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 40);
 		}
-		return ActionResult.resultSuccess(heldItem);
+		return ActionResult.success(heldItem);
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		if (contained.isEmpty()) {
 			return new TranslationTextComponent("item.forestry.crate");
 		} else {
-			ITextComponent containedName = contained.getDisplayName();
+			ITextComponent containedName = contained.getHoverName();
 			return new TranslationTextComponent("for.item.crated.grammar", containedName);
 		}
 	}

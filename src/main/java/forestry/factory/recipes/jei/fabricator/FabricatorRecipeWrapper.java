@@ -30,6 +30,6 @@ public class FabricatorRecipeWrapper extends ForestryRecipeWrapper<IFabricatorRe
 
 		ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(getRecipe().getLiquid()));
 
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getCraftingGridRecipe().getRecipeOutput());
+		ingredients.setOutput(VanillaTypes.ITEM, recipe.getCraftingGridRecipe().getResultItem());
 	}
 }

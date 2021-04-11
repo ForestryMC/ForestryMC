@@ -18,12 +18,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
@@ -33,6 +27,11 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
 
 public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_ENERGY = 0;
@@ -66,7 +65,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		// only allow one slot to be used at a time
-		if (hasSpecimen() && getStackInSlot(slotIndex).isEmpty()) {
+		if (hasSpecimen() && getItem(slotIndex).isEmpty()) {
 			return false;
 		}
 
@@ -86,8 +85,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack itemStack) {
-		super.setInventorySlotContents(index, itemStack);
+	public void setItem(int index, ItemStack itemStack) {
+		super.setItem(index, itemStack);
 		if (index == SLOT_SPECIMEN) {
 			analyzeSpecimen(itemStack);
 		}
@@ -99,8 +98,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		}
 
 		ItemStack convertedSpecimen = GeneticsUtil.convertToGeneticEquivalent(specimen);
-		if (!ItemStack.areItemStacksEqual(specimen, convertedSpecimen)) {
-			setInventorySlotContents(SLOT_SPECIMEN, convertedSpecimen);
+		if (!ItemStack.matches(specimen, convertedSpecimen)) {
+			setItem(SLOT_SPECIMEN, convertedSpecimen);
 			specimen = convertedSpecimen;
 		}
 
@@ -120,13 +119,13 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
 				if (requiresEnergy) {
 					// Requires energy
-					if (!isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+					if (!isAlyzingFuel(getItem(SLOT_ENERGY))) {
 						return;
 					}
 				}
 
 				if (individual.analyze()) {
-					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.level, player.getGameProfile());
 					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
@@ -134,14 +133,14 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 					if (requiresEnergy) {
 						// Decrease energy
-						decrStackSize(SLOT_ENERGY, 1);
+						removeItem(SLOT_ENERGY, 1);
 					}
 				}
 			}
 		}
 
-		setInventorySlotContents(SLOT_ANALYZE_1, specimen);
-		setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
+		setItem(SLOT_ANALYZE_1, specimen);
+		setItem(SLOT_SPECIMEN, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -152,7 +151,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		} else {
 			IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(getSpecimen());
-			if (definition.isPresent() && !isAlyzingFuel(getStackInSlot(SLOT_ENERGY))) {
+			if (definition.isPresent() && !isAlyzingFuel(getItem(SLOT_ENERGY))) {
 				errorStates.add(EnumErrorCode.NO_HONEY);
 			}
 		}
@@ -162,7 +161,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 	public ItemStack getSpecimen() {
 		for (int i = SLOT_SPECIMEN; i <= SLOT_ANALYZE_5; i++) {
-			ItemStack itemStack = getStackInSlot(i);
+			ItemStack itemStack = getItem(i);
 			if (!itemStack.isEmpty()) {
 				return itemStack;
 			}
@@ -176,7 +175,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 	@Override
 	protected void onWriteNBT(CompoundNBT nbt) {
-		ItemStack energy = getStackInSlot(ItemInventoryAlyzer.SLOT_ENERGY);
+		ItemStack energy = getItem(ItemInventoryAlyzer.SLOT_ENERGY);
 		int amount = 0;
 		if (!energy.isEmpty()) {
 			amount = energy.getCount();

@@ -20,27 +20,25 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
+import forestry.api.climate.IClimateProvider;
+import forestry.api.genetics.IMutationCondition;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
-import forestry.api.climate.IClimateProvider;
-import forestry.api.genetics.IMutationCondition;
-
 public class MutationConditionBiome implements IMutationCondition {
 
-	private final List<BiomeDictionary.Type> validBiomeTypes;
+	private final List<Biome.Category> validBiomeTypes;
 
-	public MutationConditionBiome(BiomeDictionary.Type... types) {
+	public MutationConditionBiome(Biome.Category... types) {
 		this.validBiomeTypes = Arrays.asList(types);
 	}
 
 	@Override
 	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		Biome biome = climate.getBiome();
-		for (BiomeDictionary.Type type : validBiomeTypes) {
-			if (BiomeDictionary.hasType(biome, type)) {
+		for (Biome.Category category : validBiomeTypes) {
+			if (biome.getBiomeCategory() == category) {
 				return 1;
 			}
 		}

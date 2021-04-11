@@ -8,12 +8,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.features.CoreItems;
@@ -23,6 +17,11 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
 
 //import forestry.database.inventory.InventoryDatabaseAnalyzer;
 
@@ -39,8 +38,8 @@ public class ContainerAnalyzerProviderHelper {
 
 		ItemInventoryAlyzer alyzerInventory = null;
 		int analyzerIndex = -1;
-		for (int i = 0; i < playerInventory.getSizeInventory(); i++) {
-			ItemStack stack = playerInventory.getStackInSlot(i);
+		for (int i = 0; i < playerInventory.getContainerSize(); i++) {
+			ItemStack stack = playerInventory.getItem(i);
 			if (stack.isEmpty() || !CoreItems.PORTABLE_ALYZER.itemEqual(stack)) {
 				continue;
 			}
@@ -74,14 +73,14 @@ public class ContainerAnalyzerProviderHelper {
 			return;
 		}
 		Slot specimenSlot = container.getForestrySlot(selectedSlot);
-		ItemStack specimen = specimenSlot.getStack();
+		ItemStack specimen = specimenSlot.getItem();
 		if (specimen.isEmpty()) {
 			return;
 		}
 
 		ItemStack convertedSpecimen = GeneticsUtil.convertToGeneticEquivalent(specimen);
-		if (!ItemStack.areItemStacksEqual(specimen, convertedSpecimen)) {
-			specimenSlot.putStack(convertedSpecimen);
+		if (!ItemStack.matches(specimen, convertedSpecimen)) {
+			specimenSlot.set(convertedSpecimen);
 			specimen = convertedSpecimen;
 		}
 
@@ -106,7 +105,7 @@ public class ContainerAnalyzerProviderHelper {
 				}
 
 				if (individual.analyze()) {
-					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.world, player.getGameProfile());
+					IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.level, player.getGameProfile());
 					breedingTracker.registerSpecies(individual.getGenome().getPrimary());
 					breedingTracker.registerSpecies(individual.getGenome().getSecondary());
 
@@ -119,7 +118,7 @@ public class ContainerAnalyzerProviderHelper {
 						//					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
 					}
 				}
-				specimenSlot.putStack(specimen);
+				specimenSlot.set(specimen);
 			}
 		}
 		return;

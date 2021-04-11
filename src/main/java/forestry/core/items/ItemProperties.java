@@ -9,7 +9,7 @@ public class ItemProperties extends Item.Properties {
 	public int burnTime = -1;
 
 	public ItemProperties(ItemGroup group) {
-		group(group);
+		tab(group);
 	}
 
 	public ItemProperties() {

@@ -71,17 +71,17 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<HygroregulatorRecipe> {
 
 		@Override
-		public HygroregulatorRecipe read(ResourceLocation recipeId, JsonObject json) {
-			FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "liquid"));
-			int transferTime = JSONUtils.getInt(json, "time");
-			float humidChange = JSONUtils.getFloat(json, "humidChange");
-			float tempChange = JSONUtils.getFloat(json, "tempChange");
+		public HygroregulatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid"));
+			int transferTime = JSONUtils.getAsInt(json, "time");
+			float humidChange = JSONUtils.getAsFloat(json, "humidChange");
+			float tempChange = JSONUtils.getAsFloat(json, "tempChange");
 
 			return new HygroregulatorRecipe(recipeId, liquid, transferTime, humidChange, tempChange);
 		}
 
 		@Override
-		public HygroregulatorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+		public HygroregulatorRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			FluidStack liquid = FluidStack.readFromPacket(buffer);
 			int transferTime = buffer.readVarInt();
 			float humidChange = buffer.readFloat();
@@ -91,7 +91,7 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, HygroregulatorRecipe recipe) {
+		public void toNetwork(PacketBuffer buffer, HygroregulatorRecipe recipe) {
 			recipe.liquid.writeToPacket(buffer);
 			buffer.writeVarInt(recipe.transferTime);
 			buffer.writeFloat(recipe.humidChange);

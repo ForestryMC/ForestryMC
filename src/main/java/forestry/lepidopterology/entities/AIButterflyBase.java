@@ -33,8 +33,8 @@ public abstract class AIButterflyBase extends Goal {
 			return getRandomDestinationUpwards();
 		}
 
-		Vector3d entityPos = entity.getPositionVec();
-		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, entityPos);
+		Vector3d entityPos = entity.position();
+		Vector3d randomTarget = RandomPositionGenerator.getPosAvoid(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;
@@ -44,8 +44,8 @@ public abstract class AIButterflyBase extends Goal {
 
 	@Nullable
 	protected Vector3d getRandomDestinationUpwards() {
-		Vector3d entityPos = entity.getPositionVec();
-		Vector3d destination = entityPos.add(0, entity.getRNG().nextInt(10) + 2, 0);
+		Vector3d entityPos = entity.position();
+		Vector3d destination = entityPos.add(0, entity.getRandom().nextInt(10) + 2, 0);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -58,19 +58,19 @@ public abstract class AIButterflyBase extends Goal {
 			return false;
 		}
 		BlockPos pos = new BlockPos(dest);
-		if (!entity.world.isBlockLoaded(pos)) {
+		if (!entity.level.hasChunkAt(pos)) {
 			return false;
 		}
-		BlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.level.getBlockState(pos);
 		Block block = blockState.getBlock();
 		if (!allowFluids && blockState.getMaterial().isLiquid()) {
 			return false;
 		}
 		//		if (!block.isPassable(entity.world, pos)) {
-		if (!block.isAir(blockState, entity.world, pos)) {    //TODO
+		if (!block.isAir(blockState, entity.level, pos)) {    //TODO
 			return false;
 		}
-		return entity.getButterfly().isAcceptedEnvironment(entity.world, dest.x, dest.y, dest.z);
+		return entity.getButterfly().isAcceptedEnvironment(entity.level, dest.x, dest.y, dest.z);
 	}
 
 }

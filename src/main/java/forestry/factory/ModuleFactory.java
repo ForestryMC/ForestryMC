@@ -129,15 +129,15 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
-		ScreenManager.registerFactory(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
-		ScreenManager.registerFactory(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
-		ScreenManager.registerFactory(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
-		ScreenManager.registerFactory(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
-		ScreenManager.registerFactory(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
-		ScreenManager.registerFactory(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
-		ScreenManager.registerFactory(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
-		ScreenManager.registerFactory(FactoryContainers.STILL.containerType(), GuiStill::new);
+		ScreenManager.register(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
+		ScreenManager.register(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
+		ScreenManager.register(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
+		ScreenManager.register(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
+		ScreenManager.register(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
+		ScreenManager.register(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
+		ScreenManager.register(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
+		ScreenManager.register(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
+		ScreenManager.register(FactoryContainers.STILL.containerType(), GuiStill::new);
 	}
 
 	@Override

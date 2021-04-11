@@ -19,7 +19,7 @@ public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
 	 */
 	@Override
 	protected boolean placeBlock(BlockItemUseContext p_195941_1_, BlockState p_195941_2_) {
-		p_195941_1_.getWorld().setBlockState(p_195941_1_.getPos().up(), Blocks.AIR.getDefaultState(), 27);
+		p_195941_1_.getLevel().setBlock(p_195941_1_.getClickedPos().above(), Blocks.AIR.defaultBlockState(), 27);
 		return super.placeBlock(p_195941_1_, p_195941_2_);
 	}
 

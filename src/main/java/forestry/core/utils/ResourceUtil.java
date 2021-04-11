@@ -90,15 +90,15 @@ public class ResourceUtil {
 	}
 
 	public static TextureAtlasSprite getMissingTexture() {
-		return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, MissingTextureSprite.getLocation());
+		return getSprite(PlayerContainer.BLOCK_ATLAS, MissingTextureSprite.getLocation());
 	}
 
 	public static TextureAtlasSprite getSprite(ResourceLocation atlas, ResourceLocation sprite) {
-		return client().getAtlasSpriteGetter(atlas).apply(sprite);
+		return client().getTextureAtlas(atlas).apply(sprite);
 	}
 
 	public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {
-		return getSprite(PlayerContainer.LOCATION_BLOCKS_TEXTURE, location);
+		return getSprite(PlayerContainer.BLOCK_ATLAS, location);
 	}
 
 	public static TextureAtlasSprite getBlockSprite(String location) {
@@ -129,7 +129,7 @@ public class ResourceUtil {
 
 	public static List<IResource> getResources(ResourceLocation location) {
 		try {
-			return resourceManager().getAllResources(location);
+			return resourceManager().getResources(location);
 		} catch (IOException e) {
 			return Collections.emptyList();
 		}
@@ -141,10 +141,10 @@ public class ResourceUtil {
 	@Nullable
 	public static IBakedModel getModel(ItemStack stack) {
 		ItemRenderer renderItem = client().getItemRenderer();
-		if (renderItem == null || renderItem.getItemModelMesher() == null) {
+		if (renderItem == null || renderItem.getItemModelShaper() == null) {
 			return null;
 		}
-		return renderItem.getItemModelMesher().getItemModel(stack);
+		return renderItem.getItemModelShaper().getItemModel(stack);
 	}
 
 	public static SimpleModelTransform loadTransform(ResourceLocation location) {
@@ -153,11 +153,11 @@ public class ResourceUtil {
 
 	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
 		try (Reader reader = getReaderForResource(location)) {
-			return BlockModel.deserialize(reader).getAllTransforms();
+			return BlockModel.fromStream(reader).getTransforms();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ItemCameraTransforms.DEFAULT;
+		return ItemCameraTransforms.NO_TRANSFORMS;
 	}
 
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {

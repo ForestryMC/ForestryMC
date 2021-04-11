@@ -29,8 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-import genetics.api.GeneticHelper;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -43,12 +41,14 @@ import forestry.core.genetics.ItemGE;
 import forestry.core.items.IColoredItem;
 import forestry.core.utils.ResourceUtil;
 
+import genetics.api.GeneticHelper;
+
 public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	private final EnumBeeType type;
 
 	public ItemBeeGE(EnumBeeType type) {
-		super(type != EnumBeeType.DRONE ? new Item.Properties().group(ItemGroups.tabApiculture).maxDamage(1) : new Item.Properties().group(ItemGroups.tabApiculture));
+		super(type != EnumBeeType.DRONE ? new Item.Properties().tab(ItemGroups.tabApiculture).durability(1) : new Item.Properties().tab(ItemGroups.tabApiculture));
 		this.type = type;
 	}
 
@@ -65,13 +65,13 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	//TODO - pretty sure this is still translating on the server atm
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemStack) {
+	public ITextComponent getName(ItemStack itemStack) {
 		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
-			return super.getDisplayName(itemStack);
+			return super.getName(itemStack);
 		}
 		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemStack);
 		if (!optionalIndividual.isPresent()) {
-			return super.getDisplayName(itemStack);
+			return super.getName(itemStack);
 		}
 
 		IBee individual = optionalIndividual.get();
@@ -86,7 +86,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
@@ -99,18 +99,18 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
-				list.add(new TranslationTextComponent("for.bees.stock.pristine").mergeStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.bees.stock.pristine").withStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
 			} else {
-				list.add(new TranslationTextComponent("for.bees.stock.ignoble").mergeStyle(TextFormatting.YELLOW));
+				list.add(new TranslationTextComponent("for.bees.stock.ignoble").withStyle(TextFormatting.YELLOW));
 			}
 		}
 
-		super.addInformation(itemstack, world, list, flag);
+		super.appendHoverText(itemstack, world, list, flag);
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}

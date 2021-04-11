@@ -38,12 +38,12 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.getCutoutMipped()));
+		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
 	}
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.gatherSprites(event);
@@ -51,7 +51,7 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.fillSprites(event);

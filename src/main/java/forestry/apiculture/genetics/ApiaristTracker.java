@@ -13,11 +13,6 @@ package forestry.apiculture.genetics;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.components.ComponentKeys;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -26,6 +21,11 @@ import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.apiculture.ModuleApiculture;
 import forestry.core.genetics.BreedingTracker;
+
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.components.ComponentKeys;
 
 public class ApiaristTracker extends BreedingTracker implements IApiaristTracker {
 
@@ -41,24 +41,24 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
+	public void load(CompoundNBT compoundNBT) {
 
 		queensTotal = compoundNBT.getInt("QueensTotal");
 		princessesTotal = compoundNBT.getInt("PrincessesTotal");
 		dronesTotal = compoundNBT.getInt("DronesTotal");
 
-		super.read(compoundNBT);
+		super.load(compoundNBT);
 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundnbt) {
+	public CompoundNBT save(CompoundNBT compoundnbt) {
 
 		compoundnbt.putInt("QueensTotal", queensTotal);
 		compoundnbt.putInt("PrincessesTotal", princessesTotal);
 		compoundnbt.putInt("DronesTotal", dronesTotal);
 
-		compoundnbt = super.write(compoundnbt);
+		compoundnbt = super.save(compoundnbt);
 		return compoundnbt;
 	}
 
@@ -116,7 +116,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	@Override
 	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
 		//TODO world cast
-		return BeeManager.beeRoot.getBreedingTracker(player.world, player.getGameProfile());
+		return BeeManager.beeRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}
 
 	@Override

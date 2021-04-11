@@ -82,7 +82,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	}
 
 	@Override
-	public BlockState getDisplayTile() {
+	public BlockState getDisplayBlockState() {
 		return ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).defaultState();
 	}
 

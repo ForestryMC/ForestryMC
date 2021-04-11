@@ -24,14 +24,14 @@ public class PacketBufferForestry extends PacketBuffer {
 		super(wrapped);
 	}
 
-	public String readString() {
-		return super.readString(1024);
+	public String readUtf() {
+		return super.readUtf(1024);
 	}
 
 	public void writeItemStacks(NonNullList<ItemStack> itemStacks) {
 		writeVarInt(itemStacks.size());
 		for (ItemStack stack : itemStacks) {
-			writeItemStack(stack);
+			writeItem(stack);
 		}
 	}
 
@@ -39,18 +39,18 @@ public class PacketBufferForestry extends PacketBuffer {
 		int stackCount = readVarInt();
 		NonNullList<ItemStack> itemStacks = NonNullList.create();
 		for (int i = 0; i < stackCount; i++) {
-			itemStacks.add(readItemStack());
+			itemStacks.add(readItem());
 		}
 		return itemStacks;
 	}
 
 	public void writeInventory(IInventory inventory) {
-		int size = inventory.getSizeInventory();
+		int size = inventory.getContainerSize();
 		writeVarInt(size);
 
 		for (int i = 0; i < size; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			writeItemStack(stack);
+			ItemStack stack = inventory.getItem(i);
+			writeItem(stack);
 		}
 	}
 
@@ -58,8 +58,8 @@ public class PacketBufferForestry extends PacketBuffer {
 		int size = readVarInt();
 
 		for (int i = 0; i < size; i++) {
-			ItemStack stack = readItemStack();
-			inventory.setInventorySlotContents(i, stack);
+			ItemStack stack = readItem();
+			inventory.setItem(i, stack);
 		}
 	}
 
@@ -72,13 +72,13 @@ public class PacketBufferForestry extends PacketBuffer {
 	}
 
 	public void writeEntityById(Entity entity) {
-		writeVarInt(entity.getEntityId());
+		writeVarInt(entity.getId());
 	}
 
 	@Nullable
 	public Entity readEntityById(World world) {
 		int entityId = readVarInt();
-		return world.getEntityByID(entityId);
+		return world.getEntity(entityId);
 	}
 
 	public <T extends Enum<T>> void writeEnum(T enumValue, T[] enumValues) {

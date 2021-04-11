@@ -65,28 +65,28 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MoistenerRecipe> {
 
 		@Override
-		public MoistenerRecipe read(ResourceLocation recipeId, JsonObject json) {
-			int timePerItem = JSONUtils.getInt(json, "time");
+		public MoistenerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			int timePerItem = JSONUtils.getAsInt(json, "time");
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			ItemStack product = RecipeSerializers.item(JSONUtils.getJsonObject(json, "product"));
+			ItemStack product = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "product"));
 
 			return new MoistenerRecipe(recipeId, resource, product, timePerItem);
 		}
 
 		@Override
-		public MoistenerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+		public MoistenerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			int timePerItem = buffer.readVarInt();
-			Ingredient resource = Ingredient.read(buffer);
-			ItemStack product = buffer.readItemStack();
+			Ingredient resource = Ingredient.fromNetwork(buffer);
+			ItemStack product = buffer.readItem();
 
 			return new MoistenerRecipe(recipeId, resource, product, timePerItem);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, MoistenerRecipe recipe) {
+		public void toNetwork(PacketBuffer buffer, MoistenerRecipe recipe) {
 			buffer.writeVarInt(recipe.timePerItem);
-			recipe.resource.write(buffer);
-			buffer.writeItemStack(recipe.product);
+			recipe.resource.toNetwork(buffer);
+			buffer.writeItem(recipe.product);
 		}
 	}
 }

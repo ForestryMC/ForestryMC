@@ -184,7 +184,7 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 			this.setFocusedElement(null);
 		}
 		//|TODO - mousehelper.left down?
-		if (!Minecraft.getInstance().mouseHelper.isLeftDown()) {
+		if (!Minecraft.getInstance().mouseHandler.isLeftPressed()) {
 			if (this.draggedElement != null) {
 				this.setDraggedElement(null);
 			}
@@ -242,11 +242,11 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	public void drawTooltip(MatrixStack transform, int mouseY, int mouseX) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
-			GlStateManager.pushMatrix();
+			GlStateManager._pushMatrix();
 			//TODO test
-			MainWindow window = Minecraft.getInstance().getMainWindow();
-			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getScaledWidth(), window.getScaledHeight(), -1, getFontRenderer());
-			GlStateManager.popMatrix();
+			MainWindow window = Minecraft.getInstance().getWindow();
+			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
+			GlStateManager._popMatrix();
 		}
 	}
 
@@ -357,6 +357,6 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 
 	@Override
 	public FontRenderer getFontRenderer() {
-		return getMinecraft().fontRenderer;
+		return getMinecraft().font;
 	}
 }

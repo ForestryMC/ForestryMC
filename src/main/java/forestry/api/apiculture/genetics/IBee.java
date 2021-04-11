@@ -12,18 +12,18 @@ import java.util.Set;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IIndividual;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividualLiving;
+
+import genetics.api.individual.IIndividual;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -65,7 +65,7 @@ public interface IBee extends IIndividualLiving {
 	 */
 	Set<IErrorState> getCanWork(IBeeHousing housing);
 
-	List<Biome> getSuitableBiomes();
+	List<ResourceLocation> getSuitableBiomes();
 
 	NonNullList<ItemStack> getProduceList();
 

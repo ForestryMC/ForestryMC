@@ -29,7 +29,7 @@ public class ButterflySpawner implements ILeafTickHandler {
 	public boolean onRandomLeafTick(ITree tree, World world, Random rand, BlockPos pos, boolean isDestroyed) {
 
 		//TODO hopefully this is right
-		if (!world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
+		if (!world.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
 			return false;
 		}
 
@@ -58,13 +58,13 @@ public class ButterflySpawner implements ILeafTickHandler {
 			return false;
 		}
 
-		if (world.isAirBlock(pos.north())) {
+		if (world.isEmptyBlock(pos.north())) {
 			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.north());
-		} else if (world.isAirBlock(pos.south())) {
+		} else if (world.isEmptyBlock(pos.south())) {
 			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.south());
-		} else if (world.isAirBlock(pos.west())) {
+		} else if (world.isEmptyBlock(pos.west())) {
 			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.west());
-		} else if (world.isAirBlock(pos.east())) {
+		} else if (world.isEmptyBlock(pos.east())) {
 			ButterflyUtils.attemptButterflySpawn(world, spawn, pos.east());
 		}
 

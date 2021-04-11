@@ -29,7 +29,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 
 	//TODO duplicated code with every other ContainerTile, refactor at some point
 	public static ContainerEscritoire fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		TileEscritoire tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileEscritoire.class);
+		TileEscritoire tile = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileEscritoire.class);
 		return new ContainerEscritoire(windowId, playerInv.player, tile);
 	}
 
@@ -51,8 +51,8 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		long gameLastUpdate = tile.getGame().getLastUpdate();
 		if (lastUpdate != gameLastUpdate) {

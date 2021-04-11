@@ -24,7 +24,7 @@ import forestry.mail.tiles.TileStampCollector;
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 
 	public static ContainerStampCollector fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileStampCollector tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileStampCollector.class);
+		TileStampCollector tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileStampCollector.class);
 		return new ContainerStampCollector(windowId, inv, tile);    //TODO nullability.
 	}
 

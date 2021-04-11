@@ -88,8 +88,8 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		ICarpenterRecipe recipe = recipeWrapper.getRecipe();
 		Ingredient box = recipe.getBox();
-		if (!box.hasNoMatchingItems()) {
-			guiItemStacks.set(boxSlot, Arrays.asList(box.getMatchingStacks()));
+		if (!box.isEmpty()) {
+			guiItemStacks.set(boxSlot, Arrays.asList(box.getItems()));
 		}
 
 		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);

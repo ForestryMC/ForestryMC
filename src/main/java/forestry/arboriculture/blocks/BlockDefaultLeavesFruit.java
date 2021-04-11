@@ -23,8 +23,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -36,6 +34,8 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
+import genetics.api.individual.IGenome;
+
 /**
  * Genetic leaves with no tile entity, used for worldgen trees.
  * Similar to decorative leaves, but these will drop saplings and can be used for pollination.
@@ -44,18 +44,18 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 	private final TreeDefinition definition;
 
 	public BlockDefaultLeavesFruit(TreeDefinition definition) {
-		super(Block.Properties.create(Material.LEAVES)
-			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT)
-			.tickRandomly()
-			.notSolid());
+		super(Block.Properties.of(Material.LEAVES)
+				.strength(0.2f)
+				.sound(SoundType.GRASS)
+				.randomTicks()
+				.noOcclusion());
 		this.definition = definition;
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
-		ItemStack mainHand = player.getHeldItem(Hand.MAIN_HAND);
-		ItemStack offHand = player.getHeldItem(Hand.OFF_HAND);
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult traceResult) {
+		ItemStack mainHand = player.getItemInHand(Hand.MAIN_HAND);
+		ItemStack offHand = player.getItemInHand(Hand.OFF_HAND);
 		if (mainHand.isEmpty() && offHand.isEmpty()) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -65,7 +65,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
-			world.setBlockState(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState(), 2);
+			world.setBlock(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState(), 2);
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}

@@ -21,32 +21,32 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
 public class BlockCandleWall extends BlockCandle {
-	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
 	public BlockCandleWall() {
-		setDefaultState(getStateContainer().getBaseState().with(FACING, Direction.NORTH).with(STATE, State.OFF));
+		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(STATE, State.OFF));
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-		return WallTorchBlock.getShapeForState(state);
+		return WallTorchBlock.getShape(state);
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
-		return Blocks.WALL_TORCH.isValidPosition(state, reader, pos);
+	public boolean canSurvive(BlockState state, IWorldReader reader, BlockPos pos) {
+		return Blocks.WALL_TORCH.canSurvive(state, reader, pos);
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction direction, BlockState blockState, IWorld world, BlockPos pos, BlockPos blockPos) {
-		return Blocks.WALL_TORCH.updatePostPlacement(state, direction, blockState, world, pos, blockPos);
+	public BlockState updateShape(BlockState state, Direction direction, BlockState blockState, IWorld world, BlockPos pos, BlockPos blockPos) {
+		return Blocks.WALL_TORCH.updateShape(state, direction, blockState, world, pos, blockPos);
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		BlockState state = Blocks.WALL_TORCH.getStateForPlacement(context);
-		return state == null ? null : this.getDefaultState().with(FACING, state.get(FACING));
+		return state == null ? null : this.defaultBlockState().setValue(FACING, state.getValue(FACING));
 	}
 
 	@Override
@@ -60,8 +60,8 @@ public class BlockCandleWall extends BlockCandle {
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 	}
 }

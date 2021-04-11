@@ -31,7 +31,7 @@ public class FeatureZebrawood extends FeatureTree {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 		FeatureHelper.generateSupportStems(wood, world, rand, startPos, height, girth, 0.8f, 0.3f);
 
-		return FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, height - 4, 0), girth, 0, 0.25f, 3, 2, 0.75f);
+		return FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, height - 4, 0), girth, 0, 0.25f, 3, 2, 0.75f);
 	}
 
 	@Override
@@ -42,15 +42,15 @@ public class FeatureZebrawood extends FeatureTree {
 
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		while (leafSpawn > height - 4) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 2.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		}
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		// Add some smaller twigs below for flavour
 		for (int times = 0; times < height / 4; times++) {
@@ -60,7 +60,7 @@ public class FeatureZebrawood extends FeatureTree {
 			}
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
-			FeatureHelper.generateSphere(world, startPos.add(x_off, h, y_off), 1 + rand.nextInt(1), leaf, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateSphere(world, startPos.offset(x_off, h, y_off), 1 + rand.nextInt(1), leaf, FeatureHelper.EnumReplaceMode.AIR);
 		}
 	}
 

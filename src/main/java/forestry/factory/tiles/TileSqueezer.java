@@ -80,20 +80,20 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 		sockets.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 		sockets.read(compoundNBT);
 
-		ItemStack chip = sockets.getStackInSlot(0);
+		ItemStack chip = sockets.getItem(0);
 		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
@@ -153,7 +153,7 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 		FluidStack resultFluid = currentRecipe.getFluidOutput();
 		productTank.fillInternal(resultFluid, IFluidHandler.FluidAction.EXECUTE);
 
-		if (!currentRecipe.getRemnants().isEmpty() && world.rand.nextFloat() < currentRecipe.getRemnantsChance()) {
+		if (!currentRecipe.getRemnants().isEmpty() && level.random.nextFloat() < currentRecipe.getRemnantsChance()) {
 			ItemStack remnant = currentRecipe.getRemnants().copy();
 			inventory.addRemnant(remnant, true);
 		}
@@ -177,13 +177,13 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 			if (currentRecipe != null && containsSets) {
 				matchingRecipe = currentRecipe;
 			} else {
-				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getWorld().getRecipeManager(), resources);
+				matchingRecipe = RecipeManagers.squeezerManager.findMatchingRecipe(getLevel().getRecipeManager(), resources);
 			}
 
 			if (matchingRecipe == null) {
 				for (ItemStack resource : resources) {
 					if (matchingRecipe == null) {
-						matchingRecipe = RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getWorld().getRecipeManager(), resource);
+						matchingRecipe = RecipeManagers.squeezerContainerManager.findMatchingContainerRecipe(getLevel().getRecipeManager(), resource);
 					}
 				}
 			}
@@ -247,28 +247,28 @@ public class TileSqueezer extends TilePowered implements ISocketable, ISidedInve
 	/* ISocketable */
 	@Override
 	public int getSocketCount() {
-		return sockets.getSizeInventory();
+		return sockets.getContainerSize();
 	}
 
 	@Override
 	public ItemStack getSocket(int slot) {
-		return sockets.getStackInSlot(slot);
+		return sockets.getItem(slot);
 	}
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 		if (stack.isEmpty() || ChipsetManager.circuitRegistry.isChipset(stack)) {
 			// Dispose correctly of old chipsets
-			if (!sockets.getStackInSlot(slot).isEmpty()) {
-				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+			if (!sockets.getItem(slot).isEmpty()) {
+				if (ChipsetManager.circuitRegistry.isChipset(sockets.getItem(slot))) {
+					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getItem(slot));
 					if (chipset != null) {
 						chipset.onRemoval(this);
 					}
 				}
 			}
 
-			sockets.setInventorySlotContents(slot, stack);
+			sockets.setItem(slot, stack);
 			if (!stack.isEmpty()) {
 				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(stack);
 				if (chipset != null) {

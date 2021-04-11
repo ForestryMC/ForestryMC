@@ -78,11 +78,11 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 			return null;
 		}
 		try {
-			model = ModelLoader.instance().getUnbakedModel(location);
+			model = ModelLoader.instance().getModel(location);
 		} catch (Exception e) {
 			return null;
 		}
-		return model.bakeModel(bakery, spriteGetter, transform, location);
+		return model.bake(bakery, spriteGetter, transform, location);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 			if (bakedModel != null) {
 				//Set the crate color index to 100
 				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), EmptyModelData.INSTANCE)) {
-					bakedQuads.add(new BakedQuad(quad.getVertexData(), 100, quad.getFace(), quad.func_187508_a(), quad.func_239287_f_()));
+					bakedQuads.add(new BakedQuad(quad.getVertices(), 100, quad.getDirection(), quad.getSprite(), quad.isShade()));
 				}
 			}
 		}
@@ -124,7 +124,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 
 		@Override
 		public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getString(modelContents, "variant"));
+			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getAsString(modelContents, "variant"));
 			Item item = ForgeRegistries.ITEMS.getValue(registryName);
 			if (!(item instanceof ItemCrated)) {
 				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CreateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);

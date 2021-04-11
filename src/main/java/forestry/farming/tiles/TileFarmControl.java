@@ -47,10 +47,10 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 		@Override
 		public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
 			for (Direction facing : new Direction[]{Direction.UP, Direction.DOWN, direction.getFacing()}) {
-				BlockPos pos = tile.getPos();
+				BlockPos pos = tile.getBlockPos();
 				World world = tile.getWorldObj();
-				BlockState blockState = world.getBlockState(pos.offset(facing));
-				if (!(blockState.getBlock() instanceof BlockFarm) && world.getRedstonePower(pos, facing) > 0) {
+				BlockState blockState = world.getBlockState(pos.relative(facing));
+				if (!(blockState.getBlock() instanceof BlockFarm) && world.getSignal(pos, facing) > 0) {
 					return true;
 				}
 			}

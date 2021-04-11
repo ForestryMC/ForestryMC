@@ -36,28 +36,28 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 
 	public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, World world) {
 		super(type, world);
-		setHasDisplayTile(true);
+		setCustomDisplay(true);
 	}
 
 	public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
 		super(type, world, posX, posY, posZ);
-		setHasDisplayTile(true);
+		setCustomDisplay(true);
 	}
 
 	// Needed to spawn the entity on the client
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
-	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-		ActionResultType ret = super.processInitialInteract(player, hand);
-		if (ret.isSuccessOrConsume()) {
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		ActionResultType ret = super.interact(player, hand);
+		if (ret.consumesAction()) {
 			return ret;
 		}
 		PlayerUtil.actOnServer(player, this::openGui);
-		return ActionResultType.func_233537_a_(this.world.isRemote);
+		return ActionResultType.sidedSuccess(this.level.isClientSide);
 	}
 
 	protected abstract void openGui(ServerPlayerEntity player);
@@ -75,18 +75,18 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 
 	// cart contents
 	@Override
-	public abstract BlockState getDisplayTile();
+	public abstract BlockState getDisplayBlockState();
 
 	// cart itemStack
 	@Override
 	public abstract ItemStack getCartItem();
 
 	@Override
-	public void killMinecart(DamageSource damageSource) {
-		super.killMinecart(damageSource);
-		if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
-			Block block = getDisplayTile().getBlock();
-			entityDropItem(new ItemStack(block), 0.0F);
+	public void destroy(DamageSource damageSource) {
+		super.destroy(damageSource);
+		if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+			Block block = getDisplayBlockState().getBlock();
+			spawnAtLocation(new ItemStack(block), 0.0F);
 		}
 	}
 
@@ -105,7 +105,7 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 	@Override
 	public String getUnlocalizedTitle() {
 		ItemStack cartItem = getCartItem();
-		return cartItem.getTranslationKey();
+		return cartItem.getDescriptionId();
 	}
 
 	@Override

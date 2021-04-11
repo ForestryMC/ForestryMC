@@ -9,11 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IWorld;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.tiles.TileUtil;
+
+import genetics.api.individual.IGenome;
 
 public class TreeGrowthHelper {
 	@Nullable
@@ -32,14 +32,14 @@ public class TreeGrowthHelper {
 
 	private static boolean hasRoom(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
 		Vector3i area = new Vector3i(expectedGirth, expectedHeight + 1, expectedGirth);
-		return checkArea(world, pos.up(), area);
+		return checkArea(world, pos.above(), area);
 	}
 
 	private static boolean checkArea(IWorld world, BlockPos start, Vector3i area) {
 		for (int x = 0; x < area.getX(); x++) {
 			for (int y = 0; y < area.getY(); y++) {
 				for (int z = 0; z < area.getZ(); z++) {
-					BlockPos pos = start.add(x, y, z);
+					BlockPos pos = start.offset(x, y, z);
 					BlockState blockState = world.getBlockState(pos);
 					//TODO: Can't be used because the world generation only provides a IWorld and not a World
 					/*BlockItemUseContext context = new DirectionalPlaceContext((World) world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP);
@@ -66,7 +66,7 @@ public class TreeGrowthHelper {
 
 		for (int x = -offset; x <= 0; x++) {
 			for (int z = -offset; z <= 0; z++) {
-				BlockPos startPos = saplingPos.add(x, 0, z);
+				BlockPos startPos = saplingPos.offset(x, 0, z);
 				if (checkForSaplings(genome, world, startPos, expectedGirth, knownSaplings)) {
 					return startPos;
 				}
@@ -79,7 +79,7 @@ public class TreeGrowthHelper {
 	private static boolean checkForSaplings(IGenome genome, IWorld world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
-				BlockPos checkPos = startPos.add(x, 0, z);
+				BlockPos checkPos = startPos.offset(x, 0, z);
 				Boolean knownSapling = knownSaplings.computeIfAbsent(checkPos, k -> isSapling(genome, world, checkPos));
 				if (!knownSapling) {
 					return false;
@@ -90,11 +90,11 @@ public class TreeGrowthHelper {
 	}
 
 	private static boolean isSapling(IGenome genome, IWorld world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos)) {
+		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
 
-		if (world.isAirBlock(pos)) {
+		if (world.isEmptyBlock(pos)) {
 			return false;
 		}
 

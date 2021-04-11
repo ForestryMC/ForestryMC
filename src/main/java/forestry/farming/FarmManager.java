@@ -137,7 +137,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 
 		World world = housing.getWorldObj();
 		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
-		Collections.shuffle(farmDirections, world.rand);
+		Collections.shuffle(farmDirections, world.random);
 		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = housing.getFarmLogic(farmSide);
 			List<FarmTarget> farmTargets = targets.get(farmSide);
@@ -325,7 +325,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 			return housing.getCoords();
 		}
 		FarmTarget target = targetList.get(0);
-		return target.getStart().offset(direction.getFacing().getOpposite());
+		return target.getStart().relative(direction.getFacing().getOpposite());
 	}
 
 	@Override

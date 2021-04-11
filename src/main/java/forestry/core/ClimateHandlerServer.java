@@ -31,8 +31,8 @@ public class ClimateHandlerServer {
 			return;
 		}
 		PlayerEntity player = event.player;
-		World world = player.world;
-		BlockPos pos = player.getPosition();
+		World world = player.level;
+		BlockPos pos = player.blockPosition();
 		IWorldClimateHolder worldClimateHolder = ClimateManager.climateRoot.getWorldClimate(world);
 		IClimateState climateState = worldClimateHolder.getState(pos);
 		tickHelper.onTick();

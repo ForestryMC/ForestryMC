@@ -23,11 +23,11 @@ import forestry.core.items.ItemBlockForestry;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {
-		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
+		super(block, new Item.Properties().tab(ItemGroups.tabArboriculture));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		IWoodTyped wood = getBlock();
 		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);

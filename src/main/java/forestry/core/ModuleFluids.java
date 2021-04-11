@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -26,6 +25,7 @@ import forestry.api.fuels.GeneratorFuel;
 import forestry.api.modules.ForestryModule;
 import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
+import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -40,7 +40,7 @@ public class ModuleFluids extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		MinecraftForge.EVENT_BUS.register(this);
+		ForgeUtils.registerSubscriber(this);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ModuleFluids extends BlankForestryModule {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() != PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
+		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
 			return;
 		}
 		for (ForestryFluids fluid : ForestryFluids.values()) {

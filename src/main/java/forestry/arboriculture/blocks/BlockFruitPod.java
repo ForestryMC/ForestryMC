@@ -53,10 +53,10 @@ public class BlockFruitPod extends CocoaBlock {
 	private final IAlleleFruit fruit;
 
 	public BlockFruitPod(IAlleleFruit fruit) {
-		super(BlockSapling.Properties.create(Material.PLANTS)
-			.tickRandomly()
-			.hardnessAndResistance(0.2f, 3.0f)
-			.sound(SoundType.WOOD));
+		super(BlockSapling.Properties.of(Material.PLANT)
+				.randomTicks()
+				.strength(0.2f, 3.0f)
+				.sound(SoundType.WOOD));
 		this.fruit = fruit;
 	}
 
@@ -75,9 +75,9 @@ public class BlockFruitPod extends CocoaBlock {
 
 	@Override
 	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
-		if (!isValidPosition(state, world, pos)) {
-			spawnDrops(state, world, pos);
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		if (!canSurvive(state, world, pos)) {
+			dropResources(state, world, pos);
+			world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			return;
 		}
 
@@ -91,7 +91,7 @@ public class BlockFruitPod extends CocoaBlock {
 
 	@Override
 	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 			if (tile != null) {
 				for (ItemStack drop : tile.getDrops()) {
@@ -104,8 +104,8 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-		Direction facing = state.get(HORIZONTAL_FACING);
+	public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+		Direction facing = state.getValue(FACING);
 		return BlockUtil.isValidPodLocation(world, pos, facing);
 	}
 
@@ -128,13 +128,13 @@ public class BlockFruitPod extends CocoaBlock {
 
 	/* IGrowable */
 	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		return podTile != null && podTile.canMature();
 	}
 
 	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (podTile != null) {
 			podTile.addRipeness(0.5f);

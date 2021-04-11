@@ -45,7 +45,7 @@ public abstract class TileBase extends TileForestry {
 	public String getUnlocalizedTitle() {
 		Block block = getBlockState().getBlock();
 		if (block instanceof BlockBase) {
-			return block.getTranslationKey();
+			return block.getDescriptionId();
 		}
 		return super.getUnlocalizedTitle();
 	}
@@ -72,7 +72,7 @@ public abstract class TileBase extends TileForestry {
 
 	@Nonnull
 	public Direction getFacing() {
-		return getWorld().getBlockState(getPos()).get(BlockBase.FACING);
+		return getLevel().getBlockState(getBlockPos()).getValue(BlockBase.FACING);
 	}
 
 }

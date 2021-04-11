@@ -12,7 +12,7 @@ public class InventoryFilter extends InventoryAdapterTile<TileGeneticFilter> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return false;
 	}
 }

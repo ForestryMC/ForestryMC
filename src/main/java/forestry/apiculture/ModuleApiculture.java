@@ -40,6 +40,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -80,6 +81,7 @@ import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
@@ -142,6 +144,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	public ModuleApiculture() {
 		proxy = DistExecutor.safeRunForDist(() -> ProxyApicultureClient::new, () -> ProxyApiculture::new);
 		ForgeUtils.registerSubscriber(this);
+		MinecraftForge.EVENT_BUS.register(HabitatLocatorLogic.class);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		if (Config.enableVillagers) {
@@ -152,7 +155,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		if (Config.getBeehivesAmount() > 0.0) {
 			modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
-			//MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 		}
 	}
 
@@ -175,14 +178,14 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
-		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
-		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
-		ScreenManager.registerFactory(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
-		ScreenManager.registerFactory(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
-		ScreenManager.registerFactory(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
-		ScreenManager.registerFactory(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
-		ScreenManager.registerFactory(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
+		ScreenManager.register(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
+		ScreenManager.register(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
+		ScreenManager.register(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
+		ScreenManager.register(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
+		ScreenManager.register(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
+		ScreenManager.register(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
+		ScreenManager.register(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
+		ScreenManager.register(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
 	}
 
 	@Override
@@ -374,19 +377,19 @@ public class ModuleApiculture extends BlankForestryModule {
 			Blocks.POTTED_WHITE_TULIP,
 			Blocks.POTTED_PINK_TULIP,
 			Blocks.POTTED_OXEYE_DAISY,
-			Blocks.POTTED_CORNFLOWER,
-			Blocks.POTTED_LILY_OF_THE_VALLEY,
-			Blocks.POTTED_WITHER_ROSE,
+				Blocks.POTTED_CORNFLOWER,
+				Blocks.POTTED_LILY_OF_THE_VALLEY,
+				Blocks.POTTED_WITHER_ROSE,
 		};
 
 		// Register plantable plants
 		String[] standardTypes = new String[]{FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow};
 		for (Block standardFlower : standardFlowers) {
-			flowerRegistry.registerPlantableFlower(standardFlower.getDefaultState(), 1.0, standardTypes);
+			flowerRegistry.registerPlantableFlower(standardFlower.defaultBlockState(), 1.0, standardTypes);
 		}
-		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.getDefaultState(), 1.0, FlowerManager.FlowerTypeMushrooms);
-		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.getDefaultState(), 1.0, FlowerManager.FlowerTypeCacti);
+		flowerRegistry.registerPlantableFlower(Blocks.BROWN_MUSHROOM.defaultBlockState(), 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.RED_MUSHROOM.defaultBlockState(), 1.0, FlowerManager.FlowerTypeMushrooms);
+		flowerRegistry.registerPlantableFlower(Blocks.CACTUS.defaultBlockState(), 1.0, FlowerManager.FlowerTypeCacti);
 
 		//Flower Pots
 		for (Block standardFlower : pottedStandardFlowers) {
@@ -435,13 +438,13 @@ public class ModuleApiculture extends BlankForestryModule {
 	public void registerRecipes() {
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
-			Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-			Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1)),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.HEALING));
+				Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
+				Ingredient.of(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL, 1)),
+				PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.HEALING));
 		BrewingRecipeRegistry.addRecipe(
-			Ingredient.fromStacks(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.AWKWARD)),
-			Ingredient.fromStacks(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)),
-			PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), Potions.REGENERATION));
+				Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
+				Ingredient.of(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)),
+				PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.REGENERATION));
 
 	}
 
@@ -609,7 +612,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, World world, BlockPos pos, String flowerType) {
 			Biome biomeGenForCoords = world.getBiome(pos);
-			return Biome.Category.THEEND == biomeGenForCoords.getCategory();
+			return Biome.Category.THEEND == biomeGenForCoords.getBiomeCategory();
 		}
 	}
 }

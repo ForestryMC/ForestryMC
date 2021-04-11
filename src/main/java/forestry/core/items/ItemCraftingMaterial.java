@@ -20,7 +20,7 @@ public class ItemCraftingMaterial extends ItemForestry {
 
 	public ItemCraftingMaterial(EnumCraftingMaterial type) {
 		super((new Item.Properties())
-			.group(ItemGroupForestry.tabForestry));
+				.tab(ItemGroupForestry.tabForestry));
 		this.type = type;
 	}
 

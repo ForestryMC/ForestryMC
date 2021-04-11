@@ -46,7 +46,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerStill;
 import forestry.factory.inventory.InventoryStill;
-import forestry.factory.recipes.StillRecipeManager;
 
 public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
@@ -63,10 +62,10 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		super(FactoryTiles.STILL.tileType(), 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
-		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidInputs(world.getRecipeManager()));
+		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidInputs(level.getRecipeManager()));
 
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidOutputs(world.getRecipeManager()));
+		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidOutputs(level.getRecipeManager()));
 
 		tankManager = new TankManager(this, resourceTank, productTank);
 
@@ -74,8 +73,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		if (!bufferedLiquid.isEmpty()) {
@@ -87,8 +86,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
 		if (compoundNBT.contains("Buffer")) {
@@ -142,7 +141,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
 		if (!RecipeManagers.stillManager.matches(currentRecipe, recipeLiquid)) {
-			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(world.getRecipeManager(), recipeLiquid);
+			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(level.getRecipeManager(), recipeLiquid);
 
 			int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
 			setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);

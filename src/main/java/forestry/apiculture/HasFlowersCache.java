@@ -23,8 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -34,6 +32,8 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.flowers.IFlowerProvider;
 import forestry.core.utils.TickHelper;
+
+import genetics.api.individual.IGenome;
 
 public class HasFlowersCache implements INbtWritable, INbtReadable {
 	private static final String NBT_KEY = "hasFlowerCache";
@@ -89,7 +89,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			Iterator<BlockPos> iterator = flowerCoords.iterator();
 			while (iterator.hasNext()) {
 				BlockPos flowerPos = iterator.next();
-				if (!flowerData.flowerPredicate.test(world, flowerPos) && world.isBlockLoaded(flowerPos)) {
+				if (!flowerData.flowerPredicate.test(world, flowerPos) && world.hasChunkAt(flowerPos)) {
 					iterator.remove();
 					flowers.clear();
 					needsSync = true;
@@ -104,7 +104,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			if (flowerData.areaIterator.hasNext()) {
 				BlockPos.Mutable blockPos = flowerData.areaIterator.next();
 				if (flowerData.flowerPredicate.test(world, blockPos)) {
-					addFlowerPos(blockPos.toImmutable());
+					addFlowerPos(blockPos.immutable());
 				}
 			} else {
 				flowerData.resetIterator(queen, beeHousing);
@@ -164,7 +164,7 @@ public class HasFlowersCache implements INbtWritable, INbtReadable {
 			while (flowerData.areaIterator.hasNext()) {
 				BlockPos.Mutable blockPos = flowerData.areaIterator.next();
 				if (flowerData.flowerPredicate.test(world, blockPos)) {
-					addFlowerPos(blockPos.toImmutable());
+					addFlowerPos(blockPos.immutable());
 				}
 			}
 		}

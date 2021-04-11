@@ -40,7 +40,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = harvestBlocks(world, position);
 		farmHousing.increaseExtent(direction, pos, extent);
 
@@ -48,7 +48,7 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 	}
 
 	private Collection<ICrop> harvestBlocks(World world, BlockPos position) {
-		if (!world.isBlockLoaded(position) || world.isAirBlock(position)) {
+		if (!world.hasChunkAt(position) || world.isEmptyBlock(position)) {
 			return Collections.emptySet();
 		}
 
@@ -82,10 +82,10 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 				if (facing == from) {
 					continue;
 				}
-				canHarvest &= harvestBlock(world, pos.offset(facing), facing.getOpposite(), plants, flowers);
+				canHarvest &= harvestBlock(world, pos.relative(facing), facing.getOpposite(), plants, flowers);
 			}
 			if (canHarvest) {
-				plants.push(new CropDestroy(world, Blocks.CHORUS_PLANT.getDefaultState(), pos, null));
+				plants.push(new CropDestroy(world, Blocks.CHORUS_PLANT.defaultBlockState(), pos, null));
 			}
 			return canHarvest;
 		}
@@ -97,11 +97,11 @@ public class FarmLogicEnder extends FarmLogicHomogeneous {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			BlockState state = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+			if (!world.isEmptyBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			BlockPos soilPos = position.down();
+			BlockPos soilPos = position.below();
 			BlockState blockState = world.getBlockState(soilPos);
 			if (!isAcceptedSoil(blockState)) {
 				continue;

@@ -33,7 +33,7 @@ public class FeatureMahoe extends FeatureTree {
 		Set<BlockPos> branchCoords = new HashSet<>(FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0));
 
 		for (int yBranch = 2; yBranch < height - 1; yBranch++) {
-			branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, yBranch, 0), girth, 0.15f, 0.25f, Math.round((height - yBranch) * 0.75f), 1, 0.25f));
+			branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, yBranch, 0), girth, 0.15f, 0.25f, Math.round((height - yBranch) * 0.75f), 1, 0.25f));
 		}
 		return branchCoords;
 	}
@@ -46,6 +46,6 @@ public class FeatureMahoe extends FeatureTree {
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, FeatureHelper.EnumReplaceMode.AIR);
 	}
 }

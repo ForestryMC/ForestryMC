@@ -45,8 +45,8 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			subItems.add(createCircuitboard(type, null, new ICircuit[]{}));
 		}
 	}
@@ -63,8 +63,8 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 		ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitBoard(itemstack);
 		if (circuitboard != null) {
 			circuitboard.addTooltip(list);

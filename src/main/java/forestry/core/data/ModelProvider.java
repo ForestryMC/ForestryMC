@@ -47,7 +47,7 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	@Override
-	public void act(DirectoryCache cache) throws IOException {
+	public void run(DirectoryCache cache) throws IOException {
 		this.pathToBuilder.clear();
 		this.registerModels();
 		pathToBuilder.forEach((key, builder) -> {
@@ -55,8 +55,8 @@ public abstract class ModelProvider implements IDataProvider {
 			Path path = this.makePath(key);
 			try {
 				String s = GSON.toJson(jsonobject);
-				String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
-				if (!Objects.equals(cache.getPreviousHash(path), s1) || !Files.exists(path)) {
+				String s1 = SHA1.hashUnencodedChars(s).toString();
+				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
 					Files.createDirectories(path.getParent());
 
 					try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
@@ -64,7 +64,7 @@ public abstract class ModelProvider implements IDataProvider {
 					}
 				}
 
-				cache.recordHash(path, s1);
+				cache.putNew(path, s1);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}
@@ -210,7 +210,7 @@ public abstract class ModelProvider implements IDataProvider {
 		}
 
 		public Element face(Direction direction, Face face) {
-			this.faces[direction.getIndex()] = face;
+			this.faces[direction.get3DDataValue()] = face;
 			return this;
 		}
 
@@ -233,8 +233,8 @@ public abstract class ModelProvider implements IDataProvider {
 				if (face == null) {
 					continue;
 				}
-				Direction direction = Direction.byIndex(i);
-				facesObj.add(direction.getString(), face.serialize());
+				Direction direction = Direction.from3DDataValue(i);
+				facesObj.add(direction.getSerializedName(), face.serialize());
 			}
 			obj.add("faces", facesObj);
 			return obj;
@@ -242,7 +242,7 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	public static class Rotation {
-		private Vector3i origin = Vector3i.NULL_VECTOR;
+		private Vector3i origin = Vector3i.ZERO;
 		@Nullable
 		private Direction.Axis axis;
 		@Nullable
@@ -273,9 +273,9 @@ public abstract class ModelProvider implements IDataProvider {
 		private JsonElement serialize() {
 			JsonObject obj = new JsonObject();
 			if (axis != null) {
-				obj.addProperty("axis", axis.getString());
+				obj.addProperty("axis", axis.getSerializedName());
 			}
-			if (origin == Vector3i.NULL_VECTOR) {
+			if (origin == Vector3i.ZERO) {
 				obj.add("origin", serializeVex(origin));
 			}
 			if (angle != null) {
@@ -324,7 +324,7 @@ public abstract class ModelProvider implements IDataProvider {
 			}
 			obj.add("uv", uvObject);
 			if (cullFace != null) {
-				obj.addProperty("cullface", cullFace.getString());
+				obj.addProperty("cullface", cullFace.getSerializedName());
 			}
 			obj.addProperty("rotation", uv.rotation);
 			if (tintIndex > 0) {

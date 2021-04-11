@@ -50,7 +50,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		if (maintainSoil(world, farmHousing, pos, direction, extent)) {
 			return true;
 		}
-		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.above());
 		boolean result = tryPlantingCocoa(world, farmHousing, position, direction);
 
 		farmHousing.increaseExtent(direction, pos, extent);
@@ -63,7 +63,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 			return false;
 		}
 		BlockPos cornerPos = farmHousing.getFarmCorner(direction);
-		int distance = getDistanceValue(direction.getFacing().rotateY(), cornerPos, pos) - 1;
+		int distance = getDistanceValue(direction.getFacing().getClockWise(), cornerPos, pos) - 1;
 		int layoutExtent = LAYOUT_POSITIONS[distance % LAYOUT_POSITIONS.length];
 		for (Soil soil : getSoils()) {
 			NonNullList<ItemStack> resources = NonNullList.create();
@@ -71,33 +71,33 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
 			for (int i = 0; i < extent; i++) {
 				BlockPos position = translateWithOffset(pos, direction, i);
-				if (!world.isBlockLoaded(position)) {
+				if (!world.hasChunkAt(position)) {
 					break;
 				}
 
 				if (!isValidPosition(direction, position, pos, layoutExtent)
-					|| !farmHousing.getFarmInventory().hasResources(resources)) {
+						|| !farmHousing.getFarmInventory().hasResources(resources)) {
 					continue;
 				}
 
-				BlockPos platformPosition = position.down();
+				BlockPos platformPosition = position.below();
 				if (!farmHousing.isValidPlatform(world, platformPosition)) {
 					break;
 				}
 
 				for (int z = 0; z < 3; z++) {
-					BlockPos location = position.up(z);
+					BlockPos location = position.above(z);
 
 					BlockState state = world.getBlockState(location);
-					if (z == 0 && !world.isAirBlock(location)
-						|| z > 0 && isAcceptedSoil(state)
-						|| !BlockUtil.isBreakableBlock(state, world, pos)) {
+					if (z == 0 && !world.isEmptyBlock(location)
+							|| z > 0 && isAcceptedSoil(state)
+							|| !BlockUtil.isBreakableBlock(state, world, pos)) {
 						continue;
 					}
 
 					if (!BlockUtil.isReplaceableBlock(state, world, location)) {
 						BlockUtil.getBlockDrops(world, location).forEach(farmHousing::addPendingProduct);
-						world.setBlockState(location, Blocks.AIR.getDefaultState());
+						world.setBlockAndUpdate(location, Blocks.AIR.defaultBlockState());
 						return trySetSoil(world, farmHousing, location, soil.getResource(), soil.getSoilState());
 					}
 
@@ -151,7 +151,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		housing.increaseExtent(direction, pos, extent);
 
@@ -160,11 +160,11 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
 	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
 		BlockPos.Mutable current = new BlockPos.Mutable();
-		BlockState blockState = world.getBlockState(current.setPos(position));
+		BlockState blockState = world.getBlockState(current.set(position));
 		while (isJungleTreeTrunk(blockState)) {
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				BlockPos candidate = new BlockPos(current.getX() + direction.getXOffset(), current.getY(), current.getZ() + direction.getZOffset());
-				if (world.isBlockLoaded(candidate) && world.isAirBlock(candidate)) {
+				BlockPos candidate = new BlockPos(current.getX() + direction.getStepX(), current.getY(), current.getZ() + direction.getStepZ());
+				if (world.hasChunkAt(candidate) && world.isEmptyBlock(candidate)) {
 					return farmHousing.plantGermling(cocoa, world, candidate, farmDirection);
 				}
 			}
@@ -196,7 +196,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		Block block = blockState.getBlock();
 
 		ICrop crop = null;
-		if (!block.isIn(BlockTags.LOGS)) {
+		if (!block.is(BlockTags.LOGS)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
 				return crops;
@@ -229,7 +229,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		for (int i = -1; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					BlockPos candidate = position.add(i, j, k);
+					BlockPos candidate = position.offset(i, j, k);
 					if (candidate.equals(position)) {
 						continue;
 					}
@@ -245,7 +245,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 						continue;
 					}
 
-					if (!world.isBlockLoaded(candidate)) {
+					if (!world.hasChunkAt(candidate)) {
 						continue;
 					}
 
@@ -255,7 +255,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (blockState.getBlock().isIn(BlockTags.LOGS)) {
+					} else if (blockState.getBlock().is(BlockTags.LOGS)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

@@ -26,7 +26,7 @@ public class ContainerStill extends ContainerLiquidTanks<TileStill> {
 
 	//TODO work out if there is a good way to make this generic
 	public static ContainerStill fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileStill tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileStill.class);
+		TileStill tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileStill.class);
 		return new ContainerStill(windowId, inv, tile);
 	}
 

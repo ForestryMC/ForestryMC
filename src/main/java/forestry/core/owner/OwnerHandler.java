@@ -46,14 +46,14 @@ public class OwnerHandler implements IOwnerHandler, IStreamable, INbtWritable, I
 			data.writeBoolean(true);
 			data.writeLong(owner.getId().getMostSignificantBits());
 			data.writeLong(owner.getId().getLeastSignificantBits());
-			data.writeString(owner.getName());
+			data.writeUtf(owner.getName());
 		}
 	}
 
 	@Override
 	public void readData(PacketBufferForestry data) {
 		if (data.readBoolean()) {
-			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+			GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUtf());
 			setOwner(owner);
 		}
 	}

@@ -17,6 +17,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -50,7 +51,7 @@ public class CropBasicGrowthCraft extends Crop {
 		NonNullList<ItemStack> harvest = NonNullList.create();
 		//TODO cast
 		LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
-			.withParameter(LootParameters.POSITION, pos);
+				.withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(pos));
 		harvest.addAll(block.getDrops(blockState, ctx));
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.
@@ -62,12 +63,12 @@ public class CropBasicGrowthCraft extends Crop {
 		if (isGrape) {
 			world.removeBlock(pos, false);
 		} else {
-			world.setBlockState(pos, block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos, block.defaultBlockState(), Constants.FLAG_BLOCK_SYNC);
 		}
 
 		if (isRice) {
 			// TODO: GrowthCraft for MC 1.9. Don't use meta, get the actual block state.
-			world.setBlockState(pos.down(), block.getDefaultState(), Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos.below(), block.defaultBlockState(), Constants.FLAG_BLOCK_SYNC);
 			//TODO flatten
 		}
 

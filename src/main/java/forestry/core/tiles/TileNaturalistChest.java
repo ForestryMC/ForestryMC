@@ -37,7 +37,7 @@ import forestry.core.network.PacketBufferForestry;
 
 public abstract class TileNaturalistChest extends TileBase implements IPagedInventory {
 	private static final float lidAngleVariationPerTick = 0.1F;
-	public static final VoxelShape CHEST_SHAPE = Block.makeCuboidShape(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+	public static final VoxelShape CHEST_SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
 	private final IForestrySpeciesRoot speciesRoot;
 	public float lidAngle;
@@ -77,7 +77,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 		prevLidAngle = lidAngle;
 
 		if (numPlayersUsing > 0 && lidAngle == 0.0F) {
-			playLidSound(SoundEvents.BLOCK_CHEST_OPEN);
+			playLidSound(SoundEvents.CHEST_OPEN);
 		}
 
 		if (numPlayersUsing == 0 && lidAngle > 0.0F || numPlayersUsing > 0 && lidAngle < 1.0F) {
@@ -92,19 +92,19 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 			lidAngle = Math.max(Math.min(lidAngle, 1), 0);
 
 			if (lidAngle < 0.5F && oldAngle >= 0.5F) {
-				playLidSound(SoundEvents.BLOCK_CHEST_CLOSE);
+				playLidSound(SoundEvents.CHEST_CLOSE);
 			}
 		}
 	}
 
 	private void playLidSound(SoundEvent sound) {
-		this.world.playSound(null, getPos(), sound, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+		this.level.playSound(null, getBlockPos(), sound, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
 	public void flipPage(ServerPlayerEntity player, short page) {
 		NetworkHooks.openGui(player, this, p -> {
-			p.writeBlockPos(this.pos);
+			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(page);
 		});
 	}
@@ -112,7 +112,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	@Override
 	public void openGui(ServerPlayerEntity player, BlockPos pos) {
 		NetworkHooks.openGui(player, this, p -> {
-			p.writeBlockPos(this.pos);
+			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(0);
 		});
 	}

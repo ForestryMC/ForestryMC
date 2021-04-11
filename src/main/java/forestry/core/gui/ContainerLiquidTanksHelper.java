@@ -44,7 +44,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void handlePipetteClickClient(int slot, PlayerEntity player) {
-		ItemStack itemstack = player.inventory.getItemStack();
+		ItemStack itemstack = player.inventory.getCarried();
 		if (itemstack.getItem() instanceof IToolPipette) {
 			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
 		}
@@ -52,7 +52,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 
 	@Override
 	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
-		ItemStack itemstack = player.inventory.getItemStack();
+		ItemStack itemstack = player.inventory.getCarried();
 		Item held = itemstack.getItem();
 		if (!(held instanceof IToolPipette)) {
 			return;
@@ -69,14 +69,14 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setItemStack(fluidHandlerItem.getContainer());
-					player.updateHeldItem();
+					player.inventory.setCarried(fluidHandlerItem.getContainer());
+					player.broadcastCarriedItem();
 				} else {//TODO: Test if this works
 					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setItemStack(fluidHandlerItem.getContainer());
-					player.updateHeldItem();
+					player.inventory.setCarried(fluidHandlerItem.getContainer());
+					player.broadcastCarriedItem();
 				}
 			} else {
 				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
@@ -84,8 +84,8 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 					if (tank instanceof FluidTank) {
 						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
 						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
-						player.inventory.setItemStack(fluidHandlerItem.getContainer());
-						player.updateHeldItem();
+						player.inventory.setCarried(fluidHandlerItem.getContainer());
+						player.broadcastCarriedItem();
 					}
 				}
 			}

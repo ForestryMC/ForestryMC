@@ -22,7 +22,7 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack itemstack) {
+	public boolean mayPlace(ItemStack itemstack) {
 		return false;
 	}
 
@@ -32,12 +32,12 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity stack) {
+	public boolean mayPickup(PlayerEntity stack) {
 		return false;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i) {
+	public ItemStack remove(int i) {
 		return ItemStack.EMPTY;
 	}
 }

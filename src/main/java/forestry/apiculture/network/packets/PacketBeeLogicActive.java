@@ -53,7 +53,7 @@ public class PacketBeeLogicActive extends ForestryPacket implements IForestryPac
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos tilePos = data.readBlockPos();
 
-			IBeeHousing beeHousing = TileUtil.getTile(player.world, tilePos, IBeeHousing.class);
+			IBeeHousing beeHousing = TileUtil.getTile(player.level, tilePos, IBeeHousing.class);
 			if (beeHousing != null) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				beekeepingLogic.readData(data);

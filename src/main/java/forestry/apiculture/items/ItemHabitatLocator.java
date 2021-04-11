@@ -46,7 +46,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	private final HabitatLocatorLogic locatorLogic;
 
 	public ItemHabitatLocator() {
-		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
+		super((new Item.Properties()).tab(ItemGroups.tabApiculture).stacksTo(1));
 		locatorLogic = new HabitatLocatorLogic();
 	}
 
@@ -56,7 +56,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	public void inventoryTick(ItemStack stack, World world, Entity player, int slot, boolean selected) {
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			locatorLogic.onUpdate(world, player);
 		}
 	}
@@ -70,26 +70,27 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 		//TODO textures
 	}
 
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
-
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 		Minecraft minecraft = Minecraft.getInstance();
+
 		if (world != null && minecraft.player != null) {
 			ClientPlayerEntity player = minecraft.player;
-			Biome currentBiome = player.world.getBiome(player.getPosition());
+			Biome currentBiome = player.level.getBiome(player.blockPosition());
 
-			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.getPosition());
+			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
 			list.add(new TranslationTextComponent("for.gui.currentBiome")
-				.append(new StringTextComponent(": "))
-				.append(new TranslationTextComponent(currentBiome.getTranslationKey())));
+					.append(new StringTextComponent(": "))
+					.append(new TranslationTextComponent("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
 
 			list.add(new TranslationTextComponent("for.gui.temperature")
-				.append(new StringTextComponent(": "))
-				.append(AlleleManager.climateHelper.toDisplay(temperature)));
+					.append(new StringTextComponent(": "))
+					.append(AlleleManager.climateHelper.toDisplay(temperature)));
 
 			list.add(new TranslationTextComponent("for.gui.humidity")
 				.append(new StringTextComponent(": "))

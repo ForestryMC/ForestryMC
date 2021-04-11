@@ -62,11 +62,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	private int getFuelSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL).isEmpty()) {
+		if (inventory.getItem(InventoryEnginePeat.SLOT_FUEL).isEmpty()) {
 			return -1;
 		}
 
-		if (determineFuelValue(inventory.getStackInSlot(InventoryEnginePeat.SLOT_FUEL)) > 0) {
+		if (determineFuelValue(inventory.getItem(InventoryEnginePeat.SLOT_FUEL)) > 0) {
 			return InventoryEnginePeat.SLOT_FUEL;
 		}
 
@@ -76,7 +76,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private int getFreeWasteSlot() {
 		IInventoryAdapter inventory = getInternalInventory();
 		for (int i = InventoryEnginePeat.SLOT_WASTE_1; i <= InventoryEnginePeat.SLOT_WASTE_COUNT; i++) {
-			ItemStack waste = inventory.getStackInSlot(i);
+			ItemStack waste = inventory.getItem(i);
 			if (waste.isEmpty()) {
 				return i;
 			}
@@ -104,7 +104,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		dumpStash();
 
 		int fuelSlot = getFuelSlot();
-		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
+		boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getItem(fuelSlot)) > 0;
 		getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
 	}
 
@@ -120,7 +120,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 			if (isRedstoneActivated()) {
 				currentOutput = determineFuelValue(fuel);
 				energyManager.generateEnergy(currentOutput);
-				world.updateComparatorOutputLevel(pos, getBlockState().getBlock());    //TODO - I thuink
+				level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());    //TODO - I thuink
 			}
 		} else if (isRedstoneActivated()) {
 			int fuelSlot = getFuelSlot();
@@ -128,11 +128,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 			if (fuelSlot >= 0 && wasteSlot >= 0) {
 				IInventoryAdapter inventory = getInternalInventory();
-				ItemStack fuelStack = inventory.getStackInSlot(fuelSlot);
+				ItemStack fuelStack = inventory.getItem(fuelSlot);
 				burnTime = totalBurnTime = determineBurnDuration(fuelStack);
 				if (burnTime > 0 && !fuelStack.isEmpty()) {
 					fuel = fuelStack.copy();
-					decrStackSize(fuelSlot, 1);
+					removeItem(fuelSlot, 1);
 				}
 			}
 		}
@@ -186,9 +186,9 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		int wasteSlot = getFreeWasteSlot();
 		if (wasteSlot >= 0) {
 			IInventoryAdapter inventory = getInternalInventory();
-			ItemStack wasteStack = inventory.getStackInSlot(wasteSlot);
+			ItemStack wasteStack = inventory.getItem(wasteSlot);
 			if (wasteStack.isEmpty()) {
-				inventory.setInventorySlotContents(wasteSlot, CoreItems.ASH.stack());
+				inventory.setItem(wasteSlot, CoreItems.ASH.stack());
 			} else {
 				wasteStack.grow(1);
 			}
@@ -232,7 +232,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
 		if (!InventoryUtil.moveOneItemToPipe(wasteItemHandler, getTileCache())) {
-			Direction powerSide = world.getBlockState(getPos()).get(BlockBase.FACING);
+			Direction powerSide = level.getBlockState(getBlockPos()).getValue(BlockBase.FACING);
 			Collection<IItemHandler> inventories = inventoryCache.getAdjacentInventoriesOtherThan(powerSide);
 			InventoryUtil.moveItemStack(wasteItemHandler, inventories);
 		}
@@ -261,17 +261,17 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		}
 
 		IInventoryAdapter inventory = getInternalInventory();
-		return (float) inventory.getStackInSlot(fuelSlot).getCount() / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize() > percentage;
+		return (float) inventory.getItem(fuelSlot).getCount() / (float) inventory.getItem(fuelSlot).getMaxStackSize() > percentage;
 	}
 
 	// / LOADING AND SAVING
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
 			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
-			fuel = ItemStack.read(fuelItemNbt);
+			fuel = ItemStack.of(fuelItemNbt);
 		}
 
 		burnTime = compoundNBT.getInt("EngineBurnTime");
@@ -283,8 +283,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		if (!fuel.isEmpty()) {
 			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());

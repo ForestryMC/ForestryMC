@@ -40,7 +40,7 @@ public class ItemFruit extends ItemForestryFood {
 		}
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name;
 		}
 
@@ -61,7 +61,7 @@ public class ItemFruit extends ItemForestryFood {
 	}
 
 	@Override
-	public boolean isDamageable() {
+	public boolean canBeDepleted() {
 		return false;
 	}
 

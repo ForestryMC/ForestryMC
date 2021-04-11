@@ -53,8 +53,8 @@ public class TileMillRainmaker extends TileMill {
 	//	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		charge = compoundNBT.getInt("Charge");
 		progress = compoundNBT.getFloat("Progress");
@@ -65,8 +65,8 @@ public class TileMillRainmaker extends TileMill {
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		compoundNBT.putInt("Charge", charge);
 		compoundNBT.putFloat("Progress", progress);
@@ -86,25 +86,25 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	public void activate() {
-		if (world.isRemote) {
-			world.playSound(null, getPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + world.rand.nextFloat() * 0.2F);
+		if (level.isClientSide) {
+			level.playSound(null, getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + level.random.nextFloat() * 0.2F);
 
-			float f = getPos().getX() + 0.5F;
-			float f1 = getPos().getY() + 0.0F + world.rand.nextFloat() * 6F / 16F;
-			float f2 = getPos().getZ() + 0.5F;
+			float f = getBlockPos().getX() + 0.5F;
+			float f1 = getBlockPos().getY() + 0.0F + level.random.nextFloat() * 6F / 16F;
+			float f2 = getBlockPos().getZ() + 0.5F;
 			float f3 = 0.52F;
-			float f4 = world.rand.nextFloat() * 0.6F - 0.3F;
+			float f4 = level.random.nextFloat() * 0.6F - 0.3F;
 
-			ParticleRender.addEntityExplodeFX(world, f - f3, f1, f2 + f4);
-			ParticleRender.addEntityExplodeFX(world, f + f3, f1, f2 + f4);
-			ParticleRender.addEntityExplodeFX(world, f + f4, f1, f2 - f3);
-			ParticleRender.addEntityExplodeFX(world, f + f4, f1, f2 + f3);
+			ParticleRender.addEntityExplodeFX(level, f - f3, f1, f2 + f4);
+			ParticleRender.addEntityExplodeFX(level, f + f3, f1, f2 + f4);
+			ParticleRender.addEntityExplodeFX(level, f + f4, f1, f2 - f3);
+			ParticleRender.addEntityExplodeFX(level, f + f4, f1, f2 + f3);
 		} else {
 			if (reverse) {
-				world.getWorldInfo().setRaining(false);
+				level.getLevelData().setRaining(false);
 			} else {
-				world.getWorldInfo().setRaining(true);
-				((IServerWorldInfo) world.getWorldInfo()).setRainTime(duration);
+				level.getLevelData().setRaining(true);
+				((IServerWorldInfo) level.getLevelData()).setRainTime(duration);
 			}
 			charge = 0;
 			duration = 0;

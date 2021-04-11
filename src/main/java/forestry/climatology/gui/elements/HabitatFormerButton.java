@@ -39,7 +39,7 @@ public class HabitatFormerButton extends ButtonElement {
 	@Override
 	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawElement(transform, mouseY, mouseX);
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		GuiUtil.drawItemStack(fontRenderer, iconStack, 3, 3);
 	}
 }

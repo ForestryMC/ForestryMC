@@ -15,11 +15,11 @@ import java.util.List;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.util.DamageSource;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectHeroic extends AlleleEffectThrottled {
 	private static final DamageSource damageSourceBeeHeroic = new DamageSourceForestry("bee.heroic");
@@ -32,7 +32,7 @@ public class AlleleEffectHeroic extends AlleleEffectThrottled {
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
 		for (MonsterEntity mob : mobs) {
-			mob.attackEntityFrom(damageSourceBeeHeroic, 2);
+			mob.hurt(damageSourceBeeHeroic, 2);
 		}
 
 		return storedData;

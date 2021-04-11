@@ -21,7 +21,7 @@ public class ContainerDummy extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity PlayerEntity) {
+	public boolean stillValid(PlayerEntity PlayerEntity) {
 		return true;
 	}
 

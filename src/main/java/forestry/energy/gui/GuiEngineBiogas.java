@@ -29,15 +29,15 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		int temperature = tile.getOperatingTemperatureScaled(16);
 		if (temperature > 16) {
 			temperature = 16;
 		}
 		if (temperature > 0) {
-			blit(transform, guiLeft + 53, guiTop + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
+			blit(transform, leftPos + 53, topPos + 47 + 16 - temperature, 176, 60 + 16 - temperature, 4, temperature);
 		}
 	}
 }

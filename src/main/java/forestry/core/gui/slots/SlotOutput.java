@@ -23,7 +23,7 @@ public class SlotOutput extends SlotWatched {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack itemstack) {
+	public boolean mayPlace(ItemStack itemstack) {
 		return false;
 	}
 }

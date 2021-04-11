@@ -45,13 +45,13 @@ public abstract class ItemGE extends ItemForestry {
 	protected abstract IOrganismType getType();
 
 	@Override
-	public boolean isDamageable() {
+	public boolean canBeDepleted() {
 		return false;
 	}
 
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		if (!stack.hasTag()) { // villager trade wildcard bees
 			return false;
 		}
@@ -61,7 +61,7 @@ public abstract class ItemGE extends ItemForestry {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
@@ -79,10 +79,10 @@ public abstract class ItemGE extends ItemForestry {
 					individual.addTooltip(list);
 				}
 			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
 			}
 		} else {
-			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").mergeStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").withStyle(TextFormatting.GRAY));
 		}
 	}
 

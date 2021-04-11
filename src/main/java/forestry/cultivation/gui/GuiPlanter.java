@@ -22,21 +22,21 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 	public GuiPlanter(ContainerPlanter container, PlayerInventory playerInventory, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + "/planter.png", container, playerInventory, title);
 		this.tile = container.getTile();
-		this.xSize = 202;
-		this.ySize = 192;
+		this.imageWidth = 202;
+		this.imageHeight = 192;
 
 		NonNullList<ItemStack> resourceStacks = tile.createResourceStacks();
 		NonNullList<ItemStack> germlingStacks = tile.createGermlingStacks();
 		NonNullList<ItemStack> productionStacks = tile.createProductionStacks();
 
-		widgetManager.add(new TankWidget(widgetManager, 178, 44, 0).setOverlayOrigin(xSize, 18));
+		widgetManager.add(new TankWidget(widgetManager, 178, 44, 0).setOverlayOrigin(imageWidth, 18));
 
 		// Resources
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (resourceStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 11 + j * 18, 65 + i * 18, resourceStacks.get(index), this.getContainer().getSlot(36 + InventoryPlanter.SLOT_RESOURCES_1 + index)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 11 + j * 18, 65 + i * 18, resourceStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.SLOT_RESOURCES_1 + index)));
 				}
 			}
 		}
@@ -46,7 +46,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (germlingStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 71 + j * 18, 65 + i * 18, germlingStacks.get(index), this.getContainer().getSlot(36 + InventoryPlanter.SLOT_GERMLINGS_1 + index)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 71 + j * 18, 65 + i * 18, germlingStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.SLOT_GERMLINGS_1 + index)));
 				}
 			}
 		}
@@ -56,12 +56,12 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (productionStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 131 + j * 18, 65 + i * 18, productionStacks.get(index), getContainer().getSlot(36 + InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 131 + j * 18, 65 + i * 18, productionStacks.get(index), getMenu().getSlot(36 + InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2)));
 				}
 			}
 		}
 
-		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, CoreItems.FERTILIZER_COMPOUND.stack(), getContainer().getSlot(36 + InventoryPlanter.SLOT_FERTILIZER)));
+		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, CoreItems.FERTILIZER_COMPOUND.stack(), getMenu().getSlot(36 + InventoryPlanter.SLOT_FERTILIZER)));
 	}
 
 	@Override
@@ -73,13 +73,13 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fertilizerRemain = tile.getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
-			blit(transform, guiLeft + 101, guiTop + 21 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
+			blit(transform, leftPos + 101, topPos + 21 + 17 - fertilizerRemain, imageWidth, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 }

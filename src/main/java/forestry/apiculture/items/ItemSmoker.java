@@ -32,14 +32,14 @@ import forestry.core.tiles.TileUtil;
 public class ItemSmoker extends ItemForestry {
 	public ItemSmoker() {
 		super((new Item.Properties())
-			.maxStackSize(1)
-			.group(ItemGroups.tabApiculture));
+				.stacksTo(1)
+				.tab(ItemGroups.tabApiculture));
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
-		if (worldIn.isRemote && isSelected && worldIn.rand.nextInt(40) == 0) {
+		if (worldIn.isClientSide && isSelected && worldIn.random.nextInt(40) == 0) {
 			addSmoke(stack, worldIn, entityIn, 1);
 		}
 	}
@@ -47,15 +47,15 @@ public class ItemSmoker extends ItemForestry {
 	@Override
 	public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
 		super.onUsingTick(stack, player, count);
-		World world = player.world;
+		World world = player.level;
 		addSmoke(stack, world, player, (count % 5) + 1);
 	}
 
 	private static HandSide getHandSide(ItemStack stack, Entity entity) {
 		if (entity instanceof LivingEntity) {
 			LivingEntity LivingEntity = (LivingEntity) entity;
-			Hand activeHand = LivingEntity.getActiveHand();
-			HandSide handSide = LivingEntity.getPrimaryHand();
+			Hand activeHand = LivingEntity.getUsedItemHand();
+			HandSide handSide = LivingEntity.getMainArm();
 			if (activeHand == Hand.OFF_HAND) {
 				// TODO: use EnumHandSide.opposite() when it's no longer client-only
 				handSide = handSide == HandSide.LEFT ? HandSide.RIGHT : HandSide.LEFT;
@@ -69,21 +69,21 @@ public class ItemSmoker extends ItemForestry {
 		if (distance <= 0) {
 			return;
 		}
-		Vector3d look = entity.getLookVec();
+		Vector3d look = entity.getLookAngle();
 		HandSide handSide = getHandSide(stack, entity);
 
 		Vector3d handOffset;
 		if (handSide == HandSide.RIGHT) {
-			handOffset = look.crossProduct(new Vector3d(0, 1, 0));
+			handOffset = look.cross(new Vector3d(0, 1, 0));
 		} else {
-			handOffset = look.crossProduct(new Vector3d(0, -1, 0));
+			handOffset = look.cross(new Vector3d(0, -1, 0));
 		}
 
 		Vector3d lookDistance = new Vector3d(look.x * distance, look.y * distance, look.z * distance);
 		Vector3d scaledOffset = handOffset.scale(1.0 / distance);
-		Vector3d smokePos = lookDistance.add(entity.getPositionVec()).add(scaledOffset);
+		Vector3d smokePos = lookDistance.add(entity.position()).add(scaledOffset);
 
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			ParticleRender.addEntitySmokeFX(world, smokePos.x, smokePos.y + 1, smokePos.z);
 		}
 
@@ -92,15 +92,15 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		playerIn.setActiveHand(handIn);
-		ItemStack itemStack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		playerIn.startUsingItem(handIn);
+		ItemStack itemStack = playerIn.getItemInHand(handIn);
 		return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
 	}
 
 	@Override
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-		TileUtil.actOnTile(context.getWorld(), context.getPos(), IHiveTile.class, IHiveTile::calmBees);
+		TileUtil.actOnTile(context.getLevel(), context.getClickedPos(), IHiveTile.class, IHiveTile::calmBees);
 		return super.onItemUseFirst(stack, context);
 	}
 

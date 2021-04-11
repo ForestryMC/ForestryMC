@@ -13,16 +13,6 @@ import net.minecraft.util.Direction;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -35,6 +25,15 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.SoundUtil;
 import forestry.sorting.gui.GuiGeneticFilter;
 import forestry.sorting.gui.ISelectableProvider;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
 
 public class SpeciesWidget extends Widget implements ISelectableProvider<IAlleleSpecies> {
 	private final static ImmutableMap<IAlleleSpecies, ItemStack> ITEMS = createEntries();
@@ -57,7 +56,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 				continue;
 			}
 			IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
-			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.world, manager.minecraft.player.getGameProfile());
+			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.level, manager.minecraft.player.getGameProfile());
 			for (String uid : tracker.getDiscoveredSpecies()) {
 				IAllele allele = AlleleUtils.getAllele(uid).orElse(null);
 				if (allele instanceof IAlleleSpecies) {
@@ -80,7 +79,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		}
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bindTexture(SelectionWidget.TEXTURE);
+			textureManager.bind(SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
@@ -127,7 +126,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		ItemStack stack = gui.getMinecraft().player.inventory.getItemStack();
+		ItemStack stack = gui.getMinecraft().player.inventory.getCarried();
 		if (!stack.isEmpty()) {
 			Optional<IIndividual> optional = RootUtils.getIndividual(stack);
 			if (optional.isPresent()) {

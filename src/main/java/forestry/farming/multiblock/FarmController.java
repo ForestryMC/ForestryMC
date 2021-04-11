@@ -125,7 +125,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		if (newPart instanceof IFarmComponent.Active) {
-			farmActiveComponents.put((IFarmComponent.Active) newPart, world.rand.nextInt(256));
+			farmActiveComponents.put((IFarmComponent.Active) newPart, world.random.nextInt(256));
 		}
 	}
 
@@ -294,7 +294,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		}
 
 		// See whether we have socketed stuff.
-		ItemStack chip = sockets.getStackInSlot(0);
+		ItemStack chip = sockets.getItem(0);
 		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
@@ -432,28 +432,28 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	public int getSocketCount() {
-		return sockets.getSizeInventory();
+		return sockets.getContainerSize();
 	}
 
 	@Override
 	public ItemStack getSocket(int slot) {
-		return sockets.getStackInSlot(slot);
+		return sockets.getItem(slot);
 	}
 
 	@Override
 	public void setSocket(int slot, ItemStack stack) {
 		if (ChipsetManager.circuitRegistry.isChipset(stack) || stack.isEmpty()) {
 			// Dispose old chipsets correctly
-			if (!sockets.getStackInSlot(slot).isEmpty()) {
-				if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+			if (!sockets.getItem(slot).isEmpty()) {
+				if (ChipsetManager.circuitRegistry.isChipset(sockets.getItem(slot))) {
+					ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getItem(slot));
 					if (chipset != null) {
 						chipset.onRemoval(this);
 					}
 				}
 			}
 
-			sockets.setInventorySlotContents(slot, stack);
+			sockets.setItem(slot, stack);
 			refreshFarmLogics();
 
 			if (!stack.isEmpty()) {

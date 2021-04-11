@@ -23,7 +23,7 @@ public abstract class HiveGen implements IHiveGen {
 
 	public static boolean isTreeBlock(BlockState blockState, ISeedReader world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block.isIn(BlockTags.LEAVES) || block.isIn(BlockTags.LOGS);
+		return block.is(BlockTags.LEAVES) || block.is(BlockTags.LOGS);
 	}
 
 	@Override

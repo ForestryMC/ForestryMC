@@ -27,7 +27,7 @@ public class SlotAnalyzer extends SlotFiltered {
 	}
 
 	@Override
-	public boolean isEnabled() {
+	public boolean isActive() {
 		return gui != null && gui.analyzer.isVisible();
 	}
 }

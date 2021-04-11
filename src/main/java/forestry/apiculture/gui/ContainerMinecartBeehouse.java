@@ -37,7 +37,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	//TODO writing things to packets here
 	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		PacketBufferForestry buf = new PacketBufferForestry(extraData);
-		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.world);    //TODO cast
+		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.level);    //TODO cast
 		PlayerEntity player = playerInv.player;
 		boolean hasFrames = buf.readBoolean();
 		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
@@ -58,8 +58,8 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 	private int beeProgress = -1;
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		int beeProgress = entity.getBeekeepingLogic().getBeeProgressPercent();
 		if (this.beeProgress != beeProgress) {

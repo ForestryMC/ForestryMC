@@ -32,7 +32,7 @@ import forestry.factory.tiles.TileCarpenter;
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 
 	public static ContainerCarpenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileCarpenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCarpenter.class);
+		TileCarpenter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileCarpenter.class);
 		return new ContainerCarpenter(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -72,13 +72,13 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 	private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		IInventory craftPreviewInventory = tile.getCraftPreviewInventory();
 
-		ItemStack newCraftPreview = craftPreviewInventory.getStackInSlot(0);
-		if (!ItemStack.areItemStacksEqual(oldCraftPreview, newCraftPreview)) {
+		ItemStack newCraftPreview = craftPreviewInventory.getItem(0);
+		if (!ItemStack.matches(oldCraftPreview, newCraftPreview)) {
 			oldCraftPreview = newCraftPreview;
 
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(tile, newCraftPreview);

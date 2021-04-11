@@ -18,18 +18,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IIndividualRoot;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.ColourUtil;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.utils.AlleleUtils;
 
 public class EscritoireGameToken implements INbtWritable, IStreamable {
 
@@ -143,7 +142,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 
 	public ITextComponent getTooltip() {
-		return !tokenStack.isEmpty() ? tokenStack.getDisplayName() : new TranslationTextComponent("for.gui.unknown");
+		return !tokenStack.isEmpty() ? tokenStack.getHoverName() : new TranslationTextComponent("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {
@@ -158,7 +157,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	public boolean matches(EscritoireGameToken other) {
-		return ItemStack.areItemStacksEqual(tokenStack, other.getTokenStack());
+		return ItemStack.matches(tokenStack, other.getTokenStack());
 	}
 
 	@Override
@@ -177,7 +176,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		data.writeEnum(state, State.VALUES);
 		if (tokenIndividual != null) {
 			data.writeBoolean(true);
-			data.writeString(tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
+			data.writeUtf(tokenIndividual.getGenome().getPrimary().getRegistryName().toString());
 		} else {
 			data.writeBoolean(false);
 		}
@@ -187,7 +186,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	public void readData(PacketBufferForestry data) {
 		state = data.readEnum(State.VALUES);
 		if (data.readBoolean()) {
-			String speciesUid = data.readString();
+			String speciesUid = data.readUtf();
 			setTokenSpecies(speciesUid);
 		}
 	}

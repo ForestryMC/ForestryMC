@@ -10,8 +10,6 @@ import java.util.Map;
 
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
-
 public class BiomeHelper {
 
 	private static final Map<Biome, Boolean> isBiomeHellishCache = new HashMap<>();
@@ -28,7 +26,7 @@ public class BiomeHelper {
 			return isBiomeHellishCache.get(biomeGen);
 		}
 
-		boolean isBiomeHellish = BiomeDictionary.hasType(biomeGen, BiomeDictionary.Type.NETHER);
+		boolean isBiomeHellish = Biome.Category.NETHER == biomeGen.getBiomeCategory();
 		isBiomeHellishCache.put(biomeGen, isBiomeHellish);
 		return isBiomeHellish;
 	}

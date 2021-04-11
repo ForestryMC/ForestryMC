@@ -29,7 +29,7 @@ public class FeaturePapaya extends FeatureTree {
 	@Override
 	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
-		return FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, height - 1, 0), girth, 0.15f, 0.25f, height / 4, 1, 0.25f);
+		return FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, height - 1, 0), girth, 0.15f, 0.25f, height / 4, 1, 0.25f);
 	}
 
 	@Override
@@ -40,6 +40,6 @@ public class FeaturePapaya extends FeatureTree {
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, Math.round((2 + rand.nextInt(girth)) * (height / 8.0f)), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, Math.round((2 + rand.nextInt(girth)) * (height / 8.0f)), leaf, FeatureHelper.EnumReplaceMode.AIR);
 	}
 }

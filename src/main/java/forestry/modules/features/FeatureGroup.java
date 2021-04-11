@@ -47,7 +47,7 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 
 	public Optional<F> findFeature(String typeName) {
 		return featureByType.entrySet().stream()
-			.filter(e -> e.getKey().getString().equals(typeName))
+				.filter(e -> e.getKey().getSerializedName().equals(typeName))
 			.findFirst()
 			.flatMap(e -> Optional.of(e.getValue()));
 	}
@@ -121,7 +121,7 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 		}
 
 		protected String getIdentifier(IFeatureSubtype type) {
-			return identifierType.apply(identifier, type.getString());
+			return identifierType.apply(identifier, type.getSerializedName());
 		}
 
 		public abstract G create();

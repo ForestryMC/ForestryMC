@@ -16,12 +16,12 @@ public class AIButterflyWander extends AIButterflyMovement {
 
 	public AIButterflyWander(EntityButterfly entity) {
 		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
+		setFlags(EnumSet.of(Flag.MOVE));
 		//		setMutexBits(1);	TODO mutex
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (entity.getDestination() != null) {
 			return false;
 		}

@@ -61,7 +61,7 @@ public class PacketTankLevelUpdate extends ForestryPacket implements IForestryPa
 			int tankIndex = data.readVarInt();
 			FluidStack contents = data.readFluidStack();
 
-			TileUtil.actOnTile(player.world, pos, ILiquidTankTile.class, tile -> {
+			TileUtil.actOnTile(player.level, pos, ILiquidTankTile.class, tile -> {
 				ITankManager tankManager = tile.getTankManager();
 				tankManager.processTankUpdate(tankIndex, contents);
 			});

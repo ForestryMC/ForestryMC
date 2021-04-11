@@ -19,7 +19,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
 
 public class MachineProperties<T extends TileForestry> implements IMachineProperties<T> {
-	private static final ISimpleShapeProvider FULL_CUBE = VoxelShapes::fullCube;
+	private static final ISimpleShapeProvider FULL_CUBE = VoxelShapes::block;
 
 	private final String name;
 	private final Supplier<FeatureTileType<? extends T>> teType;
@@ -60,7 +60,7 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name;
 	}
 

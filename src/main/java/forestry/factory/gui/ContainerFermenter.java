@@ -31,13 +31,13 @@ import forestry.factory.tiles.TileFermenter;
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
 	public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileFermenter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileFermenter.class);
+		TileFermenter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFermenter.class);
 		return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
 	}
 
 	public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
 		super(windowId, FactoryContainers.FERMENTER.containerType(), player, tile, 8, 84);
-		trackIntArray(new IntArray(4));
+		addDataSlots(new IntArray(4));
 
 		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_RESOURCE, 85, 23));
 		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_FUEL, 75, 57));
@@ -48,17 +48,17 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
+	public void setData(int messageId, int data) {
+		super.setData(messageId, data);
 
 		tile.getGUINetworkData(messageId, data);
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
-		for (IContainerListener crafter : listeners) {
+		for (IContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

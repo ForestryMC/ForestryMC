@@ -28,13 +28,13 @@ public class InventoryAdapterTile<T extends TileEntity> extends InventoryAdapter
 	}
 
 	@Override
-	public void markDirty() {
-		super.markDirty();
-		tile.markDirty();
+	public void setChanged() {
+		super.setChanged();
+		tile.setChanged();
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return false;
 	}
 }

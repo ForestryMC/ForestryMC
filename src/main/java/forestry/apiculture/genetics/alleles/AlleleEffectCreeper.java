@@ -19,12 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectCreeper extends AlleleEffectThrottled {
 
@@ -82,12 +82,12 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 				storedData.setInteger(indexExplosionForce, 10);
 			}
 
-			if (world.rand.nextInt(1000) >= chance) {
+			if (world.random.nextInt(1000) >= chance) {
 				continue;
 			}
 
-			float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-			world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
+			float pitch = (1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.2F) * 0.7F;
+			world.playSound(null, housingCoords.getX(), housingCoords.getY(), housingCoords.getZ(), SoundEvents.GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, pitch);
 			storedData.setInteger(indexExplosionTimer, 2); // Set explosion timer
 		}
 
@@ -105,7 +105,7 @@ public class AlleleEffectCreeper extends AlleleEffectThrottled {
 		}
 
 		//TODO - check explosion mode right
-		world.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
+		world.explode(null, pos.getX(), pos.getY(), pos.getZ(), storedData.getInteger(indexExplosionForce), false, Explosion.Mode.NONE);
 	}
 
 }

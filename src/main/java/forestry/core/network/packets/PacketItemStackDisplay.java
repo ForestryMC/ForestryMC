@@ -33,14 +33,14 @@ public class PacketItemStackDisplay extends ForestryPacket implements IForestryP
 	private final ItemStack itemStack;
 
 	public <T extends TileForestry & IItemStackDisplay> PacketItemStackDisplay(T tile, ItemStack itemStack) {
-		this.pos = tile.getPos();
+		this.pos = tile.getBlockPos();
 		this.itemStack = itemStack;
 	}
 
 	@Override
 	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
-		data.writeItemStack(itemStack);
+		data.writeItem(itemStack);
 	}
 
 	@Override
@@ -53,9 +53,9 @@ public class PacketItemStackDisplay extends ForestryPacket implements IForestryP
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			ItemStack itemStack = data.readItemStack();
+			ItemStack itemStack = data.readItem();
 
-			TileUtil.actOnTile(player.world, pos, IItemStackDisplay.class, tile -> tile.handleItemStackForDisplay(itemStack));
+			TileUtil.actOnTile(player.level, pos, IItemStackDisplay.class, tile -> tile.handleItemStackForDisplay(itemStack));
 		}
 	}
 }

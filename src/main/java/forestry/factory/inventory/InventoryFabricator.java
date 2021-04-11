@@ -33,7 +33,7 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		RecipeManager recipeManager = tile.getWorld().getRecipeManager();
+		RecipeManager recipeManager = tile.getLevel().getRecipeManager();
 
 		if (slotIndex == SLOT_METAL) {
 			return RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(recipeManager, itemStack) != null;
@@ -50,7 +50,7 @@ public class InventoryFabricator extends InventoryAdapterTile<TileFabricator> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return slotIndex == SLOT_RESULT;
 	}
 }

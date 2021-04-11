@@ -40,7 +40,7 @@ public class FarmableChorus implements IFarmable {
 			return null;
 		}
 
-		if (blockState.get(ChorusFlowerBlock.AGE) < 5) {
+		if (blockState.getValue(ChorusFlowerBlock.AGE) < 5) {
 			return null;
 		}
 
@@ -49,7 +49,7 @@ public class FarmableChorus implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(germling, itemstack);
+		return ItemStack.isSame(germling, itemstack);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class FarmableChorus implements IFarmable {
 
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(fruit, itemstack);
+		return ItemStack.isSame(fruit, itemstack);
 	}
 
 	@Override
@@ -68,13 +68,13 @@ public class FarmableChorus implements IFarmable {
 		if (!canPlace(world, pos)) {
 			return false;
 		}
-		return BlockUtil.setBlockWithPlaceSound(world, pos, Blocks.CHORUS_FLOWER.getDefaultState());
+		return BlockUtil.setBlockWithPlaceSound(world, pos, Blocks.CHORUS_FLOWER.defaultBlockState());
 	}
 
 	private boolean canPlace(World world, BlockPos position) {
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
-				BlockPos offsetPosition = position.add(x, 0, z);
+				BlockPos offsetPosition = position.offset(x, 0, z);
 				BlockState state = world.getBlockState(offsetPosition);
 				if (state.getBlock() == Blocks.CHORUS_FLOWER || state.getBlock() == Blocks.CHORUS_PLANT) {
 					return false;

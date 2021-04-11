@@ -31,7 +31,7 @@ public class GrowthRuleSnow implements IFlowerGrowthRule {
 	}
 
 	private boolean isValidSpot(World world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos) || world.getBlockState(pos).getBlock() != Blocks.SNOW) {
+		if (!world.hasChunkAt(pos) || world.getBlockState(pos).getBlock() != Blocks.SNOW) {
 			return false;
 		}
 

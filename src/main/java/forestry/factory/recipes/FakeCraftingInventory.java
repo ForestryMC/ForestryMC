@@ -19,7 +19,7 @@ class FakeCraftingInventory {
 
 	private static final Container EMPTY_CONTAINER = new Container(null, -1) {
 		@Override
-		public boolean canInteractWith(PlayerEntity playerIn) {
+		public boolean stillValid(PlayerEntity playerIn) {
 			return true;
 		}
 	};
@@ -28,7 +28,7 @@ class FakeCraftingInventory {
 		CraftingInventory inventory = new CraftingInventory(EMPTY_CONTAINER, 3, 3);
 
 		for (int i = 0; i < 9; i++) {
-			inventory.setInventorySlotContents(i, backing.getStackInSlot(i));
+			inventory.setItem(i, backing.getItem(i));
 		}
 
 		return inventory;

@@ -71,15 +71,15 @@ public final class FluidHelper {
 	}
 
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
-		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, getEmptyContainer(inv.getStackInSlot(inputSlot)), doFill);
+		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, getEmptyContainer(inv.getItem(inputSlot)), doFill);
 	}
 
 	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, ItemStack emptyStack, boolean doFill) {
-		ItemStack input = inv.getStackInSlot(inputSlot);
+		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return FillStatus.INVALID_INPUT;
 		}
-		ItemStack output = inv.getStackInSlot(outputSlot);
+		ItemStack output = inv.getItem(outputSlot);
 
 		ItemStack filled = input.copy();
 		filled.setCount(1);
@@ -134,13 +134,13 @@ public final class FluidHelper {
 			fluidHandler.drain(canDrain, IFluidHandler.FluidAction.EXECUTE);
 			if (moveToOutput) {
 				if (output.isEmpty()) {
-					inv.setInventorySlotContents(outputSlot, filled);
+					inv.setItem(outputSlot, filled);
 				} else {
 					output.grow(1);
 				}
-				inv.decrStackSize(inputSlot, 1);
+				inv.removeItem(inputSlot, 1);
 			} else {
-				inv.setInventorySlotContents(inputSlot, filled);
+				inv.setItem(inputSlot, filled);
 			}
 		}
 
@@ -148,7 +148,7 @@ public final class FluidHelper {
 	}
 
 	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot) {
-		ItemStack input = inv.getStackInSlot(inputSlot);
+		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return false;
 		}
@@ -164,9 +164,9 @@ public final class FluidHelper {
 			if (fluidActionResult.isSuccess()) {
 				ItemStack drainedItem = fluidActionResult.getResult();
 				if (!drainedItem.isEmpty()) {
-					inv.setInventorySlotContents(inputSlot, drainedItem);
+					inv.setItem(inputSlot, drainedItem);
 				} else {
-					inv.decrStackSize(inputSlot, 1);
+					inv.removeItem(inputSlot, 1);
 				}
 				return true;
 			}
@@ -176,11 +176,11 @@ public final class FluidHelper {
 	}
 
 	public static FillStatus drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, boolean doDrain) {
-		ItemStack input = inv.getStackInSlot(inputSlot);
+		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return FillStatus.INVALID_INPUT;
 		}
-		ItemStack outputStack = inv.getStackInSlot(outputSlot);
+		ItemStack outputStack = inv.getItem(outputSlot);
 
 		//Only needed so we can test if the container can be filled
 		FluidStack content = FluidUtil.getFluidContained(input).orElse(FluidStack.EMPTY);
@@ -202,14 +202,14 @@ public final class FluidHelper {
 							newStack.grow(outputStack.getCount());
 						}
 						if (!isFillableContainer(newStack, content) || isFillableContainerAndEmpty(newStack, content)) {
-							inv.setInventorySlotContents(outputSlot, newStack);
-							inv.decrStackSize(inputSlot, 1);
+							inv.setItem(outputSlot, newStack);
+							inv.removeItem(inputSlot, 1);
 						}
 						if (isDrainableContainer(newStack) && !isEmpty(newStack)) {
-							inv.setInventorySlotContents(inputSlot, newStack);
+							inv.setItem(inputSlot, newStack);
 						}
 					} else {
-						inv.decrStackSize(inputSlot, 1);
+						inv.removeItem(inputSlot, 1);
 					}
 					return FillStatus.SUCCESS;
 				}
@@ -231,7 +231,7 @@ public final class FluidHelper {
 					if (!transfer.isEmpty()) {
 						if (player != null) {
 							SoundEvent soundevent = transfer.getFluid().getAttributes().getEmptySound(transfer);
-							player.world.playSound(null, player.getPosX(), player.getPosY() + 0.5, player.getPosZ(), soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
 						}
 						ItemStack resultContainer = containerFluidHandler.getContainer();
 						return new FluidActionResult(resultContainer);

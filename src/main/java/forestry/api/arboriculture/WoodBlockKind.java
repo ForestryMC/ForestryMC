@@ -12,12 +12,12 @@ import net.minecraft.util.IStringSerializable;
 public enum WoodBlockKind implements IStringSerializable {
 	LOG, PLANKS, SLAB, FENCE, FENCE_GATE, STAIRS, DOOR;
 
-	public String getString() {
+	public String getSerializedName() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 
 	@Override
 	public String toString() {
-		return getString();
+		return getSerializedName();
 	}
 }

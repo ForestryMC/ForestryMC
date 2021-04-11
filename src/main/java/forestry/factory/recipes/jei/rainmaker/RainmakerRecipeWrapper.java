@@ -29,11 +29,11 @@ public class RainmakerRecipeWrapper implements IRecipeCategoryExtension {
 
 	@Override
 	public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		fontRenderer.func_238422_b_(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());
-		fontRenderer.func_238422_b_(matrixStack, new TranslationTextComponent("for.jei.rainmaker.speed", substrate.getSpeed()), 24, 10, Color.gray.getRGB());
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		fontRenderer.draw(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());
+		fontRenderer.draw(matrixStack, new TranslationTextComponent("for.jei.rainmaker.speed", substrate.getSpeed()), 24, 10, Color.gray.getRGB());
 		if (!substrate.isReverse()) {
-			fontRenderer.func_238422_b_(matrixStack, new TranslationTextComponent("for.jei.rainmaker.duration", substrate.getDuration()), 24, 20, Color.gray.getRGB());
+			fontRenderer.draw(matrixStack, new TranslationTextComponent("for.jei.rainmaker.duration", substrate.getDuration()), 24, 20, Color.gray.getRGB());
 		}
 	}
 

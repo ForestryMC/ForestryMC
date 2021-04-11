@@ -70,7 +70,7 @@ public class ItemGroupForestry extends ItemGroup {
 	}
 
 	@Override
-	public ItemStack getIcon() {
+	public ItemStack getIconItem() {
 		Item iconItem;
 		switch (icon) {
 			case 1:
@@ -97,7 +97,7 @@ public class ItemGroupForestry extends ItemGroup {
 	}
 
 	@Override
-	public ItemStack createIcon() {
-		return getIcon();
+	public ItemStack makeIcon() {
+		return getIconItem();
 	}
 }

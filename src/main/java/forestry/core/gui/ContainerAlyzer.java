@@ -14,7 +14,7 @@ public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer>
 	public static ContainerAlyzer fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
-		ItemInventoryAlyzer inv = new ItemInventoryAlyzer(player, player.getHeldItem(hand));
+		ItemInventoryAlyzer inv = new ItemInventoryAlyzer(player, player.getItemInHand(hand));
 		return new ContainerAlyzer(windowId, inv, player);
 	}
 

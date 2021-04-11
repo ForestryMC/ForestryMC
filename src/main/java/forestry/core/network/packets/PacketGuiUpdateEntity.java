@@ -49,7 +49,7 @@ public class PacketGuiUpdateEntity extends ForestryPacket implements IForestryPa
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Entity entity = data.readEntityById(player.world);
+			Entity entity = data.readEntityById(player.level);
 			if (entity instanceof IStreamableGui) {
 				((IStreamableGui) entity).readGuiData(data);
 			}

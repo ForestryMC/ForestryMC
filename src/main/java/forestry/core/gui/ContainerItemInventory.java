@@ -33,7 +33,7 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 
 	@Override
 	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
-		ItemStack stackInSlot = playerInventory.getStackInSlot(slot);
+		ItemStack stackInSlot = playerInventory.getItem(slot);
 
 		if (inventory.isParentItemInventory(stackInSlot)) {
 			addSlot(new SlotLocked(playerInventory, slot, x, y));
@@ -44,19 +44,19 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 
 	@Override
 	protected final boolean canAccess(PlayerEntity player) {
-		return canInteractWith(player);
+		return stillValid(player);
 	}
 
 	@Override
-	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
-		return inventory.isUsableByPlayer(PlayerEntity);
+	public final boolean stillValid(PlayerEntity PlayerEntity) {
+		return inventory.stillValid(PlayerEntity);
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
-		ItemStack result = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
+	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+		ItemStack result = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 		if (slotId > 0) {
-			inventory.onSlotClick(inventorySlots.get(slotId).getSlotIndex(), player);
+			inventory.onSlotClick(slots.get(slotId).getSlotIndex(), player);
 		}
 		return result;
 	}

@@ -23,17 +23,17 @@ public class InventoryAdapterRestricted extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+	public boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
 		return !itemStack.isEmpty() && canSlotAccept(slotIndex, itemStack);
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return !itemStack.isEmpty() && isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canPlaceItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return !itemStack.isEmpty() && canPlaceItem(slotIndex, itemStack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
 		return !itemStack.isEmpty();
 	}
 }

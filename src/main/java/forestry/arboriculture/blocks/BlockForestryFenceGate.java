@@ -29,9 +29,9 @@ public class BlockForestryFenceGate extends FenceGateBlock implements IWoodTyped
 	private final IWoodType woodType;
 
 	public BlockForestryFenceGate(boolean fireproof, IWoodType woodType) {
-		super(Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD));
+		super(Block.Properties.of(Material.WOOD)
+				.strength(woodType.getHardness(), woodType.getHardness() * 1.5F)
+				.sound(SoundType.WOOD));
 		this.fireproof = fireproof;
 		this.woodType = woodType;
 

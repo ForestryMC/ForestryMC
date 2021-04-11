@@ -51,7 +51,7 @@ public abstract class AbstractBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public boolean isAmbientOcclusion() {
+	public boolean useAmbientOcclusion() {
 		return true;
 	}
 
@@ -61,23 +61,23 @@ public abstract class AbstractBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public boolean func_230044_c_() {
+	public boolean usesBlockLight() {
 		return false;
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
+	public boolean isCustomRenderer() {
 		return false;
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture() {
+	public TextureAtlasSprite getParticleIcon() {
 		return ResourceUtil.getMissingTexture();
 	}
 
 	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return ItemCameraTransforms.DEFAULT;
+	public ItemCameraTransforms getTransforms() {
+		return ItemCameraTransforms.NO_TRANSFORMS;
 	}
 
 }

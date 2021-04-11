@@ -27,8 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.IAllele;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.genetics.Tree;
@@ -39,6 +37,8 @@ import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.RenderUtil;
+
+import genetics.api.alleles.IAllele;
 
 /**
  * This is the base TE class for any block that needs to contain tree genome information.
@@ -57,8 +57,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("ContainedTree")) {
 			containedTree = new Tree(compoundNBT.getCompound("ContainedTree"));
@@ -67,8 +67,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		if (containedTree != null) {
 			CompoundNBT subcompound = new CompoundNBT();
@@ -87,12 +87,12 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 		if (tree != null) {
 			speciesUID = tree.getIdentifier();
 		}
-		data.writeString(speciesUID);
+		data.writeUtf(speciesUID);
 	}
 
 	@Override
 	public void readData(PacketBufferForestry data) {
-		String speciesUID = data.readString();
+		String speciesUID = data.readUtf();
 		ITree tree = getTree(speciesUID);
 		setTree(tree);
 	}
@@ -108,8 +108,8 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/* CONTAINED TREE */
 	public void setTree(ITree tree) {
 		this.containedTree = tree;
-		if (world != null && world.isRemote) {
-			RenderUtil.markForUpdate(getPos());
+		if (level != null && level.isClientSide) {
+			RenderUtil.markForUpdate(getBlockPos());
 		}
 	}
 
@@ -132,14 +132,14 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 

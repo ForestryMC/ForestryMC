@@ -28,15 +28,15 @@ public class GuiEngineElectric extends GuiEngine<ContainerEngineElectric, TileEn
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		TileEngineElectric engine = tile;
 		int storageHeight = engine.getStorageScaled(46);
 		int storageMaxHeight = engine.getStorageScaled(100);
 		EnumTankLevel rated = EnumTankLevel.rateTankLevel(storageMaxHeight);
 
-		drawHealthMeter(transform, guiLeft + 74, guiTop + 25, storageHeight, rated);
+		drawHealthMeter(transform, leftPos + 74, topPos + 25, storageHeight, rated);
 	}
 
 	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {

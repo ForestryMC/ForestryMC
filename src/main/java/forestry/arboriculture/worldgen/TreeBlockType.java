@@ -30,7 +30,7 @@ public class TreeBlockType implements ITreeBlockType {
 
 	@Override
 	public boolean setBlock(IWorld world, BlockPos pos) {
-		return world.setBlockState(pos, blockState, 18);
+		return world.setBlock(pos, blockState, 18);
 	}
 
 	public BlockState getBlockState() {

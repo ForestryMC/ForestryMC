@@ -25,7 +25,7 @@ import forestry.factory.tiles.TileBottler;
 public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
 	public static ContainerBottler fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileBottler tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileBottler.class);
+		TileBottler tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileBottler.class);
 		return new ContainerBottler(windowId, inv, tile);    //TODO nullability.
 	}
 

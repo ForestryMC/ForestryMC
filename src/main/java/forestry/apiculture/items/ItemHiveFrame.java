@@ -23,8 +23,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
@@ -33,22 +31,24 @@ import forestry.api.apiculture.hives.IHiveFrame;
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
 
+import genetics.api.individual.IGenome;
+
 public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	private final HiveFrameBeeModifier beeModifier;
 
 	public ItemHiveFrame(int maxDamage, float geneticDecay) {
 		super((new Item.Properties())
-			.maxDamage(maxDamage)
-			.group(ItemGroups.tabApiculture));
+				.durability(maxDamage)
+				.tab(ItemGroups.tabApiculture));
 
 		this.beeModifier = new HiveFrameBeeModifier(geneticDecay);
 	}
 
 	@Override
 	public ItemStack frameUsed(IBeeHousing housing, ItemStack frame, IBee queen, int wear) {
-		frame.setDamage(frame.getDamage() + wear);
-		if (frame.getDamage() >= frame.getMaxDamage()) {
+		frame.setDamageValue(frame.getDamageValue() + wear);
+		if (frame.getDamageValue() >= frame.getMaxDamage()) {
 			return ItemStack.EMPTY;
 		} else {
 			return frame;
@@ -62,8 +62,8 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+		super.appendHoverText(stack, world, tooltip, advanced);
 		beeModifier.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
 			tooltip.add(new TranslationTextComponent("item.forestry.durability", stack.getMaxDamage()));

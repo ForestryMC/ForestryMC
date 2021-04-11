@@ -41,26 +41,26 @@ public class ApiaristAI extends MoveToBlockGoal {
 	public ApiaristAI(VillagerEntity villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
-		villagerInventory = villager.getVillagerInventory();
+		villagerInventory = villager.getInventory();
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (this.runDelay <= 0) {
+	public boolean canUse() {
+		if (this.nextStartTick <= 0) {
 			this.hasDrone = hasBeeType(EnumBeeType.DRONE);
 			this.hasPrincess = hasBeeType(EnumBeeType.PRINCESS);
 		}
-		return super.shouldExecute();
+		return super.canUse();
 	}
 
 	//TODO - now tick?
 	@Override
 	public void tick() {
 		super.tick();
-		BlockPos housePos = this.destinationBlock.north().up();
-		this.villager.getLookController().setLookPosition(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getVerticalFaceSpeed());
-		if (this.getIsAboveDestination()) {
-			World world = this.villager.world;
+		BlockPos housePos = this.blockPos.north().above();
+		this.villager.getLookControl().setLookAt(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getMaxHeadXRot());
+		if (this.isReachedTarget()) {
+			World world = this.villager.level;
 
 			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, housePos);
 			if (beeHouse == null) {
@@ -72,7 +72,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 			for (ItemStack stack : InventoryUtil.getStacks(inventory, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT)) {
 				if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
 					EnumBeeType type = ((ItemBeeGE) stack.getItem()).getType();
-					if (inventory.getStackInSlot(SLOT_QUEEN).isEmpty() && type == EnumBeeType.PRINCESS) {
+					if (inventory.getItem(SLOT_QUEEN).isEmpty() && type == EnumBeeType.PRINCESS) {
 						inventory.setQueen(stack.copy());
 						stack.setCount(0);
 					} else if (type == EnumBeeType.DRONE) {
@@ -83,7 +83,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 			}
 
 			//fill slots from villager inventory
-			if (inventory.getStackInSlot(SLOT_DRONE).isEmpty() || inventory.getStackInSlot(SLOT_QUEEN).isEmpty()) {
+			if (inventory.getItem(SLOT_DRONE).isEmpty() || inventory.getItem(SLOT_QUEEN).isEmpty()) {
 				boolean princessAdded = false;
 				boolean droneAdded = false;
 				for (ItemStack stack : InventoryUtil.getStacks(villagerInventory)) {
@@ -92,10 +92,10 @@ public class ApiaristAI extends MoveToBlockGoal {
 					}
 					if (!stack.isEmpty() && stack.getItem() instanceof ItemBeeGE) {
 						EnumBeeType type = ((ItemBeeGE) stack.getItem()).getType();
-						if (type == EnumBeeType.DRONE && inventory.getStackInSlot(SLOT_DRONE).isEmpty()) {
+						if (type == EnumBeeType.DRONE && inventory.getItem(SLOT_DRONE).isEmpty()) {
 							InventoryUtil.addStack(inventory, stack, SLOT_DRONE, 1, true);
 							droneAdded = true;
-						} else if (type == EnumBeeType.PRINCESS && inventory.getStackInSlot(SLOT_QUEEN).isEmpty()) {
+						} else if (type == EnumBeeType.PRINCESS && inventory.getItem(SLOT_QUEEN).isEmpty()) {
 							InventoryUtil.addStack(inventory, stack, SLOT_QUEEN, 1, true);
 							princessAdded = true;
 						}
@@ -110,7 +110,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 				}
 			}
 		}
-		this.runDelay = 20;
+		this.nextStartTick = 20;
 	}
 
 	public boolean hasBeeType(EnumBeeType type) {
@@ -128,8 +128,8 @@ public class ApiaristAI extends MoveToBlockGoal {
 	}
 
 	@Override
-	protected boolean shouldMoveTo(IWorldReader world, BlockPos pos) {
-		pos = pos.north().up();
+	protected boolean isValidTarget(IWorldReader world, BlockPos pos) {
+		pos = pos.north().above();
 		Block block = world.getBlockState(pos).getBlock();
 		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse) {
 			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, pos);
@@ -137,12 +137,12 @@ public class ApiaristAI extends MoveToBlockGoal {
 			if (inventory.isEmpty()) {
 				return false;
 			}
-			if (!inventory.getStackInSlot(SLOT_QUEEN).isEmpty()) {
-				EnumBeeType type = ((ItemBeeGE) inventory.getStackInSlot(SLOT_QUEEN).getItem()).getType();
+			if (!inventory.getItem(SLOT_QUEEN).isEmpty()) {
+				EnumBeeType type = ((ItemBeeGE) inventory.getItem(SLOT_QUEEN).getItem()).getType();
 				if (type == EnumBeeType.QUEEN) {
 					return false;
 				}
-				if (type == EnumBeeType.PRINCESS && !inventory.getStackInSlot(SLOT_DRONE).isEmpty() && !hasDrone) {
+				if (type == EnumBeeType.PRINCESS && !inventory.getItem(SLOT_DRONE).isEmpty() && !hasDrone) {
 					return false;
 				}
 			}

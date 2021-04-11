@@ -16,7 +16,7 @@ import forestry.cultivation.tiles.TilePlanter;
 public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 
 	public static ContainerPlanter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		TilePlanter planter = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TilePlanter.class);
+		TilePlanter planter = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TilePlanter.class);
 		return new ContainerPlanter(windowId, playerInv, planter);    //TODO what to do if Planter null
 	}
 
@@ -51,8 +51,8 @@ public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}

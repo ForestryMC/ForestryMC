@@ -11,11 +11,9 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
@@ -51,7 +49,7 @@ public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IF
 
 	@Override
 	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		addRecipe(new FabricatorSmeltingRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), molten, meltingPoint));
+		addRecipe(new FabricatorSmeltingRecipe(IForestryRecipe.anonymous(), Ingredient.of(resource), molten, meltingPoint));
 	}
 
 	@Override

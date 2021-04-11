@@ -91,7 +91,7 @@ public class ArboricultureBlocks {
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(BiFunction<Boolean, S, B> constructor, Function<B, BlockItem> itemConstructor, WoodBlockKind kind, boolean fireproof, S[] types) {
-		return registerWood(REGISTRY.blockGroup((type) -> constructor.apply(fireproof, type), types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getString(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
+		return registerWood(REGISTRY.blockGroup((type) -> constructor.apply(fireproof, type), types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getSerializedName(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(Function<S, B> constructor, WoodBlockKind kind, boolean fireproof, S[] types) {
@@ -99,7 +99,7 @@ public class ArboricultureBlocks {
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> woodGroup(Function<S, B> constructor, Function<B, BlockItem> itemConstructor, WoodBlockKind kind, boolean fireproof, S[] types) {
-		return registerWood(REGISTRY.blockGroup(constructor, types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getString(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
+		return registerWood(REGISTRY.blockGroup(constructor, types).item(itemConstructor).identifier((fireproof ? "fireproof_" : "") + kind.getSerializedName(), FeatureGroup.IdentifierType.AFFIX).create(), kind);
 	}
 
 	private static <B extends Block & IWoodTyped, S extends IWoodType> FeatureBlockGroup<B, S> registerWood(FeatureBlockGroup<B, S> group, WoodBlockKind kind) {

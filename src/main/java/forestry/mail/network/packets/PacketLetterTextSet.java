@@ -33,16 +33,16 @@ public class PacketLetterTextSet extends ForestryPacket implements IForestryPack
 
 	@Override
 	protected void writeData(PacketBufferForestry data) {
-		data.writeString(string);
+		data.writeUtf(string);
 	}
 
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			if (player.openContainer instanceof ContainerLetter) {
-				String string = data.readString();
-				((ContainerLetter) player.openContainer).handleSetText(string);
+			if (player.containerMenu instanceof ContainerLetter) {
+				String string = data.readUtf();
+				((ContainerLetter) player.containerMenu).handleSetText(string);
 			}
 		}
 	}

@@ -21,13 +21,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IEffectData;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
@@ -55,25 +55,25 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
 		for (int i = 0; i < 1; i++) {
 
-			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.rand, area);
+			BlockPos randomPos = VectUtil.getRandomPositionInArea(world.random, area);
 
-			BlockPos posBlock = randomPos.add(housing.getCoordinates()).add(offset);
+			BlockPos posBlock = randomPos.offset(housing.getCoordinates()).offset(offset);
 
 			// Put snow on the ground
-			if (world.isBlockLoaded(posBlock) && true) {//TODO solve this world.isSideSolid(posBlock.down(), Direction.UP, false)) {
+			if (world.hasChunkAt(posBlock) && true) {//TODO solve this world.isSideSolid(posBlock.down(), Direction.UP, false)) {
 				BlockState state = world.getBlockState(posBlock);
 				Block block = state.getBlock();
 
 				if (block == Blocks.SNOW) {
-					Integer layers = state.get(SnowBlock.LAYERS);
+					Integer layers = state.getValue(SnowBlock.LAYERS);
 					if (layers < 7) {
-						BlockState moreSnow = state.with(SnowBlock.LAYERS, layers + 1);
-						world.setBlockState(posBlock, moreSnow);
+						BlockState moreSnow = state.setValue(SnowBlock.LAYERS, layers + 1);
+						world.setBlockAndUpdate(posBlock, moreSnow);
 					} else {
-						world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+						world.setBlockAndUpdate(posBlock, Blocks.SNOW.defaultBlockState());
 					}
-				} else if (block.getDefaultState().getMaterial().isReplaceable()) {
-					world.setBlockState(posBlock, Blocks.SNOW.getDefaultState());
+				} else if (block.defaultBlockState().getMaterial().isReplaceable()) {
+					world.setBlockAndUpdate(posBlock, Blocks.SNOW.defaultBlockState());
 				}
 			}
 		}
@@ -84,14 +84,14 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		if (housing.getWorldObj().rand.nextInt(3) == 0) {
+		if (housing.getWorldObj().random.nextInt(3) == 0) {
 			Vector3i area = getModifiedArea(genome, housing);
 			Vector3i offset = VectUtil.scale(area, -0.5F);
 
 			BlockPos coordinates = housing.getCoordinates();
 			World world = housing.getWorldObj();
 
-			BlockPos spawn = VectUtil.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
+			BlockPos spawn = VectUtil.getRandomPositionInArea(world.random, area).offset(coordinates).offset(offset);
 			ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());
 			return storedData;
 		} else {

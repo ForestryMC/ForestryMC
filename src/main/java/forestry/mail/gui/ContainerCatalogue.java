@@ -77,7 +77,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		super(MailContainers.CATALOGUE.containerType(), windowId);
 		this.player = inv.player;
 
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			rebuildStationsList();
 		}
 	}
@@ -95,14 +95,14 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	private void rebuildStationsList() {
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			return;
 		}
 
 		stations.clear();
 
-		IPostOffice postOffice = PostManager.postRegistry.getPostOffice((ServerWorld) player.world);
-		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.world);
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice((ServerWorld) player.level);
+		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.level);
 
 		for (ITradeStation station : tradeStations.values()) {
 			ITradeStationInfo info = station.getTradeInfo();
@@ -139,7 +139,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	/* Managing Trade info */
 	private void updateTradeInfo() {
 		// Updating is done by the server.
-		if (player.world.isRemote) {
+		if (player.level.isClientSide) {
 			return;
 		}
 
@@ -167,14 +167,14 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		if (needsSync) {
-			for (IContainerListener crafter : listeners) {
-				crafter.sendWindowProperty(this, 0, stationIndex);
-				crafter.sendWindowProperty(this, 1, stations.size());
-				crafter.sendWindowProperty(this, 2, currentFilter);
+			for (IContainerListener crafter : containerListeners) {
+				crafter.setContainerData(this, 0, stationIndex);
+				crafter.setContainerData(this, 1, stations.size());
+				crafter.setContainerData(this, 2, currentFilter);
 			}
 
 			NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);
@@ -183,7 +183,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public void updateProgressBar(int i, int j) {
+	public void setData(int i, int j) {
 		switch (i) {
 			case 0:
 				stationIndex = j;
@@ -198,7 +198,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity p_75145_1_) {
+	public boolean stillValid(PlayerEntity p_75145_1_) {
 		return true;
 	}
 

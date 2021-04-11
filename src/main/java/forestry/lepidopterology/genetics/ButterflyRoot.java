@@ -28,14 +28,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootContext;
-import genetics.api.root.IndividualRoot;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
@@ -56,6 +48,13 @@ import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.tiles.TileCocoon;
+
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+import genetics.utils.AlleleUtils;
 
 public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButterflyRoot, IBreedingTrackerHandler {
 
@@ -129,7 +128,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 			return pos;
 		}
 		BlockState state = LepidopterologyBlocks.COCOON.defaultState();
-		boolean placed = world.setBlockState(pos, state, 18);
+		boolean placed = world.setBlock(pos, state, 18);
 		if (!placed) {
 			return BlockPos.ZERO;
 		}
@@ -141,7 +140,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 		TileCocoon cocoon = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (cocoon == null) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
+			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 18);
 			return BlockPos.ZERO;
 		}
 
@@ -153,12 +152,12 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	}
 
 	private BlockPos getValidCocoonPos(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
-		if (isPositionValid(world, pos.down(), caterpillar, gameProfile, createNursery)) {
-			return pos.down();
+		if (isPositionValid(world, pos.below(), caterpillar, gameProfile, createNursery)) {
+			return pos.below();
 		}
 		for (int tries = 0; tries < 3; tries++) {
 			for (int y = 1; y < world.getRandom().nextInt(5); y++) {
-				BlockPos coordinate = pos.add(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
+				BlockPos coordinate = pos.offset(world.getRandom().nextInt(6) - 3, -y, world.getRandom().nextInt(6) - 3);
 				if (isPositionValid(world, coordinate, caterpillar, gameProfile, createNursery)) {
 					return coordinate;
 				}
@@ -171,7 +170,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	public boolean isPositionValid(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canReplace(blockState, world, pos)) {
-			BlockPos nurseryPos = pos.up();
+			BlockPos nurseryPos = pos.above();
 			IButterflyNursery nursery = GeneticsUtil.getNursery(world, nurseryPos);
 			if (isNurseryValid(nursery, caterpillar, gameProfile)) {
 				return true;

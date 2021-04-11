@@ -20,12 +20,12 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.api.genetics.products.Product;
 import forestry.core.genetics.ProductListWrapper;
+
+import genetics.api.individual.IGenome;
 
 public class FruitProviderRipening extends FruitProviderNone {
 	private int colourCallow = 0xffffff;
@@ -72,7 +72,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 	@Override
 	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
-		products.addProducts(world, pos, product, Product::getChance, world.rand);
+		products.addProducts(world, pos, product, Product::getChance, world.random);
 
 		return product;
 	}

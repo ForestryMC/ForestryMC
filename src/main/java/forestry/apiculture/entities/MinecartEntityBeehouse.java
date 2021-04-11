@@ -60,7 +60,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	}
 
 	@Override
-	public BlockState getDisplayTile() {
+	public BlockState getDisplayBlockState() {
 		return ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).defaultState();
 	}
 

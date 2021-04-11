@@ -32,7 +32,7 @@ public class PacketWorktableMemoryUpdate extends ForestryPacket implements IFore
 	private final RecipeMemory recipeMemory;
 
 	public PacketWorktableMemoryUpdate(TileWorktable worktable) {
-		this.pos = worktable.getPos();
+		this.pos = worktable.getBlockPos();
 		this.recipeMemory = worktable.getMemory();
 	}
 
@@ -53,7 +53,7 @@ public class PacketWorktableMemoryUpdate extends ForestryPacket implements IFore
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 
-			TileWorktable tile = TileUtil.getTile(player.world, pos, TileWorktable.class);
+			TileWorktable tile = TileUtil.getTile(player.level, pos, TileWorktable.class);
 			if (tile != null) {
 				tile.getMemory().readData(data);
 			}

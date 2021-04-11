@@ -40,21 +40,21 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
 
 		this.itemInventory = container.getItemInventory();
-		this.xSize = 176;
-		this.ySize = 205;
+		this.imageWidth = 176;
+		this.imageHeight = 205;
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		ICircuitLayout layout = container.getLayout();
 		String title = layout.getName();
-		getFontRenderer().drawString(transform, title, guiLeft + 8 + textLayout.getCenteredOffset(title, 138), guiTop + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().draw(transform, title, leftPos + 8 + textLayout.getCenteredOffset(title, 138), topPos + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		for (int i = 0; i < 4; i++) {
 			String description;
-			ItemStack tube = itemInventory.getStackInSlot(i + 2);
+			ItemStack tube = itemInventory.getItem(i + 2);
 			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
@@ -63,7 +63,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 			}
 
 			int row = i * 20;
-			getFontRenderer().drawString(transform, description, guiLeft + 32, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+			getFontRenderer().draw(transform, description, leftPos + 32, topPos + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 
 			if (tube.isEmpty()) {
 				ICircuitSocketType socketType = layout.getSocketType();
@@ -71,7 +71,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 					FarmDirection farmDirection = FarmDirection.values()[i];
 					String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
 					String localizedDirection = Translator.translateToLocal("for.gui.solder." + farmDirectionString);
-					getFontRenderer().drawString(transform, localizedDirection, guiLeft + 17, guiTop + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
+					getFontRenderer().draw(transform, localizedDirection, leftPos + 17, topPos + 36 + row, ColourProperties.INSTANCE.get("gui.screen"));
 				}
 			}
 		}
@@ -81,8 +81,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	public void init() {
 		super.init();
 
-		addButton(new Button(guiLeft + 12, guiTop + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-		addButton(new Button(guiLeft + 130, guiTop + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+		addButton(new Button(leftPos + 12, topPos + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
+		addButton(new Button(leftPos + 130, topPos + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
 	}
 
 	@Override

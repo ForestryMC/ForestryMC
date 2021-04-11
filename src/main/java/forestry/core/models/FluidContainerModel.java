@@ -83,9 +83,9 @@ public class FluidContainerModel extends AbstractItemModel {
 
 		@Override
 		public FluidContainerModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-			String empty = JSONUtils.getString(modelContents, "empty");
-			String filled = JSONUtils.getString(modelContents, "filled");
-			String type = JSONUtils.getString(modelContents, "type");
+			String empty = JSONUtils.getAsString(modelContents, "empty");
+			String filled = JSONUtils.getAsString(modelContents, "filled");
+			String type = JSONUtils.getAsString(modelContents, "type");
 			return new FluidContainerModel.Geometry(new ResourceLocation(empty), new ResourceLocation(filled), type);
 		}
 	}

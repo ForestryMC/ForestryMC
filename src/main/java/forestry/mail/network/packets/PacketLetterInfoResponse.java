@@ -75,20 +75,20 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 
 			data.writeLong(profile.getId().getMostSignificantBits());
 			data.writeLong(profile.getId().getLeastSignificantBits());
-			data.writeString(profile.getName());
+			data.writeUtf(profile.getName());
 
 		} else if (type == EnumAddressee.TRADER) {
 			if (tradeInfo == null) {
 				data.writeBoolean(false);
 			} else {
 				data.writeBoolean(true);
-				data.writeString(tradeInfo.getAddress().getName());
+				data.writeUtf(tradeInfo.getAddress().getName());
 
 				data.writeLong(tradeInfo.getOwner().getId().getMostSignificantBits());
 				data.writeLong(tradeInfo.getOwner().getId().getLeastSignificantBits());
-				data.writeString(tradeInfo.getOwner().getName());
+				data.writeUtf(tradeInfo.getOwner().getName());
 
-				data.writeItemStack(tradeInfo.getTradegood());
+				data.writeItem(tradeInfo.getTradegood());
 				data.writeItemStacks(tradeInfo.getRequired());
 
 				data.writeEnum(tradeInfo.getState(), EnumTradeStationState.values());
@@ -100,21 +100,21 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Container container = player.openContainer;
+			Container container = player.containerMenu;
 			if (container instanceof ILetterInfoReceiver) {
 				EnumAddressee type = data.readEnum(EnumAddressee.values());
 				ITradeStationInfo tradeInfo = null;
 				IMailAddress address = null;
 
 				if (type == EnumAddressee.PLAYER) {
-					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+					GameProfile profile = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUtf());
 					address = PostManager.postRegistry.getMailAddress(profile);
 				} else if (type == EnumAddressee.TRADER) {
 					if (data.readBoolean()) {
-						address = PostManager.postRegistry.getMailAddress(data.readString());
-						GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readString());
+						address = PostManager.postRegistry.getMailAddress(data.readUtf());
+						GameProfile owner = new GameProfile(new UUID(data.readLong(), data.readLong()), data.readUtf());
 
-						ItemStack tradegood = data.readItemStack();
+						ItemStack tradegood = data.readItem();
 						NonNullList<ItemStack> required = data.readItemStacks();
 
 						EnumTradeStationState state = data.readEnum(EnumTradeStationState.values());

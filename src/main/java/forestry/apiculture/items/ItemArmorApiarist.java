@@ -43,28 +43,28 @@ public class ItemArmorApiarist extends ArmorItem {
 		private static final int[] reductions = new int[]{1, 2, 3, 1};
 
 		@Override
-		public int getDurability(EquipmentSlotType slotIn) {
+		public int getDurabilityForSlot(EquipmentSlotType slotIn) {
 			return 5;
 		}
 
 		@Override
-		public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+		public int getDefenseForSlot(EquipmentSlotType slotIn) {
 			return reductions[slotIn.getIndex()];
 		}
 
 		@Override
-		public int getEnchantability() {
+		public int getEnchantmentValue() {
 			return 15;
 		}
 
 		@Override
-		public SoundEvent getSoundEvent() {
-			return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+		public SoundEvent getEquipSound() {
+			return SoundEvents.ARMOR_EQUIP_LEATHER;
 		}
 
 		@Override
-		public Ingredient getRepairMaterial() {
-			return Ingredient.fromStacks(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1));
+		public Ingredient getRepairIngredient() {
+			return Ingredient.of(CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK, 1));
 		}
 
 		@Override
@@ -84,7 +84,7 @@ public class ItemArmorApiarist extends ArmorItem {
 	}
 
 	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
-		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).group(ItemGroups.tabApiculture));
+		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).tab(ItemGroups.tabApiculture));
 	}
 
 	@Override

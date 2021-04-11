@@ -19,8 +19,6 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
 import forestry.api.apiculture.IBeeHousing;
@@ -28,6 +26,8 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IBee;
+
+import genetics.api.individual.IGenome;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -101,7 +101,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 
 		float mutationModifier = beeModifier.getMutationModifier(queen.getGenome(), queen.getMate().orElse(null), 1.0f);
 		if (mutationModifier > 10) {
-			return housing.getWorldObj().rand.nextFloat() * 100 < 0.4 * (mutationModifier * mutationModifier - 100);
+			return housing.getWorldObj().random.nextFloat() * 100 < 0.4 * (mutationModifier * mutationModifier - 100);
 		}
 
 		return false;

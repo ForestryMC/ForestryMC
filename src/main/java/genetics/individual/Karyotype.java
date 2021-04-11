@@ -65,6 +65,11 @@ public class Karyotype implements IKaryotype {
 	}
 
 	@Override
+	public int size() {
+		return chromosomeTypes.length;
+	}
+
+	@Override
 	public IGenome getDefaultGenome() {
 		if (defaultGenome == null) {
 			defaultGenome = getDefaultTemplate().toGenome();

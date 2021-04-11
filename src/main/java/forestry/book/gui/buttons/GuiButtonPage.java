@@ -31,13 +31,13 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			TextureManager manager = Minecraft.getInstance().textureManager;
-			manager.bindTexture(GuiForesterBook.TEXTURE);
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.enableAlphaTest();
-			GlStateManager.disableBlend();
+			manager.bind(GuiForesterBook.TEXTURE);
+			GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager._enableAlphaTest();
+			GlStateManager._disableBlend();
 			blit(transform, x, y, isHovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
-			GlStateManager.enableBlend();
-			GlStateManager.disableAlphaTest();
+			GlStateManager._enableBlend();
+			GlStateManager._disableAlphaTest();
 		}
 	}
 

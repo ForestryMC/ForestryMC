@@ -32,19 +32,19 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 public class ItemAlyzer extends ItemWithGui {
 	public ItemAlyzer() {
 		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture)
-			.maxStackSize(1));
+				.tab(ItemGroups.tabApiculture)
+				.stacksTo(1));
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+		super.appendHoverText(stack, world, tooltip, advanced);
 		int charges = 0;
 		CompoundNBT compound = stack.getTag();
 		if (compound != null) {
 			charges = compound.getInt("Charges");
 		}
-		tooltip.add(new TranslationTextComponent(stack.getTranslationKey() + ".charges", charges).mergeStyle(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent(stack.getDescriptionId() + ".charges", charges).withStyle(TextFormatting.GOLD));
 	}
 
 	@Override

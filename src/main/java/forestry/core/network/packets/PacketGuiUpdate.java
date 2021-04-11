@@ -53,7 +53,7 @@ public class PacketGuiUpdate extends ForestryPacket implements IForestryPacketCl
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 
-			IStreamableGui tile = TileUtil.getTile(player.world, pos, IStreamableGui.class);
+			IStreamableGui tile = TileUtil.getTile(player.level, pos, IStreamableGui.class);
 			if (tile != null) {
 				tile.readGuiData(data);
 			}

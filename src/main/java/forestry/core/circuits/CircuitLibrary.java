@@ -22,11 +22,11 @@ public class CircuitLibrary extends WorldSavedData implements ICircuitLibrary {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void load(CompoundNBT nbt) {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundNBT save(CompoundNBT nbt) {
 		return nbt;
 	}
 

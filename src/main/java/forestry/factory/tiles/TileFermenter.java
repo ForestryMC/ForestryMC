@@ -50,7 +50,6 @@ import forestry.core.tiles.TilePowered;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.inventory.InventoryFermenter;
-import forestry.factory.recipes.FermenterRecipeManager;
 
 //import net.minecraftforge.fml.common.Optional;
 
@@ -76,17 +75,17 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		setInternalInventory(new InventoryFermenter(this));
 
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
-		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidInputs(world.getRecipeManager()));
+		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidInputs(level.getRecipeManager()));
 
 		productTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);
-		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidOutputs(world.getRecipeManager()));
+		resourceTank.setFilters(() -> RecipeManagers.fermenterManager.getRecipeFluidOutputs(level.getRecipeManager()));
 
 		tankManager = new TankManager(this, resourceTank, productTank);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		compoundNBT.putInt("FermentationTime", fermentationTime);
 		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
@@ -99,8 +98,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		fermentationTime = compoundNBT.getInt("FermentationTime");
 		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");
@@ -166,31 +165,31 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 			return;
 		}
 
-		ItemStack resource = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
+		ItemStack resource = getItem(InventoryFermenter.SLOT_RESOURCE);
 		FluidStack fluid = resourceTank.getFluid();
 
 		if (!fluid.isEmpty()) {
-			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(getWorld().getRecipeManager(), resource, fluid);
+			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(getLevel().getRecipeManager(), resource, fluid);
 		}
 
 		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
 
 		if (currentRecipe != null) {
 			currentResourceModifier = determineResourceMod(resource);
-			decrStackSize(InventoryFermenter.SLOT_RESOURCE, 1);
+			removeItem(InventoryFermenter.SLOT_RESOURCE, 1);
 		}
 	}
 
 	private void checkFuel() {
 		if (fuelBurnTime <= 0) {
-			ItemStack fuel = getStackInSlot(InventoryFermenter.SLOT_FUEL);
+			ItemStack fuel = getItem(InventoryFermenter.SLOT_FUEL);
 			if (!fuel.isEmpty()) {
 				FermenterFuel fermenterFuel = FuelManager.fermenterFuel.get(fuel);
 				if (fermenterFuel != null) {
 					fuelBurnTime = fuelTotalTime = fermenterFuel.getBurnDuration();
 					fuelCurrentFerment = fermenterFuel.getFermentPerCycle();
 
-					decrStackSize(InventoryFermenter.SLOT_FUEL, 1);
+					removeItem(InventoryFermenter.SLOT_FUEL, 1);
 				}
 			}
 		}
@@ -207,7 +206,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasResourcesMin(float percentage) {
-		ItemStack fermentationStack = getStackInSlot(InventoryFermenter.SLOT_RESOURCE);
+		ItemStack fermentationStack = getItem(InventoryFermenter.SLOT_RESOURCE);
 		if (fermentationStack.isEmpty()) {
 			return false;
 		}
@@ -217,7 +216,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public boolean hasFuelMin(float percentage) {
-		ItemStack fuelStack = getStackInSlot(InventoryFermenter.SLOT_FUEL);
+		ItemStack fuelStack = getItem(InventoryFermenter.SLOT_FUEL);
 		if (fuelStack.isEmpty()) {
 			return false;
 		}
@@ -234,7 +233,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 
 		boolean hasRecipe = currentRecipe != null;
 		boolean hasFuel = fuelBurnTime > 0;
-		boolean hasResource = fermentationTime > 0 || !getStackInSlot(InventoryFermenter.SLOT_RESOURCE).isEmpty();
+		boolean hasResource = fermentationTime > 0 || !getItem(InventoryFermenter.SLOT_RESOURCE).isEmpty();
 		FluidStack drained = resourceTank.drain(fermented, IFluidHandler.FluidAction.SIMULATE);
 		boolean hasFluidResource = !drained.isEmpty() && drained.getAmount() == fermented;
 		boolean hasFluidSpace = true;
@@ -301,10 +300,10 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendWindowProperty(container, 0, fuelBurnTime);
-		iCrafting.sendWindowProperty(container, 1, fuelTotalTime);
-		iCrafting.sendWindowProperty(container, 2, fermentationTime);
-		iCrafting.sendWindowProperty(container, 3, fermentationTotalTime);
+		iCrafting.setContainerData(container, 0, fuelBurnTime);
+		iCrafting.setContainerData(container, 1, fuelTotalTime);
+		iCrafting.setContainerData(container, 2, fermentationTime);
+		iCrafting.setContainerData(container, 3, fermentationTotalTime);
 	}
 
 

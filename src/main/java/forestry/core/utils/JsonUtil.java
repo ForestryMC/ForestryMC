@@ -25,8 +25,8 @@ public class JsonUtil {
 			return fallback;
 		}
 		try {
-			Item item = JSONUtils.getItem(object, "item");
-			int count = JSONUtils.getInt(object, "count", 1);
+			Item item = JSONUtils.getAsItem(object, "item");
+			int count = JSONUtils.getAsInt(object, "count", 1);
 			ItemStack stack = new ItemStack(item, count);
 			stack.setTag(JsonUtils.readNBT(object, "nbt"));
 			return stack;

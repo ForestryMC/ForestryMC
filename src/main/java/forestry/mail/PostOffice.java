@@ -53,7 +53,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
+	public void load(CompoundNBT compoundNBT) {
 		for (int i = 0; i < collectedPostage.length; i++) {
 			if (compoundNBT.contains("CPS" + i)) {
 				collectedPostage[i] = compoundNBT.getInt("CPS" + i);
@@ -62,7 +62,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundNBT save(CompoundNBT compoundNBT) {
 		for (int i = 0; i < collectedPostage.length; i++) {
 			compoundNBT.putInt("CPS" + i, collectedPostage[i]);
 		}
@@ -181,7 +181,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
 		collectPostage(letter.getPostage());
 
-		markDirty();
+		setDirty();
 		return EnumDeliveryState.OK;
 
 	}

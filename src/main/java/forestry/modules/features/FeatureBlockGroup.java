@@ -35,7 +35,7 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 	@Nullable
 	public BlockState findState(String typeName) {
 		Optional<FeatureBlock> block = featureByType.entrySet().stream()
-			.filter(e -> e.getKey().getString().equals(typeName))
+				.filter(e -> e.getKey().getSerializedName().equals(typeName))
 			.findFirst()
 			.flatMap(e -> Optional.of(e.getValue()));
 		return block.map(FeatureBlock::defaultState).orElse(null);

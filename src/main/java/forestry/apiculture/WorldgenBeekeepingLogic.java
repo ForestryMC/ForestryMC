@@ -96,8 +96,8 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 			IBee queen = housing.getContainedBee();
 			hasFlowersCache.update(queen, housing);
 			World world = housing.getWorldObj();
-			boolean canWork = (world.isDaytime() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
-				(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
+			boolean canWork = (world.isDay() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
+					(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
 
 			if (active != canWork) {
@@ -125,7 +125,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void syncToClient() {
 		World world = housing.getWorldObj();
-		if (world != null && !world.isRemote) {
+		if (world != null && !world.isClientSide) {
 			NetworkUtil.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
 		}
 	}
@@ -133,7 +133,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	public void syncToClient(ServerPlayerEntity player) {
 		World world = housing.getWorldObj();
-		if (world != null && !world.isRemote) {
+		if (world != null && !world.isClientSide) {
 			NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
 		}
 	}
@@ -146,7 +146,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean canDoBeeFX() {
-		return !Minecraft.getInstance().isGamePaused() && active;
+		return !Minecraft.getInstance().isPaused() && active;
 	}
 
 	@Override

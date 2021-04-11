@@ -31,7 +31,7 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 	@Override
 	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
-		data.writeShort(facing.getIndex());
+		data.writeShort(facing.get3DDataValue());
 		data.writeShort(AlleleManager.filterRegistry.getId(rule));
 	}
 
@@ -44,12 +44,12 @@ public class PacketFilterChangeRule extends ForestryPacket implements IForestryP
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			Direction facing = Direction.byIndex(data.readShort());
+			Direction facing = Direction.from3DDataValue(data.readShort());
 			IFilterRuleType rule = AlleleManager.filterRegistry.getRuleOrDefault(data.readShort());
-			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.level, pos, GeneticCapabilities.FILTER_LOGIC, null);
 			logic.ifPresent(l -> {
 				if (l.setRule(facing, rule)) {
-					l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);
+					l.getNetworkHandler().sendToPlayers(l, player.getLevel(), player);
 				}
 			});
 		}

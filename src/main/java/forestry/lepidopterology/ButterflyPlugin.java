@@ -7,23 +7,6 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import genetics.api.GeneticPlugin;
-import genetics.api.GeneticsAPI;
-import genetics.api.IGeneticApiInstance;
-import genetics.api.IGeneticFactory;
-import genetics.api.IGeneticPlugin;
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.classification.IClassificationRegistry;
-import genetics.api.individual.IIndividual;
-import genetics.api.organism.IOrganismTypes;
-import genetics.api.root.IGeneticListenerRegistry;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IIndividualRootBuilder;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.IRootManager;
-import genetics.api.root.components.ComponentKeys;
-
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -41,6 +24,23 @@ import forestry.lepidopterology.genetics.ButterflyHelper;
 import forestry.lepidopterology.genetics.ButterflyRoot;
 import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
+
+import genetics.api.GeneticPlugin;
+import genetics.api.GeneticsAPI;
+import genetics.api.IGeneticApiInstance;
+import genetics.api.IGeneticFactory;
+import genetics.api.IGeneticPlugin;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.classification.IClassificationRegistry;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismTypes;
+import genetics.api.root.IGeneticListenerRegistry;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IIndividualRootBuilder;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.IRootManager;
+import genetics.api.root.components.ComponentKeys;
 
 @GeneticPlugin(modId = Constants.MOD_ID)
 public class ButterflyPlugin implements IGeneticPlugin {
@@ -91,12 +91,12 @@ public class ButterflyPlugin implements IGeneticPlugin {
 						}
 
 						for (ItemStack stack : butterflySpecies.getButterflyLoot().getPossibleStacks()) {
-							if (stack.isItemEqual(itemstack)) {
+							if (stack.sameItem(itemstack)) {
 								return 1.0f;
 							}
 						}
 						for (ItemStack stack : butterflySpecies.getCaterpillarLoot().getPossibleStacks()) {
-							if (stack.isItemEqual(itemstack)) {
+							if (stack.sameItem(itemstack)) {
 								return 1.0f;
 							}
 						}

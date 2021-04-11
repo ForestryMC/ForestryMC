@@ -124,7 +124,7 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 					FluidStack drained = burnTank.drainInternal(1, IFluidHandler.FluidAction.EXECUTE);
 					currentOutput = determineFuelValue(drained);
 					energyManager.generateEnergy(currentOutput);
-					world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
+					level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
 				} else {
 					FluidStack fuel = fuelTank.drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int burnTime = determineBurnTime(fuel);
@@ -243,8 +243,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
 
 		if (nbt.contains("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");
@@ -253,8 +253,8 @@ public class TileEngineBiogas extends TileEngine implements ISidedInventory, ILi
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
-		nbt = super.write(nbt);
+	public CompoundNBT save(CompoundNBT nbt) {
+		nbt = super.save(nbt);
 		nbt.putBoolean("shutdown", shutdown);
 		tankManager.write(nbt);
 		return nbt;

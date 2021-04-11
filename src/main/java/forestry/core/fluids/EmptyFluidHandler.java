@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-//TODO: Remove if forge fixes the return value of fill(FluidStack, FluidAction)
 public class EmptyFluidHandler implements IFluidHandler {
 	public static final EmptyFluidHandler INSTANCE = new EmptyFluidHandler();
 

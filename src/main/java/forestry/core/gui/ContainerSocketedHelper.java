@@ -64,9 +64,9 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 		toSocket.setCount(1);
 		tile.setSocket(slot, toSocket);
 
-		ItemStack stack = player.inventory.getItemStack();
+		ItemStack stack = player.inventory.getCarried();
 		stack.shrink(1);
-		player.updateHeldItem();
+		player.broadcastCarriedItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 		NetworkUtil.sendToPlayer(packet, player);
@@ -92,8 +92,8 @@ public class ContainerSocketedHelper<T extends TileEntity & ISocketable> impleme
 
 		tile.setSocket(slot, ItemStack.EMPTY);
 		InventoryUtil.stowInInventory(socket, player.inventory, true);
-		itemstack.damageItem(1, player, p -> p.sendBreakAnimation(p.getActiveHand()));    //TODO onBreak
-		player.updateHeldItem();
+		itemstack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(p.getUsedItemHand()));    //TODO onBreak
+		player.broadcastCarriedItem();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 		NetworkUtil.sendToPlayer(packet, player);

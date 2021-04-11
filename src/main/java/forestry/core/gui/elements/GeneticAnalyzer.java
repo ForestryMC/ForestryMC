@@ -7,17 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
+import org.lwjgl.glfw.GLFW;
 
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.gatgets.IDatabasePlugin;
@@ -35,7 +32,9 @@ import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
 
-import org.lwjgl.glfw.GLFW;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
@@ -168,13 +167,13 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		}
 		//Clean the element area
 		scrollableContent.clear();
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		String key = "for.gui.portablealyzer.help";
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
 		//}
-		List<ITextProperties> lines = fontRenderer.func_238425_b_(new TranslationTextComponent(key), scrollable.getWidth());
-		for (ITextProperties text : lines) {
+		List<IReorderingProcessor> lines = fontRenderer.split(new TranslationTextComponent(key), scrollable.getWidth());
+		for (IReorderingProcessor text : lines) {
 			scrollableContent.label(text);
 		}
 		//Disable the scrollbar

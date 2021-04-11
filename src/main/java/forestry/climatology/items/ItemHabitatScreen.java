@@ -57,7 +57,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	}
 
 	public static void setPreviewMode(ItemStack itemStack, boolean preview) {
-		itemStack.setTagInfo(PREVIEW_KEY, ByteNBT.valueOf((byte) (preview ? 1 : 0)));
+		itemStack.addTagElement(PREVIEW_KEY, ByteNBT.valueOf((byte) (preview ? 1 : 0)));
 	}
 
 	@Nullable
@@ -84,7 +84,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	public static boolean isValid(ItemStack stack, @Nullable World world) {
 		BlockPos pos = getPosition(stack);
 		int dimension = getDimension(stack);
-		if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */!world.isBlockLoaded(pos)) {
+		if (pos == null || world == null || dimension == Integer.MAX_VALUE ||/* dimension != world.getDimension().getType().getId() || */!world.hasChunkAt(pos)) {
 			return false;
 		} else {
 			return TileUtil.getTile(world, pos, IClimateHousing.class) != null;
@@ -92,36 +92,36 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-		ItemStack itemStack = player.getHeldItem(hand);
-		if (!player.isSneaking()) {
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+		ItemStack itemStack = player.getItemInHand(hand);
+		if (!player.isShiftKeyDown()) {
 			boolean previewModeActive = isPreviewModeActive(itemStack);
 			setPreviewMode(itemStack, !previewModeActive);
 
-			if (!world.isRemote) {
+			if (!world.isClientSide) {
 				String text = !previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive";
-				player.sendStatusMessage(new TranslationTextComponent(text), true);
+				player.displayClientMessage(new TranslationTextComponent(text), true);
 			}
 		}
 
-		return ActionResult.resultSuccess(itemStack);
+		return ActionResult.success(itemStack);
 	}
 
 	@Override
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 			IClimateHousing housing = TileUtil.getTile(world, pos, IClimateHousing.class);
 			if (housing != null) {
-				ItemStack heldItem = player.getHeldItem(context.getHand());
-				heldItem.setTagInfo(POSITION_KEY, NBTUtil.writeBlockPos(pos));
+				ItemStack heldItem = player.getItemInHand(context.getHand());
+				heldItem.addTagElement(POSITION_KEY, NBTUtil.writeBlockPos(pos));
 				//heldItem.setTagInfo(DIMENSION_KEY, IntNBT.valueOf(world.getDimension().getType().getId()));
 			}
 		}
-		if (!world.isRemote) {
+		if (!world.isClientSide) {
 			IClimateState state;
 			IClimateState climateState = ClimateRoot.getInstance().getState(world, pos);
 			if (climateState.isPresent()) {
@@ -133,9 +133,9 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 				state = ClimateRoot.getInstance().getBiomeState(world, pos);
 			}
 			if (state.isPresent()) {
-				player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.state", TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
+				player.displayClientMessage(new TranslationTextComponent("for.habitat_screen.status.state", TextFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), TextFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
 			} else {
-				player.sendStatusMessage(new TranslationTextComponent("for.habitat_screen.status.nostate"), true);
+				player.displayClientMessage(new TranslationTextComponent("for.habitat_screen.status.nostate"), true);
 			}
 		}
 		return ActionResultType.SUCCESS;
@@ -143,8 +143,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-		super.addInformation(stack, world, tooltip, flag);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		super.appendHoverText(stack, world, tooltip, flag);
 		if (world == null) {
 			return;
 		}
@@ -165,17 +165,17 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		IClimateState climateState = housing.getTransformer().getCurrent();
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).mergeStyle(TextFormatting.GOLD));
-		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).mergeStyle(TextFormatting.BLUE));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).withStyle(TextFormatting.GOLD));
+		tooltip.add(new TranslationTextComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).withStyle(TextFormatting.BLUE));
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int tintIndex) {
 		if (tintIndex == 2) {
-			return isValid(stack, Minecraft.getInstance().world) ? 0x14B276 : 0xBA1F17;
+			return isValid(stack, Minecraft.getInstance().level) ? 0x14B276 : 0xBA1F17;
 		} else if (tintIndex == 1) {
-			World world = Minecraft.getInstance().world;
+			World world = Minecraft.getInstance().level;
 			if (!isValid(stack, world)) {
 				return 0xFFFFFF;
 			}

@@ -22,7 +22,7 @@ import forestry.core.items.ItemWithGui;
 
 public class ItemImprinter extends ItemWithGui {
 	public ItemImprinter() {
-		super((new Item.Properties()).group(ItemGroups.tabApiculture).maxStackSize(1));
+		super((new Item.Properties()).tab(ItemGroups.tabApiculture).stacksTo(1));
 	}
 
 	@Override

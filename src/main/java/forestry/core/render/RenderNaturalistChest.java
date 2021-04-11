@@ -36,20 +36,20 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 		this.base.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
 		this.lid = new ModelRenderer(64, 64, 0, 0);
 		this.lid.addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F, 0.0F);
-		this.lid.rotationPointY = 9.0F;
-		this.lid.rotationPointZ = 1.0F;
+		this.lid.y = 9.0F;
+		this.lid.z = 1.0F;
 		this.lock = new ModelRenderer(64, 64, 0, 0);
 		this.lock.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
-		this.lock.rotationPointY = 8.0F;
+		this.lock.y = 8.0F;
 		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
 	}
 
 	@Override
 	public void renderTile(TileNaturalistChest tile, RenderHelper helper) {
 		World worldObj = tile.getWorldObj();
-		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
-			Direction facing = blockState.get(BlockBase.FACING);
+			Direction facing = blockState.getValue(BlockBase.FACING);
 			render(facing, tile.prevLidAngle, tile.lidAngle, helper, helper.partialTicks);
 		}
 	}
@@ -64,7 +64,7 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		helper.translate(0.5D, 0.5D, 0.5D);
 
-		helper.rotate(Vector3f.YP.rotationDegrees(-orientation.getHorizontalAngle()));
+		helper.rotate(Vector3f.YP.rotationDegrees(-orientation.toYRot()));
 		helper.translate(-0.5D, -0.5D, -0.5D);
 
 		float angle = prevLidAngle + (lidAngle - prevLidAngle) * partialTick;

@@ -1,20 +1,18 @@
 package forestry.arboriculture;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import genetics.api.alleles.IAllele;
-
-import genetics.utils.AlleleUtils;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -22,15 +20,18 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.utils.Log;
 
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
+
 public class TreeConfig {
 	public static final String CONFIG_CATEGORY_TREE = "trees";
 	public static final String CONFIG_COMMENT =
-		"This config can be used to customise the world generation for all trees that where added by forestry or\n" +
-			"by an addon mod like extra trees.\n" +
-			"\n" +
-			"# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
-			"S:rarity=1.0\n" +
-			"\n" +
+			"This config can be used to customise the world generation for all trees that where added by forestry or\n" +
+					"by an addon mod like extra trees.\n" +
+					"\n" +
+					"# The spawn rarity of the tree species in the world. [range: 0.0 ~ 1.0]\n" +
+					"S:rarity=1.0\n" +
+					"\n" +
 			"# Dimension ids can be added to these lists to blacklist or whitelist them. \n" +
 			"dimensions {\n" +
 			"\tI:blacklist <\n" +
@@ -47,19 +48,19 @@ public class TreeConfig {
 			"\t\tS:names <\n" +
 			"\t\t\tminecraft:plains\n" +
 			"\t\t >\n" +
-			"\t\tS:types <\n" +
-			"\t\t\tforest\n" +
-			"\t\t >\n" +
-			"\t}\n" +
-			"}";
+					"\t\tS:types <\n" +
+					"\t\t\tforest\n" +
+					"\t\t >\n" +
+					"\t}\n" +
+					"}";
 	private static final Map<ResourceLocation, TreeConfig> configs = new HashMap<>();
 	private static final TreeConfig GLOBAL = new TreeConfig(new ResourceLocation(Constants.MOD_ID, "global"), 1.0F);
 
 	private final ResourceLocation treeName;
 	private final float defaultRarity;
-	private final Set<Integer> blacklistedDimensions = new HashSet<>();
-	private final Set<Integer> whitelistedDimensions = new HashSet<>();
-	private final Set<BiomeDictionary.Type> blacklistedBiomeTypes = new HashSet<>();
+	private final Set<String> blacklistedDimensions = new HashSet<>();
+	private final Set<String> whitelistedDimensions = new HashSet<>();
+	private final Set<Biome.Category> blacklistedBiomeTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 	private float spawnRarity;
 
@@ -80,14 +81,10 @@ public class TreeConfig {
 	}
 
 	private TreeConfig parseConfig(LocalizedConfiguration config) {
-		for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new int[0]).getIntList()) {
-			blacklistedDimensions.add(dimId);
-		}
-		for (int dimId : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new int[0]).getIntList()) {
-			whitelistedDimensions.add(dimId);
-		}
+		blacklistedDimensions.addAll(Arrays.asList(config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new String[0]).getStringList()));
+		whitelistedDimensions.addAll(Arrays.asList(config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new String[0]).getStringList()));
 		for (String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()) {
-			blacklistedBiomeTypes.add(BiomeDictionary.Type.getType(typeName));
+			blacklistedBiomeTypes.add(Biome.Category.byName(typeName));
 		}
 		for (String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()) {
 			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
@@ -102,7 +99,7 @@ public class TreeConfig {
 		return this;
 	}
 
-	public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, int dimID) {
+	public static void blacklistTreeDim(@Nullable ResourceLocation treeUID, String dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
 		if (treeUID == null) {
 			treeConfig = GLOBAL;
@@ -110,7 +107,7 @@ public class TreeConfig {
 		treeConfig.blacklistedDimensions.add(dimID);
 	}
 
-	public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, int dimID) {
+	public static void whitelistTreeDim(@Nullable ResourceLocation treeUID, String dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
 		if (treeUID == null) {
 			treeConfig = GLOBAL;
@@ -118,14 +115,14 @@ public class TreeConfig {
 		treeConfig.whitelistedDimensions.add(dimID);
 	}
 
-	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, int dimID) {
+	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
-		return treeConfig != null ? treeConfig.isValidDimension(dimID) : GLOBAL.isValidDimension(dimID);
+		return treeConfig != null ? treeConfig.isValidDimension(dimID.getRegistryName()) : GLOBAL.isValidDimension(dimID.getRegistryName());
 	}
 
-	private boolean isValidDimension(int dimID) { //blacklist has priority
-		if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID)) {
-			return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID);
+	private boolean isValidDimension(ResourceLocation dimID) { //blacklist has priority
+		if (blacklistedDimensions.isEmpty() || !blacklistedDimensions.contains(dimID.toString())) {
+			return whitelistedDimensions.isEmpty() || whitelistedDimensions.contains(dimID.toString());
 		}
 		return false;
 	}
@@ -139,7 +136,7 @@ public class TreeConfig {
 		if (blacklistedBiomes.contains(biome)) {
 			return false;
 		}
-		return BiomeDictionary.getTypes(biome).stream().noneMatch(blacklistedBiomeTypes::contains);
+		return Arrays.stream(Biome.Category.values()).noneMatch(blacklistedBiomeTypes::contains);
 	}
 
 	public static float getSpawnRarity(@Nullable ResourceLocation treeUID) {

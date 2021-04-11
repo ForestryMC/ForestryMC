@@ -27,9 +27,9 @@ public class CommandListAlleles {
 	}
 
 	public static int execute(CommandContext<CommandSource> context) throws CommandException, CommandSyntaxException {
-		PlayerEntity player = context.getSource().asPlayer();
+		PlayerEntity player = context.getSource().getPlayerOrException();
 
-		ItemStack stack = player.getHeldItemMainhand();
+		ItemStack stack = player.getMainHandItem();
 
 		Optional<IIndividual> individual = GeneticsAPI.apiInstance.getRootHelper().getIndividual(stack);
 		if (!individual.isPresent()) {
@@ -41,10 +41,10 @@ public class CommandListAlleles {
 		for (IChromosome chromosome : genome.getChromosomes()) {
 			IChromosomeType type = chromosome.getType();
 
-			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + I18n.format(genome.getActiveAllele(type).getLocalisationKey()) + " " + I18n.format(genome.getInactiveAllele(type).getLocalisationKey()));
+			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + I18n.get(genome.getActiveAllele(type).getLocalisationKey()) + " " + I18n.get(genome.getInactiveAllele(type).getLocalisationKey()));
 		}
 
-		GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles().forEach(a -> System.out.println(a.getRegistryName() + ": " + I18n.format(a.getLocalisationKey())));
+		GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles().forEach(a -> System.out.println(a.getRegistryName() + ": " + I18n.get(a.getLocalisationKey())));
 
 		return 1;
 	}

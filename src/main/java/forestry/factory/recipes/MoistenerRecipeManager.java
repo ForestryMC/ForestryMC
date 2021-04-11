@@ -28,7 +28,7 @@ public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerR
 
 	@Override
 	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		addRecipe(new MoistenerRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), product, timePerItem));
+		addRecipe(new MoistenerRecipe(IForestryRecipe.anonymous(), Ingredient.of(resource), product, timePerItem));
 	}
 
 	@Override

@@ -22,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import net.minecraftforge.event.ForgeEventFactory;
-
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.ItemStackUtil;
@@ -56,15 +54,16 @@ public class CropDestroy extends Crop {
 	@Override
 	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvested = Block.getDrops(blockState, (ServerWorld) world, pos, world.getTileEntity(pos));    //TODO - method safety
-		NonNullList<ItemStack> nnHarvested = NonNullList.from(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));    //TODO very messy
-		float chance = ForgeEventFactory.fireBlockHarvesting(nnHarvested, world, pos, blockState, 0, 1.0F, false, null);
-
+		List<ItemStack> harvested = Block.getDrops(blockState, (ServerWorld) world, pos, world.getBlockEntity(pos));    //TODO - method safety
+		NonNullList<ItemStack> nnHarvested = NonNullList.of(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));    //TODO very messy
+		//float chance = ForgeEventFactory.fireBlockHarvesting(nnHarvested, world, pos, blockState, 0, 1.0F, false, null);
+		//TODO: Fix dropping
+		float chance = 1.0F;
 		boolean removedSeed = germling.isEmpty();
 		Iterator<ItemStack> dropIterator = harvested.iterator();
 		while (dropIterator.hasNext()) {
 			ItemStack next = dropIterator.next();
-			if (world.rand.nextFloat() <= chance) {
+			if (world.random.nextFloat() <= chance) {
 				if (!removedSeed && ItemStackUtil.isIdenticalItem(next, germling)) {
 					next.shrink(1);
 					if (next.isEmpty()) {
@@ -81,13 +80,13 @@ public class CropDestroy extends Crop {
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
 		if (replantState != null) {
-			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		} else {
 			//TODO right call?
 			world.removeBlock(pos, false);
 		}
 		if (!(harvested instanceof NonNullList)) {
-			return NonNullList.from(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));
+			return NonNullList.of(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));
 		} else {
 			return (NonNullList<ItemStack>) harvested;
 		}

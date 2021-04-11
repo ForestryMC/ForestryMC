@@ -83,7 +83,7 @@ public class PacketHandlerServer {
 	public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
 		Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
 		ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
-		player.connection.sendPacket(payload.getThis());
+		player.connection.send(payload.getThis());
 	}
 
 	//	@OnlyIn(Dist.CLIENT)

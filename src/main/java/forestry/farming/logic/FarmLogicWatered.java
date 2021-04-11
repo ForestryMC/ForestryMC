@@ -46,7 +46,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			return true;
 		}
 
-		return maintainCrops(world, farmHousing, pos.up(), direction, extent);
+		return maintainCrops(world, farmHousing, pos.above(), direction, extent);
 
 	}
 
@@ -65,20 +65,20 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 			for (int i = 0; i < extent; i++) {
 				BlockPos position = translateWithOffset(pos, direction, i);
-				if (!world.isBlockLoaded(position)) {
+				if (!world.hasChunkAt(position)) {
 					break;
 				}
 
 				BlockState state = world.getBlockState(position);
 				if (!isValidPosition(farmHousing, direction, position, CultivationType.SOIL)
-					|| !BlockUtil.isBreakableBlock(state, world, pos)
-					|| isAcceptedSoil(state)
-					|| isWaterSourceBlock(world, position)
-					|| !farmHousing.getFarmInventory().hasResources(resources)) {
+						|| !BlockUtil.isBreakableBlock(state, world, pos)
+						|| isAcceptedSoil(state)
+						|| isWaterSourceBlock(world, position)
+						|| !farmHousing.getFarmInventory().hasResources(resources)) {
 					continue;
 				}
 
-				BlockPos platformPosition = position.down();
+				BlockPos platformPosition = position.below();
 				if (!farmHousing.isValidPlatform(world, platformPosition)) {
 					break;
 				}
@@ -107,7 +107,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 
@@ -115,7 +115,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 				continue;
 			}
 
-			BlockPos platformPosition = position.down();
+			BlockPos platformPosition = position.below();
 			if (!farmHousing.isValidPlatform(world, platformPosition)) {
 				break;
 			}
@@ -157,11 +157,11 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 			}
 
 			BlockUtil.getBlockDrops(world, position).forEach(farmHousing::addPendingProduct);
-			BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.getDefaultState());
+			BlockUtil.setBlockWithPlaceSound(world, position, Blocks.WATER.defaultBlockState());
 			farmHousing.removeLiquid(STACK_WATER);
 			return true;
 		} else if (status == WaterStatus.ICE) {
-			BlockUtil.setBlockWithPlaceSound(world, waterPair.getValue(), Blocks.WATER.getDefaultState());
+			BlockUtil.setBlockWithPlaceSound(world, waterPair.getValue(), Blocks.WATER.defaultBlockState());
 		}
 		return false;
 	}
@@ -170,7 +170,7 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 		// don't place water close to other water
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
-				BlockPos offsetPosition = position.add(x, 0, z);
+				BlockPos offsetPosition = position.offset(x, 0, z);
 				if (isWaterSourceBlock(world, offsetPosition)) {
 					return Pair.of(WaterStatus.WATER_SOURCE, BlockPos.ZERO);
 				}
@@ -190,14 +190,14 @@ public abstract class FarmLogicWatered extends FarmLogicSoil {
 
 	private boolean couldFlow(World world, BlockPos position) {
 		for (int x = -1; x <= 1; x++) {
-			BlockPos offsetPosition = position.add(x, 0, 0);
-			if (world.isAirBlock(offsetPosition)) {
+			BlockPos offsetPosition = position.offset(x, 0, 0);
+			if (world.isEmptyBlock(offsetPosition)) {
 				return true;
 			}
 		}
 		for (int z = -1; z <= 1; z++) {
-			BlockPos offsetPosition = position.add(0, 0, z);
-			if (world.isAirBlock(offsetPosition)) {
+			BlockPos offsetPosition = position.offset(0, 0, z);
+			if (world.isEmptyBlock(offsetPosition)) {
 				return true;
 			}
 		}

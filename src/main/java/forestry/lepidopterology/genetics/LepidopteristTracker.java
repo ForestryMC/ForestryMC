@@ -12,13 +12,13 @@ package forestry.lepidopterology.genetics;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-import genetics.api.individual.IIndividual;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.BreedingTracker;
+
+import genetics.api.individual.IIndividual;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
@@ -32,7 +32,7 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 	@Override
 	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
 		//TODO world cast
-		return ButterflyManager.butterflyRoot.getBreedingTracker(player.world, player.getGameProfile());
+		return ButterflyManager.butterflyRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}
 
 	@Override

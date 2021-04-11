@@ -23,8 +23,8 @@ public class GuiBackpack extends GuiForestry<ContainerBackpack> {
 		ContainerBackpack.Size size = container.getSize();
 
 		if (size == ContainerBackpack.Size.T2) {
-			xSize = 176;
-			ySize = 192;
+			imageWidth = 176;
+			imageHeight = 192;
 		}
 	}
 

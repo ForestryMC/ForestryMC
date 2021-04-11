@@ -35,12 +35,12 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 	}
 
 	public boolean canStorePollen() {
-		if (getStackInSlot(SLOT_SIEVE).isEmpty()) {
+		if (getItem(SLOT_SIEVE).isEmpty()) {
 			return false;
 		}
 
 		for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-			if (getStackInSlot(i).isEmpty()) {
+			if (getItem(i).isEmpty()) {
 				return true;
 			}
 		}
@@ -50,8 +50,8 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	public void storePollenStack(ItemStack itemstack) {
 		for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-			if (getStackInSlot(i).isEmpty()) {
-				setInventorySlotContents(i, itemstack);
+			if (getItem(i).isEmpty()) {
+				setItem(i, itemstack);
 				return;
 			}
 		}
@@ -62,10 +62,10 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 	public void onTake(int slotIndex, PlayerEntity player) {
 		if (slotIndex == SLOT_SIEVE) {
 			for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
-				setInventorySlotContents(i, ItemStack.EMPTY);
+				setItem(i, ItemStack.EMPTY);
 			}
 		} else {
-			setInventorySlotContents(SLOT_SIEVE, ItemStack.EMPTY);
+			setItem(SLOT_SIEVE, ItemStack.EMPTY);
 		}
 	}
 }

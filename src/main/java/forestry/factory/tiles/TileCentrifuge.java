@@ -48,7 +48,6 @@ import forestry.core.utils.InventoryUtil;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
-import forestry.factory.recipes.CentrifugeRecipeManager;
 
 //import forestry.factory.triggers.FactoryTriggers;
 //
@@ -75,8 +74,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		compound = super.write(compound);
+	public CompoundNBT save(CompoundNBT compound) {
+		compound = super.save(compound);
 
 		sockets.write(compound);
 
@@ -86,7 +85,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 			if (offspring[i] != null) {
 				CompoundNBT products = new CompoundNBT();
 				products.putByte("Slot", (byte) i);
-				offspring[i].write(products);
+				offspring[i].save(products);
 				nbttaglist.add(products);
 			}
 		}
@@ -95,17 +94,17 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		super.read(state, compound);
+	public void load(BlockState state, CompoundNBT compound) {
+		super.load(state, compound);
 
 		ListNBT nbttaglist = compound.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
 			CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
-			pendingProducts.add(ItemStack.read(CompoundNBT1));
+			pendingProducts.add(ItemStack.of(CompoundNBT1));
 		}
 		sockets.read(compound);
 
-		ItemStack chip = sockets.getStackInSlot(0);
+		ItemStack chip = sockets.getItem(0);
 		if (!chip.isEmpty()) {
 			ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(chip);
 			if (chipset != null) {
@@ -134,7 +133,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 
 		if (!pendingProducts.isEmpty()) {
-			craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
+			craftPreviewInventory.setItem(0, ItemStack.EMPTY);
 			return false;
 		}
 
@@ -143,21 +142,21 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 
 		// We are done, add products to queue
-		Collection<ItemStack> products = currentRecipe.getProducts(world.rand);
+		Collection<ItemStack> products = currentRecipe.getProducts(level.random);
 		pendingProducts.addAll(products);
 
 		//Add Item to preview slot.
-		ItemStack previewStack = getInternalInventory().getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).copy();
+		ItemStack previewStack = getInternalInventory().getItem(InventoryCentrifuge.SLOT_RESOURCE).copy();
 		previewStack.setCount(1);
-		craftPreviewInventory.setInventorySlotContents(0, previewStack);
+		craftPreviewInventory.setItem(0, previewStack);
 
-		getInternalInventory().decrStackSize(InventoryCentrifuge.SLOT_RESOURCE, 1);
+		getInternalInventory().removeItem(InventoryCentrifuge.SLOT_RESOURCE, 1);
 		return true;
 	}
 
 	private void checkRecipe() {
-		ItemStack resource = getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE);
-		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(getWorld().getRecipeManager(), resource);
+		ItemStack resource = getItem(InventoryCentrifuge.SLOT_RESOURCE);
+		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(getLevel().getRecipeManager(), resource);
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
@@ -181,7 +180,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		if (added) {
 			pendingProducts.pop();
 			if (pendingProducts.isEmpty()) {
-				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
+				craftPreviewInventory.setItem(0, ItemStack.EMPTY);
 			}
 		}
 
@@ -192,11 +191,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	@Override
 	public boolean hasResourcesMin(float percentage) {
 		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).isEmpty()) {
+		if (inventory.getItem(InventoryCentrifuge.SLOT_RESOURCE).isEmpty()) {
 			return false;
 		}
 
-		return (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getCount() / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
+		return (float) inventory.getItem(InventoryCentrifuge.SLOT_RESOURCE).getCount() / (float) inventory.getItem(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize() > percentage;
 	}
 
 	@Override
@@ -206,7 +205,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 		checkRecipe();
 
-		boolean hasResource = !getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).isEmpty();
+		boolean hasResource = !getItem(InventoryCentrifuge.SLOT_RESOURCE).isEmpty();
 
 		IErrorLogic errorLogic = getErrorLogic();
 		errorLogic.setCondition(!hasResource, EnumErrorCode.NO_RESOURCE);
@@ -227,12 +226,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	/* ISocketable */
 	@Override
 	public int getSocketCount() {
-		return sockets.getSizeInventory();
+		return sockets.getContainerSize();
 	}
 
 	@Override
 	public ItemStack getSocket(int slot) {
-		return sockets.getStackInSlot(slot);
+		return sockets.getItem(slot);
 	}
 
 	@Override
@@ -243,16 +242,16 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 		}
 
 		// Dispose correctly of old chipsets
-		if (!sockets.getStackInSlot(slot).isEmpty()) {
-			if (ChipsetManager.circuitRegistry.isChipset(sockets.getStackInSlot(slot))) {
-				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getStackInSlot(slot));
+		if (!sockets.getItem(slot).isEmpty()) {
+			if (ChipsetManager.circuitRegistry.isChipset(sockets.getItem(slot))) {
+				ICircuitBoard chipset = ChipsetManager.circuitRegistry.getCircuitBoard(sockets.getItem(slot));
 				if (chipset != null) {
 					chipset.onRemoval(this);
 				}
 			}
 		}
 
-		sockets.setInventorySlotContents(slot, stack);
+		sockets.setItem(slot, stack);
 		if (stack.isEmpty()) {
 			return;
 		}
@@ -279,6 +278,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
-		craftPreviewInventory.setInventorySlotContents(0, itemStack);
+		craftPreviewInventory.setItem(0, itemStack);
 	}
 }

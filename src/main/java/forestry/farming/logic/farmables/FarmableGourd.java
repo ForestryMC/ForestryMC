@@ -51,7 +51,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(itemstack, seed);
+		return ItemStack.isSame(itemstack, seed);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class FarmableGourd implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		return BlockUtil.setBlockWithPlaceSound(world, pos, stem.getDefaultState());
+		return BlockUtil.setBlockWithPlaceSound(world, pos, stem.defaultBlockState());
 	}
 
 }

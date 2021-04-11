@@ -28,16 +28,16 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 
+import forestry.api.core.ForestryEvent;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.network.packets.PacketGenomeTrackerSync;
+import forestry.core.utils.NetworkUtil;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.root.IRootDefinition;
-
-import forestry.api.core.ForestryEvent;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.network.packets.PacketGenomeTrackerSync;
-import forestry.core.utils.NetworkUtil;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
@@ -84,7 +84,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Override
 	public void setModeName(String name) {
 		this.modeName = name;
-		markDirty();
+		setDirty();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
 		if (world != null && username != null && username.getName() != null) {
-			PlayerEntity player = world.getPlayerByUuid(username.getId());
+			PlayerEntity player = world.getPlayerByUUID(username.getId());
 			if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
 				IBreedingTracker breedingTracker = getBreedingTracker(player);
 				String modeName = breedingTracker.getModeName();
@@ -133,16 +133,16 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
 	@Override
 	public void decodeFromNBT(CompoundNBT compound) {
-		read(compound);
+		load(compound);
 	}
 
 	@Override
 	public void encodeToNBT(CompoundNBT compound) {
-		write(compound);
+		save(compound);
 	}
 
 	@Override
-	public void read(CompoundNBT CompoundNBT) {
+	public void load(CompoundNBT CompoundNBT) {
 
 		if (CompoundNBT.contains(MODE_NAME_KEY)) {
 			modeName = CompoundNBT.getString(MODE_NAME_KEY);
@@ -155,7 +155,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundNBT save(CompoundNBT CompoundNBT) {
 		writeToNBT(CompoundNBT, discoveredSpecies, discoveredMutations, researchedMutations);
 		return CompoundNBT;
 	}
@@ -210,7 +210,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		String mutationString = getMutationString(mutation);
 		if (!discoveredMutations.contains(mutationString)) {
 			discoveredMutations.add(mutationString);
-			markDirty();
+			setDirty();
 
 			IRootDefinition speciesRoot = GeneticsAPI.apiInstance.getRoot(speciesRootUID());
 			ForestryEvent event = new ForestryEvent.MutationDiscovered(speciesRoot, username, mutation, this);
@@ -266,7 +266,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		String mutationString = getMutationString(mutation);
 		if (!researchedMutations.contains(mutationString)) {
 			researchedMutations.add(mutationString);
-			markDirty();
+			setDirty();
 
 			registerMutation(mutation);
 

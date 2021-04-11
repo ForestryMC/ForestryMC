@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -28,14 +29,14 @@ public class InventoryEngineBiogas extends InventoryAdapterTile<TileEngineBiogas
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return true;
 	}
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 

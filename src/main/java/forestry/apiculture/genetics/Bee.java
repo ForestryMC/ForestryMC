@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
@@ -37,18 +38,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.components.ComponentKeys;
-
-import genetics.individual.Genome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -80,6 +69,17 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.VectUtil;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.components.ComponentKeys;
+import genetics.individual.Genome;
 
 public class Bee extends IndividualLiving implements IBee {
 	private static final String NBT_NATURAL = "NA";
@@ -238,7 +238,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / Night or darkness requires nocturnal species
-		if (world.isDaytime()) {
+		if (world.isDay()) {
 			if (!canWorkDuringDay()) {
 				errorStates.add(EnumErrorCode.NOT_NIGHT);
 			}
@@ -259,7 +259,7 @@ public class Bee extends IndividualLiving implements IBee {
 		}
 
 		// / Check for the sky, except if in hell
-		if (!world.func_230315_m_().func_236037_d_()) {//TODO: We used 'isNether' earlier not sure if 'func_236037_d_' is the right replacment method
+		if (!world.dimensionType().hasCeiling()) {//TODO: We used 'isNether' earlier not sure if 'hasCeiling' is the right replacment method
 			if (!housing.canBlockSeeTheSky() && !canWorkUnderground(beeModifier)) {
 				errorStates.add(EnumErrorCode.NO_SKY);
 			}
@@ -327,11 +327,11 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public List<Biome> getSuitableBiomes() {
-		List<Biome> suitableBiomes = new ArrayList<>();
+	public List<ResourceLocation> getSuitableBiomes() {
+		List<ResourceLocation> suitableBiomes = new ArrayList<>();
 		for (Biome biome : ForgeRegistries.BIOMES) {
 			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(biome);
+				suitableBiomes.add(biome.getRegistryName());
 			}
 		}
 
@@ -437,7 +437,7 @@ public class Bee extends IndividualLiving implements IBee {
 			boolean skip = false;
 
 			for (ItemStack compare : products) {
-				if (second.isItemEqual(compare)) {
+				if (second.sameItem(compare)) {
 					skip = true;
 					break;
 				}
@@ -474,13 +474,13 @@ public class Bee extends IndividualLiving implements IBee {
 		float speed = genome.getActiveValue(BeeChromosomes.SPEED) * beeHousingModifier.getProductionModifier(genome, 1f) * beeModeModifier.getProductionModifier(genome, 1f);
 
 		// / Primary Products
-		primary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> product.getChance() * speed, world.rand);
+		primary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> product.getChance() * speed, world.random);
 		// / Secondary Products
-		secondary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> Math.round(product.getChance() / 2) * speed, world.rand);
+		secondary.getProducts().addProducts(world, housing.getCoordinates(), products, (product) -> Math.round(product.getChance() / 2) * speed, world.random);
 
 		// / Specialty products
 		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
-			primary.getSpecialties().addProducts(world, housing.getCoordinates(), products, (product) -> product.getChance() * speed, world.rand);
+			primary.getSpecialties().addProducts(world, housing.getCoordinates(), products, (product) -> product.getChance() * speed, world.random);
 		}
 
 		BlockPos housingCoordinates = housing.getCoordinates();
@@ -554,7 +554,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(world.random, parent2[i]);
 			}
 		}
 
@@ -576,7 +576,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAlleleBeeSpecies allele0;
 		IAlleleBeeSpecies allele1;
 
-		if (world.rand.nextBoolean()) {
+		if (world.random.nextBoolean()) {
 			allele0 = (IAlleleBeeSpecies) parent1[BeeChromosomes.SPECIES.ordinal()].getActiveAllele();
 			allele1 = (IAlleleBeeSpecies) parent2[BeeChromosomes.SPECIES.ordinal()].getInactiveAllele();
 
@@ -610,7 +610,7 @@ public class Bee extends IndividualLiving implements IBee {
 				chance += mutationBoost;
 			}
 
-			if (chance > world.rand.nextFloat() * 100) {
+			if (chance > world.random.nextFloat() * 100) {
 				breedingTracker.registerMutation(mutation);
 				return BeeManager.beeRoot.getKaryotype().templateAsChromosomes(mutation.getTemplate());
 			}
@@ -629,7 +629,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorldObj();
-		Random random = world.rand;
+		Random random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -670,7 +670,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = (int) (genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorldObj();
-		Random random = world.rand;
+		Random random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -716,7 +716,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		World world = housing.getWorldObj();
-		Random random = world.rand;
+		Random random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {

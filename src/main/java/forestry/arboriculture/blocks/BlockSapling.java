@@ -39,14 +39,15 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
+import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
-	protected static final VoxelShape SHAPE = Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
+	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
 	public BlockSapling() {
-		super(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().hardnessAndResistance(0.0F).sound(SoundType.PLANT));
+		super(Block.Properties.of(Material.PLANT).noCollission().strength(0.0F).sound(SoundType.GRASS));
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new TileSapling();
 	}
 
@@ -80,15 +81,15 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	@Override
 	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
-		if (!worldIn.isRemote && !canBlockStay(worldIn, pos)) {
+		if (!worldIn.isClientSide && !canBlockStay(worldIn, pos)) {
 			dropAsSapling(worldIn, pos);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 		}
 	}
 
 	@Override
 	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-		ItemStack drop = getDrop(builder.getWorld(), builder.assertPresent(LootParameters.POSITION));
+		ItemStack drop = getDrop(builder.getLevel(), new BlockPos(builder.getParameter(LootParameters.ORIGIN)));
 		if (!drop.isEmpty()) {
 			return Collections.singletonList(drop);
 		}
@@ -106,17 +107,17 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	@Override
 	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isRemote && canHarvestBlock(state, world, pos, player)) {
+		if (!world.isClientSide && canHarvestBlock(state, world, pos, player)) {
 			if (!player.isCreative()) {
 				dropAsSapling(world, pos);
 			}
 		}
 
-		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		return world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
 	}
 
 	private static void dropAsSapling(World world, BlockPos pos) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 		ItemStack drop = getDrop(world, pos);
@@ -138,8 +139,13 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	/* GROWNING */
 	@Override
-	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
-		if (world.rand.nextFloat() >= 0.45F) {
+	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+		return true;
+	}
+
+	@Override
+	public boolean isBonemealSuccess(World world, Random rand, BlockPos pos, BlockState state) {
+		if (world.random.nextFloat() >= 0.45F) {
 			return false;
 		}
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
@@ -147,12 +153,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
-		return true;
-	}
-
-	@Override
-	public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
+	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);

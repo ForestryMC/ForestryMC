@@ -72,7 +72,7 @@ public class MultiblockWorldRegistry {
 	public void tickStart() {
 		if (!controllers.isEmpty()) {
 			for (IMultiblockControllerInternal controller : controllers) {
-				if (controller.getWorldObj() == world && controller.getWorldObj().isRemote == world.isRemote()) {
+				if (controller.getWorldObj() == world && controller.getWorldObj().isClientSide == world.isClientSide()) {
 					if (controller.isEmpty()) {
 						// This happens on the server when the user breaks the last block. It's fine.
 						// Mark 'er dead and move on.
@@ -90,7 +90,7 @@ public class MultiblockWorldRegistry {
 	 * Called prior to processing multiblock controllers. Do bookkeeping.
 	 */
 	public void processMultiblockChanges() {
-		AbstractChunkProvider chunkProvider = world.getChunkProvider();
+		AbstractChunkProvider chunkProvider = world.getChunkSource();
 		BlockPos coord;
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
@@ -314,7 +314,7 @@ public class MultiblockWorldRegistry {
 	public void onPartAdded(IMultiblockComponent part) {
 		BlockPos worldLocation = part.getCoordinates();
 
-		if (!world.getChunkProvider().chunkExists(worldLocation.getX() >> 4, worldLocation.getZ() >> 4)) {
+		if (!world.getChunkSource().hasChunk(worldLocation.getX() >> 4, worldLocation.getZ() >> 4)) {
 			// Part goes into the waiting-for-chunk-load list
 			Set<IMultiblockComponent> partSet;
 			long chunkHash = ChunkPos.asLong(worldLocation.getX() >> 4, worldLocation.getZ() >> 4);

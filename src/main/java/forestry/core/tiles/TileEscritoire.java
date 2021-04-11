@@ -27,11 +27,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IIndividualRoot;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
@@ -46,6 +41,10 @@ import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
 
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IIndividualRoot;
+import genetics.utils.RootUtils;
+
 public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
 	private final EscritoireGame game = new EscritoireGame();
@@ -58,15 +57,15 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		game.read(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		game.write(compoundNBT);
 		return compoundNBT;
 	}
@@ -86,7 +85,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 			return;
 		}
 
-		Optional<IIndividual> optional = RootUtils.getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
+		Optional<IIndividual> optional = RootUtils.getIndividual(getItem(InventoryEscritoire.SLOT_ANALYZE));
 		if (!optional.isPresent()) {
 			return;
 		}
@@ -95,7 +94,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		IAlleleForestrySpecies species = individual.getGenome().getPrimary(IAlleleForestrySpecies.class);
 		IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
 		IResearchHandler<IIndividual> handler = root.getComponent(ForestryComponentKeys.RESEARCH);
-		for (ItemStack itemstack : handler.getResearchBounty(species, world, gameProfile, individual, game.getBountyLevel())) {
+		for (ItemStack itemstack : handler.getResearchBounty(species, level, gameProfile, individual, game.getBountyLevel())) {
 			InventoryUtil.addStack(getInternalInventory(), itemstack, InventoryEscritoire.SLOT_RESULTS_1, InventoryEscritoire.SLOTS_RESULTS_COUNT, true);
 		}
 	}
@@ -104,7 +103,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		int filledSlots = 0;
 		int required = game.getSampleSize(InventoryEscritoire.SLOTS_INPUT_COUNT);
 		for (int i = InventoryEscritoire.SLOT_INPUT_1; i < InventoryEscritoire.SLOT_INPUT_1 + required; i++) {
-			if (!getStackInSlot(i).isEmpty()) {
+			if (!getItem(i).isEmpty()) {
 				filledSlots++;
 			}
 		}
@@ -113,11 +112,11 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	}
 
 	public void probe() {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return;
 		}
 
-		ItemStack analyze = getStackInSlot(InventoryEscritoire.SLOT_ANALYZE);
+		ItemStack analyze = getItem(InventoryEscritoire.SLOT_ANALYZE);
 
 		if (!analyze.isEmpty() && areProbeSlotsFilled()) {
 			game.probe(analyze, this, InventoryEscritoire.SLOT_INPUT_1, InventoryEscritoire.SLOTS_INPUT_COUNT);
@@ -139,14 +138,14 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
-		data.writeItemStack(displayStack);
+		data.writeItem(displayStack);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
-		individualOnDisplayClient = data.readItemStack();
+		individualOnDisplayClient = data.readItem();
 	}
 
 	/* ISlotPickupWatcher */
@@ -155,16 +154,16 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-			NetworkUtil.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, worldPosition, level);
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		super.setInventorySlotContents(slotIndex, itemstack);
+	public void setItem(int slotIndex, ItemStack itemstack) {
+		super.setItem(slotIndex, itemstack);
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-			NetworkUtil.sendNetworkPacket(packet, pos, world);
+			NetworkUtil.sendNetworkPacket(packet, worldPosition, level);
 		}
 	}
 
@@ -175,18 +174,18 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
-		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
+		if (!ItemStack.matches(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
 			//TODO
-			Minecraft.getInstance().worldRenderer.markForRerender(getPos().getX(), getPos().getY(), getPos().getZ());
+			Minecraft.getInstance().levelRenderer.setSectionDirty(getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ());
 			//			world.markForRerender(getPos());
 		}
 	}
 
 	public ItemStack getIndividualOnDisplay() {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return individualOnDisplayClient;
 		}
-		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		return getItem(InventoryAnalyzer.SLOT_ANALYZE);
 	}
 }

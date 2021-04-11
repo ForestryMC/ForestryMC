@@ -13,18 +13,6 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
 import forestry.api.core.ILocatable;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterData;
@@ -33,6 +21,17 @@ import forestry.api.genetics.filter.IFilterRuleType;
 import forestry.core.utils.NetworkUtil;
 import forestry.sorting.network.packets.PacketFilterChangeGenome;
 import forestry.sorting.network.packets.PacketFilterChangeRule;
+
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
 
 public class FilterLogic implements IFilterLogic {
 	private final ILocatable locatable;
@@ -112,13 +111,13 @@ public class FilterLogic implements IFilterLogic {
 				}
 				if (filter.activeAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.activeAllele.getRegistryName().toString());
+					data.writeUtf(filter.activeAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
 				if (filter.inactiveAllele != null) {
 					data.writeBoolean(true);
-					data.writeString(filter.inactiveAllele.getRegistryName().toString());
+					data.writeUtf(filter.inactiveAllele.getRegistryName().toString());
 				} else {
 					data.writeBoolean(false);
 				}
@@ -138,10 +137,10 @@ public class FilterLogic implements IFilterLogic {
 			for (int j = 0; j < 3; j++) {
 				AlleleFilter filter = new AlleleFilter();
 				if (data.readBoolean()) {
-					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.readString(1024));
+					filter.activeAllele = AlleleUtils.getAlleleOrNull(data.readUtf(1024));
 				}
 				if (data.readBoolean()) {
-					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.readString(1024));
+					filter.inactiveAllele = AlleleUtils.getAlleleOrNull(data.readUtf(1024));
 				}
 				genomeFilter[i][j] = filter;
 			}

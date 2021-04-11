@@ -36,28 +36,28 @@ public abstract class InvWrapperBase implements IInventory {
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inv.getSizeInventory();
+	public int getContainerSize() {
+		return inv.getContainerSize();
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inv.getStackInSlot(slot);
+	public ItemStack getItem(int slot) {
+		return inv.getItem(slot);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		return inv.decrStackSize(slot, amount);
+	public ItemStack removeItem(int slot, int amount) {
+		return inv.removeItem(slot, amount);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slot) {
-		return inv.removeStackFromSlot(slot);
+	public ItemStack removeItemNoUpdate(int slot) {
+		return inv.removeItemNoUpdate(slot);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		inv.setInventorySlotContents(slot, itemstack);
+	public void setItem(int slot, ItemStack itemstack) {
+		inv.setItem(slot, itemstack);
 	}
 
 	//TODO inventory name
@@ -72,28 +72,28 @@ public abstract class InvWrapperBase implements IInventory {
 	//	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return inv.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return inv.getMaxStackSize();
 	}
 
 	@Override
-	public void markDirty() {
-		inv.markDirty();
+	public void setChanged() {
+		inv.setChanged();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
-		return inv.isUsableByPlayer(PlayerEntity);
+	public boolean stillValid(PlayerEntity PlayerEntity) {
+		return inv.stillValid(PlayerEntity);
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
-		inv.openInventory(player);
+	public void startOpen(PlayerEntity player) {
+		inv.startOpen(player);
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
-		inv.closeInventory(player);
+	public void stopOpen(PlayerEntity player) {
+		inv.stopOpen(player);
 	}
 
 	//TODO inventory name
@@ -103,8 +103,8 @@ public abstract class InvWrapperBase implements IInventory {
 	//	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return !checkItems || inv.isItemValidForSlot(slot, stack);
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		return !checkItems || inv.canPlaceItem(slot, stack);
 	}
 
 	//TODO inventory field
@@ -124,8 +124,8 @@ public abstract class InvWrapperBase implements IInventory {
 	//	}
 
 	@Override
-	public void clear() {
-		inv.clear();
+	public void clearContent() {
+		inv.clearContent();
 	}
 
 	public boolean checkItems() {

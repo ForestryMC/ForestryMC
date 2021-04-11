@@ -52,23 +52,23 @@ public class ForestryBlockLootTables extends BlockLootTables {
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			for (BlockDecorativeLeaves leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks()) {
-				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getDefinition(), DEFAULT_SAPLING_DROP_RATES));
+				this.add(leaves, (block) -> droppingWithChances(block, leaves.getDefinition(), NORMAL_LEAVES_SAPLING_CHANCES));
 			}
 			for (BlockDefaultLeaves leaves : ArboricultureBlocks.LEAVES_DEFAULT.getBlocks()) {
-				this.registerLootTable(leaves, (block) -> droppingWithChances(block, leaves.getTreeDefinition(), DEFAULT_SAPLING_DROP_RATES));
+				this.add(leaves, (block) -> droppingWithChances(block, leaves.getTreeDefinition(), NORMAL_LEAVES_SAPLING_CHANCES));
 			}
 			for (Map.Entry<TreeDefinition, FeatureBlock<BlockDefaultLeavesFruit, BlockItem>> entry : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getFeatureByType().entrySet()) {
 				FeatureBlock<BlockDefaultLeaves, BlockItem> defaultLeaves = ArboricultureBlocks.LEAVES_DEFAULT.get(entry.getKey());
 				Block defaultLeavesBlock = defaultLeaves.block();
 				Block fruitLeavesBlock = entry.getValue().block();
-				this.registerLootTable(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), DEFAULT_SAPLING_DROP_RATES));
+				this.add(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), NORMAL_LEAVES_SAPLING_CHANCES));
 			}
 		}
-		registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().addLootPool(new LootPool.Builder().addEntry(ItemLootEntry.builder(Blocks.DIRT))).addLootPool(new LootPool.Builder().acceptFunction(SetCount.builder(ConstantRange.of(2))).addEntry(ItemLootEntry.builder(CoreItems.PEAT.item()))));
+		registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().withPool(new LootPool.Builder().add(ItemLootEntry.lootTableItem(Blocks.DIRT))).withPool(new LootPool.Builder().apply(SetCount.setCount(ConstantRange.exactly(2))).add(ItemLootEntry.lootTableItem(CoreItems.PEAT.item()))));
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
-		registerDropSelfLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
-		registerDropSelfLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
+		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
+		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
 
 		//Apiculture
 		registerEmptyTables(ApicultureBlocks.CANDLE); // Handled by internal logic
@@ -92,10 +92,10 @@ public class ForestryBlockLootTables extends BlockLootTables {
 			Block block = ((FeatureBlock) feature).block();
 			ResourceLocation resourcelocation = block.getLootTable();
 			if (resourcelocation != LootTables.EMPTY && visited.add(resourcelocation)) {
-				LootTable.Builder builder = this.lootTables.remove(resourcelocation);
+				LootTable.Builder builder = this.map.remove(resourcelocation);
 
 				if (builder == null) {
-					builder = dropping(block);
+					builder = createSingleItemTable(block);
 					//throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", resourcelocation, Registry.BLOCK.getKey(block)));
 				}
 
@@ -103,58 +103,58 @@ public class ForestryBlockLootTables extends BlockLootTables {
 			}
 		}
 
-		if (!this.lootTables.isEmpty()) {
-			throw new IllegalStateException("Created block loot tables for non-blocks: " + this.lootTables.keySet());
+		if (!this.map.isEmpty()) {
+			throw new IllegalStateException("Created block loot tables for non-blocks: " + this.map.keySet());
 		}
 	}
 
 	@Override
-	public void registerSilkTouch(Block blockIn, Block drop) {
+	public void otherWhenSilkTouch(Block blockIn, Block drop) {
 		this.knownBlocks.add(blockIn);
-		super.registerSilkTouch(blockIn, drop);
+		super.otherWhenSilkTouch(blockIn, drop);
 	}
 
 	@Override
-	public void registerLootTable(Block blockIn, Function<Block, LootTable.Builder> builderFunction) {
+	public void add(Block blockIn, Function<Block, LootTable.Builder> builderFunction) {
 		this.knownBlocks.add(blockIn);
-		super.registerLootTable(blockIn, builderFunction);
+		super.add(blockIn, builderFunction);
 	}
 
 	@Override
-	public void registerLootTable(Block blockIn, LootTable.Builder builder) {
+	public void add(Block blockIn, LootTable.Builder builder) {
 		this.knownBlocks.add(blockIn);
-		super.registerLootTable(blockIn, builder);
+		super.add(blockIn, builder);
 	}
 
 	public static LootTable.Builder droppingWithChances(Block block, TreeDefinition definition, float... chances) {
-		return droppingWithSilkTouchOrShears(block,
-			withSurvivesExplosion(block, ItemLootEntry.builder(ArboricultureItems.SAPLING)
-				.acceptFunction(OrganismFunction.fromDefinition(definition)))
-				.acceptCondition(TableBonus.builder(Enchantments.FORTUNE, chances)));
+		return createSilkTouchOrShearsDispatchTable(block,
+				applyExplosionCondition(block, ItemLootEntry.lootTableItem(ArboricultureItems.SAPLING)
+						.apply(OrganismFunction.fromDefinition(definition)))
+						.when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)));
 	}
 
 	public void registerSilkTouch(FeatureBlock featureBlock, Block drop) {
-		registerSilkTouch(featureBlock.block(), drop);
+		otherWhenSilkTouch(featureBlock.block(), drop);
 	}
 
 	public void registerSilkTouch(FeatureBlock featureBlock, FeatureBlock drop) {
-		registerSilkTouch(featureBlock.block(), drop.block());
+		otherWhenSilkTouch(featureBlock.block(), drop.block());
 	}
 
 	public void registerLootTable(FeatureBlock featureBlock, Function<Block, LootTable.Builder> builderFunction) {
-		registerLootTable(featureBlock.block(), builderFunction);
+		add(featureBlock.block(), builderFunction);
 	}
 
 	public void registerDropping(FeatureBlock featureBlock, FeatureBlock frop) {
-		registerDropping(featureBlock.block(), frop.block());
+		dropOther(featureBlock.block(), frop.block());
 	}
 
 	public void registerLootTable(FeatureBlock featureBlock, LootTable.Builder builder) {
-		registerLootTable(featureBlock.block(), builder);
+		add(featureBlock.block(), builder);
 	}
 
 	public void registerDropping(FeatureBlock featureBlock, IItemProvider drop) {
-		registerDropping(featureBlock.block(), drop);
+		dropOther(featureBlock.block(), drop);
 	}
 
 	public void registerEmptyTables(FeatureBlockGroup blockGroup) {
@@ -167,7 +167,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
 
 	public void registerEmptyTables(Block... blocks) {
 		for (Block block : blocks) {
-			registerLootTable(block, blockNoDrop());
+			add(block, noDrop());
 		}
 	}
 }

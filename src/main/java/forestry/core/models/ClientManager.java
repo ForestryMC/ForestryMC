@@ -133,7 +133,7 @@ public class ClientManager {
 	}
 
 	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item) {
-		registerModel(model, block, item, block.getStateContainer().getValidStates());
+		registerModel(model, block, item, block.getStateDefinition().getPossibleStates());
 	}
 
 	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
@@ -149,7 +149,7 @@ public class ClientManager {
 		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
 			for (BlockState state : entry.states) {
-				registry.put(BlockModelShapes.getModelLocation(state), entry.model);
+				registry.put(BlockModelShapes.stateToModelLocation(state), entry.model);
 			}
 			if (entry.item != null) {
 				ResourceLocation registryName = entry.item.getRegistryName();

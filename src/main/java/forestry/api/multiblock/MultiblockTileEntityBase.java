@@ -31,7 +31,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 
 	@Override
 	public BlockPos getCoordinates() {
-		return getPos();
+		return getBlockPos();
 	}
 
 	@Override
@@ -46,41 +46,41 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 		multiblockLogic.readFromNBT(data);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		data = super.save(data);
 		multiblockLogic.write(data);
 		return data;
 	}
 
 	@Override
-	public void remove() {
-		super.remove();
-		multiblockLogic.invalidate(world, this);
+	public void setRemoved() {
+		super.setRemoved();
+		multiblockLogic.invalidate(level, this);
 	}
 
 	@Override
 	public void onChunkUnloaded() {
 		super.onChunkUnloaded();
-		multiblockLogic.onChunkUnload(world, this);
+		multiblockLogic.onChunkUnload(level, this);
 	}
 
 	@Override
-	public final void validate() {
-		super.validate();
-		multiblockLogic.validate(world, this);
+	public final void clearRemoved() {
+		super.clearRemoved();
+		multiblockLogic.validate(level, this);
 	}
 
 	/* Network Communication */
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	@OnlyIn(Dist.CLIENT)
 	public final void onDataPacket(NetworkManager network, SUpdateTileEntityPacket packet) {
 		super.onDataPacket(network, packet);
-		CompoundNBT nbtData = packet.getNbtCompound();
+		CompoundNBT nbtData = packet.getTag();
 		multiblockLogic.decodeDescriptionPacket(nbtData);
 		this.decodeDescriptionPacket(nbtData);
 	}

@@ -30,17 +30,17 @@ public class FarmLogicGourd extends FarmLogicWatered {
 	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 
 			BlockState state = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)
-				|| !isValidPosition(farmHousing, direction, position, CultivationType.CROP)) {
+			if (!world.isEmptyBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)
+					|| !isValidPosition(farmHousing, direction, position, CultivationType.CROP)) {
 				continue;
 			}
 
-			BlockState groundState = world.getBlockState(position.down());
+			BlockState groundState = world.getBlockState(position.below());
 			if (isAcceptedSoil(groundState)) {
 				return trySetCrop(world, farmHousing, position, direction);
 			}
@@ -61,7 +61,7 @@ public class FarmLogicGourd extends FarmLogicWatered {
 
 	@Override
 	protected boolean isValidPosition(IFarmHousing housing, FarmDirection direction, BlockPos position, CultivationType type) {
-		BlockPos farmLocation = housing.getFarmCorner(direction).offset(direction.getFacing());
+		BlockPos farmLocation = housing.getFarmCorner(direction).relative(direction.getFacing());
 		int xVal = farmLocation.getX() & 1;
 		int zVal = farmLocation.getZ() & 1;
 		boolean uneven = ((position.getX() & 1) != xVal) ^ ((position.getZ() & 1) != zVal);

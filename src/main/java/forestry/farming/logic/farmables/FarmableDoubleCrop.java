@@ -23,7 +23,7 @@ public class FarmableDoubleCrop extends FarmableBase {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		BlockPos posUp = pos.up();
+		BlockPos posUp = pos.above();
 		BlockState stateUp = world.getBlockState(posUp);
 		if (blockState != matureState || stateUp != topMatureState) {
 			return null;

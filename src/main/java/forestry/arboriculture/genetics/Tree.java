@@ -25,6 +25,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
@@ -126,13 +127,13 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* GROWTH */
 	@Override
-	public Feature<NoFeatureConfig> getTreeGenerator(World world, BlockPos pos, boolean wasBonemealed) {
+	public Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().getTreeFeature(this);
 	}
 
 	@Override
 	public boolean canStay(IBlockReader world, BlockPos pos) {
-		BlockPos blockPos = pos.down();
+		BlockPos blockPos = pos.below();
 		BlockState blockState = world.getBlockState(blockPos);
 
 		Block block = blockState.getBlock();
@@ -272,7 +273,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		float chance = genome.getActiveValue(TreeChromosomes.FERTILITY) * modifier;
 
-		if (world.rand.nextFloat() <= chance) {
+		if (world.random.nextFloat() <= chance) {
 			if (mate == null) {
 				prod.add(TreeManager.treeRoot.getTree(world, new Genome(TreeManager.treeRoot.getKaryotype(), genome.getChromosomes())));
 			} else {
@@ -301,7 +302,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 		for (int i = 0; i < parent1.length; i++) {
 			if (parent1[i] != null && parent2[i] != null) {
-				chromosomes[i] = parent1[i].inheritChromosome(world.rand, parent2[i]);
+				chromosomes[i] = parent1[i].inheritChromosome(world.random, parent2[i]);
 			}
 		}
 
@@ -318,7 +319,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		IAlleleTreeSpecies allele0;
 		IAlleleTreeSpecies allele1;
 
-		if (world.rand.nextBoolean()) {
+		if (world.random.nextBoolean()) {
 			allele0 = (IAlleleTreeSpecies) parent1[TreeChromosomes.SPECIES.ordinal()].getActiveAllele();
 			allele1 = (IAlleleTreeSpecies) parent2[TreeChromosomes.SPECIES.ordinal()].getInactiveAllele();
 
@@ -358,7 +359,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 				chance += mutationBoost;
 			}
 
-			if (chance > world.rand.nextFloat() * 100) {
+			if (chance > world.random.nextFloat() * 100) {
 				return TreeManager.treeRoot.getKaryotype().templateAsChromosomes(treeMutation.getTemplate());
 			}
 		}

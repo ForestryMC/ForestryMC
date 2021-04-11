@@ -24,7 +24,7 @@ public class ForestrySpriteUploader extends SpriteUploader implements ISpriteReg
 	}
 
 	@Override
-	protected Stream<ResourceLocation> getResourceLocations() {
+	protected Stream<ResourceLocation> getResourcesToLoad() {
 		return Collections.unmodifiableSet(this.registeredSprites).stream();
 	}
 

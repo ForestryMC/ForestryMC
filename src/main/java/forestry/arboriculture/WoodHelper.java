@@ -25,7 +25,7 @@ public class WoodHelper {
 				displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
 			}
 		} else if (woodType instanceof EnumVanillaWoodType) {
-			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getDisplayName();
+			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getHoverName();
 		} else {
 			throw new IllegalArgumentException("Unknown wood type: " + woodType);
 		}

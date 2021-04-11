@@ -46,7 +46,7 @@ public class RenderHelper {
 		if (dummyEntityItem == null) {
 			dummyEntityItem = new ItemEntity(world, 0, 0, 0);
 		} else {
-			dummyEntityItem.world = world;
+			dummyEntityItem.level = world;
 		}
 		return dummyEntityItem;
 	}
@@ -60,10 +60,10 @@ public class RenderHelper {
 			dummyItem.tick();
 		}
 
-		EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
-		renderManager.renderEntityStatic(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
+		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+		renderManager.render(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
 
-		dummyItem.world = null;
+		dummyItem.level = null;
 	}
 
 	public void setRotation(Vector3f baseRotation) {
@@ -71,7 +71,7 @@ public class RenderHelper {
 	}
 
 	public void rotate(Quaternion rotation) {
-		transformation.rotate(rotation);
+		transformation.mulPose(rotation);
 	}
 
 	public void translate(double x, double y, double z) {
@@ -83,11 +83,11 @@ public class RenderHelper {
 	}
 
 	public void pop() {
-		transformation.pop();
+		transformation.popPose();
 	}
 
 	public void push() {
-		transformation.push();
+		transformation.pushPose();
 	}
 
 	public void renderModel(IVertexBuilder builder, ModelRenderer... renderers) {
@@ -100,14 +100,14 @@ public class RenderHelper {
 
 	public void renderModel(IVertexBuilder builder, Vector3f rotation, ModelRenderer... renderers) {
 		for (ModelRenderer renderer : renderers) {
-			renderer.rotateAngleX = baseRotation.getX() + rotation.getX();
-			renderer.rotateAngleY = baseRotation.getY() + rotation.getY();
-			renderer.rotateAngleZ = baseRotation.getZ() + rotation.getZ();
+			renderer.xRot = baseRotation.x() + rotation.x();
+			renderer.yRot = baseRotation.y() + rotation.y();
+			renderer.zRot = baseRotation.z() + rotation.z();
 			renderer.render(transformation, builder, combinedLight, packetLight);
 		}
 	}
 
 	public void renderModel(ResourceLocation location, Vector3f rotation, ModelRenderer... renderers) {
-		renderModel(buffer.getBuffer(RenderType.getEntityCutout(location)), rotation, renderers);
+		renderModel(buffer.getBuffer(RenderType.entityCutout(location)), rotation, renderers);
 	}
 }

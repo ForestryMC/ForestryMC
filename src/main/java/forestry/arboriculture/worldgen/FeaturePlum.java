@@ -34,6 +34,6 @@ public class FeaturePlum extends FeatureTree {
 		if (radius > 4) {
 			radius = 4;
 		}
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.add(0, yCenter, 0), girth, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
 	}
 }

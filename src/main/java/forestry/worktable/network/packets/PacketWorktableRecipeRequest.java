@@ -34,7 +34,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 	private final MemorizedRecipe recipe;
 
 	public PacketWorktableRecipeRequest(TileWorktable worktable, MemorizedRecipe recipe) {
-		this.pos = worktable.getPos();
+		this.pos = worktable.getBlockPos();
 		this.recipe = recipe;
 	}
 
@@ -56,15 +56,15 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = new MemorizedRecipe(data);
 
-			TileUtil.actOnTile(player.world, pos, TileWorktable.class, worktable -> {
+			TileUtil.actOnTile(player.level, pos, TileWorktable.class, worktable -> {
 				worktable.setCurrentRecipe(recipe);
 
-				if (player.openContainer instanceof ContainerWorktable) {
-					ContainerWorktable containerWorktable = (ContainerWorktable) player.openContainer;
+				if (player.containerMenu instanceof ContainerWorktable) {
+					ContainerWorktable containerWorktable = (ContainerWorktable) player.containerMenu;
 					containerWorktable.updateCraftMatrix();
 				}
 
-				NetworkUtil.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketWorktableRecipeUpdate(worktable), pos, player.level);
 			});
 		}
 	}

@@ -49,27 +49,27 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 
 		basefront = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
-		basefront.rotationPointX = 8;
-		basefront.rotationPointY = 8;
-		basefront.rotationPointZ = 8;
+		basefront.x = 8;
+		basefront.y = 8;
+		basefront.z = 8;
 
 		baseback = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
-		baseback.rotationPointX = 8;
-		baseback.rotationPointY = 8;
-		baseback.rotationPointZ = 8;
+		baseback.x = 8;
+		baseback.y = 8;
+		baseback.z = 8;
 
 		resourceTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		resourceTank.addBox(-6F, -8F, -6F, 12, 16, 6);
-		resourceTank.rotationPointX = 8;
-		resourceTank.rotationPointY = 8;
-		resourceTank.rotationPointZ = 8;
+		resourceTank.x = 8;
+		resourceTank.y = 8;
+		resourceTank.z = 8;
 
 		productTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		productTank.addBox(-6F, -8F, 0F, 12, 16, 6);
-		productTank.rotationPointX = 8;
-		productTank.rotationPointY = 8;
-		productTank.rotationPointZ = 8;
+		productTank.x = 8;
+		productTank.y = 8;
+		productTank.z = 8;
 
 		textureBase = new ResourceLocation(Constants.MOD_ID, baseTexture + "base.png");
 		textureProductTank = new ResourceLocation(Constants.MOD_ID, baseTexture + "tank_product_empty.png");
@@ -88,9 +88,9 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 	public void renderTile(TileBase tile, RenderHelper helper) {
 		IRenderableTile generator = (IRenderableTile) tile;
 		World worldObj = tile.getWorldObj();
-		BlockState blockState = worldObj.getBlockState(tile.getPos());
+		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
-			Direction facing = blockState.get(BlockBase.FACING);
+			Direction facing = blockState.getValue(BlockBase.FACING);
 			render(generator.getResourceTankInfo(), generator.getProductTankInfo(), facing, helper);
 		}
 	}

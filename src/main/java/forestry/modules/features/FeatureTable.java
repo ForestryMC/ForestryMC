@@ -140,7 +140,7 @@ public abstract class FeatureTable<B extends FeatureTable.Builder<R, C, ? extend
 		}
 
 		protected String getIdentifier(IFeatureSubtype rowType, IFeatureSubtype columnType) {
-			return identifierType.apply(identifier, rowType.getString() + "_" + columnType.getString());
+			return identifierType.apply(identifier, rowType.getSerializedName() + "_" + columnType.getSerializedName());
 		}
 
 		public abstract G create();

@@ -36,7 +36,7 @@ public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifug
 			list.add(new ICentrifugeRecipe.Product(entry.getValue(), entry.getKey()));
 		}
 
-		ICentrifugeRecipe recipe = new CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.fromStacks(resource), list);
+		ICentrifugeRecipe recipe = new CentrifugeRecipe(IForestryRecipe.anonymous(), timePerItem, Ingredient.of(resource), list);
 		addRecipe(recipe);
 	}
 

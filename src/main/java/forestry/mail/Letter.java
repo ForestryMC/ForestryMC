@@ -121,7 +121,7 @@ public class Letter implements ILetter {
 	@Override
 	public void invalidatePostage() {
 		for (int i = SLOT_POSTAGE_1; i < SLOT_POSTAGE_1 + SLOT_POSTAGE_COUNT; i++) {
-			inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+			inventory.setItem(i, ItemStack.EMPTY);
 		}
 	}
 
@@ -227,13 +227,13 @@ public class Letter implements ILetter {
 	public void addTooltip(List<ITextComponent> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
 			list.add(new TranslationTextComponent("for.gui.mail.from")
-				.appendString(": " + this.sender.getName())
-				.mergeStyle(TextFormatting.GRAY));
+					.append(": " + this.sender.getName())
+					.withStyle(TextFormatting.GRAY));
 		}
 		if (this.recipient != null) {
 			list.add(new TranslationTextComponent("for.gui.mail.to")
-				.appendString(": " + this.getRecipientString())
-				.mergeStyle(TextFormatting.GRAY));
+					.append(": " + this.getRecipientString())
+					.withStyle(TextFormatting.GRAY));
 		}
 	}
 
@@ -244,62 +244,62 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public int getContainerSize() {
+		return inventory.getContainerSize();
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return inventory.getStackInSlot(var1);
+	public ItemStack getItem(int var1) {
+		return inventory.getItem(var1);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int var1, int var2) {
-		return inventory.decrStackSize(var1, var2);
+	public ItemStack removeItem(int var1, int var2) {
+		return inventory.removeItem(var1, var2);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return inventory.removeStackFromSlot(index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return inventory.removeItemNoUpdate(index);
 	}
 
 	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2) {
-		inventory.setInventorySlotContents(var1, var2);
+	public void setItem(int var1, ItemStack var2) {
+		inventory.setItem(var1, var2);
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return inventory.getMaxStackSize();
 	}
 
 	@Override
-	public void markDirty() {
-		inventory.markDirty();
+	public void setChanged() {
+		inventory.setChanged();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity var1) {
+	public boolean stillValid(PlayerEntity var1) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity var1) {
-		inventory.openInventory(var1);
+	public void startOpen(PlayerEntity var1) {
+		inventory.startOpen(var1);
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity var1) {
-		inventory.closeInventory(var1);
+	public void stopOpen(PlayerEntity var1) {
+		inventory.stopOpen(var1);
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return inventory.isItemValidForSlot(i, itemstack);
+	public boolean canPlaceItem(int i, ItemStack itemstack) {
+		return inventory.canPlaceItem(i, itemstack);
 	}
 
 	@Override
-	public void clear() {
-		inventory.clear();
+	public void clearContent() {
+		inventory.clearContent();
 	}
 }

@@ -20,20 +20,20 @@ public class AIButterflyFlee extends AIButterflyMovement {
 
 	public AIButterflyFlee(EntityButterfly entity) {
 		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
+		setFlags(EnumSet.of(Flag.MOVE));
 		//		setMutexBits(3);	TODO mutex
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 
-		PlayerEntity player = entity.world.getClosestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
+		PlayerEntity player = entity.level.getNearestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
-		if (player == null || player.isSneaking()) {
+		if (player == null || player.isShiftKeyDown()) {
 			return false;
 		}
 
-		if (!entity.getEntitySenses().canSee(player)) {
+		if (!entity.getSensing().canSee(player)) {
 			return false;
 		}
 
@@ -42,7 +42,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 			return false;
 		}
 
-		if (player.getDistanceSq(flightTarget.x, flightTarget.y, flightTarget.z) < player.getDistance(entity)) {
+		if (player.distanceToSqr(flightTarget.x, flightTarget.y, flightTarget.z) < player.distanceTo(entity)) {
 			return false;
 		}
 

@@ -23,7 +23,7 @@ public class DisplayHelper<I extends IIndividual> implements IDisplayHelper<I> {
 
 	@Override
 	public String getLocalizedShortName(IChromosomeType chromosomeType) {
-		return I18n.format(getTranslationKeyShort(chromosomeType));
+		return I18n.get(getTranslationKeyShort(chromosomeType));
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class DisplayHelper<I extends IIndividual> implements IDisplayHelper<I> {
 
 	@Override
 	public String getLocalizedName(IChromosomeType chromosomeType) {
-		return I18n.format(getTranslationKey(chromosomeType));
+		return I18n.get(getTranslationKey(chromosomeType));
 	}
 
 	@Override

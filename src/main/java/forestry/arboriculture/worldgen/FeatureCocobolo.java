@@ -36,15 +36,15 @@ public class FeatureCocobolo extends FeatureTree {
 		int leafSpawn = height;
 
 		for (BlockPos treeTop : branchEnds) {
-			FeatureHelper.addBlock(world, treeTop.up(), leaf, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.addBlock(world, treeTop.above(), leaf, FeatureHelper.EnumReplaceMode.AIR);
 		}
 		leafSpawn--;
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		if (height > 10) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 2 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 2 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		}
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
 		leafSpawn--;
 
@@ -55,7 +55,7 @@ public class FeatureCocobolo extends FeatureTree {
 			}
 
 			float radius = (leafSpawn % 2 == 0) ? 2 + girth : girth;
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(offset, leafSpawn, offset), girth, radius, 1, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(offset, leafSpawn, offset), girth, radius, 1, FeatureHelper.EnumReplaceMode.AIR);
 
 			leafSpawn--;
 		}

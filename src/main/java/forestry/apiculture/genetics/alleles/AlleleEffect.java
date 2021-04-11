@@ -20,9 +20,6 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.AlleleCategorized;
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
@@ -33,6 +30,9 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.render.ParticleRender;
 import forestry.core.utils.VectUtil;
+
+import genetics.api.alleles.AlleleCategorized;
+import genetics.api.individual.IGenome;
 
 public abstract class AlleleEffect extends AlleleCategorized implements IAlleleBeeEffect {
 	protected AlleleEffect(String valueName, boolean isDominant) {
@@ -93,14 +93,14 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
 		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), territoryModifier);
 		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
 
-		BlockPos min = housing.getCoordinates().add(offset);
-		BlockPos max = min.add(area);
+		BlockPos min = housing.getCoordinates().offset(offset);
+		BlockPos max = min.offset(area);
 
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 
 	public static <T extends Entity> List<T> getEntitiesInRange(IGenome genome, IBeeHousing housing, Class<T> entityClass) {
 		AxisAlignedBB boundingBox = getBounding(genome, housing);
-		return housing.getWorldObj().getEntitiesWithinAABB(entityClass, boundingBox);
+		return housing.getWorldObj().getEntitiesOfClass(entityClass, boundingBox);
 	}
 }

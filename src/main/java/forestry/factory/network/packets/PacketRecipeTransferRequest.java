@@ -34,7 +34,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 	private final NonNullList<ItemStack> craftingInventory;
 
 	public PacketRecipeTransferRequest(TileBase base, NonNullList<ItemStack> craftingInventory) {
-		this.pos = base.getPos();
+		this.pos = base.getBlockPos();
 		this.craftingInventory = craftingInventory;
 	}
 
@@ -55,25 +55,25 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = TileUtil.getTile(player.world, pos);
+			TileEntity tile = TileUtil.getTile(player.level, pos);
 			if (tile instanceof TileCarpenter) {
 				TileCarpenter carpenter = (TileCarpenter) tile;
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
-					carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
+					carpenter.getCraftingInventory().setItem(index, stack);
 					index++;
 				}
 
-				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(carpenter, craftingInventory), pos, player.level);
 			} else if (tile instanceof TileFabricator) {
 				TileFabricator fabricator = (TileFabricator) tile;
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
-					fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
+					fabricator.getCraftingInventory().setItem(index, stack);
 					index++;
 				}
 
-				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.world);
+				NetworkUtil.sendNetworkPacket(new PacketRecipeTransferUpdate(fabricator, craftingInventory), pos, player.level);
 			}
 		}
 	}

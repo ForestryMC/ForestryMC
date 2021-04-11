@@ -19,12 +19,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.core.tiles.TileUtil;
+
+import genetics.api.individual.IGenome;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
@@ -41,7 +41,7 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 
 		TileEntity tile;
 		do {
-			pos = pos.down();
+			pos = pos.below();
 			tile = TileUtil.getTile(world, pos);
 		} while (tile instanceof IBeeHousing && pos.getY() > 0);
 

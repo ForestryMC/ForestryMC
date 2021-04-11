@@ -32,7 +32,7 @@ public class PacketTileStream extends ForestryPacket implements IForestryPacketC
 	private final IStreamable streamable;
 
 	public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
-		this.pos = streamable.getPos();
+		this.pos = streamable.getBlockPos();
 		this.streamable = streamable;
 	}
 
@@ -52,7 +52,7 @@ public class PacketTileStream extends ForestryPacket implements IForestryPacketC
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos pos = data.readBlockPos();
-			IStreamable tile = TileUtil.getTile(player.world, pos, IStreamable.class);
+			IStreamable tile = TileUtil.getTile(player.level, pos, IStreamable.class);
 			if (tile != null) {
 				tile.readData(data);
 			}

@@ -73,7 +73,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
-		this.window = new Window<>(xSize, ySize, this);
+		this.window = new Window<>(imageWidth, imageHeight, this);
 
 		this.textureFile = texture;
 
@@ -87,12 +87,12 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	public void init() {
 		super.init();
 
-		int maxLedgerWidth = (this.width - this.xSize) / 2;
+		int maxLedgerWidth = (this.width - this.imageWidth) / 2;
 
 		this.ledgerManager.setMaxWidth(maxLedgerWidth);
 		this.ledgerManager.clear();
 
-		this.window.init(guiLeft, guiTop);
+		this.window.init(leftPos, topPos);
 
 		addLedgers();
 	}
@@ -114,7 +114,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		window.setMousePosition(mouseX, mouseY);
 		this.renderBackground(transform);
 		super.render(transform, mouseX, mouseY, partialTicks);
-		renderHoveredTooltip(transform, mouseX, mouseY);
+		renderTooltip(transform, mouseX, mouseY);
 	}
 
 	protected abstract void addLedgers();
@@ -167,7 +167,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	public FontRenderer getFontRenderer() {
-		return minecraft.fontRenderer;
+		return minecraft.font;
 	}
 
 	//super has double double int
@@ -200,9 +200,9 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
-		InputMappings.Input mouseKey = InputMappings.getInputByCode(key, scanCode);
-		if (key == 256 || this.minecraft.gameSettings.keyBindInventory.isActiveAndMatches(mouseKey)) {
-			this.minecraft.player.closeScreen();
+		InputMappings.Input mouseKey = InputMappings.getKey(key, scanCode);
+		if (key == 256 || this.minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
+			this.minecraft.player.closeContainer();
 			return true;
 		}
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
@@ -220,7 +220,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Nullable
 	public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
 		for (Widget widget : widgetManager.getWidgets()) {
-			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - guiLeft, mouseY - guiTop)) {
+			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - leftPos, mouseY - topPos)) {
 				TankWidget tankWidget = (TankWidget) widget;
 				IFluidTank tank = tankWidget.getTank();
 				if (tank != null) {
@@ -233,8 +233,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 	@Nullable
 	protected Slot getSlotAtPosition(double mouseX, double mouseY) {
-		for (int k = 0; k < this.container.inventorySlots.size(); ++k) {
-			Slot slot = this.container.inventorySlots.get(k);
+		for (int k = 0; k < this.container.slots.size(); ++k) {
+			Slot slot = this.container.slots.get(k);
 
 			if (isMouseOverSlot(slot, mouseX, mouseY)) {
 				return slot;
@@ -245,7 +245,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	private boolean isMouseOverSlot(Slot par1Slot, double mouseX, double mouseY) {
-		return isPointInRegion(par1Slot.xPos, par1Slot.yPos, 16, 16, mouseX, mouseY);
+		return isHovering(par1Slot.x, par1Slot.y, 16, 16, mouseX, mouseY);
 	}
 
 	@Override
@@ -254,39 +254,40 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	public void moveItems(MatrixStack transform, Slot slot) {
+	public void renderSlot(MatrixStack transform, Slot slot) {
 		if (slot instanceof ISlotTextured) {
 			ISlotTextured textured = (ISlotTextured) slot;
-			ItemStack stack = slot.getStack();
-			if (stack.isEmpty() && slot.isEnabled()) {
+			ItemStack stack = slot.getItem();
+			if (stack.isEmpty() && slot.isActive()) {
 				ResourceLocation location = textured.getBackgroundTexture();
 				if (location != null) {
 					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-					this.minecraft.getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
-					blit(transform, slot.xPos, slot.yPos, this.getBlitOffset(), 16, 16, sprite);
+					this.minecraft.getTextureManager().bind(sprite.atlas().location());
+					blit(transform, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
 				}
 			}
 		}
-		super.moveItems(transform, slot);
+		super.renderSlot(transform, slot);
 	}
 
+
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack transform, int mouseX, int mouseY) {
+	protected void renderLabels(MatrixStack transform, int mouseY, int mouseX) {
 		ledgerManager.drawTooltips(transform, mouseY, mouseX);
 
-		if (this.playerInventory.getItemStack().isEmpty()) {
+		if (this.inventory.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
-			GuiUtil.drawToolTips(transform, this, container.inventorySlots, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, container.slots, mouseX, mouseY);
 			window.drawTooltip(transform, mouseY, mouseX);
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
 		drawBackground(transform);
 
-		widgetManager.updateWidgets(mouseX - guiLeft, mouseY - guiTop);
+		widgetManager.updateWidgets(mouseX - leftPos, mouseY - topPos);
 
 		//RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
 		RenderSystem.disableLighting();
@@ -294,7 +295,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.pushMatrix();
 		{
-			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
+			RenderSystem.translatef(leftPos, topPos, 0.0F);
 			drawWidgets(transform);
 		}
 		RenderSystem.popMatrix();
@@ -310,7 +311,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 		//int x = (width - xSize) / 2;
 		//int y = (height - ySize) / 2;
-		blit(transform, guiLeft, guiTop, 0, 0, xSize, ySize);
+		blit(transform, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 
 	protected void drawWidgets(MatrixStack transform) {
@@ -321,27 +322,27 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	protected void bindTexture(ResourceLocation texturePath) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(texturePath);
+		textureManager.bind(texturePath);
 	}
 
 	@Override
 	public int getSizeX() {
-		return xSize;
+		return imageWidth;
 	}
 
 	@Override
 	public int getSizeY() {
-		return ySize;
+		return imageHeight;
 	}
 
 	@Override
 	public int getGuiLeft() {
-		return guiLeft;
+		return leftPos;
 	}
 
 	@Override
 	public int getGuiTop() {
-		return guiTop;
+		return topPos;
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 
 	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {
 		addVariants(feature.block(), new Builder()
-			.always((variant) -> variant.model("forestry:block/" + planter.getString()))
+				.always((variant) -> variant.model("forestry:block/" + planter.getSerializedName()))
 			.property(BlockStateProperties.FACING, Direction.EAST, (variant) -> variant.rotationY(90))
 			.property(BlockStateProperties.FACING, Direction.SOUTH, (variant) -> variant.rotationY(180))
 			.property(BlockStateProperties.FACING, Direction.WEST, (variant) -> variant.rotationY(270)));
@@ -57,9 +57,9 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 	private void addCocoon(FeatureBlock<? extends Block, BlockItem> feature) {
 		BlockState state = feature.defaultState();
 		addVariants(feature.block(), new Builder()
-			.property(AlleleButterflyCocoon.AGE, 0, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_early"))
-			.property(AlleleButterflyCocoon.AGE, 1, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_middle"))
-			.property(AlleleButterflyCocoon.AGE, 2, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_late"))
-			.state(state.with(AlleleButterflyCocoon.AGE, 2).with(AlleleButterflyCocoon.COCOON, ButterflyAlleles.cocoonSilk), variant -> variant.model(Constants.MOD_ID + ":block/cocoon_silk_late")));
+				.property(AlleleButterflyCocoon.AGE, 0, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_early"))
+				.property(AlleleButterflyCocoon.AGE, 1, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_middle"))
+				.property(AlleleButterflyCocoon.AGE, 2, variant -> variant.model(Constants.MOD_ID + ":block/cocoon_late"))
+				.state(state.setValue(AlleleButterflyCocoon.AGE, 2).setValue(AlleleButterflyCocoon.COCOON, ButterflyAlleles.cocoonSilk), variant -> variant.model(Constants.MOD_ID + ":block/cocoon_silk_late")));
 	}
 }

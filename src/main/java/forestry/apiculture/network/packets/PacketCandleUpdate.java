@@ -30,7 +30,7 @@ public class PacketCandleUpdate extends ForestryPacket implements IForestryPacke
 	private final boolean lit;
 
 	public PacketCandleUpdate(TileCandle tileCandle) {
-		pos = tileCandle.getPos();
+		pos = tileCandle.getBlockPos();
 		colour = tileCandle.getColour();
 		lit = tileCandle.isLit();
 	}
@@ -55,7 +55,7 @@ public class PacketCandleUpdate extends ForestryPacket implements IForestryPacke
 			int colour = data.readInt();
 			boolean lit = data.readBoolean();
 
-			TileUtil.actOnTile(player.world, pos, TileCandle.class, tile -> tile.onPacketUpdate(colour, lit));
+			TileUtil.actOnTile(player.level, pos, TileCandle.class, tile -> tile.onPacketUpdate(colour, lit));
 		}
 	}
 }

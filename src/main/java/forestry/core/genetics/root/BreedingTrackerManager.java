@@ -60,8 +60,8 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
 			IBreedingTrackerHandler handler = factories.get(rootUID);
 			String filename = handler.getFileName(player);
-			ServerWorld overworld = ((ServerWorld) world).getServer().getWorld(World.OVERWORLD);
-			T tracker = (T) overworld.getSavedData().getOrCreate(() -> (WorldSavedData) handler.createTracker(filename), filename);
+			ServerWorld overworld = ((ServerWorld) world).getServer().getLevel(World.OVERWORLD);
+			T tracker = (T) overworld.getDataStorage().computeIfAbsent(() -> (WorldSavedData) handler.createTracker(filename), filename);
 			handler.populateTracker(tracker, overworld, player);
 			return tracker;
 		}
@@ -80,7 +80,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 			IBreedingTrackerHandler handler = factories.get(rootUID);
 			String filename = handler.getFileName(profile);
 			T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));
-			handler.populateTracker(tracker, Minecraft.getInstance().world, profile);
+			handler.populateTracker(tracker, Minecraft.getInstance().level, profile);
 			return tracker;
 		}
 	}

@@ -31,19 +31,19 @@ public class GuiFermenter extends GuiForestryTitled<ContainerFermenter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fuelRemain = tile.getBurnTimeRemainingScaled(16);
 		if (fuelRemain > 0) {
-			blit(transform, guiLeft + 98, guiTop + 46 + 17 - fuelRemain, 176, 78 + 17 - fuelRemain, 4, fuelRemain);
+			blit(transform, leftPos + 98, topPos + 46 + 17 - fuelRemain, 176, 78 + 17 - fuelRemain, 4, fuelRemain);
 		}
 
 		// Raw bio mush remaining
 		int bioRemain = tile.getFermentationProgressScaled(16);
 		if (bioRemain > 0) {
-			blit(transform, guiLeft + 74, guiTop + 32 + 17 - bioRemain, 176, 60 + 17 - bioRemain, 4, bioRemain);
+			blit(transform, leftPos + 74, topPos + 32 + 17 - bioRemain, 176, 60 + 17 - bioRemain, 4, bioRemain);
 		}
 	}
 

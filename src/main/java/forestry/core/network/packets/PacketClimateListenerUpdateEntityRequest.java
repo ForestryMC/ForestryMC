@@ -31,7 +31,7 @@ public class PacketClimateListenerUpdateEntityRequest extends ForestryPacket imp
 
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			Entity entity = data.readEntityById(player.world);
+			Entity entity = data.readEntityById(player.level);
 			if (entity != null) {
 				entity.getCapability(ClimateCapabilities.CLIMATE_LISTENER).ifPresent(l -> l.syncToClient(player));
 			}

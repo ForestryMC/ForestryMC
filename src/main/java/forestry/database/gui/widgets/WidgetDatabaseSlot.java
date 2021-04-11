@@ -68,7 +68,7 @@ public class WidgetDatabaseSlot extends Widget {
 	@Override
 	public void draw(MatrixStack transform, int startY, int startX) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		manager.minecraft.textureManager.bindTexture(TEXTURE_LOCATION);
+		manager.minecraft.textureManager.bind(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {
 			texture = SLOT_SELECTED;
@@ -78,10 +78,10 @@ public class WidgetDatabaseSlot extends Widget {
 		if (!itemStack.isEmpty()) {
 			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
-			RenderHelper.disableStandardItemLighting();
+			RenderHelper.turnOff();
 		}
 		if (mouseOver) {
 			drawMouseOver();
@@ -103,7 +103,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getCarried().isEmpty()) {
 			return;
 		}
 		GuiDatabase gui = (GuiDatabase) manager.gui;
@@ -133,9 +133,9 @@ public class WidgetDatabaseSlot extends Widget {
 	@Override
 	public boolean handleMouseRelease(double mouseX, double mouseY, int eventType) {
 		if (!isMouseOver(mouseX, mouseY)
-			|| ignoreMouseUp
-			|| eventType != 0 && eventType != 1
-			|| manager.minecraft.player.inventory.getItemStack().isEmpty()) {
+				|| ignoreMouseUp
+				|| eventType != 0 && eventType != 1
+				|| manager.minecraft.player.inventory.getCarried().isEmpty()) {
 			ignoreMouseUp = false;
 			return false;
 		}

@@ -39,12 +39,12 @@ public enum EnumFruitFamily implements IFruitFamily {
 	//TODO - these must only be called on client. Or Should I return TranslationTextComponent
 	@Override
 	public String getName() {
-		return I18n.format("for.family." + uid);
+		return I18n.get("for.family." + uid);
 	}
 
 	@Override
 	public String getDescription() {
-		return I18n.format("for.family." + uid + ".description");
+		return I18n.get("for.family." + uid + ".description");
 	}
 
 }

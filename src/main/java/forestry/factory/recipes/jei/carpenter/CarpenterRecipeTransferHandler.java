@@ -37,7 +37,7 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 					int index = guiIngredientEntry.getKey();
 					if (index >= 2) {
 						ItemStack ingredient = guiIngredient.getDisplayedIngredient().copy();
-						craftingInventory.setInventorySlotContents(index - 2, ingredient);
+						craftingInventory.setItem(index - 2, ingredient);
 						items.set(index - 2, ingredient);
 					}
 				}

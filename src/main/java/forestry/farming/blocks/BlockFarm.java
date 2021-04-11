@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import java.util.Locale;
 import javax.annotation.Nullable;
+import java.util.Locale;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -47,30 +47,30 @@ public class BlockFarm extends BlockStructure {
 		PLAIN, BAND;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-		super(Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(1.0f)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(0));
+		super(Block.Properties.of(Material.STONE)
+				.strength(1.0f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 		this.type = type;
 		this.farmMaterial = farmMaterial;
-		setDefaultState(this.getStateContainer().getBaseState().with(STATE, State.PLAIN));
+		registerDefaultState(this.getStateDefinition().any().setValue(STATE, State.PLAIN));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
-		super.fillItemGroup(tab, list);
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> list) {
+		super.fillItemCategory(tab, list);
 	}
 
 	public EnumFarmBlockType getType() {

@@ -114,7 +114,7 @@ public final class VectUtil {
 		protected BlockPos.Mutable nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.Mutable(center.getX(), maxPos.getY(), center.getZ());
-				int y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
+				int y = Math.min(this.maxPos.getY(), this.world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
 				this.theBlockPos.setY(y);
 				return this.theBlockPos;
 			} else if (spiralLayer > maxSpiralLayers) {
@@ -155,11 +155,11 @@ public final class VectUtil {
 							break;
 					}
 
-					this.theBlockPos.setPos(x, y, z);
-					y = Math.min(this.maxPos.getY(), this.world.getHeight(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
+					this.theBlockPos.set(x, y, z);
+					y = Math.min(this.maxPos.getY(), this.world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, this.theBlockPos).getY());
 				}
 
-				return this.theBlockPos.setPos(x, y, z);
+				return this.theBlockPos.set(x, y, z);
 			}
 		}
 	}

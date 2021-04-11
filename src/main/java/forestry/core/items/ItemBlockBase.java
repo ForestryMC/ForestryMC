@@ -13,7 +13,7 @@ public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
 	}
 
 	public ItemBlockBase(B block, IBlockTypeTesr type) {
-		super(block, MachinePropertiesTesr.setRenderer(new Properties().group(ItemGroupForestry.tabForestry), type));
+		super(block, MachinePropertiesTesr.setRenderer(new Properties().tab(ItemGroupForestry.tabForestry), type));
 	}
 
 }

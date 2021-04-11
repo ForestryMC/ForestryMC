@@ -37,16 +37,16 @@ public class FarmLogicCrops extends FarmLogicWatered {
 	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 
 			BlockState state = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
+			if (!world.isEmptyBlock(position) && !BlockUtil.isReplaceableBlock(state, world, position)) {
 				continue;
 			}
 
-			BlockState groundState = world.getBlockState(position.down());
+			BlockState groundState = world.getBlockState(position.below());
 			if (isAcceptedSoil(groundState)) {
 				return trySetCrop(world, farmHousing, position, direction);
 			}

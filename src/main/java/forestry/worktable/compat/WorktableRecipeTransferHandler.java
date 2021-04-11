@@ -42,12 +42,12 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 				if (!allIngredients.isEmpty()) {
 					if (recipeSlot != 0) { // skip the output slot
 						ItemStack firstIngredient = allIngredients.get(0);
-						inventory.setInventorySlotContents(recipeSlot - 1, firstIngredient);
+						inventory.setItem(recipeSlot - 1, firstIngredient);
 					}
 				}
 			}
 
-			List<ICraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.world);
+			List<ICraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.level);
 			if (!matchingRecipes.isEmpty()) {
 				MemorizedRecipe recipe = new MemorizedRecipe(inventory, matchingRecipes);
 				container.sendWorktableRecipeRequest(recipe);

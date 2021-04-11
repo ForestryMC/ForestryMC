@@ -6,10 +6,9 @@ import java.util.Locale;
 
 import net.minecraft.client.resources.I18n;
 
+import genetics.ApiInstance;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.classification.IClassification;
-
-import genetics.ApiInstance;
 
 public class Classification implements IClassification {
 
@@ -57,12 +56,12 @@ public class Classification implements IClassification {
 
 	@Override
 	public String getName() {
-		return I18n.format("genetics." + uid);
+		return I18n.get("genetics." + uid);
 	}
 
 	@Override
 	public String getDescription() {
-		return I18n.format("genetics." + uid + ".description");
+		return I18n.get("genetics." + uid + ".description");
 	}
 
 	@Override

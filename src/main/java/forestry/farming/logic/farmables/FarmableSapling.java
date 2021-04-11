@@ -56,12 +56,12 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
 		ItemStack copy = germling.copy();
-		player.setHeldItem(Hand.MAIN_HAND, copy);
-		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.down(), true);    //TODO isInside
-		ActionResultType actionResult = copy.onItemUse(new ItemUseContext(player, Hand.MAIN_HAND, result));
-		player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+		player.setItemInHand(Hand.MAIN_HAND, copy);
+		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.below(), true);    //TODO isInside
+		ActionResultType actionResult = copy.useOn(new ItemUseContext(player, Hand.MAIN_HAND, result));
+		player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
 		if (actionResult == ActionResultType.SUCCESS) {
-			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.getDefaultState());
+			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.defaultBlockState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
 		}
@@ -76,7 +76,7 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
-		if (!block.isIn(BlockTags.LOGS)) {
+		if (!block.is(BlockTags.LOGS)) {
 			return null;
 		}
 
@@ -86,9 +86,9 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
 		if (ignoreMetadata) {
-			return ItemStack.areItemsEqual(germling, new ItemStack((itemstack.getItem())));
+			return ItemStack.isSame(germling, new ItemStack((itemstack.getItem())));
 		}
-		return ItemStack.areItemsEqual(germling, itemstack);
+		return ItemStack.isSame(germling, itemstack);
 	}
 
 	@Override
@@ -96,9 +96,9 @@ public class FarmableSapling implements IFarmable {
 		NonNullList<ItemStack> germlings = NonNullList.create();
 		if (ignoreMetadata) {
 			Item germlingItem = germling.getItem();
-			ItemGroup tab = germlingItem.getGroup();
+			ItemGroup tab = germlingItem.getItemCategory();
 			if (tab != null) {
-				germlingItem.fillItemGroup(tab, germlings);
+				germlingItem.fillItemCategory(tab, germlings);
 			}
 		}
 		if (germlings.isEmpty()) {
@@ -111,7 +111,7 @@ public class FarmableSapling implements IFarmable {
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
 		for (ItemStack drop : windfall) {
-			if (drop.isItemEqual(itemstack)) {
+			if (drop.sameItem(itemstack)) {
 				return true;
 			}
 		}

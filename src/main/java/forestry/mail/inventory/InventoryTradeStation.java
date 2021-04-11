@@ -56,7 +56,7 @@ public class InventoryTradeStation extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, Direction side) {
+	public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction side) {
 		return SlotUtil.isSlotInRange(slot, TradeStation.SLOT_RECEIVE_BUFFER, TradeStation.SLOT_RECEIVE_BUFFER_COUNT);
 	}
 
@@ -64,7 +64,7 @@ public class InventoryTradeStation extends InventoryAdapter {
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (SlotUtil.isSlotInRange(slotIndex, TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT)) {
 			for (int i = 0; i < TradeStation.SLOT_TRADEGOOD_COUNT; i++) {
-				ItemStack tradeGood = getStackInSlot(TradeStation.SLOT_TRADEGOOD + i);
+				ItemStack tradeGood = getItem(TradeStation.SLOT_TRADEGOOD + i);
 				if (ItemStackUtil.isIdenticalItem(tradeGood, itemStack)) {
 					return true;
 				}
@@ -82,7 +82,7 @@ public class InventoryTradeStation extends InventoryAdapter {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean canPlaceItem(int i, ItemStack itemstack) {
 		return canSlotAccept(i, itemstack);
 	}
 }

@@ -65,7 +65,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
-		super((new Item.Properties()).group(tab));
+		super((new Item.Properties()).tab(tab));
 		Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
 		Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
 
@@ -80,23 +80,23 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	@Override
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
 		buffer.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
-		buffer.writeItemStack(stack);
+		buffer.writeItem(stack);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (!playerIn.isSneaking()) {
-			return super.onItemRightClick(worldIn, playerIn, handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (!playerIn.isShiftKeyDown()) {
+			return super.use(worldIn, playerIn, handIn);
 		} else {
-			ItemStack heldItem = playerIn.getHeldItem(handIn);
+			ItemStack heldItem = playerIn.getItemInHand(handIn);
 			switchMode(heldItem);
-			return ActionResult.resultSuccess(heldItem);
+			return ActionResult.success(heldItem);
 		}
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext ctx) {
-		if (getInventoryHit(ctx.getWorld(), ctx.getPos(), ctx.getFace()) != null) {
+	public ActionResultType useOn(ItemUseContext ctx) {
+		if (getInventoryHit(ctx.getLevel(), ctx.getClickedPos(), ctx.getClickedFace()) != null) {
 			return ActionResultType.SUCCESS;
 		}
 		return ActionResultType.FAIL;
@@ -106,9 +106,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
 		// We only do this when shift is clicked
-		if (player.isSneaking()) {
-			ItemStack heldItem = player.getHeldItem(context.getHand());
-			return evaluateTileHit(heldItem, player, context.getWorld(), context.getPos(), context.getFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
+		if (player.isShiftKeyDown()) {
+			ItemStack heldItem = player.getItemInHand(context.getHand());
+			return evaluateTileHit(heldItem, player, context.getLevel(), context.getClickedPos(), context.getClickedFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
 		}
 		return super.onItemUseFirst(stack, context);
 	}
@@ -142,7 +142,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 			nextMode++;
 		}
 		nextMode %= BackpackMode.values().length;
-		itemstack.setDamage(nextMode);
+		itemstack.setDamageValue(nextMode);
 	}
 
 	@Nullable
@@ -164,7 +164,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 				return true;
 			}
 
-			if (!world.isRemote) {
+			if (!world.isClientSide) {
 				// Create our own backpack inventory
 				ItemInventoryBackpack backpackInventory = new ItemInventoryBackpack(player, getBackpackSize(), stack);
 
@@ -198,21 +198,21 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
 
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(new TranslationTextComponent(infoKey).mergeStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent(infoKey).withStyle(TextFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).mergeStyle(TextFormatting.GRAY));
+		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).withStyle(TextFormatting.GRAY));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		return definition.getName(itemstack);
 	}
 
@@ -243,7 +243,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	public static BackpackMode getMode(ItemStack backpack) {
 		Preconditions.checkArgument(backpack.getItem() instanceof ItemBackpack, "Item must be a backpack");
 
-		int meta = backpack.getDamage();
+		int meta = backpack.getDamageValue();
 
 		if (meta >= 3) {
 			return BackpackMode.RESUPPLY;

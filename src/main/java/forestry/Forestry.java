@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -32,6 +33,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -53,6 +55,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import forestry.api.climate.ClimateManager;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.ISetupListener;
+import forestry.api.core.ISpriteRegistry;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.IFabricatorRecipe;
@@ -86,6 +89,7 @@ import forestry.core.data.WoodItemModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.models.ModelBlockCached;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
@@ -180,7 +184,7 @@ public class Forestry {
 		modEventBus.addListener(this::clientStuff);
 		modEventBus.addListener(this::gatherData);
 		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		modEventBus.register(eventHandlerCore);
+		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
 		MinecraftForge.EVENT_BUS.register(this);
 		Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
 		Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
@@ -281,9 +285,9 @@ public class Forestry {
 			IResourceManager resourceManager = minecraft.getResourceManager();
 			if (resourceManager instanceof IReloadableResourceManager) {
 				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
-				reloadableManager.addReloadListener(ColourProperties.INSTANCE);
-				reloadableManager.addReloadListener(GuiElementFactory.INSTANCE);
-				reloadableManager.addReloadListener(spriteUploader);
+				reloadableManager.registerReloadListener(ColourProperties.INSTANCE);
+				reloadableManager.registerReloadListener(GuiElementFactory.INSTANCE);
+				reloadableManager.registerReloadListener(spriteUploader);
 			}
 			//EntriesCategory.registerSearchTree();
 			ModuleManager.getModuleHandler().runClientInit();
@@ -343,6 +347,15 @@ public class Forestry {
 		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
 			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
 			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+		}
+
+		@SubscribeEvent
+		@OnlyIn(Dist.CLIENT)
+		public void handleTextureRemap(TextureStitchEvent.Pre event) {
+			if (event.getMap().location() == PlayerContainer.BLOCK_ATLAS) {
+				TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
+				ModelBlockCached.clear();
+			}
 		}
 	}
 

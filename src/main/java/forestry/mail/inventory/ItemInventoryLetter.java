@@ -54,8 +54,8 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		ItemStack result = letter.decrStackSize(index, count);
+	public ItemStack removeItem(int index, int count) {
+		ItemStack result = letter.removeItem(index, count);
 		CompoundNBT tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter.write(tagCompound);
@@ -63,36 +63,36 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack itemstack) {
-		letter.setInventorySlotContents(index, itemstack);
+	public void setItem(int index, ItemStack itemstack) {
+		letter.setItem(index, itemstack);
 		CompoundNBT tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter.write(tagCompound);
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		return letter.getStackInSlot(i);
+	public ItemStack getItem(int i) {
+		return letter.getItem(i);
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return letter.getSizeInventory();
+	public int getContainerSize() {
+		return letter.getContainerSize();
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return letter.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return letter.getMaxStackSize();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		return letter.isUsableByPlayer(player);
+	public boolean stillValid(PlayerEntity player) {
+		return letter.stillValid(player);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slot) {
-		return letter.removeStackFromSlot(slot);
+	public ItemStack removeItemNoUpdate(int slot) {
+		return letter.removeItemNoUpdate(slot);
 	}
 
 	@Override

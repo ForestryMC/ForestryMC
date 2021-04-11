@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biomes;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;
@@ -39,7 +40,7 @@ public class FakeClimateListener implements IClimateListener {
 
 	@Override
 	public Biome getBiome() {
-		return Biomes.PLAINS;
+		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
 	}
 
 	@Override

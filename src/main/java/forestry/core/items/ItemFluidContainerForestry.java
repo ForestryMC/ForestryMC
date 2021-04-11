@@ -58,20 +58,20 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
-		super((new Item.Properties()).group(ItemGroups.tabStorage));
+		super((new Item.Properties()).tab(ItemGroups.tabStorage));
 		this.type = type;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
 
 			// filled
 			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
-				if (fluid instanceof FlowingFluid && ((FlowingFluid) fluid).getStillFluid() != fluid) {
+				if (fluid instanceof FlowingFluid && ((FlowingFluid) fluid).getSource() != fluid) {
 					continue;
 				}
 				ItemStack itemStack = new ItemStack(this);
@@ -98,44 +98,44 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
+	public ITextComponent getName(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
-				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + '.' + fluid.getFluid().getRegistryName();
+				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + fluid.getFluid().getRegistryName();
 				return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
-					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".grammar";
+					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
 					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
 				});
 			} else {
-				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getString() + ".empty";
+				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);
 			}
 		}
-		return super.getDisplayName(stack);
+		return super.getName(stack);
 	}
 
 	/**
 	 * DRINKS
 	 */
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		DrinkProperties drinkProperties = getDrinkProperties(stack);
 		if (drinkProperties != null) {
 			if (entityLiving instanceof PlayerEntity && !((PlayerEntity) entityLiving).isCreative()) {
 				PlayerEntity player = (PlayerEntity) entityLiving;
-				if (!player.abilities.isCreativeMode) {
+				if (!player.abilities.instabuild) {
 					stack.shrink(1);
 				}
 
-				if (!worldIn.isRemote) {
-					FoodStats foodStats = player.getFoodStats();
-					foodStats.addStats(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
-					worldIn.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+				if (!worldIn.isClientSide) {
+					FoodStats foodStats = player.getFoodData();
+					foodStats.eat(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
+					worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
 				}
 
-				player.addStat(Stats.ITEM_USED.get(this));
+				player.awardStat(Stats.ITEM_USED.get(this));
 			}
 		}
 		return stack;
@@ -164,7 +164,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack itemstack) {
+	public UseAction getUseAnimation(ItemStack itemstack) {
 		DrinkProperties drinkProperties = getDrinkProperties(itemstack);
 		if (drinkProperties != null) {
 			return UseAction.DRINK;
@@ -174,27 +174,27 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
-		ItemStack heldItem = player.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+		ItemStack heldItem = player.getItemInHand(handIn);
 		DrinkProperties drinkProperties = getDrinkProperties(heldItem);
 		if (drinkProperties != null) {
 			if (player.canEat(false)) {
-				player.setActiveHand(handIn);
+				player.startUsingItem(handIn);
 				return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
 			} else {
 				return new ActionResult<>(ActionResultType.FAIL, heldItem);
 			}
 		} else {
 			if (Config.CapsuleFluidPickup) {
-				RayTraceResult target = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+				RayTraceResult target = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 				if (target.getType() != RayTraceResult.Type.BLOCK) {
-					return ActionResult.resultPass(heldItem);
+					return ActionResult.pass(heldItem);
 				}
 				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);
 
-				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getPos(), blockTarget.getFace());
+				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getBlockPos(), blockTarget.getDirection());
 				if (filledResult.isSuccess()) {
 					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 
@@ -203,10 +203,10 @@ public class ItemFluidContainerForestry extends ItemForestry {
 						heldItem.shrink(1);
 					}
 
-					return ActionResult.resultSuccess(heldItem);
+					return ActionResult.success(heldItem);
 				}
 			}
-			return super.onItemRightClick(world, player, handIn);
+			return super.use(world, player, handIn);
 		}
 	}
 

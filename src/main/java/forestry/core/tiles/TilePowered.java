@@ -75,7 +75,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	public int getTicksPerWorkCycle() {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return ticksPerWorkCycle;
 		}
 		return Math.round(ticksPerWorkCycle / speedMultiplier);
@@ -156,15 +156,15 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
-		nbt = super.write(nbt);
+	public CompoundNBT save(CompoundNBT nbt) {
+		nbt = super.save(nbt);
 		energyManager.write(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
 		energyManager.read(nbt);
 	}
 

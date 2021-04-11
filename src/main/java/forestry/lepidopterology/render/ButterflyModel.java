@@ -37,45 +37,45 @@ public class ButterflyModel extends SegmentedModel<EntityButterfly> {
 	private float scale;
 
 	public ButterflyModel() {
-		textureWidth = 64;
-		textureHeight = 32;
+		texWidth = 64;
+		texHeight = 32;
 
 		wingRight = new ModelRenderer(this, 0, 0);
 		wingRight.addBox(-7F, 0F, -6F, 7, 1, 13);
-		wingRight.setRotationPoint(-0.5F, 0.5F, 0F);
-		wingRight.setTextureSize(64, 32);
+		wingRight.setPos(-0.5F, 0.5F, 0F);
+		wingRight.setTexSize(64, 32);
 		wingRight.mirror = true;
 
 		setRotation(wingRight, 0F, 0F, 0F);
 		eyeRight = new ModelRenderer(this, 40, 9);
 		eyeRight.addBox(0F, 0F, 0F, 1, 1, 1);
-		eyeRight.setRotationPoint(-1.1F, -0.5F, -4.5F);
-		eyeRight.setTextureSize(64, 32);
+		eyeRight.setPos(-1.1F, -0.5F, -4.5F);
+		eyeRight.setTexSize(64, 32);
 		eyeRight.mirror = true;
 		setRotation(eyeRight, 0F, 0F, 0F);
 		eyeLeft = new ModelRenderer(this, 40, 7);
 		eyeLeft.addBox(0F, 0F, 0F, 1, 1, 1);
-		eyeLeft.setRotationPoint(0.1F, -0.5F, -4.5F);
-		eyeLeft.setTextureSize(64, 32);
+		eyeLeft.setPos(0.1F, -0.5F, -4.5F);
+		eyeLeft.setTexSize(64, 32);
 		eyeLeft.mirror = true;
 		setRotation(eyeLeft, 0F, 0F, 0F);
 		wingLeft = new ModelRenderer(this, 0, 14);
 		wingLeft.addBox(0F, 0F, -6F, 7, 1, 13);
-		wingLeft.setRotationPoint(0.5F, 0.5F, 0F);
-		wingLeft.setTextureSize(64, 32);
+		wingLeft.setPos(0.5F, 0.5F, 0F);
+		wingLeft.setTexSize(64, 32);
 		wingLeft.mirror = true;
 		setRotation(wingLeft, 0F, 0F, 0F);
 		body = new ModelRenderer(this, 40, 0);
 		body.addBox(0F, 0F, -4F, 1, 1, 6);
-		body.setRotationPoint(0F, 0F, 0F);
-		body.setTextureSize(64, 32);
+		body.setPos(0F, 0F, 0F);
+		body.setTexSize(64, 32);
 		body.mirror = true;
 		setRotation(body, 0F, 0F, 0.7853982F);
 		parts = ImmutableList.of(wingRight, eyeLeft, eyeRight, wingLeft, body);
 	}
 
 	@Override
-	public ImmutableList<ModelRenderer> getParts() {
+	public ImmutableList<ModelRenderer> parts() {
 		return parts;
 	}
 
@@ -84,25 +84,25 @@ public class ButterflyModel extends SegmentedModel<EntityButterfly> {
 	}
 
 	@Override
-	public void render(MatrixStack transformation, IVertexBuilder builder, int packedLight, int packetLight2, float ageInTicks, float netHeadYaw, float headPitch, float alpha) {
+	public void renderToBuffer(MatrixStack transformation, IVertexBuilder builder, int packedLight, int packetLight2, float ageInTicks, float netHeadYaw, float headPitch, float alpha) {
 		transformation.scale(this.scale, this.scale, this.scale);
 		transformation.translate(0.0F, 1.45f / scale, 0.0F);
 
-		super.render(transformation, builder, packedLight, packetLight2, ageInTicks, netHeadYaw, headPitch, alpha);
+		super.renderToBuffer(transformation, builder, packedLight, packetLight2, ageInTicks, netHeadYaw, headPitch, alpha);
 	}
 
 	@Override
-	public void setRotationAngles(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(EntityButterfly entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		//body.rotateAngleX = ((float)Math.PI / 4F) + MathHelper.cos(swing * 0.1F) * 0.15F;
 		//body.rotateAngleY = 0.0F;
-		wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
-		wingLeft.rotateAngleZ = -wingRight.rotateAngleZ;
+		wingRight.zRot = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
+		wingLeft.zRot = -wingRight.zRot;
 	}
 
 	private static void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		model.xRot = x;
+		model.yRot = y;
+		model.zRot = z;
 	}
 
 }

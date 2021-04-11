@@ -29,7 +29,7 @@ public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 
 	public ItemHoneyComb(EnumHoneyComb type) {
 		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture));
+				.tab(ItemGroups.tabApiculture));
 
 		this.type = type;
 	}

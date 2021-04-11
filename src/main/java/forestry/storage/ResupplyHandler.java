@@ -32,7 +32,7 @@ public class ResupplyHandler implements IResupplyHandler {
 
 	private static NonNullList<ItemStack> getBackpacks(PlayerInventory playerInventory) {
 		NonNullList<ItemStack> backpacks = NonNullList.create();
-		for (ItemStack itemStack : playerInventory.mainInventory) {
+		for (ItemStack itemStack : playerInventory.items) {
 			if (itemStack.getItem() instanceof ItemBackpack) {
 				backpacks.add(itemStack);
 			}
@@ -44,7 +44,7 @@ public class ResupplyHandler implements IResupplyHandler {
 	public void resupply(PlayerEntity player) {
 
 		// Do not attempt resupplying if this backpack is already opened.
-		if (!(player.openContainer instanceof PlayerContainer)) {
+		if (!(player.containerMenu instanceof PlayerContainer)) {
 			return;
 		}
 
@@ -56,10 +56,10 @@ public class ResupplyHandler implements IResupplyHandler {
 
 				Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
 				if (!MinecraftForge.EVENT_BUS.post(event)) {
-					for (int i = 0; i < backpackInventory.getSizeInventory(); i++) {
-						ItemStack itemStack = backpackInventory.getStackInSlot(i);
+					for (int i = 0; i < backpackInventory.getContainerSize(); i++) {
+						ItemStack itemStack = backpackInventory.getItem(i);
 						if (topOffPlayerInventory(player, itemStack)) {
-							backpackInventory.setInventorySlotContents(i, itemStack);
+							backpackInventory.setItem(i, itemStack);
 							break;
 						}
 					}
@@ -78,13 +78,13 @@ public class ResupplyHandler implements IResupplyHandler {
 		}
 		PlayerInventory playerInventory = player.inventory;
 		List<ItemStack> inventory = new LinkedList<>();
-		inventory.addAll(playerInventory.mainInventory);
-		inventory.addAll(playerInventory.offHandInventory);
+		inventory.addAll(playerInventory.items);
+		inventory.addAll(playerInventory.offhand);
 
 		for (ItemStack inventoryStack : inventory) {
-			if (playerInventory.canMergeStacks(inventoryStack, itemstack)) {
+			if (playerInventory.hasRemainingSpaceForItem(inventoryStack, itemstack)) {
 				inventoryStack.grow(1);
-				inventoryStack.setAnimationsToGo(5);
+				inventoryStack.setPopTime(5);
 				itemstack.shrink(1);
 				return true;
 			}

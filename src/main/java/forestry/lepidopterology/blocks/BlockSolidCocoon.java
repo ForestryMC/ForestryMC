@@ -39,18 +39,18 @@ public class BlockSolidCocoon extends Block {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
-		super(Block.Properties.create(MaterialCocoon.INSTANCE)
-			.harvestTool(ItemScoop.SCOOP)
-			.harvestLevel(0)
-			.hardnessAndResistance(0.5F)
-			.tickRandomly()
-			.sound(SoundType.GROUND));
-		setDefaultState(this.getStateContainer().getBaseState().with(COCOON, ButterflyAlleles.cocoonDefault)
-			.with(AlleleButterflyCocoon.AGE, 0));
+		super(Block.Properties.of(MaterialCocoon.INSTANCE)
+				.harvestTool(ItemScoop.SCOOP)
+				.harvestLevel(0)
+				.strength(0.5F)
+				.randomTicks()
+				.sound(SoundType.GRAVEL));
+		registerDefaultState(this.getStateDefinition().any().setValue(COCOON, ButterflyAlleles.cocoonDefault)
+				.setValue(AlleleButterflyCocoon.AGE, 0));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
 
@@ -100,7 +100,7 @@ public class BlockSolidCocoon extends Block {
 			});
 		}
 
-		return world.setBlockState(pos, Blocks.AIR.getDefaultState());
+		return world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 	}
 
 	@Override
@@ -114,11 +114,11 @@ public class BlockSolidCocoon extends Block {
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
 		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
 			return state;
 		}
-		return Blocks.AIR.getDefaultState();
+		return Blocks.AIR.defaultBlockState();
 	}
 
 	@Override

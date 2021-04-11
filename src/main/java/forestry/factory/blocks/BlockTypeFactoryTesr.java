@@ -43,33 +43,33 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	private final IMachinePropertiesTesr<?> machineProperties;
 
 	<T extends TileBase> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name) {
-		final VoxelShape nsBase = Block.makeCuboidShape(2D, 2D, 4D, 14, 14, 12);
-		final VoxelShape nsFront = Block.makeCuboidShape(0D, 0D, 0D, 16, 16, 4);
-		final VoxelShape nsBack = Block.makeCuboidShape(0D, 0D, 12D, 16, 16, 16);
+		final VoxelShape nsBase = Block.box(2D, 2D, 4D, 14, 14, 12);
+		final VoxelShape nsFront = Block.box(0D, 0D, 0D, 16, 16, 4);
+		final VoxelShape nsBack = Block.box(0D, 0D, 12D, 16, 16, 16);
 		final VoxelShape ns = VoxelShapes.or(nsBase, nsFront, nsBack);
-		final VoxelShape ewBase = Block.makeCuboidShape(4D, 2D, 2D, 12, 14, 14);
-		final VoxelShape ewFront = Block.makeCuboidShape(0D, 0D, 0D, 4, 16, 16);
-		final VoxelShape ewBack = Block.makeCuboidShape(12D, 0D, 0D, 16, 16, 16);
+		final VoxelShape ewBase = Block.box(4D, 2D, 2D, 12, 14, 14);
+		final VoxelShape ewFront = Block.box(0D, 0D, 0D, 4, 16, 16);
+		final VoxelShape ewBack = Block.box(12D, 0D, 0D, 16, 16, 16);
 		final VoxelShape ew = VoxelShapes.or(ewBase, ewFront, ewBack);
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-			.setParticleTexture(name + ".0")
-			.setShape((state, reader, pos, context) -> {
-				Direction direction = state.get(BlockBase.FACING);
-				return (direction == Direction.NORTH || direction == Direction.SOUTH) ? ns : ew;
-			})
-			.create();
+				.setParticleTexture(name + ".0")
+				.setShape((state, reader, pos, context) -> {
+					Direction direction = state.getValue(BlockBase.FACING);
+					return (direction == Direction.NORTH || direction == Direction.SOUTH) ? ns : ew;
+				})
+				.create();
 		Proxies.render.setRenderDefaultMachine(machineProperties, Constants.TEXTURE_PATH_BLOCK + "/" + name + "_");
 		this.machineProperties = machineProperties;
 	}
 
 	<T extends TileMill> BlockTypeFactoryTesr(Supplier<FeatureTileType<? extends T>> teClass, String name, String renderMillTexture) {
-		final VoxelShape pedestal = Block.makeCuboidShape(0D, 0D, 0D, 16, 1, 16);
-		final VoxelShape column = Block.makeCuboidShape(5D, 1D, 4D, 11, 16, 12);
-		final VoxelShape extension = Block.makeCuboidShape(1D, 8D, 7D, 15, 10, 9);
+		final VoxelShape pedestal = Block.box(0D, 0D, 0D, 16, 1, 16);
+		final VoxelShape column = Block.box(5D, 1D, 4D, 11, 16, 12);
+		final VoxelShape extension = Block.box(1D, 8D, 7D, 15, 10, 9);
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
-			.setParticleTexture(name + ".0")
-			.setShape(() -> VoxelShapes.or(pedestal, column, extension))
-			.create();
+				.setParticleTexture(name + ".0")
+				.setShape(() -> VoxelShapes.or(pedestal, column, extension))
+				.create();
 		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
 		this.machineProperties = machineProperties;
 	}
@@ -80,7 +80,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 	}
 
 	@Override
-	public String getString() {
-		return getMachineProperties().getString();
+	public String getSerializedName() {
+		return getMachineProperties().getSerializedName();
 	}
 }

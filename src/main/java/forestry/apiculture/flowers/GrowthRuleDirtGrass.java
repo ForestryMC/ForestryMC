@@ -32,7 +32,7 @@ public class GrowthRuleDirtGrass implements IFlowerGrowthRule {
 	}
 
 	private boolean isValidSpot(World world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos) || !world.isAirBlock(pos)) {
+		if (!world.hasChunkAt(pos) || !world.isEmptyBlock(pos)) {
 			return false;
 		}
 

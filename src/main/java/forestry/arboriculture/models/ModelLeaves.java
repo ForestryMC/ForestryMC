@@ -67,7 +67,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	protected Key getInventoryKey(ItemStack itemStack) {
 		TileLeaves leaves = new TileLeaves();
 		if (itemStack.getTag() != null) {
-			leaves.read(leaves.getBlockState(), itemStack.getTag());
+			leaves.load(leaves.getBlockState(), itemStack.getTag());
 		} else {
 			leaves.setTree(TreeHelper.getRoot().getIndividualTemplates().get(0));
 		}

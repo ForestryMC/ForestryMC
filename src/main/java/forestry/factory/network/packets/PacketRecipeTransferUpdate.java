@@ -36,7 +36,7 @@ public class PacketRecipeTransferUpdate extends ForestryPacket implements IFores
 	private final NonNullList<ItemStack> craftingInventory;
 
 	public PacketRecipeTransferUpdate(TileBase base, NonNullList<ItemStack> craftingInventory) {
-		this.pos = base.getPos();
+		this.pos = base.getBlockPos();
 		this.craftingInventory = craftingInventory;
 	}
 
@@ -58,19 +58,19 @@ public class PacketRecipeTransferUpdate extends ForestryPacket implements IFores
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = TileUtil.getTile(player.world, pos);
+			TileEntity tile = TileUtil.getTile(player.level, pos);
 			if (tile instanceof TileCarpenter) {
 				TileCarpenter carpenter = (TileCarpenter) tile;
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
-					carpenter.getCraftingInventory().setInventorySlotContents(index, stack);
+					carpenter.getCraftingInventory().setItem(index, stack);
 					index++;
 				}
 			} else if (tile instanceof TileFabricator) {
 				TileFabricator fabricator = (TileFabricator) tile;
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
-					fabricator.getCraftingInventory().setInventorySlotContents(index, stack);
+					fabricator.getCraftingInventory().setItem(index, stack);
 					index++;
 				}
 			}

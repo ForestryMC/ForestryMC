@@ -31,7 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,7 +53,6 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.RenderUtil;
 
 public class BlockAlveary extends BlockStructure {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
@@ -64,7 +62,7 @@ public class BlockAlveary extends BlockStructure {
 		ON, OFF;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -73,7 +71,7 @@ public class BlockAlveary extends BlockStructure {
 		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
 
 		@Override
-		public String getString() {
+		public String getSerializedName() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -81,25 +79,25 @@ public class BlockAlveary extends BlockStructure {
 	private final BlockAlvearyType type;
 
 	public BlockAlveary(BlockAlvearyType type) {
-		super(Block.Properties.create(MaterialBeehive.BEEHIVE_ALVEARY)
-			.hardnessAndResistance(1f)
-			.sound(SoundType.WOOD)
-			.harvestTool(ToolType.AXE)
-			.harvestLevel(0)
+		super(Block.Properties.of(MaterialBeehive.BEEHIVE_ALVEARY)
+				.strength(1f)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0)
 		);
 		this.type = type;
-		BlockState defaultState = this.getStateContainer().getBaseState();
+		BlockState defaultState = this.getStateDefinition().any();
 		if (type == BlockAlvearyType.PLAIN) {
-			defaultState = defaultState.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+			defaultState = defaultState.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 		} else if (type.activatable) {
-			defaultState = defaultState.with(STATE, State.OFF);
+			defaultState = defaultState.setValue(STATE, State.OFF);
 		}
-		setDefaultState(defaultState);
+		registerDefaultState(defaultState);
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		super.fillStateContainer(builder);
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(PLAIN_TYPE, STATE);
 	}
 
@@ -140,42 +138,42 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	public BlockState getNewState(TileAlveary tile) {
-		BlockState state = this.getDefaultState();
-		World world = tile.getWorld();
-		BlockPos pos = tile.getPos();
+		BlockState state = this.defaultBlockState();
+		World world = tile.getLevel();
+		BlockPos pos = tile.getBlockPos();
 
 		if (tile instanceof IActivatable) {
 			if (((IActivatable) tile).isActive()) {
-				state = state.with(STATE, State.ON);
+				state = state.setValue(STATE, State.ON);
 			} else {
-				state = state.with(STATE, State.OFF);
+				state = state.setValue(STATE, State.OFF);
 			}
 		} else if (getType() == BlockAlvearyType.PLAIN) {
 			if (!tile.getMultiblockLogic().getController().isAssembled()) {
-				state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+				state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 			} else {
-				BlockState blockStateAbove = world.getBlockState(pos.up());
+				BlockState blockStateAbove = world.getBlockState(pos.above());
 				Block blockAbove = blockStateAbove.getBlock();
-				if (blockAbove.isIn(BlockTags.WOODEN_SLABS)) {
+				if (blockAbove.is(BlockTags.WOODEN_SLABS)) {
 					List<Direction> blocksTouching = getBlocksTouching(world, pos);
 					switch (blocksTouching.size()) {
 						case 3:
-							state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
+							state = state.setValue(PLAIN_TYPE, AlvearyPlainType.ENTRANCE);
 							break;
 						case 2:
 							if (blocksTouching.contains(Direction.SOUTH) && blocksTouching.contains(Direction.EAST) ||
-								blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
-								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
+									blocksTouching.contains(Direction.NORTH) && blocksTouching.contains(Direction.WEST)) {
+								state = state.setValue(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_LEFT);
 							} else {
-								state = state.with(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
+								state = state.setValue(PLAIN_TYPE, AlvearyPlainType.ENTRANCE_RIGHT);
 							}
 							break;
 						default:
-							state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+							state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 							break;
 					}
 				} else {
-					state = state.with(PLAIN_TYPE, AlvearyPlainType.NORMAL);
+					state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 				}
 			}
 		}
@@ -185,7 +183,7 @@ public class BlockAlveary extends BlockStructure {
 	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
 		List<Direction> touching = new ArrayList<>();
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
-			BlockState blockState = world.getBlockState(blockPos.offset(direction));
+			BlockState blockState = world.getBlockState(blockPos.relative(direction));
 			if (blockState.getBlock() instanceof BlockAlveary) {
 				touching.add(direction);
 			}
@@ -206,7 +204,7 @@ public class BlockAlveary extends BlockStructure {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
 			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
 		} else {

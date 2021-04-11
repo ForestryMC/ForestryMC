@@ -24,7 +24,7 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 	}
 
 	public void addFortuneTooltip(int index) {
-		tooltips.get(index).add(new TranslationTextComponent("for.jei.fortune").mergeStyle(TextFormatting.GRAY));
+		tooltips.get(index).add(new TranslationTextComponent("for.jei.fortune").withStyle(TextFormatting.GRAY));
 	}
 
 	public void addChanceTooltip(int index, float chance) {
@@ -38,6 +38,6 @@ public class ForestryTooltipCallback implements ITooltipCallback<ItemStack> {
 		percentFormat.setMaximumFractionDigits(2);
 		String chanceString = String.valueOf(percentFormat.format(chance));
 
-		tooltips.get(index).add(new TranslationTextComponent("for.jei.chance", chanceString).mergeStyle(TextFormatting.GRAY));
+		tooltips.get(index).add(new TranslationTextComponent("for.jei.chance", chanceString).withStyle(TextFormatting.GRAY));
 	}
 }

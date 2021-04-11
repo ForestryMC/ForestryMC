@@ -37,7 +37,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 	private final MemorizedRecipe recipe;
 
 	public PacketWorktableRecipeUpdate(TileWorktable worktable) {
-		this.pos = worktable.getPos();
+		this.pos = worktable.getBlockPos();
 		this.recipe = worktable.getCurrentRecipe();
 	}
 
@@ -59,7 +59,7 @@ public class PacketWorktableRecipeUpdate extends ForestryPacket implements IFore
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = data.readStreamable(MemorizedRecipe::new);
 
-			TileUtil.actOnTile(player.world, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
+			TileUtil.actOnTile(player.level, pos, TileWorktable.class, tile -> tile.setCurrentRecipe(recipe));
 		}
 	}
 }

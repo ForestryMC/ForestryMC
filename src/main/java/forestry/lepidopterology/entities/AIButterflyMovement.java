@@ -26,7 +26,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (entity.getState() != EnumButterflyState.FLYING) {
 			return false;
 		}
@@ -39,7 +39,7 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		}
 
 		// Continue if we have not yet reached the destination.
-		if (entity.getDestination().squareDistanceTo(entity.getPositionVec()) > 2.0f) {
+		if (entity.getDestination().distanceToSqr(entity.position()) > 2.0f) {
 			return true;
 		}
 
@@ -53,8 +53,8 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 		if (entity.isInWater()) {
 			flightTarget = getRandomDestinationUpwards();
 		} else if (false) {//TODO: entity.collided
-			flightTarget = entity.getRNG().nextBoolean() ? getRandomDestination() : null;
-		} else if (entity.world.rand.nextInt(300) == 0) {
+			flightTarget = entity.getRandom().nextBoolean() ? getRandomDestination() : null;
+		} else if (entity.level.random.nextInt(300) == 0) {
 			flightTarget = getRandomDestination();
 		}
 		entity.setDestination(flightTarget);
@@ -62,11 +62,11 @@ public abstract class AIButterflyMovement extends AIButterflyBase {
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		flightTarget = null;
 	}
 }

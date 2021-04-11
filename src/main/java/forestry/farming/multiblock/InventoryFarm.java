@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import java.util.Optional;
 import java.util.Stack;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +20,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -77,14 +77,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
 			return acceptsAsResource(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> farmController.getTankManager().canFillFluidType(f)).orElse(false);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
 	}
 
@@ -164,14 +164,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos) {
-		for (int i = 0; i < germlingsInventory.getSizeInventory(); i++) {
-			ItemStack germlingStack = germlingsInventory.getStackInSlot(i);
+		for (int i = 0; i < germlingsInventory.getContainerSize(); i++) {
+			ItemStack germlingStack = germlingsInventory.getItem(i);
 			if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {
 				continue;
 			}
 
-			if (germling.plantSaplingAt(player, germlingStack, player.world, pos)) {
-				germlingsInventory.decrStackSize(i, 1);
+			if (germling.plantSaplingAt(player, germlingStack, player.level, pos)) {
+				germlingsInventory.removeItem(i, 1);
 				return true;
 			}
 		}
@@ -207,7 +207,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public int getFertilizerValue() {
-		ItemStack fertilizerStack = getStackInSlot(SLOT_FERTILIZER);
+		ItemStack fertilizerStack = getItem(SLOT_FERTILIZER);
 		if (fertilizerStack.isEmpty()) {
 			return 0;
 		}
@@ -220,9 +220,9 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 	}
 
 	public boolean useFertilizer() {
-		ItemStack fertilizer = getStackInSlot(SLOT_FERTILIZER);
+		ItemStack fertilizer = getItem(SLOT_FERTILIZER);
 		if (acceptsAsFertilizer(fertilizer)) {
-			decrStackSize(SLOT_FERTILIZER, 1);
+			removeItem(SLOT_FERTILIZER, 1);
 			return true;
 		}
 		return false;

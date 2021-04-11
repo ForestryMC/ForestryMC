@@ -63,7 +63,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	protected void onMachineAssembled() {
 		super.onMachineAssembled();
 
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -111,48 +111,48 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public void markDirty() {
-		getInternalInventory().markDirty();
+	public void setChanged() {
+		getInternalInventory().setChanged();
 	}
 
 	@Override
-	public final int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
+	public final int getContainerSize() {
+		return getInternalInventory().getContainerSize();
 	}
 
 	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
+	public final ItemStack getItem(int slotIndex) {
+		return getInternalInventory().getItem(slotIndex);
 	}
 
 	@Override
-	public final ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
+	public final ItemStack removeItem(int slotIndex, int amount) {
+		return getInternalInventory().removeItem(slotIndex, amount);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return getInternalInventory().removeItemNoUpdate(slotIndex);
 	}
 
 	@Override
-	public final void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+	public final void setItem(int slotIndex, ItemStack itemstack) {
+		getInternalInventory().setItem(slotIndex, itemstack);
 	}
 
 	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
+	public final int getMaxStackSize() {
+		return getInternalInventory().getMaxStackSize();
 	}
 
 	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
+	public final void startOpen(PlayerEntity player) {
+		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
+	public final void stopOpen(PlayerEntity player) {
+		getInternalInventory().stopOpen(player);
 	}
 
 	//TODO inventory title
@@ -167,8 +167,8 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	//	}
 
 	@Override
-	public final boolean isUsableByPlayer(PlayerEntity player) {
-		return getInternalInventory().isUsableByPlayer(player);
+	public final boolean stillValid(PlayerEntity player) {
+		return getInternalInventory().stillValid(player);
 	}
 
 	//TODO inventory title
@@ -178,8 +178,8 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	//	}
 
 	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
+		return getInternalInventory().canPlaceItem(slotIndex, itemStack);
 	}
 
 	@Override
@@ -188,13 +188,13 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
+	public final boolean canPlaceItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return getInternalInventory().canPlaceItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	public final boolean canTakeItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return getInternalInventory().canTakeItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	//TODO inventory field
@@ -214,7 +214,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	//	}
 
 	@Override
-	public void clear() {
-		getInternalInventory().clear();
+	public void clearContent() {
+		getInternalInventory().clearContent();
 	}
 }

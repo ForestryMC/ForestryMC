@@ -44,7 +44,7 @@ public class SocketWidget extends Widget {
 	public void draw(MatrixStack transform, int startY, int startX) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (!socketStack.isEmpty()) {
-			Minecraft.getInstance().getItemRenderer().renderItemIntoGUI(socketStack, startX + xPos, startY + yPos);
+			Minecraft.getInstance().getItemRenderer().renderGuiItem(socketStack, startX + xPos, startY + yPos);
 		}
 	}
 
@@ -72,14 +72,14 @@ public class SocketWidget extends Widget {
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 
-		ItemStack itemstack = manager.minecraft.player.inventory.getItemStack();
+		ItemStack itemstack = manager.minecraft.player.inventory.getCarried();
 		if (itemstack.isEmpty()) {
 			return;
 		}
 
 		Item held = itemstack.getItem();
 
-		Container container = manager.gui.getContainer();
+		Container container = manager.gui.getMenu();
 		if (!(container instanceof IContainerSocketed)) {
 			return;
 		}

@@ -48,8 +48,8 @@ public class PacketGuiEnergy extends ForestryPacket implements IForestryPacketCl
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			int windowId = data.readVarInt();
 			int value = data.readVarInt();
-			if (player.openContainer instanceof ContainerTile && player.openContainer.windowId == windowId) {
-				((ContainerTile) player.openContainer).onGuiEnergy(value);
+			if (player.containerMenu instanceof ContainerTile && player.containerMenu.containerId == windowId) {
+				((ContainerTile) player.containerMenu).onGuiEnergy(value);
 			}
 		}
 	}

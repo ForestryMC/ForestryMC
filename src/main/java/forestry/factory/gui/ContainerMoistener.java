@@ -31,13 +31,13 @@ import forestry.factory.tiles.TileMoistener;
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
 	public static ContainerMoistener fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileMoistener tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMoistener.class);
+		TileMoistener tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileMoistener.class);
 		return new ContainerMoistener(windowId, inv, tile);    //TODO nullability.
 	}
 
 	public ContainerMoistener(int windowId, PlayerInventory player, TileMoistener tile) {
 		super(windowId, FactoryContainers.MOISTENER.containerType(), player, tile, 8, 84);
-		trackIntArray(new IntArray(4));
+		addDataSlots(new IntArray(4));
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
@@ -61,23 +61,23 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 
 	@Override
 	public void onSlotChanged(IInventory inventory, int slot) {
-		tile.setInventorySlotContents(slot, inventory.getStackInSlot(slot));
+		tile.setItem(slot, inventory.getItem(slot));
 		tile.checkRecipe();
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
+	public void setData(int messageId, int data) {
+		super.setData(messageId, data);
 
 		tile.getGUINetworkData(messageId, data);
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
-		for (IContainerListener crafter : listeners) {
+		for (IContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

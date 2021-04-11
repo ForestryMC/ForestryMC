@@ -29,7 +29,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 	private final int value;
 
 	public PacketRipeningUpdate(TileLeaves leaves) {
-		this.pos = leaves.getPos();
+		this.pos = leaves.getBlockPos();
 		this.value = leaves.getFruitColour();
 	}
 
@@ -51,7 +51,7 @@ public class PacketRipeningUpdate extends ForestryPacket implements IForestryPac
 			BlockPos pos = data.readBlockPos();
 			int value = data.readVarInt();
 
-			TileUtil.actOnTile(player.world, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
+			TileUtil.actOnTile(player.level, pos, IRipeningPacketReceiver.class, tile -> tile.fromRipeningPacket(value));
 		}
 	}
 }

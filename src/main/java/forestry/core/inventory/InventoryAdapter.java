@@ -55,11 +55,11 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	 * @return Copy of this inventory. Stacks are copies.
 	 */
 	public InventoryAdapter copy() {
-		InventoryAdapter copy = new InventoryAdapter(inventory.getSizeInventory(), "TEST_TITLE_PLEASE_IGNORE", inventory.getInventoryStackLimit());
+		InventoryAdapter copy = new InventoryAdapter(inventory.getContainerSize(), "TEST_TITLE_PLEASE_IGNORE", inventory.getMaxStackSize());
 
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
-			if (!inventory.getStackInSlot(i).isEmpty()) {
-				copy.setInventorySlotContents(i, inventory.getStackInSlot(i).copy());
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
+			if (!inventory.getItem(i).isEmpty()) {
+				copy.setItem(i, inventory.getItem(i).copy());
 			}
 		}
 
@@ -73,47 +73,47 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventory.getSizeInventory();
+	public int getContainerSize() {
+		return inventory.getContainerSize();
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slotId) {
-		return inventory.getStackInSlot(slotId);
+	public ItemStack getItem(int slotId) {
+		return inventory.getItem(slotId);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slotId, int count) {
-		return inventory.decrStackSize(slotId, count);
+	public ItemStack removeItem(int slotId, int count) {
+		return inventory.removeItem(slotId, count);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotId, ItemStack itemstack) {
-		inventory.setInventorySlotContents(slotId, itemstack);
+	public void setItem(int slotId, ItemStack itemstack) {
+		inventory.setItem(slotId, itemstack);
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return inventory.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return inventory.getMaxStackSize();
 	}
 
 	@Override
-	public void markDirty() {
-		inventory.markDirty();
+	public void setChanged() {
+		inventory.setChanged();
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return inventory.removeStackFromSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return inventory.removeItemNoUpdate(slotIndex);
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean canPlaceItem(int i, ItemStack itemstack) {
 		return true;
 	}
 
@@ -137,7 +137,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	private void configureSided() {
-		int count = getSizeInventory();
+		int count = getContainerSize();
 		slotMap = new int[count];
 		for (int i = 0; i < count; i++) {
 			slotMap[i] = i;
@@ -145,12 +145,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, Direction side) {
-		return isItemValidForSlot(slot, stack);
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
+		return canPlaceItem(slot, stack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
 		return false;
 	}
 
@@ -179,7 +179,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	/* FIELDS */
 
 	@Override
-	public void clear() {
-		inventory.clear();
+	public void clearContent() {
+		inventory.clearContent();
 	}
 }

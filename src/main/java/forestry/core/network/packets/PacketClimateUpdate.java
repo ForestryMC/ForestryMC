@@ -51,7 +51,7 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
 			BlockPos position = data.readBlockPos();
-			IClimateHousing housing = TileUtil.getTile(player.world, position, IClimateHousing.class);
+			IClimateHousing housing = TileUtil.getTile(player.level, position, IClimateHousing.class);
 			if (housing == null) {
 				return;
 			}

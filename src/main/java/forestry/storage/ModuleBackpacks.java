@@ -117,7 +117,7 @@ public class ModuleBackpacks extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(BackpackContainers.BACKPACK.containerType(), GuiBackpack::new);
+		ScreenManager.register(BackpackContainers.BACKPACK.containerType(), GuiBackpack::new);
 	}
 
 	@Override

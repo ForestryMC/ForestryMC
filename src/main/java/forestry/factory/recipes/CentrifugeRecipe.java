@@ -84,14 +84,14 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
 
 		@Override
-		public CentrifugeRecipe read(ResourceLocation recipeId, JsonObject json) {
-			int processingTime = JSONUtils.getInt(json, "time");
+		public CentrifugeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			int processingTime = JSONUtils.getAsInt(json, "time");
 			Ingredient input = RecipeSerializers.deserialize(json.get("input"));
 			NonNullList<Product> outputs = NonNullList.create();
 
-			for (JsonElement element : JSONUtils.getJsonArray(json, "products")) {
-				float chance = JSONUtils.getInt(element.getAsJsonObject(), "chance");
-				ItemStack stack = RecipeSerializers.item(JSONUtils.getJsonObject(element.getAsJsonObject(), "item"));
+			for (JsonElement element : JSONUtils.getAsJsonArray(json, "products")) {
+				float chance = JSONUtils.getAsInt(element.getAsJsonObject(), "chance");
+				ItemStack stack = RecipeSerializers.item(JSONUtils.getAsJsonObject(element.getAsJsonObject(), "item"));
 				outputs.add(new Product(chance, stack));
 			}
 
@@ -99,12 +99,12 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		}
 
 		@Override
-		public CentrifugeRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+		public CentrifugeRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			int processingTime = buffer.readVarInt();
-			Ingredient input = Ingredient.read(buffer);
+			Ingredient input = Ingredient.fromNetwork(buffer);
 			NonNullList<Product> outputs = RecipeSerializers.read(buffer, b -> {
 				float chance = b.readFloat();
-				ItemStack stack = b.readItemStack();
+				ItemStack stack = b.readItem();
 				return new Product(chance, stack);
 			});
 
@@ -112,13 +112,13 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, CentrifugeRecipe recipe) {
+		public void toNetwork(PacketBuffer buffer, CentrifugeRecipe recipe) {
 			buffer.writeVarInt(recipe.processingTime);
-			recipe.input.write(buffer);
+			recipe.input.toNetwork(buffer);
 
 			RecipeSerializers.write(buffer, recipe.outputs, (b, product) -> {
 				b.writeFloat(product.getProbability());
-				b.writeItemStack(product.getStack());
+				b.writeItem(product.getStack());
 			});
 		}
 	}

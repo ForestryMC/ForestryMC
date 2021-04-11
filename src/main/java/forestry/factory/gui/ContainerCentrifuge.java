@@ -27,7 +27,7 @@ import forestry.factory.tiles.TileCentrifuge;
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
 	public static ContainerCentrifuge fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileCentrifuge tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileCentrifuge.class);
+		TileCentrifuge tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileCentrifuge.class);
 		return new ContainerCentrifuge(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -51,13 +51,13 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 	private ItemStack oldCraftPreview = ItemStack.EMPTY;
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		IInventory craftPreviewInventory = tile.getCraftPreviewInventory();
 
-		ItemStack newCraftPreview = craftPreviewInventory.getStackInSlot(0);
-		if (!ItemStack.areItemStacksEqual(oldCraftPreview, newCraftPreview)) {
+		ItemStack newCraftPreview = craftPreviewInventory.getItem(0);
+		if (!ItemStack.matches(oldCraftPreview, newCraftPreview)) {
 			oldCraftPreview = newCraftPreview;
 
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(tile, newCraftPreview);

@@ -20,7 +20,7 @@ public class RegisterVillagerPointOfInterest {
 
 		try {
 			// PointOfInterestType.registerBlockStates(type);
-			String functionName = ASMAPI.mapMethod("func_221052_a"); // registerBlockStates
+			String functionName = ASMAPI.mapMethod("registerBlockStates"); // registerBlockStates
 			Method method = PointOfInterestType.class.getDeclaredMethod(functionName, PointOfInterestType.class);
 			method.setAccessible(true);
 			method.invoke(null, type);
@@ -32,6 +32,6 @@ public class RegisterVillagerPointOfInterest {
 	}
 
 	public static Collection<BlockState> assembleStates(Block block) {
-		return new ArrayList<>(block.getStateContainer().getValidStates());
+		return new ArrayList<>(block.getStateDefinition().getPossibleStates());
 	}
 }

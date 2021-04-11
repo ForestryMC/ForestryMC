@@ -58,13 +58,13 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	}
 
 	@Override
-	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
+	public final boolean stillValid(PlayerEntity PlayerEntity) {
 		return TileUtil.isUsableByPlayer(PlayerEntity, tile);
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		if (tile instanceof IErrorLogicSource) {
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
@@ -82,7 +82,7 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
 			int energyManagerData = energyManager.getEnergyStored();
 			if (energyManagerData != previousEnergyManagerData) {
-				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
+				PacketGuiEnergy packet = new PacketGuiEnergy(containerId, energyManagerData);
 				sendPacketToListeners(packet);
 
 				previousEnergyManagerData = energyManagerData;

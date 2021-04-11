@@ -18,13 +18,13 @@ public class MoistenerFuel {
 
 
 	public MoistenerFuel(ItemStack resource, ItemStack product, int stage, int moistenerValue) {
-		this(Ingredient.fromStacks(resource), product, stage, moistenerValue);
+		this(Ingredient.of(resource), product, stage, moistenerValue);
 	}
 
 	public MoistenerFuel(Ingredient resource, ItemStack product, int stage, int moistenerValue) {
 		Preconditions.checkNotNull(resource);
 		Preconditions.checkNotNull(product);
-		Preconditions.checkArgument(!resource.hasNoMatchingItems());
+		Preconditions.checkArgument(!resource.isEmpty());
 		Preconditions.checkArgument(!product.isEmpty());
 		this.resource = resource;
 		this.product = product;

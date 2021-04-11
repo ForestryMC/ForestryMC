@@ -81,7 +81,7 @@ public class TankElement extends GuiElement {
 			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-				fluidStillSprite = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
 				fluidStillSprite = ResourceUtil.getMissingTexture();
@@ -97,7 +97,7 @@ public class TankElement extends GuiElement {
 				scaledAmount = height;
 			}
 
-			textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
 			final int xTileCount = width / 16;
@@ -142,20 +142,20 @@ public class TankElement extends GuiElement {
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
-		float uMin = textureSprite.getMinU();
-		float uMax = textureSprite.getMaxU();
-		float vMin = textureSprite.getMinV();
-		float vMax = textureSprite.getMaxV();
+		float uMin = textureSprite.getU0();
+		float uMax = textureSprite.getU1();
+		float vMin = textureSprite.getV0();
+		float vMax = textureSprite.getV1();
 		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
 		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(xCoord, yCoord + 16, zLevel).tex(uMin, vMax).endVertex();
-		buffer.pos(xCoord + 16 - maskRight, yCoord + 16, zLevel).tex(uMax, vMax).endVertex();
-		buffer.pos(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).tex(uMax, vMin).endVertex();
-		buffer.pos(xCoord, yCoord + maskTop, zLevel).tex(uMin, vMin).endVertex();
-		tessellator.draw();
+		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
+		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
+		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
+		buffer.vertex(xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
+		tessellator.end();
 	}
 }

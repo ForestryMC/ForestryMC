@@ -45,7 +45,7 @@ public final class CommandTreeSpawn {
 	}
 
 	public static int run(ITreeSpawner treeSpawner, CommandSource source, ITree tree) throws CommandSyntaxException {
-		return treeSpawner.spawn(source, tree, source.asPlayer());
+		return treeSpawner.spawn(source, tree, source.getPlayerOrException());
 	}
 
 	public static class TreeArugment implements ArgumentType<ITree> {

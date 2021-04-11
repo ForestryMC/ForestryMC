@@ -44,7 +44,7 @@ public class FabricatorRecipeBuilder {
 
 	public FabricatorRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
 		this.recipe = (ShapedRecipeBuilder.Result) holder.get();
 		return this;
 	}
@@ -67,29 +67,29 @@ public class FabricatorRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
-			json.add("plan", plan.serialize());
+		public void serializeRecipeData(JsonObject json) {
+			json.add("plan", plan.toJson());
 			json.add("molten", RecipeSerializers.serializeFluid(molten));
-			json.add("recipe", recipe.getRecipeJson());
+			json.add("recipe", recipe.serializeRecipe());
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return IFabricatorRecipe.Companion.SERIALIZER;
 		}
 
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

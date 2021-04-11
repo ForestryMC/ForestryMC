@@ -51,7 +51,7 @@ public final class Product {
 		if (!(obj instanceof Product)) {
 			return false;
 		}
-		return ItemStack.areItemStacksEqual(stack, ((Product) obj).stack) && ((Product) obj).chance == chance;
+		return ItemStack.matches(stack, ((Product) obj).stack) && ((Product) obj).chance == chance;
 	}
 
 	/**

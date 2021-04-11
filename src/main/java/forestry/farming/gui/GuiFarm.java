@@ -41,8 +41,8 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 51, 40, FarmDirection.WEST));
 		widgetManager.add(new FarmLogicSlot(farmController, widgetManager, 87, 40, FarmDirection.EAST));
 
-		this.xSize = 216;
-		this.ySize = 220;
+		this.imageWidth = 216;
+		this.imageHeight = 220;
 	}
 
 	@Override
@@ -56,13 +56,13 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining
 		int fertilizerRemain = tile.getMultiblockLogic().getController().getStoredFertilizerScaled(16);
 		if (fertilizerRemain > 0) {
-			blit(transform, guiLeft + 81, guiTop + 94 + 17 - fertilizerRemain, xSize, 17 - fertilizerRemain, 4, fertilizerRemain);
+			blit(transform, leftPos + 81, topPos + 94 + 17 - fertilizerRemain, imageWidth, 17 - fertilizerRemain, 4, fertilizerRemain);
 		}
 	}
 }

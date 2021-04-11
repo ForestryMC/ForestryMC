@@ -10,17 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.container.CraftingResultSlot;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-
-import net.minecraftforge.fml.hooks.BasicEventHooks;
 
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.tiles.ICrafterWorktable;
@@ -53,7 +48,7 @@ public class SlotCrafter extends Slot {
 	 * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
 	 */
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 		return false;
 	}
 
@@ -62,56 +57,56 @@ public class SlotCrafter extends Slot {
 	 * internal count then calls onCrafting(item).
 	 */
 	@Override
-	protected void onCrafting(ItemStack stack, int amount) {
+	protected void onQuickCraft(ItemStack stack, int amount) {
 		this.amountCrafted += amount;
-		this.onCrafting(stack);
+		this.checkTakeAchievements(stack);
 	}
 
 	/**
 	 * Copied from {@link CraftingResultSlot#onCrafting(ItemStack)}
 	 */
 	@Override
-	protected void onCrafting(ItemStack stack) {
+	protected void checkTakeAchievements(ItemStack stack) {
 		if (this.amountCrafted > 0) {
-			stack.onCrafting(this.player.world, this.player, this.amountCrafted);
+			stack.onCraftedBy(this.player.level, this.player, this.amountCrafted);
 			net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerCraftingEvent(this.player, stack, this.craftMatrix);
 		}
 
-		if (this.inventory instanceof IRecipeHolder) {
-			((IRecipeHolder)this.inventory).onCrafting(this.player);
+		if (this.container instanceof IRecipeHolder) {
+			((IRecipeHolder) this.container).awardUsedRecipes(this.player);
 		}
 
 		this.amountCrafted = 0;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int amount) {
-		if (!this.getHasStack()) {
+	public ItemStack remove(int amount) {
+		if (!this.hasItem()) {
 			return ItemStack.EMPTY;
 		}
 
-		return this.getStack();
+		return this.getItem();
 	}
 
 	@Override
-	public boolean canTakeStack(PlayerEntity player) {
+	public boolean mayPickup(PlayerEntity player) {
 		return crafter.canTakeStack(getSlotIndex());
 	}
 
 	@Override
-	public ItemStack getStack() {
-		return crafter.getResult(craftMatrix, player.world);
+	public ItemStack getItem() {
+		return crafter.getResult(craftMatrix, player.level);
 	}
 
 	@Override
-	public boolean getHasStack() {
-		return !getStack().isEmpty() && crafter.canTakeStack(getSlotIndex());
+	public boolean hasItem() {
+		return !getItem().isEmpty() && crafter.canTakeStack(getSlotIndex());
 	}
 
 	@Override
 	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
 		if (crafter.onCraftingStart(player)) {
-			this.onCrafting(itemStack); // handles crafting achievements, maps, and statistics
+			this.checkTakeAchievements(itemStack); // handles crafting achievements, maps, and statistics
 
 			crafter.onCraftingComplete(player);
 		}

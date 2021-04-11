@@ -15,12 +15,12 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.EffectData;
 import forestry.core.utils.VectUtil;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -64,8 +64,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
-			BlockPos pos = VectUtil.getRandomPositionInArea(world.rand, area).subtract(halfArea).add(housingCoordinates);
-			if (world.isBlockLoaded(pos)) {
+			BlockPos pos = VectUtil.getRandomPositionInArea(world.random, area).subtract(halfArea).offset(housingCoordinates);
+			if (world.hasChunkAt(pos)) {
 				BlockState blockState = world.getBlockState(pos);
 
 				if (convertToMycelium(world, blockState, pos)) {
@@ -88,8 +88,8 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
-		if (block == Blocks.GRASS || block == Blocks.DIRT && world.canBlockSeeSky(pos)) {
-			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
+		if (block == Blocks.GRASS || block == Blocks.DIRT && world.canSeeSkyFromBelowWater(pos)) {
+			world.setBlockAndUpdate(pos, Blocks.MYCELIUM.defaultBlockState());
 			return true;
 		}
 		return false;
@@ -99,7 +99,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		Block block = blockState.getBlock();
 		if (block instanceof MushroomBlock) {
 			MushroomBlock mushroom = (MushroomBlock) block;
-			mushroom.grow(world, pos, blockState, world.rand);
+			mushroom.growMushroom(world, pos, blockState, world.random);
 			return true;
 		}
 		return false;
@@ -109,14 +109,14 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		if (cow instanceof MooshroomEntity) {
 			return false;
 		}
-		World world = cow.world;
+		World world = cow.level;
 		cow.remove();
 		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
-		mooshroom.setLocationAndAngles(cow.getPosX(), cow.getPosY(), cow.getPosZ(), cow.rotationYaw, cow.rotationPitch);
+		mooshroom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.yRot, cow.xRot);
 		mooshroom.setHealth(cow.getHealth());
-		mooshroom.renderYawOffset = cow.renderYawOffset;
-		world.addEntity(mooshroom);
-		world.addParticle(ParticleTypes.EXPLOSION, cow.getPosX(), cow.getPosY() + cow.getHeight() / 2.0F, cow.getPosZ(), 0.0D, 0.0D, 0.0D);
+		mooshroom.yBodyRot = cow.yBodyRot;
+		world.addFreshEntity(mooshroom);
+		world.addParticle(ParticleTypes.EXPLOSION, cow.getX(), cow.getY() + cow.getBbHeight() / 2.0F, cow.getZ(), 0.0D, 0.0D, 0.0D);
 		return true;
 	}
 }

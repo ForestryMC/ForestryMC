@@ -86,7 +86,7 @@ public class CircuitBoard implements ICircuitBoard {
 	@OnlyIn(Dist.CLIENT)
 	public void addTooltip(List<ITextComponent> list) {
 		if (layout != null) {
-			list.add(new StringTextComponent(layout.getUsage() + ":").mergeStyle(TextFormatting.GOLD));
+			list.add(new StringTextComponent(layout.getUsage() + ":").withStyle(TextFormatting.GOLD));
 			List<ITextComponent> extendedTooltip = new ArrayList<>();
 			for (ICircuit circuit : circuits) {
 				if (circuit != null) {
@@ -97,14 +97,14 @@ public class CircuitBoard implements ICircuitBoard {
 			if (Screen.hasShiftDown() || extendedTooltip.size() <= 4) {
 				list.addAll(extendedTooltip);
 			} else {
-				list.add(new StringTextComponent("<").mergeStyle(TextFormatting.UNDERLINE, TextFormatting.GRAY)
-					.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-					.append(new StringTextComponent(">")));
+				list.add(new StringTextComponent("<").withStyle(TextFormatting.UNDERLINE, TextFormatting.GRAY)
+						.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
+						.append(new StringTextComponent(">")));
 			}
 		} else {
 			int socketCount = type.getSockets();
 			String localizationKey = "item.forestry.circuit_board.tooltip." + (socketCount == 1 ? "singular" : "plural");
-			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).mergeStyle(TextFormatting.GRAY));
+			list.add(new TranslationTextComponent(localizationKey, type.getSockets()).withStyle(TextFormatting.GRAY));
 		}
 	}
 

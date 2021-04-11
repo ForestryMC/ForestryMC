@@ -29,7 +29,7 @@ public enum BlockAlvearyType implements IBlockSubtype {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return super.toString().toLowerCase(Locale.ENGLISH);
 	}
 

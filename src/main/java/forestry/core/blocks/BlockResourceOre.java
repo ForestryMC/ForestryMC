@@ -26,16 +26,16 @@ public class BlockResourceOre extends Block {
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {
-		super(Block.Properties.create(Material.ROCK)
-			.hardnessAndResistance(3f, 5f)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(1));
+		super(Block.Properties.of(Material.STONE)
+				.strength(3f, 5f)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(1));
 		this.type = type;
 	}
 
 	@Override
 	public int getExpDrop(BlockState state, IWorldReader reader, BlockPos pos, int fortune, int silktouch) {
-		Random rand = reader instanceof World ? ((World) reader).rand : new Random();
+		Random rand = reader instanceof World ? ((World) reader).random : new Random();
 		if (type == EnumResourceType.APATITE) {
 			return MathHelper.nextInt(rand, 1, 4);
 		}

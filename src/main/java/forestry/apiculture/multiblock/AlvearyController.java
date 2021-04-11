@@ -181,7 +181,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				BlockPos pos = new BlockPos(slabX, slabY, slabZ);
 				BlockState state = world.getBlockState(pos);
 				Block block = state.getBlock();
-				if (!block.isIn(BlockTags.WOODEN_SLABS)) {
+				if (!block.is(BlockTags.WOODEN_SLABS)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSlabs"));
 				}
 			}
@@ -197,7 +197,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				}
 				BlockPos pos = new BlockPos(airX, airY, airZ);
 				BlockState blockState = world.getBlockState(pos);
-				if (blockState.isOpaqueCube(world, pos)) {
+				if (blockState.isSolidRender(world, pos)) {
 					throw new MultiblockValidationException(Translator.translateToLocal("for.multiblock.alveary.error.needSpace"));
 				}
 			}
@@ -278,8 +278,8 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 				float fxZ = center.getZ() + 0.5F;
 				float distanceFromCenter = 1.6F;
 
-				float leftRightSpreadFromCenter = distanceFromCenter * (world.rand.nextFloat() - 0.5F);
-				float upSpread = world.rand.nextFloat() * 0.8F;
+				float leftRightSpreadFromCenter = distanceFromCenter * (world.random.nextFloat() - 0.5F);
+				float upSpread = world.random.nextFloat() * 0.8F;
 				fxY += upSpread;
 
 				// display fx on all 4 sides
@@ -332,7 +332,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public BlockPos getCoordinates() {
 		BlockPos coord = getCenterCoord();
-		return coord.add(0, +1, 0);
+		return coord.offset(0, +1, 0);
 	}
 
 	@Override
@@ -389,19 +389,19 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	public int getBlockLightValue() {
 		BlockPos topCenter = getTopCenterCoord();
 		//TODO light
-		return world.getLight(topCenter.up());
+		return world.getMaxLocalRawBrightness(topCenter.above());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
 		BlockPos topCenter = getTopCenterCoord();
-		return world.canBlockSeeSky(topCenter.add(0, 2, 0));
+		return world.canSeeSkyFromBelowWater(topCenter.offset(0, 2, 0));
 	}
 
 	@Override
 	public boolean isRaining() {
 		BlockPos topCenter = getTopCenterCoord();
-		return world.isRainingAt(topCenter.add(0, 2, 0));
+		return world.isRainingAt(topCenter.offset(0, 2, 0));
 	}
 
 	@Override

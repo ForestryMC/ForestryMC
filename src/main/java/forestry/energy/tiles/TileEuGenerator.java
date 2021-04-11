@@ -75,8 +75,8 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 
 	@Nonnull
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		//		if (ic2EnergySource != null) {
 		//			ic2EnergySource.write(CompoundNBT);
@@ -87,8 +87,8 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		//		if (ic2EnergySource != null) {
 		//			ic2EnergySource.read(CompoundNBT);
@@ -120,12 +120,12 @@ public class TileEuGenerator extends TileBase implements ISidedInventory, ILiqui
 	//	}
 
 	@Override
-	public void remove() {
+	public void setRemoved() {
 		//		if (ic2EnergySource != null) {
 		//			ic2EnergySource.invalidate();
 		//		}
 
-		super.remove();
+		super.setRemoved();
 	}
 
 	@Override

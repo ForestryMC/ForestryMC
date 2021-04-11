@@ -39,7 +39,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 		List<IRecipe> recipes = new LinkedList<>();
 		for (ResourceLocation location : data.locations) {
 			//TODO sides
-			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().getRecipes(IRecipeType.CRAFTING);
+			Map<ResourceLocation, IRecipe<CraftingInventory>> recipeMap = Minecraft.getInstance().player.connection.getRecipeManager().byType(IRecipeType.CRAFTING);
 			IRecipe recipe = recipeMap.get(location);
 			if (recipe != null) {
 				recipes.add(recipe);

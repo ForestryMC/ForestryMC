@@ -10,10 +10,11 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -21,7 +22,6 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
-import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.tiles.TileFermenter;
 
 public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
@@ -38,9 +38,9 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_RESOURCE) {
-			return RecipeManagers.fermenterManager.isResource(tile.getWorld().getRecipeManager(), itemStack);
+			return RecipeManagers.fermenterManager.isResource(tile.getLevel().getRecipeManager(), itemStack);
 		} else if (slotIndex == SLOT_INPUT) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		} else if (slotIndex == SLOT_CAN_INPUT) {
 			return FluidHelper.isFillableContainerWithRoom(itemStack);
@@ -51,7 +51,7 @@ public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_CAN_OUTPUT;
 	}
 }

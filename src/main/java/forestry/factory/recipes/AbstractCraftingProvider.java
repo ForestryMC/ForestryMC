@@ -49,7 +49,7 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	public Collection<T> getRecipes(@Nullable RecipeManager recipeManager) {
 		Set<T> recipes = new HashSet<>(globalRecipes);
 
-		for (IRecipe<IInventory> recipe : adjust(recipeManager).getRecipes(type).values()) {
+		for (IRecipe<IInventory> recipe : adjust(recipeManager).byType(type).values()) {
 			recipes.add((T) recipe);
 		}
 
@@ -78,10 +78,10 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	@OnlyIn(Dist.CLIENT)
 	private static RecipeManager adjustClient() {
 		Minecraft minecraft = Minecraft.getInstance();
-		IntegratedServer integratedServer = minecraft.getIntegratedServer();
+		IntegratedServer integratedServer = minecraft.getSingleplayerServer();
 
 		if (integratedServer != null) {
-			if (integratedServer.isOnExecutionThread()) {
+			if (integratedServer.isSameThread()) {
 				throw new NullPointerException("RecipeManager was null on the integrated server");
 			}
 		}

@@ -47,7 +47,7 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		BlockPos cropPos = pos.add(0, matureHeight - 1, 0);
+		BlockPos cropPos = pos.offset(0, matureHeight - 1, 0);
 		blockState = world.getBlockState(cropPos);
 		if (blockState.getBlock() != cropBlock) {
 			return null;
@@ -58,7 +58,7 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(germling, itemstack);
+		return ItemStack.isSame(germling, itemstack);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class FarmableStacked implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.getDefaultState());
+		return BlockUtil.setBlockWithPlaceSound(world, pos, cropBlock.defaultBlockState());
 	}
 
 	@Override

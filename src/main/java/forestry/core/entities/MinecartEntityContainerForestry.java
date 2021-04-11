@@ -49,31 +49,31 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	protected void readAdditional(CompoundNBT compoundNBT) {
-		super.readAdditional(compoundNBT);
+	protected void readAdditionalSaveData(CompoundNBT compoundNBT) {
+		super.readAdditionalSaveData(compoundNBT);
 		getInternalInventory().read(compoundNBT);
 	}
 
 	@Override
-	protected void writeAdditional(CompoundNBT compoundNBT) {
-		super.writeAdditional(compoundNBT);
+	protected void addAdditionalSaveData(CompoundNBT compoundNBT) {
+		super.addAdditionalSaveData(compoundNBT);
 		getInternalInventory().write(compoundNBT);
 	}
 
 	@Override
 	public void remove() {
-		if (dropContentsWhenDead && !world.isRemote) {
-			InventoryUtil.dropInventory(getInternalInventory(), world, getPosX(), getPosY(), getPosZ());
+		if (dropContentsWhenDead && !level.isClientSide) {
+			InventoryUtil.dropInventory(getInternalInventory(), level, getX(), getY(), getZ());
 		}
 		super.remove();
 	}
 
 	//TODO tbh super() method looks pretty good too
 	@Override
-	protected void applyDrag() {
-		int redstoneLevel = 15 - Container.calcRedstoneFromInventory(this);
+	protected void applyNaturalSlowdown() {
+		int redstoneLevel = 15 - Container.getRedstoneSignalFromContainer(this);
 		double drag = 0.98F + redstoneLevel * 0.001F;
-		this.setMotion(this.getMotion().mul(drag, 0.0D, drag));
+		this.setDeltaMovement(this.getDeltaMovement().multiply(drag, 0.0D, drag));
 	}
 
 	@Nullable
@@ -93,48 +93,48 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
-		return isAlive() && player.getDistance(this) <= 64.0D;
+	public boolean stillValid(PlayerEntity player) {
+		return isAlive() && player.distanceTo(this) <= 64.0D;
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
+	public int getContainerSize() {
+		return getInternalInventory().getContainerSize();
 	}
 
 	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
+	public final ItemStack getItem(int slotIndex) {
+		return getInternalInventory().getItem(slotIndex);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
+	public ItemStack removeItem(int slotIndex, int amount) {
+		return getInternalInventory().removeItem(slotIndex, amount);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return getInternalInventory().removeItemNoUpdate(slotIndex);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+	public void setItem(int slotIndex, ItemStack itemstack) {
+		getInternalInventory().setItem(slotIndex, itemstack);
 	}
 
 	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
+	public final int getMaxStackSize() {
+		return getInternalInventory().getMaxStackSize();
 	}
 
 	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
+	public final void startOpen(PlayerEntity player) {
+		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
+	public final void stopOpen(PlayerEntity player) {
+		getInternalInventory().stopOpen(player);
 	}
 
 	@Override
@@ -149,8 +149,8 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
+		return getInternalInventory().canPlaceItem(slotIndex, itemStack);
 	}
 
 	@Override
@@ -169,22 +169,22 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, Direction side) {
-		return getInternalInventory().canInsertItem(slot, stack, side);
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction side) {
+		return getInternalInventory().canPlaceItemThroughFace(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, Direction side) {
-		return getInternalInventory().canExtractItem(slot, stack, side);
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
+		return getInternalInventory().canTakeItemThroughFace(slot, stack, side);
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 
 	}
 
 	@Override
-	public void clear() {
-		getInternalInventory().clear();
+	public void clearContent() {
+		getInternalInventory().clearContent();
 	}
 }

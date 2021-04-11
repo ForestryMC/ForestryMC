@@ -27,22 +27,22 @@ public class ParticleSmoke extends Particle {
 
 	public ParticleSmoke(ClientWorld world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
-		this.motionX *= 0.8;
-		this.motionY *= 0.8;
-		this.motionZ *= 0.8;
-		this.motionY = this.rand.nextFloat() * 0.2F + 0.05F;
-		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
+		this.xd *= 0.8;
+		this.yd *= 0.8;
+		this.zd *= 0.8;
+		this.yd = this.random.nextFloat() * 0.2F + 0.05F;
+		this.rCol = this.gCol = this.bCol = 1.0F;
 		//TODO - think width and height have to be changed now
 		//TODO - or multipleParticleScaleBy()
 		//		this.particleScale *= this.rand.nextFloat() / 4;
 		//		this.ignitionParticleScale = this.particleScale;
-		this.maxAge = (int) (16.0 / (Math.random() * 0.8 + 0.2));
+		this.lifetime = (int) (16.0 / (Math.random() * 0.8 + 0.2));
 		//		this.setParticleTextureIndex(49);
 	}
 
 	@Override
-	public int getBrightnessForRender(float p_70070_1_) {
-		int i = super.getBrightnessForRender(p_70070_1_);
+	public int getLightColor(float p_70070_1_) {
+		int i = super.getLightColor(p_70070_1_);
 		int j = i >> 16 & 255;
 		return 240 | j << 16;
 	}
@@ -57,7 +57,7 @@ public class ParticleSmoke extends Particle {
 	}*/
 
 	@Override
-	public void renderParticle(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+	public void render(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
 
 	}
 
@@ -71,29 +71,29 @@ public class ParticleSmoke extends Particle {
 	 */
 	@Override
 	public void tick() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+		this.xo = this.x;
+		this.yo = this.y;
+		this.zo = this.z;
 
-		if (this.age++ >= this.maxAge) {
-			this.setExpired();
+		if (this.age++ >= this.lifetime) {
+			this.remove();
 		}
 
-		float f = (float) this.age / (float) this.maxAge;
+		float f = (float) this.age / (float) this.lifetime;
 
-		if (this.rand.nextFloat() > f * 2) {
-			this.world.addParticle(ParticleTypes.LARGE_SMOKE, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+		if (this.random.nextFloat() > f * 2) {
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.x, this.y, this.z, this.xd, this.yd, this.zd);
 		}
 
-		this.motionY -= 0.03D;
-		this.move(this.motionX, this.motionY, this.motionZ);
-		this.motionX *= 0.999D;
-		this.motionY *= 0.999D;
-		this.motionZ *= 0.999D;
+		this.yd -= 0.03D;
+		this.move(this.xd, this.yd, this.zd);
+		this.xd *= 0.999D;
+		this.yd *= 0.999D;
+		this.zd *= 0.999D;
 
 		if (this.onGround) {
-			this.motionX *= 0.7;
-			this.motionZ *= 0.7;
+			this.xd *= 0.7;
+			this.zd *= 0.7;
 		}
 	}
 }

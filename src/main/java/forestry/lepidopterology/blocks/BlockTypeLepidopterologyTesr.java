@@ -45,7 +45,7 @@ public enum BlockTypeLepidopterologyTesr implements IBlockTypeTesr {
 	}
 
 	@Override
-	public String getString() {
-		return getMachineProperties().getString();
+	public String getSerializedName() {
+		return getMachineProperties().getSerializedName();
 	}
 }

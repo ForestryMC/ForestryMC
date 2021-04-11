@@ -18,10 +18,10 @@ public class Translator {
 	}
 
 	public static boolean canTranslateToLocal(String key) {
-		return I18n.hasKey(key);
+		return I18n.exists(key);
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {
-		return I18n.format(key, format);
+		return I18n.get(key, format);
 	}
 }

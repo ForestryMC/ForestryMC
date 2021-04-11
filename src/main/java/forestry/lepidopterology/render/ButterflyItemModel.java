@@ -55,12 +55,6 @@ import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelTransform;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
-import genetics.api.GeneticHelper;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.organism.IOrganism;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
@@ -68,6 +62,11 @@ import forestry.core.config.Constants;
 import forestry.core.models.AbstractBakedModel;
 import forestry.core.models.TRSRBakedModel;
 import forestry.core.utils.ResourceUtil;
+
+import genetics.api.GeneticHelper;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.organism.IOrganism;
+import genetics.utils.AlleleUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyItemModel extends AbstractBakedModel {
@@ -91,7 +90,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+		public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
 			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
 			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
 			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
@@ -139,7 +138,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 
 		@Override
 		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-			IUnbakedModel modelButterfly = bakery.getUnbakedModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
+			IUnbakedModel modelButterfly = bakery.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
 			if (!(modelButterfly instanceof BlockModel)) {
 				return null;
 			}
@@ -149,17 +148,17 @@ public class ButterflyItemModel extends AbstractBakedModel {
 				String identifier = subModel.getKey();
 				String texture = subModel.getValue();
 
-				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(texture)))), modelBlock.ambientOcclusion, modelBlock.func_230176_c_(), modelBlock.getAllTransforms(), modelBlock.getOverrides());
+				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(texture)))), modelBlock.hasAmbientOcclusion, modelBlock.getGuiLight(), modelBlock.getTransforms(), modelBlock.getOverrides());
 				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "item/butterfly");
 				IModelTransform transform = ResourceUtil.loadTransform(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
-				subModelBuilder.put(identifier, model.bakeModel(bakery, model, spriteGetter, transform, location, true));
+				subModelBuilder.put(identifier, model.bake(bakery, model, spriteGetter, transform, location, true));
 			}
 			return new ButterflyItemModel(subModelBuilder.build());
 		}
 
 		@Override
 		public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-			return subModels.values().stream().map((location) -> new RenderMaterial(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(location))).collect(Collectors.toSet());
+			return subModels.values().stream().map((location) -> new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(location))).collect(Collectors.toSet());
 		}
 	}
 

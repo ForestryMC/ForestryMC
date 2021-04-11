@@ -63,7 +63,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			String slotKey = getSlotNBTKey(i);
 			if (nbtSlots.contains(slotKey)) {
 				CompoundNBT itemNbt = nbtSlots.getCompound(slotKey);
-				ItemStack itemStack = ItemStack.read(itemNbt);
+				ItemStack itemStack = ItemStack.of(itemNbt);
 				inventoryStacks.set(i, itemStack);
 			} else {
 				inventoryStacks.set(i, ItemStack.EMPTY);
@@ -94,7 +94,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
 	protected ItemStack getParent() {
 		for (Hand hand : Hand.values()) {
-			ItemStack held = player.getHeldItem(hand);
+			ItemStack held = player.getItemInHand(hand);
 			if (isSameItemInventory(held, parent)) {
 				return held;
 			}
@@ -109,7 +109,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	@Nullable
 	protected Hand getHand() {
 		for (Hand hand : Hand.values()) {
-			ItemStack held = player.getHeldItem(hand);
+			ItemStack held = player.getItemInHand(hand);
 			if (isSameItemInventory(held, parent)) {
 				return hand;
 			}
@@ -151,12 +151,12 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		}
 
 		CompoundNBT slotsNbt = new CompoundNBT();
-		for (int i = 0; i < getSizeInventory(); i++) {
-			ItemStack itemStack = getStackInSlot(i);
+		for (int i = 0; i < getContainerSize(); i++) {
+			ItemStack itemStack = getItem(i);
 			if (!itemStack.isEmpty()) {
 				String slotKey = getSlotNBTKey(i);
 				CompoundNBT itemNbt = new CompoundNBT();
-				itemStack.write(itemNbt);
+				itemStack.save(itemNbt);
 				slotsNbt.put(slotKey, itemNbt);
 			}
 		}
@@ -188,18 +188,18 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		ItemStack itemstack = ItemStackHelper.getAndSplit(this.inventoryStacks, index, count);
+	public ItemStack removeItem(int index, int count) {
+		ItemStack itemstack = ItemStackHelper.removeItem(this.inventoryStacks, index, count);
 
 		if (!itemstack.isEmpty()) {
-			this.markDirty();
+			this.setChanged();
 		}
 
 		return itemstack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack itemstack) {
+	public void setItem(int index, ItemStack itemstack) {
 		inventoryStacks.set(index, itemstack);
 
 		ItemStack parent = getParent();
@@ -224,56 +224,56 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			slotNbt.remove(slotKey);
 		} else {
 			CompoundNBT itemNbt = new CompoundNBT();
-			itemstack.write(itemNbt);
+			itemstack.save(itemNbt);
 
 			slotNbt.put(slotKey, itemNbt);
 		}
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
+	public ItemStack getItem(int i) {
 		return inventoryStacks.get(i);
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return inventoryStacks.size();
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
 	}
 
 	@Override
-	public final void markDirty() {
+	public final void setChanged() {
 		writeToParentNBT();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+	public boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
 		return canSlotAccept(slotIndex, itemStack);
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slot) {
-		ItemStack toReturn = getStackInSlot(slot);
+	public ItemStack removeItemNoUpdate(int slot) {
+		ItemStack toReturn = getItem(slot);
 
 		if (!toReturn.isEmpty()) {
-			setInventorySlotContents(slot, ItemStack.EMPTY);
+			setItem(slot, ItemStack.EMPTY);
 		}
 
 		return toReturn;
@@ -305,7 +305,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		this.inventoryStacks.clear();
 	}
 }

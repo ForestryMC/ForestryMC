@@ -21,13 +21,13 @@ public class ParticleSnow extends SpriteTexturedParticle {
 	public ParticleSnow(ClientWorld world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
-		this.setSprite(sprites[rand.nextInt(sprites.length)]);
-		this.particleScale *= 0.5F;
-		this.maxAge = (int) (40.0D / (Math.random() * 0.8D + 0.2D));
+		this.setSprite(sprites[random.nextInt(sprites.length)]);
+		this.quadSize *= 0.5F;
+		this.lifetime = (int) (40.0D / (Math.random() * 0.8D + 0.2D));
 
-		this.motionX *= 0.01D;
-		this.motionY *= -0.4D;
-		this.motionZ *= 0.01D;
+		this.xd *= 0.01D;
+		this.yd *= -0.4D;
+		this.zd *= 0.01D;
 	}
 
 	/*@Override

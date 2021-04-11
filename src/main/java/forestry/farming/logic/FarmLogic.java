@@ -70,7 +70,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
+			BlockPos position = translateWithOffset(pos.above(), direction, i);
 			ICrop crop = getCrop(world, position);
 			if (crop != null) {
 				crops.push(crop);
@@ -81,7 +81,7 @@ public abstract class FarmLogic implements IFarmLogic {
 
 	@Nullable
 	protected ICrop getCrop(World world, BlockPos position) {
-		if (!world.isBlockLoaded(position) || world.isAirBlock(position)) {
+		if (!world.hasChunkAt(position) || world.isEmptyBlock(position)) {
 			return null;
 		}
 		BlockState blockState = world.getBlockState(position);
@@ -100,7 +100,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
-		if (!world.isBlockLoaded(position)) {
+		if (!world.hasChunkAt(position)) {
 			return false;
 		}
 		BlockState blockState = world.getBlockState(position);
@@ -109,7 +109,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final boolean isIceBlock(World world, BlockPos position) {
-		if (!world.isBlockLoaded(position)) {
+		if (!world.hasChunkAt(position)) {
 			return false;
 		}
 		BlockState blockState = world.getBlockState(position);
@@ -118,7 +118,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
-		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
+		return VectUtil.scale(farmDirection.getFacing().getNormal(), step).offset(pos);
 	}
 
 	private static AxisAlignedBB getHarvestBox(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
@@ -126,12 +126,12 @@ public abstract class FarmLogic implements IFarmLogic {
 		Vector3i area = farmHousing.getArea();
 		Vector3i offset = farmHousing.getOffset();
 
-		BlockPos min = coords.add(offset);
-		BlockPos max = min.add(area);
+		BlockPos min = coords.offset(offset);
+		BlockPos max = min.offset(area);
 
 		int maxY = max.getY();
 		if (toWorldHeight) {
-			maxY = world.getHeight();
+			maxY = world.getMaxBuildHeight();
 		}
 
 		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
@@ -140,7 +140,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	protected NonNullList<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
-		List<ItemEntity> entityItems = world.getEntitiesWithinAABB(ItemEntity.class, harvestBox, entitySelectorFarm);
+		List<ItemEntity> entityItems = world.getEntitiesOfClass(ItemEntity.class, harvestBox, entitySelectorFarm);
 		NonNullList<ItemStack> stacks = NonNullList.create();
 		for (ItemEntity entity : entityItems) {
 			ItemStack contained = entity.getItem();

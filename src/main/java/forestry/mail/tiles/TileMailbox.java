@@ -45,16 +45,16 @@ public class TileMailbox extends TileBase {
 	/* GUI */
 	@Override
 	public void openGui(ServerPlayerEntity player, BlockPos pos) {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return;
 		}
 
-		ItemStack heldItem = player.getHeldItem(player.getActiveHand());
+		ItemStack heldItem = player.getItemInHand(player.getUsedItemHand());
 		// Handle letter sending
 		if (PostManager.postRegistry.isLetter(heldItem)) {
 			IPostalState result = this.tryDispatchLetter(heldItem);
 			if (!result.isOk()) {
-				player.sendMessage(result.getDescription(), Util.DUMMY_UUID);
+				player.sendMessage(result.getDescription(), Util.NIL_UUID);
 			} else {
 				heldItem.shrink(1);
 			}
@@ -65,7 +65,7 @@ public class TileMailbox extends TileBase {
 
 	/* MAIL HANDLING */
 	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return getInternalInventory();
 		}
 
@@ -79,7 +79,7 @@ public class TileMailbox extends TileBase {
 
 		if (letter != null) {
 			//this is only called after !world.isRemote has been checked, so I believe the cast is OK
-			ServerWorld world = (ServerWorld) this.world;
+			ServerWorld world = (ServerWorld) this.level;
 			result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;

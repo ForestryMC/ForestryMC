@@ -5,9 +5,9 @@ import java.util.function.Supplier;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
-import genetics.api.individual.IIndividual;
-
 import forestry.api.genetics.gatgets.IDatabaseTab;
+
+import genetics.api.individual.IIndividual;
 
 //TODO: Rework the database and the analyser
 public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab<I> {
@@ -27,6 +27,6 @@ public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab
 	//TODO -side issues
 	@Override
 	public String getTooltip(IIndividual individual) {
-		return I18n.format("for.gui.database.tab." + name + ".name");
+		return I18n.get("for.gui.database.tab." + name + ".name");
 	}
 }

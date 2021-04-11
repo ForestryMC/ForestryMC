@@ -47,7 +47,7 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			Container container = player.openContainer;
+			Container container = player.containerMenu;
 			if (container instanceof ContainerImprinter) {
 				int primaryIndex = data.readVarInt();
 				int secondaryIndex = data.readVarInt();

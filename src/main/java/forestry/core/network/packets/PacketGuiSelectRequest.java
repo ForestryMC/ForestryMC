@@ -46,7 +46,7 @@ public class PacketGuiSelectRequest extends ForestryPacket implements IForestryP
 			int primary = data.readVarInt();
 			int secondary = data.readVarInt();
 
-			Container container = player.openContainer;
+			Container container = player.containerMenu;
 			if ((container instanceof IGuiSelectable)) {
 				IGuiSelectable guiSelectable = (IGuiSelectable) container;
 				guiSelectable.handleSelectionRequest(player, primary, secondary);

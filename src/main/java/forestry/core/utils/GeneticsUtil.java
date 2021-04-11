@@ -29,22 +29,6 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import genetics.api.GeneticHelper;
-import genetics.api.GeneticsAPI;
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.components.ComponentKeys;
-
-import genetics.utils.AlleleUtils;
-import genetics.utils.RootUtils;
-
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -60,6 +44,21 @@ import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.core.genetics.ItemGE;
 import forestry.core.tiles.TileUtil;
+
+import genetics.api.GeneticHelper;
+import genetics.api.GeneticsAPI;
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.components.ComponentKeys;
+import genetics.utils.AlleleUtils;
+import genetics.utils.RootUtils;
 
 public class GeneticsUtil {
 
@@ -84,7 +83,7 @@ public class GeneticsUtil {
 	}
 
 	public static boolean hasNaturalistEye(PlayerEntity player) {
-		ItemStack armorItemStack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+		ItemStack armorItemStack = player.getItemBySlot(EquipmentSlotType.HEAD);
 		if (armorItemStack.isEmpty()) {
 			return false;
 		}
@@ -180,7 +179,7 @@ public class GeneticsUtil {
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
 	public static Optional<IIndividual> getPollen(IWorld world, final BlockPos pos) {
-		if (!world.isBlockLoaded(pos)) {
+		if (!world.hasChunkAt(pos)) {
 			return Optional.empty();
 		}
 

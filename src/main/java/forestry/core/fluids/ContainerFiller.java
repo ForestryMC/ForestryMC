@@ -35,7 +35,7 @@ public class ContainerFiller {
 	}
 
 	public void updateServerSide() {
-		ItemStack input = inventory.getStackInSlot(inputSlot);
+		ItemStack input = inventory.getItem(inputSlot);
 		if (usedInput == null || !ItemStackUtil.isIdenticalItem(usedInput, input)) {
 			fillingProgress = 0;
 			usedInput = input;

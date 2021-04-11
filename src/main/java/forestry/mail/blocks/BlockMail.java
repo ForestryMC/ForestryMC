@@ -19,8 +19,8 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
 	public BlockMail(BlockTypeMail blockType) {
-		super(blockType, Block.Properties.create(Material.IRON)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(0));
+		super(blockType, Block.Properties.of(Material.METAL)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 	}
 }

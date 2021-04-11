@@ -34,7 +34,7 @@ public final class RecipeUtils {
         if(manager == null){
             return null;
         }
-        return manager.getRecipes(recipeType).get(name);
+        return manager.byType(recipeType).get(name);
     }
 
     public static <C extends IInventory, T extends IRecipe<C>> List<T> getRecipes(IRecipeType<T> recipeType, C inventory, @Nullable World world) {
@@ -42,11 +42,11 @@ public final class RecipeUtils {
         if (manager == null || world == null) {
             return Collections.emptyList();
         }
-        return manager.getRecipes(recipeType, inventory, world);
+		return manager.getRecipesFor(recipeType, inventory, world);
     }
 
     public static List<ICraftingRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {
-        return world.getRecipeManager().getRecipes(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+		return world.getRecipeManager().getRecipesFor(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
     }
 
 }

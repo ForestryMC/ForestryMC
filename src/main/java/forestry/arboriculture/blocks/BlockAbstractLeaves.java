@@ -46,7 +46,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	protected abstract ITree getTree(IBlockReader world, BlockPos pos);
 
 	@Override
-	public final void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> list) {
+	public final void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> list) {
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 
@@ -90,10 +90,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	 * Used for walking through willow leaves.
 	 */
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		super.onEntityCollision(state, worldIn, pos, entityIn);
-		Vector3d motion = entityIn.getMotion();
-		entityIn.setMotion(motion.getX() * 0.4D, motion.getY(), motion.getZ() * 0.4D);
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		super.entityInside(state, worldIn, pos, entityIn);
+		Vector3d motion = entityIn.getDeltaMovement();
+		entityIn.setDeltaMovement(motion.x() * 0.4D, motion.y(), motion.z() * 0.4D);
 	}
 
 	/* RENDERING */

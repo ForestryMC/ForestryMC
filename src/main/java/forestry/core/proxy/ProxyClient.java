@@ -64,13 +64,13 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public File getForestryRoot() {
-		return Minecraft.getInstance().gameDir;
+		return Minecraft.getInstance().gameDirectory;
 	}
 
 	@Override
 	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
 		if (PlayerEntity instanceof ClientPlayerEntity) {
-			return Minecraft.getInstance().playerController.getBlockReachDistance();
+			return Minecraft.getInstance().gameMode.getPickRange();
 		} else {
 			return 4f;
 		}

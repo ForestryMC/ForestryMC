@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import forestry.apiculture.blocks.BlockAlveary;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
@@ -45,6 +44,7 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.gui.ContainerAlveary;
@@ -69,30 +69,30 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	@Override
 	public void onMachineAssembled(IMultiblockController multiblockController, BlockPos minCoord, BlockPos maxCoord) {
 		Block block = getBlockState().getBlock();
-		if(block instanceof BlockAlveary) {
-			world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+		if (block instanceof BlockAlveary) {
+			level.setBlockAndUpdate(getBlockPos(), ((BlockAlveary) block).getNewState(this));
 		}
-		world.notifyNeighborsOfStateChange(getPos(), block);
+		level.updateNeighborsAt(getBlockPos(), block);
 		// Re-render this block on the client
-		if (world.isRemote) {
-			RenderUtil.markForUpdate(getPos());
+		if (level.isClientSide) {
+			RenderUtil.markForUpdate(getBlockPos());
 		}
 	}
 
 	@Override
 	public void onMachineBroken() {
 		Block block = getBlockState().getBlock();
-		if(block instanceof BlockAlveary) {
-			world.setBlockState(getPos(), ((BlockAlveary) block).getNewState(this));
+		if (block instanceof BlockAlveary) {
+			level.setBlockAndUpdate(getBlockPos(), ((BlockAlveary) block).getNewState(this));
 		}
-		world.notifyNeighborsOfStateChange(getPos(), getBlockState().getBlock());
+		level.updateNeighborsAt(getBlockPos(), getBlockState().getBlock());
 		// Re-render this block on the client
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			//TODO
-			BlockPos pos = getPos();
+			BlockPos pos = getBlockPos();
 			RenderUtil.markForUpdate(pos);
 		}
-		markDirty();
+		setChanged();
 	}
 
 	@Override

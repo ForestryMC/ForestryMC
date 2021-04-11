@@ -25,7 +25,7 @@ import forestry.core.tiles.TileUtil;
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
 	public static ContainerAlvearySieve fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileAlvearySieve tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileAlvearySieve.class);
+		TileAlvearySieve tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlvearySieve.class);
 		return new ContainerAlvearySieve(windowId, inv, tile);    //TODO nullability.
 	}
 

@@ -19,8 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-
 import net.minecraft.world.World;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -124,7 +124,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 
 	//Client Only
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
-		World world = Minecraft.getInstance().world;
+		World world = Minecraft.getInstance().level;
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
 			return ItemStack.EMPTY;

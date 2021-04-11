@@ -18,6 +18,8 @@ import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.render.ColourProperties;
@@ -26,8 +28,6 @@ import forestry.core.utils.Translator;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
 
-import org.lwjgl.glfw.GLFW;
-
 public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	private final TileTrader tile;
 	private TextFieldWidget addressNameField;
@@ -35,19 +35,19 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	public GuiTradeName(ContainerTradeName container, PlayerInventory inv, ITextComponent title) {
 		super(Constants.TEXTURE_PATH_GUI + "/tradername.png", container, inv, title);
 		this.tile = container.getTile();
-		this.xSize = 176;
-		this.ySize = 90;
+		this.imageWidth = 176;
+		this.imageHeight = 90;
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
+		addressNameField = new TextFieldWidget(this.minecraft.font, leftPos + 44, topPos + 39, 90, 14, null);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 
-		addressNameField = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 44, guiTop + 39, 90, 14, null);
-		addressNameField.setText(container.getAddress().getName());
-		addressNameField.setFocused2(true);
+		addressNameField = new TextFieldWidget(this.minecraft.font, leftPos + 44, topPos + 39, 90, 14, null);
+		addressNameField.setValue(container.getAddress().getName());
+		addressNameField.setFocus(true);
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int var3, int var2) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, var3, var2);
+	protected void renderBg(MatrixStack transform, float partialTicks, int var3, int var2) {
+		super.renderBg(transform, partialTicks, var3, var2);
 
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
 		textLayout.startPage();
@@ -88,13 +88,13 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
+	public void removed() {
+		super.removed();
 		setAddress();
 	}
 
 	private void setAddress() {
-		String address = addressNameField.getText();
+		String address = addressNameField.getValue();
 		if (StringUtils.isNotBlank(address)) {
 			PacketTraderAddressRequest packet = new PacketTraderAddressRequest(tile, address);
 			NetworkUtil.sendToServer(packet);

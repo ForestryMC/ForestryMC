@@ -69,13 +69,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	private ICarpenterRecipe currentRecipe;
 
 	private ItemStack getBoxStack() {
-		return getInternalInventory().getStackInSlot(InventoryCarpenter.SLOT_BOX);
+		return getInternalInventory().getItem(InventoryCarpenter.SLOT_BOX);
 	}
 
 	public TileCarpenter() {
 		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getWorld().getRecipeManager()));
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getLevel().getRecipeManager()));
 
 		craftingInventory = new InventoryGhostCrafting<>(this, 10);
 		craftPreviewInventory = new CraftResultInventory();
@@ -87,8 +87,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		tankManager.write(compoundNBT);
 		craftingInventory.write(compoundNBT);
@@ -96,8 +96,8 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 		craftingInventory.read(compoundNBT);
 	}
@@ -116,13 +116,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	public void checkRecipe() {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return;
 		}
 
 		//TODO optional could work quite well here
-		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory, world)) {
-			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(world.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory, world);
+		if (!RecipeManagers.carpenterManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory, level)) {
+			Optional<ICarpenterRecipe> optional = RecipeManagers.carpenterManager.findMatchingRecipe(level.getRecipeManager(), resourceTank.getFluid(), getBoxStack(), craftingInventory, level);
 			currentRecipe = optional.orElse(null);
 
 			if (optional.isPresent()) {
@@ -131,9 +131,9 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 				setEnergyPerWorkCycle(recipeTime * ENERGY_PER_RECIPE_TIME);
 
 				ItemStack craftingResult = currentRecipe.getResult();
-				craftPreviewInventory.setInventorySlotContents(0, craftingResult);
+				craftPreviewInventory.setItem(0, craftingResult);
 			} else {
-				craftPreviewInventory.setInventorySlotContents(0, ItemStack.EMPTY);
+				craftPreviewInventory.setItem(0, ItemStack.EMPTY);
 			}
 		}
 	}
@@ -187,13 +187,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			return true;
 		}
 
-		if (!currentRecipe.getBox().hasNoMatchingItems()) {
-			ItemStack box = getStackInSlot(InventoryCarpenter.SLOT_BOX);
+		if (!currentRecipe.getBox().isEmpty()) {
+			ItemStack box = getItem(InventoryCarpenter.SLOT_BOX);
 			if (box.isEmpty()) {
 				return false;
 			}
 			if (doRemove) {
-				decrStackSize(InventoryCarpenter.SLOT_BOX, 1);
+				removeItem(InventoryCarpenter.SLOT_BOX, 1);
 			}
 		}
 
@@ -248,7 +248,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
-		craftPreviewInventory.setInventorySlotContents(0, itemStack);
+		craftPreviewInventory.setItem(0, itemStack);
 	}
 
 

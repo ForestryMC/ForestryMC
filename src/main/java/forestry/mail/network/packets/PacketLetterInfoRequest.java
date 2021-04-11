@@ -36,7 +36,7 @@ public class PacketLetterInfoRequest extends ForestryPacket implements IForestry
 
 	@Override
 	protected void writeData(PacketBufferForestry data) {
-		data.writeString(recipientName);
+		data.writeUtf(recipientName);
 		data.writeEnum(addressType, EnumAddressee.values());
 	}
 
@@ -44,11 +44,11 @@ public class PacketLetterInfoRequest extends ForestryPacket implements IForestry
 
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
-			String recipientName = data.readString();
+			String recipientName = data.readUtf();
 			EnumAddressee addressType = data.readEnum(EnumAddressee.values());
 
-			if (player.openContainer instanceof ContainerLetter) {
-				ContainerLetter containerLetter = (ContainerLetter) player.openContainer;
+			if (player.containerMenu instanceof ContainerLetter) {
+				ContainerLetter containerLetter = (ContainerLetter) player.containerMenu;
 				containerLetter.handleRequestLetterInfo(player, recipientName, addressType);
 			}
 		}

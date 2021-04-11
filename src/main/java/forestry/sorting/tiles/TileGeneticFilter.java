@@ -24,12 +24,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import genetics.api.individual.IIndividual;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IRootDefinition;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.api.genetics.filter.IFilterData;
@@ -47,6 +41,11 @@ import forestry.sorting.gui.ContainerGeneticFilter;
 import forestry.sorting.inventory.InventoryFilter;
 import forestry.sorting.inventory.ItemHandlerFilter;
 
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootDefinition;
+import genetics.utils.RootUtils;
+
 public class TileGeneticFilter extends TileForestry implements IStreamableGui, IFilterContainer {
 	private static final int TRANSFER_DELAY = 5;
 
@@ -61,8 +60,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		super.save(data);
 
 		data.put("Logic", logic.write(new CompoundNBT()));
 
@@ -70,8 +69,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 
 		logic.read(data.getCompound("Logic"));
 	}
@@ -88,10 +87,10 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	private void sendToPlayers(ServerWorld server, PlayerEntity PlayerEntity) {
-		for (PlayerEntity player : server.getPlayers()) {
-			if (player != PlayerEntity && player.openContainer instanceof ContainerGeneticFilter) {
-				if (((ContainerGeneticFilter) PlayerEntity.openContainer).hasSameTile((ContainerGeneticFilter) player.openContainer)) {
-					((ContainerGeneticFilter) player.openContainer).setGuiNeedsUpdate(true);
+		for (PlayerEntity player : server.players()) {
+			if (player != PlayerEntity && player.containerMenu instanceof ContainerGeneticFilter) {
+				if (((ContainerGeneticFilter) PlayerEntity.containerMenu).hasSameTile((ContainerGeneticFilter) player.containerMenu)) {
+					((ContainerGeneticFilter) player.containerMenu).setGuiNeedsUpdate(true);
 				}
 			}
 		}
@@ -101,7 +100,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	protected void updateServerSide() {
 		if (updateOnInterval(TRANSFER_DELAY)) {
 			for (Direction facing : Direction.VALUES) {
-				ItemStack stack = getStackInSlot(facing.getIndex());
+				ItemStack stack = getItem(facing.get3DDataValue());
 				if (stack.isEmpty()) {
 					continue;
 				}
@@ -110,9 +109,9 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 				if (remaining > 0) {
 					stack = stack.copy();
 					stack.setCount(remaining);
-					ItemStackUtil.dropItemStackAsEntity(stack.copy(), world, pos.getX(), pos.getY() + 0.5F, pos.getZ());
+					ItemStackUtil.dropItemStackAsEntity(stack.copy(), level, worldPosition.getX(), worldPosition.getY() + 0.5F, worldPosition.getZ());
 				}
-				setInventorySlotContents(facing.getIndex(), ItemStack.EMPTY);
+				setItem(facing.get3DDataValue(), ItemStack.EMPTY);
 			}
 		}
 	}
@@ -121,7 +120,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		if (inventoryCache.getAdjacentInventory(facing) != null) {
 			return true;
 		}
-		TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
+		TileEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
 		return TileUtil.getInventoryFromTile(tileEntity, facing.getOpposite()) != null;
 	}
 

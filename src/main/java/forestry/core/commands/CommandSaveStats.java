@@ -75,7 +75,7 @@ public final class CommandSaveStats implements Command<CommandSource> {
 
 		ServerPlayerEntity player = EntityArgument.getPlayer(ctx, "player");
 
-		World world = ctx.getSource().getWorld();
+		World world = ctx.getSource().getLevel();
 
 		Collection<String> statistics = new ArrayList<>();
 

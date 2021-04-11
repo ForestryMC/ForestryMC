@@ -38,8 +38,8 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", container, inv, title);
 
 		this.tile = container.getTile();
-		this.xSize = 228;
-		this.ySize = 235;
+		this.imageWidth = 228;
+		this.imageHeight = 235;
 
 		this.widgetManager.add(new ProbeButton(this, widgetManager, 14, 16));
 
@@ -83,17 +83,17 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
-			GuiUtil.drawItemStack(this, LEVEL_ITEM, guiLeft + 170 + i * 8, guiTop + 7);
+			GuiUtil.drawItemStack(this, LEVEL_ITEM, leftPos + 170 + i * 8, topPos + 7);
 		}
 
 		textLayout.startPage();
 		{
 			RenderSystem.scaled(0.5, 0.5, 0.5);
-			RenderSystem.translated(guiLeft + 170, guiTop + 10, 0.0);
+			RenderSystem.translated(leftPos + 170, topPos + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();

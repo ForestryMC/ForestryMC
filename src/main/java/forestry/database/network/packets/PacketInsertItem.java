@@ -35,7 +35,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			boolean single = data.readBoolean();
-			Container container = player.openContainer;
+			Container container = player.containerMenu;
 			if (!(container instanceof ContainerDatabase)) {
 				return;
 			}
@@ -44,7 +44,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 			if (itemHandler == null) {
 				return;
 			}
-			ItemStack playerStack = player.inventory.getItemStack();
+			ItemStack playerStack = player.inventory.getCarried();
 			ItemStack itemStack = playerStack.copy();
 
 			if (single) {
@@ -54,10 +54,10 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 			if (single && remaining.isEmpty()) {
 				playerStack.shrink(1);
 				if (playerStack.isEmpty()) {
-					player.inventory.setItemStack(ItemStack.EMPTY);
+					player.inventory.setCarried(ItemStack.EMPTY);
 				}
 			} else {
-				player.inventory.setItemStack(remaining);
+				player.inventory.setCarried(remaining);
 			}
 
 			if (container instanceof ContainerDatabase) {

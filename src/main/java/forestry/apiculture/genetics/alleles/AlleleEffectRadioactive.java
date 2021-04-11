@@ -22,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -33,6 +31,8 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.DamageSourceForestry;
 import forestry.core.utils.VectUtil;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
@@ -61,13 +61,13 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			entity.attackEntityFrom(damageSourceBeeRadioactive, damage);
+			entity.hurt(damageSourceBeeRadioactive, damage);
 		}
 	}
 
 	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		World world = housing.getWorldObj();
-		Random rand = world.rand;
+		Random rand = world.random;
 
 		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
 		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
@@ -75,10 +75,10 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 		for (int i = 0; i < 20; i++) {
 			BlockPos randomPos = VectUtil.getRandomPositionInArea(rand, area);
-			BlockPos posBlock = randomPos.add(posHousing);
-			posBlock = posBlock.add(offset);
+			BlockPos posBlock = randomPos.offset(posHousing);
+			posBlock = posBlock.offset(offset);
 
-			if (posBlock.getY() <= 1 || posBlock.getY() >= world.func_234938_ad_()) {
+			if (posBlock.getY() <= 1 || posBlock.getY() >= world.getMaxBuildHeight()) {
 				continue;
 			}
 
@@ -87,7 +87,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (!world.isBlockLoaded(posBlock) || world.isAirBlock(posBlock)) {
+			if (!world.hasChunkAt(posBlock) || world.isEmptyBlock(posBlock)) {
 				continue;
 			}
 
@@ -103,7 +103,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			if (blockState.getBlockHardness(world, posBlock) < 0) {
+			if (blockState.getDestroySpeed(world, posBlock) < 0) {
 				continue;
 			}
 

@@ -31,14 +31,14 @@ public class DatabaseHelper {
 	//TODO simplify this?
 	public static ITextComponent getItemName(ItemStack itemStack) {
 		try {
-			ITextComponent name = itemStack.getDisplayName();
-			if (name.getUnformattedComponentText().isEmpty()) {
-				name = new TranslationTextComponent(itemStack.getItem().getTranslationKey(itemStack));
+			ITextComponent name = itemStack.getHoverName();
+			if (name.getContents().isEmpty()) {
+				name = new TranslationTextComponent(itemStack.getItem().getDescriptionId(itemStack));
 			}
 			return name;
 		} catch (final Exception errA) {
 			try {
-				String name = itemStack.getTranslationKey();
+				String name = itemStack.getDescriptionId();
 				return new TranslationTextComponent(name);
 			} catch (final Exception errB) {
 				return new StringTextComponent("Exception");

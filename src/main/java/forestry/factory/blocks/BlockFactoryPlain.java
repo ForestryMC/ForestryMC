@@ -19,8 +19,8 @@ import forestry.core.blocks.BlockBase;
 
 public class BlockFactoryPlain extends BlockBase<BlockTypeFactoryPlain> {
 	public BlockFactoryPlain(BlockTypeFactoryPlain type) {
-		super(type, Block.Properties.create(Material.IRON)
-			.harvestTool(ToolType.PICKAXE)
-			.harvestLevel(0));
+		super(type, Block.Properties.of(Material.METAL)
+				.harvestTool(ToolType.PICKAXE)
+				.harvestLevel(0));
 	}
 }

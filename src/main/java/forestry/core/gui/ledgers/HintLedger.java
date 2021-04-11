@@ -37,10 +37,10 @@ public class HintLedger extends Ledger {
 		hintTooltip = new TranslationTextComponent("for.hints." + hint + ".tag");
 
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
+		FontRenderer fontRenderer = minecraft.font;
 		//TODO text component
-		int lineCount = fontRenderer.func_238425_b_(hintString, maxTextWidth).size();
-		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
+		int lineCount = fontRenderer.split(hintString, maxTextWidth).size();
+		maxHeight = (lineCount + 1) * fontRenderer.lineHeight + 20;
 	}
 
 	@Override

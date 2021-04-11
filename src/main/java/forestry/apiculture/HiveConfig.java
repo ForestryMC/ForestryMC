@@ -38,7 +38,7 @@ public class HiveConfig {
 			whitelistedDims.add(new ResourceLocation(dimId));
 		}
 		for (IHiveRegistry.HiveType type : IHiveRegistry.HiveType.values()) {
-			String[] entries = config.get(CATEGORY, type.getString(), new String[0]).getStringList();
+			String[] entries = config.get(CATEGORY, type.getSerializedName(), new String[0]).getStringList();
 			configs.put(type, new HiveConfig(entries));
 		}
 		String[] globalEntries = config.get(CATEGORY, "global", new String[0]).getStringList();

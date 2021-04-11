@@ -56,14 +56,14 @@ public class CarpenterRecipeBuilder {
 
 	public CarpenterRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
 		this.recipe = holder.get();
 		return this;
 	}
 
 	public CarpenterRecipeBuilder recipe(ShapelessRecipeBuilder recipe) {
 		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.addCriterion("impossible", new ImpossibleTrigger.Instance()).build(holder::set);
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
 		this.recipe = holder.get();
 		return this;
 	}
@@ -103,15 +103,15 @@ public class CarpenterRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.addProperty("time", packagingTime);
 
 			if (liquid != null) {
 				json.add("liquid", RecipeSerializers.serializeFluid(liquid));
 			}
 
-			json.add("box", box.serialize());
-			json.add("recipe", recipe.getRecipeJson());
+			json.add("box", box.toJson());
+			json.add("recipe", recipe.serializeRecipe());
 
 			if (result != null) {
 				json.add("result", RecipeSerializers.item(result));
@@ -119,22 +119,22 @@ public class CarpenterRecipeBuilder {
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ICarpenterRecipe.Companion.SERIALIZER;
 		}
 
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

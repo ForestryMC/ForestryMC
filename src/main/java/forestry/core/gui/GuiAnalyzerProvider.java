@@ -96,16 +96,16 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		super.init();
 
 		if (analyzer.isVisible()) {
-			this.guiLeft = (this.width - this.xSize + analyzer.getWidth() + (screenDistance)) / 2;
+			this.leftPos = (this.width - this.imageWidth + analyzer.getWidth() + (screenDistance)) / 2;
 		}
-		window.init(guiLeft, guiTop + (ySize - 166) / 2);
+		window.init(leftPos, topPos + (imageHeight - 166) / 2);
 
-		addButton(new GuiToggleButton(guiLeft + buttonX, guiTop + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
+		addButton(new GuiToggleButton(leftPos + buttonX, topPos + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
 		dirty = true;
 
 		if (slotAnalyzer != null) {
 			IGuiElement element = analyzer.getItemElement();
-			slotAnalyzer.setPosition(element.getAbsoluteX() - guiLeft + 6, element.getAbsoluteY() - guiTop + 9);
+			slotAnalyzer.setPosition(element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
 		}
 	}
 
@@ -142,8 +142,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseX, mouseY);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(transform, partialTicks, mouseX, mouseY);
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();

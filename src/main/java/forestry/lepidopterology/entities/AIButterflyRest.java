@@ -30,19 +30,19 @@ public class AIButterflyRest extends AIButterflyBase {
 
 	public AIButterflyRest(EntityButterfly entity) {
 		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
+		setFlags(EnumSet.of(Flag.MOVE));
 		//		setMutexBits(3);	TODO mutex
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 
 		if (entity.getExhaustion() < EntityButterfly.EXHAUSTION_REST
-			&& entity.canFly()) {
+				&& entity.canFly()) {
 			return false;
 		}
 
-		Vector3d entityPos = entity.getPositionVec();
+		Vector3d entityPos = entity.position();
 		int x = (int) entityPos.x;
 		int y = (int) Math.floor(entityPos.y);
 		int z = (int) entityPos.z;
@@ -52,15 +52,15 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 
-		pos = pos.offset(Direction.DOWN);
-		if (entity.world.isAirBlock(pos)) {
+		pos = pos.relative(Direction.DOWN);
+		if (entity.level.isEmptyBlock(pos)) {
 			return false;
 		}
-		BlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.level.getBlockState(pos);
 		if (blockState.getMaterial().isLiquid()) {
 			return false;
 		}
-		if (!entity.getButterfly().isAcceptedEnvironment(entity.world, x, pos.getY(), z)) {
+		if (!entity.getButterfly().isAcceptedEnvironment(entity.level, x, pos.getY(), z)) {
 			return false;
 		}
 
@@ -70,7 +70,7 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		if (entity.getExhaustion() <= 0 && entity.canFly()) {
 			return false;
 		}
@@ -78,11 +78,11 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 	}
 
 	@Override
@@ -91,12 +91,12 @@ public class AIButterflyRest extends AIButterflyBase {
 	}
 
 	private boolean canLand(BlockPos pos) {
-		if (!entity.world.isBlockLoaded(pos)) {
+		if (!entity.level.hasChunkAt(pos)) {
 			return false;
 		}
-		BlockState blockState = entity.world.getBlockState(pos);
+		BlockState blockState = entity.level.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if (!block.isAir(blockState, entity.world, pos)) {    //TODO
+		if (!block.isAir(blockState, entity.level, pos)) {    //TODO
 			//			if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
@@ -104,9 +104,9 @@ public class AIButterflyRest extends AIButterflyBase {
 			return true;
 		}
 
-		BlockState blockStateBelow = entity.world.getBlockState(pos.down());
+		BlockState blockStateBelow = entity.level.getBlockState(pos.below());
 		Block blockBelow = blockStateBelow.getBlock();
-		return isRest(blockBelow) || blockBelow.isIn(BlockTags.LEAVES);
+		return isRest(blockBelow) || blockBelow.is(BlockTags.LEAVES);
 	}
 
 	private static boolean isRest(Block block) {
@@ -125,7 +125,7 @@ public class AIButterflyRest extends AIButterflyBase {
 		} else if (block instanceof IGrowable) {
 			return true;
 		} else {
-			return blockState.getMaterial() == Material.PLANTS;
+			return blockState.getMaterial() == Material.PLANT;
 		}
 	}
 }

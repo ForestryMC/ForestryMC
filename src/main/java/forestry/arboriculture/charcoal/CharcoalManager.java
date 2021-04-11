@@ -37,7 +37,7 @@ public class CharcoalManager implements ICharcoalManager {
 
 	@Override
 	public boolean removeWall(Block block) {
-		return removeWall(block.getDefaultState());
+		return removeWall(block.defaultBlockState());
 	}
 
 	@Override

@@ -56,9 +56,9 @@ public final class AdjacentTileCache {
 
 	@Nullable
 	private TileEntity searchSide(Direction side) {
-		World world = source.getWorld();
-		BlockPos pos = source.getPos().offset(side);
-		if (world.isBlockLoaded(pos) && !world.isAirBlock(pos)) {
+		World world = source.getLevel();
+		BlockPos pos = source.getBlockPos().relative(side);
+		if (world.hasChunkAt(pos) && !world.isEmptyBlock(pos)) {
 			return TileUtil.getTile(world, pos);
 		}
 		return null;
@@ -100,7 +100,7 @@ public final class AdjacentTileCache {
 	}
 
 	private boolean areCoordinatesOnSide(Direction side, TileEntity target) {
-		return source.getPos().getX() + side.getXOffset() == target.getPos().getX() && source.getPos().getY() + side.getYOffset() == target.getPos().getY() && source.getPos().getZ() + side.getZOffset() == target.getPos().getZ();
+		return source.getBlockPos().getX() + side.getStepX() == target.getBlockPos().getX() && source.getBlockPos().getY() + side.getStepY() == target.getBlockPos().getY() && source.getBlockPos().getZ() + side.getStepZ() == target.getBlockPos().getZ();
 	}
 
 	@Nullable
@@ -114,7 +114,7 @@ public final class AdjacentTileCache {
 			}
 		}
 
-		if (timer[s].hasTriggered(source.getWorld(), delay[s])) {
+		if (timer[s].hasTriggered(source.getLevel(), delay[s])) {
 			setTile(s, searchSide(side));
 			if (cache[s] == null) {
 				incrementDelay(s);

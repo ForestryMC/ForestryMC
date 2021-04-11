@@ -33,13 +33,13 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		if (!itemstack.hasTag()) {
 			return new TranslationTextComponent("trees.grammar.leaves.type");
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(tileLeaves.getBlockState(), itemstack.getTag());
+		tileLeaves.load(tileLeaves.getBlockState(), itemstack.getTag());
 
 		String unlocalizedName = tileLeaves.getUnlocalizedName();
 		return getDisplayName(unlocalizedName);
@@ -65,7 +65,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.read(tileLeaves.getBlockState(), itemStack.getTag());
+		tileLeaves.load(tileLeaves.getBlockState(), itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();

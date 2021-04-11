@@ -52,12 +52,12 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	@Override
 	public Vector3i getArea() {
-		return Vector3i.NULL_VECTOR;
+		return Vector3i.ZERO;
 	}
 
 	@Override
 	public Vector3i getOffset() {
-		return Vector3i.NULL_VECTOR;
+		return Vector3i.ZERO;
 	}
 
 	@Override

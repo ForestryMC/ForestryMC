@@ -26,14 +26,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import genetics.commands.CommandListAlleles;
-
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneTemplate;
 import genetics.api.organism.IOrganism;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
+import genetics.commands.CommandListAlleles;
 import genetics.individual.GeneticSaveHandler;
 import genetics.individual.SaveFormat;
 import genetics.items.GeneTemplate;
@@ -104,7 +103,7 @@ public class Genetics {
 	}
 
 	public void serverStarting(FMLServerStartingEvent event) {
-		CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommandManager().getDispatcher();
+		CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommands().getDispatcher();
 		LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("genetics");
 		rootCommand.then(CommandListAlleles.register());
 		dispatcher.register(rootCommand);

@@ -35,15 +35,15 @@ public class ItemForestryFood extends Item {
 
 	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
 		super(properties
-			.group(ItemGroupForestry.tabForestry)
+				.tab(ItemGroupForestry.tabForestry)
 			.food((new Food.Builder())
-				.hunger(heal)
-				.saturation(saturation)
+					.nutrition(heal)
+					.saturationMod(saturation)
 				.build()));
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack itemstack) {
+	public UseAction getUseAnimation(ItemStack itemstack) {
 		if (isDrink) {
 			return UseAction.DRINK;
 		} else {

@@ -95,7 +95,7 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public boolean func_230044_c_() {
+	public boolean usesBlockLight() {
 		return true;
 	}
 
@@ -104,7 +104,7 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public boolean isAmbientOcclusion() {
+	public boolean useAmbientOcclusion() {
 		return isAmbientOcclusion;
 	}
 
@@ -113,18 +113,18 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture() {
+	public TextureAtlasSprite getParticleIcon() {
 		return particleSprite;
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
+	public boolean isCustomRenderer() {
 		return false;
 	}
 
 	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
-		return ItemCameraTransforms.DEFAULT;
+	public ItemCameraTransforms getTransforms() {
+		return ItemCameraTransforms.NO_TRANSFORMS;
 	}
 
 	@Override

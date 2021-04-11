@@ -68,7 +68,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
 		CompoundNBT tag = NBTUtil.writeBlockState(blockState);
-		data.writeCompoundTag(tag);
+		data.writeNbt(tag);
 	}
 
 	@Override
@@ -83,21 +83,21 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 			BlockPos pos = data.readBlockPos();
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
-			World world = player.world;
-			BlockState blockState = NBTUtil.readBlockState(data.readCompoundTag());
+			World world = player.level;
+			BlockState blockState = NBTUtil.readBlockState(data.readNbt());
 			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
-				Minecraft.getInstance().particles.addBlockDestroyEffects(pos, blockState);
+				Minecraft.getInstance().particleEngine.destroy(pos, blockState);
 			}
 
 			if (soundFX != SoundFXType.NONE) {
 				SoundType soundType = block.getSoundType(blockState, world, pos, null);
 
 				if (soundFX == SoundFXType.BLOCK_BREAK) {
-					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-					world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				}
 			}
 		}

@@ -79,15 +79,15 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 	}
 
@@ -109,15 +109,15 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		if (updateOnInterval(20)) {
 			IErrorLogic errorLogic = getErrorLogic();
 
-			BlockPos pos = getPos();
-			Biome biome = world.getBiome(pos);
+			BlockPos pos = getBlockPos();
+			Biome biome = level.getBiome(pos);
 			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.RainType.RAIN), EnumErrorCode.NO_RAIN_BIOME);
 
-			BlockPos posAbove = pos.up();
-			boolean hasSky = world.canBlockSeeSky(posAbove);
+			BlockPos posAbove = pos.above();
+			boolean hasSky = level.canSeeSkyFromBelowWater(posAbove);
 			errorLogic.setCondition(!hasSky, EnumErrorCode.NO_SKY_RAIN_TANK);
 
-			errorLogic.setCondition(!world.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
+			errorLogic.setCondition(!level.isRainingAt(posAbove), EnumErrorCode.NOT_RAINING);
 
 			if (!errorLogic.hasErrors()) {
 				resourceTank.fillInternal(WATER_PER_UPDATE, IFluidHandler.FluidAction.EXECUTE);
@@ -127,7 +127,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 
 		if (canDumpBelow == null) {
-			canDumpBelow = FluidHelper.canAcceptFluid(world, getPos().down(), Direction.UP, STACK_WATER);
+			canDumpBelow = FluidHelper.canAcceptFluid(level, getBlockPos().below(), Direction.UP, STACK_WATER);
 		}
 
 		if (canDumpBelow) {
@@ -139,7 +139,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 	private boolean dumpFluidBelow() {
 		if (!resourceTank.isEmpty()) {
-			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(world, pos.down(), Direction.UP);
+			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(level, worldPosition.below(), Direction.UP);
 			if (fluidCap.isPresent()) {
 				return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidAttributes.BUCKET_VOLUME / 20, true).isEmpty();
 			}
@@ -165,7 +165,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.sendWindowProperty(container, 0, containerFiller.getFillingProgress());
+		iCrafting.setContainerData(container, 0, containerFiller.getFillingProgress());
 	}
 
 	@Override
@@ -177,7 +177,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborTileChange(world, pos, neighbor);
 
-		if (neighbor.equals(pos.down())) {
+		if (neighbor.equals(pos.below())) {
 			canDumpBelow = FluidHelper.canAcceptFluid(world, neighbor, Direction.UP, STACK_WATER);
 		}
 	}

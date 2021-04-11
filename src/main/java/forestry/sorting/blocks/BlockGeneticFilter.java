@@ -42,19 +42,19 @@ public class BlockGeneticFilter extends BlockForestry {
 	private static final AxisAlignedBB[] BOX_FACES = {BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST};
 
 	public BlockGeneticFilter() {    //TODO super resets hardness and resistance
-		super(Block.Properties.create(Material.WOOD)
-				.hardnessAndResistance(0.25f, 3.0f)
-				.variableOpacity()    //TODO maybe?
-			//				setLightOpacity(0);
+		super(Block.Properties.of(Material.WOOD)
+						.strength(0.25f, 3.0f)
+						.dynamicShape()    //TODO maybe?
+				//				setLightOpacity(0);
 		);
 		//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item
-		this.setDefaultState(this.getStateContainer().getBaseState()
-			.with(NORTH, false)
-			.with(EAST, false)
-			.with(SOUTH, false)
-			.with(WEST, false)
-			.with(UP, false)
-			.with(DOWN, false));
+		this.registerDefaultState(this.getStateDefinition().any()
+				.setValue(NORTH, false)
+				.setValue(EAST, false)
+				.setValue(SOUTH, false)
+				.setValue(WEST, false)
+				.setValue(UP, false)
+				.setValue(DOWN, false));
 	}
 
 	//TODO don't know how this works any more
@@ -73,11 +73,11 @@ public class BlockGeneticFilter extends BlockForestry {
 	//	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
 		TileGeneticFilter tile = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
 		if (tile != null) {
 			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
-				if (!worldIn.isRemote) {
+				if (!worldIn.isClientSide) {
 					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;
 					NetworkHooks.openGui(sPlayer, tile, pos);
 				}
@@ -142,7 +142,7 @@ public class BlockGeneticFilter extends BlockForestry {
 	//	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
 	}
 

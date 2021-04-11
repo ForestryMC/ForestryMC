@@ -52,7 +52,7 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 
 	//TODO dedupe
 	public static ContainerHabitatFormer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileHabitatFormer tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileHabitatFormer.class);
+		TileHabitatFormer tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileHabitatFormer.class);
 		return new ContainerHabitatFormer(windowId, inv, tile);
 	}
 
@@ -64,8 +64,8 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		boolean guiNeedsUpdate = false;
 		IClimateTransformer transformer = tile.getTransformer();
 
@@ -104,7 +104,7 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 			sendPacketToListeners(packet);
 		}
 
-		tile.getTankManager().sendTankUpdate(this, listeners);
+		tile.getTankManager().sendTankUpdate(this, containerListeners);
 	}
 
 	@Override
@@ -134,14 +134,14 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public void addListener(IContainerListener crafting) {
-		super.addListener(crafting);
+	public void addSlotListener(IContainerListener crafting) {
+		super.addSlotListener(crafting);
 		tile.getTankManager().containerAdded(this, crafting);
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity PlayerEntity) {
-		super.onContainerClosed(PlayerEntity);
+	public void removed(PlayerEntity PlayerEntity) {
+		super.removed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
 	}
 

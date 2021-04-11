@@ -23,23 +23,23 @@ import net.minecraft.world.World;
 public class ItemFertilizer extends ItemForestry {
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
-		World worldIn = context.getWorld();
+		World worldIn = context.getLevel();
 		Hand hand = context.getHand();
-		BlockPos pos = context.getPos();
-		Direction facing = context.getFace();
+		BlockPos pos = context.getClickedPos();
+		Direction facing = context.getClickedFace();
 		if (player == null) {
 			return ActionResultType.FAIL;
 		}
-		ItemStack heldItem = player.getHeldItem(hand);
-		if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
+		ItemStack heldItem = player.getItemInHand(hand);
+		if (!player.mayUseItemAt(pos.relative(facing), facing, heldItem)) {
 			return ActionResultType.FAIL;
 		}
 
 		if (BoneMealItem.applyBonemeal(heldItem, worldIn, pos, player)) {
-			if (!worldIn.isRemote) {
-				worldIn.playEvent(2005, pos, 0);
+			if (!worldIn.isClientSide) {
+				worldIn.levelEvent(2005, pos, 0);
 			}
 
 			return ActionResultType.SUCCESS;

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
+import java.util.Optional;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
-import forestry.factory.recipes.CarpenterRecipeManager;
 import forestry.factory.tiles.TileCarpenter;
 
 public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
@@ -38,10 +38,10 @@ public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex == SLOT_CAN_INPUT) {
-			LazyOptional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
+			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
 			return fluid.map(f -> tile.getTankManager().canFillFluidType(f)).orElse(false);
 		} else if (slotIndex == SLOT_BOX) {
-			return RecipeManagers.carpenterManager.isBox(tile.getWorld().getRecipeManager(), itemStack);
+			return RecipeManagers.carpenterManager.isBox(tile.getLevel().getRecipeManager(), itemStack);
 		} else if (canSlotAccept(SLOT_CAN_INPUT, itemStack) || canSlotAccept(SLOT_BOX, itemStack)) {
 			return false;
 		}
@@ -50,7 +50,7 @@ public class InventoryCarpenter extends InventoryAdapterTile<TileCarpenter> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

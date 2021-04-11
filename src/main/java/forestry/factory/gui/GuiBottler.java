@@ -33,12 +33,12 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 		bindTexture(textureFile);
 
-		int x = (width - xSize) / 2;
-		int y = (height - ySize) / 2;
-		blit(transform, x, y, 0, 0, xSize, ySize);
+		int x = (width - imageWidth) / 2;
+		int y = (height - imageHeight) / 2;
+		blit(transform, x, y, 0, 0, imageWidth, imageHeight);
 
 		//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 		RenderSystem.disableLighting();
@@ -46,7 +46,7 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.pushMatrix();
 		{
-			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
+			RenderSystem.translatef(leftPos, topPos, 0.0F);
 			drawWidgets(transform);
 		}
 		RenderSystem.popMatrix();
@@ -62,9 +62,9 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 		int progressArrow = bottler.getProgressScaled(22);
 		if (progressArrow > 0) {
 			if (bottler.isFillRecipe) {
-				blit(transform, guiLeft + 108, guiTop + 35, 177, 74, progressArrow, 16);
+				blit(transform, leftPos + 108, topPos + 35, 177, 74, progressArrow, 16);
 			} else {
-				blit(transform, guiLeft + 46, guiTop + 35, 177, 74, progressArrow, 16);
+				blit(transform, leftPos + 46, topPos + 35, 177, 74, progressArrow, 16);
 			}
 		}
 	}

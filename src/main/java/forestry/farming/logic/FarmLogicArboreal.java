@@ -55,7 +55,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = harvestBlocks(world, position);
 		farmHousing.increaseExtent(direction, pos, extent);
 
@@ -78,12 +78,12 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 		while (!knownCropPositions.empty()) {
 			BlockPos knownCropPos = knownCropPositions.pop();
-			for (BlockPos mutable : BlockPos.getAllInBoxMutable(knownCropPos.add(-1, -1, -1), knownCropPos.add(1, 1, 1))) {
-				if (!world.isBlockLoaded(mutable)) {
+			for (BlockPos mutable : BlockPos.betweenClosed(knownCropPos.offset(-1, -1, -1), knownCropPos.offset(1, 1, 1))) {
+				if (!world.hasChunkAt(mutable)) {
 					return crops;
 				}
 
-				BlockPos candidate = mutable.toImmutable();
+				BlockPos candidate = mutable.immutable();
 				if (!checkedBlocks.contains(candidate)) {
 					checkedBlocks.add(candidate);
 
@@ -102,7 +102,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 
 	@Nullable
 	private static IFarmable getFarmableForBlock(World world, BlockPos position, Collection<IFarmable> farmables) {
-		if (world.isAirBlock(position)) {
+		if (world.isEmptyBlock(position)) {
 			return null;
 		}
 		BlockState blockState = world.getBlockState(position);
@@ -120,8 +120,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
-			if (world.isAirBlock(position)) {
-				BlockPos soilPosition = position.down();
+			if (world.isEmptyBlock(position)) {
+				BlockPos soilPosition = position.below();
 				BlockState soilState = world.getBlockState(soilPosition);
 				if (isAcceptedSoil(soilState)) {
 					return plantSapling(world, farmHousing, position, direction);

@@ -20,13 +20,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleSpecies;
-import genetics.api.individual.IGenome;
-import genetics.api.mutation.IMutation;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
@@ -34,6 +28,11 @@ import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.IMutationBuilder;
 import forestry.api.genetics.IMutationCondition;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleSpecies;
+import genetics.api.individual.IGenome;
+import genetics.api.mutation.IMutation;
 
 public abstract class Mutation implements IMutation, IMutationBuilder {
 
@@ -89,7 +88,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Mutation restrictBiomeType(BiomeDictionary.Type... types) {
+	public Mutation restrictBiomeType(Biome.Category... types) {
 		IMutationCondition mutationCondition = new MutationConditionBiome(types);
 		return addMutationCondition(mutationCondition);
 	}

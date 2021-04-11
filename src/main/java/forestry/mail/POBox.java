@@ -50,7 +50,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void read(CompoundNBT compoundNBT) {
+	public void load(CompoundNBT compoundNBT) {
 		if (compoundNBT.contains("address")) {
 			this.address = new MailAddress(compoundNBT.getCompound("address"));
 		}
@@ -58,7 +58,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundNBT save(CompoundNBT compoundNBT) {
 		if (this.address != null) {
 			CompoundNBT nbt = new CompoundNBT();
 			this.address.write(nbt);
@@ -79,7 +79,7 @@ public class POBox extends WorldSavedData implements IInventory {
 		letter.write(compoundNBT);
 		letterstack.setTag(compoundNBT);
 
-		this.markDirty();
+		this.setDirty();
 
 		return InventoryUtil.tryAddStack(letters, letterstack, true);
 	}
@@ -87,11 +87,11 @@ public class POBox extends WorldSavedData implements IInventory {
 	public POBoxInfo getPOBoxInfo() {
 		int playerLetters = 0;
 		int tradeLetters = 0;
-		for (int i = 0; i < letters.getSizeInventory(); i++) {
-			if (letters.getStackInSlot(i).isEmpty()) {
+		for (int i = 0; i < letters.getContainerSize(); i++) {
+			if (letters.getItem(i).isEmpty()) {
 				continue;
 			}
-			CompoundNBT tagCompound = letters.getStackInSlot(i).getTag();
+			CompoundNBT tagCompound = letters.getItem(i).getTag();
 			if (tagCompound != null) {
 				ILetter letter = new Letter(tagCompound);
 				if (letter.getSender().getType() == EnumAddressee.PLAYER) {
@@ -113,35 +113,35 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void markDirty() {
-		super.markDirty();
-		letters.markDirty();
+	public void setDirty() {
+		super.setDirty();
+		letters.setChanged();
 	}
 
 	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2) {
-		this.markDirty();
-		letters.setInventorySlotContents(var1, var2);
+	public void setItem(int var1, ItemStack var2) {
+		this.setDirty();
+		letters.setItem(var1, var2);
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return letters.getSizeInventory();
+	public int getContainerSize() {
+		return letters.getContainerSize();
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return letters.getStackInSlot(var1);
+	public ItemStack getItem(int var1) {
+		return letters.getItem(var1);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int var1, int var2) {
-		return letters.decrStackSize(var1, var2);
+	public ItemStack removeItem(int var1, int var2) {
+		return letters.removeItem(var1, var2);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return letters.removeStackFromSlot(index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return letters.removeItemNoUpdate(index);
 	}
 
 	//	@Override
@@ -150,30 +150,35 @@ public class POBox extends WorldSavedData implements IInventory {
 	//	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return letters.getInventoryStackLimit();
+	public int getMaxStackSize() {
+		return letters.getMaxStackSize();
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity var1) {
-		return letters.isUsableByPlayer(var1);
+	public void setChanged() {
+
 	}
 
 	@Override
-	public void openInventory(PlayerEntity var1) {
+	public boolean stillValid(PlayerEntity var1) {
+		return letters.stillValid(var1);
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity var1) {
+	public void startOpen(PlayerEntity var1) {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return letters.isItemValidForSlot(i, itemstack);
+	public void stopOpen(PlayerEntity var1) {
 	}
 
 	@Override
-	public void clear() {
+	public boolean canPlaceItem(int i, ItemStack itemstack) {
+		return letters.canPlaceItem(i, itemstack);
+	}
+
+	@Override
+	public void clearContent() {
 	}
 
 }

@@ -11,23 +11,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import genetics.api.GeneticPlugin;
-import genetics.api.GeneticsAPI;
-import genetics.api.IGeneticApiInstance;
-import genetics.api.IGeneticFactory;
-import genetics.api.IGeneticPlugin;
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.classification.IClassificationRegistry;
-import genetics.api.organism.IOrganismTypes;
-import genetics.api.root.IGeneticListenerRegistry;
-import genetics.api.root.IIndividualRootBuilder;
-import genetics.api.root.IRootDefinition;
-import genetics.api.root.IRootManager;
-import genetics.api.root.components.ComponentKeys;
-import genetics.api.root.translator.IBlockTranslator;
-import genetics.api.root.translator.IIndividualTranslator;
-import genetics.api.root.translator.IItemTranslator;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
@@ -53,6 +36,23 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.genetics.root.ResearchHandler;
 import forestry.modules.features.FeatureBlock;
+
+import genetics.api.GeneticPlugin;
+import genetics.api.GeneticsAPI;
+import genetics.api.IGeneticApiInstance;
+import genetics.api.IGeneticFactory;
+import genetics.api.IGeneticPlugin;
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.classification.IClassificationRegistry;
+import genetics.api.organism.IOrganismTypes;
+import genetics.api.root.IGeneticListenerRegistry;
+import genetics.api.root.IIndividualRootBuilder;
+import genetics.api.root.IRootDefinition;
+import genetics.api.root.IRootManager;
+import genetics.api.root.components.ComponentKeys;
+import genetics.api.root.translator.IBlockTranslator;
+import genetics.api.root.translator.IIndividualTranslator;
+import genetics.api.root.translator.IItemTranslator;
 
 @GeneticPlugin(modId = Constants.MOD_ID)
 public class TreePlugin implements IGeneticPlugin {
@@ -108,13 +108,13 @@ public class TreePlugin implements IGeneticPlugin {
 						for (IFruitProvider fruitProvider : fruitProviders) {
 							IProductList products = fruitProvider.getProducts();
 							for (ItemStack stack : products.getPossibleStacks()) {
-								if (stack.isItemEqual(itemstack)) {
+								if (stack.sameItem(itemstack)) {
 									return 1.0f;
 								}
 							}
 							IProductList specialtyChances = fruitProvider.getSpecialty();
 							for (ItemStack stack : specialtyChances.getPossibleStacks()) {
-								if (stack.isItemEqual(itemstack)) {
+								if (stack.sameItem(itemstack)) {
 									return 1.0f;
 								}
 							}
@@ -126,7 +126,7 @@ public class TreePlugin implements IGeneticPlugin {
 			.addListener(ComponentKeys.TRANSLATORS, (IIndividualTranslator<ITree> builder) -> {
 					Function<TreeDefinition, IBlockTranslator<ITree>> leavesFactory = (definition) ->
 						(BlockState blockState) -> {
-							if (blockState.get(LeavesBlock.PERSISTENT)) {
+							if (blockState.getValue(LeavesBlock.PERSISTENT)) {
 								return null;
 							}
 							return definition.createIndividual();

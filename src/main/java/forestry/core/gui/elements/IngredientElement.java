@@ -20,7 +20,7 @@ public class IngredientElement extends AbstractItemElement {
 
 	public IngredientElement(int xPos, int yPos, Ingredient ingredient) {
 		super(xPos, yPos);
-		items = NonNullList.from(ItemStack.EMPTY, ingredient.getMatchingStacks());
+		items = NonNullList.of(ItemStack.EMPTY, ingredient.getItems());
 	}
 
 	public IngredientElement(int xPos, int yPos, NonNullList<ItemStack> items) {

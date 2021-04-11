@@ -39,7 +39,7 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
+		ScreenManager.register(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
 	}
 
 	@Override

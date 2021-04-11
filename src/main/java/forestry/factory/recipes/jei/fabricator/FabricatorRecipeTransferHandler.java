@@ -37,7 +37,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<C
 				int index = guiIngredientEntry.getKey();
 				if (index >= 3 && guiIngredient.getDisplayedIngredient() != null) {
 					ItemStack ingredient = guiIngredient.getDisplayedIngredient().copy();
-					craftingInventory.setInventorySlotContents(index - 3, ingredient);
+					craftingInventory.setItem(index - 3, ingredient);
 					items.set(index - 3, ingredient);
 				}
 			}

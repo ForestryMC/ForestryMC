@@ -31,14 +31,14 @@ public class PickupHandlerStorage implements IPickupHandler {
 		}
 
 		// Do not pick up if a backpack is open
-		if (player.openContainer instanceof ContainerBackpack || player.openContainer instanceof ContainerNaturalistBackpack) {
+		if (player.containerMenu instanceof ContainerBackpack || player.containerMenu instanceof ContainerNaturalistBackpack) {
 			return false;
 		}
 
 		// Make sure to top off manually placed itemstacks in player inventory first
 		topOffPlayerInventory(player, itemstack);
 
-		for (ItemStack pack : player.inventory.mainInventory) {
+		for (ItemStack pack : player.inventory.items) {
 			if (itemstack.isEmpty()) {
 				break;
 			}
@@ -65,8 +65,8 @@ public class PickupHandlerStorage implements IPickupHandler {
 
 		// Add to player inventory first, if there is an incomplete stack in
 		// there.
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack inventoryStack = player.inventory.getStackInSlot(i);
+		for (int i = 0; i < player.inventory.getContainerSize(); i++) {
+			ItemStack inventoryStack = player.inventory.getItem(i);
 			// We only add to existing stacks.
 			if (inventoryStack.isEmpty()) {
 				continue;
@@ -77,7 +77,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 				continue;
 			}
 
-			if (inventoryStack.isItemEqual(itemstack) && ItemStack.areItemStackTagsEqual(inventoryStack, itemstack)) {
+			if (inventoryStack.sameItem(itemstack) && ItemStack.tagMatches(inventoryStack, itemstack)) {
 				int space = inventoryStack.getMaxStackSize() - inventoryStack.getCount();
 
 				if (space > itemstack.getCount()) {

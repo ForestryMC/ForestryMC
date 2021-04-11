@@ -40,8 +40,8 @@ public class PacketPipetteClick extends ForestryPacket implements IForestryPacke
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			int slot = data.readVarInt();
-			if (player.openContainer instanceof IContainerLiquidTanks) {
-				((IContainerLiquidTanks) player.openContainer).handlePipetteClick(slot, player);
+			if (player.containerMenu instanceof IContainerLiquidTanks) {
+				((IContainerLiquidTanks) player.containerMenu).handlePipetteClick(slot, player);
 			}
 		}
 	}

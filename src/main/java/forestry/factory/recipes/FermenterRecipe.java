@@ -38,7 +38,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 	public FermenterRecipe(ResourceLocation id, Ingredient resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(resource, "Fermenter Resource cannot be null!");
-		Preconditions.checkArgument(!resource.hasNoMatchingItems(), "Fermenter Resource item cannot be empty!");
+		Preconditions.checkArgument(!resource.isEmpty(), "Fermenter Resource item cannot be empty!");
 		Preconditions.checkNotNull(output, "Fermenter Output cannot be null!");
 		Preconditions.checkNotNull(fluidResource, "Fermenter Liquid cannot be null!");
 
@@ -91,7 +91,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 
 	@Override
 	public int compareTo(IFermenterRecipe o) {
-		return !resource.hasNoMatchingItems() ? -1 : 1;
+		return !resource.isEmpty() ? -1 : 1;
 	}
 
 	@Override
@@ -102,19 +102,19 @@ public class FermenterRecipe implements IFermenterRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FermenterRecipe> {
 
 		@Override
-		public FermenterRecipe read(ResourceLocation recipeId, JsonObject json) {
+		public FermenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			int fermentationValue = JSONUtils.getInt(json, "fermentationValue");
-			float modifier = JSONUtils.getFloat(json, "modifier");
-			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getString(json, "output")));
-			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "fluidResource"));
+			int fermentationValue = JSONUtils.getAsInt(json, "fermentationValue");
+			float modifier = JSONUtils.getAsFloat(json, "modifier");
+			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "output")));
+			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "fluidResource"));
 
 			return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
 		}
 
 		@Override
-		public FermenterRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			Ingredient resource = Ingredient.read(buffer);
+		public FermenterRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			Ingredient resource = Ingredient.fromNetwork(buffer);
 			int fermentationValue = buffer.readVarInt();
 			float modifier = buffer.readFloat();
 			Fluid output = ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation());
@@ -124,8 +124,8 @@ public class FermenterRecipe implements IFermenterRecipe {
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, FermenterRecipe recipe) {
-			recipe.resource.write(buffer);
+		public void toNetwork(PacketBuffer buffer, FermenterRecipe recipe) {
+			recipe.resource.toNetwork(buffer);
 			buffer.writeVarInt(recipe.fermentationValue);
 			buffer.writeFloat(recipe.modifier);
 			buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(recipe.output));

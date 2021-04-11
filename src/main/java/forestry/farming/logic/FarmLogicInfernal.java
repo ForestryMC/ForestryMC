@@ -34,11 +34,11 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
-			BlockPos position = translateWithOffset(pos.up(), direction, i);
-			if (!world.isBlockLoaded(position)) {
+			BlockPos position = translateWithOffset(pos.above(), direction, i);
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
-			if (world.isAirBlock(pos)) {
+			if (world.isEmptyBlock(pos)) {
 				continue;
 			}
 			BlockState blockState = world.getBlockState(position);
@@ -59,16 +59,16 @@ public class FarmLogicInfernal extends FarmLogicHomogeneous {
 	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
-			if (!world.isBlockLoaded(position)) {
+			if (!world.hasChunkAt(position)) {
 				break;
 			}
 
 			BlockState blockState = world.getBlockState(position);
-			if (!world.isAirBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
+			if (!world.isEmptyBlock(position) && !BlockUtil.isReplaceableBlock(blockState, world, position)) {
 				continue;
 			}
 
-			BlockPos soilPosition = position.down();
+			BlockPos soilPosition = position.below();
 			BlockState soilState = world.getBlockState(soilPosition);
 			if (isAcceptedSoil(soilState)) {
 				return trySetCrop(world, farmHousing, position, direction);

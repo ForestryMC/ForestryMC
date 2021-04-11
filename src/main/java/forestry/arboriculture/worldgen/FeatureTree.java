@@ -49,10 +49,10 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	@Override
 	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
 		int leafHeight = height + 1;
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.AIR);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight--, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafHeight, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight--, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
 	}
 
 	@Override

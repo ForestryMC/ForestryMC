@@ -53,11 +53,11 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	private final EnumPostage postage;
 
 	EnumStampDefinition(String name, EnumPostage postage, ITag<Item> crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, () -> Ingredient.fromTag(crafting), primaryColor, secondaryColor);
+		this(name, postage, () -> Ingredient.of(crafting), primaryColor, secondaryColor);
 	}
 
 	EnumStampDefinition(String name, EnumPostage postage, Item crafting, Color primaryColor, Color secondaryColor) {
-		this(name, postage, () -> Ingredient.fromItems(crafting), primaryColor, secondaryColor);
+		this(name, postage, () -> Ingredient.of(crafting), primaryColor, secondaryColor);
 	}
 
 	EnumStampDefinition(String name, EnumPostage postage, Supplier<Ingredient> crafting, Color primaryColor, Color secondaryColor) {
@@ -77,7 +77,7 @@ public enum EnumStampDefinition implements ItemOverlay.IOverlayInfo {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name;
 	}
 

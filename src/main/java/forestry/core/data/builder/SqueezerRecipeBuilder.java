@@ -73,13 +73,13 @@ public class SqueezerRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
+		public void serializeRecipeData(JsonObject json) {
 			json.addProperty("time", processingTime);
 
 			JsonArray resources = new JsonArray();
 
 			for (Ingredient resource : this.resources) {
-				resources.add(resource.serialize());
+				resources.add(resource.toJson());
 			}
 
 			json.add("resources", resources);
@@ -89,24 +89,24 @@ public class SqueezerRecipeBuilder {
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return ISqueezerRecipe.Companion.SERIALIZER;
 		}
 
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

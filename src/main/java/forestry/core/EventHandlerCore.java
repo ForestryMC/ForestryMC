@@ -19,15 +19,11 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -37,28 +33,25 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import forestry.api.core.ISpriteRegistry;
+import net.minecraftforge.fml.common.Mod;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.ApiaristAI;
 import forestry.apiculture.villagers.RegisterVillager;
 import forestry.core.config.Constants;
-import forestry.core.models.ModelBlockCached;
-import forestry.core.render.TextureManagerForestry;
 import forestry.modules.ModuleManager;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class EventHandlerCore {
-
-	public EventHandlerCore() {
-	}
 
 	//TODO - register event handler
 	@SubscribeEvent
-	public void handleItemPickup(EntityItemPickupEvent event) {
+	public static void handleItemPickup(EntityItemPickupEvent event) {
 		if (event.isCanceled() || event.getResult() == Event.Result.ALLOW) {
 			return;
 		}
@@ -72,13 +65,13 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+	public static void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
 
 	@SubscribeEvent
-	public void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+	public static void handlePlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
 		PlayerEntity player = event.getPlayer();
 		syncBreedingTrackers(player);
 	}
@@ -94,13 +87,13 @@ public class EventHandlerCore {
 				continue;
 			}
 			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
-			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getEntityWorld(), player.getGameProfile());
+			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getCommandSenderWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
 	}
 
 	@SubscribeEvent
-	public void handleWorldLoad(WorldEvent.Load event) {
+	public static void handleWorldLoad(WorldEvent.Load event) {
 		IWorld world = event.getWorld();
 
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
@@ -109,32 +102,23 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public void handleWorldSave(WorldEvent.Save event) {
+	public static void handleWorldSave(WorldEvent.Save event) {
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldSave(event.getWorld());
 		}
 	}
 
 	@SubscribeEvent
-	public void handleWorldUnload(WorldEvent.Unload event) {
+	public static void handleWorldUnload(WorldEvent.Unload event) {
 		for (ISaveEventHandler handler : ModuleManager.saveEventHandlers) {
 			handler.onWorldUnload(event.getWorld());
 		}
 	}
 
 	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void handleTextureRemap(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation() == PlayerContainer.LOCATION_BLOCKS_TEXTURE) {
-			TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
-			ModelBlockCached.clear();
-		}
-	}
-
-	@SubscribeEvent
-	public void lootLoad(LootTableLoadEvent event) {
+	public static void lootLoad(LootTableLoadEvent event) {
 		if (!event.getName().getNamespace().equals("minecraft")
-			&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
+				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
 			return;
 		}
 
@@ -144,8 +128,8 @@ public class EventHandlerCore {
 			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getPath() + "/" + lootTableFile);
 			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
 			if (url != null) {
-				LootTable forestryChestAdditions = event.getLootTableManager().getLootTableFromLocation(resourceLocation);
-				if (forestryChestAdditions != LootTable.EMPTY_LOOT_TABLE) {
+				LootTable forestryChestAdditions = event.getLootTableManager().get(resourceLocation);
+				if (forestryChestAdditions != LootTable.EMPTY) {
 					for (String poolName : lootPoolNames) {
 						LootPool pool = forestryChestAdditions.getPool(poolName);
 						if (pool != null) {
@@ -158,7 +142,7 @@ public class EventHandlerCore {
 	}
 
 	@SubscribeEvent
-	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+	public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 		if ((entity instanceof VillagerEntity)) {
 			VillagerEntity villager = (VillagerEntity) entity;

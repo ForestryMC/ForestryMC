@@ -1,6 +1,7 @@
 package forestry.farming.models;
 
-import forestry.farming.blocks.BlockFarm.State;
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -13,10 +14,10 @@ import net.minecraftforge.client.model.data.IModelData;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.farming.blocks.BlockFarm;
+import forestry.farming.blocks.BlockFarm.State;
 import forestry.farming.blocks.EnumFarmBlockType;
 import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingBlocks;
-import org.apache.commons.lang3.tuple.Pair;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, BlockFarm.State>> {
@@ -27,7 +28,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 
 	@Override
 	protected Pair<BlockFarm, State> getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
+		Block block = Block.byItem(stack.getItem());
 		if (block instanceof BlockFarm) {
 			return Pair.of((BlockFarm) block, State.PLAIN);
 		}
@@ -38,7 +39,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 	protected Pair<BlockFarm, State> getWorldKey(BlockState state, IModelData extraData) {
 		Block block = state.getBlock();
 		if (block instanceof BlockFarm) {
-			return Pair.of((BlockFarm) block, state.get(BlockFarm.STATE));
+			return Pair.of((BlockFarm) block, state.getValue(BlockFarm.STATE));
 		}
 		return Pair.of(FarmingBlocks.FARM.get(EnumFarmBlockType.PLAIN, EnumFarmMaterial.BRICK).block(), State.PLAIN);
 	}

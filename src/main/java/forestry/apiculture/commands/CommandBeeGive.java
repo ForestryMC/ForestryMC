@@ -39,11 +39,11 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.genetics.BeeDefinition;
-import genetics.commands.PermLevel;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
 import genetics.commands.CommandHelpers;
+import genetics.commands.PermLevel;
 
 public class CommandBeeGive {
 	public static LiteralArgumentBuilder<CommandSource> register() {
@@ -52,9 +52,9 @@ public class CommandBeeGive {
 						.then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
 								.then(Commands.argument("player", EntityArgument.player())
 										.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), EntityArgument.getPlayer(a, "player"))))
-								.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), a.getSource().asPlayer())))
-						.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), EnumBeeType.QUEEN, a.getSource().asPlayer())))
-				.executes(a -> execute(a.getSource(), BeeDefinition.FOREST.createIndividual(), EnumBeeType.QUEEN, a.getSource().asPlayer()));
+								.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), a.getArgument("type", EnumBeeType.class), a.getSource().getPlayerOrException())))
+						.executes(a -> execute(a.getSource(), a.getArgument("bee", IBee.class), EnumBeeType.QUEEN, a.getSource().getPlayerOrException())))
+				.executes(a -> execute(a.getSource(), BeeDefinition.FOREST.createIndividual(), EnumBeeType.QUEEN, a.getSource().getPlayerOrException()));
 	}
 
 	public static int execute(CommandSource source, IBee bee, EnumBeeType type, PlayerEntity player) {
@@ -64,7 +64,7 @@ public class CommandBeeGive {
 		}
 
 		ItemStack beeStack = BeeManager.beeRoot.createStack(beeCopy, type);
-		player.dropItem(beeStack, false, true);
+		player.drop(beeStack, false, true);
 
 		CommandHelpers.sendLocalizedChatMessage(source, "for.chat.command.forestry.bee.give.given", player.getName(), bee.getGenome().getPrimary().getDisplayName().getString(), type.getName());
 		return 1;

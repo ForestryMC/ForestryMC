@@ -60,9 +60,9 @@ public class TileEngineClockwork extends TileEngine {
 			return;
 		}
 
-		player.addExhaustion(WIND_EXHAUSTION);
+		player.causeFoodExhaustion(WIND_EXHAUSTION);
 		if (tension > ENGINE_CLOCKWORK_WIND_MAX + 0.1 * WIND_TENSION_BASE) {
-			player.attackEntityFrom(damageSourceEngineClockwork, 6);
+			player.hurt(damageSourceEngineClockwork, 6);
 		}
 		tension = Math.min(tension, ENGINE_CLOCKWORK_WIND_MAX + WIND_TENSION_BASE);
 		delay = WIND_DELAY;
@@ -71,15 +71,15 @@ public class TileEngineClockwork extends TileEngine {
 
 	/* LOADING & SAVING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tension = compoundNBT.getFloat("Wound");
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		compoundNBT.putFloat("Wound", tension);
 		return compoundNBT;
 	}
@@ -124,7 +124,7 @@ public class TileEngineClockwork extends TileEngine {
 			tension = 0;
 		}
 		energyManager.generateEnergy(ENGINE_CLOCKWORK_ENERGY_PER_CYCLE * (int) tension);
-		world.updateComparatorOutputLevel(pos, getBlockState().getBlock());
+		level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
 	}
 
 	@Override

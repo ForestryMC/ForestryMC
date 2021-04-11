@@ -123,9 +123,9 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		errorLogic.setCondition(!enabledRedstone, EnumErrorCode.NO_REDSTONE);
 
 		// Determine targeted tile
-		BlockState blockState = world.getBlockState(getPos());
-		Direction facing = blockState.get(BlockBase.FACING);
-		TileEntity tile = world.getTileEntity(getPos().offset(facing));
+		BlockState blockState = level.getBlockState(getBlockPos());
+		Direction facing = blockState.getValue(BlockBase.FACING);
+		TileEntity tile = level.getBlockEntity(getBlockPos().relative(facing));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -184,8 +184,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		}
 		this.active = active;
 
-		if (!world.isRemote) {
-			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), pos, world);
+		if (!level.isClientSide) {
+			NetworkUtil.sendNetworkPacket(new PacketActiveUpdate(this), worldPosition, level);
 		}
 	}
 
@@ -244,8 +244,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT nbt) {
-		super.read(state, nbt);
+	public void load(BlockState state, CompoundNBT nbt) {
+		super.load(state, nbt);
 		energyManager.read(nbt);
 
 		heat = nbt.getInt("EngineHeat");
@@ -256,8 +256,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
-		nbt = super.write(nbt);
+	public CompoundNBT save(CompoundNBT nbt) {
+		nbt = super.save(nbt);
 		energyManager.write(nbt);
 
 		nbt.putInt("EngineHeat", heat);

@@ -46,8 +46,8 @@ public class GuiUtil {
 		}
 
 		ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
-		itemRender.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-		itemRender.renderItemOverlayIntoGUI(font, stack, xPos, yPos, null);
+		itemRender.renderAndDecorateItem(stack, xPos, yPos);
+		itemRender.renderGuiItemDecorations(font, stack, xPos, yPos, null);
 	}
 
 	//TODO hopefully this is client side...
@@ -57,8 +57,8 @@ public class GuiUtil {
 			if (provider == null || provider.isRelativeToGui()) {
 				RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			MainWindow window = Minecraft.getInstance().getMainWindow();    //TODO - more resolution stuff to check
-			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getScaledWidth(), window.getScaledHeight(), -1, gui.getMC().fontRenderer);
+			MainWindow window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
+			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getMC().font);
 			RenderSystem.popMatrix();
 		}
 	}

@@ -20,7 +20,7 @@ import forestry.core.gui.elements.lib.events.GuiEvent;
 @OnlyIn(Dist.CLIENT)
 public class IndexElement extends VerticalLayout {
 	//TODO Unicode
-	private static final Style INDEX_STYLE = Style.EMPTY.setColor(Color.func_240743_a_(0x000000));
+	private static final Style INDEX_STYLE = Style.EMPTY.withColor(Color.fromRgb(0x000000));
 
 	public IndexElement(int xPos, int yPos, IndexEntry[] data) {
 		super(xPos, yPos, 108);
@@ -32,8 +32,8 @@ public class IndexElement extends VerticalLayout {
 	private class IndexEntryElement extends LabelElement {
 
 		public IndexEntryElement(IndexEntry data) {
-			super(0, 0, -1, 9, new StringTextComponent(data.title).mergeStyle(INDEX_STYLE), true);
-			setWidth(width + LabelElement.FONT_RENDERER.getStringWidth(" > "));
+			super(0, 0, -1, 9, new StringTextComponent(data.title).withStyle(INDEX_STYLE), true);
+			setWidth(width + LabelElement.FONT_RENDERER.width(" > "));
 			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 				GuiForesterBook bookGui = GuiForesterBook.getGuiScreen();
 				if (bookGui instanceof GuiForestryBookPages) {
@@ -48,7 +48,7 @@ public class IndexElement extends VerticalLayout {
 		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 			boolean mouseOver = isMouseOver();
 			String preFix = mouseOver ? TextFormatting.GOLD + " > " : TextFormatting.DARK_GRAY + "- ";
-			FONT_RENDERER.drawString(transform, preFix + component.getString(), 0, 0, 0);
+			FONT_RENDERER.draw(transform, preFix + component.getString(), 0, 0, 0);
 		}
 
 		@Override

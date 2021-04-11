@@ -28,8 +28,8 @@ public class GuiButtonBack extends Button implements IToolTipProvider {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			TextureManager manager = Minecraft.getInstance().getTextureManager();
-			manager.bindTexture(GuiForesterBook.TEXTURE);
-			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			manager.bind(GuiForesterBook.TEXTURE);
+			GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			blit(transform, x, y, 36 + (isHovered ? 18 : 0), 181, 18, 9);
 		}
 	}

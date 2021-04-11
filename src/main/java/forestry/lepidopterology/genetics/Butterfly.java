@@ -25,17 +25,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
-import net.minecraftforge.common.BiomeDictionary;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IChromosome;
-import genetics.api.individual.IGenome;
-import genetics.api.mutation.IMutationContainer;
-import genetics.api.root.IIndividualRoot;
-import genetics.api.root.components.ComponentKeys;
-
-import genetics.individual.Genome;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorState;
@@ -56,6 +45,14 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.utils.ClimateUtil;
 import forestry.lepidopterology.ModuleLepidopterology;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IChromosome;
+import genetics.api.individual.IGenome;
+import genetics.api.mutation.IMutationContainer;
+import genetics.api.root.IIndividualRoot;
+import genetics.api.root.components.ComponentKeys;
+import genetics.individual.Genome;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
 	private static final Random rand = new Random();
@@ -124,7 +121,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 		Set<IErrorState> errorStates = new HashSet<>();
 		// / Night or darkness requires nocturnal species
-		boolean isDaytime = world.isDaytime();
+		boolean isDaytime = world.isDay();
 		if (!isActiveThisTime(isDaytime)) {
 			if (isDaytime) {
 				errorStates.add(EnumErrorCode.NOT_NIGHT);
@@ -175,13 +172,13 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			boolean noneMatched = true;
 
 			if (species.strictSpawnMatch()) {
-				Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
-				if (types.size() == 1 && species.getSpawnBiomes().containsAll(types)) {
+				Biome.Category category = biome.getBiomeCategory();
+				if (species.getSpawnBiomes().contains(category)) {
 					noneMatched = false;
 				}
 			} else {
-				for (BiomeDictionary.Type type : species.getSpawnBiomes()) {
-					if (BiomeDictionary.hasType(biome, type)) {
+				for (Biome.Category type : species.getSpawnBiomes()) {
+					if (type == biome.getBiomeCategory()) {
 						noneMatched = false;
 						break;
 					}
@@ -204,7 +201,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	private boolean canFly(World world) {
 		return (!world.isRaining() || getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER)) &&
-			isActiveThisTime(world.isDaytime());
+				isActiveThisTime(world.isDay());
 	}
 
 	@Override
@@ -312,7 +309,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot();
 
 		for (Product product : products.getPossibleProducts()) {
-			if (creature.world.rand.nextFloat() < product.getChance() * metabolism) {
+			if (creature.level.random.nextFloat() < product.getChance() * metabolism) {
 				drop.add(product.copyStack());
 			}
 		}

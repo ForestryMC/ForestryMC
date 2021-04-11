@@ -23,7 +23,7 @@ import forestry.core.inventory.ItemInventorySolderingIron;
 public class ItemSolderingIron extends ItemWithGui implements ISolderingIron {
 
 	public ItemSolderingIron() {
-		super(new Item.Properties().maxDamage(5).group(ItemGroupForestry.tabForestry));
+		super(new Item.Properties().durability(5).tab(ItemGroupForestry.tabForestry));
 	}
 
 	@Override

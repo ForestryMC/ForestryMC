@@ -35,7 +35,7 @@ public class ModuleCultivation extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(CultivationContainers.PLANTER.containerType(), GuiPlanter::new);
+		ScreenManager.register(CultivationContainers.PLANTER.containerType(), GuiPlanter::new);
 	}
 
 	@Override

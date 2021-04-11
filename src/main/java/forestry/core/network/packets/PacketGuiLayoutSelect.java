@@ -39,15 +39,15 @@ public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPa
 
 	@Override
 	protected void writeData(PacketBufferForestry data) {
-		data.writeString(layoutUid);
+		data.writeUtf(layoutUid);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			String layoutUid = data.readString();
-			Container container = player.openContainer;
+			String layoutUid = data.readUtf();
+			Container container = player.containerMenu;
 			if (!(container instanceof ContainerSolderingIron)) {
 				return;
 			}

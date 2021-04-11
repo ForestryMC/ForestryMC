@@ -38,7 +38,7 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 			ingredients.setInputs(VanillaTypes.FLUID, Collections.singletonList(fluidResource));
 		}
 
-		ItemStack recipeOutput = craftingGridRecipe.getRecipeOutput();
+		ItemStack recipeOutput = craftingGridRecipe.getResultItem();
 		ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
 	}
 }

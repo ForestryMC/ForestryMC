@@ -90,13 +90,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public ITextComponent getDisplayName() {
-		String name = getBlockType(BlockTypePlanter.ARBORETUM).getString();
-		return new TranslationTextComponent("block.forestry.planter." + (mode.getString()), new TranslationTextComponent("block.forestry." + name));
+		String name = getBlockType(BlockTypePlanter.ARBORETUM).getSerializedName();
+		return new TranslationTextComponent("block.forestry.planter." + (mode.getSerializedName()), new TranslationTextComponent("block.forestry." + name));
 	}
 
 	@Override
-	public void setPos(BlockPos posIn) {
-		super.setPos(posIn);
+	public void setPosition(BlockPos posIn) {
+		super.setPosition(posIn);
 		this.platformHeight = posIn.getY() - 2;
 	}
 
@@ -122,8 +122,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		data = super.save(data);
 		manager.write(data);
 		ownerHandler.write(data);
 		data.putInt("mode", mode.ordinal());
@@ -131,8 +131,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 		manager.read(data);
 		ownerHandler.read(data);
 		setManual(BlockPlanter.Mode.values()[data.getInt("mode")]);
@@ -151,31 +151,31 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Override
 	public void setUpFarmlandTargets(Map<FarmDirection, List<FarmTarget>> targets) {
 		BlockPos targetStart = getCoords();
-		BlockPos minPos = pos;
-		BlockPos maxPos = pos;
+		BlockPos minPos = worldPosition;
+		BlockPos maxPos = worldPosition;
 		int size = 1;
 		int extend = Config.planterExtend;
 
 		if (Config.ringFarms) {
 			int ringSize = Config.ringSize;
-			minPos = pos.add(-ringSize, 0, -ringSize);
-			maxPos = pos.add(ringSize, 0, ringSize);
+			minPos = worldPosition.offset(-ringSize, 0, -ringSize);
+			maxPos = worldPosition.offset(ringSize, 0, ringSize);
 			size = 1 + ringSize * 2;
 			extend--;
 		}
 
-		FarmHelper.createTargets(world, this, targets, targetStart, extend, size, size, minPos, maxPos);
-		FarmHelper.setExtents(world, this, targets);
+		FarmHelper.createTargets(level, this, targets, targetStart, extend, size, size, minPos, maxPos);
+		FarmHelper.setExtents(level, this, targets);
 	}
 
 	@Override
 	public BlockPos getCoords() {
-		return pos;
+		return worldPosition;
 	}
 
 	@Override
 	public BlockPos getTopCoord() {
-		return pos;
+		return worldPosition;
 	}
 
 	@Override
@@ -274,8 +274,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public void remove() {
-		super.remove();
+	public void setRemoved() {
+		super.setRemoved();
 		manager.clearTargets();
 	}
 
@@ -287,7 +287,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	protected final BlockPos translateWithOffset(BlockPos pos, FarmDirection farmDirection, int step) {
-		return VectUtil.scale(farmDirection.getFacing().getDirectionVec(), step).add(pos);
+		return VectUtil.scale(farmDirection.getFacing().getNormal(), step).offset(pos);
 	}
 
 	@Override
@@ -312,13 +312,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getCoordinates();
-		return world.getBiome(coords).getTemperature(coords);
+		return level.getBiome(coords).getTemperature(coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getCoordinates();
-		return world.getBiome(coords).getDownfall();
+		return level.getBiome(coords).getDownfall();
 	}
 
 	@Override
@@ -335,7 +335,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	protected NonNullList<ItemStack> createList(ItemStack... stacks) {
-		return NonNullList.from(ItemStack.EMPTY, stacks);
+		return NonNullList.of(ItemStack.EMPTY, stacks);
 	}
 
 	public abstract NonNullList<ItemStack> createGermlingStacks();
@@ -346,7 +346,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public BlockPos getFarmCorner(FarmDirection direction) {
-		return pos.down(2);
+		return worldPosition.below(2);
 	}
 
 	@Override

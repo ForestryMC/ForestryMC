@@ -53,11 +53,11 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 
 	@Override
 	protected void drawText(MatrixStack transform) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		drawCenteredString(transform, fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		ITextComponent about = new TranslationTextComponent("for.gui.book.about");
-		fontRenderer.func_238418_a_(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
-		fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.getWordWrappedHeight(about.getString(), 108), 0);
+		fontRenderer.drawWordWrap(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
+		fontRenderer.draw(transform, Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.wordWrapHeight(about.getString(), 108), 0);
 		LOGO.draw(transform, guiTop + LEFT_PAGE_START_Y + 110, 108, 24, guiLeft + RIGHT_PAGE_START_X);
 	}
 
@@ -65,7 +65,7 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	protected void actionPerformed(Button button) {
 		if (button instanceof GuiButtonBookCategory) {
 			GuiButtonBookCategory buttonCategory = (GuiButtonBookCategory) button;
-			Minecraft.getInstance().displayGuiScreen(new GuiForestryBookEntries(book, buttonCategory.category));
+			Minecraft.getInstance().setScreen(new GuiForestryBookEntries(book, buttonCategory.category));
 		}
 	}
 

@@ -54,7 +54,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 		this.inventory = new InventoryHygroregulator(this);
 
-		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
+		this.liquidTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(level.getRecipeManager()));
 
 		this.tankManager = new TankManager(this, liquidTank);
 	}
@@ -75,7 +75,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 		if (transferTime <= 0) {
 			FluidStack fluid = liquidTank.getFluid();
 			if (!fluid.isEmpty()) {
-				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), fluid);
+				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), fluid);
 
 				if (currentRecipe != null) {
 					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
@@ -103,22 +103,22 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
 		transferTime = compoundNBT.getInt("TransferTime");
 
 		if (compoundNBT.contains("CurrentLiquid")) {
 			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
-			currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(world.getRecipeManager(), liquid);
+			currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), liquid);
 		}
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		compoundNBT.putInt("TransferTime", transferTime);

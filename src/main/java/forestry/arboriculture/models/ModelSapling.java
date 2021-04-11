@@ -35,16 +35,15 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.tiles.TileSapling;
+
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+import genetics.utils.AlleleUtils;
 
 public class ModelSapling implements IModelGeometry<ModelSapling> {
 
@@ -52,7 +51,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
 	public ModelSapling() {
 		this.modelsBySpecies = AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-			.collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
+				.collect(Collectors.toMap(allele -> allele, allele -> Pair.of(allele.getBlockModel(), allele.getItemModel())));
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	@Override
 	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return getDependencies().stream()
-			.flatMap(location -> modelGetter.apply(location).getTextures(modelGetter, missingTextureErrors).stream())
+				.flatMap(location -> modelGetter.apply(location).getMaterials(modelGetter, missingTextureErrors).stream())
 			.collect(Collectors.toSet());
 	}
 
@@ -114,8 +113,8 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		@Override
-		public boolean isAmbientOcclusion() {
-			return defaultBlock.isAmbientOcclusion();
+		public boolean useAmbientOcclusion() {
+			return defaultBlock.useAmbientOcclusion();
 		}
 
 		@Override
@@ -124,18 +123,18 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		@Override
-		public boolean func_230044_c_() {
+		public boolean usesBlockLight() {
 			return false;
 		}
 
 		@Override
-		public boolean isBuiltInRenderer() {
+		public boolean isCustomRenderer() {
 			return false;
 		}
 
 		@Override
-		public TextureAtlasSprite getParticleTexture() {
-			return defaultBlock.getParticleTexture();
+		public TextureAtlasSprite getParticleIcon() {
+			return defaultBlock.getParticleIcon();
 		}
 
 		@Override
@@ -150,7 +149,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
 			@Nullable
 			@Override
-			public IBakedModel func_239290_a_(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+			public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 				IOrganism<ITree> organism = GeneticHelper.getOrganism(stack);
 				if (organism.isEmpty()) {
 					return model;

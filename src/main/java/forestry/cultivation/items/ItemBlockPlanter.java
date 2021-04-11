@@ -14,8 +14,8 @@ public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack stack) {
-		String name = getBlock().blockType.getString();
-		return new TranslationTextComponent("block.forestry.planter." + (getBlock().getMode().getString()), new TranslationTextComponent("block.forestry." + name));
+	public ITextComponent getName(ItemStack stack) {
+		String name = getBlock().blockType.getSerializedName();
+		return new TranslationTextComponent("block.forestry.planter." + (getBlock().getMode().getSerializedName()), new TranslationTextComponent("block.forestry." + name));
 	}
 }

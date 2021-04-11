@@ -30,7 +30,7 @@ public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements
 	//TODO gui
 	@Override
 	public void flipPage(ServerPlayerEntity player, short page) {
-		ItemStack heldItem = player.getHeldItem(player.getActiveHand());
+		ItemStack heldItem = player.getItemInHand(player.getUsedItemHand());
 		NetworkHooks.openGui(player, new ItemBackpackNaturalist.ContainerProvider(heldItem), b -> {
 
 		});

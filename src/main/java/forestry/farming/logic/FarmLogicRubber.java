@@ -46,7 +46,7 @@ public class FarmLogicRubber extends FarmLogic {
 			return Collections.emptyList();
 		}
 
-		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		farmHousing.increaseExtent(direction, pos, extent);
 
@@ -57,9 +57,9 @@ public class FarmLogicRubber extends FarmLogic {
 		Stack<ICrop> crops = new Stack<>();
 
 		for (int j = 0; j < 10; j++) {
-			BlockPos candidate = position.add(0, j, 0);
+			BlockPos candidate = position.offset(0, j, 0);
 
-			if (!world.isBlockLoaded(candidate)) {
+			if (!world.hasChunkAt(candidate)) {
 				return crops;
 			}
 

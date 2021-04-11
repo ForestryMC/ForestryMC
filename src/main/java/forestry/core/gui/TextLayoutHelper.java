@@ -97,7 +97,7 @@ public class TextLayoutHelper {
 	}
 
 	public void drawCenteredLine(MatrixStack transform, String text, int x, int y, int width, int color) {
-		guiForestry.getFontRenderer().drawString(transform, text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
+		guiForestry.getFontRenderer().draw(transform, text, guiForestry.getGuiLeft() + x + getCenteredOffset(text, width), guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawLine(MatrixStack transform, String text, int x, int color) {
@@ -105,11 +105,11 @@ public class TextLayoutHelper {
 	}
 
 	public void drawLine(MatrixStack transform, String text, int x, int y, int color) {
-		guiForestry.getFontRenderer().drawString(transform, text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
+		guiForestry.getFontRenderer().draw(transform, text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
 	}
 
 	public void drawSplitLine(String text, int x, int maxWidth, int color) {
-		guiForestry.getFontRenderer().func_238418_a_(new StringTextComponent(text), guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
+		guiForestry.getFontRenderer().drawWordWrap(new StringTextComponent(text), guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
 	}
 
 	public int getCenteredOffset(String string) {
@@ -117,6 +117,6 @@ public class TextLayoutHelper {
 	}
 
 	public int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - guiForestry.getFontRenderer().getStringWidth(string)) / 2;
+		return (xWidth - guiForestry.getFontRenderer().width(string)) / 2;
 	}
 }

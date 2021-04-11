@@ -43,25 +43,25 @@ public class AIButterflyMate extends AIButterflyInteract {
 			return false;
 		}
 
-		return rest != null && GeneticsUtil.canNurse(entity.getButterfly(), entity.world, rest);
+		return rest != null && GeneticsUtil.canNurse(entity.getButterfly(), entity.level, rest);
 	}
 
 	@Override
 	public void tick() {
-		if (shouldContinueExecuting()) {
+		if (canContinueToUse()) {
 			if (entity.getButterfly().getMate() == null && targetMate != null) {
-				if (entity.cooldownMate <= 0 && entity.getDistance(targetMate) < 9.0D) {
+				if (entity.cooldownMate <= 0 && entity.distanceTo(targetMate) < 9.0D) {
 					entity.getButterfly().mate(targetMate.getButterfly().getGenome());
 					targetMate.getButterfly().mate(entity.getButterfly().getGenome());
 					entity.cooldownMate = EntityButterfly.COOLDOWNS;
 				}
 			} else if (rest != null) {
-				IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(null, entity.world, rest, false);
+				IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(null, entity.level, rest, false);
 				if (nursery != null) {
 					if (nursery.canNurse(entity.getButterfly())) {
-						nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.world, nursery));
+						nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(entity.level, nursery));
 						//Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
-						if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(ButterflyChromosomes.FERTILITY)) {
+						if (entity.getRandom().nextFloat() < 1.0f / entity.getButterfly().getGenome().getActiveValue(ButterflyChromosomes.FERTILITY)) {
 							entity.setHealth(0);
 						}
 					}
@@ -73,8 +73,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
-	public boolean shouldExecute() {
-		if (!super.shouldExecute()) {
+	public boolean canUse() {
+		if (!super.canUse()) {
 			return false;
 		}
 		if (entity.getButterfly().getMate() == null) {
@@ -89,8 +89,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		if (!super.shouldContinueExecuting()) {
+	public boolean canContinueToUse() {
+		if (!super.canContinueToUse()) {
 			return false;
 		}
 		if (entity.getButterfly().getMate() == null) {
@@ -100,8 +100,8 @@ public class AIButterflyMate extends AIButterflyInteract {
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
+	public void stop() {
+		super.stop();
 
 		targetMate = null;
 	}
@@ -109,14 +109,14 @@ public class AIButterflyMate extends AIButterflyInteract {
 	@Nullable
 	private EntityButterfly getNearbyMate() {
 		float f = 8.0F;
-		List<EntityButterfly> nextButterflys = entity.world.getEntitiesWithinAABB(EntityButterfly.class, this.entity.getBoundingBox().expand(f, f, f));
+		List<EntityButterfly> nextButterflys = entity.level.getEntitiesOfClass(EntityButterfly.class, this.entity.getBoundingBox().expandTowards(f, f, f));
 		double d0 = Double.MAX_VALUE;
 		EntityButterfly nextButterfly = null;
 
 		for (EntityButterfly butterfly : nextButterflys) {
-			if (this.entity.canMateWith(butterfly) && this.entity.getDistance(butterfly) < d0) {
+			if (this.entity.canMateWith(butterfly) && this.entity.distanceTo(butterfly) < d0) {
 				nextButterfly = butterfly;
-				d0 = this.entity.getDistance(butterfly);
+				d0 = this.entity.distanceTo(butterfly);
 			}
 		}
 

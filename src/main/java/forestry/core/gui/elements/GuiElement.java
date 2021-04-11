@@ -19,6 +19,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import org.lwjgl.opengl.GL11;
+
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IGuiElement;
@@ -27,8 +29,6 @@ import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
-
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiElement {
@@ -126,13 +126,13 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getInstance();
 			//TODO - resolution stuff again, check gameSettings.guiscale too
-			MainWindow window = mc.getMainWindow();
-			double scaleWidth = ((double) window.getWidth()) / window.getScaledWidth();
-			double scaleHeight = ((double) window.getHeight()) / window.getScaledHeight();
+			MainWindow window = mc.getWindow();
+			double scaleWidth = ((double) window.getScreenWidth()) / window.getGuiScaledWidth();
+			double scaleHeight = ((double) window.getScreenHeight()) / window.getGuiScaledHeight();
 			IGuiElement cropRelative = cropElement != null ? cropElement : this;
 			int posX = cropRelative.getAbsoluteX();
 			int posY = cropRelative.getAbsoluteY();
-			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
+			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getScreenHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
 		drawElement(transform, mouseY, mouseX);

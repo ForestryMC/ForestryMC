@@ -64,6 +64,6 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
 
 	@Override
 	public TileEntityType.Builder<T> getTileTypeConstructor() {
-		return TileEntityType.Builder.create(constructorTileEntity, validBlocks.get().toArray(new Block[0]));
+		return TileEntityType.Builder.of(constructorTileEntity, validBlocks.get().toArray(new Block[0]));
 	}
 }

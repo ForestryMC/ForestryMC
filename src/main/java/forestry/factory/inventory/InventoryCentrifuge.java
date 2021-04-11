@@ -16,7 +16,6 @@ import net.minecraft.util.Direction;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;
-import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.tiles.TileCentrifuge;
 
 public class InventoryCentrifuge extends InventoryAdapterTile<TileCentrifuge> {
@@ -30,11 +29,11 @@ public class InventoryCentrifuge extends InventoryAdapterTile<TileCentrifuge> {
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return slotIndex == SLOT_RESOURCE && RecipeManagers.centrifugeManager.findMatchingRecipe(tile.getWorld().getRecipeManager(), itemStack) != null;
+		return slotIndex == SLOT_RESOURCE && RecipeManagers.centrifugeManager.findMatchingRecipe(tile.getLevel().getRecipeManager(), itemStack) != null;
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCT_1, SLOT_PRODUCT_COUNT);
 	}
 }

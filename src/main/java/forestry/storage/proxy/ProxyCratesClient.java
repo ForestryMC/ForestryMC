@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
@@ -27,10 +28,6 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
-		ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
-
-
 		for (EnumBackpackType backpackType : EnumBackpackType.values()) {
 			for (BackpackMode mode : BackpackMode.values()) {
 				ModelLoader.addSpecialModel(backpackType.getLocation(mode));
@@ -40,4 +37,9 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 		ModelLoader.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
 	}
 
+	@Override
+	public void registerModels(ModelRegistryEvent event) {
+		ModelLoaderRegistry.registerLoader(CrateModel.Loader.LOCATION, new CrateModel.Loader());
+		ModelLoaderRegistry.registerLoader(BackpackItemModel.Loader.LOCATION, new BackpackItemModel.Loader());
+	}
 }

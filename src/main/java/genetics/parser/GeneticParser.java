@@ -36,9 +36,7 @@ import genetics.api.GeneticsResourceType;
 import genetics.api.alleles.AlleleInfo;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleType;
-
 import genetics.utils.NBTUtils;
-
 import io.netty.util.internal.StringUtil;
 
 public class GeneticParser implements ISelectiveResourceReloadListener {
@@ -56,7 +54,7 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 
 		Multimap<ResourceLocation, CompoundNBT> alleleData = HashMultimap.create();
 
-		for (ResourceLocation location : manager.getAllResourceLocations("genetics/alleles", filename -> filename.endsWith(".json"))) {
+		for (ResourceLocation location : manager.listResources("genetics/alleles", filename -> filename.endsWith(".json"))) {
 			String path = location.getPath();
 			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
 			try (IResource resource = manager.getResource(location)) {
@@ -70,7 +68,7 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 				if (object == null) {
 					//LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
 				} else {
-					alleleData.put(location, JsonToNBT.getTagFromJson(object.toString()));
+					alleleData.put(location, JsonToNBT.parseTag(object.toString()));
 					//AlleleInfo info = new AlleleInfo();
 					//deserialize(location, object, info);
 				}

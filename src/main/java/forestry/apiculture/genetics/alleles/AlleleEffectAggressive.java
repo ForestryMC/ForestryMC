@@ -15,12 +15,12 @@ import java.util.List;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.DamageSource;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
 	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
@@ -42,7 +42,7 @@ public class AlleleEffectAggressive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			entity.attackEntityFrom(damageSourceBeeAggressive, damage);
+			entity.hurt(damageSourceBeeAggressive, damage);
 		}
 
 		return storedData;

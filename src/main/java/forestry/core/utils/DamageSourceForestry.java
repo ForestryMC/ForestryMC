@@ -19,13 +19,13 @@ public class DamageSourceForestry extends DamageSource {
 
 	public DamageSourceForestry(String ident) {
 		super(ident);
-		setDamageBypassesArmor();
+		bypassArmor();
 	}
 
 	@Override
-	public ITextComponent getDeathMessage(LivingEntity living) {
-		LivingEntity other = living.getAttackingEntity();
-		String ssp = "death." + this.damageType;
+	public ITextComponent getLocalizedDeathMessage(LivingEntity living) {
+		LivingEntity other = living.getKillCredit();
+		String ssp = "death." + this.msgId;
 		String smp = ssp + ".player";
 
 		if (other != null) {

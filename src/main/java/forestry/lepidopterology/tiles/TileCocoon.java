@@ -30,9 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
-
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterflyCocoon;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -50,6 +47,9 @@ import forestry.core.utils.NetworkUtil;
 import forestry.lepidopterology.features.LepidopterologyTiles;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.individual.IGenome;
 
 public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, IButterflyCocoon {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
@@ -72,8 +72,8 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("Caterpillar")) {
 			caterpillar = new Butterfly(compoundNBT.getCompound("Caterpillar"));
@@ -85,8 +85,8 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		CompoundNBT subcompound = new CompoundNBT();
 		caterpillar.write(subcompound);
@@ -104,13 +104,13 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	public void writeData(PacketBufferForestry data) {
 		IButterfly caterpillar = getCaterpillar();
 		String speciesUID = caterpillar.getIdentifier();
-		data.writeString(speciesUID);
+		data.writeUtf(speciesUID);
 		data.writeInt(age);
 	}
 
 	@Override
 	public void readData(PacketBufferForestry data) {
-		String speciesUID = data.readString();
+		String speciesUID = data.readUtf();
 		IButterfly caterpillar = getButterfly(speciesUID);
 		setCaterpillar(caterpillar);
 		age = data.readInt();
@@ -137,7 +137,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 		if (oldAge != age) {
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			Minecraft.getInstance().levelRenderer.setSectionDirty(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ());
 			//			world.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
@@ -162,7 +162,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	@OnlyIn(Dist.CLIENT)
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getNbtCompound();
+		CompoundNBT nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
@@ -177,15 +177,15 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 			if (age < 2) {
 				age++;
 				maturationTime = 0;
-				BlockState blockState = world.getBlockState(pos);
-				world.notifyBlockUpdate(pos, blockState, blockState, 0);
-			} else if (caterpillar.canTakeFlight(world, getPos().getX(), getPos().getY(), getPos().getZ())) {
+				BlockState blockState = level.getBlockState(worldPosition);
+				level.sendBlockUpdated(worldPosition, blockState, blockState, 0);
+			} else if (caterpillar.canTakeFlight(level, getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ())) {
 				NonNullList<ItemStack> cocoonDrops = caterpillar.getCocoonDrop(this);
 				for (ItemStack drop : cocoonDrops) {
-					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
+					ItemStackUtil.dropItemStackAsEntity(drop, level, worldPosition);
 				}
-				world.setBlockState(getPos(), Blocks.AIR.getDefaultState());
-				attemptButterflySpawn(world, caterpillar, getPos());
+				level.setBlockAndUpdate(getBlockPos(), Blocks.AIR.defaultBlockState());
+				attemptButterflySpawn(level, caterpillar, getBlockPos());
 			}
 		}
 	}
@@ -211,7 +211,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 
 	@Override
 	public BlockPos getCoordinates() {
-		return getPos();
+		return getBlockPos();
 	}
 
 	@Override
@@ -226,7 +226,7 @@ public class TileCocoon extends TileEntity implements IStreamable, IOwnedTile, I
 	}
 
 	private void sendNetworkUpdate() {
-		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), pos, world);
+		NetworkUtil.sendNetworkPacket(new PacketTileStream(this), worldPosition, level);
 	}
 
 	public int getAge() {

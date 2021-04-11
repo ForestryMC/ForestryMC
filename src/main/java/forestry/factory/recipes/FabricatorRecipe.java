@@ -66,28 +66,28 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorRecipe> {
 
 		@Override
-		public FabricatorRecipe read(ResourceLocation recipeId, JsonObject json) {
+		public FabricatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient plan = RecipeSerializers.deserialize(json.get("plan"));
-			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getJsonObject(json, "molten"));
-			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, JSONUtils.getJsonObject(json, "recipe"));
+			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "molten"));
+			ShapedRecipe internal = IRecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, JSONUtils.getAsJsonObject(json, "recipe"));
 
 			return new FabricatorRecipe(recipeId, plan, molten, internal);
 		}
 
 		@Override
-		public FabricatorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			Ingredient plan = Ingredient.read(buffer);
+		public FabricatorRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			Ingredient plan = Ingredient.fromNetwork(buffer);
 			FluidStack molten = buffer.readFluidStack();
-			ShapedRecipe internal = IRecipeSerializer.CRAFTING_SHAPED.read(recipeId, buffer);
+			ShapedRecipe internal = IRecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
 
 			return new FabricatorRecipe(recipeId, plan, molten, internal);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, FabricatorRecipe recipe) {
-			recipe.getPlan().write(buffer);
+		public void toNetwork(PacketBuffer buffer, FabricatorRecipe recipe) {
+			recipe.getPlan().toNetwork(buffer);
 			buffer.writeFluidStack(recipe.getLiquid());
-			IRecipeSerializer.CRAFTING_SHAPED.write(buffer, recipe.getCraftingGridRecipe());
+			IRecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe.getCraftingGridRecipe());
 		}
 	}
 }

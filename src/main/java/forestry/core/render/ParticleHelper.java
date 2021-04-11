@@ -37,15 +37,15 @@ public class ParticleHelper {
 	@OnlyIn(Dist.CLIENT)
 	public static boolean addBlockHitEffects(World world, BlockPos pos, Direction side, ParticleManager effectRenderer, Callback callback) {
 		BlockState blockState = world.getBlockState(pos);
-		if (blockState.getRenderType() != BlockRenderType.INVISIBLE) {
+		if (blockState.getRenderShape() != BlockRenderType.INVISIBLE) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			float f = 0.1F;
-			AxisAlignedBB axisalignedbb = blockState.getShape(world, pos).getBoundingBox();
-			double px = x + world.rand.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
-			double py = y + world.rand.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
-			double pz = z + world.rand.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
+			AxisAlignedBB axisalignedbb = blockState.getShape(world, pos).bounds();
+			double px = x + world.random.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
+			double py = y + world.random.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
+			double pz = z + world.random.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
 			if (side == Direction.DOWN) {
 				py = y + axisalignedbb.minY - f;
 			}
@@ -75,9 +75,9 @@ public class ParticleHelper {
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
 			DiggingParticle fx = new DiggingParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
-			effectRenderer.addEffect(fx);
+			effectRenderer.add(fx);
 			callback.addHitEffects(fx, world, pos, blockState);
-			fx.setBlockPos(new BlockPos(x, y, z)).multiplyVelocity(0.2F).multiplyParticleScaleBy(0.6F);
+			fx.init(new BlockPos(x, y, z)).setPower(0.2F).scale(0.6F);
 		}
 		return true;
 	}
@@ -150,8 +150,8 @@ public class ParticleHelper {
 		@OnlyIn(Dist.CLIENT)
 		protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
 			Minecraft minecraft = Minecraft.getInstance();
-			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
-			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
+			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRenderer();
+			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShaper();
 			//			fx.sprite = blockModelShapes.getTexture(state);	//TODO At on field SpriteTexturedParticle.sprite but it's protected so idk. Reflection?
 		}
 	}

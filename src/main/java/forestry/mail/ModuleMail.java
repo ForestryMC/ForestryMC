@@ -50,12 +50,12 @@ public class ModuleMail extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.registerFactory(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
-		ScreenManager.registerFactory(MailContainers.LETTER.containerType(), GuiLetter::new);
-		ScreenManager.registerFactory(MailContainers.MAILBOX.containerType(), GuiMailbox::new);
-		ScreenManager.registerFactory(MailContainers.STAMP_COLLECTOR.containerType(), GuiStampCollector::new);
-		ScreenManager.registerFactory(MailContainers.TRADE_NAME.containerType(), GuiTradeName::new);
-		ScreenManager.registerFactory(MailContainers.TRADER.containerType(), GuiTrader::new);
+		ScreenManager.register(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
+		ScreenManager.register(MailContainers.LETTER.containerType(), GuiLetter::new);
+		ScreenManager.register(MailContainers.MAILBOX.containerType(), GuiMailbox::new);
+		ScreenManager.register(MailContainers.STAMP_COLLECTOR.containerType(), GuiStampCollector::new);
+		ScreenManager.register(MailContainers.TRADE_NAME.containerType(), GuiTradeName::new);
+		ScreenManager.register(MailContainers.TRADER.containerType(), GuiTrader::new);
 	}
 
 	@Override

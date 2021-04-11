@@ -68,7 +68,7 @@ public final class Hive {
 	}
 
 	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
-		if (!HiveConfig.isDimAllowed(world.getWorld().getDimensionKey().func_240901_a_())) {
+		if (!HiveConfig.isDimAllowed(world.getLevel().dimension().location())) {
 			return false;
 		}
 

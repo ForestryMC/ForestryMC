@@ -40,7 +40,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	public Fluid getFlowingFluid() {
+	public Fluid getFlowing() {
 		if (flowing) {
 			return this;
 		}
@@ -48,7 +48,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	public Fluid getStillFluid() {
+	public Fluid getSource() {
 		if (!flowing) {
 			return this;
 		}
@@ -56,14 +56,14 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	protected boolean canSourcesMultiply() {
+	protected boolean canConvertToSource() {
 		return false;
 	}
 
 	@Override
-	protected void beforeReplacingBlock(IWorld world, BlockPos blockPos, BlockState blockState) {
-		TileEntity tileEntity = blockState.hasTileEntity() ? world.getTileEntity(blockPos) : null;
-		Block.spawnDrops(blockState, world.getWorld(), blockPos, tileEntity);
+	protected void beforeDestroyingBlock(IWorld world, BlockPos blockPos, BlockState blockState) {
+		TileEntity tileEntity = blockState.hasTileEntity() ? world.getBlockEntity(blockPos) : null;
+		Block.dropResources(blockState, world, blockPos, tileEntity);
 	}
 
 	@Override
@@ -72,22 +72,22 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	protected int getLevelDecreasePerBlock(IWorldReader iWorldReader) {
+	protected int getDropOff(IWorldReader iWorldReader) {
 		return 1;
 	}
 
 	@Override
-	public Item getFilledBucket() {
+	public Item getBucket() {
 		return null;    //TODO fluids
 	}
 
 	@Override
-	protected boolean canDisplace(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+	protected boolean canBeReplacedWith(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public int getTickRate(IWorldReader worldReader) {
+	public int getTickDelay(IWorldReader worldReader) {
 		return 0;
 	}
 
@@ -101,8 +101,8 @@ public abstract class ForestryFluid extends FlowingFluid {
 	}
 
 	@Override
-	protected BlockState getBlockState(FluidState state) {
-		return getBlock().getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+	protected BlockState createLegacyBlock(FluidState state) {
+		return getBlock().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getAmount(state));
 	}
 
 	public static class Flowing extends ForestryFluid {
@@ -111,14 +111,14 @@ public abstract class ForestryFluid extends FlowingFluid {
 		}
 
 		@Override
-		protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-			super.fillStateContainer(builder);
-			builder.add(LEVEL_1_8);
+		protected void createFluidStateDefinition(StateContainer.Builder<Fluid, FluidState> builder) {
+			super.createFluidStateDefinition(builder);
+			builder.add(LEVEL);
 		}
 
 		@Override
-		public int getLevel(FluidState fluidState) {
-			return fluidState.get(LEVEL_1_8);
+		public int getAmount(FluidState fluidState) {
+			return fluidState.getValue(LEVEL);
 		}
 
 		public boolean isSource(FluidState state) {
@@ -132,7 +132,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 		}
 
 		@Override
-		public int getLevel(FluidState fluidState) {
+		public int getAmount(FluidState fluidState) {
 			return 8;
 		}
 

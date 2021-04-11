@@ -34,8 +34,8 @@ public class CraftingInventoryForestry extends CraftingInventory {
 
 	public CraftingInventoryForestry copy() {
 		CraftingInventoryForestry copy = new CraftingInventoryForestry(this.eventHandlerIn, getWidth(), getHeight());
-		for (int slot = 0; slot < getSizeInventory(); slot++) {
-			copy.setInventorySlotContents(slot, getStackInSlot(slot).copy());
+		for (int slot = 0; slot < getContainerSize(); slot++) {
+			copy.setItem(slot, getItem(slot).copy());
 		}
 		return copy;
 	}

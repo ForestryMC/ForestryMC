@@ -53,7 +53,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 	}
 
 	@Override
-	public void act(DirectoryCache cache) throws IOException {
+	public void run(DirectoryCache cache) throws IOException {
 		this.blockToBuilder.clear();
 		this.registerStates();
 		blockToBuilder.forEach((key, builder) -> {
@@ -64,8 +64,8 @@ public abstract class BlockStateProvider implements IDataProvider {
 			Path path = this.makePath(key.getRegistryName());
 			try {
 				String s = GSON.toJson(jsonobject);
-				String s1 = HASH_FUNCTION.hashUnencodedChars(s).toString();
-				if (!Objects.equals(cache.getPreviousHash(path), s1) || !Files.exists(path)) {
+				String s1 = SHA1.hashUnencodedChars(s).toString();
+				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
 					Files.createDirectories(path.getParent());
 
 					try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
@@ -73,7 +73,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 					}
 				}
 
-				cache.recordHash(path, s1);
+				cache.putNew(path, s1);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}
@@ -119,11 +119,11 @@ public abstract class BlockStateProvider implements IDataProvider {
 		}
 
 		public <T extends Comparable<T>> Builder property(Property<T> property, T value, Consumer<Variant> consumer) {
-			return condition((state) -> state.get(property) == value, consumer);
+			return condition((state) -> state.getValue(property) == value, consumer);
 		}
 
 		public <T extends Comparable<T>, V extends Comparable<V>> Builder property(Property<T> property, T value, Property<V> propertyTwo, V valueTwo, Consumer<Variant> consumer) {
-			return condition((state) -> state.get(property) == value && state.get(propertyTwo) == valueTwo, consumer);
+			return condition((state) -> state.getValue(property) == value && state.getValue(propertyTwo) == valueTwo, consumer);
 		}
 
 		public <T extends Comparable<T>> Builder state(BlockState state, Consumer<Variant> consumer) {
@@ -142,8 +142,8 @@ public abstract class BlockStateProvider implements IDataProvider {
 
 		private <V extends Comparable<V>> Set<BlockState> mapStates(Property<V> property, Set<BlockState> states) {
 			Set<BlockState> mappedStates = new HashSet<>();
-			for (V value : property.getAllowedValues()) {
-				states.forEach(mappedState -> mappedStates.add(mappedState.with(property, value)));
+			for (V value : property.getPossibleValues()) {
+				states.forEach(mappedState -> mappedStates.add(mappedState.setValue(property, value)));
 			}
 			return mappedStates;
 		}
@@ -174,7 +174,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 			JsonObject variantsObj = new JsonObject();
 			Variant defaultVariant = new Variant();
 			always.forEach(consumer -> consumer.accept(defaultVariant));
-			for (BlockState state : block.getStateContainer().getValidStates()) {
+			for (BlockState state : block.getStateDefinition().getPossibleStates()) {
 				Variant variant = defaultVariant.copy();
 				for (Map.Entry<Predicate<BlockState>, Consumer<Variant>> entry : this.variants.entrySet()) {
 					if (entry.getKey().test(state)) {
@@ -184,7 +184,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 				blockStateVariants.get(state).forEach(consumer -> consumer.accept(variant));
 				Map<Property<?>, Comparable<?>> properties = new HashMap<>(state.getValues());
 				alwaysIgnore.forEach(properties::remove);
-				variantsObj.add(BlockModelShapes.getPropertyMapString(properties), variant.serialize());
+				variantsObj.add(BlockModelShapes.statePropertiesToString(properties), variant.serialize());
 			}
 			obj.add("variants", variantsObj);
 			return obj;

@@ -9,11 +9,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
 
-import genetics.api.alleles.IAllele;
-
 import forestry.api.genetics.filter.IFilterData;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRuleType;
+
+import genetics.api.alleles.IAllele;
 
 public final class FakeFilterLogic implements IFilterLogic {
 	public static final FakeFilterLogic INSTANCE = new FakeFilterLogic();

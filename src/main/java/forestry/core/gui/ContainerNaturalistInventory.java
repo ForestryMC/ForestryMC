@@ -27,7 +27,7 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 
 	//TODO more duped code
 	public static ContainerNaturalistInventory fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		TileNaturalistChest tile = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileNaturalistChest.class);    //TODO think this is OK for inheritance
+		TileNaturalistChest tile = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileNaturalistChest.class);    //TODO think this is OK for inheritance
 		return new ContainerNaturalistInventory(windowId, playerInv, tile, extraData.readVarInt());
 	}
 
@@ -72,15 +72,15 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
 	}
 
 	@Override
-	public void addListener(IContainerListener listener) {
-		super.addListener(listener);
+	public void addSlotListener(IContainerListener listener) {
+		super.addSlotListener(listener);
 
 		tile.increaseNumPlayersUsing();
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity player) {
-		super.onContainerClosed(player);
+	public void removed(PlayerEntity player) {
+		super.removed(player);
 		tile.decreaseNumPlayersUsing();
 	}
 }

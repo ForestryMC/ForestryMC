@@ -232,7 +232,7 @@ public class ModFeatureRegistry {
 
 		@Override
 		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
-			return entity(factory, classification, identifier, consumer, LivingEntity::registerAttributes);
+			return entity(factory, classification, identifier, consumer, LivingEntity::createLivingAttributes);
 		}
 
 		@Override

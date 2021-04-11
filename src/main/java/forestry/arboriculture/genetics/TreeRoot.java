@@ -36,14 +36,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IIndividual;
-import genetics.api.root.IRootContext;
-import genetics.api.root.IndividualRoot;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafTickHandler;
@@ -72,6 +64,13 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.RenderUtil;
+
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+import genetics.utils.AlleleUtils;
 
 public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreedingTrackerHandler {
 	public static final String UID = "rootTrees";
@@ -146,7 +145,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	@Override
 	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
 		BlockState state = ArboricultureBlocks.SAPLING_GE.defaultState();
-		boolean placed = world.setBlockState(pos, state);
+		boolean placed = world.setBlockAndUpdate(pos, state);
 		if (!placed) {
 			return false;
 		}
@@ -159,7 +158,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+			world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
 			return false;
 		}
 
@@ -181,8 +180,8 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 			BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();
 			if (fruitPod != null) {
 
-				BlockState state = fruitPod.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
-				boolean placed = world.setBlockState(pos, state, 18);
+				BlockState state = fruitPod.defaultBlockState().setValue(HorizontalBlock.FACING, facing);
+				boolean placed = world.setBlock(pos, state, 18);
 				if (placed) {
 
 					Block block = world.getBlockState(pos).getBlock();
@@ -194,7 +193,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 							RenderUtil.markForUpdate(pos);
 							return true;
 						} else {
-							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 18);
+							world.setBlock(pos, Blocks.AIR.defaultBlockState(), 18);
 							return false;
 						}
 					}
@@ -312,7 +311,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
 		Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
 		ITree pollen = (ITree) individual;
-		if (pollen.setLeaves(world, owner, pos, world.rand)) {
+		if (pollen.setLeaves(world, owner, pos, world.random)) {
 			return TileUtil.getTile(world, pos, IPollinatable.class);
 		} else {
 			return null;

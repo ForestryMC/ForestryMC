@@ -15,12 +15,12 @@ import java.util.List;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+
+import genetics.api.individual.IGenome;
 
 public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
@@ -43,7 +43,7 @@ public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 				continue;
 			}
 
-			player.attackEntityFrom(damageSourceBeeEnd, damage);
+			player.hurt(damageSourceBeeEnd, damage);
 		}
 
 		return storedData;

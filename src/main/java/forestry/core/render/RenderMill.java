@@ -34,33 +34,33 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 		int textureHeight = 32;
 		pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
-		pedestal.rotationPointX = 8;
-		pedestal.rotationPointY = 8;
-		pedestal.rotationPointZ = 8;
+		pedestal.x = 8;
+		pedestal.y = 8;
+		pedestal.z = 8;
 
 		column = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		column.addBox(-2, -7F, -2, 4, 15, 4);
-		column.rotationPointX = 8;
-		column.rotationPointY = 8;
-		column.rotationPointZ = 8;
+		column.x = 8;
+		column.y = 8;
+		column.z = 8;
 
 		extension = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		extension.addBox(1F, 8F, 7F, 14, 2, 2);
-		extension.rotationPointX = 0;
-		extension.rotationPointY = 0;
-		extension.rotationPointZ = 0;
+		extension.x = 0;
+		extension.y = 0;
+		extension.z = 0;
 
 		blade1 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		blade1.addBox(-4F, -5F, -3F, 8, 12, 1);
-		blade1.rotationPointX = 8;
-		blade1.rotationPointY = 8;
-		blade1.rotationPointZ = 8;
+		blade1.x = 8;
+		blade1.y = 8;
+		blade1.z = 8;
 
 		blade2 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
 		blade2.addBox(-4F, -5F, 2F, 8, 12, 1);
-		blade2.rotationPointX = 8;
-		blade2.rotationPointY = 8;
-		blade2.rotationPointZ = 8;
+		blade2.x = 8;
+		blade2.y = 8;
+		blade2.z = 8;
 
 		textures = new ResourceLocation[12];
 

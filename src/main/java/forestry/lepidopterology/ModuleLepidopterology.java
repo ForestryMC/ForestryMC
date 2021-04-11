@@ -28,12 +28,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
@@ -52,6 +56,7 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
+import forestry.lepidopterology.features.LepidopterologyFeatures;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
 import forestry.lepidopterology.genetics.ButterflyFactory;
 import forestry.lepidopterology.genetics.ButterflyMutationFactory;
@@ -87,6 +92,16 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public ModuleLepidopterology() {
 		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
 		ForgeUtils.registerSubscriber(this);
+
+		MinecraftForge.EVENT_BUS.register(ForgeEvents.class);
+
+		if (generateCocoons) {
+			if (generateCocoonsAmount > 0.0) {
+				IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+				modEventBus.addGenericListener(Feature.class, LepidopterologyFeatures::registerFeatures);
+				MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, LepidopterologyFeatures::onBiomeLoad);
+			}
+		}
 	}
 
 	@Override
@@ -290,15 +305,17 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		return secondSerumChance;
 	}
 
-	@SubscribeEvent
-	public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
-		if (event.getEntity() instanceof EntityButterfly) {
-			event.setCanceled(true);
-		}
-	}
-
 	@Override
 	public ISidedModuleHandler getModuleHandler() {
 		return proxy;
+	}
+
+	private class ForgeEvents {
+		@SubscribeEvent
+		public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
+			if (event.getEntity() instanceof EntityButterfly) {
+				event.setCanceled(true);
+			}
+		}
 	}
 }

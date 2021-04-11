@@ -76,7 +76,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		}
 
 		Ingredient box = recipe.getBox();
-		if (!box.hasNoMatchingItems() && !box.test(item)) {
+		if (!box.isEmpty() && !box.test(item)) {
 			return false;
 		}
 

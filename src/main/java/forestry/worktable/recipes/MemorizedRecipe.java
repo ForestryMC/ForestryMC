@@ -14,9 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import forestry.core.utils.RecipeUtils;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
@@ -34,6 +32,7 @@ import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NBTUtilForestry;
+import forestry.core.utils.RecipeUtils;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 
 public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStreamable {
@@ -97,7 +96,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public ItemStack getOutputIcon(World world) {
 		ICraftingRecipe selectedRecipe = getSelectedRecipe(world);
 		if (selectedRecipe != null) {
-			ItemStack recipeOutput = selectedRecipe.getCraftingResult(craftMatrix);
+			ItemStack recipeOutput = selectedRecipe.assemble(craftMatrix);
 			if (!recipeOutput.isEmpty()) {
 				return recipeOutput;
 			}
@@ -108,7 +107,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	public ItemStack getCraftingResult(CraftingInventory inventory, World world) {
 		ICraftingRecipe selectedRecipe = getSelectedRecipe(world);
 		if (selectedRecipe != null && selectedRecipe.matches(inventory, world)) {
-			ItemStack recipeOutput = selectedRecipe.getCraftingResult(inventory);
+			ItemStack recipeOutput = selectedRecipe.assemble(inventory);
 			if (!recipeOutput.isEmpty()) {
 				return recipeOutput;
 			}
@@ -220,7 +219,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 
 		data.writeVarInt(recipeNames.size());
 		for (String recipeName : recipeNames) {
-			data.writeString(recipeName);
+			data.writeUtf(recipeName);
 		}
 	}
 
@@ -234,7 +233,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 		recipeNames.clear();
 		int recipeCount = data.readVarInt();
 		for (int i = 0; i < recipeCount; i++) {
-			String recipeId = data.readString();
+			String recipeId = data.readUtf();
 			recipeNames.add(recipeId);
 		}
 	}

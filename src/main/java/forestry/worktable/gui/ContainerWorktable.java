@@ -46,7 +46,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	private boolean craftMatrixChanged = false;
 
 	public static ContainerWorktable fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		TileWorktable worktable = TileUtil.getTile(playerInv.player.world, extraData.readBlockPos(), TileWorktable.class);
+		TileWorktable worktable = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileWorktable.class);
 		return new ContainerWorktable(windowId, playerInv, worktable);    //TODO what to do if Worktable null
 	}
 
@@ -73,20 +73,20 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 		// CraftResult display
 		addSlot(new SlotCrafter(inv.player, craftMatrix, craftingDisplay, tile, InventoryGhostCrafting.SLOT_CRAFTING_RESULT, 77, 38));
 
-		for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
+		for (int i = 0; i < craftMatrix.getContainerSize(); i++) {
 			onCraftMatrixChanged(tile.getCraftingDisplay(), i);
 		}
 	}
 
 	@Override
-	public void detectAndSendChanges() {
+	public void broadcastChanges() {
 		if (craftMatrixChanged) {
 			craftMatrixChanged = false;
 			tile.setCurrentRecipe(craftMatrix);
 			sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 		}
 
-		super.detectAndSendChanges();
+		super.broadcastChanges();
 
 		if (lastMemoryUpdate != tile.getMemory().getLastUpdate()) {
 			lastMemoryUpdate = tile.getMemory().getLastUpdate();
@@ -96,7 +96,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 	public void updateCraftMatrix() {
 		IInventory crafting = tile.getCraftingDisplay();
-		for (int i = 0; i < crafting.getSizeInventory(); i++) {
+		for (int i = 0; i < crafting.getContainerSize(); i++) {
 			onCraftMatrixChanged(crafting, i);
 		}
 	}
@@ -105,21 +105,21 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	// Direct changes to the underlying inventory are not detected, only slot changes.
 	@Override
 	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
-		if (slot >= craftMatrix.getSizeInventory()) {
+		if (slot >= craftMatrix.getContainerSize()) {
 			return;
 		}
 
-		ItemStack stack = iinventory.getStackInSlot(slot);
-		ItemStack currentStack = craftMatrix.getStackInSlot(slot);
+		ItemStack stack = iinventory.getItem(slot);
+		ItemStack currentStack = craftMatrix.getItem(slot);
 
 		if (!ItemStackUtil.isIdenticalItem(stack, currentStack)) {
-			craftMatrix.setInventorySlotContents(slot, stack.copy());
+			craftMatrix.setItem(slot, stack.copy());
 		}
 	}
 
 	// Fired when this container's craftMatrix detects a change
 	@Override
-	public void onCraftMatrixChanged(IInventory iinventory) {
+	public void slotsChanged(IInventory iinventory) {
 		craftMatrixChanged = true;
 	}
 
@@ -150,7 +150,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 				break;
 			}
 			case 1: { // right clicked a memorized recipe
-				long time = player.world.getGameTime();
+				long time = player.level.getGameTime();
 				RecipeMemory memory = tile.getMemory();
 				memory.toggleLock(time, secondary);
 				break;

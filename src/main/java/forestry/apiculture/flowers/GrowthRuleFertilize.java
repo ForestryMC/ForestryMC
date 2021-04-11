@@ -37,7 +37,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 	}
 
 	private boolean growFlower(ServerWorld world, BlockPos pos) {
-		if (!world.isBlockLoaded(pos)) {
+		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
 
@@ -46,9 +46,9 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 		for (Block b : this.allowedItems) {
 			if (b == ground && b instanceof IGrowable) {
 				IGrowable growable = (IGrowable) b;
-				if (growable.canGrow(world, pos, state, false)) {//TODO what to put for isClient
-					for (int i = 0; i < world.rand.nextInt(2) + 1; i++) {
-						growable.grow(world, world.rand, pos, state);
+				if (growable.isValidBonemealTarget(world, pos, state, false)) {//TODO what to put for isClient
+					for (int i = 0; i < world.random.nextInt(2) + 1; i++) {
+						growable.performBonemeal(world, world.random, pos, state);
 					}
 				}
 			}

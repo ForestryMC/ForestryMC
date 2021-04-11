@@ -24,17 +24,17 @@ public class ItemAmbrosia extends ItemForestryFood {
 
 	public ItemAmbrosia() {
 		super((new Item.Properties())
-			.group(ItemGroupForestry.tabForestry)
+				.tab(ItemGroupForestry.tabForestry)
 			.food(new Food.Builder()
-				.setAlwaysEdible()
-				.hunger(Constants.FOOD_AMBROSIA_HEAL)
-				.saturation(0.6f)
+					.alwaysEat()
+					.nutrition(Constants.FOOD_AMBROSIA_HEAL)
+					.saturationMod(0.6f)
 				.effect(new EffectInstance(Effects.REGENERATION, 40, 0), 1.0F)
 				.build()));
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack itemstack) {
+	public boolean isFoil(ItemStack itemstack) {
 		return true;
 	}
 

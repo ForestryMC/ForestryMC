@@ -34,7 +34,7 @@ public class PacketSocketUpdate extends ForestryPacket implements IForestryPacke
 	private final NonNullList<ItemStack> itemStacks;
 
 	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
-		this.pos = tile.getPos();
+		this.pos = tile.getBlockPos();
 
 		this.itemStacks = NonNullList.withSize(tile.getSocketCount(), ItemStack.EMPTY);
 		for (int i = 0; i < tile.getSocketCount(); i++) {
@@ -60,7 +60,7 @@ public class PacketSocketUpdate extends ForestryPacket implements IForestryPacke
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> itemStacks = data.readItemStacks();
 
-			TileUtil.actOnTile(player.world, pos, ISocketable.class, socketable -> {
+			TileUtil.actOnTile(player.level, pos, ISocketable.class, socketable -> {
 				for (int i = 0; i < itemStacks.size(); i++) {
 					socketable.setSocket(i, itemStacks.get(i));
 				}

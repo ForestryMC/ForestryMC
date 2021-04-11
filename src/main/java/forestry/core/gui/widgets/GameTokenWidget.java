@@ -66,7 +66,7 @@ public class GameTokenWidget extends Widget {
 		float colorB = (tokenColour & 255) / 255.0F;
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(manager.gui.textureFile);
+		textureManager.bind(manager.gui.textureFile);
 
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();
@@ -86,7 +86,7 @@ public class GameTokenWidget extends Widget {
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
 			//TODO no idea if this is right at all
-			manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getMaxU()), (int) (startY + yPos + 3 + icon.getMaxV()), 16, 16);
+			manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getU1()), (int) (startY + yPos + 3 + icon.getV1()), 16, 16);
 		}
 		RenderSystem.enableDepthTest();
 	}

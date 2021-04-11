@@ -33,8 +33,8 @@ public class EventHandlerMailAlert {
 	@OnlyIn(Dist.CLIENT)
 	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (event.phase == TickEvent.Phase.END &&
-			Minecraft.getInstance().world != null &&
-			GuiMailboxInfo.instance.hasPOBoxInfo()) {
+				Minecraft.getInstance().level != null &&
+				GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			//TODO: Test / Find a valid matrix stack
 			GuiMailboxInfo.instance.render(new MatrixStack());
 		}
@@ -45,7 +45,7 @@ public class EventHandlerMailAlert {
 		PlayerEntity player = event.getPlayer();
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
-		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.world), address);
+		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.level), address);
 		PacketPOBoxInfoResponse packet = new PacketPOBoxInfoResponse(pobox.getPOBoxInfo());
 		NetworkUtil.sendToPlayer(packet, player);
 	}

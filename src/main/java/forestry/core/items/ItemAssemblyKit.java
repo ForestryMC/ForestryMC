@@ -25,19 +25,19 @@ public class ItemAssemblyKit extends ItemForestry {
 
 	public ItemAssemblyKit(ItemStack assembled) {
 		super((new Item.Properties())
-			.maxStackSize(24)
-			.group(ItemGroupForestry.tabForestry));
+				.stacksTo(24)
+				.tab(ItemGroupForestry.tabForestry));
 		this.assembled = assembled;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
-		if (!worldIn.isRemote) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack heldItem = playerIn.getItemInHand(handIn);
+		if (!worldIn.isClientSide) {
 			heldItem.shrink(1);
-			ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(), playerIn.getPosZ(), assembled.copy());
-			worldIn.addEntity(entity);
+			ItemEntity entity = new ItemEntity(worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), assembled.copy());
+			worldIn.addFreshEntity(entity);
 		}
-		return ActionResult.resultSuccess(heldItem);
+		return ActionResult.success(heldItem);
 	}
 }

@@ -6,13 +6,12 @@
 package forestry.api.genetics;
 
 import net.minecraft.block.BlockState;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import genetics.api.mutation.IMutation;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+
+import genetics.api.mutation.IMutation;
 
 /**
  * Set custom mutation requirements
@@ -45,7 +44,7 @@ public interface IMutationBuilder {
 	 *
 	 * @param types The types of biomes this mutation can occur.
 	 */
-	IMutationBuilder restrictBiomeType(BiomeDictionary.Type... types);
+	IMutationBuilder restrictBiomeType(Biome.Category... types);
 
 	/**
 	 * Restrict the days of the year that this mutation can occur

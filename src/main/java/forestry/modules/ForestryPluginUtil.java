@@ -65,7 +65,7 @@ public class ForestryPluginUtil {
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
 		//TODO - check this is only called on the client. I don't think it is at the moment
-		String comment = new TranslationTextComponent(info.unlocalizedDescription()).getUnformattedComponentText();
+		String comment = new TranslationTextComponent(info.unlocalizedDescription()).getContents();
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
 		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();

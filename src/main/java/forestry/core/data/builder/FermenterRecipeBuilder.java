@@ -71,8 +71,8 @@ public class FermenterRecipeBuilder {
 		}
 
 		@Override
-		public void serialize(JsonObject json) {
-			json.add("resource", resource.serialize());
+		public void serializeRecipeData(JsonObject json) {
+			json.add("resource", resource.toJson());
 			json.addProperty("fermentationValue", fermentationValue);
 			json.addProperty("modifier", modifier);
 			json.addProperty("output", output.getRegistryName().toString());
@@ -80,24 +80,24 @@ public class FermenterRecipeBuilder {
 		}
 
 		@Override
-		public ResourceLocation getID() {
+		public ResourceLocation getId() {
 			return id;
 		}
 
 		@Override
-		public IRecipeSerializer<?> getSerializer() {
+		public IRecipeSerializer<?> getType() {
 			return IFermenterRecipe.Companion.SERIALIZER;
 		}
 
 		@Nullable
 		@Override
-		public JsonObject getAdvancementJson() {
+		public JsonObject serializeAdvancement() {
 			return null;
 		}
 
 		@Nullable
 		@Override
-		public ResourceLocation getAdvancementID() {
+		public ResourceLocation getAdvancementId() {
 			return null;
 		}
 	}

@@ -26,21 +26,21 @@ public class ParticleBeeExplore extends SpriteTexturedParticle {
 		setSprite(ProxyApicultureClient.getBeeSprite());
 		this.origin = origin;
 
-		this.motionX = (destination.getX() + 0.5 - this.posX) * 0.015;
-		this.motionY = (destination.getY() + 0.5 - this.posY) * 0.015;
-		this.motionZ = (destination.getZ() + 0.5 - this.posZ) * 0.015;
+		this.xd = (destination.getX() + 0.5 - this.x) * 0.015;
+		this.yd = (destination.getY() + 0.5 - this.y) * 0.015;
+		this.zd = (destination.getZ() + 0.5 - this.z) * 0.015;
 
-		particleRed = (color >> 16 & 255) / 255.0F;
-		particleGreen = (color >> 8 & 255) / 255.0F;
-		particleBlue = (color & 255) / 255.0F;
+		rCol = (color >> 16 & 255) / 255.0F;
+		gCol = (color >> 8 & 255) / 255.0F;
+		bCol = (color & 255) / 255.0F;
 
 		this.setSize(0.1F, 0.1F);
-		this.particleScale *= 0.2F;
-		this.maxAge = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
+		this.quadSize *= 0.2F;
+		this.lifetime = (int) (80.0D / (Math.random() * 0.8D + 0.2D));
 
-		this.motionX *= 0.9D;
-		this.motionY *= 0.015D;
-		this.motionZ *= 0.9D;
+		this.xd *= 0.9D;
+		this.yd *= 0.015D;
+		this.zd *= 0.9D;
 	}
 
 	/**
@@ -48,57 +48,57 @@ public class ParticleBeeExplore extends SpriteTexturedParticle {
 	 */
 	@Override
 	public void tick() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.move(this.motionX, this.motionY, this.motionZ);
+		this.xo = this.x;
+		this.yo = this.y;
+		this.zo = this.z;
+		this.move(this.xd, this.yd, this.zd);
 
-		if (this.age == this.maxAge / 2) {
-			this.motionX = (origin.x - this.posX) * 0.03;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionZ = (origin.z - this.posZ) * 0.03;
+		if (this.age == this.lifetime / 2) {
+			this.xd = (origin.x - this.x) * 0.03;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.zd = (origin.z - this.z) * 0.03;
 		}
 
-		if (this.age < this.maxAge * 0.25) {
+		if (this.age < this.lifetime * 0.25) {
 			// venture out
-			this.motionX *= 0.92 + 0.3D * rand.nextFloat();
-			this.motionY = (this.motionY + 0.3 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.92 + 0.3D * rand.nextFloat();
-		} else if (this.age < this.maxAge * 0.5) {
+			this.xd *= 0.92 + 0.3D * random.nextFloat();
+			this.yd = (this.yd + 0.3 * (-0.5 + random.nextFloat())) / 2;
+			this.zd *= 0.92 + 0.3D * random.nextFloat();
+		} else if (this.age < this.lifetime * 0.5) {
 			// slow down
-			this.motionX *= 0.75 + 0.3D * rand.nextFloat();
-			this.motionY = (this.motionY + 0.3 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.75 + 0.3D * rand.nextFloat();
-		} else if (this.age < this.maxAge * 0.75) {
+			this.xd *= 0.75 + 0.3D * random.nextFloat();
+			this.yd = (this.yd + 0.3 * (-0.5 + random.nextFloat())) / 2;
+			this.zd *= 0.75 + 0.3D * random.nextFloat();
+		} else if (this.age < this.lifetime * 0.75) {
 			// venture back
-			this.motionX *= 0.95;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ *= 0.95;
+			this.xd *= 0.95;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.yd = (this.yd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+			this.zd *= 0.95;
 		} else {
 			// get to origin
-			this.motionX = (origin.x - this.posX) * 0.03;
-			this.motionY = (origin.y - this.posY) * 0.03;
-			this.motionY = (this.motionY + 0.2 * (-0.5 + rand.nextFloat())) / 2;
-			this.motionZ = (origin.z - this.posZ) * 0.03;
+			this.xd = (origin.x - this.x) * 0.03;
+			this.yd = (origin.y - this.y) * 0.03;
+			this.yd = (this.yd + 0.2 * (-0.5 + random.nextFloat())) / 2;
+			this.zd = (origin.z - this.z) * 0.03;
 		}
 
-		if (this.age++ >= this.maxAge) {
-			this.setExpired();
+		if (this.age++ >= this.lifetime) {
+			this.remove();
 		}
 	}
 
 	// avoid calculating lighting for bees, it is too much processing
 	@Override
-	public int getBrightnessForRender(float partialTick) {
+	public int getLightColor(float partialTick) {
 		return 15728880;
 	}
 
 	// avoid calculating collisions
 	@Override
 	public void move(double x, double y, double z) {
-		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
-		this.resetPositionToBB();
+		this.setBoundingBox(this.getBoundingBox().move(x, y, z));
+		this.setLocationFromBoundingbox();
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class FeaturePoplar extends FeatureTree {
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		while (leafSpawn > girth - 1) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		}
 	}
 }

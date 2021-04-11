@@ -42,14 +42,14 @@ import forestry.core.utils.InventoryUtil;
 public abstract class BlockStructure extends BlockForestry {
 
 	protected BlockStructure(Block.Properties properties) {
-		super(properties.hardnessAndResistance(1f));
+		super(properties.strength(1f));
 	}
 
 	protected long previousMessageTick = 0;
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-		if (playerIn.isSneaking()) { //isSneaking
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+		if (playerIn.isShiftKeyDown()) { //isSneaking
 			return ActionResultType.PASS;
 		}
 
@@ -59,7 +59,7 @@ public abstract class BlockStructure extends BlockForestry {
 		}
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
-		ItemStack heldItem = playerIn.getHeldItem(hand);
+		ItemStack heldItem = playerIn.getItemInHand(hand);
 		// If the player's hands are empty and they right-click on a multiblock, they get a
 		// multiblock-debugging message if the machine is not assembled.
 		if (heldItem.isEmpty()) {
@@ -69,14 +69,14 @@ public abstract class BlockStructure extends BlockForestry {
 					if (validationError != null) {
 						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(new StringTextComponent(validationError), Util.DUMMY_UUID);
+							playerIn.sendMessage(new StringTextComponent(validationError), Util.NIL_UUID);
 							previousMessageTick = tick;
 						}
 						return ActionResultType.SUCCESS;
 					}
 				}
 			} else {
-				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.DUMMY_UUID);
+				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.NIL_UUID);
 				return ActionResultType.SUCCESS;
 			}
 		}
@@ -86,15 +86,15 @@ public abstract class BlockStructure extends BlockForestry {
 			return ActionResultType.PASS;
 		}
 
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			part.openGui((ServerPlayerEntity) playerIn, pos);    //TODO cast is safe because on server?
 		}
 		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		if (world.isRemote) {
+	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -108,8 +108,8 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
-		if (world.isRemote) {
+	public void playerDestroy(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+		if (world.isClientSide) {
 			return;
 		}
 
@@ -125,7 +125,7 @@ public abstract class BlockStructure extends BlockForestry {
 			}
 		});
 
-		super.harvestBlock(world, player, pos, state, te, stack);
+		super.playerDestroy(world, player, pos, state, te, stack);
 	}
 
 }

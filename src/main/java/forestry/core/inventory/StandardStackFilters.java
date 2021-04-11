@@ -34,7 +34,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 	FUEL {
 		@Override
 		public boolean test(ItemStack stack) {
-			return FurnaceTileEntity.getBurnTimes().get(stack.getItem()) > 0;
+			return FurnaceTileEntity.getFuel().get(stack.getItem()) > 0;
 		}
 	},
 	//TODO - where is this used?
@@ -42,7 +42,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 		@Override
 		public boolean test(ItemStack stack) {
 			//TODO - tag on seeds?
-			return stack.getItem().getFood() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
+			return stack.getItem().getFoodProperties() != null || stack.getItem() == Items.WHEAT || stack.getItem() == Items.WHEAT_SEEDS;
 		}
 	}
 }

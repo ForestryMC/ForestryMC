@@ -76,7 +76,7 @@ public abstract class NBTUtilForestry {
 
 		public NBTList(ListNBT nbtList) {
 			//noinspection unchecked
-			backingList = new ArrayList<>((List<T>) nbtList.tagList);
+			backingList = new ArrayList<>((List<T>) nbtList.list);
 		}
 
 		@Override

@@ -16,10 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.world.World;
 
-import genetics.api.individual.IIndividual;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
@@ -27,6 +23,9 @@ import forestry.core.tiles.EscritoireGame;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
+
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	public static final short SLOT_ANALYZE = 0;
@@ -42,7 +41,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT)) {
-			ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
+			ItemStack specimen = getItem(SLOT_ANALYZE);
 			if (specimen.isEmpty()) {
 				return false;
 			}
@@ -64,7 +63,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 			return false;
 		}
 
-		if (getStackInSlot(SLOT_ANALYZE).isEmpty()) {
+		if (getItem(SLOT_ANALYZE).isEmpty()) {
 			return true;
 		}
 
@@ -76,24 +75,24 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return SlotUtil.isSlotInRange(slotIndex, SLOT_RESULTS_1, SLOTS_RESULTS_COUNT);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		super.setInventorySlotContents(slotIndex, itemstack);
+	public void setItem(int slotIndex, ItemStack itemstack) {
+		super.setItem(slotIndex, itemstack);
 		if (slotIndex == SLOT_ANALYZE) {
-			if (!RootUtils.isIndividual(getStackInSlot(SLOT_ANALYZE)) && !getStackInSlot(SLOT_ANALYZE).isEmpty()) {
-				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getStackInSlot(SLOT_ANALYZE));
+			if (!RootUtils.isIndividual(getItem(SLOT_ANALYZE)) && !getItem(SLOT_ANALYZE).isEmpty()) {
+				ItemStack ersatz = GeneticsUtil.convertToGeneticEquivalent(getItem(SLOT_ANALYZE));
 				if (RootUtils.isIndividual(ersatz)) {
-					super.setInventorySlotContents(SLOT_ANALYZE, ersatz);
+					super.setItem(SLOT_ANALYZE, ersatz);
 				}
 			}
-			World world = tile.getWorld();
-			if (world != null && !world.isRemote) {
+			World world = tile.getLevel();
+			if (world != null && !world.isClientSide) {
 				EscritoireGame game = tile.getGame();
-				game.initialize(getStackInSlot(SLOT_ANALYZE));
+				game.initialize(getItem(SLOT_ANALYZE));
 			}
 		}
 	}

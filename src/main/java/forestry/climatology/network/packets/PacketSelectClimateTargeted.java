@@ -49,7 +49,7 @@ public class PacketSelectClimateTargeted extends ForestryPacket implements IFore
 			BlockPos pos = data.readBlockPos();
 			IClimateState climateState = data.readClimateState();
 
-			IClimateHousing housing = TileUtil.getTile(player.world, pos, IClimateHousing.class);
+			IClimateHousing housing = TileUtil.getTile(player.level, pos, IClimateHousing.class);
 			if (housing != null) {
 				IClimateTransformer transformer = housing.getTransformer();
 				transformer.setTarget(climateState);

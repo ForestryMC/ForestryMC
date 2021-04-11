@@ -38,11 +38,11 @@ public class TickHandlerCoreClient {
 					if (this.hasNaturalistEye != hasNaturalistEye) {
 						this.hasNaturalistEye = hasNaturalistEye;
 						//TODO - I think this is the correct field
-						WorldRenderer renderGlobal = minecraft.worldRenderer;
+						WorldRenderer renderGlobal = minecraft.levelRenderer;
 						if (renderGlobal != null) {
-							renderGlobal.markBlockRangeForRenderUpdate(
-								(int) player.getPosX() - 32, (int) player.getPosY() - 32, (int) player.getPosZ() - 32,
-								(int) player.getPosX() + 32, (int) player.getPosY() + 32, (int) player.getPosZ() + 32);
+							renderGlobal.setBlocksDirty(
+									(int) player.getX() - 32, (int) player.getY() - 32, (int) player.getZ() - 32,
+									(int) player.getX() + 32, (int) player.getY() + 32, (int) player.getZ() + 32);
 						}
 					}
 				}

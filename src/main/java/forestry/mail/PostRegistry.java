@@ -63,7 +63,7 @@ public class PostRegistry implements IPostRegistry {
 		}
 
 		//TODO  needs getOrCreate
-		POBox pobox = world.getSavedData().get(() -> new POBox(address), POBox.SAVE_NAME + address);
+		POBox pobox = world.getDataStorage().get(() -> new POBox(address), POBox.SAVE_NAME + address);
 		if (pobox != null) {
 			cachedPOBoxes.put(address, pobox);
 		}
@@ -74,8 +74,8 @@ public class PostRegistry implements IPostRegistry {
 		POBox pobox = getPOBox(world, add);
 
 		if (pobox == null) {
-			pobox = world.getSavedData().getOrCreate(() -> new POBox(add), POBox.SAVE_NAME + add);
-			pobox.markDirty();
+			pobox = world.getDataStorage().computeIfAbsent(() -> new POBox(add), POBox.SAVE_NAME + add);
+			pobox.setDirty();
 			cachedPOBoxes.put(add, pobox);
 
 			PlayerEntity player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
@@ -114,7 +114,7 @@ public class PostRegistry implements IPostRegistry {
 		}
 
 		//TODO again this should be altered to use getOrCreate. At the moment this may supply bad trade stations with no owner. Not sure how this code will handle that
-		TradeStation trade = world.getSavedData().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
+		TradeStation trade = world.getDataStorage().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
 		if (trade != null && trade.isValid()) {
@@ -131,8 +131,8 @@ public class PostRegistry implements IPostRegistry {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = world.getSavedData().getOrCreate(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
-			trade.markDirty();
+			trade = world.getDataStorage().computeIfAbsent(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
+			trade.setDirty();
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
 		}
@@ -164,7 +164,7 @@ public class PostRegistry implements IPostRegistry {
 			return cachedPostOffice;
 		}
 
-		PostOffice office = world.getSavedData().getOrCreate(PostOffice::new, PostOffice.SAVE_NAME);
+		PostOffice office = world.getDataStorage().computeIfAbsent(PostOffice::new, PostOffice.SAVE_NAME);
 
 		office.setWorld(world);
 

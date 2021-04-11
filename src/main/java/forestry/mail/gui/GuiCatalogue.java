@@ -50,11 +50,11 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 	public GuiCatalogue(ContainerCatalogue container, PlayerInventory inv, ITextComponent title) {
 		super(new ResourceLocation("textures/gui/book.png"), container, inv, title);
-		this.xSize = 192;
-		this.ySize = 192;
+		this.imageWidth = 192;
+		this.imageHeight = 192;
 
-		buttonFilter = new Button(width / 2 - 44, guiTop + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
-		buttonUse = new Button(width / 2, guiTop + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
+		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
 	}
 
 	@Override
@@ -64,40 +64,40 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 		buttons.clear();
 		children.clear();
 
-		Minecraft.getInstance().keyboardListener.enableRepeatEvents(true);
+		Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
 
-		addButton(new Button(width / 2 + 44, guiTop + 150, 12, 20, new StringTextComponent(">"), b -> actionPerformed(2)));
-		addButton(new Button(width / 2 - 58, guiTop + 150, 12, 20, new StringTextComponent("<"), b -> actionPerformed(3)));
+		addButton(new Button(width / 2 + 44, topPos + 150, 12, 20, new StringTextComponent(">"), b -> actionPerformed(2)));
+		addButton(new Button(width / 2 - 58, topPos + 150, 12, 20, new StringTextComponent("<"), b -> actionPerformed(3)));
 
 		//TODO but these are set in the constructor??
-		buttonFilter = new Button(width / 2 - 44, guiTop + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
 		addButton(buttonFilter);
 
-		buttonUse = new Button(width / 2, guiTop + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
+		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
 		addButton(buttonUse);
 	}
 
 	@Override
-	public void onClose() {
-		Minecraft.getInstance().keyboardListener.enableRepeatEvents(false);
-		super.onClose();
+	public void removed() {
+		Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
+		super.removed();
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
-		Minecraft.getInstance().fontRenderer.drawString(transform, String.format("%s / %s", container.getPageNumber(), container.getPageCount()), guiLeft + xSize - 72, guiTop + 12, ColourProperties.INSTANCE.get("gui.book"));
+		Minecraft.getInstance().font.draw(transform, String.format("%s / %s", container.getPageNumber(), container.getPageCount()), leftPos + imageWidth - 72, topPos + 12, ColourProperties.INSTANCE.get("gui.book"));
 
 		clearTradeInfoWidgets();
 
 		ITradeStationInfo tradeInfo = container.getTradeInfo();
 
 		if (tradeInfo != null) {
-			drawTradePreview(transform, tradeInfo, guiLeft + 38, guiTop + 30);
+			drawTradePreview(transform, tradeInfo, leftPos + 38, topPos + 30);
 			buttonUse.visible = tradeInfo.getState().isOk();
 		} else {
-			drawNoTrade(guiLeft + 38, guiTop + 30);
+			drawNoTrade(leftPos + 38, topPos + 30);
 			buttonUse.visible = false;
 		}
 
@@ -105,30 +105,30 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	}
 
 	private void drawNoTrade(int x, int y) {
-		Minecraft.getInstance().fontRenderer.func_238418_a_(new TranslationTextComponent("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
+		Minecraft.getInstance().font.drawWordWrap(new TranslationTextComponent("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
 	}
 
 	private void drawTradePreview(MatrixStack transform, ITradeStationInfo tradeInfo, int x, int y) {
 
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		fontRenderer.drawString(transform, boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		fontRenderer.draw(transform, boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
 
-		fontRenderer.drawString(transform, String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
+		fontRenderer.draw(transform, String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
 
-		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft, y - guiTop + 28, tradeInfo.getTradegood()));
+		addTradeInfoWidget(new ItemStackWidget(widgetManager, x - leftPos, y - topPos + 28, tradeInfo.getTradegood()));
 
-		fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
+		fontRenderer.draw(transform, Translator.translateToLocal("for.gui.mail.tradefor"), x, y + 46, ColourProperties.INSTANCE.get("gui.book"));
 
 		for (int i = 0; i < tradeInfo.getRequired().size(); i++) {
 			ItemStack itemStack = tradeInfo.getRequired().get(i);
-			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - guiLeft + i * 18, y - guiTop + 56, itemStack));
+			addTradeInfoWidget(new ItemStackWidget(widgetManager, x - leftPos + i * 18, y - topPos + 56, itemStack));
 		}
 
 		//TODO: Fix later
 		if (tradeInfo.getState().isOk()) {
-			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).mergeStyle(TextFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.drawWordWrap(((IFormattableTextComponent) tradeInfo.getState().getDescription()).withStyle(TextFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		} else {
-			fontRenderer.func_238418_a_(((IFormattableTextComponent) tradeInfo.getState().getDescription()).mergeStyle(TextFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.drawWordWrap(((IFormattableTextComponent) tradeInfo.getState().getDescription()).withStyle(TextFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		}
 	}
 
@@ -148,7 +148,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		switch (id) {
 			case 0:
-				player.closeScreen();
+				player.closeContainer();
 				break;
 			case 2: // next page
 				NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
@@ -165,7 +165,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
-				player.closeScreen();
+				player.closeContainer();
 				break;
 		}
 	}

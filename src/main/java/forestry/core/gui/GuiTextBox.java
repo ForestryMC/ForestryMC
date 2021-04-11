@@ -14,8 +14,8 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -56,16 +56,16 @@ public class GuiTextBox extends TextFieldWidget {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRenderer.func_238425_b_(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.FONT_HEIGHT < height;
+		return fontRenderer.split(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.lineHeight < height;
 	}
 
 	private String getCursoredText() {
 		if (!isFocused()) {
-			return getText();
+			return getValue();
 		}
 
 		int cursorPos = getCursorPosition() - getLineScrollOffset();
-		String text = getText();
+		String text = getValue();
 		if (cursorPos < 0) {
 			return text;
 		}
@@ -76,22 +76,22 @@ public class GuiTextBox extends TextFieldWidget {
 	}
 
 	private void drawScrolledSplitString(MatrixStack transform, ITextComponent text, int startX, int startY, int width, int textColour) {
-		List<ITextProperties> lines = fontRenderer.func_238425_b_(text, width);
+		List<IReorderingProcessor> lines = fontRenderer.split(text, width);
 		maxLines = lines.size();
 
 		int count = 0;
 		int lineY = startY;
 
-		for (ITextProperties line : lines) {
+		for (IReorderingProcessor line : lines) {
 			if (count < lineScroll) {
 				count++;
 				continue;
-			} else if (lineY + fontRenderer.FONT_HEIGHT - startY > height) {
+			} else if (lineY + fontRenderer.lineHeight - startY > height) {
 				break;
 			}
 
-			fontRenderer.drawString(transform, line.getString(), startX, lineY, textColour);
-			lineY += fontRenderer.FONT_HEIGHT;
+			fontRenderer.draw(transform, line, startX, lineY, textColour);
+			lineY += fontRenderer.lineHeight;
 
 			count++;
 		}

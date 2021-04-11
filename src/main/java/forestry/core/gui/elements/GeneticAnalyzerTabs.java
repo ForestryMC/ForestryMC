@@ -124,9 +124,9 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			background.draw(transform, 0, x);
 			if (!displayStack.isEmpty()) {
 				//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-				GlStateManager.enableRescaleNormal();
-				GuiUtil.drawItemStack(Minecraft.getInstance().fontRenderer, displayStack, x + 9, 5);
-				RenderHelper.disableStandardItemLighting();
+				GlStateManager._enableRescaleNormal();
+				GuiUtil.drawItemStack(Minecraft.getInstance().font, displayStack, x + 9, 5);
+				RenderHelper.turnOff();
 			}
 		}
 	}

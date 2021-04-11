@@ -14,7 +14,7 @@ import forestry.core.items.ItemBlockForestry;
 public class ItemBlockHoneyComb extends ItemBlockForestry<BlockHoneyComb> implements IColoredItem {
 
 	public ItemBlockHoneyComb(BlockHoneyComb block) {
-		super(block, new Item.Properties().group(ItemGroups.tabApiculture));
+		super(block, new Item.Properties().tab(ItemGroups.tabApiculture));
 	}
 
 	@OnlyIn(Dist.CLIENT)

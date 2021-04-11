@@ -129,7 +129,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 			}
 		} else if (button instanceof GuiButtonSubEntry) {
 			GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
-			Minecraft.getInstance().displayGuiScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
+			Minecraft.getInstance().setScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
 		} else if (button instanceof GuiButtonBack || pages.isEmpty()) {
 			if (lastPage >= 0) {
 				setPages(lastPage);
@@ -142,6 +142,6 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	}
 
 	private void displayEntries() {
-		Minecraft.getInstance().displayGuiScreen(new GuiForestryBookEntries(book, category));
+		Minecraft.getInstance().setScreen(new GuiForestryBookEntries(book, category));
 	}
 }

@@ -52,7 +52,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	public static ContainerLetter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
-		ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getHeldItem(hand));
+		ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getItemInHand(hand));
 		return new ContainerLetter(windowId, player, inv);
 	}
 
@@ -74,7 +74,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		}
 
 		// Rip open delivered mails
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			if (inventory.getLetter().isProcessed()) {
 				inventory.onLetterOpened();
 			}
@@ -89,9 +89,9 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity PlayerEntity) {
+	public void removed(PlayerEntity PlayerEntity) {
 
-		if (!PlayerEntity.world.isRemote) {
+		if (!PlayerEntity.level.isClientSide) {
 			ILetter letter = inventory.getLetter();
 			if (!letter.isProcessed()) {
 				IMailAddress sender = PostManager.postRegistry.getMailAddress(PlayerEntity.getGameProfile());
@@ -101,7 +101,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
 		inventory.onLetterClosed();
 
-		super.onContainerClosed(PlayerEntity);
+		super.removed(PlayerEntity);
 	}
 
 	public ILetter getLetter() {
@@ -146,7 +146,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
 		// Update the trading info
 		if (recipient == null || recipient.getType() == EnumAddressee.TRADER) {
-			updateTradeInfo(player.world, recipient);
+			updateTradeInfo(player.level, recipient);
 		}
 
 		// Update info on client
@@ -157,7 +157,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
 		switch (type) {
 			case PLAYER: {
-				GameProfile gameProfile = minecraftServer.getPlayerProfileCache().getGameProfileForUsername(recipientName);
+				GameProfile gameProfile = minecraftServer.getProfileCache().get(recipientName);
 				if (gameProfile == null) {
 					return null;
 				}
@@ -194,7 +194,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	/* Managing Trade info */
 	private void updateTradeInfo(World world, @Nullable IMailAddress address) {
 		// Updating is done by the server.
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return;
 		}
 

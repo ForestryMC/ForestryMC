@@ -100,15 +100,15 @@ public class WoodItemModelProvider extends ModelProvider {
 	private String getLocation(IWoodType type, WoodBlockKind kind) {
 		String location;
 		if (type instanceof EnumVanillaWoodType) {
-			location = "block/" + type.getString() + "_" + kind.getString();
+			location = "block/" + type.getSerializedName() + "_" + kind.getSerializedName();
 		} else if (kind == WoodBlockKind.DOOR) {
-			location = "forestry:item/doors/" + type.getString();
+			location = "forestry:item/doors/" + type.getSerializedName();
 		} else {
-			String kindName = kind.getString();
+			String kindName = kind.getSerializedName();
 			if (!kindName.endsWith("s")) {
 				kindName = kindName + "s";
 			}
-			location = "forestry:block/arboriculture/" + kindName + "/" + type.getString();
+			location = "forestry:block/arboriculture/" + kindName + "/" + type.getSerializedName();
 		}
 		return location;
 	}

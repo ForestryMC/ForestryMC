@@ -30,19 +30,19 @@ public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Mycelium production progress
 		if (tile.isProducing()) {
 			int i1 = tile.getProductionProgressScaled(16);
-			blit(transform, guiLeft + 124, guiTop + 36, 176, 74, 16 - i1, 16);
+			blit(transform, leftPos + 124, topPos + 36, 176, 74, 16 - i1, 16);
 		}
 
 		// Resource consumption progress
 		if (tile.isWorking()) {
 			int i1 = tile.getConsumptionProgressScaled(54);
-			blit(transform, guiLeft + 93, guiTop + 18 + i1, 176, 92 + i1, 29, 54 - i1);
+			blit(transform, leftPos + 93, topPos + 18 + i1, 176, 92 + i1, 29, 54 - i1);
 		}
 	}
 

@@ -46,7 +46,7 @@ public class BackpackDefinition implements IBackpackDefinition {
 	@Override
 	public ITextComponent getName(ItemStack backpack) {
 		Item item = backpack.getItem();
-		ITextComponent display = new TranslationTextComponent((item.getTranslationKey(backpack)).trim());
+		ITextComponent display = new TranslationTextComponent((item.getDescriptionId(backpack)).trim());
 
 		CompoundNBT tagCompound = backpack.getTag();
 		if (tagCompound != null && tagCompound.contains("display", 10)) {

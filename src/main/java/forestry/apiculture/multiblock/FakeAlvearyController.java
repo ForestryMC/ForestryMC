@@ -20,6 +20,8 @@ import net.minecraft.world.biome.Biomes;
 
 import com.mojang.authlib.GameProfile;
 
+import net.minecraftforge.registries.ForgeRegistries;
+
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -92,7 +94,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
 	@Override
 	public Biome getBiome() {
-		return Biomes.PLAINS;
+		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
 	}
 
 	@Override

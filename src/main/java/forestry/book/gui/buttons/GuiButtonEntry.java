@@ -24,27 +24,27 @@ public class GuiButtonEntry extends Button {
 	public final IBookEntry entry;
 
 	public GuiButtonEntry(int x, int y, IBookEntry entry, IPressable action) {
-		super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(entry.getTitle().getString()) + 9, 11, entry.getTitle(), action);
+		super(x, y, Minecraft.getInstance().font.width(entry.getTitle().getString()) + 9, 11, entry.getTitle(), action);
 		this.entry = entry;
 	}
 
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
-			FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+			FontRenderer fontRenderer = Minecraft.getInstance().font;
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			ITextComponent text = getMessage();
 			if (isHovered) {
-				((IFormattableTextComponent) text).mergeStyle(TextFormatting.GOLD);
+				((IFormattableTextComponent) text).withStyle(TextFormatting.GOLD);
 			} else {
-				((IFormattableTextComponent) text).mergeStyle(TextFormatting.DARK_GRAY);
+				((IFormattableTextComponent) text).withStyle(TextFormatting.DARK_GRAY);
 			}
 
-			boolean unicode = fontRenderer.getBidiFlag();
+			boolean unicode = fontRenderer.isBidirectional();
 			//fontRenderer.setBidiFlag(true);
-			fontRenderer.drawString(transform, text.getString(), this.x + 9, this.y, 0);
+			fontRenderer.draw(transform, text.getString(), this.x + 9, this.y, 0);
 			//fontRenderer.setBidiFlag(unicode);
 
 			ItemStack stack = entry.getStack();
@@ -52,11 +52,11 @@ public class GuiButtonEntry extends Button {
 				RenderSystem.pushMatrix();
 				RenderSystem.translatef(x, y, getBlitOffset());    //TODO correct?
 				//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
-				GlStateManager.enableRescaleNormal();
-				GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+				GlStateManager._enableRescaleNormal();
+				GlStateManager._scalef(0.5F, 0.5F, 0.5F);
 				GuiUtil.drawItemStack(fontRenderer, stack, 0, 0);
-				RenderHelper.disableStandardItemLighting();
-				GlStateManager.popMatrix();
+				RenderHelper.turnOff();
+				GlStateManager._popMatrix();
 			}
 		}
 	}

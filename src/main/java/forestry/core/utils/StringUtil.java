@@ -64,13 +64,13 @@ public class StringUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static int getLineHeight(int maxWidth, ITextProperties... strings) {
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
+		FontRenderer fontRenderer = minecraft.font;
 
 		int lineCount = 0;
 		for (ITextProperties string : strings) {
-			lineCount += fontRenderer.func_238425_b_(string, maxWidth).size();
+			lineCount += fontRenderer.split(string, maxWidth).size();
 		}
 
-		return lineCount * fontRenderer.FONT_HEIGHT;
+		return lineCount * fontRenderer.lineHeight;
 	}
 }

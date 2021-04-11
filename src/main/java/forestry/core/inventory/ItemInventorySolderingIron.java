@@ -25,7 +25,6 @@ import forestry.api.recipes.ISolderRecipe;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
-import forestry.core.circuits.SolderManager;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
 
@@ -45,7 +44,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 1;
 	}
 
@@ -69,12 +68,12 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		ICircuit[] circuits = new ICircuit[ingredientSlotCount];
 
 		for (short i = 0; i < ingredientSlotCount; i++) {
-			ItemStack ingredient = getStackInSlot(ingredientSlot1 + i);
+			ItemStack ingredient = getItem(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
 				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layouts.getCurrent(), ingredient);
 				if (recipe != null) {
 					if (doConsume) {
-						decrStackSize(ingredientSlot1 + i, recipe.getResource().getCount());
+						removeItem(ingredientSlot1 + i, recipe.getResource().getCount());
 					}
 					circuits[i] = recipe.getCircuit();
 				}
@@ -90,12 +89,12 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			return;
 		}
 
-		ItemStack inputCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
+		ItemStack inputCircuitBoard = getItem(inputCircuitBoardSlot);
 
 		if (inputCircuitBoard.isEmpty() || inputCircuitBoard.getCount() > 1) {
 			return;
 		}
-		if (!getStackInSlot(finishedCircuitBoardSlot).isEmpty()) {
+		if (!getItem(finishedCircuitBoardSlot).isEmpty()) {
 			return;
 		}
 
@@ -120,8 +119,8 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 		ItemStack outputCircuitBoard = ItemCircuitBoard.createCircuitboard(type, layouts.getCurrent(), circuits);
 
-		setInventorySlotContents(finishedCircuitBoardSlot, outputCircuitBoard);
-		setInventorySlotContents(inputCircuitBoardSlot, ItemStack.EMPTY);
+		setItem(finishedCircuitBoardSlot, outputCircuitBoard);
+		setItem(inputCircuitBoardSlot, ItemStack.EMPTY);
 	}
 
 	private int getCircuitCount() {
@@ -143,7 +142,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_LAYOUT);
 		}
 
-		ItemStack blankCircuitBoard = getStackInSlot(inputCircuitBoardSlot);
+		ItemStack blankCircuitBoard = getItem(inputCircuitBoardSlot);
 
 		if (blankCircuitBoard.isEmpty()) {
 			errorStates.add(EnumErrorCode.NO_CIRCUIT_BOARD);
@@ -156,7 +155,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 
 			int circuitCount = 0;
 			for (short i = 0; i < type.getSockets(); i++) {
-				if (!getStackInSlot(ingredientSlot1 + i).isEmpty()) {
+				if (!getItem(ingredientSlot1 + i).isEmpty()) {
 					circuitCount++;
 				}
 			}

@@ -37,7 +37,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
 		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT)) {
-			return itemStack.getItem() instanceof IHiveFrame && getStackInSlot(slotIndex).isEmpty();
+			return itemStack.getItem() instanceof IHiveFrame && getItem(slotIndex).isEmpty();
 		}
 
 		return super.canSlotAccept(slotIndex, itemStack);
@@ -45,16 +45,16 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 
 	// override for pipe automation
 	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+	public boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
 		return !SlotUtil.isSlotInRange(slotIndex, SLOT_FRAMES_1, SLOT_FRAMES_COUNT) &&
-			super.isItemValidForSlot(slotIndex, itemStack);
+				super.canPlaceItem(slotIndex, itemStack);
 	}
 
 	public Collection<Tuple<IHiveFrame, ItemStack>> getFrames() {
 		Collection<Tuple<IHiveFrame, ItemStack>> hiveFrames = new ArrayList<>(SLOT_FRAMES_COUNT);
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			ItemStack stackInSlot = getStackInSlot(i);
+			ItemStack stackInSlot = getItem(i);
 			Item itemInSlot = stackInSlot.getItem();
 			if (itemInSlot instanceof IHiveFrame) {
 				IHiveFrame frame = (IHiveFrame) itemInSlot;
@@ -71,7 +71,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 		int wear = Math.round(amount * beekeepingMode.getWearModifier());
 
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
-			ItemStack hiveFrameStack = getStackInSlot(i);
+			ItemStack hiveFrameStack = getItem(i);
 			Item hiveFrameItem = hiveFrameStack.getItem();
 			if ((hiveFrameItem instanceof IHiveFrame)) {
 				IHiveFrame hiveFrame = (IHiveFrame) hiveFrameItem;
@@ -82,7 +82,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 					IBee queen = optionalBee.get();
 					ItemStack usedFrame = hiveFrame.frameUsed(beeHousing, hiveFrameStack, queen, wear);
 
-					setInventorySlotContents(i, usedFrame);
+					setItem(i, usedFrame);
 				}
 			}
 		}

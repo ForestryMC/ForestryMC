@@ -44,7 +44,7 @@ public class NetworkUtil {
 		//		int chunkX = pos.getX() >> 4;
 		//		int chunkZ = pos.getZ() >> 4;
 
-		for (PlayerEntity playerObj : world.getPlayers()) {
+		for (PlayerEntity playerObj : world.players()) {
 			if (playerObj instanceof ServerPlayerEntity) {
 				ServerPlayerEntity player = (ServerPlayerEntity) playerObj;
 
@@ -66,7 +66,7 @@ public class NetworkUtil {
 
 	public static void inventoryChangeNotify(PlayerEntity player, Container container) {
 		if (player instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity) player).sendContainerToPlayer(container);
+			((ServerPlayerEntity) player).refreshContainer(container);
 		}
 	}
 

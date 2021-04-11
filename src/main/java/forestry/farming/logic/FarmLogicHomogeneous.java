@@ -40,7 +40,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 
 	@Override
 	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
-		return maintainSoil(world, farmHousing, pos, direction, extent) || maintainSeedlings(world, farmHousing, pos.up(), direction, extent);
+		return maintainSoil(world, farmHousing, pos, direction, extent) || maintainSeedlings(world, farmHousing, pos.above(), direction, extent);
 	}
 
 	private boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
@@ -59,7 +59,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 				BlockPos position = translateWithOffset(pos, direction, i);
 				BlockState soilState = world.getBlockState(position);
 
-				if (!world.isBlockLoaded(position) || farmHousing.isValidPlatform(world, pos)) {
+				if (!world.hasChunkAt(position) || farmHousing.isValidPlatform(world, pos)) {
 					break;
 				}
 
@@ -67,7 +67,7 @@ public abstract class FarmLogicHomogeneous extends FarmLogicSoil {
 					continue;
 				}
 
-				BlockPos platformPosition = position.down();
+				BlockPos platformPosition = position.below();
 				if (!farmHousing.isValidPlatform(world, platformPosition)) {
 					break;
 				}

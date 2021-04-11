@@ -25,18 +25,18 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 
 	protected AIButterflyInteract(EntityButterfly entity) {
 		super(entity);
-		setMutexFlags(EnumSet.of(Flag.MOVE));
+		setFlags(EnumSet.of(Flag.MOVE));
 		//		setMutexBits(3);	TODO mutex
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 		if (entity.getState() != EnumButterflyState.RESTING) {
 			return false;
 		}
-		Vector3d pos = entity.getPositionVec();
+		Vector3d pos = entity.position();
 		rest = new BlockPos((int) pos.x, (int) Math.floor(pos.y) - 1, (int) pos.z);
-		if (entity.world.isAirBlock(rest)) {
+		if (entity.level.isEmptyBlock(rest)) {
 			return false;
 		}
 
@@ -48,16 +48,16 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 	protected abstract boolean canInteract();
 
 	@Override
-	public boolean shouldContinueExecuting() {
+	public boolean canContinueToUse() {
 		return canInteract && !hasInteracted;
 	}
 
 	@Override
-	public void startExecuting() {
+	public void start() {
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		canInteract = false;
 		hasInteracted = false;
 		rest = null;

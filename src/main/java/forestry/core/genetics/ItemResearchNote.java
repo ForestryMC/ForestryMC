@@ -35,6 +35,14 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.items.ItemForestry;
+import forestry.core.utils.NetworkUtil;
+import forestry.core.utils.Translator;
+
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -44,16 +52,7 @@ import genetics.api.mutation.IMutationContainer;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
-
 import genetics.utils.AlleleUtils;
-
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IForestrySpeciesRoot;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.items.ItemForestry;
-import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.Translator;
 
 public class ItemResearchNote extends ItemForestry {
 
@@ -131,7 +130,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (ITextComponent line : encoded.getSpecialConditions()) {
-						tooltips.add(((IFormattableTextComponent) line).mergeStyle(TextFormatting.GOLD));
+						tooltips.add(((IFormattableTextComponent) line).withStyle(TextFormatting.GOLD));
 					}
 				}
 			} else if (this == SPECIES) {
@@ -168,7 +167,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.DUMMY_UUID);
+					player.sendMessage(new TranslationTextComponent("for.chat.cannotmemorizeagain"), Util.NIL_UUID);
 					return false;
 				}
 
@@ -181,12 +180,12 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.DUMMY_UUID);
+				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote"), Util.NIL_UUID);
 
 				player.sendMessage(new TranslationTextComponent("for.chat.memorizednote2",
-					((IFormattableTextComponent) speciesFirst.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesSecond.getDisplayName()).mergeStyle(TextFormatting.GRAY),
-					((IFormattableTextComponent) speciesResult.getDisplayName()).mergeStyle(TextFormatting.GREEN)), Util.DUMMY_UUID);
+						((IFormattableTextComponent) speciesFirst.getDisplayName()).withStyle(TextFormatting.GRAY),
+						((IFormattableTextComponent) speciesSecond.getDisplayName()).withStyle(TextFormatting.GRAY),
+						((IFormattableTextComponent) speciesResult.getDisplayName()).withStyle(TextFormatting.GREEN)), Util.NIL_UUID);
 
 				return true;
 			}
@@ -273,7 +272,7 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<ITextComponent> list) {
 			List<ITextComponent> tooltips = type.getTooltip(inner);
 			if (tooltips.isEmpty()) {
-				list.add(new TranslationTextComponent("for.researchNote.error.0").mergeStyle(TextFormatting.RED, TextFormatting.ITALIC));
+				list.add(new TranslationTextComponent("for.researchNote.error.0").withStyle(TextFormatting.RED, TextFormatting.ITALIC));
 				list.add(new TranslationTextComponent("for.researchNote.error.1"));
 				return;
 			}
@@ -287,11 +286,11 @@ public class ItemResearchNote extends ItemForestry {
 	}
 
 	public ItemResearchNote() {
-		super((new Item.Properties()).group(null));
+		super((new Item.Properties()).tab(null));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemstack) {
+	public ITextComponent getName(ItemStack itemstack) {
 		ResearchNote note = new ResearchNote(itemstack.getTag());
 		String researcherName;
 		if (note.researcher == null) {
@@ -299,31 +298,31 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return new TranslationTextComponent(getTranslationKey(itemstack), researcherName);
+		return new TranslationTextComponent(getDescriptionId(itemstack), researcherName);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 		ResearchNote note = new ResearchNote(itemstack.getTag());
 		note.addTooltip(list);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack heldItem = playerIn.getHeldItem(handIn);
-		if (worldIn.isRemote) {
-			return ActionResult.resultPass(heldItem);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack heldItem = playerIn.getItemInHand(handIn);
+		if (worldIn.isClientSide) {
+			return ActionResult.pass(heldItem);
 		}
 
 		ResearchNote note = new ResearchNote(heldItem.getTag());
 		if (note.registerResults(worldIn, playerIn)) {
-			playerIn.inventory.decrStackSize(playerIn.inventory.currentItem, 1);
+			playerIn.inventory.removeItem(playerIn.inventory.selected, 1);
 			// Notify player that his inventory has changed.
-			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.openContainer);    //TODO not sure this is right
+			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.containerMenu);    //TODO not sure this is right
 		}
 
-		return ActionResult.resultSuccess(heldItem);
+		return ActionResult.success(heldItem);
 	}
 }

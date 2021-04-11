@@ -36,15 +36,15 @@ public abstract class ItemWithGui extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		ItemStack stack = playerIn.getItemInHand(handIn);
 
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO safe?
 			openGui(sPlayer, stack);
 		}
 
-		return ActionResult.resultSuccess(stack);
+		return ActionResult.success(stack);
 	}
 
 	protected void openGui(ServerPlayerEntity player, ItemStack stack) {
@@ -52,15 +52,15 @@ public abstract class ItemWithGui extends ItemForestry {
 	}
 
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-		buffer.writeBoolean(player.getActiveHand() == Hand.MAIN_HAND);
+		buffer.writeBoolean(player.getUsedItemHand() == Hand.MAIN_HAND);
 	}
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
 		if (!itemstack.isEmpty() &&
-			player instanceof ServerPlayerEntity &&
-			player.openContainer instanceof ContainerItemInventory) {
-			player.closeScreen();
+				player instanceof ServerPlayerEntity &&
+				player.containerMenu instanceof ContainerItemInventory) {
+			player.closeContainer();
 		}
 
 		return super.onDroppedByPlayer(itemstack, player);
@@ -79,7 +79,7 @@ public abstract class ItemWithGui extends ItemForestry {
 
 		@Override
 		public ITextComponent getDisplayName() {
-			return heldItem.getDisplayName();
+			return heldItem.getHoverName();
 		}
 
 		@Nullable

@@ -17,7 +17,7 @@ import java.util.Set;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.IBee;
@@ -49,24 +49,24 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 	@Override
 	public void onSlotClick(int slotIndex, PlayerEntity player) {
-		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
+		if (!getItem(SLOT_ANALYZED).isEmpty()) {
 			if (locatorLogic.isBiomeFound()) {
 				return;
 			}
-		} else if (!getStackInSlot(SLOT_SPECIMEN).isEmpty()) {
+		} else if (!getItem(SLOT_SPECIMEN).isEmpty()) {
 			// Requires energy
-			if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+			if (!isEnergy(getItem(SLOT_ENERGY))) {
 				return;
 			}
 
 			// Decrease energy
-			decrStackSize(SLOT_ENERGY, 1);
+			removeItem(SLOT_ENERGY, 1);
 
-			setInventorySlotContents(SLOT_ANALYZED, getStackInSlot(SLOT_SPECIMEN));
-			setInventorySlotContents(SLOT_SPECIMEN, ItemStack.EMPTY);
+			setItem(SLOT_ANALYZED, getItem(SLOT_SPECIMEN));
+			setItem(SLOT_SPECIMEN, ItemStack.EMPTY);
 		}
 
-		ItemStack analyzed = getStackInSlot(SLOT_ANALYZED);
+		ItemStack analyzed = getItem(SLOT_ANALYZED);
 		Optional<IBee> optionalBee = BeeManager.beeRoot.create(analyzed);
 		if (optionalBee.isPresent()) {
 			IBee bee = optionalBee.get();
@@ -74,25 +74,25 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 	}
 
-	public Set<Biome> getBiomesToSearch() {
+	public Set<ResourceLocation> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
 	}
 
 	/* IErrorSource */
 	@Override
 	public ImmutableSet<IErrorState> getErrorStates() {
-		if (!getStackInSlot(SLOT_ANALYZED).isEmpty()) {
+		if (!getItem(SLOT_ANALYZED).isEmpty()) {
 			return ImmutableSet.of();
 		}
 
 		ImmutableSet.Builder<IErrorState> errorStates = ImmutableSet.builder();
 
-		ItemStack specimen = getStackInSlot(SLOT_SPECIMEN);
+		ItemStack specimen = getItem(SLOT_SPECIMEN);
 		if (!BeeManager.beeRoot.isMember(specimen)) {
 			errorStates.add(EnumErrorCode.NO_SPECIMEN);
 		}
 
-		if (!isEnergy(getStackInSlot(SLOT_ENERGY))) {
+		if (!isEnergy(getItem(SLOT_ENERGY))) {
 			errorStates.add(EnumErrorCode.NO_HONEY);
 		}
 

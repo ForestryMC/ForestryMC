@@ -20,9 +20,6 @@ import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.apiculture.features.ApicultureItems;
@@ -35,6 +32,9 @@ import forestry.core.render.ColourProperties;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+
 public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	private final ItemInventoryImprinter itemInventory;
 	private int startX;
@@ -46,8 +46,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
 
 		this.itemInventory = container.getItemInventory();
-		this.xSize = 176;
-		this.ySize = 185;
+		this.imageWidth = 176;
+		this.imageHeight = 185;
 
 		NonNullList<ItemStack> beeList = NonNullList.create();
 		ApicultureItems.BEE_DRONE.item().addCreativeItems(beeList, false);
@@ -62,23 +62,23 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
-		int offset = (138 - getFontRenderer().getStringWidth(Translator.translateToLocal("for.gui.imprinter"))) / 2;
-		getFontRenderer().drawString(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
+		int offset = (138 - getFontRenderer().width(Translator.translateToLocal("for.gui.imprinter"))) / 2;
+		getFontRenderer().draw(transform, Translator.translateToLocal("for.gui.imprinter"), startX + 8 + offset, startY + 16, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies primary = itemInventory.getPrimary();
 		drawBeeSpeciesIcon(primary, startX + 12, startY + 32);
-		getFontRenderer().drawString(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().draw(transform, primary.getDisplayName().getString(), startX + 32, startY + 36, ColourProperties.INSTANCE.get("gui.screen"));
 
 		IAlleleBeeSpecies secondary = itemInventory.getSecondary();
 		drawBeeSpeciesIcon(secondary, startX + 12, startY + 52);
-		getFontRenderer().drawString(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().draw(transform, secondary.getDisplayName().getString(), startX + 32, startY + 56, ColourProperties.INSTANCE.get("gui.screen"));
 
 		String youCheater = Translator.translateToLocal("for.gui.imprinter.cheater");
-		offset = (138 - getFontRenderer().getStringWidth(youCheater)) / 2;
-		getFontRenderer().drawString(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
+		offset = (138 - getFontRenderer().width(youCheater)) / 2;
+		getFontRenderer().draw(transform, youCheater, startX + 8 + offset, startY + 76, ColourProperties.INSTANCE.get("gui.screen"));
 
 	}
 
@@ -104,8 +104,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	public boolean mouseClicked(double mouseX, double mouseY, int k) {
 		super.mouseClicked(mouseX, mouseY, k);
 
-		int cornerX = (width - xSize) / 2;
-		int cornerY = (height - ySize) / 2;
+		int cornerX = (width - imageWidth) / 2;
+		int cornerY = (height - imageHeight) / 2;
 
 		int slot = getHabitatSlotAtPosition(mouseX - cornerX, mouseY - cornerY);
 		if (slot < 0) {
@@ -125,8 +125,8 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	public void init() {
 		super.init();
 
-		startX = (this.width - this.xSize) / 2;
-		startY = (this.height - this.ySize) / 2;
+		startX = (this.width - this.imageWidth) / 2;
+		startY = (this.height - this.imageHeight) / 2;
 	}
 
 	private static void advanceSelection(int index) {

@@ -15,10 +15,6 @@ import net.minecraft.util.text.Style;
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.mutation.IMutation;
-
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
@@ -43,6 +39,10 @@ import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.IGuiElementFactory;
 import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.render.ColourProperties;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.mutation.IMutation;
 
 public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
 
@@ -70,12 +70,12 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-		dominantStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
-		recessiveStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
-		guiStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.screen")));
-		guiTitleStyle = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.title")));
-		databaseTitle = Style.EMPTY.setColor(Color.func_240743_a_(0xcfb53b)).setUnderlined(true);
-		binomial = Style.EMPTY.setColor(Color.func_240743_a_(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
+		dominantStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
+		recessiveStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
+		guiStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
+		guiTitleStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
+		databaseTitle = Style.EMPTY.withColor(Color.fromRgb(0xcfb53b)).setUnderlined(true);
+		binomial = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
 	@Override
@@ -165,8 +165,8 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		}
 		if (component == null) {
 			component = new StringTextComponent("(")
-				.append(toleranceAllele.getDisplayName())
-				.appendString(")");
+					.append(toleranceAllele.getDisplayName())
+					.append(")");
 		}
 		layout.label(component).setStyle(textStyle);
 		return layout;

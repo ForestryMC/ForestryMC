@@ -36,7 +36,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 	public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
-		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getHeldItem(hand));
+		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getItemInHand(hand));
 		return new ContainerSolderingIron(windowId, player, inv);
 	}
 

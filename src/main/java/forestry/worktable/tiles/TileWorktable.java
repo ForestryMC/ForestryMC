@@ -16,11 +16,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.RecipeUtils;
-import forestry.core.utils.WorldUtils;
-import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,7 +23,8 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
@@ -43,6 +39,7 @@ import forestry.core.inventory.wrappers.InventoryMapper;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.RecipeUtils;
 import forestry.worktable.features.WorktableTiles;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.inventory.CraftingInventoryForestry;
@@ -68,8 +65,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 
 		craftingDisplay.write(compoundNBT);
 		recipeMemory.write(compoundNBT);
@@ -77,8 +74,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 
 		craftingDisplay.read(compoundNBT);
 		recipeMemory = new RecipeMemory(compoundNBT);
@@ -148,13 +145,13 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(world);
+		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
 		if (selectedRecipe == null) {
 			return false;
 		}
 
 		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
-		if(!InventoryUtil.consumeIngredients(inventory, selectedRecipe.getIngredients(),null,true,false, !simulate)){
+		if (!InventoryUtil.consumeIngredients(inventory, selectedRecipe.getIngredients(), null, true, false, !simulate)) {
 			return false;
 		}
 
@@ -170,7 +167,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	@Override
 	public void onCraftingComplete(PlayerEntity player) {
 		Preconditions.checkNotNull(currentRecipe);
-		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(world);
+		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
 		Preconditions.checkNotNull(selectedRecipe);
 
 		ForgeHooks.setCraftingPlayer(player);
@@ -181,13 +178,13 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		for (ItemStack remainingItem : remainingItems) {
 			if (remainingItem != null && !remainingItem.isEmpty()) {
 				if (!InventoryUtil.tryAddStack(this, remainingItem, true)) {
-					player.dropItem(remainingItem, false);
+					player.drop(remainingItem, false);
 				}
 			}
 		}
 
-		if (!world.isRemote) {
-			recipeMemory.memorizeRecipe(world.getGameTime(), currentRecipe, world);
+		if (!level.isClientSide) {
+			recipeMemory.memorizeRecipe(level.getGameTime(), currentRecipe, level);
 		}
 	}
 
@@ -198,7 +195,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return null;
 		}
 
-		return currentRecipe.getSelectedRecipe(world);
+		return currentRecipe.getSelectedRecipe(level);
 	}
 
 	/* Crafting Container methods */
@@ -212,9 +209,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	private void setCraftingDisplay(IInventory craftMatrix) {
-		for (int slot = 0; slot < craftMatrix.getSizeInventory(); slot++) {
-			ItemStack stack = craftMatrix.getStackInSlot(slot);
-			craftingDisplay.setInventorySlotContents(slot, stack.copy());
+		for (int slot = 0; slot < craftMatrix.getContainerSize(); slot++) {
+			ItemStack stack = craftMatrix.getItem(slot);
+			craftingDisplay.setItem(slot, stack.copy());
 		}
 	}
 
@@ -223,18 +220,18 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	public void clearCraftMatrix() {
-		for (int slot = 0; slot < craftingDisplay.getSizeInventory(); slot++) {
-			craftingDisplay.setInventorySlotContents(slot, ItemStack.EMPTY);
+		for (int slot = 0; slot < craftingDisplay.getContainerSize(); slot++) {
+			craftingDisplay.setItem(slot, ItemStack.EMPTY);
 		}
 	}
 
 	public void setCurrentRecipe(CraftingInventoryForestry crafting) {
-		List<ICraftingRecipe> recipes = RecipeUtils.getRecipes(IRecipeType.CRAFTING, crafting, world);
+		List<ICraftingRecipe> recipes = RecipeUtils.getRecipes(IRecipeType.CRAFTING, crafting, level);
 		MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
 
 		if (currentRecipe != null && recipe != null) {
 			//TODO: Find a new way to find unneeded updates
-			if (recipe.hasRecipe(currentRecipe.getSelectedRecipe(world), world)) {
+			if (recipe.hasRecipe(currentRecipe.getSelectedRecipe(level), level)) {
 				/*NonNullList<ItemStack> stacks = InventoryUtil.getStacks(crafting);
 				NonNullList<ItemStack> currentStacks = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
 				if (ItemStackUtil.equalSets(stacks, currentStacks)) {

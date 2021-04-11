@@ -25,7 +25,7 @@ public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas
 
 	//TODO dedupe
 	public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
-		TileEngineBiogas tile = TileUtil.getTile(inv.player.world, extraData.readBlockPos(), TileEngineBiogas.class);
+		TileEngineBiogas tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileEngineBiogas.class);
 		return new ContainerEngineBiogas(windowId, inv, tile);
 	}
 
@@ -36,8 +36,8 @@ public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
 		sendPacketToListeners(packet);
 	}

@@ -76,7 +76,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	protected IBakedModel bakeModel(ItemStack stack, World world, K key) {
 		ModelBaker baker = new ModelBaker();
-		Block block = Block.getBlockFromItem(stack.getItem());
+		Block block = Block.byItem(stack.getItem());
 		Preconditions.checkArgument(blockClass.isInstance(block));
 		B bBlock = blockClass.cast(block);
 		bakeBlock(bBlock, EmptyModelData.INSTANCE, key, baker, true);
@@ -106,9 +106,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	}
 
 	@Override
-	public boolean isAmbientOcclusion() {
+	public boolean useAmbientOcclusion() {
 		return (itemModel != null || blockModel != null) &&
-			(blockModel != null ? blockModel.isAmbientOcclusion() : itemModel.isAmbientOcclusion());
+				(blockModel != null ? blockModel.useAmbientOcclusion() : itemModel.useAmbientOcclusion());
 	}
 
 	@Override
@@ -117,30 +117,30 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	}
 
 	@Override
-	public boolean isBuiltInRenderer() {
+	public boolean isCustomRenderer() {
 		return (itemModel != null || blockModel != null) &&
-			(blockModel != null ? blockModel.isBuiltInRenderer() : itemModel.isBuiltInRenderer());
+				(blockModel != null ? blockModel.isCustomRenderer() : itemModel.isCustomRenderer());
 	}
 
 	@Override
-	public boolean func_230044_c_() {
-		return itemModel != null && itemModel.func_230044_c_();
+	public boolean usesBlockLight() {
+		return itemModel != null && itemModel.usesBlockLight();
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture() {
+	public TextureAtlasSprite getParticleIcon() {
 		if (blockModel != null) {
-			return blockModel.getParticleTexture();
+			return blockModel.getParticleIcon();
 		}
 		return ResourceUtil.getMissingTexture();
 	}
 
 	@Override
-	public ItemCameraTransforms getItemCameraTransforms() {
+	public ItemCameraTransforms getTransforms() {
 		if (itemModel == null) {
-			return ItemCameraTransforms.DEFAULT;
+			return ItemCameraTransforms.NO_TRANSFORMS;
 		}
-		return itemModel.getItemCameraTransforms();
+		return itemModel.getTransforms();
 	}
 
 	protected ItemOverrideList createOverrides() {
@@ -168,9 +168,9 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 		@Nullable
 		@Override
-		public IBakedModel func_239290_a_(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+		public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
 			if (world == null) {
-				world = Minecraft.getInstance().world;
+				world = Minecraft.getInstance().level;
 			}
 			return getModel(stack, world);
 		}

@@ -20,8 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -30,17 +28,18 @@ import forestry.core.blocks.IColoredBlock;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 
-//TODO shearing
+import genetics.api.individual.IGenome;
+
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForgeShearable {
 	private TreeDefinition definition;
 
 	public BlockDecorativeLeaves(TreeDefinition definition) {
-		super(Properties.create(Material.LEAVES)
-			.hardnessAndResistance(0.2f)
-			.sound(SoundType.PLANT)
-			.notSolid()
-			.setSuffocates(BlockUtil::alwaysTrue)
-			.setOpaque((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition))
+		super(Properties.of(Material.LEAVES)
+				.strength(0.2f)
+				.sound(SoundType.GRASS)
+				.noOcclusion()
+				.isSuffocating(BlockUtil::alwaysTrue)
+				.isRedstoneConductor((state, reader, pos) -> !Proxies.render.fancyGraphicsEnabled() && !TreeDefinition.Willow.equals(definition))
 		);
 		//		this.setCreativeTab(Tabs.tabArboriculture);
 		//		this.setLightOpacity(1);	//TODO block stuff);
@@ -60,10 +59,10 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 	}
 
 	@Override
-	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		super.onEntityCollision(state, worldIn, pos, entityIn);
-		Vector3d motion = entityIn.getMotion();
-		entityIn.setMotion(motion.mul(0.4D, 1.0D, 0.4D));
+	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+		super.entityInside(state, worldIn, pos, entityIn);
+		Vector3d motion = entityIn.getDeltaMovement();
+		entityIn.setDeltaMovement(motion.multiply(0.4D, 1.0D, 0.4D));
 	}
 
 	/* PROPERTIES */

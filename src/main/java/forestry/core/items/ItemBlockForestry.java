@@ -41,7 +41,7 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 	}
 
 	public ItemBlockForestry(B block) {
-		this(block, new Item.Properties().group(ItemGroupForestry.tabForestry));
+		this(block, new Item.Properties().tab(ItemGroupForestry.tabForestry));
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, world, tooltip, advanced);
+	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+		super.appendHoverText(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}
 }

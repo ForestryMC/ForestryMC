@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -32,14 +32,14 @@ public class TextDataElement extends GuiElement {
 		if (height >= 0) {
 			return height;
 		}
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		boolean unicode = fontRenderer.getBidiFlag();
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		boolean unicode = fontRenderer.isBidirectional();
 		//fontRenderer.setBidiFlag(true);
 		boolean lastEmpty = false;
 		for (TextData data : textElements) {
 			if (data.text.equals("\n")) {
 				if (lastEmpty) {
-					height += fontRenderer.FONT_HEIGHT;
+					height += fontRenderer.lineHeight;
 				}
 				lastEmpty = true;
 				continue;
@@ -47,12 +47,12 @@ public class TextDataElement extends GuiElement {
 			lastEmpty = false;
 
 			if (data.paragraph) {
-				height += fontRenderer.FONT_HEIGHT * 1.6D;
+				height += fontRenderer.lineHeight * 1.6D;
 			}
 
 			String modifiers = "";
 
-			modifiers += TextFormatting.getValueByName(data.color);
+			modifiers += TextFormatting.getByName(data.color);
 
 			if (data.bold) {
 				modifiers += TextFormatting.BOLD;
@@ -69,7 +69,7 @@ public class TextDataElement extends GuiElement {
 			if (data.obfuscated) {
 				modifiers += TextFormatting.OBFUSCATED;
 			}
-			height += fontRenderer.getWordWrappedHeight(modifiers + data.text, width);
+			height += fontRenderer.wordWrapHeight(modifiers + data.text, width);
 		}
 		//fontRenderer.setBidiFlag(unicode);
 		return height;
@@ -77,38 +77,38 @@ public class TextDataElement extends GuiElement {
 
 	@Override
 	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		boolean unicode = fontRenderer.getBidiFlag();
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		boolean unicode = fontRenderer.isBidirectional();
 		//fontRenderer.setBidiFlag(true);
 		int x = 0;
 		int y = 0;
 		for (TextData data : textElements) {
 			if (data.text.equals("\n")) {
 				x = 0;
-				y += fontRenderer.FONT_HEIGHT;
+				y += fontRenderer.lineHeight;
 				continue;
 			}
 
 			if (data.paragraph) {
 				x = 0;
-				y += fontRenderer.FONT_HEIGHT * 1.6D;
+				y += fontRenderer.lineHeight * 1.6D;
 			}
 
 			String text = getFormattedString(data);
-			List<ITextProperties> split = fontRenderer.func_238425_b_(new StringTextComponent(text), width);
+			List<IReorderingProcessor> split = fontRenderer.split(new StringTextComponent(text), width);
 			for (int i = 0; i < split.size(); i++) {
-				ITextProperties s = split.get(i);
+				IReorderingProcessor s = split.get(i);
 				int textLength;
 				//TODO correct?
 				if (data.dropshadow) {
-					textLength = fontRenderer.drawString(transform, s.getString(), x, y, 0);
+					textLength = fontRenderer.draw(transform, s, x, y, 0);
 				} else {
-					textLength = fontRenderer.drawStringWithShadow(transform, s.getString(), x, y, 0);
+					textLength = fontRenderer.drawShadow(transform, s, x, y, 0);
 				}
 				if (i == split.size() - 1) {
 					x += textLength;
 				} else {
-					y += fontRenderer.FONT_HEIGHT;
+					y += fontRenderer.lineHeight;
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class TextDataElement extends GuiElement {
 	private String getFormattedString(TextData data) {
 		StringBuilder modifiers = new StringBuilder();
 
-		modifiers.append(TextFormatting.getValueByName(data.color));
+		modifiers.append(TextFormatting.getByName(data.color));
 
 		if (data.bold) {
 			modifiers.append(TextFormatting.BOLD);

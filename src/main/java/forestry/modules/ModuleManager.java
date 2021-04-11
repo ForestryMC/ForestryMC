@@ -239,7 +239,7 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		CommandDispatcher<CommandSource> dispatcher = server.getCommandManager().getDispatcher();
+		CommandDispatcher<CommandSource> dispatcher = server.getCommands().getDispatcher();
 
 		loadedModules.stream()
 				.map(IForestryModule::register)

@@ -39,7 +39,7 @@ public class FarmableRusticGrape implements IFarmable {
 			return null;
 		}
 
-		if (!blockState.get(GRAPES)) {
+		if (!blockState.getValue(GRAPES)) {
 			return null;
 		}
 
@@ -49,7 +49,7 @@ public class FarmableRusticGrape implements IFarmable {
 
 	@Nullable
 	protected BlockState getReplantState(BlockState blockState) {
-		return blockState.with(GRAPES, false);
+		return blockState.setValue(GRAPES, false);
 	}
 
 	@Override

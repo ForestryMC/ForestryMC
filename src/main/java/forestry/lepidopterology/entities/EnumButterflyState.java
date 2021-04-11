@@ -30,7 +30,7 @@ public enum EnumButterflyState {
 
 			return getIrregularWingYaw(flapping, flap);
 		} else {
-			return entity.ticksExisted + partialTicktime;
+			return entity.tickCount + partialTicktime;
 		}
 	}
 

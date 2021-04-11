@@ -39,7 +39,7 @@ public class SidedInventoryMapper extends InvWrapperBase implements ISidedInvent
 	public boolean isEmpty() {
 		int[] slotsForFace = inv.getSlotsForFace(side);
 		for (int slot : slotsForFace) {
-			if (!inv.getStackInSlot(slot).isEmpty()) {
+			if (!inv.getItem(slot).isEmpty()) {
 				return false;
 			}
 		}
@@ -52,13 +52,13 @@ public class SidedInventoryMapper extends InvWrapperBase implements ISidedInvent
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, Direction s) {
-		return !checkItems() || inv.canInsertItem(slot, stack, side);
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, Direction s) {
+		return !checkItems() || inv.canPlaceItemThroughFace(slot, stack, side);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, Direction s) {
-		return !checkItems() || inv.canExtractItem(slot, stack, side);
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction s) {
+		return !checkItems() || inv.canTakeItemThroughFace(slot, stack, side);
 	}
 
 }

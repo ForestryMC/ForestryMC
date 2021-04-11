@@ -49,28 +49,28 @@ public class BlockBeeHive extends ContainerBlock {
 	private final HiveType type;
 
 	public BlockBeeHive(HiveType type) {
-		super(Properties.create(MaterialBeehive.BEEHIVE_WORLD)
-			.setLightLevel((state) -> (int) (0.4f * 15)) //TODO - correct?
-			.hardnessAndResistance(2.5f)
-			.harvestLevel(0)
-			.harvestTool(ItemScoop.SCOOP));
+		super(Properties.of(MaterialBeehive.BEEHIVE_WORLD)
+				.lightLevel((state) -> (int) (0.4f * 15)) //TODO - correct?
+				.strength(2.5f)
+				.harvestLevel(0)
+				.harvestTool(ItemScoop.SCOOP));
 		this.type = type;
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader world) {
+	public TileEntity newBlockEntity(IBlockReader world) {
 		return new TileHive();
 	}
 
 	@Override
-	public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-		super.onBlockClicked(state, world, pos, player);
+	public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+		super.attack(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		super.onBlockHarvested(world, pos, state, player);
+	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.playerWillDestroy(world, pos, state, player);
 		boolean canHarvest = canHarvestBlock(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
 	}
@@ -85,16 +85,16 @@ public class BlockBeeHive extends ContainerBlock {
 
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		BlockPos pos = builder.assertPresent(LootParameters.POSITION);
-		ItemStack tool = builder.assertPresent(LootParameters.TOOL);
-		int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
-		ServerWorld world = builder.getWorld();
+		BlockPos pos = new BlockPos(builder.getParameter(LootParameters.ORIGIN));
+		ItemStack tool = builder.getParameter(LootParameters.TOOL);
+		int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+		ServerWorld world = builder.getLevel();
 		return getDrops(world, pos, fortune);
 	}
 
 	private NonNullList<ItemStack> getDrops(IBlockReader world, BlockPos pos, int fortune) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		Random random = world instanceof World ? ((World) world).rand : RANDOM;
+		Random random = world instanceof World ? ((World) world).getRandom() : RANDOM;
 
 		List<IHiveDrop> hiveDrops = getDropsForHive();
 		Collections.shuffle(hiveDrops);
@@ -145,7 +145,7 @@ public class BlockBeeHive extends ContainerBlock {
 	}
 
 	@Override
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 

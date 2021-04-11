@@ -29,7 +29,7 @@ public class FeatureSilverLime extends FeatureTree {
 	@Override
 	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
-		BlockPos pos = startPos.add(0, 3 + rand.nextInt(1), 0);
+		BlockPos pos = startPos.offset(0, 3 + rand.nextInt(1), 0);
 		return FeatureHelper.generateBranches(world, rand, wood, pos, girth, 0.25f, 0.10f, Math.round(height * 0.25f), 2, 0.5f);
 	}
 
@@ -41,10 +41,10 @@ public class FeatureSilverLime extends FeatureTree {
 
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		float radius = 1;
 		while (leafSpawn > 1) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, radius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, radius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 			radius += 0.25;
 		}
 	}

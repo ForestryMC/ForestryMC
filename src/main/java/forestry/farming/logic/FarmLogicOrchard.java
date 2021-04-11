@@ -64,7 +64,7 @@ public class FarmLogicOrchard extends FarmLogic {
 
 	@Override
 	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
-		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.up());
+		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		housing.increaseExtent(direction, pos, extent);
 
@@ -75,7 +75,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
-		if (!world.isBlockLoaded(position)) {
+		if (!world.hasChunkAt(position)) {
 			return Collections.emptyList();
 		}
 
@@ -108,7 +108,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		for (int i = -2; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
 				for (int k = -1; k < 2; k++) {
-					BlockPos candidate = position.add(i, j, k);
+					BlockPos candidate = position.offset(i, j, k);
 					if (Math.abs(candidate.getX() - start.getX()) > 5) {
 						continue;
 					}
@@ -120,7 +120,7 @@ public class FarmLogicOrchard extends FarmLogic {
 					if (seen.contains(candidate)) {
 						continue;
 					}
-					if (!world.isBlockLoaded(candidate) || world.isAirBlock(candidate)) {
+					if (!world.hasChunkAt(candidate) || world.isEmptyBlock(candidate)) {
 						continue;
 					}
 

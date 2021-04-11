@@ -52,7 +52,7 @@ public class CircuitRecipe implements ISolderRecipe {
 			return false;
 		}
 
-		return itemstack.isItemEqual(resource);
+		return itemstack.sameItem(resource);
 	}
 
 	@Override
@@ -78,28 +78,28 @@ public class CircuitRecipe implements ISolderRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CircuitRecipe> {
 
 		@Override
-		public CircuitRecipe read(ResourceLocation recipeId, JsonObject json) {
-			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(JSONUtils.getString(json, "layout"));
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(JSONUtils.getString(json, "circuit"));
-			ItemStack resource = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "resource"));
+		public CircuitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(JSONUtils.getAsString(json, "layout"));
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(JSONUtils.getAsString(json, "circuit"));
+			ItemStack resource = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "resource"));
 
 			return new CircuitRecipe(recipeId, layout, resource, circuit);
 		}
 
 		@Override
-		public CircuitRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(buffer.readString());
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(buffer.readString());
-			ItemStack resource = buffer.readItemStack();
+		public CircuitRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(buffer.readUtf());
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(buffer.readUtf());
+			ItemStack resource = buffer.readItem();
 
 			return new CircuitRecipe(recipeId, layout, resource, circuit);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, CircuitRecipe recipe) {
-			buffer.writeString(recipe.layout.getUID());
-			buffer.writeString(recipe.circuit.getUID());
-			buffer.writeItemStack(recipe.resource);
+		public void toNetwork(PacketBuffer buffer, CircuitRecipe recipe) {
+			buffer.writeUtf(recipe.layout.getUID());
+			buffer.writeUtf(recipe.circuit.getUID());
+			buffer.writeItem(recipe.resource);
 		}
 	}
 }

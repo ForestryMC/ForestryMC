@@ -46,7 +46,7 @@ public class Drawable {
 
 	public void draw(MatrixStack transform, int yOffset, int width, int height, int xOffset) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(textureLocation);
+		textureManager.bind(textureLocation);
 
 		// Enable correct lighting.
 		RenderSystem.enableAlphaTest();

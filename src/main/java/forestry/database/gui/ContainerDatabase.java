@@ -19,7 +19,7 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 
 	public static ContainerDatabase fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
 		PacketBufferForestry buf = new PacketBufferForestry(data);
-		TileDatabase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileDatabase.class);
+		TileDatabase tile = TileUtil.getTile(inv.player.level, buf.readBlockPos(), TileDatabase.class);
 		return new ContainerDatabase(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -31,14 +31,14 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 
 	private static void addInventory(ContainerForestry container, TileDatabase inventory) {
 		//Only to sync the items with the client
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+		for (int i = 0; i < inventory.getContainerSize(); i++) {
 			container.addSlot(new SlotFilteredInventory(inventory, i, -10000, -10000));
 		}
 	}
 
 	public void sendContainerToListeners() {
-		for (IContainerListener listener : listeners) {
-			listener.sendAllContents(this, getInventory());
+		for (IContainerListener listener : containerListeners) {
+			listener.refreshContainer(this, getItems());
 		}
 	}
 

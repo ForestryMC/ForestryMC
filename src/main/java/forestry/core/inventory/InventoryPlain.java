@@ -51,17 +51,17 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return contents.size();
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slotId) {
+	public ItemStack getItem(int slotId) {
 		return contents.get(slotId);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slotId, int count) {
+	public ItemStack removeItem(int slotId, int count) {
 		ItemStack itemStack = contents.get(slotId);
 		if (itemStack.isEmpty()) {
 			return ItemStack.EMPTY;
@@ -70,31 +70,31 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotId, ItemStack itemstack) {
+	public void setItem(int slotId, ItemStack itemstack) {
 		contents.set(slotId, itemstack);
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return stackLimit;
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity PlayerEntity) {
+	public boolean stillValid(PlayerEntity PlayerEntity) {
 		return false;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return this.getStackInSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return this.getItem(slotIndex);
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	public boolean canPlaceItem(int i, ItemStack itemstack) {
 		return true;
 	}
 
@@ -112,7 +112,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
 	/* Fields */
 	@Override
-	public void clear() {
+	public void clearContent() {
 		contents.clear();
 	}
 }

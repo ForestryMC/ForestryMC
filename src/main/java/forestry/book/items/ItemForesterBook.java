@@ -26,16 +26,16 @@ import forestry.core.network.PacketBufferForestry;
 public class ItemForesterBook extends ItemWithGui {
 
 	public ItemForesterBook() {
-		super(new Item.Properties().group(ItemGroupForestry.tabForestry));
+		super(new Item.Properties().tab(ItemGroupForestry.tabForestry));
 
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		bookOpenGui(playerIn, playerIn.getHeldItem(handIn));
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		bookOpenGui(playerIn, playerIn.getItemInHand(handIn));
 
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		return ActionResult.resultSuccess(stack);
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		return ActionResult.success(stack);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ItemForesterBook extends ItemWithGui {
 			guiScreen = null;
 		}
 		GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
-		Minecraft.getInstance().displayGuiScreen(bookGui);    //TODO does this work
+		Minecraft.getInstance().setScreen(bookGui);    //TODO does this work
 	}
 
 	@Nullable

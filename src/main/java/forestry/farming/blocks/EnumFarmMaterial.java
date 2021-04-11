@@ -71,7 +71,7 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 	public TextureAtlasSprite[] getSprites() {
 		TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
 		for (Direction direction : Direction.VALUES) {
-			textures[direction.getIndex()] = ResourceUtil.getBlockSprite("block/" + texture.apply(direction));
+			textures[direction.get3DDataValue()] = ResourceUtil.getBlockSprite("block/" + texture.apply(direction));
 		}
 		return textures;
 	}
@@ -81,11 +81,11 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 	}
 
 	public ITextComponent getDisplayName() {
-		return base.getItem().getDisplayName(base);
+		return base.getItem().getName(base);
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

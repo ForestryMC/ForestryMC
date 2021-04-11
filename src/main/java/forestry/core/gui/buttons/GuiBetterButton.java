@@ -104,7 +104,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		if (!visible) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE);
+		Minecraft.getInstance().getTextureManager().bind(TEXTURE);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();
@@ -122,7 +122,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		//TODO mousedragged
 		//		mouseDragged(minecraft, mouseX, mouseY);
 		if (getMessage() != null) {
-			drawCenteredString(transform, Minecraft.getInstance().fontRenderer, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
+			drawCenteredString(transform, Minecraft.getInstance().font, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
 		}
 	}
 

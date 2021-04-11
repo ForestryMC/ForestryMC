@@ -60,7 +60,7 @@ public class FarmableGE implements IFarmable {
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
 
-		if (!block.isIn(BlockTags.LOGS)) {
+		if (!block.is(BlockTags.LOGS)) {
 			return null;
 		}
 

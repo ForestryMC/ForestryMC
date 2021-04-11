@@ -61,8 +61,8 @@ public abstract class BlockUtil {
 			return false;
 		}
 
-		BlockState state = Blocks.COCOA.getDefaultState().with(HorizontalBlock.HORIZONTAL_FACING, facing);
-		world.setBlockState(pos, state, 18);
+		BlockState state = Blocks.COCOA.defaultBlockState().setValue(HorizontalBlock.FACING, facing);
+		world.setBlock(pos, state, 18);
 		return true;
 	}
 
@@ -77,13 +77,13 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction) {
-		pos = pos.offset(direction);
-		if (!world.isBlockLoaded(pos)) {
+		pos = pos.relative(direction);
+		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		return block.isIn(BlockTags.JUNGLE_LOGS);
+		return block.is(BlockTags.JUNGLE_LOGS);
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {
@@ -92,7 +92,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean isBreakableBlock(BlockState blockState, World world, BlockPos pos) {
-		return blockState.getBlockHardness(world, pos) >= 0.0F;
+		return blockState.getDestroySpeed(world, pos) >= 0.0F;
 	}
 
 	public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
@@ -150,23 +150,23 @@ public abstract class BlockUtil {
 			minHit = vec32;
 		}
 
-		if (vec33 != null && (minHit == null || startVec.squareDistanceTo(vec33) < startVec.squareDistanceTo(minHit))) {
+		if (vec33 != null && (minHit == null || startVec.distanceToSqr(vec33) < startVec.distanceToSqr(minHit))) {
 			minHit = vec33;
 		}
 
-		if (vec34 != null && (minHit == null || startVec.squareDistanceTo(vec34) < startVec.squareDistanceTo(minHit))) {
+		if (vec34 != null && (minHit == null || startVec.distanceToSqr(vec34) < startVec.distanceToSqr(minHit))) {
 			minHit = vec34;
 		}
 
-		if (vec35 != null && (minHit == null || startVec.squareDistanceTo(vec35) < startVec.squareDistanceTo(minHit))) {
+		if (vec35 != null && (minHit == null || startVec.distanceToSqr(vec35) < startVec.distanceToSqr(minHit))) {
 			minHit = vec35;
 		}
 
-		if (vec36 != null && (minHit == null || startVec.squareDistanceTo(vec36) < startVec.squareDistanceTo(minHit))) {
+		if (vec36 != null && (minHit == null || startVec.distanceToSqr(vec36) < startVec.distanceToSqr(minHit))) {
 			minHit = vec36;
 		}
 
-		if (vec37 != null && (minHit == null || startVec.squareDistanceTo(vec37) < startVec.squareDistanceTo(minHit))) {
+		if (vec37 != null && (minHit == null || startVec.distanceToSqr(vec37) < startVec.distanceToSqr(minHit))) {
 			minHit = vec37;
 		}
 
@@ -231,18 +231,18 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean canPlaceTree(BlockState blockState, IWorld world, BlockPos pos) {
-		BlockPos downPos = pos.down();
+		BlockPos downPos = pos.below();
 		Block block = world.getBlockState(downPos).getBlock();
 		return !(world.getBlockState(pos).getMaterial().isReplaceable() &&
-			blockState.getMaterial().isLiquid()) && true;
+				blockState.getMaterial().isLiquid()) && true;
 		//			!block.isLeaves(blockState, world, downPos) &&
 		//			!block.isWood(world, downPos);
 	}
 
 	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
-		BlockPos topPos = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
+		BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, pos);
 		final BlockPos.Mutable newPos = new BlockPos.Mutable();
-		BlockState blockState = world.getBlockState(newPos.setPos(pos));
+		BlockState blockState = world.getBlockState(newPos.set(pos));
 
 		while (!BlockUtil.canReplace(blockState, world, newPos)) {
 			newPos.move(Direction.UP);
@@ -252,14 +252,14 @@ public abstract class BlockUtil {
 			blockState = world.getBlockState(newPos);
 		}
 
-		return newPos.down();
+		return newPos.below();
 	}
 
 	@Nullable
 	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
 		final BlockPos.Mutable newPos = new BlockPos.Mutable();
 
-		BlockState blockState = world.getBlockState(newPos.setPos(pos));
+		BlockState blockState = world.getBlockState(newPos.set(pos));
 		while (canReplace(blockState, world, newPos)) {
 			newPos.move(Direction.DOWN);
 			if (newPos.getY() <= 0) {
@@ -267,12 +267,12 @@ public abstract class BlockUtil {
 			}
 			blockState = world.getBlockState(newPos);
 		}
-		return newPos.up();
+		return newPos.above();
 	}
 
 
 	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, BlockState blockState) {
-		if (world.setBlockState(pos, blockState)) {
+		if (world.setBlockAndUpdate(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
@@ -281,7 +281,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean setBlockWithBreakSound(World world, BlockPos pos, BlockState blockState, BlockState oldState) {
-		if (world.setBlockState(pos, blockState)) {
+		if (world.setBlockAndUpdate(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;

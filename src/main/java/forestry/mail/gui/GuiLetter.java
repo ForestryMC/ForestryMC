@@ -26,6 +26,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.core.config.Constants;
@@ -39,8 +41,6 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.Translator;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
-
-import org.lwjgl.glfw.GLFW;
 
 public class GuiLetter extends GuiForestry<ContainerLetter> {
 	private final ItemInventoryLetter itemInventory;
@@ -60,32 +60,32 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		this.minecraft = Minecraft.getInstance(); //not 100% why this is needed, maybe side issues
 
 		this.itemInventory = container.getItemInventory();
-		this.xSize = 194;
-		this.ySize = 227;
+		this.imageWidth = 194;
+		this.imageHeight = 227;
 
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
 		this.tradeInfoWidgets = new ArrayList<>();
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
-		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
+		address = new TextFieldWidget(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
+		text = new GuiTextBox(this.minecraft.font, leftPos + 17, topPos + 31, 122, 57);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 
-		minecraft.keyboardListener.enableRepeatEvents(true);
+		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
-		address = new TextFieldWidget(this.minecraft.fontRenderer, guiLeft + 46, guiTop + 13, 93, 13, null);
+		address = new TextFieldWidget(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
 		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
-			address.setText(recipient.getName());
+			address.setValue(recipient.getName());
 		}
 
-		text = new GuiTextBox(this.minecraft.fontRenderer, guiLeft + 17, guiTop + 31, 122, 57);
-		text.setMaxStringLength(128);
+		text = new GuiTextBox(this.minecraft.font, leftPos + 17, topPos + 31, 122, 57);
+		text.setMaxLength(128);
 		if (!container.getText().isEmpty()) {
-			text.setText(container.getText());
+			text.setValue(container.getText());
 		}
 	}
 
@@ -95,7 +95,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		// Set focus or enter text into address
 		if (this.address.isFocused()) {
 			if (scanCode == GLFW.GLFW_KEY_ENTER) {
-				this.address.setFocused2(false);
+				this.address.setFocus(false);
 			} else {
 				this.address.keyPressed(key, scanCode, modifiers);
 			}
@@ -105,9 +105,9 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		if (this.text.isFocused()) {
 			if (scanCode == GLFW.GLFW_KEY_ENTER) {
 				if (hasShiftDown()) {
-					text.setText(text.getText() + "\n");
+					text.setValue(text.getValue() + "\n");
 				} else {
-					this.text.setFocused2(false);
+					this.text.setFocus(false);
 				}
 			} else if (scanCode == GLFW.GLFW_KEY_DOWN) {
 				text.advanceLine();
@@ -133,19 +133,19 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
 
 		if (!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
 			setFromSessionVars();
-			String recipient = this.address.getText();
+			String recipient = this.address.getValue();
 			EnumAddressee recipientType = container.getCarrierType();
 			setRecipient(recipient, recipientType);
 		}
 
 		// Check for focus changes
 		if (addressFocus != address.isFocused()) {
-			String recipient = this.address.getText();
+			String recipient = this.address.getValue();
 			if (StringUtils.isNotBlank(recipient)) {
 				EnumAddressee recipientType = container.getCarrierType();
 				setRecipient(recipient, recipientType);
@@ -157,11 +157,11 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 		textFocus = text.isFocused();
 
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		if (this.isProcessedLetter) {
-			minecraft.fontRenderer.drawString(transform, address.getText(), guiLeft + 49, guiTop + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-			minecraft.fontRenderer.func_238418_a_(new StringTextComponent(text.getText()), guiLeft + 20, guiTop + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.font.draw(transform, address.getValue(), leftPos + 49, topPos + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.font.drawWordWrap(new StringTextComponent(text.getValue()), leftPos + 20, topPos + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		} else {
 			clearTradeInfoWidgets();
 			address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
@@ -185,15 +185,15 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 
 		if (infoString != null) {
-			minecraft.fontRenderer.func_238418_a_(infoString, guiLeft + x, guiTop + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.font.drawWordWrap(infoString, leftPos + x, topPos + y, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 			return;
 		}
 
-		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.pleasesend"), guiLeft + x, guiTop + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+		minecraft.font.draw(transform, Translator.translateToLocal("for.gui.mail.pleasesend"), leftPos + x, topPos + y, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		addTradeInfoWidget(new ItemStackWidget(widgetManager, x, y + 10, container.getTradeInfo().getTradegood()));
 
-		minecraft.fontRenderer.drawString(transform, Translator.translateToLocal("for.gui.mail.foreveryattached"), guiLeft + x, guiTop + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+		minecraft.font.draw(transform, Translator.translateToLocal("for.gui.mail.foreveryattached"), leftPos + x, topPos + y + 28, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 
 		for (int i = 0; i < container.getTradeInfo().getRequired().size(); i++) {
 			addTradeInfoWidget(new ItemStackWidget(widgetManager, x + i * 18, y + 38, container.getTradeInfo().getRequired().get(i)));
@@ -214,11 +214,11 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 	@Override
 	public void onClose() {
-		String recipientName = this.address.getText();
+		String recipientName = this.address.getValue();
 		EnumAddressee recipientType = container.getCarrierType();
 		setRecipient(recipientName, recipientType);
 		setText();
-		minecraft.keyboardListener.enableRepeatEvents(false);
+		minecraft.keyboardHandler.setSendRepeatsToGui(false);
 		super.onClose();
 	}
 
@@ -231,7 +231,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		String typeName = SessionVars.getStringVar("mail.letter.addressee");
 
 		if (StringUtils.isNotBlank(recipient) && StringUtils.isNotBlank(typeName)) {
-			address.setText(recipient);
+			address.setValue(recipient);
 
 			EnumAddressee type = EnumAddressee.fromString(typeName);
 			container.setCarrierType(type);
@@ -256,7 +256,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 			return;
 		}
 
-		container.setText(this.text.getText());
+		container.setText(this.text.getValue());
 	}
 
 	@Override

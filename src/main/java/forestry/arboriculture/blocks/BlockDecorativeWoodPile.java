@@ -16,9 +16,9 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock {
 	public static final EnumProperty<Direction.Axis> AXIS = EnumProperty.create("axis", Direction.Axis.class);
 
 	public BlockDecorativeWoodPile() {
-		super(Block.Properties.create(Material.WOOD)
-			.sound(SoundType.WOOD)
-			.hardnessAndResistance(1.5f));
+		super(Block.Properties.of(Material.WOOD)
+				.sound(SoundType.WOOD)
+				.strength(1.5f));
 		//		setCreativeTab(ModuleCharcoal.getTag());
 		//TODO creative tab
 	}
@@ -45,7 +45,7 @@ public class BlockDecorativeWoodPile extends RotatedPillarBlock {
 
 
 	protected ItemStack getSilkTouchDrop(BlockState state) {
-		return new ItemStack(Item.getItemFromBlock(this));
+		return new ItemStack(Item.byBlock(this));
 	}
 
 }

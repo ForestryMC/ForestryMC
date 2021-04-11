@@ -56,13 +56,13 @@ public class ColorElement extends GuiElement {
 		RenderSystem.shadeModel(GL11.GL_SMOOTH);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(right, top, 0).color(endRed, endGreen, endBlue, endAlpha).endVertex();
-		buffer.pos(left, top, 0).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-		buffer.pos(left, bottom, 0).color(startRed, startGreen, startBlue, startAlpha).endVertex();
-		buffer.pos(right, bottom, 0).color(endRed, endGreen, endBlue, endAlpha).endVertex();
-		tessellator.draw();
+		buffer.vertex(right, top, 0).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+		buffer.vertex(left, top, 0).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+		buffer.vertex(left, bottom, 0).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+		buffer.vertex(right, bottom, 0).color(endRed, endGreen, endBlue, endAlpha).endVertex();
+		tessellator.end();
 
 		RenderSystem.shadeModel(GL11.GL_FLAT);
 		RenderSystem.disableBlend();

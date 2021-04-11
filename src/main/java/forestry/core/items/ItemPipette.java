@@ -40,8 +40,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	public ItemPipette() {
 		super((new Item.Properties())
-			.maxStackSize(1)
-			.group(ItemGroupForestry.tabForestry));
+				.stacksTo(1)
+				.tab(ItemGroupForestry.tabForestry));
 		//addPropertyOverride(new ResourceLocation("state"), (itemStack, world, livingEntity) -> FluidUtil.getFluidContained(itemStack).isPresent() ? 1 : 0);
 		//		setFull3D();
 	}
@@ -54,8 +54,8 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
-		super.addInformation(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+		super.appendHoverText(itemstack, world, list, flag);
 
 		if (CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY == null) {
 			return;

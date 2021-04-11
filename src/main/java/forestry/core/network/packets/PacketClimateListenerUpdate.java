@@ -42,7 +42,7 @@ public class PacketClimateListenerUpdate extends ForestryPacket implements IFore
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 			IClimateState state = data.readClimateState();
-			LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(player.world, pos);
+			LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(player.level, pos);
 			listener.ifPresent(l -> l.setClimateState(state));
 		}
 	}

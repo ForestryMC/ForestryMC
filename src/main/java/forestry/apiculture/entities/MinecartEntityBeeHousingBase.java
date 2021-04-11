@@ -46,7 +46,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
 public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
-	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.createKey(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
+	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.defineId(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final int beeFXInterval = 4;
 	private static final int pollenFXInterval = 50;
@@ -59,12 +59,12 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 		@Override
 		public void setOwner(GameProfile owner) {
 			super.setOwner(owner);
-			dataManager.set(OWNER, Optional.of(owner));
+			entityData.set(OWNER, Optional.of(owner));
 		}
 
 		@Override
 		public GameProfile getOwner() {
-			Optional<GameProfile> gameProfileOptional = dataManager.get(OWNER);
+			Optional<GameProfile> gameProfileOptional = entityData.get(OWNER);
 			return gameProfileOptional.orElse(null);
 		}
 	};
@@ -82,9 +82,9 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	protected void registerData() {
-		super.registerData();
-		this.dataManager.register(OWNER, Optional.empty());
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(OWNER, Optional.empty());
 	}
 
 	/* IOwnedTile */
@@ -101,7 +101,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromBiome(getBiome(), getPosition());
+		return EnumTemperature.getFromBiome(getBiome(), blockPosition());
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().getTemperature(getPosition());
+		return getBiome().getTemperature(blockPosition());
 	}
 
 	@Override
@@ -121,27 +121,27 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public int getBlockLightValue() {
-		return world.getLight(getPosition().up());
+		return level.getMaxLocalRawBrightness(blockPosition().above());
 	}
 
 	@Override
 	public boolean canBlockSeeTheSky() {
-		return world.canBlockSeeSky(getPosition().up());
+		return level.canSeeSkyFromBelowWater(blockPosition().above());
 	}
 
 	@Override
 	public boolean isRaining() {
-		return world.isRainingAt(getPosition().up());
+		return level.isRainingAt(blockPosition().above());
 	}
 
 	@Override
 	public World getWorldObj() {
-		return world;
+		return level;
 	}
 
 	@Override
 	public Biome getBiome() {
-		return world.getBiome(getPosition());
+		return level.getBiome(blockPosition());
 	}
 
 	@Override
@@ -156,12 +156,12 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public BlockPos getCoordinates() {
-		return getPosition();
+		return blockPosition();
 	}
 
 	@Override
 	public Vector3d getBeeFXCoordinates() {
-		BlockPos pos = getPosition();
+		BlockPos pos = blockPosition();
 		return new Vector3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
 	}
 
@@ -184,7 +184,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	public void tick() {
 		super.tick();
 		tickHelper.onTick();
-		if (!world.isRemote) {
+		if (!level.isClientSide) {
 			if (beeLogic.canWork()) {
 				beeLogic.doWork();
 			}
@@ -201,23 +201,23 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 				}
 
 				if (tickHelper.updateOnInterval(pollenFXInterval)) {
-					BlockPos pos = getPosition();
-					TileBeeHousingBase.doPollenFX(world, pos.getX() - 0.5, pos.getY() - 0.1, pos.getZ() - 0.5);
+					BlockPos pos = blockPosition();
+					TileBeeHousingBase.doPollenFX(level, pos.getX() - 0.5, pos.getY() - 0.1, pos.getZ() - 0.5);
 				}
 			}
 		}
 	}
 
 	@Override
-	public void readAdditional(CompoundNBT compoundNBT) {
-		super.readAdditional(compoundNBT);
+	public void readAdditionalSaveData(CompoundNBT compoundNBT) {
+		super.readAdditionalSaveData(compoundNBT);
 		beeLogic.read(compoundNBT);
 		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
-	protected void writeAdditional(CompoundNBT compoundNBT) {
-		super.writeAdditional(compoundNBT);
+	protected void addAdditionalSaveData(CompoundNBT compoundNBT) {
+		super.addAdditionalSaveData(compoundNBT);
 		beeLogic.write(compoundNBT);
 		ownerHandler.write(compoundNBT);
 	}

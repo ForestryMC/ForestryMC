@@ -41,12 +41,12 @@ public class MultiblockUtil {
 		List<BlockPos> neighbors = new ArrayList<>(Direction.values().length);
 		for (Direction facing : Direction.values()) {
 			BlockPos neighborCoord = new BlockPos(partCoord);
-			neighborCoord = neighborCoord.offset(facing);
+			neighborCoord = neighborCoord.relative(facing);
 			neighbors.add(neighborCoord);
 		}
 
 		List<IMultiblockComponent> neighborParts = new ArrayList<>();
-		AbstractChunkProvider chunkProvider = world.getChunkProvider();
+		AbstractChunkProvider chunkProvider = world.getChunkSource();
 		for (BlockPos neighbor : neighbors) {
 			//TODO loaded chunk bool
 			if (chunkProvider.getChunk(neighbor.getX() >> 4, neighbor.getZ() >> 4, true) == null) {

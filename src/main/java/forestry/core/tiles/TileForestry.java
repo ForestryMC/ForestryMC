@@ -83,15 +83,15 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public void remove() {
+	public void setRemoved() {
 		tileCache.purge();
-		super.remove();
+		super.setRemoved();
 	}
 
 	@Override
-	public void validate() {
+	public void clearRemoved() {
 		tileCache.purge();
-		super.validate();
+		super.clearRemoved();
 	}
 
 	// / UPDATING
@@ -99,7 +99,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public final void tick() {
 		tickHelper.onTick();
 
-		if (!world.isRemote) {
+		if (!level.isClientSide) {
 			updateServerSide();
 		} else {
 			updateClientSide();
@@ -124,15 +124,15 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / SAVING & LOADING
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 		inventory.read(data);
 	}
 
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		data = super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		data = super.save(data);
 		inventory.write(data);
 		return data;
 	}
@@ -140,7 +140,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	@Nullable
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), 0, getUpdateTag());
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
 	}
 
 
@@ -160,7 +160,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	/* INetworkedEntity */
 	protected final void sendNetworkUpdate() {
 		PacketTileStream packet = new PacketTileStream(this);
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, worldPosition, level);
 	}
 
 	/* IStreamable */
@@ -180,7 +180,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	@Override
 	public World getWorldObj() {
-		return world;
+		return level;
 	}
 
 	/* ITriggerProvider */
@@ -200,7 +200,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {
-		return world.getRedstonePowerFromNeighbors(getPos()) > 0;
+		return level.getBestNeighborSignal(getBlockPos()) > 0;
 	}
 
 	protected final void setNeedsNetworkUpdate() {
@@ -219,7 +219,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	 */
 	@Override
 	public String getUnlocalizedTitle() {
-		return getBlockState().getBlock().getTranslationKey();
+		return getBlockState().getBlock().getDescriptionId();
 	}
 
 	/* INVENTORY BASICS */
@@ -240,43 +240,43 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public final int getSizeInventory() {
-		return getInternalInventory().getSizeInventory();
+	public final int getContainerSize() {
+		return getInternalInventory().getContainerSize();
 	}
 
 	@Override
-	public final ItemStack getStackInSlot(int slotIndex) {
-		return getInternalInventory().getStackInSlot(slotIndex);
+	public final ItemStack getItem(int slotIndex) {
+		return getInternalInventory().getItem(slotIndex);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slotIndex, int amount) {
-		return getInternalInventory().decrStackSize(slotIndex, amount);
+	public ItemStack removeItem(int slotIndex, int amount) {
+		return getInternalInventory().removeItem(slotIndex, amount);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int slotIndex) {
-		return getInternalInventory().removeStackFromSlot(slotIndex);
+	public ItemStack removeItemNoUpdate(int slotIndex) {
+		return getInternalInventory().removeItemNoUpdate(slotIndex);
 	}
 
 	@Override
-	public void setInventorySlotContents(int slotIndex, ItemStack itemstack) {
-		getInternalInventory().setInventorySlotContents(slotIndex, itemstack);
+	public void setItem(int slotIndex, ItemStack itemstack) {
+		getInternalInventory().setItem(slotIndex, itemstack);
 	}
 
 	@Override
-	public final int getInventoryStackLimit() {
-		return getInternalInventory().getInventoryStackLimit();
+	public final int getMaxStackSize() {
+		return getInternalInventory().getMaxStackSize();
 	}
 
 	@Override
-	public final void openInventory(PlayerEntity player) {
-		getInternalInventory().openInventory(player);
+	public final void startOpen(PlayerEntity player) {
+		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void closeInventory(PlayerEntity player) {
-		getInternalInventory().closeInventory(player);
+	public final void stopOpen(PlayerEntity player) {
+		getInternalInventory().stopOpen(player);
 	}
 
 	//	@Override
@@ -290,8 +290,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	//	}
 
 	@Override
-	public final boolean isUsableByPlayer(PlayerEntity player) {
-		return getInternalInventory().isUsableByPlayer(player);
+	public final boolean stillValid(PlayerEntity player) {
+		return getInternalInventory().stillValid(player);
 	}
 
 	//	@Override
@@ -300,8 +300,8 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	//	}
 
 	@Override
-	public final boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		return getInternalInventory().isItemValidForSlot(slotIndex, itemStack);
+	public final boolean canPlaceItem(int slotIndex, ItemStack itemStack) {
+		return getInternalInventory().canPlaceItem(slotIndex, itemStack);
 	}
 
 	@Override
@@ -320,22 +320,22 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canInsertItem(slotIndex, itemStack, side);
+	public final boolean canPlaceItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return getInternalInventory().canPlaceItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	@Override
-	public final boolean canExtractItem(int slotIndex, ItemStack itemStack, Direction side) {
-		return getInternalInventory().canExtractItem(slotIndex, itemStack, side);
+	public final boolean canTakeItemThroughFace(int slotIndex, ItemStack itemStack, Direction side) {
+		return getInternalInventory().canTakeItemThroughFace(slotIndex, itemStack, side);
 	}
 
 	@Override
 	public final BlockPos getCoordinates() {
-		return getPos();
+		return getBlockPos();
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 	}
 
 	@Override

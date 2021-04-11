@@ -52,7 +52,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
@@ -71,7 +70,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
-		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(world.getRecipeManager()));
+		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(level.getRecipeManager()));
 		tankManager = new TankManager(this, resourceTank);
 		setTicksPerWorkCycle(10);
 		setEnergyPerWorkCycle(0);
@@ -239,7 +238,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	@Override
 	public Biome getBiome() {
-		return world.getBiome(getPos());
+		return level.getBiome(getBlockPos());
 	}
 
 	@Override
@@ -273,8 +272,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	/* Methods - SAVING & LOADING */
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
-		super.write(data);
+	public CompoundNBT save(CompoundNBT data) {
+		super.save(data);
 
 		tankManager.write(data);
 
@@ -284,8 +283,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT data) {
-		super.read(state, data);
+	public void load(BlockState state, CompoundNBT data) {
+		super.load(state, data);
 
 		tankManager.read(data);
 

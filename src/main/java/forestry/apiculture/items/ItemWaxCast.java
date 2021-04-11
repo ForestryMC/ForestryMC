@@ -21,15 +21,15 @@ public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
 	public ItemWaxCast() {
 		super((new Item.Properties())
-			.group(ItemGroups.tabApiculture)
-			.maxDamage(16)
+				.tab(ItemGroups.tabApiculture)
+				.durability(16)
 			.setNoRepair());
 	}
 
 	@Override
 	public ItemStack planUsed(ItemStack plan, ItemStack result) {
-		plan.setDamage(plan.getDamage() + result.getCount());
-		if (plan.getDamage() >= plan.getMaxDamage()) {
+		plan.setDamageValue(plan.getDamageValue() + result.getCount());
+		if (plan.getDamageValue() >= plan.getMaxDamage()) {
 			return ItemStack.EMPTY;
 		} else {
 			return plan;

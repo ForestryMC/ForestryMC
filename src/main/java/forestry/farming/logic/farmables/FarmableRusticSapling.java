@@ -23,14 +23,14 @@ public class FarmableRusticSapling implements IFarmable {
 
 	public FarmableRusticSapling(Item germling, ItemStack[] windfall) {
 		this.germling = germling;
-		this.germlingBlock = Block.getBlockFromItem(germling);
+		this.germlingBlock = Block.byItem(germling);
 		this.windfall = windfall;
 	}
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		BlockState blockState = germlingBlock.getDefaultState();//TODO flatten germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
-		if (world.setBlockState(pos, blockState)) {
+		BlockState blockState = germlingBlock.defaultBlockState();//TODO flatten germlingBlock.getStateFromMeta(germling.getItemDamage());    //TODO - stop using meta here
+		if (world.setBlockAndUpdate(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
@@ -67,7 +67,7 @@ public class FarmableRusticSapling implements IFarmable {
 	@Override
 	public boolean isWindfall(ItemStack itemstack) {
 		for (ItemStack drop : windfall) {
-			if (drop.isItemEqual(itemstack)) {
+			if (drop.sameItem(itemstack)) {
 				return true;
 			}
 		}

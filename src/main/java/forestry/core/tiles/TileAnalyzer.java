@@ -33,11 +33,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import genetics.api.GeneticHelper;
-import genetics.api.individual.IIndividual;
-
-import genetics.utils.RootUtils;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -57,6 +52,10 @@ import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
+
+import genetics.api.GeneticHelper;
+import genetics.api.individual.IIndividual;
+import genetics.utils.RootUtils;
 
 public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
@@ -84,18 +83,18 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		compoundNBT = super.write(compoundNBT);
+	public CompoundNBT save(CompoundNBT compoundNBT) {
+		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT compoundNBT) {
-		super.read(state, compoundNBT);
+	public void load(BlockState state, CompoundNBT compoundNBT) {
+		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
-		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		ItemStack stackToAnalyze = getItem(InventoryAnalyzer.SLOT_ANALYZE);
 		if (!stackToAnalyze.isEmpty()) {
 			specimenToAnalyze = RootUtils.getIndividualOrNull(stackToAnalyze);
 		}
@@ -114,7 +113,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* WORKING */
 	@Override
 	public boolean workCycle() {
-		ItemStack stackToAnalyze = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		ItemStack stackToAnalyze = getItem(InventoryAnalyzer.SLOT_ANALYZE);
 		if (stackToAnalyze.isEmpty() || specimenToAnalyze == null) {
 			return false;
 		}
@@ -136,17 +135,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return false;
 		}
 
-		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
+		setItem(InventoryAnalyzer.SLOT_ANALYZE, ItemStack.EMPTY);
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, worldPosition, level);
 
 		return true;
 	}
 
 	@Nullable
 	private Integer getInputSlotIndex() {
-		for (int slotIndex = 0; slotIndex < invInput.getSizeInventory(); slotIndex++) {
-			ItemStack inputStack = invInput.getStackInSlot(slotIndex);
+		for (int slotIndex = 0; slotIndex < invInput.getContainerSize(); slotIndex++) {
+			ItemStack inputStack = invInput.getItem(slotIndex);
 			if (RootUtils.isIndividual(inputStack)) {
 				return slotIndex;
 			}
@@ -159,7 +158,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public void writeData(PacketBufferForestry data) {
 		super.writeData(data);
 		ItemStack displayStack = getIndividualOnDisplay();
-		data.writeItemStack(displayStack);
+		data.writeItem(displayStack);
 		tankManager.writeData(data);
 	}
 
@@ -167,17 +166,17 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	@OnlyIn(Dist.CLIENT)
 	public void readData(PacketBufferForestry data) throws IOException {
 		super.readData(data);
-		individualOnDisplayClient = data.readItemStack();
+		individualOnDisplayClient = data.readItem();
 		tankManager.readData(data);
 	}
 
 	@Override
 	public void handleItemStackForDisplay(ItemStack itemStack) {
-		if (!ItemStack.areItemStacksEqual(itemStack, individualOnDisplayClient)) {
+		if (!ItemStack.matches(itemStack, individualOnDisplayClient)) {
 			individualOnDisplayClient = itemStack;
 			//TODO
-			BlockPos pos = getPos();
-			Minecraft.getInstance().worldRenderer.markForRerender(pos.getX(), pos.getY(), pos.getZ());
+			BlockPos pos = getBlockPos();
+			Minecraft.getInstance().levelRenderer.setSectionDirty(pos.getX(), pos.getY(), pos.getZ());
 			//			world.markForRerender(getPos());
 		}
 	}
@@ -187,7 +186,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	public boolean hasWork() {
 		moveSpecimenToAnalyzeSlot();
 
-		ItemStack specimen = getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		ItemStack specimen = getItem(InventoryAnalyzer.SLOT_ANALYZE);
 
 		boolean hasSpecimen = !specimen.isEmpty();
 		boolean hasResource = true;
@@ -210,7 +209,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	private void moveSpecimenToAnalyzeSlot() {
-		if (!getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
+		if (!getItem(InventoryAnalyzer.SLOT_ANALYZE).isEmpty()) {
 			return;
 		}
 
@@ -219,7 +218,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		ItemStack inputStack = invInput.getStackInSlot(slotIndex);
+		ItemStack inputStack = invInput.getItem(slotIndex);
 		if (inputStack.isEmpty()) {
 			return;
 		}
@@ -233,8 +232,8 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		setInventorySlotContents(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
-		invInput.setInventorySlotContents(slotIndex, ItemStack.EMPTY);
+		setItem(InventoryAnalyzer.SLOT_ANALYZE, inputStack);
+		invInput.setItem(slotIndex, ItemStack.EMPTY);
 
 		if (specimenToAnalyze.isAnalyzed()) {
 			setTicksPerWorkCycle(1);
@@ -245,14 +244,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 		}
 
 		PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
-		NetworkUtil.sendNetworkPacket(packet, pos, world);
+		NetworkUtil.sendNetworkPacket(packet, worldPosition, level);
 	}
 
 	public ItemStack getIndividualOnDisplay() {
-		if (world.isRemote) {
+		if (level.isClientSide) {
 			return individualOnDisplayClient;
 		}
-		return getStackInSlot(InventoryAnalyzer.SLOT_ANALYZE);
+		return getItem(InventoryAnalyzer.SLOT_ANALYZE);
 	}
 
 	/* ILiquidTankTile */

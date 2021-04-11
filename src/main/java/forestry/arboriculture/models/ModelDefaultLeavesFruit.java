@@ -25,8 +25,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -37,6 +35,8 @@ import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ResourceUtil;
+
+import genetics.api.individual.IGenome;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeavesFruit, ModelDefaultLeavesFruit.Key> {
@@ -73,7 +73,7 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 
 	@Override
 	protected ModelDefaultLeavesFruit.Key getInventoryKey(ItemStack stack) {
-		Block block = Block.getBlockFromItem(stack.getItem());
+		Block block = Block.byItem(stack.getItem());
 		Preconditions.checkArgument(block instanceof BlockDefaultLeavesFruit, "ItemStack must be for default fruit leaves.");
 		BlockDefaultLeavesFruit bBlock = (BlockDefaultLeavesFruit) block;
 		return new Key(bBlock.getDefinition(), Proxies.render.fancyGraphicsEnabled());

@@ -102,9 +102,9 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		int treeGirth = tree.getGirth();
 		for (int x = 0; x < treeGirth; x++) {
 			for (int z = 0; z < treeGirth; z++) {
-				BlockPos saplingPos = genPos.add(x, 0, z);
+				BlockPos saplingPos = genPos.offset(x, 0, z);
 				if (world.getBlockState(saplingPos).getBlock() instanceof BlockSapling) {
-					world.setBlockState(saplingPos, Blocks.AIR.getDefaultState(), 18);
+					world.setBlock(saplingPos, Blocks.AIR.defaultBlockState(), 18);
 				}
 			}
 		}

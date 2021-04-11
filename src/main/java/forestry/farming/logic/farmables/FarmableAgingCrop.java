@@ -66,7 +66,7 @@ public class FarmableAgingCrop implements IFarmable {
 
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		return blockState.getBlock() == cropBlock && blockState.get(ageProperty) <= minHarvestAge;
+		return blockState.getBlock() == cropBlock && blockState.getValue(ageProperty) <= minHarvestAge;
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class FarmableAgingCrop implements IFarmable {
 			return null;
 		}
 
-		if (blockState.get(ageProperty) < minHarvestAge) {
+		if (blockState.getValue(ageProperty) < minHarvestAge) {
 			return null;
 		}
 
@@ -89,12 +89,12 @@ public class FarmableAgingCrop implements IFarmable {
 		if (replantAge == null) {
 			return null;
 		}
-		return blockState.with(ageProperty, replantAge);
+		return blockState.setValue(ageProperty, replantAge);
 	}
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		return ItemStack.areItemsEqual(germling, itemstack);
+		return ItemStack.isSame(germling, itemstack);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class FarmableAgingCrop implements IFarmable {
 
 	@Override
 	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
-		BlockState plantedState = cropBlock.getDefaultState().with(ageProperty, 0);
+		BlockState plantedState = cropBlock.defaultBlockState().setValue(ageProperty, 0);
 		return BlockUtil.setBlockWithPlaceSound(world, pos, plantedState);
 	}
 

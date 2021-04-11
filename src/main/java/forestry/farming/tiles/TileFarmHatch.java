@@ -48,7 +48,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	public TileFarmHatch() {
 		super(FarmingTiles.HATCH.tileType());
 		this.tileCache = new AdjacentTileCache(this);
-		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getPos().getY() < getPos().getY());
+		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getBlockPos().getY() < getBlockPos().getY());
 	}
 
 	@Override

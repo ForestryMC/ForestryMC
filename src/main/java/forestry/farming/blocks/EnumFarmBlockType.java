@@ -2,8 +2,8 @@ package forestry.farming.blocks;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.Arrays;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Locale;
 
 import net.minecraft.client.renderer.texture.AtlasTexture;
@@ -115,7 +115,7 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 

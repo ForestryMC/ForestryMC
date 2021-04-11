@@ -15,6 +15,6 @@ public enum PermLevel implements Predicate<CommandSource> {
 
     @Override
     public boolean test(CommandSource commandSource) {
-        return commandSource.hasPermissionLevel(permLevel);
+        return commandSource.hasPermission(permLevel);
     }
 }

@@ -8,10 +8,6 @@ import net.minecraft.util.math.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
-import genetics.api.alleles.IAllele;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.genetics.GeneticCapabilities;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.core.network.ForestryPacket;
@@ -20,6 +16,9 @@ import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.TileUtil;
+
+import genetics.api.alleles.IAllele;
+import genetics.utils.AlleleUtils;
 
 public class PacketFilterChangeGenome extends ForestryPacket implements IForestryPacketServer {
 	private final BlockPos pos;
@@ -40,12 +39,12 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 	@Override
 	protected void writeData(PacketBufferForestry data) {
 		data.writeBlockPos(pos);
-		data.writeShort(facing.getIndex());
+		data.writeShort(facing.get3DDataValue());
 		data.writeShort(index);
 		data.writeBoolean(active);
 		if (allele != null) {
 			data.writeBoolean(true);
-			data.writeString(allele.getRegistryName().toString());
+			data.writeUtf(allele.getRegistryName().toString());
 		} else {
 			data.writeBoolean(false);
 		}
@@ -60,19 +59,19 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
-			Direction facing = Direction.byIndex(data.readShort());
+			Direction facing = Direction.from3DDataValue(data.readShort());
 			short index = data.readShort();
 			boolean active = data.readBoolean();
 			IAllele allele;
 			if (data.readBoolean()) {
-				allele = AlleleUtils.getAlleleOrNull(data.readString());
+				allele = AlleleUtils.getAlleleOrNull(data.readUtf());
 			} else {
 				allele = null;
 			}
-			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.world, pos, GeneticCapabilities.FILTER_LOGIC, null);
+			LazyOptional<IFilterLogic> logic = TileUtil.getInterface(player.level, pos, GeneticCapabilities.FILTER_LOGIC, null);
 			logic.ifPresent(l -> {
 				if (l.setGenomeFilter(facing, index, active, allele)) {
-					l.getNetworkHandler().sendToPlayers(l, player.getServerWorld(), player);
+					l.getNetworkHandler().sendToPlayers(l, player.getLevel(), player);
 				}
 			});
 		}

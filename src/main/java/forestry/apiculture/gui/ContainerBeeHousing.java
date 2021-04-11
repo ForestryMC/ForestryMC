@@ -33,7 +33,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 
 	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
 		PacketBufferForestry buf = new PacketBufferForestry(data);
-		TileBeeHousingBase tile = TileUtil.getTile(inv.player.world, buf.readBlockPos(), TileBeeHousingBase.class);
+		TileBeeHousingBase tile = TileUtil.getTile(inv.player.level, buf.readBlockPos(), TileBeeHousingBase.class);
 		boolean hasFrames = buf.readBoolean();
 		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
 		return new ContainerBeeHousing(windowId, inv, tile, hasFrames, icon);    //TODO nullability.
@@ -45,7 +45,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
-		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getWorld(), tile.getPos());
+		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getLevel(), tile.getBlockPos());
 		if (player.player instanceof ServerPlayerEntity) {
 			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) player.player));
 		}
@@ -57,8 +57,8 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 	private int beeProgress = -1;
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		int beeProgress = tile.getBeekeepingLogic().getBeeProgressPercent();
 		if (this.beeProgress != beeProgress) {

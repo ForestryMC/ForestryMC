@@ -45,7 +45,7 @@ public class FeatureJungle extends FeatureTreeVanilla {
 		if (height > 10) {
 			int branchSpawn = 6;
 			while (branchSpawn < height - 2) {
-				branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.add(0, branchSpawn, 0), girth, 0.5f, 0f, 2, 1, 0.25f));
+				branchCoords.addAll(FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, branchSpawn, 0), girth, 0.5f, 0f, 2, 1, 0.25f));
 				branchSpawn += rand.nextInt(4);
 			}
 		}
@@ -67,10 +67,10 @@ public class FeatureJungle extends FeatureTreeVanilla {
 		int leafSpawn = height + 1;
 		float canopyRadiusMultiplier = height / 7.0f;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 0.5f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 0.5f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn--, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.add(0, leafSpawn, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, 1.9f * canopyRadiusMultiplier + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 	}
 }

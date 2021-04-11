@@ -41,7 +41,7 @@ public class InventoryRaintank extends InventoryAdapterTile<TileRaintank> {
 	}
 
 	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemstack, Direction side) {
+	public boolean canTakeItemThroughFace(int slotIndex, ItemStack itemstack, Direction side) {
 		return slotIndex == SLOT_PRODUCT;
 	}
 }

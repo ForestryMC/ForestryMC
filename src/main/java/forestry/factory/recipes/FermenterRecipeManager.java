@@ -35,7 +35,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.fromStacks(resource), fermentationValue, modifier, output.getFluid(), liquid));
+		addRecipe(new FermenterRecipe(IForestryRecipe.anonymous(), Ingredient.of(resource), fermentationValue, modifier, output.getFluid(), liquid));
 	}
 
 	@Override

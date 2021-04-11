@@ -39,13 +39,13 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
 
 	public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileMailbox tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileMailbox.class);
+		TileMailbox tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileMailbox.class);
 		return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
 	}
 
 	public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
 		super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
-		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.world, playerInventory.player.getGameProfile());
+		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.level, playerInventory.player.getGameProfile());
 
 		if (inventory instanceof POBox) {
 			this.mailInventory = (POBox) inventory;
@@ -61,11 +61,11 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
-		ItemStack stack = super.slotClick(slotId, dragType_or_button, clickTypeIn, player);
+	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+		ItemStack stack = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
-			if (!player.world.isRemote && mailInventory != null) {
+			if (!player.level.isClientSide && mailInventory != null) {
 				POBoxInfo info = mailInventory.getPOBoxInfo();
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
 			}

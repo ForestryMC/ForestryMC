@@ -7,8 +7,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.ItemGroups;
@@ -18,13 +16,15 @@ import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
 
+import genetics.api.individual.IGenome;
+
 public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorativeLeaves> implements IColoredItem {
 	public ItemBlockDecorativeLeaves(BlockDecorativeLeaves block) {
-		super(block, new Item.Properties().group(ItemGroups.tabArboriculture));
+		super(block, new Item.Properties().tab(ItemGroups.tabArboriculture));
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemStack) {
+	public ITextComponent getName(ItemStack itemStack) {
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getDefinition();
 		String unlocalizedSpeciesName = treeDefinition.getUnlocalizedName();

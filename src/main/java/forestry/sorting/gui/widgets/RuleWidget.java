@@ -45,7 +45,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 		draw(manager.gui, rule, transform, y, x);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bindTexture(SelectionWidget.TEXTURE);
+			textureManager.bind(SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
@@ -58,7 +58,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 	@Override
 	public void draw(GuiForestry gui, IFilterRuleType selectable, MatrixStack transform, int y, int x) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindTexture(selectable.getTextureMap());
+		textureManager.bind(selectable.getTextureMap());
 
 		TextureAtlasSprite sprite = selectable.getSprite();
 		AbstractGui.blit(transform, x, y, gui.getBlitOffset(), 16, 16, sprite);

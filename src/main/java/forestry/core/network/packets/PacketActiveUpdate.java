@@ -55,7 +55,7 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 			BlockPos pos = data.readBlockPos();
 			boolean active = data.readBoolean();
 
-			ClientWorld world = Minecraft.getInstance().world;
+			ClientWorld world = Minecraft.getInstance().level;
 			TileEntity tile = TileUtil.getTile(world, pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);

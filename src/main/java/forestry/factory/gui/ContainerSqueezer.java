@@ -25,7 +25,7 @@ import forestry.factory.tiles.TileSqueezer;
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 
 	public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileSqueezer tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileSqueezer.class);
+		TileSqueezer tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileSqueezer.class);
 		return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
 	}
 

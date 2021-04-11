@@ -16,7 +16,7 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 	private boolean guiNeedsUpdate = true;
 
 	public static ContainerGeneticFilter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileGeneticFilter tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileGeneticFilter.class);
+		TileGeneticFilter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileGeneticFilter.class);
 		return new ContainerGeneticFilter(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -51,8 +51,8 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 		if (guiNeedsUpdate) {
 			PacketGuiFilterUpdate packet = new PacketGuiFilterUpdate(container);
 			sendPacketToListeners(packet);

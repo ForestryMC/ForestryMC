@@ -28,16 +28,16 @@ public class GameProfileDataSerializer implements IDataSerializer<Optional<GameP
 		} else {
 			buf.writeBoolean(true);
 			GameProfile gameProfile = value.get();
-			buf.writeUniqueId(gameProfile.getId());
-			buf.writeString(gameProfile.getName());
+			buf.writeUUID(gameProfile.getId());
+			buf.writeUtf(gameProfile.getName());
 		}
 	}
 
 	@Override
 	public Optional<GameProfile> read(PacketBuffer buf) {
 		if (buf.readBoolean()) {
-			UUID uuid = buf.readUniqueId();
-			String name = buf.readString(1024);
+			UUID uuid = buf.readUUID();
+			String name = buf.readUtf(1024);
 			GameProfile gameProfile = new GameProfile(uuid, name);
 			return Optional.of(gameProfile);
 		} else {
@@ -46,12 +46,12 @@ public class GameProfileDataSerializer implements IDataSerializer<Optional<GameP
 	}
 
 	@Override
-	public DataParameter<Optional<GameProfile>> createKey(int id) {
+	public DataParameter<Optional<GameProfile>> createAccessor(int id) {
 		return new DataParameter<>(id, this);
 	}
 
 	@Override
-	public Optional<GameProfile> copyValue(Optional<GameProfile> value) {
+	public Optional<GameProfile> copy(Optional<GameProfile> value) {
 		return value;
 	}
 }

@@ -45,7 +45,7 @@ public class CropBasicAgriCraft extends Crop {
 		harvest.remove(0);
 
 		BlockState oldState = world.getBlockState(pos);
-		BlockUtil.setBlockWithBreakSound(world, pos, block.getDefaultState(), oldState);
+		BlockUtil.setBlockWithBreakSound(world, pos, block.defaultBlockState(), oldState);
 		return harvest;
 	}
 

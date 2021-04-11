@@ -26,7 +26,7 @@ import forestry.core.items.ItemBlockWallForestry;
 public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCandleWall> implements IColoredItem {
 
 	public ItemBlockCandle(BlockCandle block, BlockCandleWall wall) {
-		super(block, wall, new Item.Properties().group(ItemGroups.tabApiculture));
+		super(block, wall, new Item.Properties().tab(ItemGroups.tabApiculture));
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCan
 	}
 
 	@Override
-	public String getTranslationKey(ItemStack itemStack) {
-		String value = getBlock().getTranslationKey();
+	public String getDescriptionId(ItemStack itemStack) {
+		String value = getBlock().getDescriptionId();
 		if (itemStack.getTag() != null && itemStack.getTag().contains(BlockCandle.COLOUR_TAG_NAME)) {
 			value = value + ".dyed";
 		}

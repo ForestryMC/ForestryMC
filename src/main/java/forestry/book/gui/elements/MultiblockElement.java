@@ -32,14 +32,14 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import org.lwjgl.opengl.GL11;
+
 import forestry.book.data.structure.BlockData;
 import forestry.book.data.structure.StructureBlockAccess;
 import forestry.book.data.structure.StructureInfo;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
-
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {
@@ -90,7 +90,7 @@ public class MultiblockElement extends GuiElement {
 	@Override
 	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
 		if (lastClick != null) {
-			if (Minecraft.getInstance().mouseHelper.isLeftDown() || Minecraft.getInstance().mouseHelper.isRightDown()) {
+			if (Minecraft.getInstance().mouseHandler.isLeftPressed() || Minecraft.getInstance().mouseHandler.isRightPressed()) {
 				double dx = mouseX - lastClick[0];
 				double dy = mouseY - lastClick[1];
 				float maxSpeed = 10f;
@@ -119,29 +119,29 @@ public class MultiblockElement extends GuiElement {
 		int structureWidth = structureData.structureWidth;
 		int structureHeight = structureData.structureHeight;
 
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.pushMatrix();
-		RenderHelper.disableStandardItemLighting();
+		GlStateManager._enableRescaleNormal();
+		GlStateManager._pushMatrix();
+		RenderHelper.turnOff();
 
-		final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRendererDispatcher();
+		final BlockRendererDispatcher blockRender = Minecraft.getInstance().getBlockRenderer();
 		final TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 
-		GlStateManager.translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
-		GlStateManager.scalef(scale, -scale, 1);
-		GlStateManager.rotatef(rotX, 1, 0, 0);
-		GlStateManager.rotatef(rotY, 0, 1, 0);
+		GlStateManager._translatef(xTranslate, yTranslate, Math.max(structureHeight, Math.max(structureWidth, structureLength)));
+		GlStateManager._scalef(scale, -scale, 1);
+		GlStateManager._rotatef(rotX, 1, 0, 0);
+		GlStateManager._rotatef(rotY, 0, 1, 0);
 
-		GlStateManager.translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
+		GlStateManager._translatef((float) structureLength / -2f, (float) structureHeight / -2f, (float) structureWidth / -2f);
 
-		GlStateManager.disableLighting();
+		GlStateManager._disableLighting();
 
-		if (Minecraft.isAmbientOcclusionEnabled()) {
-			GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		if (Minecraft.useAmbientOcclusion()) {
+			GlStateManager._shadeModel(GL11.GL_SMOOTH);
 		} else {
-			GlStateManager.shadeModel(GL11.GL_FLAT);
+			GlStateManager._shadeModel(GL11.GL_FLAT);
 		}
 
-		textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+		textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
 		for (int h = 0; h < structureData.structureHeight; h++) {
 			for (int l = 0; l < structureData.structureLength; l++) {
 				for (int w = 0; w < structureData.structureWidth; w++) {
@@ -149,20 +149,20 @@ public class MultiblockElement extends GuiElement {
 					if (!blockAccess.isAirBlock(pos)) {
 						BlockState state = blockAccess.getBlockState(pos);
 						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder buffer = tessellator.getBuffer();
+						BufferBuilder buffer = tessellator.getBuilder();
 						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 						//blockRender.renderBlock(state, pos, blockAccess, buffer, new Random(), EmptyModelData.INSTANCE);//TODO: Guide
-						tessellator.draw();
+						tessellator.end();
 					}
 				}
 			}
 		}
-		GlStateManager.popMatrix();
+		GlStateManager._popMatrix();
 
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.enableBlend();
-		RenderHelper.disableStandardItemLighting();
+		RenderHelper.turnOff();
+		GlStateManager._disableRescaleNormal();
+		GlStateManager._shadeModel(GL11.GL_FLAT);
+		GlStateManager._enableBlend();
+		RenderHelper.turnOff();
 	}
 }

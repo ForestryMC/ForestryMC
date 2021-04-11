@@ -43,9 +43,9 @@ public class CropDestroyDouble extends Crop {
 		PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, blockState);
 		NetworkUtil.sendNetworkPacket(packet, pos, world);
 
-		world.removeBlock(pos.up(), false);
+		world.removeBlock(pos.above(), false);
 		if (replantState != null) {
-			world.setBlockState(pos, replantState, Constants.FLAG_BLOCK_SYNC);
+			world.setBlock(pos, replantState, Constants.FLAG_BLOCK_SYNC);
 		} else {
 			world.removeBlock(pos, false);
 		}

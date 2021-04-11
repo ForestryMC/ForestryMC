@@ -26,7 +26,7 @@ public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventor
 	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		PlayerEntity player = playerInv.player;
-		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getHeldItem(hand));
+		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getItemInHand(hand));
 		return new ContainerHabitatLocator(windowId, player, inv);
 	}
 

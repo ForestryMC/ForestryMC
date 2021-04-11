@@ -34,21 +34,21 @@ import forestry.core.config.Constants;
 public class BlockStump extends TorchBlock {
 
 	public BlockStump() {
-		super(Block.Properties.create(Material.MISCELLANEOUS)
-			.hardnessAndResistance(0.0f)
-			.sound(SoundType.WOOD), ParticleTypes.FLAME);
+		super(Block.Properties.of(Material.DECORATION)
+				.strength(0.0f)
+				.sound(SoundType.WOOD), ParticleTypes.FLAME);
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-		ItemStack heldItem = playerIn.getHeldItem(hand);
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+		ItemStack heldItem = playerIn.getItemInHand(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			BlockState activatedState = ApicultureBlocks.CANDLE.with(BlockCandle.STATE, BlockCandle.State.ON);
-			worldIn.setBlockState(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
+			worldIn.setBlock(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
 			TileCandle tc = new TileCandle();
 			tc.setColour(DyeColor.WHITE.getColorValue()); // default to white
 			tc.setLit(true);
-			worldIn.setTileEntity(pos, tc);
+			worldIn.setBlockEntity(pos, tc);
 			return ActionResultType.SUCCESS;
 		}
 

@@ -17,11 +17,11 @@ import forestry.arboriculture.IWoodTyped;
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
 	public static Properties createWoodProperties(IWoodType woodType) {
-		return Block.Properties.create(Material.WOOD)
-			.hardnessAndResistance(woodType.getHardness(), woodType.getHardness() * 1.5F)
-			.sound(SoundType.WOOD)
-			.harvestTool(ToolType.AXE)
-			.harvestLevel(0);
+		return Block.Properties.of(Material.WOOD)
+				.strength(woodType.getHardness(), woodType.getHardness() * 1.5F)
+				.sound(SoundType.WOOD)
+				.harvestTool(ToolType.AXE)
+				.harvestLevel(0);
 	}
 
 	private final boolean fireproof;

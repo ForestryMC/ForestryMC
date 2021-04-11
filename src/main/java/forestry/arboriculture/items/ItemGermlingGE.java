@@ -65,7 +65,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	private final EnumGermlingType type;
 
 	public ItemGermlingGE(EnumGermlingType type) {
-		super(new Item.Properties().group(ItemGroups.tabArboriculture));
+		super(new Item.Properties().tab(ItemGroups.tabArboriculture));
 		this.type = type;
 	}
 
@@ -86,7 +86,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public ITextComponent getDisplayName(ItemStack itemStack) {
+	public ITextComponent getName(ItemStack itemStack) {
 		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
 			return new StringTextComponent("Unknown");
 		}
@@ -100,8 +100,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> subItems) {
-		if (this.isInGroup(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
 	}
@@ -154,13 +154,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		BlockRayTraceResult traceResult = (BlockRayTraceResult) rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		BlockRayTraceResult traceResult = (BlockRayTraceResult) getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
 		BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(playerIn, handIn, traceResult));
 
-		ItemStack itemStack = playerIn.getHeldItem(handIn);
+		ItemStack itemStack = playerIn.getItemInHand(handIn);
 		if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
-			BlockPos pos = traceResult.getPos();
+			BlockPos pos = traceResult.getBlockPos();
 
 			Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemStack);
 			if (treeOptional.isPresent()) {
@@ -188,7 +188,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 		}
 
-		if (worldIn.isRemote) {
+		if (worldIn.isClientSide) {
 			return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
 		} else {
 			pollinatable.mateWith(tree);
@@ -208,11 +208,11 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
 		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 		BlockState hitBlock = worldIn.getBlockState(pos);
-		if (!hitBlock.isReplaceable(context)) {
-			if (!worldIn.isAirBlock(pos.up())) {
+		if (!hitBlock.canBeReplaced(context)) {
+			if (!worldIn.isEmptyBlock(pos.above())) {
 				return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
 			}
-			pos = pos.up();
+			pos = pos.above();
 		}
 
 		if (tree.canStay(worldIn, pos)) {

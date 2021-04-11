@@ -8,16 +8,9 @@ import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
-
-import genetics.api.alleles.IAllele;
-import genetics.api.alleles.IAlleleValue;
-import genetics.api.individual.IChromosomeType;
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-import genetics.api.mutation.IMutation;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
@@ -30,6 +23,13 @@ import forestry.core.gui.elements.lib.IElementGroup;
 import forestry.core.gui.elements.lib.IElementLayout;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.utils.Translator;
+
+import genetics.api.alleles.IAllele;
+import genetics.api.alleles.IAlleleValue;
+import genetics.api.individual.IChromosomeType;
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
+import genetics.api.mutation.IMutation;
 
 public class DatabaseElement extends VerticalLayout implements IDatabaseElement {
 	private DatabaseMode mode = DatabaseMode.ACTIVE;
@@ -160,9 +160,9 @@ public class DatabaseElement extends VerticalLayout implements IDatabaseElement 
 	}
 
 	private IElementLayout addSplitText(int width, String text, Style style) {
-		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		IElementLayout vertical = new VerticalLayout(width);
-		for (ITextProperties splitText : fontRenderer.func_238425_b_(new StringTextComponent(text), 70)) {
+		for (IReorderingProcessor splitText : fontRenderer.split(new StringTextComponent(text), 70)) {
 			vertical.label(splitText).setStyle(style);
 		}
 		return vertical;

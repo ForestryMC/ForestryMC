@@ -69,7 +69,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, title);
 		this.tile = container.getTile();
 		this.transformer = tile.getTransformer();
-		this.ySize = 233;
+		this.imageHeight = 233;
 
 		widgetManager.add(new TankWidget(widgetManager, 152, 17, 0));
 
@@ -77,10 +77,10 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		window.add(new ClimateBarElement(61, 57, transformer, ClimateType.HUMIDITY));
 
 		rangeBar = window.add(new ScrollBarElement(10, 17, 12, 58, SCROLLBAR_SLIDER))
-			.setParameters(this, 1, 16, 1);
+				.setParameters(this, 1, 16, 1);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
 			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).mergeStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).withStyle(TextFormatting.GRAY));
 		});
 		window.add(new CircleButton(30, 37));
 
@@ -118,14 +118,14 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.drawGuiContainerBackgroundLayer(transform, partialTicks, mouseY, mouseX);
-		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), xSize / 2, 23);
-		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), xSize / 2, 47);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+		super.renderBg(transform, partialTicks, mouseY, mouseX);
+		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), imageWidth / 2, 23);
+		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), imageWidth / 2, 47);
 	}
 
 	private void drawCenteredString(MatrixStack transform, String text, int x, int y) {
-		minecraft.fontRenderer.drawStringWithShadow(transform, text, guiLeft + (float) (x - (double) minecraft.fontRenderer.getStringWidth(text) / 2), (float) guiTop + y, 16777215);
+		minecraft.font.drawShadow(transform, text, leftPos + (float) (x - (double) minecraft.font.width(text) / 2), (float) topPos + y, 16777215);
 	}
 
 	public void setClimate(ClimateType type, String text) {
@@ -148,7 +148,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	public void sendClimateUpdate() {
 		IClimateState targetedState = transformer.getTarget();
 		if (targetedState.isPresent()) {
-			BlockPos pos = tile.getPos();
+			BlockPos pos = tile.getBlockPos();
 			NetworkUtil.sendToServer(new PacketSelectClimateTargeted(pos, targetedState));
 		}
 	}

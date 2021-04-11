@@ -23,7 +23,7 @@ import forestry.mail.tiles.TileTrader;
 public class ContainerTradeName extends ContainerTile<TileTrader> {
 
 	public static ContainerTradeName fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
-		TileTrader tile = TileUtil.getTile(inv.player.world, data.readBlockPos(), TileTrader.class);
+		TileTrader tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileTrader.class);
 		return new ContainerTradeName(windowId, inv, tile);    //TODO nullability.
 	}
 
@@ -36,14 +36,14 @@ public class ContainerTradeName extends ContainerTile<TileTrader> {
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		if (tile.isLinked()) {
-			for (Object crafter : listeners) {
+			for (Object crafter : containerListeners) {
 				if (crafter instanceof ServerPlayerEntity) {
 					ServerPlayerEntity player = (ServerPlayerEntity) crafter;
-					tile.openGui(player, tile.getPos());    //TODO correct pos?
+					tile.openGui(player, tile.getBlockPos());    //TODO correct pos?
 				}
 			}
 		}

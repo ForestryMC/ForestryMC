@@ -45,13 +45,13 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 	}
 
 	@Override
-	public final boolean canInteractWith(PlayerEntity PlayerEntity) {
-		return entity.isUsableByPlayer(PlayerEntity);
+	public final boolean stillValid(PlayerEntity PlayerEntity) {
+		return entity.stillValid(PlayerEntity);
 	}
 
 	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+	public void broadcastChanges() {
+		super.broadcastChanges();
 
 		if (entity instanceof IErrorLogicSource) {
 			IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;

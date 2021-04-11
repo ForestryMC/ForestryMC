@@ -24,7 +24,7 @@ import forestry.mail.gui.ContainerCatalogue;
 public class ItemCatalogue extends ItemWithGui {
 
 	public ItemCatalogue() {
-		super((new Item.Properties()).group(ItemGroupForestry.tabForestry));
+		super((new Item.Properties()).tab(ItemGroupForestry.tabForestry));
 	}
 
 	@Nullable

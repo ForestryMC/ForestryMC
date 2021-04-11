@@ -49,7 +49,7 @@ public class TickHandlerCoreServer {
 		}
 
 		if (Config.enableBackpackResupply) {
-			for (PlayerEntity obj : event.world.getPlayers()) {
+			for (PlayerEntity obj : event.world.players()) {
 				for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
 					handler.resupply(obj);
 				}
@@ -58,7 +58,7 @@ public class TickHandlerCoreServer {
 
 		if (Config.doRetrogen && event.world instanceof ServerWorld) {
 			ServerWorld world = (ServerWorld) event.world;
-			RegistryKey<World> dimId = world.getDimensionKey();
+			RegistryKey<World> dimId = world.dimension();
 			if (checkForRetrogen.contains(dimId)) {
 				List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
 				Iterator<ChunkCoords> iterator = chunkList.iterator();
@@ -85,10 +85,10 @@ public class TickHandlerCoreServer {
 	}
 
 	private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
-		ServerChunkProvider chunkProvider = server.getChunkProvider();
+		ServerChunkProvider chunkProvider = server.getChunkSource();
 		for (int x = 0; x <= 1; x++) {
 			for (int z = 0; z <= 1; z++) {
-				if (!chunkProvider.chunkExists(chunkCoords.x + x, chunkCoords.z + z)) {
+				if (!chunkProvider.hasChunk(chunkCoords.x + x, chunkCoords.z + z)) {
 					return false;
 				}
 			}
@@ -134,7 +134,7 @@ public class TickHandlerCoreServer {
 				this.x = 0;
 				this.z = 0;
 			} else {
-				this.dimension = ((World) world).getDimensionKey();
+				this.dimension = ((World) world).dimension();
 				this.x = chunk.getPos().x;
 				this.z = chunk.getPos().z;
 			}

@@ -16,8 +16,8 @@ public class BlockHoneyComb extends Block implements IColoredBlock {
 	public final EnumHoneyComb type;
 
 	public BlockHoneyComb(EnumHoneyComb type) {
-		super(Block.Properties.create(Material.WOOL)
-			.hardnessAndResistance(1F));
+		super(Block.Properties.of(Material.WOOL)
+				.strength(1F));
 		this.type = type;
 	}
 

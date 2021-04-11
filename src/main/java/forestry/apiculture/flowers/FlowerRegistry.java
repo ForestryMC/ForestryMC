@@ -33,9 +33,6 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IIndividual;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -50,6 +47,9 @@ import forestry.api.genetics.flowers.IFlowerRegistry;
 import forestry.core.utils.VectUtil;
 import forestry.core.utils.datastructures.BlockStateSet;
 import forestry.core.utils.datastructures.WeightedCollection;
+
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IIndividual;
 
 public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelper {
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
@@ -154,8 +154,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	public Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee) {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(beeHousing);
 		Vector3i area = getArea(bee.getGenome(), beeModifier);
-		BlockPos minPos = beeHousing.getCoordinates().add(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
-		BlockPos maxPos = minPos.add(area);
+		BlockPos minPos = beeHousing.getCoordinates().offset(-area.getX() / 2, -area.getY() / 2, -area.getZ() / 2);
+		BlockPos maxPos = minPos.offset(area);
 		World world = beeHousing.getWorldObj();
 		return VectUtil.getAllInBoxFromCenterMutable(world, minPos, beeHousing.getCoordinates(), maxPos);
 	}
@@ -246,8 +246,8 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			}
 		}
 
-		final BlockState blockState = potentialChances.getRandom(world.rand);
-		return blockState != null && world.setBlockState(pos, blockState);
+		final BlockState blockState = potentialChances.getRandom(world.random);
+		return blockState != null && world.setBlockAndUpdate(pos, blockState);
 	}
 
 	private static class AcceptedFlowerPredicate implements IBlockPosPredicate {
@@ -267,7 +267,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 
 		@Override
 		public boolean test(World world, BlockPos blockPos) {
-			if (world.isBlockLoaded(blockPos)) {
+			if (world.hasChunkAt(blockPos)) {
 				BlockState blockState = world.getBlockState(blockPos);
 				if (!blockState.getBlock().isAir(blockState, world, blockPos)) {
 					for (IFlowerAcceptableRule acceptableRule : acceptableRules) {

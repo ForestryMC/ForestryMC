@@ -57,7 +57,7 @@ public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSu
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name;
 	}
 

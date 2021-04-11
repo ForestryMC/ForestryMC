@@ -106,14 +106,14 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<FabricatorR
 		IFabricatorRecipe recipe = recipeWrapper.getRecipe();
 
 		Ingredient plan = recipe.getPlan();
-		if (!plan.hasNoMatchingItems()) {
-			guiItemStacks.set(planSlot, plan.getMatchingStacks()[0]);
+		if (!plan.isEmpty()) {
+			guiItemStacks.set(planSlot, plan.getItems()[0]);
 		}
 
 		List<ItemStack> smeltingInput = new ArrayList<>();
 		Fluid recipeFluid = recipe.getLiquid().getFluid();
 		for (IFabricatorSmeltingRecipe s : getSmeltingInputs(manager).get(recipeFluid)) {
-			Optional<ItemStack> itemStack = Arrays.stream(s.getResource().getMatchingStacks()).findFirst();
+			Optional<ItemStack> itemStack = Arrays.stream(s.getResource().getItems()).findFirst();
 			itemStack.ifPresent(smeltingInput::add);
 		}
 

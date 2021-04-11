@@ -31,7 +31,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 	private final IErrorLogic errorLogic;
 
 	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
-		this.pos = tile.getPos();
+		this.pos = tile.getBlockPos();
 		this.errorLogic = errorLogicSource.getErrorLogic();
 	}
 
@@ -52,7 +52,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
 			BlockPos pos = data.readBlockPos();
 
-			TileUtil.actOnTile(player.world, pos, IErrorLogicSource.class, errorSourceTile -> {
+			TileUtil.actOnTile(player.level, pos, IErrorLogicSource.class, errorSourceTile -> {
 				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
 				errorLogic.readData(data);
 			});

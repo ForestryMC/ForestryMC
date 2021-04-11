@@ -41,12 +41,12 @@ public class StructureBlockAccess implements IBlockReader {
 
 	@Nullable
 	@Override
-	public TileEntity getTileEntity(BlockPos pos) {
+	public TileEntity getBlockEntity(BlockPos pos) {
 		return null;
 	}
 
 	@Override
-	public int getLightValue(BlockPos pos) {
+	public int getLightEmission(BlockPos pos) {
 		return 15 << 20 | 15 << 4;
 	}
 
@@ -61,12 +61,12 @@ public class StructureBlockAccess implements IBlockReader {
 				if (z >= 0 && z < structure[y][x].length) {
 					int index = y * (data.structureLength * data.structureWidth) + x * data.structureWidth + z;
 					if (index <= data.getLimiter()) {
-						return structure[y][x][z] != null ? structure[y][x][z] : Blocks.AIR.getDefaultState();
+						return structure[y][x][z] != null ? structure[y][x][z] : Blocks.AIR.defaultBlockState();
 					}
 				}
 			}
 		}
-		return Blocks.AIR.getDefaultState();
+		return Blocks.AIR.defaultBlockState();
 	}
 
 	@Override

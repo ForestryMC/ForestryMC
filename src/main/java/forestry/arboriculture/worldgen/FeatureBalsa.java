@@ -28,11 +28,11 @@ public class FeatureBalsa extends FeatureTree {
 
 	@Override
 	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		BlockPos topPos = startPos.add(0, height + 1, 0);
+		BlockPos topPos = startPos.offset(0, height + 1, 0);
 		BlockPos.Mutable leafCenter = new BlockPos.Mutable();
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
-		FeatureHelper.addBlock(world, leafCenter.setPos(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.addBlock(world, leafCenter.set(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR);
 		leafCenter.move(Direction.DOWN);
 		FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
 		leafCenter.move(Direction.DOWN);

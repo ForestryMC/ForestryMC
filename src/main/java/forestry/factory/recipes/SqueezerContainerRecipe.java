@@ -84,30 +84,30 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerContainerRecipe> {
 
 		@Override
-		public SqueezerContainerRecipe read(ResourceLocation recipeId, JsonObject json) {
-			ItemStack emptyContainer = RecipeSerializers.item(JSONUtils.getJsonObject(json, "container"));
-			int processingTime = JSONUtils.getInt(json, "time");
-			ItemStack remnants = RecipeSerializers.item(JSONUtils.getJsonObject(json, "remnants"));
-			float remnantsChance = JSONUtils.getFloat(json, "remnantsChance");
+		public SqueezerContainerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+			ItemStack emptyContainer = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "container"));
+			int processingTime = JSONUtils.getAsInt(json, "time");
+			ItemStack remnants = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "remnants"));
+			float remnantsChance = JSONUtils.getAsFloat(json, "remnantsChance");
 
 			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);
 		}
 
 		@Override
-		public SqueezerContainerRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-			ItemStack emptyContainer = buffer.readItemStack();
+		public SqueezerContainerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+			ItemStack emptyContainer = buffer.readItem();
 			int processingTime = buffer.readVarInt();
-			ItemStack remnants = buffer.readItemStack();
+			ItemStack remnants = buffer.readItem();
 			float remnantsChance = buffer.readFloat();
 
 			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, SqueezerContainerRecipe recipe) {
-			buffer.writeItemStack(recipe.emptyContainer);
+		public void toNetwork(PacketBuffer buffer, SqueezerContainerRecipe recipe) {
+			buffer.writeItem(recipe.emptyContainer);
 			buffer.writeVarInt(recipe.processingTime);
-			buffer.writeItemStack(recipe.remnants);
+			buffer.writeItem(recipe.remnants);
 			buffer.writeFloat(recipe.remnantsChance);
 		}
 	}

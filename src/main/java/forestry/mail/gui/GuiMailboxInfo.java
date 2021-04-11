@@ -54,7 +54,7 @@ public class GuiMailboxInfo extends AbstractGui {
 	private final ResourceLocation textureAlert = new ForestryResource(Constants.TEXTURE_PATH_GUI + "/mailalert.png");
 
 	private GuiMailboxInfo() {
-		fontRenderer = Minecraft.getInstance().fontRenderer;
+		fontRenderer = Minecraft.getInstance().font;
 	}
 
 	public void render(MatrixStack transform) {
@@ -66,27 +66,27 @@ public class GuiMailboxInfo extends AbstractGui {
 		int y = 0;
 
 		Minecraft minecraft = Minecraft.getInstance();
-		MainWindow win = minecraft.getMainWindow();
+		MainWindow win = minecraft.getWindow();
 		if (Config.mailAlertXPosition == XPosition.RIGHT) {
-			x = win.getScaledWidth() - WIDTH;
+			x = win.getGuiScaledWidth() - WIDTH;
 		}
 		if (Config.mailAlertYPosition == YPosition.BOTTOM) {
-			y = win.getScaledHeight() - HEIGHT;
+			y = win.getGuiScaledHeight() - HEIGHT;
 		}
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
-		textureManager.bindTexture(textureAlert);
+		textureManager.bind(textureAlert);
 
 		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
-		fontRenderer.drawString(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
-		fontRenderer.drawString(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
+		fontRenderer.draw(transform, Integer.toString(poInfo.playerLetters), x + 27 + getCenteredOffset(Integer.toString(poInfo.playerLetters), 22), y + 5, 0xffffff);
+		fontRenderer.draw(transform, Integer.toString(poInfo.tradeLetters), x + 75 + getCenteredOffset(Integer.toString(poInfo.tradeLetters), 22), y + 5, 0xffffff);
 	}
 
 	protected int getCenteredOffset(String string, int xWidth) {
-		return (xWidth - fontRenderer.getStringWidth(string)) / 2;
+		return (xWidth - fontRenderer.width(string)) / 2;
 	}
 
 	public boolean hasPOBoxInfo() {
@@ -106,7 +106,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		}
 
 		if (playJingle) {
-			SoundUtil.playSoundEvent(SoundEvents.ENTITY_PLAYER_LEVELUP);
+			SoundUtil.playSoundEvent(SoundEvents.PLAYER_LEVELUP);
 		}
 
 		this.poInfo = info;

@@ -51,12 +51,12 @@ public class ItemForestryTool extends ItemForestry {
 	}
 
 	@Override
-	public boolean canHarvestBlock(BlockState block) {
+	public boolean isCorrectToolForDrops(BlockState block) {
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = block.getMaterial();
-			return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
+			return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
 		}
-		return super.canHarvestBlock(block);
+		return super.isCorrectToolForDrops(block);
 	}
 
 	@Override
@@ -68,34 +68,34 @@ public class ItemForestryTool extends ItemForestry {
 		}
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
-			return material != Material.IRON && material != Material.ANVIL && material != Material.ROCK ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
+			return material != Material.METAL && material != Material.HEAVY_METAL && material != Material.STONE ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
 		}
 		return super.getDestroySpeed(itemstack, state);
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
 		Hand hand = context.getHand();
-		BlockPos pos = context.getPos();
-		World world = context.getWorld();
-		Direction facing = context.getFace();
+		BlockPos pos = context.getClickedPos();
+		World world = context.getLevel();
+		Direction facing = context.getClickedFace();
 
 		if (CoreItems.BRONZE_SHOVEL.itemEqual(this)) {
-			ItemStack heldItem = player.getHeldItem(hand);
-			if (!player.canPlayerEdit(pos.offset(facing), facing, heldItem)) {
+			ItemStack heldItem = player.getItemInHand(hand);
+			if (!player.mayUseItemAt(pos.relative(facing), facing, heldItem)) {
 				return ActionResultType.FAIL;
 			} else {
 				BlockState BlockState = world.getBlockState(pos);
 				Block block = BlockState.getBlock();
 
-				if (facing != Direction.DOWN && world.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
-					BlockState BlockState1 = Blocks.GRASS_PATH.getDefaultState();
-					world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				if (facing != Direction.DOWN && world.getBlockState(pos.above()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
+					BlockState BlockState1 = Blocks.GRASS_PATH.defaultBlockState();
+					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-					if (!world.isRemote) {
-						world.setBlockState(pos, BlockState1, 11);
-						heldItem.damageItem(1, player, this::onBroken);
+					if (!world.isClientSide) {
+						world.setBlock(pos, BlockState1, 11);
+						heldItem.hurtAndBreak(1, player, this::onBroken);
 					}
 
 					return ActionResultType.SUCCESS;
@@ -122,18 +122,18 @@ public class ItemForestryTool extends ItemForestry {
 	//	}
 
 	public void onBroken(LivingEntity player) {
-		World world = player.world;
+		World world = player.level;
 
-		if (!world.isRemote && !remnants.isEmpty()) {
-			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getPosX(), player.getPosY(), player.getPosZ());
+		if (!world.isClientSide && !remnants.isEmpty()) {
+			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getX(), player.getY(), player.getZ());
 		}
 	}
 
 	//TODO - check the consumer is called how I think it is
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (state.getBlockHardness(worldIn, pos) != 0) {
-			stack.damageItem(1, entityLiving, this::onBroken);
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+		if (state.getDestroySpeed(worldIn, pos) != 0) {
+			stack.hurtAndBreak(1, entityLiving, this::onBroken);
 		}
 		return true;
 	}

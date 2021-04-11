@@ -66,10 +66,10 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 			}
 		}
 		Ingredient plan = recipe.getPlan();
-		if (!plan.hasNoMatchingItems()) {
-			selectedElement.item(91, 1, plan.getMatchingStacks()[0]);
+		if (!plan.isEmpty()) {
+			selectedElement.item(91, 1, plan.getItems()[0]);
 		}
-		selectedElement.item(91, 39, recipe.getCraftingGridRecipe().getRecipeOutput());
+		selectedElement.item(91, 39, recipe.getCraftingGridRecipe().getResultItem());
 		NonNullList<Ingredient> smeltingInput = NonNullList.create();
 		Fluid recipeFluid = recipe.getLiquid().getFluid();
 		for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipeFluid)) {

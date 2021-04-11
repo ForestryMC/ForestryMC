@@ -17,6 +17,7 @@ import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IChromosomeValue;
+import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.EmptyOrganismType;
 import genetics.api.organism.IOrganism;
@@ -36,6 +37,25 @@ public class GeneticHelper {
 	public static final IOrganism<?> EMPTY = EmptyOrganism.INSTANCE;
 
 	private GeneticHelper() {
+	}
+
+	public static boolean isValidTemplate(@Nullable IAllele[] template, IRootDefinition<?> root) {
+		return template != null && template.length >= root.map(value -> value.getTemplates().getKaryotype().size()).orElse(0);
+	}
+
+	public static boolean isValidTemplate(@Nullable IAllele[] template, IIndividualRoot<?> root) {
+		return template != null && template.length >= root.getTemplates().getKaryotype().size();
+	}
+
+	@Nullable
+	public static IGenome genomeFromTemplate(String templateName, IRootDefinition<?> rootDef) {
+		return rootDef.map(root -> {
+			IAllele[] template = root.getTemplates().getTemplate(templateName);
+			if (GeneticHelper.isValidTemplate(template, root)) {
+				return root.getKaryotype().templateAsGenome(template);
+			}
+			return null;
+		}).orElse(null);
 	}
 
 	public static <I extends IIndividual> IOrganism<I> createOrganism(ItemStack itemStack, IOrganismType type, IRootDefinition<? extends IIndividualRoot<I>> root) {

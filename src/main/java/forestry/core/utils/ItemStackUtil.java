@@ -15,20 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
-import java.util.stream.IntStream;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -63,7 +58,7 @@ public abstract class ItemStackUtil {
 		//			}
 		//		}
 
-		return ItemStack.areItemStackTagsEqual(lhs, rhs);
+		return ItemStack.tagMatches(lhs, rhs);
 	}
 
 
@@ -106,7 +101,7 @@ public abstract class ItemStackUtil {
 			return;
 		}
 
-		if (!receptor.isItemEqual(giver)) {
+		if (!receptor.sameItem(giver)) {
 			return;
 		}
 
@@ -142,7 +137,7 @@ public abstract class ItemStackUtil {
 
 			boolean matched = false;
 			for (ItemStack cached : condensed) {
-				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
+				if (cached.sameItem(stack) && ItemStack.tagMatches(cached, stack)) {
 					cached.grow(stack.getCount());
 					matched = true;
 				}
@@ -168,7 +163,7 @@ public abstract class ItemStackUtil {
 	}
 
 	public static int[] createConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
-		return createConsume(set, inventory.getSizeInventory(), inventory::getStackInSlot, craftingTools);
+		return createConsume(set, inventory.getContainerSize(), inventory::getItem, craftingTools);
 	}
 
 	public static int[] createConsume(NonNullList<Ingredient> set, int stockCount, Function<Integer, ItemStack> stock, boolean craftingTools) {
@@ -178,11 +173,11 @@ public abstract class ItemStackUtil {
 		int[] reqAmounts = new int[stockCount];
 		int found = 0;
 		for (Ingredient ing : set) {
-			if (ing.hasNoMatchingItems()) {
+			if (ing.isEmpty()) {
 				found++;
 				continue;
 			}
-			for (ItemStack stack : ing.getMatchingStacks()) {
+			for (ItemStack stack : ing.getItems()) {
 				int curFound = found;
 				for (int i = 0; i < reqAmounts.length; i++) {
 					ItemStack offer = stock.apply(i);
@@ -274,7 +269,7 @@ public abstract class ItemStackUtil {
 		if (base.getTag() == null || base.getTag().isEmpty()) {
 			return true;
 		} else {
-			return ItemStack.areItemStackTagsEqual(base, comparison);
+			return ItemStack.tagMatches(base, comparison);
 		}
 	}
 
@@ -323,18 +318,18 @@ public abstract class ItemStackUtil {
 	}
 
 	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
-		if (items.isEmpty() || world.isRemote) {
+		if (items.isEmpty() || world.isClientSide) {
 			return;
 		}
 
 		float f1 = 0.7F;
-		double d = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
-		double d1 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
-		double d2 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5D;
+		double d = world.random.nextFloat() * f1 + (1.0F - f1) * 0.5D;
+		double d1 = world.random.nextFloat() * f1 + (1.0F - f1) * 0.5D;
+		double d2 = world.random.nextFloat() * f1 + (1.0F - f1) * 0.5D;
 		ItemEntity entityitem = new ItemEntity(world, x + d, y + d1, z + d2, items);
-		entityitem.setPickupDelay(delayForPickup);
+		entityitem.setPickUpDelay(delayForPickup);
 
-		world.addEntity(entityitem);
+		world.addFreshEntity(entityitem);
 	}
 
 

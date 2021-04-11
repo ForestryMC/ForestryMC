@@ -41,59 +41,59 @@ public class AIAvoidPlayers extends Goal {
 		this.minDistance = minDistance;
 		this.farSpeed = farSpeed;
 		this.nearSpeed = nearSpeed;
-		this.pathNavigator = mob.getNavigator();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE));
+		this.pathNavigator = mob.getNavigation();
+		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
 	@Override
-	public boolean shouldExecute() {
+	public boolean canUse() {
 
-		player = mob.world.getClosestPlayer(mob, minDistance);
+		player = mob.level.getNearestPlayer(mob, minDistance);
 
 		if (player == null) {
 			return false;
 		}
 
-		if (!mob.getEntitySenses().canSee(player)) {
+		if (!mob.getSensing().canSee(player)) {
 			return false;
 		}
 
-		Vector3d randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(mob, 16, 7,
-			player.getPositionVec());
+		Vector3d randomTarget = RandomPositionGenerator.getPosAvoid(mob, 16, 7,
+				player.position());
 
 		if (randomTarget == null) {
 			return false;
 		}
 
-		if (player.getDistanceSq(randomTarget.x, randomTarget.y, randomTarget.z) < player.getDistance(mob)) {
+		if (player.distanceToSqr(randomTarget.x, randomTarget.y, randomTarget.z) < player.distanceTo(mob)) {
 			return false;
 		}
 
-		path = pathNavigator.getPathToPos(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
+		path = pathNavigator.createPath(randomTarget.x, randomTarget.y, randomTarget.z, 0);    //TODO what does the 4th param mean?
 		return path != null;
 	}
 
 	@Override
-	public boolean shouldContinueExecuting() {
-		return !this.pathNavigator.noPath();
+	public boolean canContinueToUse() {
+		return !this.pathNavigator.isDone();
 	}
 
 	@Override
-	public void startExecuting() {
-		this.pathNavigator.setPath(path, farSpeed);
+	public void start() {
+		this.pathNavigator.moveTo(path, farSpeed);
 	}
 
 	@Override
-	public void resetTask() {
+	public void stop() {
 		player = null;
 	}
 
 	@Override
 	public void tick() {
-		if (player != null && mob.getDistance(player) < 49.0D) {
-			mob.getNavigator().setSpeed(nearSpeed);
+		if (player != null && mob.distanceTo(player) < 49.0D) {
+			mob.getNavigation().setSpeedModifier(nearSpeed);
 		} else {
-			mob.getNavigator().setSpeed(farSpeed);
+			mob.getNavigation().setSpeedModifier(farSpeed);
 		}
 	}
 }

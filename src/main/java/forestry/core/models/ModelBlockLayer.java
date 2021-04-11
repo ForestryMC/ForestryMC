@@ -38,7 +38,7 @@ public class ModelBlockLayer<K> extends ModelBlockCached<Block, K> {
 			TextureAtlasSprite[] textures = new TextureAtlasSprite[6];
 			for (Direction direction : Direction.VALUES) {
 				TextureAtlasSprite texture = provider.getSprite(key, direction, layer);
-				textures[direction.getIndex()] = texture != null ? texture : ResourceUtil.getMissingTexture();
+				textures[direction.get3DDataValue()] = texture != null ? texture : ResourceUtil.getMissingTexture();
 			}
 			baker.addBlockModel(textures, provider.getColorIndex(key, layer));
 		}

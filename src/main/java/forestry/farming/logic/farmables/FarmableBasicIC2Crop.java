@@ -44,7 +44,7 @@ public class FarmableBasicIC2Crop implements IFarmable {
 	//	}
 	@Override
 	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
-		TileEntity crop = world.getTileEntity(pos);
+		TileEntity crop = world.getBlockEntity(pos);
 		//CropBasicIC2Crop.isIC2Crop(crop)) {
 		//			babysitCrop(crop);
 		return false;
@@ -53,7 +53,7 @@ public class FarmableBasicIC2Crop implements IFarmable {
 	@Nullable
 	@Override
 	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		TileEntity crop = world.getTileEntity(pos);
+		TileEntity crop = world.getBlockEntity(pos);
 		if (crop == null) {
 			return null;
 		}

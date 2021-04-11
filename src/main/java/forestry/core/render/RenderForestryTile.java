@@ -20,8 +20,8 @@ public class RenderForestryTile<T extends TileEntity> extends TileEntityRenderer
 
 	@Override
 	public void render(T tile, float partialTicks, MatrixStack transformation, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
-		World worldObj = tile.getWorld();
-		if (worldObj == null || !worldObj.isBlockLoaded(tile.getPos())) {
+		World worldObj = tile.getLevel();
+		if (worldObj == null || !worldObj.hasChunkAt(tile.getBlockPos())) {
 			return;
 		}
 		helper.update(partialTicks, transformation, buffer, combinedLight, packetLight);

@@ -17,17 +17,7 @@ import java.util.Locale;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-
-import net.minecraftforge.common.BiomeDictionary;
-
-import genetics.api.alleles.IAlleleRegistry;
-import genetics.api.alleles.IAlleleTemplate;
-import genetics.api.alleles.IAlleleTemplateBuilder;
-import genetics.api.individual.IGenome;
-import genetics.api.root.ITemplateContainer;
-import genetics.api.root.components.ComponentKey;
-import genetics.api.root.components.ComponentKeys;
-import genetics.api.root.components.IRootComponent;
+import net.minecraft.world.biome.Biome;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -48,6 +38,14 @@ import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.items.EnumCraftingMaterial;
 
+import genetics.api.alleles.IAlleleRegistry;
+import genetics.api.alleles.IAlleleTemplate;
+import genetics.api.alleles.IAlleleTemplateBuilder;
+import genetics.api.individual.IGenome;
+import genetics.api.root.ITemplateContainer;
+import genetics.api.root.components.ComponentKey;
+import genetics.api.root.components.ComponentKeys;
+import genetics.api.root.components.IRootComponent;
 import static forestry.apiculture.features.ApicultureItems.BEE_COMBS;
 
 public enum BeeDefinition implements IBeeDefinition {
@@ -302,7 +300,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(STEADFAST, VALIANT, 6)
-				.restrictBiomeType(BiomeDictionary.Type.FOREST);
+					.restrictBiomeType(Biome.Category.FOREST);
 		}
 	},
 
@@ -326,7 +324,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void registerMutations() {
 			for (BeeDefinition parent2 : EnumSet.of(MODEST, TROPICAL)) {
 				registerMutation(CULTIVATED, parent2, 60)
-					.restrictBiomeType(BiomeDictionary.Type.NETHER);
+						.restrictBiomeType(Biome.Category.NETHER);
 			}
 		}
 	},
@@ -350,7 +348,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		protected void registerMutations() {
 			for (BeeDefinition parent2 : EnumSet.of(CULTIVATED, MODEST, TROPICAL)) {
 				registerMutation(SINISTER, parent2, 40)
-					.restrictBiomeType(BiomeDictionary.Type.NETHER);
+						.restrictBiomeType(Biome.Category.NETHER);
 			}
 		}
 	},
@@ -374,7 +372,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(SINISTER, FIENDISH, 25)
-				.restrictBiomeType(BiomeDictionary.Type.NETHER);
+					.restrictBiomeType(Biome.Category.NETHER);
 		}
 	},
 
@@ -824,7 +822,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(MEADOWS, DILIGENT, 12)
-				.restrictBiomeType(BiomeDictionary.Type.PLAINS);
+					.restrictBiomeType(Biome.Category.PLAINS);
 		}
 	},
 	FARMERLY(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xD39728), new Color(0xffdc16)) {
@@ -842,7 +840,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(RURAL, UNWEARY, 10)
-				.restrictBiomeType(BiomeDictionary.Type.PLAINS);
+					.restrictBiomeType(Biome.Category.PLAINS);
 		}
 	},
 	AGRARIAN(BeeBranchDefinition.AGRARIAN, "arator", true, new Color(0xFFCA75), new Color(0xFFE047)) {
@@ -863,7 +861,7 @@ public enum BeeDefinition implements IBeeDefinition {
 		@Override
 		protected void registerMutations() {
 			registerMutation(FARMERLY, INDUSTRIOUS, 6)
-				.restrictBiomeType(BiomeDictionary.Type.PLAINS);
+					.restrictBiomeType(Biome.Category.PLAINS);
 		}
 	},
 

@@ -17,15 +17,15 @@ public enum EnumBackpackType implements IStringSerializable {
 	NORMAL, WOVEN, NATURALIST;
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name().toLowerCase(Locale.ENGLISH);
 	}
 
 	public ModelResourceLocation getLocation(BackpackMode mode) {
-		String typeName = getString();
+		String typeName = getSerializedName();
 		if (this == NATURALIST) {
-			typeName = NORMAL.getString();
+			typeName = NORMAL.getSerializedName();
 		}
-		return new ModelResourceLocation(Constants.MOD_ID + ":backpacks/" + typeName + "_" + mode.getString(), "inventory");
+		return new ModelResourceLocation(Constants.MOD_ID + ":backpacks/" + typeName + "_" + mode.getSerializedName(), "inventory");
 	}
 }

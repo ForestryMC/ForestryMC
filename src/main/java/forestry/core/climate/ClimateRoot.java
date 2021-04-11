@@ -37,7 +37,7 @@ public class ClimateRoot implements IClimateRoot {
 
 	@Override
 	public LazyOptional<IClimateListener> getListener(World world, BlockPos pos) {
-		TileEntity tileEntity = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity != null && ClimateCapabilities.CLIMATE_LISTENER != null) {
 			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
 		}
@@ -63,8 +63,8 @@ public class ClimateRoot implements IClimateRoot {
 	@Override
 	public IWorldClimateHolder getWorldClimate(World world) {
 		//TODO - need to make sure this is only called server side...
-		DimensionSavedDataManager storage = ((ServerWorld) world).getSavedData();
-		WorldClimateHolder holder = storage.getOrCreate(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
+		DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
+		WorldClimateHolder holder = storage.computeIfAbsent(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}
