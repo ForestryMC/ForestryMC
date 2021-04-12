@@ -83,6 +83,7 @@ import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.network.PacketRegistryApiculture;
+import forestry.apiculture.particles.ApicultureParticles;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
 import forestry.apiculture.trigger.ApicultureTriggers;
@@ -145,6 +146,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		proxy = DistExecutor.safeRunForDist(() -> ProxyApicultureClient::new, () -> ProxyApiculture::new);
 		ForgeUtils.registerSubscriber(this);
 		MinecraftForge.EVENT_BUS.register(HabitatLocatorLogic.class);
+
+		ApicultureParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		if (Config.enableVillagers) {

@@ -43,6 +43,8 @@ import genetics.api.individual.IGenome;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleRender {
+	private static final RedstoneParticleData HONEY_DUST = new RedstoneParticleData(0.9F, 0.75F, 0.0F, 1.0F);
+
 	public static boolean shouldSpawnParticle(World world) {
 		if (!Config.enableParticleFX) {
 			return false;
@@ -113,7 +115,7 @@ public class ParticleRender {
 			return;
 		}
 
-		ParticleManager effectRenderer = Minecraft.getInstance().particleEngine;
+		world.addParticle(HONEY_DUST, x, y, z, 0, 0, 0);
 		//		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 

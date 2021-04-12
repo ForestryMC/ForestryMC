@@ -35,6 +35,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.genetics.alleles.AlleleManager;
@@ -63,6 +64,7 @@ import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
+import forestry.core.particles.CoreParticles;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.utils.ClimateUtil;
@@ -80,6 +82,8 @@ public class ModuleCore extends BlankForestryModule {
 	public ModuleCore() {
 		MinecraftForge.EVENT_BUS.register(this);
 		ForgeUtils.registerSubscriber(this);
+
+		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	@Override
