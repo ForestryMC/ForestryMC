@@ -25,11 +25,11 @@ import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.entities.ParticleBeeExplore;
-import forestry.apiculture.entities.ParticleBeeRoundTrip;
-import forestry.apiculture.entities.ParticleBeeTargetEntity;
 import forestry.apiculture.entities.ParticleSnow;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
+import forestry.apiculture.particles.ApicultureParticles;
+import forestry.apiculture.particles.BeeParticleData;
+import forestry.apiculture.particles.BeeTargetParticleData;
 import forestry.core.config.Config;
 import forestry.core.entities.ParticleIgnition;
 import forestry.core.entities.ParticleSmoke;
@@ -90,8 +90,9 @@ public class ParticleRender {
 				List<LivingEntity> entitiesInRange = AlleleEffect.getEntitiesInRange(genome, housing, LivingEntity.class);
 				if (!entitiesInRange.isEmpty()) {
 					LivingEntity entity = entitiesInRange.get(world.random.nextInt(entitiesInRange.size()));
-					Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
-					effectRenderer.add(particle);
+					//Particle particle = new ParticleBeeTargetEntity(world, particleStart, entity, color);
+					//effectRenderer.add(particle);
+					world.addParticle(new BeeTargetParticleData(entity, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
 					return;
 				}
 			}
@@ -99,14 +100,16 @@ public class ParticleRender {
 
 		if (randomInt < 75 && !flowerPositions.isEmpty()) {
 			BlockPos destination = flowerPositions.get(world.random.nextInt(flowerPositions.size()));
-			Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
-			effectRenderer.add(particle);
+			//Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
+			//effectRenderer.add(particle);
+			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE, destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
 		} else {
 			Vector3i area = AlleleEffect.getModifiedArea(genome, housing);
 			Vector3i offset = housing.getCoordinates().offset(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 			BlockPos destination = VectUtil.getRandomPositionInArea(world.random, area).offset(offset);
-			Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
-			effectRenderer.add(particle);
+			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_EXPLORER_PARTICLE, destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
+			//Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
+			//effectRenderer.add(particle);
 		}
 	}
 

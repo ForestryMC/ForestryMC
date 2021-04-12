@@ -26,9 +26,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class BeeExploreParticle extends SpriteTexturedParticle {
 	private final Vector3d origin;
 
-	public BeeExploreParticle(ClientWorld world, Vector3d origin, BlockPos destination, int color) {
-		super(world, origin.x(), origin.y(), origin.z(), 0.0D, 0.0D, 0.0D);
-		this.origin = origin;
+	public BeeExploreParticle(ClientWorld world, double x, double y, double z, BlockPos destination, int color) {
+		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		this.origin = new Vector3d(x, y, z);
 
 		this.xd = (destination.getX() + 0.5 - this.x) * 0.015;
 		this.yd = (destination.getY() + 0.5 - this.y) * 0.015;
@@ -120,7 +120,7 @@ public class BeeExploreParticle extends SpriteTexturedParticle {
 
 		@Override
 		public Particle createParticle(BeeParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			BeeExploreParticle particle = new BeeExploreParticle(worldIn, typeIn.particleStart, typeIn.direction, typeIn.color);
+			BeeExploreParticle particle = new BeeExploreParticle(worldIn, x, y, z, typeIn.destination, typeIn.color);
 			particle.pickSprite(spriteSet);
 			return particle;
 		}

@@ -1,6 +1,9 @@
 package forestry.apiculture.particles;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.particles.ParticleType;
+
+import com.mojang.serialization.Codec;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -21,7 +24,13 @@ public class ApicultureParticles {
 
 	public static final ParticleTypeRegistryObject<BeeParticleData> BEE_ROUND_TRIP_PARTICLE = PARTICLE_TYPES.register("bee_round_trip_particle", BeeParticleType::new);
 
-	public static final ParticleTypeRegistryObject<BeeParticleData> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", BeeParticleType::new);
+	public static final ParticleTypeRegistryObject<BeeTargetParticleData> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", () -> new ParticleType<BeeTargetParticleData>(false, BeeTargetParticleData.DESERIALIZER) {
+
+		@Override
+		public Codec<BeeTargetParticleData> codec() {
+			return BeeTargetParticleData.CODEC;
+		}
+	});
 
 	@SuppressWarnings("resource")
 	@SubscribeEvent

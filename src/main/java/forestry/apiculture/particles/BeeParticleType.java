@@ -28,6 +28,6 @@ public class BeeParticleType extends ParticleType<BeeParticleData> {
 	@Nonnull
 	@Override
 	public Codec<BeeParticleData> codec() {
-		return BeeParticleData.CODEC;
+		return BeeParticleData.createCodec(this);
 	}
 }

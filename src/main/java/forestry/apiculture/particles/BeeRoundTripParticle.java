@@ -27,9 +27,9 @@ public class BeeRoundTripParticle extends SpriteTexturedParticle {
 	private final Vector3d origin;
 	private final BlockPos destination;
 
-	public BeeRoundTripParticle(ClientWorld world, Vector3d origin, BlockPos destination, int color) {
-		super(world, origin.x, origin.y, origin.z, 0.0D, 0.0D, 0.0D);
-		this.origin = origin;
+	public BeeRoundTripParticle(ClientWorld world, double x, double y, double z, BlockPos destination, int color) {
+		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		this.origin = new Vector3d(x, y, z);
 
 		this.destination = destination;
 		this.xd = (destination.getX() + 0.5 - this.x) * 0.02 + 0.1 * random.nextFloat();
@@ -123,7 +123,7 @@ public class BeeRoundTripParticle extends SpriteTexturedParticle {
 
 		@Override
 		public Particle createParticle(BeeParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-			BeeRoundTripParticle particle = new BeeRoundTripParticle(worldIn, typeIn.particleStart, typeIn.direction, typeIn.color);
+			BeeRoundTripParticle particle = new BeeRoundTripParticle(worldIn, x, y, z, typeIn.destination, typeIn.color);
 			particle.pickSprite(spriteSet);
 			return particle;
 		}
