@@ -60,7 +60,7 @@ public class FarmableSapling implements IFarmable {
 		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.below(), true);    //TODO isInside
 		ActionResultType actionResult = copy.useOn(new ItemUseContext(player, Hand.MAIN_HAND, result));
 		player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
-		if (actionResult == ActionResultType.SUCCESS) {
+		if (actionResult.consumesAction()) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.defaultBlockState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
 			return true;
