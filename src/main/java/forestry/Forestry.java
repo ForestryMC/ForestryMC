@@ -36,6 +36,7 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -256,9 +257,10 @@ public class Forestry {
 		DataGenerator generator = event.getGenerator();
 
 		if (event.includeServer()) {
-			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator);
+			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
 			generator.addProvider(blockTagsProvider);
-			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider));
+			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new WoodBlockStateProvider(generator));
 			generator.addProvider(new WoodBlockModelProvider(generator));

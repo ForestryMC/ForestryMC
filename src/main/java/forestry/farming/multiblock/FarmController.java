@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -428,6 +429,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public IFarmLogic getFarmLogic(FarmDirection direction) {
 		return farmLogics.get(direction);
+	}
+
+	@Override
+	public Collection<IFarmLogic> getFarmLogics() {
+		return farmLogics.values();
 	}
 
 	@Override

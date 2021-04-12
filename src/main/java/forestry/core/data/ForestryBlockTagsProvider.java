@@ -2,9 +2,8 @@ package forestry.core.data;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
@@ -15,10 +14,12 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.blocks.EnumResourceType;
+import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -28,14 +29,14 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	@Nullable
 	private Set<ResourceLocation> filter = null;
 
-	public ForestryBlockTagsProvider(DataGenerator generator) {
-		super(generator);
+	public ForestryBlockTagsProvider(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper) {
+		super(generator, Constants.MOD_ID, existingFileHelper);
 	}
 
 	@Override
 	protected void addTags() {
 		//super.registerTags();
-		filter = this.builders.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
+		filter = new HashSet<>(this.builders.keySet());
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			tag(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
 		}
@@ -92,6 +93,8 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		tag(ForestryTags.Blocks.STORAGE_BLOCKS_TIN).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block());
 		tag(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block());
 		tag(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.BRONZE).block());
+
+		tag(Tags.Blocks.DIRT).add(CoreBlocks.HUMUS.block());
 	}
 
 	@SafeVarargs

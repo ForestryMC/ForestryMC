@@ -15,9 +15,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.arboriculture.features.ArboricultureItems;
+import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.mail.features.MailItems;
 
@@ -25,8 +27,8 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Nullable
 	private Set<ResourceLocation> filter = null;
 
-	public ForestryItemTagsProvider(DataGenerator generator, ForestryBlockTagsProvider blockTagsProvider) {
-		super(generator, blockTagsProvider);
+	public ForestryItemTagsProvider(DataGenerator generator, ForestryBlockTagsProvider blockTagsProvider, @Nullable ExistingFileHelper existingFileHelper) {
+		super(generator, blockTagsProvider, Constants.MOD_ID, existingFileHelper);
 	}
 
 	@Override

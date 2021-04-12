@@ -1,151 +1,30 @@
 package forestry.cultivation.inventory;
 
-import java.util.Optional;
-import java.util.Stack;
-
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmLogic;
 import forestry.api.farming.IFarmable;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.fluids.TankManager;
-import forestry.core.inventory.InventoryAdapterRestricted;
-import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.SlotUtil;
 import forestry.cultivation.tiles.TilePlanter;
 import forestry.farming.FarmHelper;
 import forestry.farming.multiblock.IFarmInventoryInternal;
+import forestry.farming.multiblock.InventoryPlantation;
 
-public class InventoryPlanter extends InventoryAdapterRestricted implements IFarmInventoryInternal {
-	public static final int SLOT_RESOURCES_1 = 0;
-	public static final int SLOT_RESOURCES_COUNT = 4;
-	public static final int SLOT_GERMLINGS_1 = 4;
-	public static final int SLOT_GERMLINGS_COUNT = 4;
-	public static final int SLOT_PRODUCTION_1 = 8;
-	public static final int SLOT_PRODUCTION_COUNT = 4;
-
-	public static final int SLOT_FERTILIZER = 12;
-	public static final int SLOT_FERTILIZER_COUNT = 1;
-	public static final int SLOT_CAN = 13;
-	public static final int SLOT_CAN_COUNT = 1;
-
-	public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT + SLOT_PRODUCTION_COUNT + SLOT_FERTILIZER_COUNT + SLOT_CAN_COUNT;
-
-	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
-
-	private final TilePlanter housing;
-
-	private final IInventory resourcesInventory;
-	private final IInventory germlingsInventory;
-	private final IInventory productInventory;
-	private final IInventory fertilizerInventory;
+public class InventoryPlanter extends InventoryPlantation<TilePlanter> implements IFarmInventoryInternal {
+	public static InventoryPlantation.InventoryConfig CONFIG = new InventoryPlantation.InventoryConfig(
+			0, 4,
+			4, 4,
+			8, 4,
+			12, 1,
+			13, 1
+	);
 
 	public InventoryPlanter(TilePlanter housing) {
-		super(SLOT_COUNT, "Items");
-		this.housing = housing;
-
-		this.resourcesInventory = new InventoryMapper(this, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT);
-		this.germlingsInventory = new InventoryMapper(this, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT);
-		this.productInventory = new InventoryMapper(this, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
-		this.fertilizerInventory = new InventoryMapper(this, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT);
+		super(housing, CONFIG);
 	}
 
 	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (SlotUtil.isSlotInRange(slotIndex, SLOT_FERTILIZER, SLOT_FERTILIZER_COUNT)) {
-			return acceptsAsFertilizer(itemStack);
-		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_GERMLINGS_1, SLOT_GERMLINGS_COUNT)) {
-			return acceptsAsSeedling(itemStack);
-		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_RESOURCES_1, SLOT_RESOURCES_COUNT)) {
-			return acceptsAsResource(itemStack);
-		} else if (SlotUtil.isSlotInRange(slotIndex, SLOT_CAN, SLOT_CAN_COUNT)) {
-			Optional<FluidStack> fluid = FluidUtil.getFluidContained(itemStack);
-			return fluid.map(f -> housing.getTankManager().canFillFluidType(f)).orElse(false);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean canTakeItemThroughFace(int slotIndex, ItemStack stack, Direction side) {
-		return SlotUtil.isSlotInRange(slotIndex, SLOT_PRODUCTION_1, SLOT_PRODUCTION_COUNT);
-	}
-
-	@Override
-	public boolean hasResources(NonNullList<ItemStack> resources) {
-		return InventoryUtil.contains(resourcesInventory, resources);
-	}
-
-	@Override
-	public void removeResources(NonNullList<ItemStack> resources) {
-		InventoryUtil.removeSets(resourcesInventory, 1, resources, null, false, false, true);
-	}
-
-	@Override
-	public boolean acceptsAsSeedling(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return false;
-		}
-
-		IFarmLogic logic = housing.getFarmLogic();
-		return logic.getProperties().isAcceptedSeedling(itemstack);
-
-	}
-
-	@Override
-	public boolean acceptsAsResource(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return false;
-		}
-
-		IFarmLogic logic = housing.getFarmLogic();
-		return logic.getProperties().isAcceptedResource(itemstack);
-
-	}
-
-	@Override
-	public boolean acceptsAsFertilizer(ItemStack itemstack) {
-		if (itemstack.isEmpty()) {
-			return false;
-		}
-
-		return ForestryAPI.farmRegistry.getFertilizeValue(itemstack) > 0;
-	}
-
-	@Override
-	public IInventory getProductInventory() {
-		return productInventory;
-	}
-
-	@Override
-	public IInventory getGermlingsInventory() {
-		return germlingsInventory;
-	}
-
-	@Override
-	public IInventory getResourcesInventory() {
-		return resourcesInventory;
-	}
-
-	@Override
-	public IInventory getFertilizerInventory() {
-		return fertilizerInventory;
-	}
-
-	public void drainCan(TankManager tankManager) {
-		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
-	}
-
 	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos) {
 		for (FarmDirection direction : FarmDirection.values()) {
 			if (plantGermling(germling, player, pos, direction)) {
@@ -164,56 +43,6 @@ public class InventoryPlanter extends InventoryAdapterRestricted implements IFar
 
 		if (germling.plantSaplingAt(player, germlingStack, player.level, pos)) {
 			germlingsInventory.removeItem(index, 1);
-			return true;
-		}
-		return false;
-	}
-
-	public void addProduce(ItemStack produce) {
-		int added = InventoryUtil.addStack(productInventory, produce, true);
-		produce.shrink(added);
-	}
-
-	public void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
-		for (ItemStack harvest : harvested) {
-			int added = InventoryUtil.addStack(productInventory, harvest, true);
-			harvest.shrink(added);
-			if (!harvest.isEmpty()) {
-				pendingProduce.push(harvest);
-			}
-		}
-	}
-
-	public boolean tryAddPendingProduce(Stack<ItemStack> pendingProduce) {
-		IInventory productInventory = getProductInventory();
-
-		ItemStack next = pendingProduce.peek();
-		boolean added = InventoryUtil.tryAddStack(productInventory, next, true, true);
-
-		if (added) {
-			pendingProduce.pop();
-		}
-
-		return added;
-	}
-
-	public int getFertilizerValue() {
-		ItemStack fertilizerStack = getItem(SLOT_FERTILIZER);
-		if (fertilizerStack.isEmpty()) {
-			return 0;
-		}
-
-		int fertilizerValue = ForestryAPI.farmRegistry.getFertilizeValue(fertilizerStack);
-		if (fertilizerValue > 0) {
-			return fertilizerValue * FERTILIZER_MODIFIER;
-		}
-		return 0;
-	}
-
-	public boolean useFertilizer() {
-		ItemStack fertilizer = getItem(SLOT_FERTILIZER);
-		if (acceptsAsFertilizer(fertilizer)) {
-			removeItem(SLOT_FERTILIZER, 1);
 			return true;
 		}
 		return false;

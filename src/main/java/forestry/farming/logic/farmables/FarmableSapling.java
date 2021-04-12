@@ -38,19 +38,13 @@ import forestry.farming.logic.crops.CropDestroy;
 
 public class FarmableSapling implements IFarmable {
 	protected final ItemStack germling;
-	protected final boolean ignoreMetadata;
 	protected final Block saplingBlock;
 	protected final ItemStack[] windfall;
 
 	public FarmableSapling(final ItemStack germling, final ItemStack[] windfall) {
-		this(germling, windfall, true);
-	}
-
-	public FarmableSapling(final ItemStack germling, final ItemStack[] windfall, boolean addSubItems) {
 		this.germling = germling;
 		this.windfall = windfall;
 		this.saplingBlock = ItemStackUtil.getBlock(germling);
-		this.ignoreMetadata = addSubItems;
 	}
 
 	@Override
@@ -85,22 +79,22 @@ public class FarmableSapling implements IFarmable {
 
 	@Override
 	public boolean isGermling(ItemStack itemstack) {
-		if (ignoreMetadata) {
-			return ItemStack.isSame(germling, new ItemStack((itemstack.getItem())));
-		}
-		return ItemStack.isSame(germling, itemstack);
+		//if (ignoreMetadata) {
+		return ItemStack.isSame(germling, new ItemStack((itemstack.getItem())));
+		/*}
+		return ItemStack.isSame(germling, itemstack);*/
 	}
 
 	@Override
 	public void addInformation(IFarmableInfo info) {
 		NonNullList<ItemStack> germlings = NonNullList.create();
-		if (ignoreMetadata) {
-			Item germlingItem = germling.getItem();
-			ItemGroup tab = germlingItem.getItemCategory();
-			if (tab != null) {
-				germlingItem.fillItemCategory(tab, germlings);
-			}
+		//if (ignoreMetadata) {
+		Item germlingItem = germling.getItem();
+		ItemGroup tab = germlingItem.getItemCategory();
+		if (tab != null) {
+			germlingItem.fillItemCategory(tab, germlings);
 		}
+		//}
 		if (germlings.isEmpty()) {
 			germlings.add(germling);
 		}

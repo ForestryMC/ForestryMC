@@ -36,7 +36,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (resourceStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 11 + j * 18, 65 + i * 18, resourceStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.SLOT_RESOURCES_1 + index)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 11 + j * 18, 65 + i * 18, resourceStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.CONFIG.resourcesStart + index)));
 				}
 			}
 		}
@@ -46,7 +46,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (germlingStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 71 + j * 18, 65 + i * 18, germlingStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.SLOT_GERMLINGS_1 + index)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 71 + j * 18, 65 + i * 18, germlingStacks.get(index), this.getMenu().getSlot(36 + InventoryPlanter.CONFIG.germlingsStart + index)));
 				}
 			}
 		}
@@ -56,12 +56,12 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 			for (int j = 0; j < 2; j++) {
 				int index = j + i * 2;
 				if (productionStacks.size() == 4) {
-					widgetManager.add(new GhostItemStackWidget(widgetManager, 131 + j * 18, 65 + i * 18, productionStacks.get(index), getMenu().getSlot(36 + InventoryPlanter.SLOT_PRODUCTION_1 + j + i * 2)));
+					widgetManager.add(new GhostItemStackWidget(widgetManager, 131 + j * 18, 65 + i * 18, productionStacks.get(index), getMenu().getSlot(36 + InventoryPlanter.CONFIG.productionStart + j + i * 2)));
 				}
 			}
 		}
 
-		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, CoreItems.FERTILIZER_COMPOUND.stack(), getMenu().getSlot(36 + InventoryPlanter.SLOT_FERTILIZER)));
+		widgetManager.add(new GhostItemStackWidget(widgetManager, 83, 22, CoreItems.FERTILIZER_COMPOUND.stack(), getMenu().getSlot(36 + InventoryPlanter.CONFIG.fertilizerStart)));
 	}
 
 	@Override

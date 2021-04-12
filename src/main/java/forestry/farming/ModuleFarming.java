@@ -47,8 +47,8 @@ import forestry.farming.logic.farmables.FarmableAgingCrop;
 import forestry.farming.logic.farmables.FarmableChorus;
 import forestry.farming.logic.farmables.FarmableGE;
 import forestry.farming.logic.farmables.FarmableGourd;
+import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.farming.logic.farmables.FarmableStacked;
-import forestry.farming.logic.farmables.FarmableVanillaSapling;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.farming.triggers.FarmingTriggers;
@@ -90,7 +90,30 @@ public class ModuleFarming extends BlankForestryModule {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 		IFarmRegistry registry = ForestryAPI.farmRegistry;
-		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableVanillaSapling());
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.OAK_SAPLING),
+				new ItemStack[]{new ItemStack(Items.APPLE), new ItemStack(Items.STICK)}
+		));
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.BIRCH_SAPLING),
+				new ItemStack[]{new ItemStack(Items.STICK)}
+		));
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.SPRUCE_SAPLING),
+				new ItemStack[]{new ItemStack(Items.STICK)}
+		));
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.JUNGLE_SAPLING),
+				new ItemStack[]{new ItemStack(Items.STICK), new ItemStack(Items.COCOA_BEANS)}
+		));
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.DARK_OAK_SAPLING),
+				new ItemStack[]{new ItemStack(Items.STICK)}
+		));
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableSapling(
+				new ItemStack(Blocks.ACACIA_SAPLING),
+				new ItemStack[]{new ItemStack(Items.STICK)}
+		));
 		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
 			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 		}

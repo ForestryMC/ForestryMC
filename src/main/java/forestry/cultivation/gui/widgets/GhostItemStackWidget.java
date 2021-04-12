@@ -54,8 +54,10 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.enableLighting();
 	}
 
+	//TODO: TextComponent
 	private String getDirectionString() {
-		if (slot.getSlotIndex() >= InventoryPlanter.SLOT_PRODUCTION_1 || slot.getSlotIndex() < InventoryPlanter.SLOT_RESOURCES_1 + InventoryPlanter.SLOT_RESOURCES_COUNT) {
+		if (slot.getSlotIndex() >= InventoryPlanter.CONFIG.productionStart
+				|| slot.getSlotIndex() < InventoryPlanter.CONFIG.productionStart + InventoryPlanter.CONFIG.productionCount) {
 			return "";
 		}
 		int index = slot.getSlotIndex() % 4;

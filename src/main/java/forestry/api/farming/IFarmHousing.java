@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.farming;
 
+import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
@@ -14,12 +16,31 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.IErrorLogicSource;
 
+/**
+ * The IFarmHousing describes a forestry farm handler.
+ * <p>
+ * It contains methods to interact with the farm itself.
+ * Can be used in {@link IFarmLogic}'s to remove fluid or add products.
+ */
 public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
 
+	/**
+	 * Position of the farm. Mostly used by internal logic.
+	 * <p>
+	 * If the farm is a multiblock, the position is based in the center.
+	 *
+	 * @return Position of the farm.
+	 */
 	BlockPos getCoords();
 
+	/**
+	 * @return The area of the farmland of the farm.
+	 */
 	Vector3i getArea();
 
+	/**
+	 * @return The offset used by the farm to create a bounding box for the harvest logic.
+	 */
 	Vector3i getOffset();
 
 	/**
@@ -27,12 +48,35 @@ public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
 	 */
 	boolean doWork();
 
+	/**
+	 * Checks if the given liquid and amount is contained in the internal tank.
+	 *
+	 * @param liquid The liquid to be checked
+	 * @return True if the tank contains the liquid, false otherwise
+	 */
 	boolean hasLiquid(FluidStack liquid);
 
+	/**
+	 * Removes the given liquid from the internal tank if possible.
+	 *
+	 * @param liquid The liquid to be removed
+	 */
 	void removeLiquid(FluidStack liquid);
 
+	/**
+	 * The current temperature value of this object.
+	 * The range is based on the vanilla values of the biomes.
+	 *
+	 * @return A value between 0.0f and 2.0f.
+	 */
 	float getExactTemperature();
 
+	/**
+	 * The current humidity value of this object.
+	 * The range is based on the vanilla values of the biomes.
+	 *
+	 * @return A value between 0.0f and 2.0f.
+	 */
 	float getExactHumidity();
 
 	/**
@@ -48,28 +92,88 @@ public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
 		return false;
 	}
 
+	/**
+	 * If the farmland area is square.
+	 *
+	 * @return True if the farmland area is a square, false otherwise
+	 */
 	default boolean isSquare() {
 		return false;
 	}
 
+	/**
+	 * Checks if the farm can plant soil.
+	 *
+	 * @param manual If true the manual mode of the farm is enabled
+	 * @return True if the farm is able to place soil, false otherwise
+	 */
 	default boolean canPlantSoil(boolean manual) {
 		return !manual;
 	}
 
 	/* INTERACTION WITH HATCHES */
+
+	/**
+	 * @return The inventory instance of this farm.
+	 */
 	IFarmInventory getFarmInventory();
 
+	/**
+	 * Adds a product to an internal buffer of items, which will later be added to the inventory.
+	 *
+	 * @param stack The stack to be added to the inventory.
+	 */
 	void addPendingProduct(ItemStack stack);
 
 	/* LOGIC */
+
+	/**
+	 * Sets the farm logic of one direction of the farm.
+	 *
+	 * @param direction The direction of the farm to be set
+	 * @param logic     The farm logic that direction should be set to
+	 */
 	void setFarmLogic(FarmDirection direction, IFarmLogic logic);
 
+	/**
+	 * Resets the farm logic off the given direction to the default logic (ARBOREAL).
+	 *
+	 * @param direction The direction to reset
+	 */
 	void resetFarmLogic(FarmDirection direction);
 
+	/**
+	 * Receives the logic of the given direction.
+	 *
+	 * @param direction The direction of the logic to get.
+	 * @return The logic that is located on this side of the farm.
+	 */
 	IFarmLogic getFarmLogic(FarmDirection direction);
 
+	/**
+	 * Receives a collection with all logics of this farm.
+	 * By default this ether contains 1 or 4 logics.
+	 *
+	 * @return A collection which contains all logics of this farm.
+	 */
+	Collection<IFarmLogic> getFarmLogics();
+
 	/* GUI */
+
+	/**
+	 * The percentage of fertilizer stored my the farm multiplied by the given scale.
+	 *
+	 * @param scale Value used to scale the fertilizer percentage
+	 * @return The percentage of fertilizer stored my the farm multiplied by the given scale.
+	 */
 	int getStoredFertilizerScaled(int scale);
 
+	/**
+	 * Receives the corner position of the given direction.
+	 * Mainly used for internal logic to position the crops and germlings.
+	 *
+	 * @param direction The direction to receive
+	 * @return The position of the direction corner.
+	 */
 	BlockPos getFarmCorner(FarmDirection direction);
 }

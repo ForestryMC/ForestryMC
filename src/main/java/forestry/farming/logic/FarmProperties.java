@@ -93,7 +93,6 @@ public final class FarmProperties implements IFarmProperties {
 	@Override
 	public boolean isAcceptedResource(ItemStack itemstack) {
 		for (Soil soil : soils) {
-			//TODO this is deprecated??
 			if (soil.getResource().sameItem(itemstack)) {
 				return true;
 			}

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -109,9 +111,15 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 
 	}
 
+	//TODO: Empty / fake farm property, this is a stupid work around
 	@Override
 	public IFarmLogic getFarmLogic(FarmDirection direction) {
 		return FarmRegistry.getInstance().getProperties(ForestryFarmIdentifier.ARBOREAL).getLogic(false);
+	}
+
+	@Override
+	public Collection<IFarmLogic> getFarmLogics() {
+		return Collections.emptySet();
 	}
 
 	@Override
@@ -207,17 +215,17 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		}
 
 		@Override
-		public boolean acceptsAsSeedling(ItemStack itemstack) {
+		public boolean acceptsAsSeedling(ItemStack stack) {
 			return false;
 		}
 
 		@Override
-		public boolean acceptsAsResource(ItemStack itemstack) {
+		public boolean acceptsAsResource(ItemStack stack) {
 			return false;
 		}
 
 		@Override
-		public boolean acceptsAsFertilizer(ItemStack itemstack) {
+		public boolean acceptsAsFertilizer(ItemStack stack) {
 			return false;
 		}
 

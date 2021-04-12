@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -266,6 +268,11 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	public IFarmLogic getFarmLogic() {
 		return logic;
+	}
+
+	@Override
+	public Collection<IFarmLogic> getFarmLogics() {
+		return Collections.singleton(logic);
 	}
 
 	@Override

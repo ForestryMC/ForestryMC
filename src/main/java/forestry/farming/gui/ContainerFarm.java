@@ -38,35 +38,35 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 		// Resources
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_RESOURCES_1 + j + i * 2, 123 + j * 18, 22 + i * 18));
+				this.addSlot(new SlotFiltered(tile, InventoryFarm.CONFIG.resourcesStart + j + i * 2, 123 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Germlings
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_GERMLINGS_1 + j + i * 2, 164 + j * 18, 22 + i * 18));
+				this.addSlot(new SlotFiltered(tile, InventoryFarm.CONFIG.germlingsStart + j + i * 2, 164 + j * 18, 22 + i * 18));
 			}
 		}
 
 		// Production 1
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + j + i * 2, 123 + j * 18, 86 + i * 18));
+				this.addSlot(new SlotOutput(tile, InventoryFarm.CONFIG.productionStart + j + i * 2, 123 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Production 2
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				this.addSlot(new SlotOutput(tile, InventoryFarm.SLOT_PRODUCTION_1 + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
+				this.addSlot(new SlotOutput(tile, InventoryFarm.CONFIG.productionStart + 4 + j + i * 2, 164 + j * 18, 86 + i * 18));
 			}
 		}
 
 		// Fertilizer
-		this.addSlot(new SlotFiltered(tile, InventoryFarm.SLOT_FERTILIZER, 63, 95));
+		this.addSlot(new SlotFiltered(tile, InventoryFarm.CONFIG.fertilizerStart, 63, 95));
 		// Can Slot
-		this.addSlot(new SlotLiquidIn(tile, InventoryFarm.SLOT_CAN, 15, 95));
+		this.addSlot(new SlotLiquidIn(tile, InventoryFarm.CONFIG.canStart, 15, 95));
 	}
 
 	@Override
