@@ -36,7 +36,8 @@ public class ForestryLootTableProvider implements IDataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private final DataGenerator dataGenerator;
-	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK));
+	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
+			ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK), Pair.of(ForestryChestLootTables::new, LootParameterSets.CHEST));
 
 	public ForestryLootTableProvider(DataGenerator dataGeneratorIn) {
 		this.dataGenerator = dataGeneratorIn;

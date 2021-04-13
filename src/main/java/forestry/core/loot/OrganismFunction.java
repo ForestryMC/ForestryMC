@@ -32,11 +32,11 @@ public class OrganismFunction extends LootFunction {
 		this.speciesUid = speciesUid;
 	}
 
-	public static LootFunction.Builder fromDefinition(ISpeciesDefinition definition) {
+	public static LootFunction.Builder<?> fromDefinition(ISpeciesDefinition<?> definition) {
 		return fromUID(definition.getSpecies().getRegistryName());
 	}
 
-	public static LootFunction.Builder fromUID(ResourceLocation speciesUid) {
+	public static LootFunction.Builder<?> fromUID(ResourceLocation speciesUid) {
 		return simpleBuilder((conditions) -> new OrganismFunction(conditions, speciesUid));
 	}
 

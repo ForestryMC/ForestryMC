@@ -1,31 +1,32 @@
 {
+  "type": "minecraft:chest",
   "pools": [
     {
       "name": "forestry_factory_items",
       "rolls": 1,
       "entries": [
         {
-          "type": "item",
-          "name": "forestry:broken_bronze_shovel",
-          "weight": 10
+          "type": "minecraft:item",
+          "weight": 30,
+          "name": "forestry:broken_bronze_pickaxe"
         },
         {
-          "type": "item",
-          "name": "forestry:broken_bronze_pickaxe",
-          "weight": 30
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "forestry:broken_bronze_shovel"
         },
         {
-          "type": "item",
-          "name": "forestry:kit_pickaxe",
-          "weight": 10
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "forestry:kit_pickaxe"
         },
         {
-          "type": "item",
-          "name": "forestry:kit_shovel",
-          "weight": 5
+          "type": "minecraft:item",
+          "weight": 5,
+          "name": "forestry:kit_shovel"
         },
         {
-          "type": "empty",
+          "type": "minecraft:empty",
           "weight": 50
         }
       ]

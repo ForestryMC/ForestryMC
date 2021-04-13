@@ -53,16 +53,12 @@ public class ApicultureItems {
 	public static final FeatureItemGroup<ItemOverlay, EnumHoneyDrop> HONEY_DROPS = REGISTRY.itemGroup((type) -> new ItemOverlay(ItemGroups.tabApiculture, type), "honey_drop", EnumHoneyDrop.values());
 	public static final FeatureItemGroup<ItemPropolis, EnumPropolis> PROPOLIS = REGISTRY.itemGroup(ItemPropolis::new, "propolis", EnumPropolis.values());
 	public static final FeatureItem<ItemForestry> HONEYDEW = REGISTRY.item(() -> new ItemForestry(ItemGroups.tabApiculture), "honeydew");
-	//		OreDictionary.registerOre(OreDictUtil.DROP_HONEYDEW, honeydew);
 
 	public static final FeatureItem<ItemForestry> ROYAL_JELLY = REGISTRY.item(() -> new ItemForestry(ItemGroups.tabApiculture), "royal_jelly");
-	//		OreDictionary.registerOre(OreDictUtil.DROP_ROYAL_JELLY, royalJelly);
 
 	public static final FeatureItem<ItemWaxCast> WAX_CAST = REGISTRY.item(ItemWaxCast::new, "wax_cast");
 	public static final FeatureItemGroup<ItemPollenCluster, EnumPollenCluster> POLLEN_CLUSTER = REGISTRY.itemGroup(ItemPollenCluster::new, "pollen_cluster", EnumPollenCluster.VALUES);
 	public static final FeatureItemGroup<ItemHoneyComb, EnumHoneyComb> BEE_COMBS = REGISTRY.itemGroup(ItemHoneyComb::new, "bee_comb", EnumHoneyComb.VALUES);
-	//		OreDictionary.registerOre(OreDictUtil.BEE_COMB, beeComb.getWildcard());
-	//TODO - tags
 
 	// / APIARIST'S CLOTHES
 	public static final FeatureItem<ItemArmorApiarist> APIARIST_HELMET = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.HEAD), "apiarist_helmet");

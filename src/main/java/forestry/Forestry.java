@@ -37,6 +37,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -81,6 +82,7 @@ import forestry.core.data.ForestryBlockStateProvider;
 import forestry.core.data.ForestryBlockTagsProvider;
 import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
+import forestry.core.data.ForestryLootModifierProvider;
 import forestry.core.data.ForestryLootTableProvider;
 import forestry.core.data.ForestryMachineRecipeProvider;
 import forestry.core.data.ForestryRecipeProvider;
@@ -90,6 +92,7 @@ import forestry.core.data.WoodItemModelProvider;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.loot.ConditionLootModifier;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
@@ -270,6 +273,7 @@ public class Forestry {
 			generator.addProvider(new ForestryItemModelProvider(generator));
 			generator.addProvider(new ForestryRecipeProvider(generator));
 			generator.addProvider(new ForestryMachineRecipeProvider(generator));
+			generator.addProvider(new ForestryLootModifierProvider(generator));
 			try {
 				generator.run();
 			} catch (Exception e) {
@@ -344,6 +348,13 @@ public class Forestry {
 			register(registry, ISqueezerContainerRecipe.TYPE, new SqueezerContainerRecipe.Serializer());
 			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
 			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
+		}
+
+
+		@SubscribeEvent
+		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
+			registry.register(ConditionLootModifier.SERIALIZER);
 		}
 
 		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {

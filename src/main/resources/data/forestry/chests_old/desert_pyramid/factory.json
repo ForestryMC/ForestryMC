@@ -1,0 +1,28 @@
+{
+  "pools": [
+    {
+      "name": "forestry_factory_items",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "forestry:ash",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 7,
+                "max": 12
+              }
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

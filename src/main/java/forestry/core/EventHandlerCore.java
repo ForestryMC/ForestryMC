@@ -10,21 +10,15 @@
  ******************************************************************************/
 package forestry.core;
 
-import java.net.URL;
 import java.util.Collection;
-import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.LootTable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IWorld;
 
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -115,10 +109,11 @@ public class EventHandlerCore {
 		}
 	}
 
-	@SubscribeEvent
+	//TODO: Was replaced by the global loot modifiers, should be removes once testing finished
+	/*@SubscribeEvent
 	public static void lootLoad(LootTableLoadEvent event) {
 		if (!event.getName().getNamespace().equals("minecraft")
-				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY)) {
+				&& !event.getName().equals(Constants.VILLAGE_NATURALIST_LOOT_KEY) || !event.getName().getPath().startsWith("chests/")) {
 			return;
 		}
 
@@ -126,7 +121,7 @@ public class EventHandlerCore {
 
 		for (String lootTableFile : ModuleManager.getLootTableFiles()) {
 			ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, event.getName().getPath() + "/" + lootTableFile);
-			URL url = EventHandlerCore.class.getResource("/assets/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
+			URL url = EventHandlerCore.class.getResource("/data/" + resourceLocation.getNamespace() + "/loot_tables/" + resourceLocation.getPath() + ".json");
 			if (url != null) {
 				LootTable forestryChestAdditions = event.getLootTableManager().get(resourceLocation);
 				if (forestryChestAdditions != LootTable.EMPTY) {
@@ -139,7 +134,7 @@ public class EventHandlerCore {
 				}
 			}
 		}
-	}
+	}*/
 
 	@SubscribeEvent
 	public static void onEntityJoinWorld(EntityJoinWorldEvent event) {

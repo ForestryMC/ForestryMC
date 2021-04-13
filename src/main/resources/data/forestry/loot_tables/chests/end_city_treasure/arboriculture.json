@@ -1,17 +1,16 @@
 {
+  "type": "minecraft:chest",
   "pools": [
     {
       "name": "forestry_arboriculture_items",
       "rolls": 1,
       "entries": [
         {
-          "type": "item",
-          "name": "forestry:grafter_proven",
-          "weight": 1
+          "type": "minecraft:item",
+          "name": "forestry:grafter"
         },
         {
-          "type": "empty",
-          "weight": 1
+          "type": "minecraft:empty"
         }
       ]
     }

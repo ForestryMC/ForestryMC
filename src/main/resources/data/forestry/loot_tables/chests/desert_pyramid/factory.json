@@ -1,26 +1,26 @@
 {
+  "type": "minecraft:chest",
   "pools": [
     {
       "name": "forestry_factory_items",
       "rolls": 1,
       "entries": [
         {
-          "type": "item",
-          "name": "forestry:ash",
+          "type": "minecraft:item",
           "functions": [
             {
-              "function": "set_count",
+              "function": "minecraft:set_count",
               "count": {
-                "min": 7,
-                "max": 12
+                "min": 7.0,
+                "max": 12.0,
+                "type": "minecraft:uniform"
               }
             }
           ],
-          "weight": 1
+          "name": "forestry:ash"
         },
         {
-          "type": "empty",
-          "weight": 1
+          "type": "minecraft:empty"
         }
       ]
     }
