@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "apiculture",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " # ",
+          "XYX",
+          " # "
+        ],
+        "key": {
+          "#": {
+            "tag": "forestry:dusts/ash"
+          },
+          "X": {
+            "item": "forestry:peat"
+          },
+          "Y": {
+            "item": "forestry:propolis_normal"
+          }
+        },
+        "result": {
+          "item": "forestry:bituminous_peat"
+        }
+      }
+    }
+  ]
+}

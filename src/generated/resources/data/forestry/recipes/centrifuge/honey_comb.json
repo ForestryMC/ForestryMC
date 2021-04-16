@@ -1,0 +1,23 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 20,
+  "input": {
+    "item": "forestry:bee_comb_honey"
+  },
+  "products": [
+    {
+      "chance": 1.0,
+      "item": {
+        "id": "forestry:beeswax",
+        "Count": 1
+      }
+    },
+    {
+      "chance": 0.9,
+      "item": {
+        "id": "forestry:honey_drop_honey",
+        "Count": 1
+      }
+    }
+  ]
+}

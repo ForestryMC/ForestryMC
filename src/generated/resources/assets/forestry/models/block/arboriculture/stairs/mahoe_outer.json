@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "side": "forestry:block/wood/planks.mahoe",
+    "top": "forestry:block/wood/planks.mahoe",
+    "bottom": "forestry:block/wood/planks.mahoe",
+    "particle": "forestry:block/wood/planks.mahoe"
+  }
+}

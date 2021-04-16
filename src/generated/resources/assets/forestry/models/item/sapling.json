@@ -1,0 +1,4 @@
+{
+  "parent": "forge:item/default",
+  "loader": "forestry:sapling_ge"
+}

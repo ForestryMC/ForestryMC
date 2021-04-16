@@ -1,0 +1,9 @@
+{
+  "table": "minecraft:chests/abandoned_mineshaft",
+  "extensions": [
+    "apiculture",
+    "factory",
+    "storage"
+  ],
+  "type": "forestry:condition_modifier"
+}

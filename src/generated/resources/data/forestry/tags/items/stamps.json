@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "forestry:stamp_5n",
+    "forestry:stamp_10n",
+    "forestry:stamp_1n",
+    "forestry:stamp_2n",
+    "forestry:stamp_20n",
+    "forestry:stamp_100n",
+    "forestry:stamp_50n"
+  ]
+}

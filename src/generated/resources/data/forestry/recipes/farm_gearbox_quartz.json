@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "farming",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " # ",
+          "TTT"
+        ],
+        "key": {
+          "#": {
+            "item": "minecraft:quartz_block"
+          },
+          "T": {
+            "tag": "forge:gears/tin"
+          }
+        },
+        "result": {
+          "item": "forestry:farm_gearbox_quartz"
+        }
+      }
+    }
+  ]
+}

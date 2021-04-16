@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "name": "forestry_arboriculture_items",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "forestry:grafter"
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ]
+    }
+  ]
+}

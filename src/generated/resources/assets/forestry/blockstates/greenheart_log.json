@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "forestry:block/arboriculture/logs/greenheart",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "forestry:block/arboriculture/logs/greenheart"
+    },
+    "axis=z": {
+      "model": "forestry:block/arboriculture/logs/greenheart",
+      "x": 90
+    }
+  }
+}

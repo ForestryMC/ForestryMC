@@ -1,0 +1,11 @@
+{
+  "type": "forestry:moistener",
+  "time": 20000,
+  "resource": {
+    "item": "minecraft:cobblestone"
+  },
+  "product": {
+    "id": "minecraft:mossy_cobblestone",
+    "Count": 1
+  }
+}

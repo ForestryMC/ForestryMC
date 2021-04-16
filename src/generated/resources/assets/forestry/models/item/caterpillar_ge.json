@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "forestry:item/caterpillar.body2",
+    "layer1": "forestry:item/caterpillar.body"
+  }
+}

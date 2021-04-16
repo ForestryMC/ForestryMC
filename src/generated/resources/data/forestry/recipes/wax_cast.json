@@ -1,0 +1,30 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "apiculture",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "###",
+          "# #",
+          "###"
+        ],
+        "key": {
+          "#": {
+            "item": "forestry:beeswax"
+          }
+        },
+        "result": {
+          "item": "forestry:wax_cast"
+        }
+      }
+    }
+  ]
+}

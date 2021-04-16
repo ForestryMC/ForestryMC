@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "name": "forestry_apiculture_bees",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "forestry:scoop"
+        }
+      ]
+    }
+  ]
+}

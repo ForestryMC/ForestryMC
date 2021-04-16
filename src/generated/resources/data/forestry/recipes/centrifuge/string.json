@@ -1,0 +1,16 @@
+{
+  "type": "forestry:centrifuge",
+  "time": 5,
+  "input": {
+    "item": "minecraft:string"
+  },
+  "products": [
+    {
+      "chance": 0.15,
+      "item": {
+        "id": "forestry:silk_wisp",
+        "Count": 1
+      }
+    }
+  ]
+}

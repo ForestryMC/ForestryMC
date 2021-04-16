@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "hinge=left,facing=north,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge"
+    },
+    "hinge=left,facing=north,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 270
+    },
+    "hinge=right,facing=north,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 180
+    },
+    "hinge=right,facing=north,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 270
+    },
+    "hinge=left,facing=north,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge"
+    },
+    "hinge=left,facing=north,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 270
+    },
+    "hinge=right,facing=north,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 180
+    },
+    "hinge=right,facing=north,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 270
+    },
+    "hinge=left,facing=south,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 180
+    },
+    "hinge=left,facing=south,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 90
+    },
+    "hinge=right,facing=south,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top"
+    },
+    "hinge=right,facing=south,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 90
+    },
+    "hinge=left,facing=south,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 180
+    },
+    "hinge=left,facing=south,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 90
+    },
+    "hinge=right,facing=south,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom"
+    },
+    "hinge=right,facing=south,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 90
+    },
+    "hinge=left,facing=west,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 270
+    },
+    "hinge=left,facing=west,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 180
+    },
+    "hinge=right,facing=west,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 90
+    },
+    "hinge=right,facing=west,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 180
+    },
+    "hinge=left,facing=west,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 270
+    },
+    "hinge=left,facing=west,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 180
+    },
+    "hinge=right,facing=west,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 90
+    },
+    "hinge=right,facing=west,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 180
+    },
+    "hinge=left,facing=east,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge",
+      "y": 90
+    },
+    "hinge=left,facing=east,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top"
+    },
+    "hinge=right,facing=east,half=upper,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_top",
+      "y": 270
+    },
+    "hinge=right,facing=east,half=upper,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_top_hinge"
+    },
+    "hinge=left,facing=east,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge",
+      "y": 90
+    },
+    "hinge=left,facing=east,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom"
+    },
+    "hinge=right,facing=east,half=lower,open=true": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom",
+      "y": 270
+    },
+    "hinge=right,facing=east,half=lower,open=false": {
+      "model": "forestry:block/arboriculture/doors/citrus_bottom_hinge"
+    }
+  }
+}
