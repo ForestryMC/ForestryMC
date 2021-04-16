@@ -3,7 +3,6 @@ package genetics.commands;
 
 import java.util.Optional;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -41,10 +40,10 @@ public class CommandListAlleles {
 		for (IChromosome chromosome : genome.getChromosomes()) {
 			IChromosomeType type = chromosome.getType();
 
-			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + I18n.get(genome.getActiveAllele(type).getLocalisationKey()) + " " + I18n.get(genome.getInactiveAllele(type).getLocalisationKey()));
+			CommandHelpers.sendChatMessage(context.getSource(), type.getName() + ": " + genome.getActiveAllele(type).getDisplayName().getString() + " " + genome.getInactiveAllele(type).getDisplayName().getString());
 		}
 
-		GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles().forEach(a -> System.out.println(a.getRegistryName() + ": " + I18n.get(a.getLocalisationKey())));
+		GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles().forEach(a -> System.out.println(a.getRegistryName() + ": " + a.getDisplayName().getString()));
 
 		return 1;
 	}

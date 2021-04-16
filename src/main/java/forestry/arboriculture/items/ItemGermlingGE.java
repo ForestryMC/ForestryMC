@@ -29,9 +29,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +43,6 @@ import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.ItemGroups;
 import forestry.api.genetics.ICheckPollinatable;
 import forestry.api.genetics.IPollinatable;
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.recipes.IVariableFermentable;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.config.Config;
@@ -55,7 +51,6 @@ import forestry.core.items.definitions.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.ResourceUtil;
 
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganismType;
@@ -83,20 +78,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
 		return GeneticHelper.createOrganism(stack, type, TreeHelper.getRoot().getDefinition());
-	}
-
-	@Override
-	public ITextComponent getName(ItemStack itemStack) {
-		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
-			return new StringTextComponent("Unknown");
-		}
-		IAlleleForestrySpecies species = getSpecies(itemStack);
-
-		String customTreeKey = "for.trees.custom." + type.getName() + "." + species.getLocalisationKey().replace("trees.species.", "");
-		return ResourceUtil.tryTranslate(customTreeKey, () -> {
-			ITextComponent typeComponent = new TranslationTextComponent("for.trees.grammar." + type.getName() + ".type");
-			return new TranslationTextComponent("for.trees.grammar." + type.getName(), species.getDisplayName(), typeComponent);
-		});
 	}
 
 	@Override

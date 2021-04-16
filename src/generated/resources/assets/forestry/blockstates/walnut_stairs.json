@@ -1,212 +1,212 @@
 {
   "variants": {
-    "shape=straight,facing=north,half=top": {
+    "shape=straight,half=top,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=inner_left,facing=north,half=top": {
+    "shape=inner_left,half=top,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=inner_right,facing=north,half=top": {
+    "shape=inner_right,half=top,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180
     },
-    "shape=outer_left,facing=north,half=top": {
+    "shape=outer_left,half=top,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=outer_right,facing=north,half=top": {
+    "shape=outer_right,half=top,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180
     },
-    "shape=straight,facing=north,half=bottom": {
+    "shape=straight,half=bottom,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "y": 270
     },
-    "shape=inner_left,facing=north,half=bottom": {
+    "shape=inner_left,half=bottom,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 180
     },
-    "shape=inner_right,facing=north,half=bottom": {
+    "shape=inner_right,half=bottom,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 270
     },
-    "shape=outer_left,facing=north,half=bottom": {
+    "shape=outer_left,half=bottom,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 180
     },
-    "shape=outer_right,facing=north,half=bottom": {
+    "shape=outer_right,half=bottom,facing=north": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 270
     },
-    "shape=straight,facing=south,half=top": {
+    "shape=straight,half=top,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=inner_left,facing=south,half=top": {
+    "shape=inner_left,half=top,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=inner_right,facing=south,half=top": {
+    "shape=inner_right,half=top,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=outer_left,facing=south,half=top": {
+    "shape=outer_left,half=top,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=outer_right,facing=south,half=top": {
+    "shape=outer_right,half=top,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=straight,facing=south,half=bottom": {
+    "shape=straight,half=bottom,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "y": 90
     },
-    "shape=inner_left,facing=south,half=bottom": {
+    "shape=inner_left,half=bottom,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true
     },
-    "shape=inner_right,facing=south,half=bottom": {
+    "shape=inner_right,half=bottom,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 90
     },
-    "shape=outer_left,facing=south,half=bottom": {
+    "shape=outer_left,half=bottom,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true
     },
-    "shape=outer_right,facing=south,half=bottom": {
+    "shape=outer_right,half=bottom,facing=south": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 90
     },
-    "shape=straight,facing=west,half=top": {
+    "shape=straight,half=top,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=inner_left,facing=west,half=top": {
+    "shape=inner_left,half=top,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=inner_right,facing=west,half=top": {
+    "shape=inner_right,half=top,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=outer_left,facing=west,half=top": {
+    "shape=outer_left,half=top,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 180
     },
-    "shape=outer_right,facing=west,half=top": {
+    "shape=outer_right,half=top,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 270
     },
-    "shape=straight,facing=west,half=bottom": {
+    "shape=straight,half=bottom,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "y": 180
     },
-    "shape=inner_left,facing=west,half=bottom": {
+    "shape=inner_left,half=bottom,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 90
     },
-    "shape=inner_right,facing=west,half=bottom": {
+    "shape=inner_right,half=bottom,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 180
     },
-    "shape=outer_left,facing=west,half=bottom": {
+    "shape=outer_left,half=bottom,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 90
     },
-    "shape=outer_right,facing=west,half=bottom": {
+    "shape=outer_right,half=bottom,facing=west": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 180
     },
-    "shape=straight,facing=east,half=top": {
+    "shape=straight,half=top,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true,
       "x": 180
     },
-    "shape=inner_left,facing=east,half=top": {
+    "shape=inner_left,half=top,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180
     },
-    "shape=inner_right,facing=east,half=top": {
+    "shape=inner_right,half=top,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=outer_left,facing=east,half=top": {
+    "shape=outer_left,half=top,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180
     },
-    "shape=outer_right,facing=east,half=top": {
+    "shape=outer_right,half=top,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "x": 180,
       "y": 90
     },
-    "shape=straight,facing=east,half=bottom": {
+    "shape=straight,half=bottom,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut",
       "uvlock": true
     },
-    "shape=inner_left,facing=east,half=bottom": {
+    "shape=inner_left,half=bottom,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true,
       "y": 270
     },
-    "shape=inner_right,facing=east,half=bottom": {
+    "shape=inner_right,half=bottom,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_inner",
       "uvlock": true
     },
-    "shape=outer_left,facing=east,half=bottom": {
+    "shape=outer_left,half=bottom,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true,
       "y": 270
     },
-    "shape=outer_right,facing=east,half=bottom": {
+    "shape=outer_right,half=bottom,facing=east": {
       "model": "forestry:block/arboriculture/stairs/walnut_outer",
       "uvlock": true
     }

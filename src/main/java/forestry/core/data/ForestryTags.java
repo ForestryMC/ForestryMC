@@ -56,9 +56,9 @@ public class ForestryTags {
 		public static final ITag.INamedTag<Item> GEARS_TIN = forgeTag("gears/tin");
 		public static final ITag.INamedTag<Item> GEARS_STONE = forgeTag("gears/stone");
 
-		public static final ITag.INamedTag<Item> DUSTS_ASH = tag("dusts/ash");
+		public static final ITag.INamedTag<Item> DUSTS_ASH = forgeTag("dusts/ash");
 
-		public static final ITag.INamedTag<Item> GEMS_APATITE = tag("gems/apatite");
+		public static final ITag.INamedTag<Item> GEMS_APATITE = forgeTag("gems/apatite");
 
 		public static final ITag.INamedTag<Item> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
 		public static final ITag.INamedTag<Item> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");

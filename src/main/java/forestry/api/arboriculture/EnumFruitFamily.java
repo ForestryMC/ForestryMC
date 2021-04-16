@@ -5,7 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.AlleleManager;
@@ -36,15 +37,14 @@ public enum EnumFruitFamily implements IFruitFamily {
 		return this.scientific;
 	}
 
-	//TODO - these must only be called on client. Or Should I return TranslationTextComponent
 	@Override
-	public String getName() {
-		return I18n.get("for.family." + uid);
+	public TextComponent getName() {
+		return new TranslationTextComponent("for.family." + uid);
 	}
 
 	@Override
-	public String getDescription() {
-		return I18n.get("for.family." + uid + ".description");
+	public TextComponent getDescription() {
+		return new TranslationTextComponent("for.family." + uid + ".description");
 	}
 
 }

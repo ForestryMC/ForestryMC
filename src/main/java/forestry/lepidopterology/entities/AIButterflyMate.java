@@ -27,14 +27,14 @@ public class AIButterflyMate extends AIButterflyInteract {
 
 	@Override
 	protected boolean canInteract() {
-		if (entity.getButterfly().getMate() == null && entity.canMate()) {
+		if (!entity.getButterfly().getMate().isPresent() && entity.canMate()) {
 			return true;
 		}
 		if (entity.cooldownEgg > 0) {
 			return false;
 		}
 
-		if (entity.getButterfly().getMate() == null) {
+		if (!entity.getButterfly().getMate().isPresent()) {
 			return false;
 		}
 
@@ -49,7 +49,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 	@Override
 	public void tick() {
 		if (canContinueToUse()) {
-			if (entity.getButterfly().getMate() == null && targetMate != null) {
+			if (!entity.getButterfly().getMate().isPresent() && targetMate != null) {
 				if (entity.cooldownMate <= 0 && entity.distanceTo(targetMate) < 9.0D) {
 					entity.getButterfly().mate(targetMate.getButterfly().getGenome());
 					targetMate.getButterfly().mate(entity.getButterfly().getGenome());
@@ -77,7 +77,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 		if (!super.canUse()) {
 			return false;
 		}
-		if (entity.getButterfly().getMate() == null) {
+		if (!entity.getButterfly().getMate().isPresent()) {
 			if (!entity.canMate()) {
 				return false;
 			} else {
@@ -93,7 +93,7 @@ public class AIButterflyMate extends AIButterflyInteract {
 		if (!super.canContinueToUse()) {
 			return false;
 		}
-		if (entity.getButterfly().getMate() == null) {
+		if (!entity.getButterfly().getMate().isPresent()) {
 			return targetMate != null && targetMate.isAlive() && targetMate.canMate();
 		}
 		return true;

@@ -1,123 +1,123 @@
 {
   "variants": {
-    "hinge=left,facing=north,half=upper,open=true": {
+    "facing=north,open=true,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge"
     },
-    "hinge=left,facing=north,half=upper,open=false": {
+    "facing=north,open=false,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 270
     },
-    "hinge=right,facing=north,half=upper,open=true": {
+    "facing=north,open=true,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 180
     },
-    "hinge=right,facing=north,half=upper,open=false": {
+    "facing=north,open=false,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 270
     },
-    "hinge=left,facing=north,half=lower,open=true": {
+    "facing=north,open=true,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge"
     },
-    "hinge=left,facing=north,half=lower,open=false": {
+    "facing=north,open=false,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 270
     },
-    "hinge=right,facing=north,half=lower,open=true": {
+    "facing=north,open=true,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 180
     },
-    "hinge=right,facing=north,half=lower,open=false": {
+    "facing=north,open=false,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 270
     },
-    "hinge=left,facing=south,half=upper,open=true": {
+    "facing=south,open=true,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 180
     },
-    "hinge=left,facing=south,half=upper,open=false": {
+    "facing=south,open=false,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 90
     },
-    "hinge=right,facing=south,half=upper,open=true": {
+    "facing=south,open=true,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top"
     },
-    "hinge=right,facing=south,half=upper,open=false": {
+    "facing=south,open=false,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 90
     },
-    "hinge=left,facing=south,half=lower,open=true": {
+    "facing=south,open=true,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 180
     },
-    "hinge=left,facing=south,half=lower,open=false": {
+    "facing=south,open=false,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 90
     },
-    "hinge=right,facing=south,half=lower,open=true": {
+    "facing=south,open=true,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom"
     },
-    "hinge=right,facing=south,half=lower,open=false": {
+    "facing=south,open=false,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 90
     },
-    "hinge=left,facing=west,half=upper,open=true": {
+    "facing=west,open=true,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 270
     },
-    "hinge=left,facing=west,half=upper,open=false": {
+    "facing=west,open=false,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 180
     },
-    "hinge=right,facing=west,half=upper,open=true": {
+    "facing=west,open=true,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 90
     },
-    "hinge=right,facing=west,half=upper,open=false": {
+    "facing=west,open=false,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 180
     },
-    "hinge=left,facing=west,half=lower,open=true": {
+    "facing=west,open=true,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 270
     },
-    "hinge=left,facing=west,half=lower,open=false": {
+    "facing=west,open=false,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 180
     },
-    "hinge=right,facing=west,half=lower,open=true": {
+    "facing=west,open=true,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 90
     },
-    "hinge=right,facing=west,half=lower,open=false": {
+    "facing=west,open=false,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 180
     },
-    "hinge=left,facing=east,half=upper,open=true": {
+    "facing=east,open=true,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge",
       "y": 90
     },
-    "hinge=left,facing=east,half=upper,open=false": {
+    "facing=east,open=false,half=upper,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_top"
     },
-    "hinge=right,facing=east,half=upper,open=true": {
+    "facing=east,open=true,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top",
       "y": 270
     },
-    "hinge=right,facing=east,half=upper,open=false": {
+    "facing=east,open=false,half=upper,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_top_hinge"
     },
-    "hinge=left,facing=east,half=lower,open=true": {
+    "facing=east,open=true,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge",
       "y": 90
     },
-    "hinge=left,facing=east,half=lower,open=false": {
+    "facing=east,open=false,half=lower,hinge=left": {
       "model": "forestry:block/arboriculture/doors/palm_bottom"
     },
-    "hinge=right,facing=east,half=lower,open=true": {
+    "facing=east,open=true,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom",
       "y": 270
     },
-    "hinge=right,facing=east,half=lower,open=false": {
+    "facing=east,open=false,half=lower,hinge=right": {
       "model": "forestry:block/arboriculture/doors/palm_bottom_hinge"
     }
   }

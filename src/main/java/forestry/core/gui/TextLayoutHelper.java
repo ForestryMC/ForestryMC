@@ -10,7 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -84,6 +86,14 @@ public class TextLayoutHelper {
 		drawLine(transform, text, x, defaultFontColor);
 	}
 
+	public void drawLine(MatrixStack transform, ITextComponent component, int x) {
+		drawLine(transform, component, x, defaultFontColor);
+	}
+
+	public void drawTranslatedLine(MatrixStack transform, String key, int x) {
+		drawLine(transform, new TranslationTextComponent(key), x, defaultFontColor);
+	}
+
 	public void drawSplitLine(String text, int x, int maxWidth) {
 		drawSplitLine(text, x, maxWidth, defaultFontColor);
 	}
@@ -104,12 +114,24 @@ public class TextLayoutHelper {
 		drawLine(transform, text, x, 0, color);
 	}
 
+	public void drawLine(MatrixStack transform, ITextComponent component, int x, int color) {
+		drawLine(transform, component, x, 0, color);
+	}
+
 	public void drawLine(MatrixStack transform, String text, int x, int y, int color) {
 		guiForestry.getFontRenderer().draw(transform, text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
 	}
 
+	public void drawLine(MatrixStack transform, ITextComponent component, int x, int y, int color) {
+		guiForestry.getFontRenderer().draw(transform, component, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + y + line, color);
+	}
+
 	public void drawSplitLine(String text, int x, int maxWidth, int color) {
-		guiForestry.getFontRenderer().drawWordWrap(new StringTextComponent(text), guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
+		drawSplitLine(new StringTextComponent(text), x, maxWidth, color);
+	}
+
+	public void drawSplitLine(ITextComponent component, int x, int maxWidth, int color) {
+		guiForestry.getFontRenderer().drawWordWrap(component, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
 	}
 
 	public int getCenteredOffset(String string) {

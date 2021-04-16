@@ -64,6 +64,8 @@ public interface IAlyzerHelper {
 
 	void drawFertilityInfo(int value, int textColor, int xOffset);
 
+	void addToleranceLine(IChromosomeType chromosome);
+
 	/**
 	 * Retrieves a pre created stack that should be used to display the given species in a gui. The idea behind this is
 	 * to only need to create one stack for each species.

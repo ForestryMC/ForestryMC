@@ -23,8 +23,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,7 +45,6 @@ import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.core.utils.ResourceUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyEntities;
 import forestry.lepidopterology.genetics.ButterflyHelper;
@@ -303,22 +300,6 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	@OnlyIn(Dist.CLIENT)
 	public void registerSprites(ISpriteRegistry registry) {
 		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (allele) -> allele.registerSprites(registry));
-	}
-
-	@Override
-	public ITextComponent getName(ItemStack itemstack) {
-		if (itemstack.getTag() == null) {
-			return super.getName(itemstack);
-		}
-
-		IButterfly individual = ButterflyManager.butterflyRoot.getTypes().createIndividual(itemstack).orElse(null);
-		String customKey = "for.butterflies.custom." + type.getName() + "."
-				+ individual.getGenome().getPrimary().getLocalisationKey().replace("butterflies.species.", "");
-		return ResourceUtil.tryTranslate(customKey, () -> {
-			ITextComponent speciesString = individual.getDisplayName();
-			ITextComponent typeString = new TranslationTextComponent("for.butterflies.grammar." + type.getName() + ".type");
-			return new TranslationTextComponent("for.butterflies.grammar." + type.getName(), speciesString, typeString);
-		});
 	}
 
 	@Override

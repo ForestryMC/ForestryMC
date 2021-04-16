@@ -39,7 +39,6 @@ import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.items.definitions.IColoredItem;
-import forestry.core.utils.ResourceUtil;
 
 import genetics.api.GeneticHelper;
 
@@ -61,27 +60,6 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	@Override
 	protected IAlleleBeeSpecies getSpecies(ItemStack itemStack) {
 		return GeneticHelper.getOrganism(itemStack).getAllele(BeeChromosomes.SPECIES, true);
-	}
-
-	//TODO - pretty sure this is still translating on the server atm
-	@Override
-	public ITextComponent getName(ItemStack itemStack) {
-		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
-			return super.getName(itemStack);
-		}
-		Optional<IBee> optionalIndividual = GeneticHelper.getIndividual(itemStack);
-		if (!optionalIndividual.isPresent()) {
-			return super.getName(itemStack);
-		}
-
-		IBee individual = optionalIndividual.get();
-		String customBeeKey = "for.bees.custom." + type.getName() + "." + individual.getGenome().getPrimary().getLocalisationKey().replace("bees.species.", "");
-
-		return ResourceUtil.tryTranslate(customBeeKey, () -> {
-			ITextComponent beeSpecies = individual.getGenome().getPrimary().getDisplayName();
-			ITextComponent beeType = new TranslationTextComponent("for.bees.grammar." + type.getName() + ".type");
-			return new TranslationTextComponent("for.bees.grammar." + type.getName(), beeSpecies, beeType);
-		});
 	}
 
 	@Override

@@ -12,19 +12,21 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage1(Screen gui, ItemStack itemStack);
+	void drawAnalyticsPage1(MatrixStack transform, Screen gui, ItemStack itemStack);
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage2(Screen gui, ItemStack itemStack);
+	void drawAnalyticsPage2(MatrixStack transform, Screen gui, ItemStack itemStack);
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage3(Screen gui, ItemStack itemStack);
+	void drawAnalyticsPage3(MatrixStack transform, ItemStack itemStack, Screen gui);
 
 	/**
 	 * The hints that will be shown in the alyzer gui.

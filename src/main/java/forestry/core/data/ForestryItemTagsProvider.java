@@ -34,7 +34,17 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	protected void addTags() {
 		super.addTags();
 		builders.remove(ItemTags.SAPLINGS.getName());
+		//builders.remove()
 		filter = new HashSet<>(this.builders.keySet());
+		filter.remove(ItemTags.LOGS.getName());
+		filter.remove(ItemTags.PLANKS.getName());
+		filter.remove(ItemTags.WOODEN_DOORS.getName());
+		filter.remove(ItemTags.STAIRS.getName());
+		filter.remove(ItemTags.SLABS.getName());
+		filter.remove(ItemTags.DOORS.getName());
+		filter.remove(ItemTags.LOGS_THAT_BURN.getName());
+		filter.remove(ItemTags.WOODEN_STAIRS.getName());
+		filter.remove(ItemTags.WOODEN_FENCES.getName());
 		addToTag(ForestryTags.Items.GEARS, ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		tag(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		tag(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
@@ -57,6 +67,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 
 		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
 
+		//copy(BlockTags., ForestryTags.Items.STORAGE_BLOCKS_APATITE);
 		tag(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
 		tag(ForestryTags.Items.BEE_COMBS).add(ApicultureItems.BEE_COMBS.itemArray());
 		tag(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
@@ -70,6 +81,11 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tag(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.itemArray());
 
 		tag(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());
+
+		copy(Tags.Blocks.FENCES, Tags.Items.FENCES);
+		copy(Tags.Blocks.FENCE_GATES, Tags.Items.FENCE_GATES);
+		copy(Tags.Blocks.FENCE_GATES_WOODEN, Tags.Items.FENCE_GATES_WOODEN);
+		copy(Tags.Blocks.CHESTS, Tags.Items.CHESTS);
 	}
 
 	@SafeVarargs

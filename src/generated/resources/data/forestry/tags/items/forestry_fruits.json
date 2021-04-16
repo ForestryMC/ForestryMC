@@ -1,12 +1,12 @@
 {
   "replace": false,
   "values": [
-    "forestry:fruit_lemon",
     "forestry:fruit_plum",
-    "forestry:fruit_papaya",
-    "forestry:fruit_cherry",
-    "forestry:fruit_chestnut",
+    "forestry:fruit_dates",
     "forestry:fruit_walnut",
-    "forestry:fruit_dates"
+    "forestry:fruit_lemon",
+    "forestry:fruit_chestnut",
+    "forestry:fruit_cherry",
+    "forestry:fruit_papaya"
   ]
 }

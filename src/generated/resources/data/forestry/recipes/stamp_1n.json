@@ -18,7 +18,7 @@
         ],
         "key": {
           "X": {
-            "tag": "forestry:gems/apatite"
+            "tag": "forge:gems/apatite"
           },
           "#": {
             "item": "minecraft:paper"

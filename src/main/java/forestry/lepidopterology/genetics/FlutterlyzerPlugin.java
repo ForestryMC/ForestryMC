@@ -18,6 +18,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -41,7 +43,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(Screen gui, ItemStack itemStack) {
+	public void drawAnalyticsPage1(MatrixStack transform, Screen gui, ItemStack itemStack) {
 		//		if (gui instanceof GuiAlyzer) {
 		//			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 		//			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
@@ -104,7 +106,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(Screen gui, ItemStack itemStack) {
+	public void drawAnalyticsPage2(MatrixStack transform, Screen gui, ItemStack itemStack) {
 		//		if (gui instanceof GuiAlyzer) {
 		//			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 		//			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);
@@ -193,7 +195,7 @@ public class FlutterlyzerPlugin implements IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(Screen gui, ItemStack itemStack) {
+	public void drawAnalyticsPage3(MatrixStack transform, ItemStack itemStack, Screen gui) {
 		//		if (gui instanceof GuiAlyzer) {
 		//			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
 		//			IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(itemStack);

@@ -19,12 +19,14 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
+import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.definitions.IColoredItem;
-import forestry.core.utils.Translator;
+import forestry.core.utils.ResourceUtil;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
@@ -41,20 +43,20 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		TileLeaves tileLeaves = new TileLeaves();
 		tileLeaves.load(tileLeaves.getBlockState(), itemstack.getTag());
 
-		String unlocalizedName = tileLeaves.getUnlocalizedName();
-		return getDisplayName(unlocalizedName);
+		ITree tree = tileLeaves.getTree();
+		if (tree == null) {
+			return new TranslationTextComponent("for.leaves.corrupted");
+		}
+		return getDisplayName(tree);
 	}
 
-	public static ITextComponent getDisplayName(String unlocalizedSpeciesName) {
-		String customTreeKey = "for.trees.custom.leaves." + unlocalizedSpeciesName.replace("for.trees.species.", "");
-		if (Translator.canTranslateToLocal(customTreeKey)) {
-			return new TranslationTextComponent(customTreeKey);
-		}
-
-		ITextComponent localizedName = new TranslationTextComponent(unlocalizedSpeciesName);
-
-		ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
-		return new TranslationTextComponent("for.trees.grammar.leaves", localizedName, leaves);
+	public static ITextComponent getDisplayName(ITree tree) {
+		IAlleleTreeSpecies primary = (IAlleleTreeSpecies) tree.getGenome().getPrimary();
+		String customTreeKey = "for.trees.custom.leaves." + primary.getSpeciesIdentifier();
+		return ResourceUtil.tryTranslate(customTreeKey, () -> {
+			ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
+			return new TranslationTextComponent("for.trees.grammar.leaves", primary.getDisplayName(), leaves);
+		});
 	}
 
 	@Override

@@ -10,8 +10,6 @@ import net.minecraft.util.text.Style;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.alleles.IAlleleValue;
-
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
@@ -27,6 +25,8 @@ import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.Translator;
+
+import genetics.api.alleles.IAlleleValue;
 
 @OnlyIn(Dist.CLIENT)
 public class TreeDatabaseTab implements IDatabaseTab<ITree> {
@@ -68,7 +68,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 		List<IFruitFamily> families = new ArrayList<>(primarySpecies.getSuitableFruit());
 
 		for (IFruitFamily fruitFamily : families) {
-			container.label(fruitFamily.getName(), GuiElementAlignment.TOP_CENTER, speciesStyle);
+			container.label(fruitFamily.getName().getString(), GuiElementAlignment.TOP_CENTER, speciesStyle);
 		}
 
 		IAlleleFruit fruit = mode == DatabaseMode.ACTIVE ? tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS) : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
@@ -86,7 +86,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
 		if (family != null && !family.getUID().equals(EnumFruitFamily.NONE.getUID())) {
 			container.label(Translator.translateToLocal("for.gui.family"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
-			container.label(family.getName(), GuiElementAlignment.TOP_CENTER, textStyle);
+			container.label(family.getName().getString(), GuiElementAlignment.TOP_CENTER, textStyle);
 		}
 
 	}

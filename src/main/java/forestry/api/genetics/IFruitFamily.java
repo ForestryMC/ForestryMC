@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import net.minecraft.util.text.TextComponent;
+
 public interface IFruitFamily {
 
 	/**
@@ -15,7 +17,7 @@ public interface IFruitFamily {
 	/**
 	 * @return Localized family name for user display.
 	 */
-	String getName();
+	TextComponent getName();
 
 	/**
 	 * A scientific-y name for this fruit family
@@ -27,6 +29,6 @@ public interface IFruitFamily {
 	/**
 	 * @return Localized description of this fruit family. (May be null.)
 	 */
-	String getDescription();
+	TextComponent getDescription();
 
 }

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -21,13 +21,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.ISetupListener;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
+
+import genetics.api.individual.IGenome;
 
 /**
  * Provides all information that is needed to spawn a fruit leaves / pod block in the world.
@@ -107,7 +107,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	ITextComponent getDescription();
+	TextComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.

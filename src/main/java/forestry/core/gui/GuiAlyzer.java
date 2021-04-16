@@ -33,11 +33,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
-import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.widgets.ItemStackWidget;
@@ -55,6 +55,7 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.mutation.IMutationContainer;
+import genetics.api.organism.IOrganismType;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.ComponentKeys;
 import genetics.utils.AlleleUtils;
@@ -100,33 +101,41 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 	}
 
+	public final void drawSplitLine(ITextComponent component, int x, int maxWidth, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
+		if (!inactive) {
+			textLayout.drawSplitLine(component, x, maxWidth, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
+		} else {
+			textLayout.drawSplitLine(component, x, maxWidth, getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+		}
+	}
+
 	public final void drawRow(MatrixStack transform, String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
 		textLayout.drawRow(transform, text0, text1, text2, ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
-			getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
+				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
 	public final void drawChromosomeRow(MatrixStack transform, String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
 		textLayout.drawRow(transform, chromosomeName, active.getDisplayName().getString(), inactive.getDisplayName().getString(),
-			ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
-			getColorCoding(inactive.isDominant()));
+				ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(active.isDominant()),
+				getColorCoding(inactive.isDominant()));
 	}
 
-	public final void drawSpeciesRow(MatrixStack transform, String text0, IIndividual individual, IChromosomeType chromosome, @Nullable String customPrimaryName, @Nullable String customSecondaryName) {
-		IAlleleSpecies primary = individual.getGenome().getPrimary();
-		IAlleleSpecies secondary = individual.getGenome().getSecondary();
+	public final void drawSpeciesRow(MatrixStack transform, String text0, IIndividual individual, IChromosomeType chromosome, IOrganismType type) {
+		IAlleleForestrySpecies primary = (IAlleleForestrySpecies) individual.getGenome().getPrimary();
+		IAlleleForestrySpecies secondary = (IAlleleForestrySpecies) individual.getGenome().getSecondary();
 
 		textLayout.drawLine(transform, text0, textLayout.column0);
 		int columnwidth = textLayout.column2 - textLayout.column1 - 2;
 
-		Map<ResourceLocation, ItemStack> iconStacks = ((IBeeRoot) chromosome.getRoot()).getAlyzerPlugin().getIconStacks();
+		Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot<?>) chromosome.getRoot()).getAlyzerPlugin().getIconStacks();
 
 		GuiUtil.drawItemStack(this, iconStacks.get(primary.getRegistryName()), leftPos + textLayout.column1 + columnwidth - 20, topPos + 10);
 		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getRegistryName()), leftPos + textLayout.column2 + columnwidth - 20, topPos + 10);
 
-		String primaryName = customPrimaryName == null ? primary.getDisplayName().getString() : customPrimaryName;
-		String secondaryName = customSecondaryName == null ? secondary.getDisplayName().getString() : customSecondaryName;
+		ITextComponent primaryName = primary.getAlyzerName(type);
+		ITextComponent secondaryName = primary.getAlyzerName(type);
 
 		drawSplitLine(primaryName, textLayout.column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, textLayout.column2, columnwidth, individual, chromosome, true);
@@ -144,8 +153,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
-		super.renderBg(transform, partialTicks, mouseY, mouseX);
+	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+		super.renderBg(transform, partialTicks, mouseX, mouseY);
 		widgetManager.clear();
 
 		int specimenSlot = getSpecimenSlot();
@@ -156,21 +165,21 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 		ItemStack stackInSlot = itemInventory.getItem(specimenSlot);
 		IRootDefinition<IForestrySpeciesRoot<IIndividual>> definition = RootUtils.getRoot(stackInSlot);
-		if (definition.isPresent()) {
+		if (!definition.isPresent()) {
 			return;
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 		switch (specimenSlot) {
 			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
-				speciesRoot.getAlyzerPlugin().drawAnalyticsPage1(this, stackInSlot);
+				speciesRoot.getAlyzerPlugin().drawAnalyticsPage1(transform, this, stackInSlot);
 				break;
 			}
 			case ItemInventoryAlyzer.SLOT_ANALYZE_2: {
-				speciesRoot.getAlyzerPlugin().drawAnalyticsPage2(this, stackInSlot);
+				speciesRoot.getAlyzerPlugin().drawAnalyticsPage2(transform, this, stackInSlot);
 				break;
 			}
 			case ItemInventoryAlyzer.SLOT_ANALYZE_3: {
-				speciesRoot.getAlyzerPlugin().drawAnalyticsPage3(this, stackInSlot);
+				speciesRoot.getAlyzerPlugin().drawAnalyticsPage3(transform, stackInSlot, this);
 				break;
 			}
 			case ItemInventoryAlyzer.SLOT_ANALYZE_4: {

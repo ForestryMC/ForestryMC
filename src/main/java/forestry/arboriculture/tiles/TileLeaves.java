@@ -335,8 +335,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (individual instanceof ITree) {
 			ITree tree = getTree();
 			return tree != null &&
-				tree.getMate() == null &&
-				(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
+					!tree.getMate().isPresent() &&
+					(ModuleApiculture.doSelfPollination || !tree.isGeneticEqual(individual));
 		}
 		return false;
 	}
@@ -359,14 +359,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	@Override
 	public ITree getPollen() {
 		return getTree();
-	}
-
-	public String getUnlocalizedName() {
-		ITree tree = getTree();
-		if (tree == null) {
-			return "for.leaves.corrupted";
-		}
-		return tree.getGenome().getPrimary().getLocalisationKey();
 	}
 
 	/* NETWORK */

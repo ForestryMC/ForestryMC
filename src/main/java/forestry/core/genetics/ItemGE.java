@@ -49,6 +49,15 @@ public abstract class ItemGE extends ItemForestry {
 		return false;
 	}
 
+	@Override
+	public ITextComponent getName(ItemStack itemStack) {
+		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
+			return super.getName(itemStack);
+		}
+		IAlleleForestrySpecies species = getSpecies(itemStack);
+
+		return species.getItemName(getType());
+	}
 
 	@Override
 	public boolean isFoil(ItemStack stack) {

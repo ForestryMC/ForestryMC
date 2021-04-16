@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
@@ -64,22 +65,36 @@ public class GeneticsUtil {
 
 	private static String getKeyPrefix(IAllele allele) {
 		if (allele instanceof IAlleleBeeSpecies) {
-			return "for.bees.custom.alyzer";
+			return "for.bees";
 		} else if (allele instanceof IAlleleTreeSpecies) {
-			return "for.trees.custom.alyzer";
+			return "for.trees";
 		} else if (allele instanceof IAlleleButterflySpecies) {
-			return "for.butterflies.custom.alyzer";
+			return "for.butterflies";
 		}
 		throw new IllegalStateException();
 	}
 
-	public static ITextComponent getSpeciesName(IOrganismType type, IAlleleForestrySpecies allele) {
+	public static ITextComponent getAlyzerName(IOrganismType type, IAlleleForestrySpecies allele) {
 		String customKey = getKeyPrefix(allele) +
-			'.' +
-			type.getName() +
-			'.' +
-			allele.getSpeciesIdentifier();
+				".custom.alyzer." +
+				type.getName() +
+				'.' +
+				allele.getSpeciesIdentifier();
 		return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
+	}
+
+	public static ITextComponent getItemName(IOrganismType type, IAlleleForestrySpecies allele) {
+		String prefix = getKeyPrefix(allele);
+		String customKey = prefix +
+				".custom." +
+				type.getName() +
+				'.' +
+				allele.getSpeciesIdentifier();
+		return ResourceUtil.tryTranslate(customKey, () -> {
+			ITextComponent speciesName = allele.getDisplayName();
+			ITextComponent typeName = new TranslationTextComponent(prefix + ".grammar." + type.getName() + ".type");
+			return new TranslationTextComponent(prefix + ".grammar." + type.getName(), speciesName, typeName);
+		});
 	}
 
 	public static boolean hasNaturalistEye(PlayerEntity player) {

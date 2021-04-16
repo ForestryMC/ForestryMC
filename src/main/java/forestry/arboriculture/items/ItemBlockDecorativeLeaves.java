@@ -27,8 +27,7 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 	public ITextComponent getName(ItemStack itemStack) {
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getDefinition();
-		String unlocalizedSpeciesName = treeDefinition.getUnlocalizedName();
-		return ItemBlockLeaves.getDisplayName(unlocalizedSpeciesName);
+		return ItemBlockLeaves.getDisplayName(treeDefinition.createIndividual());
 	}
 
 	@Override

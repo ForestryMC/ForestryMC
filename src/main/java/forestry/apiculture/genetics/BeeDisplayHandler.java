@@ -55,8 +55,8 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		@Override
 		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
 			IOrganismType organismType = helper.getOrganismType();
-			ITextComponent primaryName = GeneticsUtil.getSpeciesName(organismType, getActiveAllele(genome));
-			ITextComponent secondaryName = GeneticsUtil.getSpeciesName(organismType, getActiveAllele(genome));
+			ITextComponent primaryName = GeneticsUtil.getAlyzerName(organismType, getActiveAllele(genome));
+			ITextComponent secondaryName = GeneticsUtil.getAlyzerName(organismType, getActiveAllele(genome));
 
 			helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
 		}
