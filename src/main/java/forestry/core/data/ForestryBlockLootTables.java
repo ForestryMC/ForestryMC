@@ -18,7 +18,9 @@ import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.conditions.TableBonus;
+import net.minecraft.loot.functions.ApplyBonus;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -45,8 +47,11 @@ import forestry.modules.features.IModFeature;
 
 import genetics.Log;
 
+/**
+ * Data generator class that generates the block drop loot tables for forestry blocks.
+ */
 public class ForestryBlockLootTables extends BlockLootTables {
-	private Set<Block> knownBlocks = new HashSet<>();
+	private final Set<Block> knownBlocks = new HashSet<>();
 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
@@ -64,7 +69,7 @@ public class ForestryBlockLootTables extends BlockLootTables {
 				this.add(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), NORMAL_LEAVES_SAPLING_CHANCES));
 			}
 		}
-		registerLootTable(CoreBlocks.PEAT, (block) -> new LootTable.Builder().withPool(new LootPool.Builder().add(ItemLootEntry.lootTableItem(Blocks.DIRT))).withPool(new LootPool.Builder().apply(SetCount.setCount(ConstantRange.exactly(2))).add(ItemLootEntry.lootTableItem(CoreItems.PEAT.item()))));
+		registerLootTable(CoreBlocks.PEAT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Blocks.DIRT))).withPool(LootPool.lootPool().apply(SetCount.setCount(ConstantRange.exactly(2))).add(ItemLootEntry.lootTableItem(CoreItems.PEAT.item()))));
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
 		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
@@ -77,19 +82,19 @@ public class ForestryBlockLootTables extends BlockLootTables {
 
 		registerEmptyTables(ArboricultureBlocks.PODS); // Handled by internal logic
 		registerEmptyTables(ArboricultureBlocks.SAPLING_GE); // Handled by internal logic
+		registerEmptyTables(ArboricultureBlocks.LEAVES);  // Handled by internal logic
 		registerEmptyTables(LepidopterologyBlocks.COCOON);
 		registerEmptyTables(LepidopterologyBlocks.COCOON_SOLID);
+		registerLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE), (p_218548_0_) -> createSilkTouchDispatchTable(p_218548_0_, applyExplosionDecay(p_218548_0_, ItemLootEntry.lootTableItem(CoreItems.APATITE.item()).apply(SetCount.setCount(RandomValueRange.between(2.0F, 7.0F))).apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2)))));
 		//TODO: Hives
-		//TODO: APATITE drops
-		//registerLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block(), (block) -> withExplosionDecay((IItemProvider) block, ItemLootEntry.builder(CoreItems.APATITE.item()).acceptFunction(SetCount.builder(RandomValueRange.of(2, 7))).acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE, 2))));
 
 		Set<ResourceLocation> visited = Sets.newHashSet();
 		for (IModFeature feature : ModuleManager.moduleHandler.getFeatures((type) -> type.equals(FeatureType.BLOCK))) {
 			if (!(feature instanceof FeatureBlock)) {
-				Log.error("Error"); //TODO: Better error description
+				Log.error("Found feature of the type block that does not extends the \"FeatureBlock\" class.");
 				continue;
 			}
-			Block block = ((FeatureBlock) feature).block();
+			Block block = ((FeatureBlock<?, ?>) feature).block();
 			ResourceLocation resourcelocation = block.getLootTable();
 			if (resourcelocation != LootTables.EMPTY && visited.add(resourcelocation)) {
 				LootTable.Builder builder = this.map.remove(resourcelocation);
@@ -133,35 +138,35 @@ public class ForestryBlockLootTables extends BlockLootTables {
 						.when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, chances)));
 	}
 
-	public void registerSilkTouch(FeatureBlock featureBlock, Block drop) {
+	public void registerSilkTouch(FeatureBlock<?, ?> featureBlock, Block drop) {
 		otherWhenSilkTouch(featureBlock.block(), drop);
 	}
 
-	public void registerSilkTouch(FeatureBlock featureBlock, FeatureBlock drop) {
+	public void registerSilkTouch(FeatureBlock<?, ?> featureBlock, FeatureBlock<?, ?> drop) {
 		otherWhenSilkTouch(featureBlock.block(), drop.block());
 	}
 
-	public void registerLootTable(FeatureBlock featureBlock, Function<Block, LootTable.Builder> builderFunction) {
+	public void registerLootTable(FeatureBlock<?, ?> featureBlock, Function<Block, LootTable.Builder> builderFunction) {
 		add(featureBlock.block(), builderFunction);
 	}
 
-	public void registerDropping(FeatureBlock featureBlock, FeatureBlock frop) {
-		dropOther(featureBlock.block(), frop.block());
+	public void registerDropping(FeatureBlock<?, ?> featureBlock, FeatureBlock<?, ?> drop) {
+		dropOther(featureBlock.block(), drop.block());
 	}
 
-	public void registerLootTable(FeatureBlock featureBlock, LootTable.Builder builder) {
+	public void registerLootTable(FeatureBlock<?, ?> featureBlock, LootTable.Builder builder) {
 		add(featureBlock.block(), builder);
 	}
 
-	public void registerDropping(FeatureBlock featureBlock, IItemProvider drop) {
+	public void registerDropping(FeatureBlock<?, ?> featureBlock, IItemProvider drop) {
 		dropOther(featureBlock.block(), drop);
 	}
 
-	public void registerEmptyTables(FeatureBlockGroup blockGroup) {
+	public void registerEmptyTables(FeatureBlockGroup<?, ?> blockGroup) {
 		registerEmptyTables(blockGroup.blockArray());
 	}
 
-	public void registerEmptyTables(FeatureBlock featureBlock) {
+	public void registerEmptyTables(FeatureBlock<?, ?> featureBlock) {
 		registerEmptyTables(featureBlock.block());
 	}
 

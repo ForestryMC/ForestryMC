@@ -12,7 +12,6 @@ package forestry.core.render;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.DiggingParticle;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,11 +25,11 @@ import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.utils.ResourceUtil;
 
-public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase> {
+public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase<?>> {
 
 	private final P blockType;
 
-	public MachineParticleCallback(BlockBase block, P blockType) {
+	public MachineParticleCallback(BlockBase<?> block, P blockType) {
 		super(block);
 		this.blockType = blockType;
 	}
@@ -38,11 +37,10 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
-		IMachineProperties<?> machineProperties = blockType.getMachineProperties();
-		if (machineProperties instanceof IMachinePropertiesTesr) {
-			IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-			TextureAtlasSprite particleTexture = ResourceUtil.getBlockSprite(machinePropertiesTesr.getParticleTexture());
-			fx.sprite = particleTexture;
+		IMachineProperties<?> properties = blockType.getMachineProperties();
+		if (properties instanceof IMachinePropertiesTesr) {
+			IMachinePropertiesTesr<?> propertiesTesr = (IMachinePropertiesTesr<?>) properties;
+			fx.sprite = ResourceUtil.getBlockSprite(propertiesTesr.getParticleTexture());
 		}
 	}
 

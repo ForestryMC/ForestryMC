@@ -20,8 +20,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.blocks.BlockCandle;
 import forestry.apiculture.blocks.BlockCandleWall;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockWallForestry;
+import forestry.core.items.definitions.IColoredItem;
 
 public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCandleWall> implements IColoredItem {
 

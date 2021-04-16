@@ -10,6 +10,9 @@ import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 
+import genetics.GeneticFactory;
+import genetics.Genetics;
+import genetics.Log;
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
@@ -19,10 +22,6 @@ import genetics.api.organism.IOrganismTypes;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.components.ComponentKey;
 import genetics.api.root.components.ComponentKeys;
-
-import genetics.GeneticFactory;
-import genetics.Genetics;
-import genetics.Log;
 
 public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 	private final Map<IOrganismType, IOrganismHandler<I>> types = new LinkedHashMap<>();
@@ -77,6 +76,9 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 
 	@Override
 	public boolean setIndividual(ItemStack itemStack, I individual) {
+		if (itemStack.isEmpty()) {
+			return false;
+		}
 		Optional<IOrganismType> optional = getType(itemStack);
 		if (!optional.isPresent()) {
 			return false;
@@ -90,6 +92,9 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 
 	@Override
 	public Optional<IOrganismType> getType(ItemStack itemStack) {
+		if (itemStack.isEmpty()) {
+			return Optional.empty();
+		}
 		IOrganism organism = itemStack.getCapability(Genetics.ORGANISM).orElse(GeneticHelper.EMPTY);
 		IOrganismType type = organism.getType();
 		return type.isEmpty() ? Optional.empty() : getHandler(type).map((handler) -> type);

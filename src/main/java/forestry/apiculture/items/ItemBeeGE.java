@@ -38,7 +38,7 @@ import forestry.api.core.ItemGroups;
 import forestry.apiculture.genetics.BeeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.items.IColoredItem;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.ResourceUtil;
 
 import genetics.api.GeneticHelper;

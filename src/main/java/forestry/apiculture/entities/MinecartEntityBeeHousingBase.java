@@ -26,6 +26,7 @@ import com.mojang.authlib.GameProfile;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
+import forestry.api.climate.IClimatised;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ForestryAPI;
@@ -41,7 +42,6 @@ import forestry.core.owner.GameProfileDataSerializer;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
-import forestry.core.tiles.IClimatised;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 

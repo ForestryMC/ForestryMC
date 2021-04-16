@@ -13,8 +13,8 @@ import forestry.api.core.ItemGroups;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.genetics.TreeDefinition;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.definitions.IColoredItem;
 
 import genetics.api.individual.IGenome;
 

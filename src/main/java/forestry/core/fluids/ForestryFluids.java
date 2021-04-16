@@ -28,7 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
-import forestry.core.items.DrinkProperties;
+import forestry.core.items.definitions.DrinkProperties;
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;

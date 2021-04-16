@@ -34,7 +34,7 @@ import forestry.api.core.ItemGroups;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumCraftingMaterial;
 
 public class ItemArmorApiarist extends ArmorItem {
 

@@ -26,8 +26,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ItemGroups;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {

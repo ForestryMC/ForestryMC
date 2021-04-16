@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_bottom_rh",
-  "textures": {
-    "top": "forestry:block/doors/mahoe_upper",
-    "bottom": "forestry:block/doors/mahoe_lower"
-  }
-}

@@ -14,8 +14,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ItemGroups;
-import forestry.core.items.ICraftingPlan;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.definitions.ICraftingPlan;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 

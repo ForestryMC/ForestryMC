@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.owner.IOwnedTile;
-import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 
 public interface IGuiBeeHousingDelegate extends ITitled, IErrorLogicSource, IOwnedTile, IClimatised {

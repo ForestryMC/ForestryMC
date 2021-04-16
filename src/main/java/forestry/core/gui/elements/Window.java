@@ -239,7 +239,7 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		return widgets;
 	}
 
-	public void drawTooltip(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawTooltip(MatrixStack transform, int mouseX, int mouseY) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
 			GlStateManager._pushMatrix();

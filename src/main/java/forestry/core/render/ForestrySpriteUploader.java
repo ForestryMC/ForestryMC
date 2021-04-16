@@ -12,6 +12,11 @@ import net.minecraft.util.ResourceLocation;
 
 import forestry.api.core.ISpriteRegistry;
 
+/**
+ * Uploads the forestry gui icon texture sprites to the forestry gui atlas texture.
+ *
+ * @see TextureManagerForestry
+ */
 public class ForestrySpriteUploader extends SpriteUploader implements ISpriteRegistry {
 	private final Set<ResourceLocation> registeredSprites = new HashSet<>();
 

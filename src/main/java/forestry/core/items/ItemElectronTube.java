@@ -36,6 +36,7 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
+import forestry.core.items.definitions.EnumElectronTube;
 import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemElectronTube extends ItemOverlay {

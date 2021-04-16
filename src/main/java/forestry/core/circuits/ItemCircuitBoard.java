@@ -29,8 +29,8 @@ import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.features.CoreItems;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.definitions.IColoredItem;
 
 public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 

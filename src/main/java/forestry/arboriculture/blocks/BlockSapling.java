@@ -113,6 +113,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 			}
 		}
 
+		getBlock().playerWillDestroy(world, pos, state, player);
 		return world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
 	}
 

@@ -31,6 +31,7 @@ import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.climate.ClimateCapabilities;
+import forestry.api.climate.IClimatised;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.apiculture.gui.IGuiBeeHousingDelegate;
@@ -41,7 +42,6 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 import forestry.core.render.ParticleRender;
-import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.TileBase;
 
 public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing, IOwnedTile, IClimatised, IGuiBeeHousingDelegate, IStreamableGui {

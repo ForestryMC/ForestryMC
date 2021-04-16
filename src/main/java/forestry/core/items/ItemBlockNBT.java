@@ -29,6 +29,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 
+/**
+ * {@link net.minecraft.item.BlockItem} that gives it's nbt data to the {@link net.minecraft.tileentity.TileEntity}
+ * of the placed block.
+ * <p>
+ * Used by the {@link forestry.worktable.tiles.TileWorktable} to save the memorized recipes
+ */
 public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	public ItemBlockNBT(Block block) {

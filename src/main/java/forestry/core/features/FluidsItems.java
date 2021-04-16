@@ -11,8 +11,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.ModuleFluids;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumContainerType;
 import forestry.core.items.ItemFluidContainerForestry;
+import forestry.core.items.definitions.EnumContainerType;
 import forestry.modules.features.FeatureItemGroup;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.IFeatureRegistry;

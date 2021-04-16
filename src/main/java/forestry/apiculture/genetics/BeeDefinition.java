@@ -36,7 +36,7 @@ import forestry.apiculture.items.EnumPollenCluster;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.EnumAllele;
-import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumCraftingMaterial;
 
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;

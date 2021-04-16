@@ -21,12 +21,14 @@ import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.IResearchHandler;
 import forestry.api.genetics.products.IProductList;
+import forestry.apiculture.DisplayHelper;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.genetics.TreeBranchDefinition;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.genetics.TreeDisplayHandler;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.genetics.TreeRoot;
 import forestry.arboriculture.genetics.TreekeepingMode;
@@ -177,5 +179,7 @@ public class TreePlugin implements IGeneticPlugin {
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
 		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
+
+		TreeDisplayHandler.init(DisplayHelper.getInstance());
 	}
 }

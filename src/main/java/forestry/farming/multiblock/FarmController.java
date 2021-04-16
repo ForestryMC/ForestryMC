@@ -20,6 +20,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,9 +29,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -307,7 +311,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public EnumTemperature getTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return EnumTemperature.getFromBiome(world.getBiome(coords), coords);
+		return EnumTemperature.getFromBiome(getBiome(), coords);
 	}
 
 	@Override
@@ -318,13 +322,20 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return world.getBiome(coords).getTemperature(coords);
+		return getBiome().getTemperature(coords);
 	}
 
 	@Override
 	public float getExactHumidity() {
+		return getBiome().getDownfall();
+	}
+
+	protected Biome getBiome() {
 		BlockPos coords = getReferenceCoord();
-		return world.getBiome(coords).getDownfall();
+		if (coords == null) {
+			return Objects.requireNonNull(ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName()));
+		}
+		return world.getBiome(coords);
 	}
 
 	@Override

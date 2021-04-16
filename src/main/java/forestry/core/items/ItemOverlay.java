@@ -18,7 +18,16 @@ import net.minecraft.util.NonNullList;
 import forestry.api.core.IItemSubtype;
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Config;
+import forestry.core.items.definitions.IColoredItem;
 
+/**
+ * Base class for items with an overlay color and multiple layer models.
+ *
+ * @see forestry.core.items.ItemElectronTube
+ * @see forestry.apiculture.items.ItemPollenCluster
+ * @see forestry.apiculture.items.ItemPropolis
+ * @see forestry.mail.items.ItemStamp
+ */
 public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	public interface IOverlayInfo extends IItemSubtype {
@@ -39,6 +48,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 		this.overlay = overlay;
 	}
 
+	//TODO: Why is this needed ?
 	@Override
 	public boolean canBeDepleted() {
 		return false;

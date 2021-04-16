@@ -215,9 +215,18 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 			scrollBar.setValue(0);
 			markForSorting();
 			return true;
-		} else {
-			return super.keyPressed(key, scanCode, modifiers);
 		}
+		return super.keyPressed(key, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean charTyped(char codePoint, int modifiers) {
+		if (searchField != null && this.searchField.charTyped(codePoint, modifiers)) {
+			scrollBar.setValue(0);
+			markForSorting();
+			return true;
+		}
+		return super.charTyped(codePoint, modifiers);
 	}
 
 	@Override

@@ -30,6 +30,12 @@ import forestry.core.features.CoreItems;
 import forestry.core.loot.OrganismFunction;
 import forestry.storage.features.BackpackItems;
 
+/**
+ * Helper class to handle chest loot.
+ * <p>
+ * <p>
+ * Used by {@link ForestryChestLootTables} and {@link ForestryLootModifierProvider}
+ */
 public class LootTableHelper {
 	@Nullable
 	public static LootTableHelper instance;

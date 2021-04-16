@@ -17,7 +17,7 @@ import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.features.CoreItems;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
-import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.utils.ItemStackUtil;
 
 public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve> implements ISlotPickupWatcher {

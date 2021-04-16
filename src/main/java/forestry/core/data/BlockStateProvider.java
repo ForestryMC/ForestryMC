@@ -100,8 +100,8 @@ public abstract class BlockStateProvider implements IDataProvider {
 		private final List<Consumer<Variant>> always = new LinkedList<>();
 		private final Map<Predicate<BlockState>, Consumer<Variant>> variants = new HashMap<>();
 		private final Multimap<BlockState, Consumer<Variant>> blockStateVariants = HashMultimap.create();
-		private final Deque<List<Property>> ignored = new ArrayDeque<>();
-		private final List<Property> alwaysIgnore = new LinkedList<>();
+		private final Deque<List<Property<?>>> ignored = new ArrayDeque<>();
+		private final List<Property<?>> alwaysIgnore = new LinkedList<>();
 
 		public Builder push() {
 			ignored.addFirst(new LinkedList<>());
@@ -113,7 +113,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 			return this;
 		}
 
-		public Builder alwaysIgnore(Property... properties) {
+		public Builder alwaysIgnore(Property<?>... properties) {
 			alwaysIgnore.addAll(Arrays.asList(properties));
 			return this;
 		}
@@ -129,11 +129,10 @@ public abstract class BlockStateProvider implements IDataProvider {
 		public <T extends Comparable<T>> Builder state(BlockState state, Consumer<Variant> consumer) {
 			Set<BlockState> mappedStates = new HashSet<>();
 			mappedStates.add(state);
-			List<Property> ignoredProperties = new LinkedList<>();
+			List<Property<?>> ignoredProperties = new LinkedList<>();
 			ignored.forEach(ignoredProperties::addAll);
 			ignoredProperties.addAll(alwaysIgnore);
-			for (Property property : ignoredProperties) {
-				//noinspection unchecked
+			for (Property<?> property : ignoredProperties) {
 				mappedStates = mapStates(property, mappedStates);
 			}
 			mappedStates.forEach(mappedState -> blockStateVariants.put(mappedState, consumer));
@@ -153,8 +152,8 @@ public abstract class BlockStateProvider implements IDataProvider {
 			return this;
 		}
 
-		public Builder ignore(Property property) {
-			List<Property> properties;
+		public Builder ignore(Property<?> property) {
+			List<Property<?>> properties;
 			if (ignored.isEmpty()) {
 				ignored.addFirst(properties = new LinkedList<>());
 			} else {
@@ -261,7 +260,8 @@ public abstract class BlockStateProvider implements IDataProvider {
 			return this;
 		}
 
-		public <V extends Comparable<V>> MultipartBuilder property(UnaryOperator<Variant> builder, Property<V> property, V... values) {
+		@SafeVarargs
+		public final <V extends Comparable<V>> MultipartBuilder property(UnaryOperator<Variant> builder, Property<V> property, V... values) {
 			return and(builder, new ConditionBuilder().property(property, values));
 		}
 
@@ -288,12 +288,14 @@ public abstract class BlockStateProvider implements IDataProvider {
 	public static class ConditionBuilder {
 		private final List<ICondition> conditions = new LinkedList<>();
 
-		public <V extends Comparable<V>> ConditionBuilder property(Property<V> property, V... values) {
+		@SafeVarargs
+		public final <V extends Comparable<V>> ConditionBuilder property(Property<V> property, V... values) {
 			conditions.add(new PropertyValueCondition<>(property, false, values));
 			return this;
 		}
 
-		public <V extends Comparable<V>> ConditionBuilder propertyNegated(Property<V> property, V... values) {
+		@SafeVarargs
+		public final <V extends Comparable<V>> ConditionBuilder propertyNegated(Property<V> property, V... values) {
 			conditions.add(new PropertyValueCondition<>(property, true, values));
 			return this;
 		}
@@ -396,6 +398,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 		private final V[] values;
 		private final boolean negated;
 
+		@SafeVarargs
 		public PropertyValueCondition(Property<V> property, boolean negated, V... values) {
 			this.property = property;
 			this.values = values;

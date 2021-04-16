@@ -10,10 +10,6 @@ import net.minecraft.tileentity.TileEntity;
  */
 public interface IForestryRenderer<T extends TileEntity> {
 
-	@Deprecated
-	default void renderTile(T tile, double x, double y, double z, float partialTicks, int destroyStage) {
-	}
-
 	/**
 	 * Renders the given tile entity.
 	 *
@@ -27,7 +23,4 @@ public interface IForestryRenderer<T extends TileEntity> {
 	 * @param stack The item stack of the tile entity.
 	 */
 	void renderItem(ItemStack stack, RenderHelper helper);
-
-	default void renderItem(ItemStack stack) {
-	}
 }

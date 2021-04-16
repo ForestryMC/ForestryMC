@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/nether_bridge",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

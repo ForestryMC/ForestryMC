@@ -41,7 +41,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 
 import forestry.core.blocks.IColoredBlock;
-import forestry.core.items.IColoredItem;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.ResourceUtil;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureGroup;

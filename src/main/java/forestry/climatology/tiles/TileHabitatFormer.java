@@ -36,8 +36,7 @@ import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateManipulator;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
+import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.api.recipes.RecipeManagers;
@@ -52,7 +51,6 @@ import forestry.core.fluids.FluidHelper;
 import forestry.core.fluids.ITankManager;
 import forestry.core.fluids.TankManager;
 import forestry.core.network.PacketBufferForestry;
-import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;
 import forestry.energy.EnergyManager;
@@ -224,16 +222,6 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return new ContainerHabitatFormer(windowId, inv, this);
-	}
-
-	@Override
-	public EnumTemperature getTemperature() {
-		return EnumTemperature.getFromValue(getExactTemperature());
-	}
-
-	@Override
-	public EnumHumidity getHumidity() {
-		return EnumHumidity.getFromValue(getExactHumidity());
 	}
 
 	@Override

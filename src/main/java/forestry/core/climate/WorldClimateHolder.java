@@ -265,11 +265,11 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	}
 
 	private static class TransformerData implements INbtWritable {
-		private IClimateState climateState = ClimateStateHelper.INSTANCE.absent();
+		private final long position;
+		private IClimateState climateState;
 		private int range;
 		private boolean circular;
-		private long position;
-		private long[] chunks = new long[0];
+		private long[] chunks;
 
 		private TransformerData(long position, IClimateState climateState, int range, boolean circular, long[] chunks) {
 			this.position = position;

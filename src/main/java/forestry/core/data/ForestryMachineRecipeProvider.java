@@ -59,10 +59,10 @@ import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.features.FluidsItems;
 import forestry.core.fluids.ForestryFluids;
-import forestry.core.items.EnumContainerType;
-import forestry.core.items.EnumCraftingMaterial;
-import forestry.core.items.EnumElectronTube;
 import forestry.core.items.ItemFruit;
+import forestry.core.items.definitions.EnumContainerType;
+import forestry.core.items.definitions.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumElectronTube;
 
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 

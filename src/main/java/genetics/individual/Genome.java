@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.ApiInstance;
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
@@ -20,8 +21,6 @@ import genetics.api.individual.IGenomeWrapper;
 import genetics.api.individual.IKaryotype;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-
-import genetics.ApiInstance;
 import genetics.utils.AlleleUtils;
 
 public final class Genome implements IGenome {
@@ -208,7 +207,7 @@ public final class Genome implements IGenome {
 		IAllele allele = getActiveAllele(chromosomeType);
 		V value = AlleleUtils.getAlleleValue(allele, valueClass);
 		if (value == null) {
-			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' has no value.", allele, chromosomeType));
+			throw new IllegalArgumentException(String.format("The allele '%s' at the active position of the chromosome type '%s' has no value of the type '%s'.", allele, chromosomeType, valueClass));
 		}
 		return value;
 	}

@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/stronghold_corridor",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

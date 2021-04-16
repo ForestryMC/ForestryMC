@@ -37,8 +37,8 @@ import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.core.climate.ClimateRoot;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.StringUtil;
 

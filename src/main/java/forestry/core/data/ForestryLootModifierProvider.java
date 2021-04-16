@@ -11,6 +11,11 @@ import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import forestry.core.config.Constants;
 import forestry.core.loot.ConditionLootModifier;
 
+/**
+ * Data provider for the generation of global loot modifiers.
+ * <p>
+ * Currently the only modifier is the {@link ConditionLootModifier}
+ */
 public class ForestryLootModifierProvider extends GlobalLootModifierProvider {
 	public ForestryLootModifierProvider(DataGenerator gen) {
 		super(gen, Constants.MOD_ID);

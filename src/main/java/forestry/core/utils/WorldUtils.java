@@ -1,6 +1,7 @@
 package forestry.core.utils;
 
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.IServerWorldInfo;
@@ -12,14 +13,14 @@ public final class WorldUtils {
 	private WorldUtils() {
 	}
 
-	public static ClientWorld asClient(World world) {
+	public static ClientWorld asClient(IWorld world) {
 		if (!(world instanceof ClientWorld)) {
 			throw new IllegalStateException("Failed to cast world to its client version.");
 		}
 		return (ClientWorld) world;
 	}
 
-	public static ServerWorld asServer(World world) {
+	public static ServerWorld asServer(IWorld world) {
 		if (!(world instanceof ServerWorld)) {
 			throw new IllegalStateException("Failed to cast world to its server version.");
 		}

@@ -21,6 +21,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
+ * A helper class that caches adjacent tiles for a given tile entity.
+ * <p>
+ * Listeners can be added to listen for adjacent tile changes.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class AdjacentTileCache {
@@ -34,10 +38,19 @@ public final class AdjacentTileCache {
 	private final TileEntity source;
 	private final Set<ICacheListener> listeners = new LinkedHashSet<>();
 
+	/**
+	 * Listener that listens for adjacent tile changes.
+	 */
 	public interface ICacheListener {
 
+		/**
+		 * Called at the moment the tile registers an adjacent tile change.
+		 */
 		void changed();
 
+		/**
+		 * Calle if the tile entity gets removed to clean the cached data.
+		 */
 		void purge();
 
 	}

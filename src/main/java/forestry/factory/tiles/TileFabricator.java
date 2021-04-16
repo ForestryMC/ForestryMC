@@ -48,7 +48,7 @@ import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.inventory.InventoryGhostCrafting;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 import forestry.core.inventory.wrappers.InventoryMapper;
-import forestry.core.items.ICraftingPlan;
+import forestry.core.items.definitions.ICraftingPlan;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.TilePowered;

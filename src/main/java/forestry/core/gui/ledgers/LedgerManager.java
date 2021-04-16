@@ -172,7 +172,7 @@ public class LedgerManager {
 		RenderSystem.color4f(1, 1, 1, 1);
 	}
 
-	public void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawTooltips(MatrixStack transform, int mouseX, int mouseY) {
 		Ledger ledger = getAtPosition(mouseX, mouseY);
 		if (ledger != null) {
 			ToolTip toolTip = new ToolTip();

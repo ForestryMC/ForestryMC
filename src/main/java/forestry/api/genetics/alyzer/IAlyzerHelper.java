@@ -4,6 +4,8 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
+import forestry.api.genetics.alleles.IAlleleForestrySpecies;
+
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
@@ -13,10 +15,8 @@ import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 
-import forestry.api.genetics.alleles.IAlleleForestrySpecies;
-
 /**
- * Helper for creating easily a multiline multicolumn gui like the forestry alyzer. Can be used to create custom gui
+ * Helper for creating easily a multiline multi column gui like the forestry alyzer. Can be used to create custom gui
  * renderings for your alleles in the alyzer.
  *
  * @see IAlleleDisplayHandler

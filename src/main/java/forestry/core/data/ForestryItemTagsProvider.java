@@ -2,9 +2,8 @@ package forestry.core.data;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -35,7 +34,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	protected void addTags() {
 		super.addTags();
 		builders.remove(ItemTags.SAPLINGS.getName());
-		filter = this.builders.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet());
+		filter = new HashSet<>(this.builders.keySet());
 		addToTag(ForestryTags.Items.GEARS, ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		tag(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		tag(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());

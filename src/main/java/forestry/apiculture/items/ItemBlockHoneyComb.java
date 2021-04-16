@@ -8,8 +8,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.blocks.BlockHoneyComb;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.definitions.IColoredItem;
 
 public class ItemBlockHoneyComb extends ItemBlockForestry<BlockHoneyComb> implements IColoredItem {
 

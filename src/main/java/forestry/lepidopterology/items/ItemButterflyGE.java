@@ -42,7 +42,7 @@ import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.items.IColoredItem;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.GeneticsUtil;

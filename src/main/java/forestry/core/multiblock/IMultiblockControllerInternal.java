@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -24,7 +25,6 @@ import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.core.network.IStreamableGui;
 import forestry.core.owner.IOwnedTile;
-import forestry.core.tiles.IClimatised;
 
 // internal implementation of IMultiblockController
 public interface IMultiblockControllerInternal extends IMultiblockController, INbtWritable, INbtReadable, IOwnedTile, IErrorLogicSource, IClimatised, IStreamableGui {

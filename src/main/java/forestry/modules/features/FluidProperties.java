@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import forestry.core.items.DrinkProperties;
+import forestry.core.items.definitions.DrinkProperties;
 import forestry.core.render.ForestryResource;
 
 public class FluidProperties {

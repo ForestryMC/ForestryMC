@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "side": "forestry:block/wood/planks.cocobolo",
-    "top": "forestry:block/wood/planks.cocobolo",
-    "bottom": "forestry:block/wood/planks.cocobolo",
-    "particle": "forestry:block/wood/planks.cocobolo"
-  }
-}

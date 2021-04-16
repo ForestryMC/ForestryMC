@@ -10,7 +10,7 @@ import net.minecraft.item.BlockItem;
 import forestry.core.config.Constants;
 import forestry.core.fluids.BlockForestryFluid;
 import forestry.core.fluids.ForestryFluid;
-import forestry.core.items.DrinkProperties;
+import forestry.core.items.definitions.DrinkProperties;
 
 public class FeatureFluid implements IFluidFeature {
 	private final FeatureBlock<BlockForestryFluid, BlockItem> block;

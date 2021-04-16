@@ -22,6 +22,9 @@ import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
 import genetics.utils.RootUtils;
 
+/**
+ * Loot function to add genetic information, an organism, to the item stack.
+ */
 public class OrganismFunction extends LootFunction {
 	public static LootFunctionType type;
 

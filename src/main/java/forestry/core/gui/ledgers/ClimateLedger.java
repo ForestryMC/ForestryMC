@@ -15,9 +15,9 @@ import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import forestry.api.climate.IClimatised;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.alleles.AlleleManager;
-import forestry.core.tiles.IClimatised;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 

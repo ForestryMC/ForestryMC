@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "side": "forestry:block/wood/planks.kapok",
-    "top": "forestry:block/wood/planks.kapok",
-    "bottom": "forestry:block/wood/planks.kapok",
-    "particle": "forestry:block/wood/planks.kapok"
-  }
-}

@@ -76,12 +76,12 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 		this.resourcesInventory = new InventoryMapper(this, config.resourcesStart, config.resourcesCount);
 		this.germlingsInventory = new InventoryMapper(this, config.germlingsStart, config.germlingsCount);
 		this.productInventory = new InventoryMapper(this, config.productionStart, config.productionCount);
-		this.fertilizerInventory = new InventoryMapper(this, config.fertilizerStart, config.fertilizerStart);
+		this.fertilizerInventory = new InventoryMapper(this, config.fertilizerStart, config.fertilizerCount);
 	}
 
 	@Override
 	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (SlotUtil.isSlotInRange(slotIndex, config.fertilizerStart, config.fertilizerStart)) {
+		if (SlotUtil.isSlotInRange(slotIndex, config.fertilizerStart, config.fertilizerCount)) {
 			return acceptsAsFertilizer(itemStack);
 		} else if (SlotUtil.isSlotInRange(slotIndex, config.germlingsStart, config.germlingsCount)) {
 			return acceptsAsSeedling(itemStack);

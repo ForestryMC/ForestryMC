@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -37,6 +38,10 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 	FIREPROOF(TreeChromosomes.FIREPROOF, 3) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, ITree individual) {
+			Boolean value = getActiveValue(genome);
+			if (!value) {
+				return;
+			}
 			toolTip.translated("for.gui.fireresist")
 					.style(TextFormatting.RED);
 		}
@@ -130,6 +135,21 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 	@Override
 	public void addTooltip(ToolTip toolTip, IGenome genome, ITree individual) {
 		//Default Implementation
+		if (groupPair.length == 2) {
+			TreeDisplayHandler first = values()[groupPair[0]];
+			TreeDisplayHandler second = values()[groupPair[1]];
+			//list.add(new TranslationTextComponent("%1$s %2$s", saplings, maturation));
+			Object firstValue = genome.getActiveValue(first.type, Object.class);
+			Object secondValue = genome.getActiveValue(second.type, Object.class);
+			toolTip.singleLine()
+					.add(new TranslationTextComponent(first.formattingText, firstValue
+					), first.color)
+					.text(" ")
+					.add(new TranslationTextComponent(second.formattingText, secondValue
+					), second.color)
+					.create();
+			//toolTip.translated("%1$s %2$s", first.formattingText, second.formattingText)
+		}
 	}
 
 	@Override

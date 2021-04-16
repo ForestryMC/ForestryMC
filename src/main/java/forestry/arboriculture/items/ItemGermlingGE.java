@@ -51,7 +51,7 @@ import forestry.api.recipes.IVariableFermentable;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import forestry.core.items.IColoredItem;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.NetworkUtil;

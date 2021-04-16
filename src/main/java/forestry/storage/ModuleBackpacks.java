@@ -45,7 +45,7 @@ import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
 import forestry.core.config.forge_old.Property;
 import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.utils.IMCUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;

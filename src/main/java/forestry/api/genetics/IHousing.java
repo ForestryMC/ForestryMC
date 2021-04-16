@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 /**
  * Any housing, hatchery or nest with a location in the world.
  */
+//TODO: Remove in favor of ILocatable ?
 public interface IHousing {
 
 	/**

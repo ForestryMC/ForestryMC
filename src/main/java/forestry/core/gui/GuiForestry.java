@@ -33,6 +33,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 
+import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
@@ -52,7 +53,6 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
-import forestry.core.tiles.IClimatised;
 import forestry.energy.EnergyManager;
 
 public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
@@ -111,7 +111,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	//TODO - I think this is the right method
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-		window.setMousePosition(mouseX, mouseY);
+		window.setMousePosition(mouseX - leftPos, mouseY - topPos);
 		this.renderBackground(transform);
 		super.render(transform, mouseX, mouseY, partialTicks);
 		renderTooltip(transform, mouseX, mouseY);
@@ -170,20 +170,14 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return minecraft.font;
 	}
 
-	//super has double double int
-	//int is probably mousebutton?
-	//TODO - check params
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
-		return true;
-		//TODO - what to return
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -249,8 +243,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int idk) {
-		return !window.isMouseOver(mouseX, mouseY) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, 0);    //TODO - I have no idea what the last param actually does
+	protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int mouseButton) {
+		return !window.isMouseOver(mouseX - guiLeft, mouseY - guiTop) && super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, mouseButton);
 	}
 
 	@Override
@@ -272,14 +266,14 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 
 	@Override
-	protected void renderLabels(MatrixStack transform, int mouseY, int mouseX) {
-		ledgerManager.drawTooltips(transform, mouseY, mouseX);
+	protected void renderLabels(MatrixStack transform, int mouseX, int mouseY) {
+		ledgerManager.drawTooltips(transform, mouseX, mouseY);
 
 		if (this.inventory.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, container.slots, mouseX, mouseY);
-			window.drawTooltip(transform, mouseY, mouseX);
+			window.drawTooltip(transform, mouseX, mouseY);
 		}
 	}
 
@@ -309,8 +303,6 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	protected void drawBackground(MatrixStack transform) {
 		bindTexture(textureFile);
 
-		//int x = (width - xSize) / 2;
-		//int y = (height - ySize) / 2;
 		blit(transform, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 

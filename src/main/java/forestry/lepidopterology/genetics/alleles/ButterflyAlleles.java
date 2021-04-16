@@ -6,13 +6,13 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-import genetics.api.alleles.IAlleleRegistry;
-
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyEffect;
 import forestry.core.features.CoreItems;
-import forestry.core.items.EnumCraftingMaterial;
+import forestry.core.items.definitions.EnumCraftingMaterial;
+
+import genetics.api.alleles.IAlleleRegistry;
 
 public class ButterflyAlleles {
 	public static final IAlleleButterflyCocoon cocoonDefault;

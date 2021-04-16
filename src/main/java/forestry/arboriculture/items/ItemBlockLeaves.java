@@ -22,8 +22,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.arboriculture.ModuleArboriculture;
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemBlockForestry;
+import forestry.core.items.definitions.IColoredItem;
 import forestry.core.utils.Translator;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {

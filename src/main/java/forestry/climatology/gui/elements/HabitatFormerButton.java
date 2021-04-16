@@ -23,7 +23,7 @@ import forestry.core.features.CoreItems;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.ButtonElement;
-import forestry.core.items.EnumElectronTube;
+import forestry.core.items.definitions.EnumElectronTube;
 
 public class HabitatFormerButton extends ButtonElement {
 	private static final Drawable ENABLED_BUTTON = new Drawable(GuiHabitatFormer.TEXTURE, 234, 0, 22, 22);

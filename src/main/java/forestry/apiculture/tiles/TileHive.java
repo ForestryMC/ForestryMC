@@ -325,6 +325,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		return EnumHumidity.getFromValue(humidity);
 	}
 
+
 	@Override
 	public int getBlockLightValue() {
 		return getLevel().isDay() ? 15 : 0; // hives may have the sky obstructed but should still be active

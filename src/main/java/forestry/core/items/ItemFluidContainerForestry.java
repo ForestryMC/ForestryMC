@@ -52,6 +52,9 @@ import forestry.api.core.ItemGroups;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
+import forestry.core.items.definitions.DrinkProperties;
+import forestry.core.items.definitions.EnumContainerType;
+import forestry.core.items.definitions.FluidHandlerItemForestry;
 import forestry.core.utils.ResourceUtil;
 
 public class ItemFluidContainerForestry extends ItemForestry {

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 
 /**
@@ -22,7 +23,7 @@ import forestry.api.core.IErrorLogicSource;
  * It contains methods to interact with the farm itself.
  * Can be used in {@link IFarmLogic}'s to remove fluid or add products.
  */
-public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
+public interface IFarmHousing extends IErrorLogicSource, IExtentCache, IClimatised {
 
 	/**
 	 * Position of the farm. Mostly used by internal logic.
@@ -62,22 +63,6 @@ public interface IFarmHousing extends IErrorLogicSource, IExtentCache {
 	 * @param liquid The liquid to be removed
 	 */
 	void removeLiquid(FluidStack liquid);
-
-	/**
-	 * The current temperature value of this object.
-	 * The range is based on the vanilla values of the biomes.
-	 *
-	 * @return A value between 0.0f and 2.0f.
-	 */
-	float getExactTemperature();
-
-	/**
-	 * The current humidity value of this object.
-	 * The range is based on the vanilla values of the biomes.
-	 *
-	 * @return A value between 0.0f and 2.0f.
-	 */
-	float getExactHumidity();
 
 	/**
 	 * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem.

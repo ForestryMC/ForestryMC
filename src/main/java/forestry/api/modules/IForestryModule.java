@@ -22,7 +22,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 /**
  * Defines a Forestry module.
  * Any class implementing this interface and annotated by {@link ForestryModule} to be loaded by
- * the model manager of Forestry.
+ * the module manager of Forestry.
  */
 public interface IForestryModule {
 	default boolean isAvailable() {

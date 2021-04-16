@@ -20,6 +20,9 @@ import net.minecraftforge.common.loot.LootTableIdCondition;
 
 import forestry.core.config.Constants;
 
+/**
+ * A global loot modifier used by forestry to inject the additional chest loot to the vanilla loot tables.
+ */
 public class ConditionLootModifier extends LootModifier {
 	public static final Serializer SERIALIZER = new Serializer();
 
@@ -47,7 +50,10 @@ public class ConditionLootModifier extends LootModifier {
 	}
 
 	/**
-	 * Helper field to prevent an endless method loop caused by forge.
+	 * Helper field to prevent an endless method loop caused by forge in {@link LootTable#getRandomItems(LootContext)}
+	 * which calls this method again, since it keeps the {@link LootContext#getQueriedLootTableId()} value, which causes
+	 * "getRandomItems" to calling this method again, because the conditions still met even that it is an other loot
+	 * table.
 	 */
 	private boolean operates = false;
 
@@ -58,11 +64,10 @@ public class ConditionLootModifier extends LootModifier {
 			return generatedLoot;
 		}
 		operates = true;
-		//context.getLootTable().getRandomItems(context)
 		for (String extension : extensions) {
 			ResourceLocation location = new ResourceLocation(Constants.MOD_ID, tableLocation.getPath() + "/" + extension);
 			LootTable table = context.getLootTable(location);
-			if (table != null) {
+			if (table != LootTable.EMPTY) {
 				generatedLoot.addAll(table.getRandomItems(context));
 			}
 		}
@@ -84,6 +89,7 @@ public class ConditionLootModifier extends LootModifier {
 			for (int i = 0; i < array.size(); i++) {
 				extensions[i] = array.get(i).getAsString();
 			}
+			//We don't add the conditions back to the json at #write, so the conditions fields ends up with an null value
 			if (conditions == null) {
 				return new ConditionLootModifier(new ResourceLocation(table), extensions);
 			}

@@ -39,6 +39,7 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.climate.ClimateCapabilities;
 import forestry.api.climate.IClimateListener;
+import forestry.api.climate.IClimatised;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.IErrorLogic;
@@ -54,7 +55,6 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
-import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.RenderUtil;
 

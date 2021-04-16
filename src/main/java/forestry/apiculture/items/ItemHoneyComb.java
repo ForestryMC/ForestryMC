@@ -20,8 +20,8 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.features.ApicultureItems;
-import forestry.core.items.IColoredItem;
 import forestry.core.items.ItemForestry;
+import forestry.core.items.definitions.IColoredItem;
 
 public class ItemHoneyComb extends ItemForestry implements IColoredItem {
 

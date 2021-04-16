@@ -17,6 +17,8 @@ import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -66,6 +68,16 @@ public abstract class TileUtil {
 	@Nullable
 	public static <T> T getTile(IBlockReader world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity = getTile(world, pos);
+		if (tileClass.isInstance(tileEntity)) {
+			return tileClass.cast(tileEntity);
+		} else {
+			return null;
+		}
+	}
+
+	@Nullable
+	public static <T> T getTile(LootContext.Builder builder, Class<T> tileClass) {
+		TileEntity tileEntity = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {

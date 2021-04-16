@@ -16,7 +16,7 @@ import forestry.api.core.EnumTemperature;
 /**
  * A {@link IClimateState} is used to store and handle temperature and humidity.
  * <p>
- * The values are oriented on the values of {@link Biome#getDefaultTemperature()} and {@link Biome#getDownfall()}}.
+ * The values are oriented on the values of {@link Biome#getBaseTemperature()} and {@link Biome#getDownfall()}}.
  * <p>
  * If any of the two values would be Float.NAN after an operation {@link IClimateStateHelper#absent()} will be returned
  * instead of the state.

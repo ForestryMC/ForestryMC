@@ -28,7 +28,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
-import forestry.core.items.EnumContainerType;
+import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.models.ClientManager;
 import forestry.core.models.FluidContainerModel;
 import forestry.core.render.RenderAnalyzer;

@@ -404,7 +404,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		BeeManager.beeRoot.getBreedingTracker(housing.getWorldObj(), housing.getOwner()).registerQueen(princess);
 
 		// Remove drone
-		beeInventory.getDrone().shrink(1);
+		droneStack.shrink(1);
+		if (droneStack.isEmpty()) {
+			beeInventory.setDrone(ItemStack.EMPTY);
+		}
 
 		// Reset breeding time
 		queen = princess;
@@ -421,7 +424,6 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			spawn = spawnOffspring(queen, beeHousing);
 			beeListener.onQueenDeath();
 			beeInventory.getQueen().setCount(0);
-			beeInventory.setQueen(ItemStack.EMPTY);
 		} else {
 			Log.warning("Tried to spawn offspring off an unmated queen. Devolving her to a princess.");
 
@@ -429,8 +431,8 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			GeneticHelper.setIndividual(convert, queen);
 
 			spawn = Collections.singleton(convert);
-			beeInventory.setQueen(ItemStack.EMPTY);
 		}
+		beeInventory.setQueen(ItemStack.EMPTY);
 
 		return spawn;
 	}

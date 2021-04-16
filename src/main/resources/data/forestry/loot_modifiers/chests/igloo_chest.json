@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/igloo_chest",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}
