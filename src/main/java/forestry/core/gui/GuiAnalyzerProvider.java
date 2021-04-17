@@ -19,6 +19,7 @@ import forestry.core.gui.elements.GeneticAnalyzer;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.slots.SlotAnalyzer;
+import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.ITitled;
 
@@ -33,7 +34,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	public final IGeneticAnalyzer analyzer;
 	//The slot that contains the "energy" (honey drops) of the analyzer.
 	@Nullable
-	private final SlotAnalyzer slotAnalyzer;
+	private SlotAnalyzer slotAnalyzer;
 	//Position of the button that toggles the analyzer.
 	private final int buttonX;
 	private final int buttonY;
@@ -72,7 +73,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
 			Slot slot = containerAnalyzer.getAnalyzerSlot();
 			if (slot instanceof SlotAnalyzer) {
-				((SlotAnalyzer) slot).setGui(this);
+				((SlotAnalyzer) slot).setGui(analyzer::isVisible);
 				analyzerSlot = (SlotAnalyzer) slot;
 			}
 		}
@@ -105,7 +106,11 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 		if (slotAnalyzer != null) {
 			IGuiElement element = analyzer.getItemElement();
-			slotAnalyzer.setPosition(element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
+			int index = slotAnalyzer.index;
+			slotAnalyzer = new SlotAnalyzer((ItemInventoryAlyzer) slotAnalyzer.container, slotAnalyzer.getSlotIndex(), element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
+			slotAnalyzer.index = index;
+			slotAnalyzer.setGui(analyzer::isVisible);
+			container.slots.set(index, slotAnalyzer);
 		}
 	}
 

@@ -15,6 +15,7 @@ import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
+import forestry.database.inventory.InventoryDatabaseAnalyzer;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
@@ -45,7 +46,7 @@ public class ContainerAnalyzerProviderHelper {
 			}
 			analyzerIndex = i;
 			alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
-			Slot slot = container.getSlot(i);    //TODO - probably not right
+			Slot slot = container.getSlot(i < 9 ? i + 27 : i - 9);
 			if (slot instanceof SlotLockable) {
 				SlotLockable lockable = (SlotLockable) slot;
 				lockable.lock();
@@ -65,7 +66,12 @@ public class ContainerAnalyzerProviderHelper {
 		if (alyzerInventory == null) {
 			return null;
 		}
-		return container.getSlot(0);    //TODO - not sure about this
+		for (Slot slot : container.slots) {
+			if (slot instanceof SlotAnalyzer) {
+				return slot;
+			}
+		}
+		return null;
 	}
 
 	public void analyzeSpecimen(int selectedSlot) {
@@ -99,7 +105,7 @@ public class ContainerAnalyzerProviderHelper {
 			IIndividual individual = optionalIndividual.get();
 			if (!individual.isAnalyzed()) {
 				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-				ItemStack energyStack = ItemStack.EMPTY;//alyzerInventory.getStackInSlot(InventoryDatabaseAnalyzer.SLOT_ENERGY);
+				ItemStack energyStack = alyzerInventory.getItem(InventoryDatabaseAnalyzer.SLOT_ENERGY);
 				if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
 					return;
 				}
@@ -114,13 +120,11 @@ public class ContainerAnalyzerProviderHelper {
 
 					if (requiresEnergy) {
 						// Decrease energy
-						//TODO energy
-						//					alyzerInventory.decrStackSize(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
+						alyzerInventory.removeItem(InventoryDatabaseAnalyzer.SLOT_ENERGY, 1);
 					}
 				}
 				specimenSlot.set(specimen);
 			}
 		}
-		return;
 	}
 }

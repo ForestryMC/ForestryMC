@@ -111,7 +111,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	//TODO - I think this is the right method
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-		window.setMousePosition(mouseX - leftPos, mouseY - topPos);
+		window.setMousePosition(mouseX, mouseY);
 		this.renderBackground(transform);
 		super.render(transform, mouseX, mouseY, partialTicks);
 		renderTooltip(transform, mouseX, mouseY);
@@ -176,7 +176,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.DownEvent(origin, mouseX - leftPos, mouseY - topPos, mouseButton), GuiEventDestination.ALL);
+		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
@@ -186,7 +186,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 			return true;
 		}
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.UpEvent(origin, mouseX - leftPos, mouseY - topPos, mouseButton), GuiEventDestination.ALL);
+		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		super.mouseReleased(mouseX, mouseY, mouseButton);
 		return true;
 		//TODO - what to return
@@ -283,7 +283,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, container.slots, mouseX, mouseY);
-			window.drawTooltip(transform, mouseX - leftPos, mouseY - topPos);
+			window.drawTooltip(transform, mouseX, mouseY);
 		}
 	}
 
@@ -305,7 +305,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		RenderSystem.popMatrix();
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-		window.draw(transform, mouseX - leftPos, mouseY - topPos);
+		window.draw(transform, mouseX, mouseY);
 
 		bindTexture(textureFile);
 	}

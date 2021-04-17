@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.organism.IOrganismType;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -25,6 +23,8 @@ import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
+
+import genetics.api.organism.IOrganismType;
 
 @OnlyIn(Dist.CLIENT)
 public class BeeDatabaseTab implements IDatabaseTab<IBee> {
@@ -50,7 +50,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 		IAlleleBeeSpecies primarySpecies = bee.getGenome().getActiveAllele(BeeChromosomes.SPECIES);
 		IAlleleBeeSpecies secondarySpecies = bee.getGenome().getInactiveAllele(BeeChromosomes.SPECIES);
 
-		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
+		container.label(Translator.translateToLocal("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species"), GuiElementAlignment.TOP_CENTER, GuiElementFactory.INSTANCE.databaseTitle);
 
 		container.addLine(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES);
 

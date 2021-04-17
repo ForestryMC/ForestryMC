@@ -185,12 +185,12 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		if (!visible) {
 			return;
 		}
-		/*List<String> lines = getTooltip(mouseX, mouseY);
+		/*ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
-			GlStateManager.pushMatrix();
-			ScaledResolution scaledresolution = new ScaledResolution(gui.mc);
-			GuiUtils.drawHoveringText(lines, mouseX, mouseY, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight(), -1, gui.mc.fontRenderer);
-			GlStateManager.popMatrix();
+			GlStateManager._pushMatrix();
+			MainWindow window = Minecraft.getInstance().getWindow();
+			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
+			GlStateManager._popMatrix();
 		}*/
 	}
 
