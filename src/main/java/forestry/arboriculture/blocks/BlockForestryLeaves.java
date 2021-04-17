@@ -109,7 +109,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 			return;
 		}
 
-		// Add saplings	//TODO cast
+		// Add saplings
 		List<ITree> saplings = tree.getSaplings(world, playerProfile, pos, saplingModifier);
 
 		for (ITree sapling : saplings) {

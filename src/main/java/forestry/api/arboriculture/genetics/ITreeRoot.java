@@ -9,13 +9,12 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
-
-import genetics.api.individual.IGenome;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.IFruitProvider;
@@ -23,6 +22,8 @@ import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRootPollinatable;
+
+import genetics.api.individual.IGenome;
 
 public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 
@@ -46,7 +47,11 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	@Nullable
 	ITree getTree(World world, BlockPos pos);
 
+	//TODO: Why is there a world ?
 	ITree getTree(World world, IGenome genome);
+
+	@Nullable
+	ITree getTree(TileEntity tileEntity);
 
 	boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
 

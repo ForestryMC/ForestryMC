@@ -367,6 +367,9 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	private void sendNetworkUpdateRipening() {
+		if (isRemoved()) {
+			return;
+		}
 		int newColourFruits = determineFruitColour();
 		if (newColourFruits == colourFruits) {
 			return;

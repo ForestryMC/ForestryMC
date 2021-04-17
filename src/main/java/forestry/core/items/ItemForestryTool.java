@@ -16,6 +16,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -107,40 +108,21 @@ public class ItemForestryTool extends ItemForestry {
 		return ActionResultType.PASS;
 	}
 
-	//	@SubscribeEvent
-	//	public void onDestroyCurrentItem(PlayerDestroyItemEvent event) {
-	//		if (event.getOriginal().isEmpty() || event.getOriginal().getItem() != this) {
-	//			return;
-	//		}
-	//
-	//		PlayerEntity player = event.getEntityPlayer();
-	//		World world = player.world;
-	//
-	//		if (!world.isRemote && !remnants.isEmpty()) {
-	//			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.posX, player.posY, player.posZ);
-	//		}
-	//	}
-
 	public void onBroken(LivingEntity player) {
 		World world = player.level;
+
+		player.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
 
 		if (!world.isClientSide && !remnants.isEmpty()) {
 			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getX(), player.getY(), player.getZ());
 		}
 	}
 
-	//TODO - check the consumer is called how I think it is
 	@Override
 	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (state.getDestroySpeed(worldIn, pos) != 0) {
+		if (!worldIn.isClientSide && state.getDestroySpeed(worldIn, pos) != 0) {
 			stack.hurtAndBreak(1, entityLiving, this::onBroken);
 		}
 		return true;
 	}
-
-	//TODO - block shape
-	//	@Override
-	//	public boolean isFull3D() {
-	//		return true;
-	//	}
 }

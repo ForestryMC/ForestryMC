@@ -7,15 +7,11 @@ import java.util.List;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +25,6 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -138,9 +133,11 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		}
 	}
 
+
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		List<ItemStack> ret = super.getDrops(state, builder);
+		return super.getDrops(state, builder);
+		/*List<ItemStack> ret = super.getDrops(state, builder);
 		Entity entity = builder.getOptionalParameter(LootParameters.THIS_ENTITY);
 		PlayerEntity player = null;
 		GameProfile profile = null;
@@ -167,7 +164,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		// leaves not harvested, get drops normally
 		getLeafDrop(drops, world, profile, pos, saplingModifier, fortune, builder);
 		ret.addAll(drops);
-		return ret;
+		return ret;*/
 	}
 
 	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune, LootContext.Builder builder);

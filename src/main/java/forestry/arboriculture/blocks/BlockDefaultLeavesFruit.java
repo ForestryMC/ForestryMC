@@ -91,7 +91,7 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			}
 		}
 
-		// Add fruitsk
+		// Add fruits
 		IGenome genome = tree.getGenome();
 		IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		if (fruitProvider.isFruitLeaf(genome, world, pos)) {

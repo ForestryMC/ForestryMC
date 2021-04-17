@@ -81,6 +81,8 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tag(ForestryTags.Items.STAMPS).add(MailItems.STAMPS.itemArray());
 
 		tag(ForestryTags.Items.FRUITS).add(CoreItems.FRUITS.itemArray());
+		tag(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
+		tag(ForestryTags.Items.SAWDUST).add(CoreItems.WOOD_PULP.item());
 
 		copy(Tags.Blocks.FENCES, Tags.Items.FENCES);
 		copy(Tags.Blocks.FENCE_GATES, Tags.Items.FENCE_GATES);

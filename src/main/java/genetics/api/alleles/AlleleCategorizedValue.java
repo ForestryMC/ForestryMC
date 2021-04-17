@@ -33,15 +33,8 @@ public class AlleleCategorizedValue<V> extends AlleleValue<V> {
 		return new ResourceLocation(modId, category + "_" + valueName);
 	}
 
-	//TODO: Find a way to lazy load the unlocalized name so we can use the custom name again
 	private static String getUnlocalizedName(String modId, String category, String valueName) {
 		return modId + '.' + "allele." + valueName;
-		/*String customName = modId + '.' + "allele." + category + '.' + valueName;
-		if (I18n.hasKey(customName)) {
-			return customName;
-		} else {
-			return modId + '.' + "allele." + valueName;
-		}*/
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 		}
 
 		// Fertilizer
-		addSlot(new SlotFiltered(tile.getInternalInventory(), InventoryPlanter.CONFIG.germlingsStart, 83, 22));
+		addSlot(new SlotFiltered(tile.getInternalInventory(), InventoryPlanter.CONFIG.fertilizerStart, 83, 22));
 		// Can Slot
 		addSlot(new SlotLiquidIn(tile.getInternalInventory(), InventoryPlanter.CONFIG.canStart, 178, 18));
 	}

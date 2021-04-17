@@ -69,8 +69,15 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 	private final ParticleHelper.Callback particleCallback;
 
+	private static Block.Properties createProperties(IBlockType type, Block.Properties properties) {
+		if (type instanceof IBlockTypeTesr || type instanceof IBlockTypeCustom) {
+			properties = properties.noOcclusion();
+		}
+		return properties.isViewBlocking((state, reader, pos) -> !(type instanceof IBlockTypeTesr) && !(type instanceof IBlockTypeCustom));
+	}
+
 	public BlockBase(P blockType, Block.Properties properties) {
-		super(properties.isRedstoneConductor((state, reader, pos) -> !(blockType instanceof IBlockTypeTesr) && !(blockType instanceof IBlockTypeCustom)));
+		super(createProperties(blockType, properties));
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 
 		this.blockType = blockType;

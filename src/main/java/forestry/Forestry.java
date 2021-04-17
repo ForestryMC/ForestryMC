@@ -69,6 +69,7 @@ import forestry.api.recipes.ISolderRecipe;
 import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillRecipe;
+import forestry.arboriculture.loot.GrafterLootModifier;
 import forestry.core.EventHandlerCore;
 import forestry.core.circuits.CircuitRecipe;
 import forestry.core.climate.ClimateFactory;
@@ -256,7 +257,7 @@ public class Forestry {
 	}
 
 	private void gatherData(GatherDataEvent event) {
-		CapabilityFluidHandler.register();    //TODO test
+		CapabilityFluidHandler.register();
 		DataGenerator generator = event.getGenerator();
 
 		if (event.includeServer()) {
@@ -274,12 +275,6 @@ public class Forestry {
 			generator.addProvider(new ForestryRecipeProvider(generator));
 			generator.addProvider(new ForestryMachineRecipeProvider(generator));
 			generator.addProvider(new ForestryLootModifierProvider(generator));
-			try {
-				generator.run();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-			//generator.run();
 		}
 	}
 
@@ -321,8 +316,7 @@ public class Forestry {
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerObjects(RegistryEvent.Register event) {
-			//noinspection unchecked
+		public static void registerObjects(RegistryEvent.Register<?> event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
 		}
 
@@ -355,6 +349,7 @@ public class Forestry {
 		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
 			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
 			registry.register(ConditionLootModifier.SERIALIZER);
+			registry.register(GrafterLootModifier.SERIALIZER);
 		}
 
 		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
@@ -371,30 +366,6 @@ public class Forestry {
 			}
 		}
 	}
-
-	//split
-	//TODO - when to run these events
-	//		@EventHandler
-	//		public void init(FMLInitializationEvent event) {
-	//			// Register gui handler
-	//			NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-	//
-	//			ModuleManager.getInternalHandler().runInit();
-	//
-	//			AdvancementManager.registerTriggers();
-	//		}
-	//
-	////	@EventHandler
-	//	public void postInit(FMLPostInitializationEvent event) {
-	//		ModuleManager.getInternalHandler().runPostInit();
-	//
-	//		// Register world generator
-	//		WorldGenerator worldGenerator = new WorldGenerator();
-	//		GameRegistry.registerWorldGenerator(worldGenerator, 0);
-	//
-	//		// Register tick handlers
-	//		Proxies.common.registerTickHandlers(worldGenerator);
-	//	}
 
 	@SubscribeEvent
 	public void serverStarting(FMLServerStartingEvent event) {

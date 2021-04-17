@@ -85,6 +85,15 @@ public abstract class TileUtil {
 		}
 	}
 
+	@Nullable
+	public static <T> T getTile(TileEntity tileEntity, Class<T> tileClass) {
+		if (tileClass.isInstance(tileEntity)) {
+			return tileClass.cast(tileEntity);
+		} else {
+			return null;
+		}
+	}
+
 	public interface ITileGetResult<T, R> {
 		@Nullable
 		R getResult(T tile);
@@ -96,6 +105,18 @@ public abstract class TileUtil {
 	@Nullable
 	public static <T, R> R getResultFromTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
 		T tile = getTile(world, pos, tileClass);
+		if (tile != null) {
+			return tileGetResult.getResult(tile);
+		}
+		return null;
+	}
+
+	/**
+	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
+	 */
+	@Nullable
+	public static <T, R> R getResultFromTile(TileEntity tileEntity, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+		T tile = getTile(tileEntity, tileClass);
 		if (tile != null) {
 			return tileGetResult.getResult(tile);
 		}

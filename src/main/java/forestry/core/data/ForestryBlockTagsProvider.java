@@ -88,8 +88,6 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 			tag(BlockTags.SAPLINGS).add(ArboricultureBlocks.SAPLING_GE.block());
 			tag(BlockTags.LEAVES).add(ArboricultureBlocks.LEAVES.block()).add(ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.blockArray()).add(ArboricultureBlocks.LEAVES_DEFAULT.blockArray()).add(ArboricultureBlocks.LEAVES_DECORATIVE.blockArray());
 			tag(Tags.Blocks.CHESTS).add(ArboricultureBlocks.TREE_CHEST.block());
-			//getOrCreateBuilder(Tags.Blocks.CHESTS).add(registry.treeChest);
-			//getOrCreateBuilder(Tags.Blocks.CHESTS_WOODEN).add(registry.treeChest);
 		}
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {

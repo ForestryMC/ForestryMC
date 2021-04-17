@@ -26,6 +26,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -56,6 +57,7 @@ import forestry.api.genetics.gatgets.IDatabasePlugin;
 import forestry.arboriculture.blocks.BlockFruitPod;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.tiles.TileFruitPod;
+import forestry.arboriculture.tiles.TileLeaves;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.network.packets.PacketFXSignal;
@@ -137,9 +139,16 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 		return EnumGermlingType.SAPLING;
 	}
 
+	//TODO: Should be transformed into a more generic method
 	@Override
 	public ITree getTree(World world, BlockPos pos) {
 		return TileUtil.getResultFromTile(world, pos, TileSapling.class, TileSapling::getTree);
+	}
+
+	@Nullable
+	@Override
+	public ITree getTree(TileEntity tileEntity) {
+		return TileUtil.getResultFromTile(tileEntity, TileLeaves.class, TileLeaves::getTree);
 	}
 
 	@Override

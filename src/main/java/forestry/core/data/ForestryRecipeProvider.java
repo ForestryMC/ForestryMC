@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
+import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IFinishedRecipe;
@@ -362,7 +363,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		registerFoodRecipes(helper);
 		registerBackpackRecipes(helper);
 		registerCharcoalRecipes(helper);
-		addClimatologyRecipes(helper);
+		registerClimatologyRecipes(helper);
 		registerCoreRecipes(helper);
 		registerBookRecipes(helper);
 		registerCultivationRecipes(helper);
@@ -552,11 +553,12 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				ForestryModuleUids.APICULTURE
 		);
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shaped(Items.SLIME_BALL)
+				(consumer) -> ShapedRecipeBuilder.shaped(Items.SLIME_BALL)
 						.define('#', propolis)
 						.define('X', ApicultureItems.POLLEN_CLUSTER.get(EnumPollenCluster.NORMAL).item())
 						.pattern("#X#").pattern("#X#").pattern("#X#")
-						.unlockedBy("has_propolis", has(propolis))::save,
+						.unlockedBy("has_propolis", has(propolis))
+						.save(consumer, new ResourceLocation(Constants.MOD_ID, "slime_from_propolis")),
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(ApicultureItems.SMOKER.item())
@@ -578,11 +580,11 @@ public class ForestryRecipeProvider extends RecipeProvider {
 
 		Item beesWax = CoreItems.BEESWAX.item();
 		helper.moduleConditionRecipe(
-				ShapedRecipeBuilder.shaped(Items.TORCH, 3)
+				(consumer) -> ShapedRecipeBuilder.shaped(Items.TORCH, 3)
 						.define('#', beesWax)
 						.define('Y', Tags.Items.RODS_WOODEN)
 						.pattern(" # ").pattern(" # ").pattern(" Y ")
-						.unlockedBy("has_wax", has(beesWax))::save,
+						.unlockedBy("has_wax", has(beesWax)).save(consumer, new ResourceLocation(Constants.MOD_ID, "torch_from_way")),
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(ApicultureItems.WAX_CAST.item())
@@ -801,9 +803,10 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						.unlockedBy("has_charcoal", has(Items.CHARCOAL))::save,
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapeless(Items.CHARCOAL, 9)
+				(consumer) -> ShapelessRecipeBuilder.shapeless(Items.CHARCOAL, 9)
 						.requires(ForestryTags.Items.CHARCOAL)
-						.unlockedBy("has_charcoal_block", has(ForestryTags.Items.CHARCOAL))::save,
+						.unlockedBy("has_charcoal_block", has(ForestryTags.Items.CHARCOAL))
+						.save(consumer, new ResourceLocation(Constants.MOD_ID, "charcoal_from_block")),
 				ForestryModuleUids.CHARCOAL);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(CharcoalBlocks.WOOD_PILE.block())
@@ -823,7 +826,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"), ForestryModuleUids.CHARCOAL);
 	}
 
-	private void addClimatologyRecipes(RecipeDataHelper helper) {
+	private void registerClimatologyRecipes(RecipeDataHelper helper) {
 
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(ClimatologyBlocks.HABITATFORMER.block())
@@ -851,6 +854,35 @@ public class ForestryRecipeProvider extends RecipeProvider {
 
 	private void registerCoreRecipes(RecipeDataHelper helper) {
 		Consumer<IFinishedRecipe> consumer = helper.getConsumer();
+
+		CookingRecipeBuilder.smelting(
+				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)),
+				CoreItems.APATITE,
+				0.5F,
+				200)
+				.unlockedBy("has_apatite_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_blasting"));
+		CookingRecipeBuilder.smelting(
+				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)),
+				CoreItems.INGOT_TIN,
+				0.5F,
+				200)
+				.unlockedBy("has_tin_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_blasting"));
+		CookingRecipeBuilder.smelting(
+				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)),
+				CoreItems.INGOT_COPPER,
+				0.5F,
+				200)
+				.unlockedBy("has_copper_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "copper_ingot_from_blasting"));
+		CookingRecipeBuilder.smelting(
+				Ingredient.of(CoreItems.PEAT),
+				CoreItems.ASH.item(),
+				0.0F,
+				200)
+				.unlockedBy("has_peat", has(CoreItems.PEAT))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "ash_from_peat_blasting"));
 
 		//don't need conditions here generally since core is always enabled
 		ShapedRecipeBuilder.shaped(CoreBlocks.BASE.get(BlockTypeCoreTesr.ANALYZER).block())
@@ -993,7 +1025,8 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		ShapedRecipeBuilder.shaped(Items.STRING)
 				.define('#', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item())
 				.pattern(" # ").pattern(" # ").pattern(" # ")
-				.unlockedBy("has_wisp", has(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item())).save(consumer);
+				.unlockedBy("has_wisp", has(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item()))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "string_from_wisp"));
 		ShapedRecipeBuilder.shaped(CoreItems.STURDY_CASING.item())
 				.define('#', ForestryTags.Items.INGOTS_BRONZE)
 				.pattern("###").pattern("# #").pattern("###")
@@ -1001,7 +1034,8 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		ShapedRecipeBuilder.shaped(Items.COBWEB, 4)
 				.define('#', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item())
 				.pattern("# #").pattern(" # ").pattern("# #")
-				.unlockedBy("has_wisp", has(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item())).save(consumer);
+				.unlockedBy("has_wisp", has(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP).item()))
+				.save(consumer, new ResourceLocation("cobweb_from_wisp"));
 		ShapedRecipeBuilder.shaped(CoreItems.WRENCH.item())
 				.define('#', ForestryTags.Items.INGOTS_BRONZE)
 				.pattern("# #").pattern(" # ").pattern(" # ")

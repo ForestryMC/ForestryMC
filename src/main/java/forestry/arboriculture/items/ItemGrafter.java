@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -69,7 +70,12 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 
 	@Override
 	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		return true;
+		if (!worldIn.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
+			stack.hurtAndBreak(1, entityLiving, (p_220036_0_) -> {
+				p_220036_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+			});
+		}
+		return state.is(BlockTags.LEAVES);
 	}
 
 	@Override

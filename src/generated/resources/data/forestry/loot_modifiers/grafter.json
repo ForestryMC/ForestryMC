@@ -1,0 +1,22 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:alternative",
+      "terms": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "item": "forestry:grafter"
+          }
+        },
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "item": "forestry:grafter_proven"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "forestry:grafter_modifier"
+}
