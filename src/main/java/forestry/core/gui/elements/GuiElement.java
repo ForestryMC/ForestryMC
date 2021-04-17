@@ -116,7 +116,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 	}
 
 	@Override
-	public final void draw(MatrixStack transform, int mouseY, int mouseX) {
+	public final void draw(MatrixStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
 		}
@@ -135,7 +135,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getScreenHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
 		}
 
-		drawElement(transform, mouseY, mouseX);
+		drawElement(transform, mouseX, mouseY);
 
 		if (isCropped()) {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -144,7 +144,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		RenderSystem.popMatrix();
 	}
 
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		//Default-Implementation
 	}
 

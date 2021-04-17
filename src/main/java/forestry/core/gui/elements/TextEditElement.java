@@ -73,8 +73,8 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	//TODO - maybe need to supply start/end points now?
 	//TODO third param probably partial ticks. Is it being 0 a problem?
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		field.render(transform, mouseX, mouseY, 0);
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		field.render(transform, mouseY, mouseX, 0);
 	}
 
 	@Override

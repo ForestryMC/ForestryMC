@@ -88,11 +88,11 @@ public class MultiblockElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		if (lastClick != null) {
 			if (Minecraft.getInstance().mouseHandler.isLeftPressed() || Minecraft.getInstance().mouseHandler.isRightPressed()) {
-				double dx = mouseX - lastClick[0];
-				double dy = mouseY - lastClick[1];
+				double dx = mouseY - lastClick[0];
+				double dy = mouseX - lastClick[1];
 				float maxSpeed = 10f;
 				double changeY = Math.min(maxSpeed, dx / 10f);
 				double changeX = Math.min(maxSpeed, dy / 10f);

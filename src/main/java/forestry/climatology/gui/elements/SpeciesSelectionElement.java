@@ -94,8 +94,8 @@ public class SpeciesSelectionElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		super.drawElement(transform, mouseY, mouseX);
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		super.drawElement(transform, mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		RenderSystem.enableAlphaTest();

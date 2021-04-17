@@ -35,7 +35,7 @@ public class ColorElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		drawGradientRect(0, 0, width, height, startColor, endColor);
 	}
 

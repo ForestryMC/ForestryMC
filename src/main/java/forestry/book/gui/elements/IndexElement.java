@@ -45,7 +45,7 @@ public class IndexElement extends VerticalLayout {
 
 		//TODO ITextComponent
 		@Override
-		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 			boolean mouseOver = isMouseOver();
 			String preFix = mouseOver ? TextFormatting.GOLD + " > " : TextFormatting.DARK_GRAY + "- ";
 			FONT_RENDERER.draw(transform, preFix + component.getString(), 0, 0, 0);

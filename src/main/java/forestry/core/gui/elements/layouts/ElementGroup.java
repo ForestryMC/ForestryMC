@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -65,9 +65,9 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		int mX = mouseX - getX();
-		int mY = mouseY - getY();
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		int mX = mouseY - getX();
+		int mY = mouseX - getY();
 		elements.forEach(element -> element.draw(transform, mY, mX));
 	}
 
@@ -110,7 +110,7 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 	}
 
 	@Override
-	public ILabelElement label(ITextProperties component) {
+	public ILabelElement label(ITextComponent component) {
 		return add(new LabelElement(component));
 	}
 

@@ -34,7 +34,7 @@ public class SplitTextElement extends GuiElement implements ITextElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		int posY = 0;
 		for (IReorderingProcessor text : lines) {
 			int posX = width - FONT_RENDERER.width(text);

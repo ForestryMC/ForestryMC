@@ -68,7 +68,7 @@ public class ButtonElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		RenderSystem.enableAlphaTest();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getHoverState(mouseOver);

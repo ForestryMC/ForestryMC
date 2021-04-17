@@ -73,8 +73,8 @@ public class ClimateBarElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		handleMouse(mouseX - getX(), mouseY - getY());
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		handleMouse(mouseY - getX(), mouseX - getY());
 
 		RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();

@@ -85,7 +85,7 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 				previousDelays = 0;
 			} else {
 				// If the central TE doesn't have work, we add to the activation delay to throttle the CPU usage.
-				activationDelay = 10 * previousDelays < 120 ? 10 * previousDelays : 120;
+				activationDelay = Math.min(10 * previousDelays, 120);
 				previousDelays++; // First delay is free!
 			}
 		}

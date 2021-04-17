@@ -137,7 +137,7 @@ public class ScrollBarElement extends ElementGroup {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
 		}
@@ -145,7 +145,7 @@ public class ScrollBarElement extends ElementGroup {
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		super.drawElement(transform, mouseY, mouseX);
+		super.drawElement(transform, mouseX, mouseY);
 	}
 
 	private void updateSlider(int mouseX, int mouseY) {

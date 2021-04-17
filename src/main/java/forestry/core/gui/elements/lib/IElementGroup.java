@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -69,7 +69,7 @@ public interface IElementGroup extends IGuiElement {
 
 	Style defaultStyle();
 
-	ILabelElement label(ITextProperties component);
+	ILabelElement label(ITextComponent component);
 
 	ILabelElement label(IReorderingProcessor component);
 

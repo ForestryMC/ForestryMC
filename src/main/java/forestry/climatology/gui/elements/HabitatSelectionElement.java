@@ -64,8 +64,8 @@ public class HabitatSelectionElement extends ElementGroup {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
-		super.drawElement(transform, mouseY, mouseX);
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		super.drawElement(transform, mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
@@ -117,7 +117,7 @@ public class HabitatSelectionElement extends ElementGroup {
 		}
 
 		@Override
-		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));

@@ -112,7 +112,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 		}
 
 		@Override
-		public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+		public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 			if (!isVisible()) {
 				return;
 			}

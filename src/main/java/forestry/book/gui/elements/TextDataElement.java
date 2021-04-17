@@ -76,7 +76,7 @@ public class TextDataElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseY, int mouseX) {
+	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		boolean unicode = fontRenderer.isBidirectional();
 		//fontRenderer.setBidiFlag(true);
