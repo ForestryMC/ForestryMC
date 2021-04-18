@@ -62,6 +62,10 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.items.definitions.EnumElectronTube;
+import forestry.modules.features.FeatureItem;
+import forestry.storage.ModuleCrates;
+import forestry.storage.features.CrateItems;
+import forestry.storage.items.ItemCrated;
 
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 
@@ -371,6 +375,41 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.define('#', Tags.Items.INGOTS_GOLD)
 						.define('R', Tags.Items.DUSTS_REDSTONE))
 				.build(consumer, id("carpenter", "circuits", "intricate"));
+
+		// / Crates
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(20)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shaped(CrateItems.CRATE, 24)
+						.pattern(" # ")
+						.pattern("# #")
+						.pattern(" # ")
+						.define('#', ItemTags.LOGS))
+				.build(consumer, id("carpenter", "crates", "empty"));
+
+		for (FeatureItem<ItemCrated> crated : ModuleCrates.crates) {
+			ItemCrated itemCrated = crated.getItem();
+			if (itemCrated == null) {
+				continue;
+			}
+			new CarpenterRecipeBuilder()
+					.setPackagingTime(Constants.CARPENTER_CRATING_CYCLES)
+					.setLiquid(new FluidStack(Fluids.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY))
+					.setBox(Ingredient.of(CrateItems.CRATE))
+					.recipe(ShapedRecipeBuilder.shaped(itemCrated, 1)
+							.pattern("###")
+							.pattern("###")
+							.pattern("###")
+							.define('#', Ingredient.of(itemCrated.getContained())))
+					.build(consumer, id("carpenter", "crates", "pack", itemCrated.identifier));
+			new CarpenterRecipeBuilder()
+					.setPackagingTime(Constants.CARPENTER_UNCRATING_CYCLES)
+					.setLiquid(null)
+					.setBox(Ingredient.EMPTY)
+					.recipe(ShapelessRecipeBuilder.shapeless(itemCrated.getContained().getItem(), 9).requires(itemCrated))
+					.build(consumer, id("carpenter", "crates", "unpack", itemCrated.identifier));
+		}
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {

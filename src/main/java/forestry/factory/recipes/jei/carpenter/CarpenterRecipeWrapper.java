@@ -31,6 +31,8 @@ public class CarpenterRecipeWrapper extends ForestryRecipeWrapper<ICarpenterReci
 		List<Ingredient> inputStacks = new ArrayList<>();
 		inputStacks.addAll(itemIngredients);
 
+		inputStacks.add(recipe.getBox());
+
 		ingredients.setInputIngredients(inputStacks);
 
 		FluidStack fluidResource = recipe.getFluidResource();

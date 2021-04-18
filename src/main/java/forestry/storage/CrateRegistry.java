@@ -16,6 +16,9 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
+import net.minecraft.tags.TagCollectionManager;
+import net.minecraft.util.ResourceLocation;
 
 import forestry.api.core.IItemProvider;
 import forestry.api.storage.ICrateRegistry;
@@ -27,27 +30,35 @@ import forestry.storage.items.ItemCrated;
 
 public class CrateRegistry implements ICrateRegistry {
 
-	private static void registerCrate(ItemStack stack, @Nullable String oreDictName) {
+	private static void registerCrate(Item item, @Nullable String tagName) {
+		registerCrate(new ItemStack(item), tagName);
+	}
+
+	private static void registerCrate(ItemStack stack, @Nullable String tagName) {
 		if (stack.isEmpty()) {
 			Log.error("Tried to make a crate without an item");
 			return;
 		}
 
 		String crateName;
-		if (oreDictName != null) {
-			crateName = "crated." + oreDictName;
+		String identifier;
+		if (tagName != null) {
+			crateName = "crated_" + tagName;
+			identifier = tagName;
 		} else {
 			String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
 			if (stringForItemStack == null) {
 				Log.error("Could not get string name for itemStack {}", stack);
 				return;
 			}
-			String itemName = stringForItemStack.replace(':', '.');
-			crateName = "crated." + itemName;
+			String itemName = stringForItemStack.replace(':', '_');
+			itemName = itemName.replace("minecraft_", "");
+			crateName = "crated_" + itemName;
+			identifier = itemName;
 		}
 
 		IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
-		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack, oreDictName), crateName));
+		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack, tagName, identifier), crateName));
 	}
 
 	@Override
@@ -63,6 +74,21 @@ public class CrateRegistry implements ICrateRegistry {
 		//				}
 		//			}
 		//		}	//TODO tags
+	}
+
+	@Override
+	public void registerCrate(ITag<Item> tag) {
+		ResourceLocation location = TagCollectionManager.getInstance().getItems().getId(tag);
+		if (location == null) {
+			return;
+		}
+		//TagCollectionManager.getInstance().getItems().getTag(tag_name)
+		/*for (Item item : tag.getValues()) {
+			if (item != null) {
+				registerCrate(item, location.toString().replace(":", "_"));
+				break;
+			}
+		}*/
 	}
 
 	@Override

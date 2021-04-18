@@ -43,7 +43,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import forestry.core.config.Constants;
 import forestry.core.models.ClientManager;
 import forestry.core.utils.ResourceUtil;
-import forestry.storage.features.CreateItems;
+import forestry.storage.features.CrateItems;
 import forestry.storage.items.ItemCrated;
 
 @OnlyIn(Dist.CLIENT)
@@ -127,7 +127,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getAsString(modelContents, "variant"));
 			Item item = ForgeRegistries.ITEMS.getValue(registryName);
 			if (!(item instanceof ItemCrated)) {
-				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CreateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
+				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CrateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
 			}
 			ItemCrated crated = (ItemCrated) item;
 			return new CrateModel(crated);

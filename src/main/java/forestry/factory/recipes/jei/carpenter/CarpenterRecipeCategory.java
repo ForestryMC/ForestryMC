@@ -1,6 +1,5 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -86,10 +85,12 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 
 		guiFluidStacks.init(inputTank, true, 141, 1, 16, 58, 10000, false, tankOverlay);
 
+		List<List<ItemStack>> craftingInputs = ingredients.getInputs(VanillaTypes.ITEM);
+
 		ICarpenterRecipe recipe = recipeWrapper.getRecipe();
 		Ingredient box = recipe.getBox();
 		if (!box.isEmpty()) {
-			guiItemStacks.set(boxSlot, Arrays.asList(box.getItems()));
+			guiItemStacks.set(boxSlot, craftingInputs.get(craftingInputs.size() - 1));
 		}
 
 		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
@@ -104,9 +105,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 			height = shapedRecipe.getRecipeHeight();
 		}
 
-		List<List<ItemStack>> craftingInputs = ingredients.getInputs(VanillaTypes.ITEM);
-
-		craftingGridHelper.setInputs(guiItemStacks, craftingInputs, width, height);
+		craftingGridHelper.setInputs(guiItemStacks, craftingInputs.subList(0, Math.min(9, craftingInputs.size() - 1)), width, height);
 
 		List<List<FluidStack>> fluidInputs = ingredients.getInputs(VanillaTypes.FLUID);
 		if (!fluidInputs.isEmpty()) {

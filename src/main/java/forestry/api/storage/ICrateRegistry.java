@@ -8,6 +8,7 @@ package forestry.api.storage;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 
 import forestry.api.core.IItemProvider;
 
@@ -28,6 +29,8 @@ public interface ICrateRegistry {
 	void registerCrate(ItemStack stack);
 
 	void registerCrate(String oreDictName);
+
+	void registerCrate(ITag<Item> tag);
 
 	void registerCrate(IItemProvider provider);
 

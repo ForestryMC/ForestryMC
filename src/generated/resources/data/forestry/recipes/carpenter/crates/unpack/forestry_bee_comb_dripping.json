@@ -1,0 +1,17 @@
+{
+  "type": "forestry:carpenter",
+  "time": 5,
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "forestry:crated_forestry_bee_comb_dripping"
+      }
+    ],
+    "result": {
+      "item": "forestry:bee_comb_dripping",
+      "count": 9
+    }
+  }
+}

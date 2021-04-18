@@ -34,11 +34,18 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
 	@Nullable
 	private final String oreDictName;
+	@Nullable
+	public final String identifier;
 
-	public ItemCrated(ItemStack contained, @Nullable String oreDictName) {
+	public ItemCrated() {
+		this(ItemStack.EMPTY, null, null);
+	}
+
+	public ItemCrated(ItemStack contained, @Nullable String oreDictName, @Nullable String identifier) {
 		super(ItemGroups.tabStorage);
 		this.contained = contained;
 		this.oreDictName = oreDictName;
+		this.identifier = identifier;
 	}
 
 	public ItemStack getContained() {
