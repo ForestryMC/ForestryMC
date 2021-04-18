@@ -27,6 +27,10 @@ public class RenderHelper {
 	public IRenderTypeBuffer buffer;
 	public int combinedLight;
 	public int packetLight;
+	public float rColor = 1.0f;
+	public float bColor = 1.0f;
+	public float gColor = 1.0f;
+	public float alpha = 1.0f;
 
 	@Nullable
 	private ItemEntity dummyEntityItem;
@@ -82,6 +86,17 @@ public class RenderHelper {
 		transformation.scale(x, y, z);
 	}
 
+	public void color(float rColor, float gColor, float bColor) {
+		color(rColor, gColor, bColor, 1.0f);
+	}
+
+	public void color(float rColor, float gColor, float bColor, float alpha) {
+		this.rColor = rColor;
+		this.gColor = gColor;
+		this.bColor = bColor;
+		this.alpha = alpha;
+	}
+
 	public void pop() {
 		transformation.popPose();
 	}
@@ -103,7 +118,7 @@ public class RenderHelper {
 			renderer.xRot = baseRotation.x() + rotation.x();
 			renderer.yRot = baseRotation.y() + rotation.y();
 			renderer.zRot = baseRotation.z() + rotation.z();
-			renderer.render(transformation, builder, combinedLight, packetLight);
+			renderer.render(transformation, builder, combinedLight, packetLight, rColor, gColor, bColor, alpha);
 		}
 	}
 

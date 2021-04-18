@@ -17,7 +17,6 @@ import java.util.List;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,9 +36,6 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.arboriculture.genetics.LeafProvider;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
-import forestry.core.utils.GeneticsUtil;
-
-import genetics.api.organism.IOrganismType;
 
 public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpecies {
 	private final ITreeGenerator generator;
@@ -62,17 +58,6 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		this.fruits = builder.fruits.build();
 		this.rarity = builder.rarity;
 		this.growthProvider = builder.growthProvider;
-	}
-
-
-	@Override
-	public ITextComponent getItemName(IOrganismType type) {
-		return GeneticsUtil.getItemName(type, this);
-	}
-
-	@Override
-	public ITextComponent getAlyzerName(IOrganismType type) {
-		return GeneticsUtil.getAlyzerName(type, this);
 	}
 
 	@Override

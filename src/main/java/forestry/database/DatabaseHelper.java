@@ -32,7 +32,7 @@ public class DatabaseHelper {
 	public static ITextComponent getItemName(ItemStack itemStack) {
 		try {
 			ITextComponent name = itemStack.getHoverName();
-			if (name.getContents().isEmpty()) {
+			if (name.getString().isEmpty()) {
 				name = new TranslationTextComponent(itemStack.getItem().getDescriptionId(itemStack));
 			}
 			return name;

@@ -1,21 +1,21 @@
 {
   "variants": {
-    "cocoon=default,age=0": {
+    "age=0,cocoon=default": {
       "model": "forestry:block/cocoon_early"
     },
-    "cocoon=silk,age=0": {
+    "age=0,cocoon=silk": {
       "model": "forestry:block/cocoon_early"
     },
-    "cocoon=default,age=1": {
+    "age=1,cocoon=default": {
       "model": "forestry:block/cocoon_middle"
     },
-    "cocoon=silk,age=1": {
+    "age=1,cocoon=silk": {
       "model": "forestry:block/cocoon_middle"
     },
-    "cocoon=default,age=2": {
+    "age=2,cocoon=default": {
       "model": "forestry:block/cocoon_late"
     },
-    "cocoon=silk,age=2": {
+    "age=2,cocoon=silk": {
       "model": "forestry:block/cocoon_silk_late"
     }
   }

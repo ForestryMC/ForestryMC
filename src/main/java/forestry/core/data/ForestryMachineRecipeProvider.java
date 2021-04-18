@@ -33,7 +33,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.core.ForestryAPI;
-import forestry.apiculture.blocks.BlockTypeApiculture;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -237,22 +236,22 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setPackagingTime(30)
 				.setLiquid(new FluidStack(Fluids.WATER, 600))
 				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY), 24)
+				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.CANDLE, 24)
 						.pattern(" X ")
 						.pattern("###")
 						.pattern("###")
 						.define('#', CoreItems.BEESWAX)
 						.define('X', Items.STRING))
-				.build(consumer, id("carpenter", "apiary_string"));
+				.build(consumer, id("carpenter", "candle_string"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(10)
 				.setLiquid(new FluidStack(Fluids.WATER, 200))
 				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY), 6)
+				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.CANDLE, 6)
 						.pattern("#X#")
 						.define('#', CoreItems.BEESWAX)
 						.define('X', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP)))
-				.build(consumer, id("carpenter", "apiary_silk_wisp"));
+				.build(consumer, id("carpenter", "candle_silk_wisp"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(100)
 				.setLiquid(new FluidStack(Fluids.WATER, 2000))
@@ -329,7 +328,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setLiquid(new FluidStack(Fluids.WATER, 1000))
 				.setBox(Ingredient.EMPTY)
 				.override(basic)
-				.recipe(ShapedRecipeBuilder.shaped(Items.DIAMOND)
+				.recipe(ShapedRecipeBuilder.shaped(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.BASIC))
 						.pattern("R R")
 						.pattern("R#R")
 						.pattern("R R")
@@ -341,7 +340,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setLiquid(new FluidStack(Fluids.WATER, 1000))
 				.setBox(Ingredient.EMPTY)
 				.override(enhanced)
-				.recipe(ShapedRecipeBuilder.shaped(Items.DIAMOND)
+				.recipe(ShapedRecipeBuilder.shaped(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.ENHANCED))
 						.pattern("R#R")
 						.pattern("R#R")
 						.pattern("R#R")
@@ -353,7 +352,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setLiquid(new FluidStack(Fluids.WATER, 1000))
 				.setBox(Ingredient.EMPTY)
 				.override(refined)
-				.recipe(ShapedRecipeBuilder.shaped(Items.DIAMOND)
+				.recipe(ShapedRecipeBuilder.shaped(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.REFINED))
 						.pattern("R#R")
 						.pattern("R#R")
 						.pattern("R#R")
@@ -365,7 +364,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setLiquid(new FluidStack(Fluids.WATER, 1000))
 				.setBox(Ingredient.EMPTY)
 				.override(intricate)
-				.recipe(ShapedRecipeBuilder.shaped(Items.DIAMOND)
+				.recipe(ShapedRecipeBuilder.shaped(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE))
 						.pattern("R#R")
 						.pattern("R#R")
 						.pattern("R#R")

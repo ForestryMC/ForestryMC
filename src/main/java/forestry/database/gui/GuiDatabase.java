@@ -16,6 +16,8 @@ import net.minecraft.util.text.ITextComponent;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import org.lwjgl.glfw.GLFW;
+
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.Drawable;
@@ -187,7 +189,13 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		}
 	}
 
-	/* Methods - Implement GuiScreen */
+	/* Methods - Implement Screen */
+	@Override
+	public void tick() {
+		super.tick();
+		this.searchField.tick();
+	}
+
 	@Override
 	public void init() {
 		super.init();
@@ -196,6 +204,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		this.searchField.setMaxLength(50);
 		this.searchField.setBordered(false);
 		this.searchField.setTextColor(16777215);
+		children.add(searchField);
 
 		addButton(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
@@ -211,7 +220,10 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
-		if (searchField != null && this.searchField.keyPressed(key, scanCode, modifiers)) {
+		if (key == GLFW.GLFW_KEY_ESCAPE) {
+			this.minecraft.player.closeContainer();
+		}
+		if (searchField != null && (searchField.keyPressed(key, scanCode, modifiers) || searchField.canConsumeInput())) {
 			scrollBar.setValue(0);
 			markForSorting();
 			return true;
@@ -221,12 +233,14 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
-		if (searchField != null && this.searchField.charTyped(codePoint, modifiers)) {
-			scrollBar.setValue(0);
-			markForSorting();
+		if (super.charTyped(codePoint, modifiers)) {
+			if (getFocused() == searchField) {
+				scrollBar.setValue(0);
+				markForSorting();
+			}
 			return true;
 		}
-		return super.charTyped(codePoint, modifiers);
+		return false;
 	}
 
 	@Override
@@ -235,16 +249,10 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		if (slot != null && slot.getSlotIndex() == -1) {
 			return false;
 		}
-		boolean acted = super.mouseClicked(mouseX, mouseY, mouseButton);
-		if (searchField != null) {
-			searchField.mouseClicked(mouseX, mouseY, mouseButton);
-			return true;
-		} else {
-			return acted;
-		}
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
-	/* Methods - Implement GuiContainer */
+	/* Methods - Implement ContainerScreen */
 	@Override
 	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);

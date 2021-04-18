@@ -584,7 +584,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						.define('#', beesWax)
 						.define('Y', Tags.Items.RODS_WOODEN)
 						.pattern(" # ").pattern(" # ").pattern(" Y ")
-						.unlockedBy("has_wax", has(beesWax)).save(consumer, new ResourceLocation(Constants.MOD_ID, "torch_from_way")),
+						.unlockedBy("has_wax", has(beesWax)).save(consumer, new ResourceLocation(Constants.MOD_ID, "torch_from_wax")),
 				ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(ApicultureItems.WAX_CAST.item())

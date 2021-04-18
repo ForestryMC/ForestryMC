@@ -219,10 +219,19 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	@Override
-	public void doInit() {
+	public void registerObjects() {
 		Circuits.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f);
 		Circuits.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f);
 		Circuits.machineEfficiencyUpgrade1 = new CircuitSpeedUpgrade("machine.efficiency.1", 0, -0.10f);
+
+		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
+
+		// / Solder Manager
+		if (layout != null) {
+			ChipsetManager.solderManager.addRecipe(layout, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.EMERALD, 1), Circuits.machineSpeedUpgrade1);
+			ChipsetManager.solderManager.addRecipe(layout, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.BLAZE, 1), Circuits.machineSpeedUpgrade2);
+			ChipsetManager.solderManager.addRecipe(layout, CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 1), Circuits.machineEfficiencyUpgrade1);
+		}
 	}
 
 	@Override

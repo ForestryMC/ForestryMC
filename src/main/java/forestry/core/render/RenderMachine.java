@@ -146,10 +146,10 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
 		float[] colors = new float[3];
 		primaryTankColor.getRGBColorComponents(colors);
-		RenderSystem.color4f(colors[0], colors[1], colors[2], 1.0f);
+		helper.color(colors[0], colors[1], colors[2], 1.0f);
 
 		helper.renderModel(textureResourceTankLevel, tankModel);
 
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+		helper.color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }

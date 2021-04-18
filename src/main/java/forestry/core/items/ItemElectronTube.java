@@ -41,7 +41,7 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public class ItemElectronTube extends ItemOverlay {
 
-	private EnumElectronTube type;
+	private final EnumElectronTube type;
 
 	public ItemElectronTube(EnumElectronTube type) {
 		super(ItemGroupForestry.tabForestry, type);
@@ -79,7 +79,7 @@ public class ItemElectronTube extends ItemOverlay {
 	@Override
 	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
-			if (Config.isDebug || !this.getType().isSecret()) {
+			if (Config.isDebug || !type.isSecret()) {
 				ItemStack stack = new ItemStack(this);
 				if (!getCircuits(stack).isEmpty()) {
 					subItems.add(new ItemStack(this));

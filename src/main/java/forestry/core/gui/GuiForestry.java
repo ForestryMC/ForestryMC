@@ -19,7 +19,6 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
@@ -105,10 +104,10 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 	@Override
 	public void tick() {
+		super.tick();
 		window.updateClient();
 	}
 
-	//TODO - I think this is the right method
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
@@ -187,28 +186,26 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		}
 		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
-		super.mouseReleased(mouseX, mouseY, mouseButton);
-		return true;
-		//TODO - what to return
+		return super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
-		InputMappings.Input mouseKey = InputMappings.getKey(key, scanCode);
-		if (key == 256 || this.minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
+		/*InputMappings.Input mouseKey = InputMappings.getKey(key, scanCode);
+		if (key == GLFW.GLFW_KEY_ESCAPE || this.minecraft.options.keyInventory.isActiveAndMatches(mouseKey)) {
 			this.minecraft.player.closeContainer();
 			return true;
-		}
+		}*/
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
-		return true;
+		return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
 		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
-		return true;
+		return super.charTyped(codePoint, modifiers);
 	}
 
 	@Override
@@ -218,7 +215,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 			window.postEvent(new GuiEvent.WheelEvent(window, x, y, w), GuiEventDestination.ALL);
 
 		}
-		return true;
+		return super.mouseScrolled(x, y, w);
 	}
 
 	@Nullable

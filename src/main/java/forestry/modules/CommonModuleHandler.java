@@ -113,6 +113,13 @@ public class CommonModuleHandler {
 
 	public <T extends IForgeRegistryEntry<T>> void registerObjects(RegistryEvent.Register<T> event) {
 		registry.onRegister(event);
+		registerObjects();
+	}
+
+	private void registerObjects() {
+		for (IForestryModule module : modules) {
+			module.registerObjects();
+		}
 	}
 
 	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {

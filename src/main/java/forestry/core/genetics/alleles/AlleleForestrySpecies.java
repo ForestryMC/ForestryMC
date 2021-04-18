@@ -18,14 +18,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import genetics.api.alleles.Allele;
-import genetics.api.classification.IClassification;
-
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
 import forestry.core.utils.GeneticsUtil;
+
+import genetics.api.alleles.Allele;
+import genetics.api.classification.IClassification;
+import genetics.api.organism.IOrganismType;
 
 public abstract class AlleleForestrySpecies extends Allele implements IAlleleForestrySpecies {
 	private final String binomial;
@@ -59,6 +60,16 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleFor
 		this.humidity = builder.humidity;
 
 		this.complexityOverride = builder.complexityOverride;
+	}
+
+	@Override
+	public ITextComponent getItemName(IOrganismType type) {
+		return GeneticsUtil.getItemName(type, this);
+	}
+
+	@Override
+	public ITextComponent getAlyzerName(IOrganismType type) {
+		return GeneticsUtil.getAlyzerName(type, this);
 	}
 
 	@Override

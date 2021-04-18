@@ -82,6 +82,10 @@ public interface IForestryModule {
 	default void registerTriggers() {
 	}
 
+	default void registerObjects() {
+
+	}
+
 	default void doInit() {
 	}
 
