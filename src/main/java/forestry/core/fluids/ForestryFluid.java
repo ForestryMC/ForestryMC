@@ -31,12 +31,13 @@ public abstract class ForestryFluid extends FlowingFluid {
 
 	@Override
 	protected FluidAttributes createAttributes() {
-		ResourceLocation[] resources = definition.getProperties().resources;
+		ResourceLocation[] resources = definition.properties().resources;
 		return FluidAttributes.builder(resources[0], resources[1])
-			.density(definition.getProperties().density)
-			.viscosity(definition.getProperties().viscosity)
-			.temperature(definition.getProperties().temperature)
-			.build(this);
+				.density(definition.properties().density)
+				.viscosity(definition.properties().viscosity)
+				.temperature(definition.properties().temperature)
+
+				.build(this);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public abstract class ForestryFluid extends FlowingFluid {
 
 	@Override
 	public Item getBucket() {
-		return null;    //TODO fluids
+		return definition.properties().bucket.get();
 	}
 
 	@Override

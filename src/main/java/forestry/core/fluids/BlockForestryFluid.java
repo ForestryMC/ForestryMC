@@ -42,12 +42,11 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	private final Color color;
 
 	public BlockForestryFluid(FeatureFluid feature) {
-		super(feature.fluid(), Block.Properties.of(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
+		super(feature::fluid, Block.Properties.of(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
 				.noCollission()
 				.strength(100.0F).noDrops());
 		this.feature = feature;
-
-		FluidProperties properties = feature.getProperties();
+		FluidProperties properties = feature.properties();
 		this.flammability = properties.flammability;
 		this.flammable = properties.flammable;
 
@@ -56,33 +55,33 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
 	@Override
 	public void randomTick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
-		double d0 = pos.getX();
-		double d1 = pos.getY();
-		double d2 = pos.getZ();
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
 
 		if (this.material == Material.WATER) {
 			int i = blockState.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
 				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
-					world.playLocalSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, SoundEvents.WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
+					world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
-				world.addParticle(ParticleTypes.UNDERWATER, d0 + rand.nextFloat(), d1 + rand.nextFloat(), d2 + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
+				world.addParticle(ParticleTypes.UNDERWATER, x + rand.nextFloat(), y + rand.nextFloat(), z + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
 			}
 		}
 
 		if (this.material == Material.LAVA && world.getBlockState(pos.above()).getMaterial() == Material.AIR && !world.getBlockState(pos.above()).isSolidRender(world, pos.above())) {
 			if (rand.nextInt(100) == 0) {
-				double d8 = d0 + rand.nextFloat();
-				double d4 = d1 + 1;
-				double d6 = d2 + rand.nextFloat();
+				double d8 = x + rand.nextFloat();
+				double d4 = y + 1;
+				double d6 = z + rand.nextFloat();
 				world.addParticle(ParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
 				world.playLocalSound(d8, d4, d6, SoundEvents.LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 
 			if (rand.nextInt(200) == 0) {
-				world.playLocalSound(d0, d1, d2, SoundEvents.LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+				world.playLocalSound(x, y, z, SoundEvents.LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 		}
 
@@ -90,9 +89,9 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			Material material = world.getBlockState(pos.below(2)).getMaterial();
 
 			if (!material.blocksMotion() && !material.isLiquid()) {
-				double px = d0 + rand.nextFloat();
-				double py = d1 - 1.05D;
-				double pz = d2 + rand.nextFloat();
+				double px = x + rand.nextFloat();
+				double py = y - 1.05D;
+				double pz = z + rand.nextFloat();
 
 				/*Particle fx = new ParticleColoredDripParticle(world, px, py, pz, color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
 				Minecraft.getInstance().particles.addEffect(fx);*/

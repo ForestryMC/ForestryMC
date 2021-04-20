@@ -6,10 +6,15 @@ import java.util.function.Supplier;
 
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import forestry.core.config.Constants;
 import forestry.core.fluids.BlockForestryFluid;
-import forestry.core.fluids.ForestryFluid;
 import forestry.core.items.definitions.DrinkProperties;
 
 public class FeatureFluid implements IFluidFeature {
@@ -17,6 +22,7 @@ public class FeatureFluid implements IFluidFeature {
 	private final FluidProperties properties;
 	private final String moduleID;
 	private final String identifier;
+	private final ForgeFlowingFluid.Properties internal;
 	@Nullable
 	private FlowingFluid fluid;
 	@Nullable
@@ -27,6 +33,12 @@ public class FeatureFluid implements IFluidFeature {
 		this.identifier = builder.identifier;
 		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
 		this.properties = new FluidProperties(builder);
+		ResourceLocation[] resources = properties().resources;
+		FluidAttributes.Builder attributes = FluidAttributes.builder(resources[0], resources[1])
+				.density(properties().density)
+				.viscosity(properties().viscosity)
+				.temperature(properties().temperature);
+		this.internal = new ForgeFlowingFluid.Properties(this::getFluid, this::getFlowing, attributes).block(block::getBlock).bucket(properties().bucket);
 	}
 
 	@Override
@@ -46,7 +58,7 @@ public class FeatureFluid implements IFluidFeature {
 
 	@Override
 	public Supplier<FlowingFluid> getFluidConstructor(boolean flowing) {
-		return () -> flowing ? new ForestryFluid.Flowing(this) : new ForestryFluid.Source(this);
+		return () -> flowing ? new ForgeFlowingFluid.Flowing(internal) : new ForgeFlowingFluid.Source(internal);
 	}
 
 	@Nullable
@@ -62,7 +74,7 @@ public class FeatureFluid implements IFluidFeature {
 	}
 
 	@Override
-	public FluidProperties getProperties() {
+	public FluidProperties properties() {
 		return properties;
 	}
 
@@ -109,6 +121,7 @@ public class FeatureFluid implements IFluidFeature {
 		boolean flammable = false;
 		@Nullable
 		DrinkProperties properties = null;
+		Supplier<Item> bucket = () -> Items.AIR;
 
 		public Builder(IFeatureRegistry registry, String moduleID, String identifier) {
 			this.registry = registry;
@@ -141,13 +154,13 @@ public class FeatureFluid implements IFluidFeature {
 			return this;
 		}
 
-		public Builder setParticleColor(Color particleColor) {
-			this.particleColor = particleColor;
+		public Builder particleColor(Color color) {
+			this.particleColor = color;
 			return this;
 		}
 
-		public Builder particleColor(Color color) {
-			this.particleColor = color;
+		public Builder bucket(Supplier<Item> bucket) {
+			this.bucket = bucket;
 			return this;
 		}
 

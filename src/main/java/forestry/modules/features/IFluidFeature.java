@@ -35,7 +35,7 @@ public interface IFluidFeature extends IModFeature {
 	@Nullable
 	FlowingFluid getFlowing();
 
-	FluidProperties getProperties();
+	FluidProperties properties();
 
 	boolean hasFluid();
 
@@ -85,6 +85,7 @@ public interface IFluidFeature extends IModFeature {
 		Class<T> superType = registry.getRegistrySuperType();
 		if (Fluid.class.isAssignableFrom(superType)) {
 			registry.register((T) fluid());
+			registry.register((T) flowing());
 		}
 	}
 }

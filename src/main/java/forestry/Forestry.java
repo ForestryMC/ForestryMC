@@ -81,6 +81,7 @@ import forestry.core.config.GameMode;
 import forestry.core.data.ForestryBlockModelProvider;
 import forestry.core.data.ForestryBlockStateProvider;
 import forestry.core.data.ForestryBlockTagsProvider;
+import forestry.core.data.ForestryFluidTagsProvider;
 import forestry.core.data.ForestryItemModelProvider;
 import forestry.core.data.ForestryItemTagsProvider;
 import forestry.core.data.ForestryLootModifierProvider;
@@ -265,6 +266,7 @@ public class Forestry {
 			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
 			generator.addProvider(blockTagsProvider);
 			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new WoodBlockStateProvider(generator));
 			generator.addProvider(new WoodBlockModelProvider(generator));
