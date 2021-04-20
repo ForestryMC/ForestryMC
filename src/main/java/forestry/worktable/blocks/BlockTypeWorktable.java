@@ -14,14 +14,14 @@ public enum BlockTypeWorktable implements IBlockType {
 
 	public static final BlockTypeWorktable[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+	private final IMachineProperties<?> machineProperties;
 
 	<T extends TileForestry> BlockTypeWorktable(Supplier<FeatureTileType<? extends T>> teClass, String name) {
 		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();
 	}
 
 	@Override
-	public IMachineProperties getMachineProperties() {
+	public IMachineProperties<?> getMachineProperties() {
 		return machineProperties;
 	}
 

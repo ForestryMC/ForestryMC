@@ -13,7 +13,10 @@ package forestry.arboriculture.genetics.alleles;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
@@ -34,7 +37,6 @@ import forestry.api.arboriculture.genetics.IAlleleTreeSpeciesBuilder;
 import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
-import forestry.arboriculture.genetics.LeafProvider;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
 public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpecies {
@@ -53,11 +55,11 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		this.generator = builder.generator;
 		this.germlingModelProvider = builder.germlingModelProvider;
 		this.leafSpriteProvider = builder.leafSpriteProvider;
-		this.leafProvider = builder.leafProvider;
 		this.nativeType = builder.nativeType;
 		this.fruits = builder.fruits.build();
 		this.rarity = builder.rarity;
 		this.growthProvider = builder.growthProvider;
+		this.leafProvider = builder.leafProvider != null ? builder.leafProvider.apply(this) : null;
 	}
 
 	@Override
@@ -120,8 +122,8 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 	}
 
 	@Override
-	public ILeafProvider getLeafProvider() {
-		return leafProvider;
+	public Optional<ILeafProvider> getLeafProvider() {
+		return Optional.of(leafProvider);
 	}
 
 	@Override
@@ -135,7 +137,8 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 
 		private ITreeGenerator generator;
 		private IGermlingModelProvider germlingModelProvider;
-		private ILeafProvider leafProvider = new LeafProvider();
+		@Nullable
+		private Function<IAlleleTreeSpecies, ILeafProvider> leafProvider;
 		private ILeafSpriteProvider leafSpriteProvider;
 		private PlantType nativeType = PlantType.PLAINS;
 		private IGrowthProvider growthProvider = new ClimateGrowthProvider();
@@ -160,9 +163,7 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		@Override
 		public IAlleleTreeSpecies build() {
 			checkBuilder(this);
-			AlleleTreeSpecies species = new AlleleTreeSpecies(this);
-			leafProvider.init(species);
-			return species;
+			return new AlleleTreeSpecies(this);
 		}
 
 		@Override
@@ -178,7 +179,7 @@ public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleT
 		}
 
 		@Override
-		public IAlleleTreeSpeciesBuilder setLeaf(ILeafProvider leafProvider) {
+		public IAlleleTreeSpeciesBuilder setLeaf(Function<IAlleleTreeSpecies, ILeafProvider> leafProvider) {
 			this.leafProvider = leafProvider;
 			return this;
 		}

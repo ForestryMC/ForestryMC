@@ -1,5 +1,8 @@
 package forestry.core.utils;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -11,6 +14,19 @@ import net.minecraft.world.storage.ServerWorldInfo;
 public final class WorldUtils {
 
 	private WorldUtils() {
+	}
+
+	@Nullable
+	public static ClientWorld clientSafe() {
+		return Minecraft.getInstance().level;
+	}
+
+	public static ClientWorld client() {
+		ClientWorld world = clientSafe();
+		if (world == null) {
+			throw new IllegalStateException("Failed to get client side world.");
+		}
+		return world;
 	}
 
 	public static ClientWorld asClient(IWorld world) {

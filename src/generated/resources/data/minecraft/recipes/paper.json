@@ -19,10 +19,10 @@
         "key": {
           "#": [
             {
-              "item": "forestry:letter_empty_emptied"
+              "item": "forestry:letter_empty_fresh"
             },
             {
-              "item": "forestry:letter_empty_fresh"
+              "item": "forestry:letter_empty_emptied"
             },
             {
               "item": "forestry:letter_empty_stamped"

@@ -32,7 +32,7 @@ public class TemplateContainer<I extends IIndividual> implements ITemplateContai
 	}
 
 	@Override
-	public ITemplateContainer registerTemplate(IAllele[] template) {
+	public ITemplateContainer<I> registerTemplate(IAllele[] template) {
 		Preconditions.checkNotNull(template, "Tried to register null template");
 		Preconditions.checkArgument(template.length > 0, "Tried to register empty template");
 
@@ -45,7 +45,7 @@ public class TemplateContainer<I extends IIndividual> implements ITemplateContai
 	}
 
 	@Override
-	public ITemplateContainer registerTemplate(IAlleleTemplate template) {
+	public ITemplateContainer<I> registerTemplate(IAlleleTemplate template) {
 		return registerTemplate(template.alleles());
 	}
 

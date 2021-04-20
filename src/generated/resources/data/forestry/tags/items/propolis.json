@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "forestry:propolis_pulsating",
     "forestry:propolis_normal",
     "forestry:propolis_silky",
+    "forestry:propolis_pulsating",
     "forestry:propolis_sticky"
   ]
 }

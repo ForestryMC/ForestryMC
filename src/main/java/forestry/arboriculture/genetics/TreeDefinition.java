@@ -1010,12 +1010,13 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 
 		IAlleleTreeSpeciesBuilder speciesBuilder = TreeManager.treeFactory.createSpecies(Constants.MOD_ID, uid, speciesName)
 				.setDescriptionKey(unlocalizedDescription)
-			.setTranslationKey(unlocalizedName)
-			.setDominant(dominant)
-			.setBranch(branch.getBranch())
-			.setBinomial(binomial)
-			.setLeafSprite(leafIconProvider)
-			.setModel(germlingIconProvider)
+				.setTranslationKey(unlocalizedName)
+				.setDominant(dominant)
+				.setBranch(branch.getBranch())
+				.setBinomial(binomial)
+				.setLeafSprite(leafIconProvider)
+				.setModel(germlingIconProvider)
+				.setLeaf((value) -> new LeafProvider(this))
 			.setGenerator(this);
 		setSpeciesProperties(speciesBuilder);
 		this.species = speciesBuilder.build();

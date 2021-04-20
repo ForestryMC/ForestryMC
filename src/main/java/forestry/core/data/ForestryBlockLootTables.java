@@ -13,8 +13,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.loot.BlockLootTables;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Items;
+import net.minecraft.loot.BinomialRange;
 import net.minecraft.loot.ConstantRange;
 import net.minecraft.loot.ItemLootEntry;
+import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
@@ -31,7 +34,9 @@ import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureItems;
+import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.arboriculture.loot.CountBlockFunction;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
@@ -68,6 +73,9 @@ public class ForestryBlockLootTables extends BlockLootTables {
 				Block fruitLeavesBlock = entry.getValue().block();
 				this.add(fruitLeavesBlock, (block) -> droppingWithChances(defaultLeavesBlock, entry.getKey(), NORMAL_LEAVES_SAPLING_CHANCES));
 			}
+			registerLootTable(CharcoalBlocks.ASH, (block) -> LootTable.lootTable().setParamSet(LootParameterSets.BLOCK)
+					.withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(CoreItems.ASH)).apply(SetCount.setCount(BinomialRange.binomial(2, 1.0f / 3.0f))))
+					.withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Items.COAL)).apply(CountBlockFunction.builder()).apply(ApplyBonus.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 23.0f / 40, 2))));
 		}
 		registerLootTable(CoreBlocks.PEAT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(ItemLootEntry.lootTableItem(Blocks.DIRT))).withPool(LootPool.lootPool().apply(SetCount.setCount(ConstantRange.exactly(2))).add(ItemLootEntry.lootTableItem(CoreItems.PEAT.item()))));
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);

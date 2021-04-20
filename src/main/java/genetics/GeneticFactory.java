@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import genetics.alleles.AlleleTemplate;
+import genetics.alleles.AlleleTemplateBuilder;
 import genetics.api.IGeneTemplate;
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
@@ -23,9 +25,6 @@ import genetics.api.organism.IOrganismType;
 import genetics.api.root.IDisplayHelper;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-
-import genetics.alleles.AlleleTemplate;
-import genetics.alleles.AlleleTemplateBuilder;
 import genetics.individual.Chromosome;
 import genetics.individual.Genome;
 import genetics.individual.IndividualBuilder;
@@ -83,7 +82,7 @@ public enum GeneticFactory implements IGeneticFactory {
 	}
 
 	@Override
-	public <I extends IIndividual> IDisplayHelper createDisplayHelper(IIndividualRoot<I> root) {
+	public <I extends IIndividual> IDisplayHelper<I> createDisplayHelper(IIndividualRoot<I> root) {
 		return new DisplayHelper<>(root);
 	}
 

@@ -7,8 +7,10 @@ package forestry.api.arboriculture.genetics;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Optional;
 
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,7 +51,11 @@ public interface IAlleleTreeSpecies extends IAlleleForestrySpecies, IAllelePrope
 	 */
 	float getRarity();
 
-	ILeafProvider getLeafProvider();
+	Optional<ILeafProvider> getLeafProvider();
+
+	default ItemStack getDecorativeLeaves() {
+		return getLeafProvider().map(ILeafProvider::getDecorativeLeaves).orElse(ItemStack.EMPTY);
+	}
 
 	IGrowthProvider getGrowthProvider();
 

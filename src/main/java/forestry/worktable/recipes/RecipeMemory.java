@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.core.INbtWritable;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+import forestry.core.utils.WorldUtils;
 
 public class RecipeMemory implements INbtWritable, IStreamable {
 
@@ -124,11 +124,11 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 
 	//Client Only
 	public ItemStack getRecipeDisplayOutput(int recipeIndex) {
-		World world = Minecraft.getInstance().level;
 		MemorizedRecipe recipe = getRecipe(recipeIndex);
 		if (recipe == null) {
 			return ItemStack.EMPTY;
 		}
+		World world = WorldUtils.client();
 		return recipe.getOutputIcon(world);
 	}
 
@@ -159,15 +159,15 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 
 	@Override
 	public CompoundNBT write(CompoundNBT compoundNBT) {
-		ListNBT nbttaglist = new ListNBT();
+		ListNBT listNBT = new ListNBT();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
 			if (recipe != null && recipe.hasSelectedRecipe()) {
 				CompoundNBT recipeNbt = new CompoundNBT();
 				recipe.write(recipeNbt);
-				nbttaglist.add(recipeNbt);
+				listNBT.add(recipeNbt);
 			}
 		}
-		compoundNBT.put("RecipeMemory", nbttaglist);
+		compoundNBT.put("RecipeMemory", listNBT);
 		return compoundNBT;
 	}
 

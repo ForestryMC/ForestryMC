@@ -30,7 +30,7 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerWorktable container, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerWorktable container, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 
@@ -49,8 +49,8 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 			List<ICraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.level);
 			if (!matchingRecipes.isEmpty()) {
-				MemorizedRecipe recipe = new MemorizedRecipe(inventory, matchingRecipes);
-				container.sendWorktableRecipeRequest(recipe);
+				MemorizedRecipe memorizedRecipe = new MemorizedRecipe(inventory, matchingRecipes);
+				container.sendWorktableRecipeRequest(memorizedRecipe);
 			}
 		}
 

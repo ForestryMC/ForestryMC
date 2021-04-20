@@ -20,6 +20,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -52,16 +53,20 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
+	public IFormattableTextComponent getName() {
+		return super.getName();
+	}
+
+	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			return ItemStack.EMPTY;
 		}
 		IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-		return species.getLeafProvider().getDecorativeLeaves();
+		return species.getDecorativeLeaves();
 	}
 
-	//TODO since loot done in loot table I don't know if this works
 	@Nonnull
 	@Override
 	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
@@ -70,7 +75,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			tree = TreeDefinition.Oak.createIndividual();
 		}
 		IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-		ItemStack decorativeLeaves = species.getLeafProvider().getDecorativeLeaves();
+		ItemStack decorativeLeaves = species.getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {

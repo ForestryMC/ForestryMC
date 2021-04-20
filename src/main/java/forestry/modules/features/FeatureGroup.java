@@ -37,6 +37,10 @@ public abstract class FeatureGroup<B extends FeatureGroup.Builder<S, ? extends F
 		return featureByType.get(subType);
 	}
 
+	public Optional<F> getProbably(S subType) {
+		return Optional.ofNullable(featureByType.get(subType));
+	}
+
 	public ImmutableMap<S, F> getFeatureByType() {
 		return featureByType;
 	}

@@ -50,7 +50,7 @@ import forestry.worktable.recipes.RecipeMemory;
 public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	private RecipeMemory recipeMemory;
-	private final InventoryAdapterTile craftingDisplay;
+	private final InventoryAdapterTile<TileWorktable> craftingDisplay;
 	@Nullable
 	private MemorizedRecipe currentRecipe;
 
@@ -183,7 +183,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			}
 		}
 
-		if (!level.isClientSide) {
+		if (level != null && !level.isClientSide) {
 			recipeMemory.memorizeRecipe(level.getGameTime(), currentRecipe, level);
 		}
 	}

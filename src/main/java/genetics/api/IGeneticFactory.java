@@ -109,7 +109,7 @@ public interface IGeneticFactory {
 	 */
 	<I extends IIndividual> IOrganismHandler<I> createOrganismHandler(IRootDefinition<? extends IIndividualRoot<I>> rootDefinition, Supplier<ItemStack> stack);
 
-	<I extends IIndividual> IDisplayHelper createDisplayHelper(IIndividualRoot<I> root);
+	<I extends IIndividual> IDisplayHelper<I> createDisplayHelper(IIndividualRoot<I> root);
 
 	/**
 	 * Creates a default implementation of a {@link IGeneTemplate}

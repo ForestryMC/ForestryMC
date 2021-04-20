@@ -43,7 +43,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public GuiBetterButton(int x, int y, IButtonTextureSet texture, IPressable handler) {
-		super(x, y, texture.getWidth(), texture.getHeight(), null, handler);
+		super(x, y, texture.getWidth(), texture.getHeight(), StringTextComponent.EMPTY, handler);
 		this.texture = texture;
 		useTexWidth = true;
 	}
@@ -114,7 +114,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 			blit(transform, x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 
-		if (getMessage() != null) {
+		if (getMessage() != StringTextComponent.EMPTY) {
 			renderButton(transform, mouseX, mouseY, partialTicks);
 			drawCenteredString(transform, Minecraft.getInstance().font, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
 		}

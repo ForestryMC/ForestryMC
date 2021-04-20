@@ -25,6 +25,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.loot.LootFunctionType;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -69,6 +70,7 @@ import forestry.api.recipes.ISolderRecipe;
 import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillRecipe;
+import forestry.arboriculture.loot.CountBlockFunction;
 import forestry.arboriculture.loot.GrafterLootModifier;
 import forestry.core.EventHandlerCore;
 import forestry.core.circuits.CircuitRecipe;
@@ -95,6 +97,7 @@ import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.loot.ConditionLootModifier;
+import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ModelBlockCached;
 import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
@@ -344,18 +347,21 @@ public class Forestry {
 			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
 		}
 
+		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
+			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
+		}
 
 		@SubscribeEvent
 		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
 			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
 			registry.register(ConditionLootModifier.SERIALIZER);
 			registry.register(GrafterLootModifier.SERIALIZER);
+
+			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
+			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootFunctionType(new CountBlockFunction.Serializer()));
 		}
 
-		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
-			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
-		}
 
 		@SubscribeEvent
 		@OnlyIn(Dist.CLIENT)

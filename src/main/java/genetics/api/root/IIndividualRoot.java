@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -91,7 +92,10 @@ public interface IIndividualRoot<I extends IIndividual> {
 	 * @param templateActive   The active alleles of the genome.
 	 * @param templateInactive The inactive alleles of the genome.
 	 */
-	I templateAsIndividual(IAllele[] templateActive, @Nullable IAllele[] templateInactive);
+	default I templateAsIndividual(IAllele[] templateActive, @Nullable IAllele[] templateInactive) {
+		IGenome genome = getKaryotype().templateAsGenome(templateActive, templateInactive);
+		return create(genome);
+	}
 
 	/**
 	 * A instance of an {@link IIndividual} that is used if a item has lost its generic data.
@@ -132,7 +136,7 @@ public interface IIndividualRoot<I extends IIndividual> {
 	 *
 	 * @return The template container of this root.
 	 */
-	ITemplateContainer getTemplates();
+	ITemplateContainer<I> getTemplates();
 
 	/**
 	 * The Karyotype defines how many {@link IChromosomeType}s the {@link IGenome} of an
@@ -153,6 +157,34 @@ public interface IIndividualRoot<I extends IIndividual> {
 	IIndividualTranslator<I> getTranslator();
 
 	/**
+	 * Translates {@link BlockState}s into genetic data.
+	 */
+	default Optional<I> translateMember(BlockState objectToTranslate) {
+		return getTranslator().translateMember(objectToTranslate);
+	}
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data.
+	 */
+	default Optional<I> translateMember(ItemStack objectToTranslate) {
+		return getTranslator().translateMember(objectToTranslate);
+	}
+
+	/**
+	 * Translates a {@link BlockState}s into genetic data and returns a {@link ItemStack} that contains this data.
+	 */
+	default ItemStack getGeneticEquivalent(BlockState objectToTranslate) {
+		return getTranslator().getGeneticEquivalent(objectToTranslate);
+	}
+
+	/**
+	 * Translates {@link ItemStack}s into genetic data and returns a other {@link ItemStack} that contains this data.
+	 */
+	default ItemStack getGeneticEquivalent(ItemStack objectToTranslate) {
+		return getTranslator().getGeneticEquivalent(objectToTranslate);
+	}
+
+	/**
 	 * All registered {@link IOrganismType}s with there mapped {@link IOrganismHandler}s.
 	 *
 	 * @return A object that contains all registered types of this root.
@@ -166,17 +198,17 @@ public interface IIndividualRoot<I extends IIndividual> {
 	 */
 	String getUID();
 
-	boolean hasComponent(ComponentKey key);
+	boolean hasComponent(ComponentKey<?> key);
 
-	<C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key);
+	<C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey<?> key);
 
-	<C extends IRootComponent<I>> C getComponent(ComponentKey key);
+	<C extends IRootComponent<I>> C getComponent(ComponentKey<?> key);
 
 	IRootComponentContainer<I> getComponentContainer();
 
-	IDisplayHelper getDisplayHelper();
+	IDisplayHelper<I> getDisplayHelper();
 
 	IRootDefinition<? extends IIndividualRoot<I>> getDefinition();
 
-	<T extends IIndividualRoot> T cast();
+	<T extends IIndividualRoot<?>> T cast();
 }

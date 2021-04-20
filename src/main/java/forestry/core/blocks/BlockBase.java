@@ -59,7 +59,7 @@ import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
 	/**
-	 * use this instead of {@link HorizontalBlock#HORIZONTAL_FACING} so the blocks rotate in a circle instead of NSWE order.
+	 * use this instead of {@link HorizontalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
 	public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
 
