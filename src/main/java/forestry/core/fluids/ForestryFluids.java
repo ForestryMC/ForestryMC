@@ -187,11 +187,7 @@ public enum ForestryFluids {
 
 	@Nullable
 	public static ForestryFluids getFluidDefinition(Fluid fluid) {
-		if (fluid instanceof ForestryFluid) {
-			return tagToFluid.get(fluid.getRegistryName());
-		}
-
-		return null;
+		return tagToFluid.get(fluid.getRegistryName());
 	}
 
 	@Nullable

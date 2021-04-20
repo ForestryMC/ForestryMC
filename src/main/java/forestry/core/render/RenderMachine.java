@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraftforge.fluids.FluidAttributes;
+
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
@@ -141,11 +143,19 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 			return;
 		}
 
-		// TODO: render fluid overlay on tank
-		ForestryFluids fluidDefinition = ForestryFluids.getFluidDefinition(renderInfo.getFluidStack());
-		Color primaryTankColor = fluidDefinition == null ? Color.BLUE : fluidDefinition.getParticleColor();
+		FluidAttributes attributes = renderInfo.getFluidStack().getFluid().getAttributes();
+		int color = attributes.getColor();
+		ForestryFluids definition = ForestryFluids.getFluidDefinition(renderInfo.getFluidStack().getFluid());
+		if (color < 0) {
+			color = Color.BLUE.getRGB();
+			if (definition != null) {
+				color = definition.getParticleColor().getRGB();
+			}
+		}
 		float[] colors = new float[3];
-		primaryTankColor.getRGBColorComponents(colors);
+		colors[0] = (color >> 16 & 255) / 255f;
+		colors[1] = (color >> 8 & 255) / 255f;
+		colors[2] = (color & 255) / 255f;
 		helper.color(colors[0], colors[1], colors[2], 1.0f);
 
 		helper.renderModel(textureResourceTankLevel, tankModel);
