@@ -151,8 +151,6 @@ import genetics.utils.AlleleUtils;
 //		+ "after:" + PluginTechReborn.MOD_ID + ";"
 //		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";"
 //		+ "before:binniecore@[2.5.1.184,)"
-
-
 //the big TODO - things have to be properly sided now, can't keep just using OnlyIn I think
 @Mod("forestry")
 public class Forestry {

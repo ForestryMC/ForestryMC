@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.api.core.tooltips;
 
-import net.minecraft.util.text.StringTextComponent;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,12 +27,6 @@ public class ToolTip extends TextCollection {
 
 	public ToolTip(int delay) {
 		this.delay = delay;
-	}
-
-	//TODO - only for porting, remove when cleaning up
-	@Deprecated
-	public ITextInstance add(String s) {
-		return this.add(new StringTextComponent(s));
 	}
 
 	public void onTick(boolean mouseOver) {

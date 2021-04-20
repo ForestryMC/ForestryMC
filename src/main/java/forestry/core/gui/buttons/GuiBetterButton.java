@@ -72,11 +72,6 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		return this;
 	}
 
-	public GuiBetterButton clearLabel() {
-		this.setMessage(null);
-		return this;
-	}
-
 	public int getWidth() {
 		return width;
 	}
@@ -119,9 +114,8 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 			blit(transform, x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 
-		//TODO mousedragged
-		//		mouseDragged(minecraft, mouseX, mouseY);
 		if (getMessage() != null) {
+			renderButton(transform, mouseX, mouseY, partialTicks);
 			drawCenteredString(transform, Minecraft.getInstance().font, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
 		}
 	}

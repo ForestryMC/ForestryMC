@@ -32,8 +32,12 @@ import forestry.core.utils.Log;
 public abstract class BlockForestry extends Block {
 
 	protected BlockForestry(Block.Properties properties) {
-		super(properties
-				.strength(1.5f));
+		this(properties, false);
+	}
+
+	protected BlockForestry(Block.Properties properties, boolean defaultStrength) {
+		super(defaultStrength ? properties
+				.strength(1.5f) : properties);
 	}
 
 	@Override

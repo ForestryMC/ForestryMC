@@ -10,6 +10,3 @@ package forestry.api.core.tooltips;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import mcp.MethodsReturnNonnullByDefault;
-
-//import net.minecraftforge.fml.common.API;
-//TODO API

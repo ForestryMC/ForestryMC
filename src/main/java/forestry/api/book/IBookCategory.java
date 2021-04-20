@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,7 +71,7 @@ public interface IBookCategory {
 	/**
 	 * @return the localized name of this category.
 	 */
-	String getLocalizedName();
+	ITextComponent getLocalizedName();
 
 	/**
 	 * Currently unused

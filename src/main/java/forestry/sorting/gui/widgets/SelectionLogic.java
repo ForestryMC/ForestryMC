@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import net.minecraft.util.text.ITextComponent;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -30,7 +32,7 @@ public class SelectionLogic<S> implements IScrollable {
 		this.widget = widget;
 		this.provider = provider;
 		this.entries = provider.getEntries();
-		this.comparator = (S f, S s) -> provider.getName(f).compareToIgnoreCase(provider.getName(s));
+		this.comparator = (S f, S s) -> provider.getName(f).getString().compareToIgnoreCase(provider.getName(s).getString());
 
 	}
 
@@ -74,8 +76,8 @@ public class SelectionLogic<S> implements IScrollable {
 		}
 
 		for (S entry : entries) {
-			String name = provider.getName(entry);
-			if (pattern.matcher(name.toLowerCase(Locale.ENGLISH)).find()) {
+			ITextComponent name = provider.getName(entry);
+			if (pattern.matcher(name.getString().toLowerCase(Locale.ENGLISH)).find()) {
 				sorted.add(entry);
 			}
 		}

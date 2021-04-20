@@ -77,7 +77,6 @@ import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
-import forestry.storage.ModuleCrates;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
@@ -267,10 +266,6 @@ public class ModuleFactory extends BlankForestryModule {
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_POTATO, 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
 		// RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), ForestryFluids.BIOMASS);
 
-		// Crating and uncrating
-		if (ModuleHelper.isEnabled(ForestryModuleUids.CRATE)) {
-			ModuleCrates.createCrateRecipes();
-		}
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
 
 		// / Solder Manager
