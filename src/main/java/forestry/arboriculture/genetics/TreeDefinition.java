@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
@@ -32,6 +33,7 @@ import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.IGermlingModelProvider;
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.ITreeGenData;
@@ -88,8 +90,10 @@ import forestry.arboriculture.worldgen.FeatureWenge;
 import forestry.arboriculture.worldgen.FeatureWillow;
 import forestry.arboriculture.worldgen.FeatureZebrawood;
 import forestry.core.config.Constants;
+import forestry.core.genetics.TemplateMatcher;
 import forestry.core.genetics.alleles.EnumAllele;
 import forestry.core.tiles.TileUtil;
+import forestry.modules.features.FeatureBlockGroup;
 
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;
@@ -1044,7 +1048,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 
 	@Override
 	public boolean setLeaves(IGenome genome, IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
-		/*if (owner == null && new TemplateMatcher(genome).matches()) {
+		if (owner == null && new TemplateMatcher(genome).matches()) {
 			IFruitProvider fruitProvider = genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			BlockState defaultLeaves;
 			FeatureBlockGroup<? extends Block, TreeDefinition> leavesGroup;
@@ -1055,25 +1059,25 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator, IBlockSub
 			}
 			defaultLeaves = leavesGroup.get(this).defaultState();
 			return world.setBlock(pos, defaultLeaves, 19);
-		} else {*/
-		BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
-		boolean placed = world.setBlock(pos, LeavesBlock.updateDistance(leaves, world, pos), 19);
-		if (!placed) {
-			return false;
-		}
+		} else {
+			BlockState leaves = ArboricultureBlocks.LEAVES.defaultState();
+			boolean placed = world.setBlock(pos, LeavesBlock.updateDistance(leaves, world, pos), 19);
+			if (!placed) {
+				return false;
+			}
 
-		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
-		if (tileLeaves == null) {
-			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
-			return false;
-		}
+			TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
+			if (tileLeaves == null) {
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 19);
+				return false;
+			}
 
-		if (owner != null) {
-			tileLeaves.getOwnerHandler().setOwner(owner);
+			if (owner != null) {
+				tileLeaves.getOwnerHandler().setOwner(owner);
+			}
+			tileLeaves.setTree(new Tree(genome));
+			return true;
 		}
-		tileLeaves.setTree(new Tree(genome));
-		return true;
-		//}
 	}
 
 	public static void initTrees() {

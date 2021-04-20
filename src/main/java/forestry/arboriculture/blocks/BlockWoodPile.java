@@ -56,22 +56,6 @@ public class BlockWoodPile extends Block {
 		builder.add(IS_ACTIVE, AGE);
 	}
 
-	//TODO voxelShape
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isNormalCube(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isFullBlock(BlockState state) {
-	//		return false;
-	//	}
-
 	@Override
 	public void onPlace(BlockState state, World world, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
 		if (!state.getValue(IS_ACTIVE)) {

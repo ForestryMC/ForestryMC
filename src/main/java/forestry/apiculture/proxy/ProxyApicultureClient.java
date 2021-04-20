@@ -51,6 +51,10 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
 		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutout()));
+		RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE.block(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE_WALL.block(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP.block(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP_WALL.block(), RenderType.cutout());
 	}
 
 	@Override

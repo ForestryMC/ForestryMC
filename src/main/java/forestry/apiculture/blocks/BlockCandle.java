@@ -25,11 +25,13 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -41,12 +43,16 @@ import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -54,13 +60,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.blocks.IColoredBlock;
+import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.RenderUtil;
 
-public class BlockCandle extends TorchBlock implements IColoredBlock {
+public class BlockCandle extends TorchBlock implements IColoredBlock, ITileEntityProvider {
 
-	private static final ImmutableMap<String, Integer> colours;
+	private static final ImmutableMap<DyeColor, Integer> colours;
 	public static final Set<Item> lightingItems;
 	public static final String COLOUR_TAG_NAME = "colour";
 
@@ -82,24 +89,24 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 	}
 
 	static {
-		colours = ImmutableMap.<String, Integer>builder()
-			.put("dyeWhite", new Color(255, 255, 255).getRGB())
-			.put("dyeOrange", new Color(219, 125, 62).getRGB())
-			.put("dyeMagenta", new Color(255, 20, 255).getRGB())
-			.put("dyeLightBlue", new Color(107, 138, 201).getRGB())
-			.put("dyeYellow", new Color(255, 255, 20).getRGB())
-			.put("dyeLime", new Color(20, 255, 20).getRGB())
-			.put("dyePink", new Color(208, 132, 153).getRGB())
-			.put("dyeGray", new Color(74, 74, 74).getRGB())
-			.put("dyeLightGray", new Color(154, 161, 161).getRGB())
-			.put("dyeCyan", new Color(20, 255, 255).getRGB())
-			.put("dyePurple", new Color(126, 61, 181).getRGB())
-			.put("dyeBlue", new Color(20, 20, 255).getRGB())
-			.put("dyeBrown", new Color(79, 50, 31).getRGB())
-			.put("dyeGreen", new Color(53, 70, 27).getRGB())
-			.put("dyeRed", new Color(150, 52, 48).getRGB())
-			.put("dyeBlack", new Color(20, 20, 20).getRGB())
-			.build();
+		colours = ImmutableMap.<DyeColor, Integer>builder()
+				.put(DyeColor.WHITE, new Color(255, 255, 255).getRGB())
+				.put(DyeColor.ORANGE, new Color(219, 125, 62).getRGB())
+				.put(DyeColor.MAGENTA, new Color(255, 20, 255).getRGB())
+				.put(DyeColor.LIGHT_BLUE, new Color(107, 138, 201).getRGB())
+				.put(DyeColor.YELLOW, new Color(255, 255, 20).getRGB())
+				.put(DyeColor.LIME, new Color(20, 255, 20).getRGB())
+				.put(DyeColor.PINK, new Color(208, 132, 153).getRGB())
+				.put(DyeColor.GRAY, new Color(74, 74, 74).getRGB())
+				.put(DyeColor.LIGHT_GRAY, new Color(154, 161, 161).getRGB())
+				.put(DyeColor.CYAN, new Color(20, 255, 255).getRGB())
+				.put(DyeColor.PURPLE, new Color(126, 61, 181).getRGB())
+				.put(DyeColor.BLUE, new Color(20, 20, 255).getRGB())
+				.put(DyeColor.BROWN, new Color(79, 50, 31).getRGB())
+				.put(DyeColor.GREEN, new Color(53, 70, 27).getRGB())
+				.put(DyeColor.RED, new Color(150, 52, 48).getRGB())
+				.put(DyeColor.BLACK, new Color(20, 20, 20).getRGB())
+				.build();
 
 		lightingItems = new HashSet<>(Arrays.asList(
 				Items.FLINT_AND_STEEL,
@@ -110,9 +117,18 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 	public BlockCandle() {
 		super(Block.Properties.of(Material.DECORATION)
-				.strength(0.0f)
-				.sound(SoundType.WOOD), ParticleTypes.FLAME);
+						.strength(0.0f)
+						.sound(SoundType.WOOD)
+						.noCollission()
+						.instabreak(),
+				ParticleTypes.FLAME
+		);
 		registerDefaultState(this.getStateDefinition().any().setValue(STATE, State.OFF));
+	}
+
+	@Override
+	public TileEntity newBlockEntity(IBlockReader world) {
+		return new TileCandle();
 	}
 
 	@Override
@@ -121,14 +137,11 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		builder.add(STATE);
 	}
 
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader world, BlockPos pos) {
-	//		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
-	//		if (tileCandle != null && tileCandle.isLit()) {
-	//			state = state.with(STATE, State.ON);
-	//		}
-	//		return super.getActualState(state, world, pos);
-	//	}
+	@Override
+	public BlockState updateShape(BlockState state, Direction direction, BlockState blockState, IWorld world, BlockPos pos, BlockPos blockPos) {
+		TileCandle tileCandle = TileUtil.getTile(world, pos, TileCandle.class);
+		return state.setValue(STATE, tileCandle != null && tileCandle.isLit() ? State.ON : State.OFF);
+	}
 
 	@Override
 	public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
@@ -170,6 +183,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 						// Reset to white if item has no
 						tileCandle.setColour(0xffffff);
 					}
+					RenderUtil.markForUpdate(pos);
 				} else {
 					toggleLitState = true;
 				}
@@ -186,21 +200,24 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 
 		if (toggleLitState) {
 			tileCandle.setLit(!isLit);
+			worldIn.setBlock(pos, state.setValue(STATE, tileCandle.isLit() ? State.ON : State.OFF), Constants.FLAG_BLOCK_UPDATE);
 			RenderUtil.markForUpdate(pos);
+
 			worldIn.getProfiler().push("checkLight");
 			worldIn.getChunkSource().getLightEngine().checkBlock(pos);
 			worldIn.getProfiler().pop();
+
 			flag = ActionResultType.SUCCESS;
+			worldIn.playSound(playerIn, pos, !isLit ? heldItem.getItem() == Items.FLINT_AND_STEEL ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_AMBIENT : SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.75F, worldIn.random.nextFloat() * 0.4F + 0.8F);
 		}
 		return flag;
 	}
 
 	private static boolean tryDye(ItemStack held, boolean isLit, TileCandle tileCandle) {
 		// Check for dye-able.
-		for (Map.Entry<String, Integer> colour : colours.entrySet()) {
-			String colourName = colour.getKey();
-			for (ItemStack stack : new ItemStack[0]) {// TODO tags OreDictionary.getOres(colourName)) {
-				if (false) {//OreDictionary.itemMatches(stack, held, true)) {
+		for (Map.Entry<DyeColor, Integer> colour : colours.entrySet()) {
+			for (Item item : colour.getKey().getTag().getValues()) {
+				if (held.getItem() == item) {
 					if (isLit) {
 						tileCandle.setColour(colour.getValue());
 					} else {
@@ -213,33 +230,10 @@ public class BlockCandle extends TorchBlock implements IColoredBlock {
 		return false;
 	}
 
-	//TODO - is this fixed?
-	/* DROP HANDLING */
-	// Hack: 	When harvesting we need to get the drops in onBlockHarvested,
-	// 			because Mojang destroys the block and tile before calling getDrops.
-	private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
-
-	@Override
-	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-		super.playerWillDestroy(world, pos, state, player);
-		if (!world.isClientSide) {
-			ItemStack itemStack = getCandleDrop(world, pos);
-			drop.set(itemStack);
-		}
-	}
-
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		ItemStack dropStack = drop.get();
-		drop.remove();
 		List<ItemStack> drops = new ArrayList<>();
-
-		// not harvested, get drops normally
-		if (dropStack == null) {
-			dropStack = getCandleDrop(builder.getParameter(LootParameters.BLOCK_ENTITY));
-		}
-
-		drops.add(dropStack);
+		drops.add(getCandleDrop(builder.getParameter(LootParameters.BLOCK_ENTITY)));
 		return drops;
 	}
 

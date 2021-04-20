@@ -16,6 +16,6 @@ public class RenderUtil {
 	}
 
 	public static void markForUpdate(BlockPos pos) {
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().levelRenderer.setSectionDirty(pos.getX(), pos.getY(), pos.getZ()));
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Minecraft.getInstance().levelRenderer.setBlocksDirty(pos.getX(), pos.getY(), pos.getZ(), pos.getX(), pos.getY(), pos.getZ()));
 	}
 }

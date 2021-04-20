@@ -20,7 +20,6 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -52,9 +51,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 
+	//TODO: Default leaves translation ?
 	@Override
-	public IFormattableTextComponent getName() {
-		return super.getName();
+	public String getDescriptionId() {
+		return "block.forestry.leaves";// Use the same for all leaves, so the default leaves don't have an other name than the pollinated ones
 	}
 
 	@Override

@@ -16,13 +16,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.TorchBlock;
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
@@ -30,6 +34,7 @@ import net.minecraft.world.World;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileCandle;
 import forestry.core.config.Constants;
+import forestry.modules.features.FeatureBlock;
 
 public class BlockStump extends TorchBlock {
 
@@ -41,14 +46,22 @@ public class BlockStump extends TorchBlock {
 
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+		return useStump(ApicultureBlocks.CANDLE, state, worldIn, pos, playerIn, hand);
+	}
+
+	public static ActionResultType useStump(FeatureBlock<?, ?> featureBlock, BlockState oldState, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand) {
 		ItemStack heldItem = playerIn.getItemInHand(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			BlockState activatedState = ApicultureBlocks.CANDLE.with(BlockCandle.STATE, BlockCandle.State.ON);
+			BlockState activatedState = featureBlock.with(BlockCandle.STATE, BlockCandle.State.ON);
+			if (activatedState.hasProperty(WallTorchBlock.FACING)) {
+				activatedState = activatedState.setValue(WallTorchBlock.FACING, oldState.getValue(WallTorchBlock.FACING));
+			}
 			worldIn.setBlock(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
-			TileCandle tc = new TileCandle();
-			tc.setColour(DyeColor.WHITE.getColorValue()); // default to white
-			tc.setLit(true);
-			worldIn.setBlockEntity(pos, tc);
+			TileCandle candle = new TileCandle();
+			candle.setColour(DyeColor.WHITE.getColorValue()); // default to white
+			candle.setLit(true);
+			worldIn.setBlockEntity(pos, candle);
+			worldIn.playSound(playerIn, pos, heldItem.getItem() == Items.FLINT_AND_STEEL ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_AMBIENT, SoundCategory.BLOCKS, 0.75F, worldIn.random.nextFloat() * 0.4F + 0.8F);
 			return ActionResultType.SUCCESS;
 		}
 
