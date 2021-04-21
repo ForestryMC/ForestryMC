@@ -13,9 +13,8 @@
         "type": "minecraft:crafting_shaped",
         "group": "combs",
         "pattern": [
-          "###",
-          "###",
-          "###"
+          "##",
+          "##"
         ],
         "key": {
           "#": {

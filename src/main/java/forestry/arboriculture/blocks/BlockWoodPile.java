@@ -46,7 +46,8 @@ public class BlockWoodPile extends Block {
 				.strength(1.5f)
 				.sound(SoundType.WOOD)
 				.harvestLevel(0)
-				.harvestTool(ToolType.AXE));
+				.harvestTool(ToolType.AXE)
+				.noOcclusion());
 		registerDefaultState(getStateDefinition().any().setValue(AGE, 0).setValue(IS_ACTIVE, false));
 	}
 
@@ -54,22 +55,6 @@ public class BlockWoodPile extends Block {
 	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(IS_ACTIVE, AGE);
 	}
-
-	//TODO voxelShape
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isNormalCube(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isFullBlock(BlockState state) {
-	//		return false;
-	//	}
 
 	@Override
 	public void onPlace(BlockState state, World world, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
@@ -89,7 +74,8 @@ public class BlockWoodPile extends Block {
 	@Override
 	public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		boolean isActive = state.getValue(IS_ACTIVE);
-		if (world.getBlockState(fromPos).getBlock() == Blocks.FIRE) {
+		BlockState neighborState = world.getBlockState(fromPos);
+		if (neighborState.getBlock() == Blocks.FIRE || neighborState.getBlock() == this) {
 			if (!isActive) {
 				activatePile(state, world, pos, true);
 			}
@@ -119,7 +105,9 @@ public class BlockWoodPile extends Block {
 					} else if (!blockState.getValue(IS_ACTIVE) && state.getValue(IS_ACTIVE)) {
 						activatePile(blockState, world, position, true);
 					}
-				} else if (world.isEmptyBlock(position) || !Block.canSupportCenter(world, position, facing.getOpposite()) || block.isFlammable(state, world, position, facing.getOpposite())) {
+				} else if (world.isEmptyBlock(position)
+						|| !Block.canSupportCenter(world, position, facing.getOpposite())
+						|| block.isFlammable(blockState, world, position, facing.getOpposite())) {
 					world.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
 					return;
 				}
@@ -162,8 +150,11 @@ public class BlockWoodPile extends Block {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void animateTick(BlockState state, World world, BlockPos pos, Random rand) {
+		if (rand.nextInt() < 0.25F) {
+			return;
+		}
 		if (state.getValue(IS_ACTIVE)) {
-			if (rand.nextDouble() < 0.1D) {
+			if (rand.nextDouble() < 0.05D) {
 				world.playLocalSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F, false);
 			}
 			float f = pos.getX() + 0.5F;
@@ -179,12 +170,13 @@ public class BlockWoodPile extends Block {
 		}
 	}
 
+	//TODO: Precalculate, like leaf distance
 	private float getCharcoalAmount(World world, BlockPos pos) {
 		float charcoalAmount = 0F;
 		for (Direction facing : Direction.VALUES) {
 			charcoalAmount += getCharcoalFaceAmount(world, pos, facing);
 		}
-		return MathHelper.clamp(charcoalAmount / 6, Config.charcoalAmountBase, 63.0F - Config.charcoalAmountBase);
+		return MathHelper.clamp(charcoalAmount / 6, 0, 63.0F - Config.charcoalAmountBase);
 	}
 
 	private int getCharcoalFaceAmount(World world, BlockPos pos, Direction facing) {

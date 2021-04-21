@@ -1,34 +1,25 @@
 package forestry.arboriculture.genetics;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
 
-import genetics.api.alleles.IAllele;
-
 import forestry.api.arboriculture.ILeafProvider;
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.IItemProvider;
 import forestry.arboriculture.features.ArboricultureBlocks;
 
 public class LeafProvider implements ILeafProvider {
 
-	@Nullable
-	private IAlleleTreeSpecies treeSpecies = null;
+	private final TreeDefinition definition;
 
-	@Override
-	public void init(IAlleleTreeSpecies treeSpecies) {
-		this.treeSpecies = treeSpecies;
+	public LeafProvider(TreeDefinition definition) {
+		this.definition = definition;
 	}
 
 	@Override
 	public ItemStack getDecorativeLeaves() {
-		IAllele allele = treeSpecies;
-		if (allele == null) {
-			allele = TreeDefinition.Oak.getTemplate().get(TreeChromosomes.SPECIES);
-		}
-		return ArboricultureBlocks.LEAVES_DECORATIVE.findFeature(allele.getRegistryName().toString()).map(IItemProvider::stack).orElse(ItemStack.EMPTY);
+		return ArboricultureBlocks.LEAVES_DECORATIVE
+				.getProbably(definition)
+				.map(IItemProvider::stack)
+				.orElse(ItemStack.EMPTY);
 	}
 
 }

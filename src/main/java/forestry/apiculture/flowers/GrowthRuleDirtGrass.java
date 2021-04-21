@@ -24,7 +24,6 @@ import forestry.api.genetics.flowers.IFlowerGrowthRule;
 
 public class GrowthRuleDirtGrass implements IFlowerGrowthRule {
 
-
 	@Override
 	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&

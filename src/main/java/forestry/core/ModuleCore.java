@@ -20,9 +20,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootFunctionType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
@@ -31,8 +29,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.InterModComms;
@@ -60,7 +56,6 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
@@ -267,12 +262,6 @@ public class ModuleCore extends BlankForestryModule {
 	@OnlyIn(Dist.CLIENT)
 	public void onBakeModels(ModelBakeEvent event) {
 		ClientManager.getInstance().onBakeModels(event);
-	}
-
-	@SubscribeEvent
-	public void onRegisterLoot(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-		//TODO: Remove if forge adds missing registry types.
-		OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
 	}
 
 	@Override

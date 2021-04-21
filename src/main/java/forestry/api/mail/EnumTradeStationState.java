@@ -27,8 +27,6 @@ public enum EnumTradeStationState implements IPostalState {
 		return this == OK;
 	}
 
-	//TODO - make sure this is not called on the server (or perhaps the method needs to
-	//return a translationtextcomponent
 	@Override
 	public ITextComponent getDescription() {
 		return new TranslationTextComponent(unlocalizedDescription);

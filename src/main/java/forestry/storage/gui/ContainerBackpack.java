@@ -44,7 +44,7 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 		}
 	}
 
-	private Size size;
+	private final Size size;
 
 	public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
 		Size size = extraData.readEnum(Size.class);

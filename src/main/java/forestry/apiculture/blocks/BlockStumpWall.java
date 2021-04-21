@@ -17,8 +17,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -27,31 +25,20 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
 import forestry.apiculture.features.ApicultureBlocks;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.config.Constants;
 
 public class BlockStumpWall extends WallTorchBlock {
 
 	public BlockStumpWall() {
 		super(Properties.of(Material.DECORATION)
-				.strength(0.0f)
-				.sound(SoundType.WOOD), ParticleTypes.FLAME);
+						.strength(0.0f)
+						.sound(SoundType.WOOD),
+				ParticleTypes.FLAME
+		);
 	}
 
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
-		ItemStack heldItem = playerIn.getItemInHand(hand);
-		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
-			BlockState activatedState = ApicultureBlocks.CANDLE_WALL.with(BlockCandle.STATE, BlockCandle.State.ON).setValue(FACING, state.getValue(FACING));
-			worldIn.setBlock(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
-			TileCandle tc = new TileCandle();
-			tc.setColour(DyeColor.WHITE.getColorValue()); // default to white
-			tc.setLit(true);
-			worldIn.setBlockEntity(pos, tc);
-			return ActionResultType.SUCCESS;
-		}
-
-		return ActionResultType.PASS;
+		return BlockStump.useStump(ApicultureBlocks.CANDLE_WALL, state, worldIn, pos, playerIn, hand);
 	}
 
 	@Override

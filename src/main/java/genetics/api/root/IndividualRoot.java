@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
-import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.individual.IKaryotype;
 import genetics.api.organism.IOrganismType;
@@ -21,7 +20,6 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.api.root.components.IRootComponent;
 import genetics.api.root.components.IRootComponentContainer;
 import genetics.api.root.translator.IIndividualTranslator;
-
 import genetics.individual.RootDefinition;
 import genetics.root.RootComponentContainer;
 
@@ -69,12 +67,6 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	public I templateAsIndividual(IAllele[] templateActive, @Nullable IAllele[] templateInactive) {
-		IGenome genome = karyotype.templateAsGenome(templateActive, templateInactive);
-		return create(genome);
-	}
-
-	@Override
 	public I getDefaultMember() {
 		return defaultMember;
 	}
@@ -105,7 +97,7 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	public ITemplateContainer getTemplates() {
+	public ITemplateContainer<I> getTemplates() {
 		return templates;
 	}
 
@@ -115,13 +107,12 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public IIndividualTranslator<I> getTranslator() {
-		Optional<IIndividualTranslator> translator = getComponentSafe(ComponentKeys.TRANSLATORS);
+		Optional<IIndividualTranslator<I>> translator = getComponentSafe(ComponentKeys.TRANSLATORS);
 		if (!translator.isPresent()) {
 			throw new IllegalStateException(String.format("No translator component was added to the root with the uid '%s'.", getUID()));
 		}
-		return (IIndividualTranslator<I>) translator.get();
+		return translator.get();
 	}
 
 	@Override
@@ -136,22 +127,22 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends IIndividualRoot> T cast() {
+	public <T extends IIndividualRoot<?>> T cast() {
 		return (T) this;
 	}
 
 	@Override
-	public boolean hasComponent(ComponentKey key) {
+	public boolean hasComponent(ComponentKey<?> key) {
 		return components.has(key);
 	}
 
 	@Override
-	public <C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey key) {
+	public <C extends IRootComponent<I>> Optional<C> getComponentSafe(ComponentKey<?> key) {
 		return components.getSafe(key);
 	}
 
 	@Override
-	public <C extends IRootComponent<I>> C getComponent(ComponentKey key) {
+	public <C extends IRootComponent<I>> C getComponent(ComponentKey<?> key) {
 		return components.get(key);
 	}
 
@@ -161,8 +152,7 @@ public abstract class IndividualRoot<I extends IIndividual> implements IIndividu
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public IDisplayHelper getDisplayHelper() {
+	public IDisplayHelper<I> getDisplayHelper() {
 		if (displayHelper == null) {
 			IGeneticFactory geneticFactory = GeneticsAPI.apiInstance.getGeneticFactory();
 			displayHelper = geneticFactory.createDisplayHelper(this);

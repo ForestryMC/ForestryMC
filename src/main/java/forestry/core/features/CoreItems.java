@@ -98,7 +98,7 @@ public class CoreItems {
 
 	/* Misc */
 	public static final FeatureItemGroup<ItemCraftingMaterial, EnumCraftingMaterial> CRAFTING_MATERIALS = REGISTRY.itemGroup(ItemCraftingMaterial::new, EnumCraftingMaterial.VALUES).create();
-	public static final FeatureItem<ItemForestry> STICK_IMPREGNATED = REGISTRY.item(ItemForestry::new, "oak_stick");//TODO: Rename
+	public static final FeatureItem<ItemForestry> STICK_IMPREGNATED = REGISTRY.item(ItemForestry::new, "impregnated_stick");
 	public static final FeatureItem<ItemForestry> WOOD_PULP = REGISTRY.item(ItemForestry::new, "wood_pulp");
 	public static final FeatureItem<ItemForestry> BEESWAX = REGISTRY.item(ItemForestry::new, "beeswax");
 	public static final FeatureItem<ItemForestry> REFRACTORY_WAX = REGISTRY.item(ItemForestry::new, "refractory_wax");

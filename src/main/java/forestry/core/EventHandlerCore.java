@@ -147,4 +147,22 @@ public class EventHandlerCore {
 			}
 		}
 	}
+
+	//	@SubscribeEvent
+	//	public static void renderOverlay(RenderGameOverlayEvent.Post event) {
+	//		if(event.getType() != RenderGameOverlayEvent.ElementType.TEXT){
+	//			return;
+	//		}
+	//		Entity entity = Minecraft.getInstance().getCameraEntity();
+	//		if(entity == null){
+	//			return;
+	//		}
+	//		RayTraceResult block = entity.pick(20.0D, 0.0F, false);
+	//		if (block.getType() == RayTraceResult.Type.BLOCK) {
+	//			BlockPos blockpos = ((BlockRayTraceResult)block).getBlockPos();
+	//			BlockState blockstate = Minecraft.getInstance().level.getBlockState(blockpos);
+	//			ITextComponent component = blockstate.getBlock().getName();
+	//			Minecraft.getInstance().font.drawShadow(event.getMatrixStack(), component, event.getWindow().getGuiScaledWidth() / 2.0f, 10, 16777215);
+	//		}
+	//	}
 }

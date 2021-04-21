@@ -1,6 +1,7 @@
 package forestry.apiculture.blocks;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,6 +20,10 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockCandleWall extends BlockCandle {
 	public static final DirectionProperty FACING = HorizontalBlock.FACING;
@@ -40,6 +45,11 @@ public class BlockCandleWall extends BlockCandle {
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState blockState, IWorld world, BlockPos pos, BlockPos blockPos) {
 		return Blocks.WALL_TORCH.updateShape(state, direction, blockState, world, pos, blockPos);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState p_180655_1_, World p_180655_2_, BlockPos p_180655_3_, Random p_180655_4_) {
+		Blocks.WALL_TORCH.animateTick(p_180655_1_, p_180655_2_, p_180655_3_, p_180655_4_);
 	}
 
 	@Nullable

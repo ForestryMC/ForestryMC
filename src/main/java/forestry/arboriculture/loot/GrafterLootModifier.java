@@ -33,6 +33,7 @@ import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitBearer;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
@@ -40,8 +41,6 @@ import forestry.arboriculture.genetics.TreeHelper;
 import forestry.core.config.Constants;
 
 import genetics.api.individual.IGenome;
-import genetics.api.root.components.ComponentKeys;
-import genetics.api.root.translator.IIndividualTranslator;
 
 public class GrafterLootModifier extends LootModifier {
 	public static final Serializer SERIALIZER = new Serializer();
@@ -115,8 +114,8 @@ public class GrafterLootModifier extends LootModifier {
 
 	@Nullable
 	private ITree getTree(BlockState state, @Nullable TileEntity entity) {
-		IIndividualTranslator<ITree> treeTranslator = TreeHelper.getRoot().getComponent(ComponentKeys.TRANSLATORS);
-		ITree tree = treeTranslator.getTranslator(state.getBlock()).map((value) -> value.getIndividualFromObject(state)).orElse(null);
+		ITreeRoot root = TreeHelper.getRoot();
+		ITree tree = root.translateMember(state).orElse(null);
 		if (tree != null || entity == null) {
 			return tree;
 		}

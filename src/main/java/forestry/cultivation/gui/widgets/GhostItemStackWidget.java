@@ -8,6 +8,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,7 +20,6 @@ import forestry.api.farming.FarmDirection;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.ColourProperties;
-import forestry.core.utils.Translator;
 import forestry.cultivation.inventory.InventoryPlanter;
 
 public class GhostItemStackWidget extends ItemStackWidget {
@@ -37,8 +39,8 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.disableDepthTest();
 		RenderSystem.enableBlend();
 
-		String directionString = getDirectionString();
-		if (!directionString.isEmpty()) {
+		ITextComponent directionString = getDirectionString();
+		if (directionString == StringTextComponent.EMPTY) {
 			FontRenderer fontRenderer = manager.minecraft.font;
 			fontRenderer.drawShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
@@ -54,16 +56,15 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.enableLighting();
 	}
 
-	//TODO: TextComponent
-	private String getDirectionString() {
+	private ITextComponent getDirectionString() {
 		if (slot.getSlotIndex() >= InventoryPlanter.CONFIG.productionStart
 				|| slot.getSlotIndex() < InventoryPlanter.CONFIG.productionStart + InventoryPlanter.CONFIG.productionCount) {
-			return "";
+			return StringTextComponent.EMPTY;
 		}
 		int index = slot.getSlotIndex() % 4;
 		FarmDirection direction = FarmDirection.values()[index];
 		String directionString = direction.toString().toLowerCase(Locale.ENGLISH);
-		return Translator.translateToLocal("for.gui.planter." + directionString);
+		return new TranslationTextComponent("for.gui.planter." + directionString);
 	}
 
 	@Nullable

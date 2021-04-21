@@ -201,7 +201,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			return LazyOptional.of(() -> tankManager).cast();    //TODO - still unsure if this is the correct pattern for caps
+			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);
 	}

@@ -11,11 +11,13 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -41,13 +43,13 @@ public class BlockGeneticFilter extends BlockForestry {
 	private static final AxisAlignedBB BOX_EAST = new AxisAlignedBB(0.6875, 0.25, 0.25, 1, 0.75, 0.75);
 	private static final AxisAlignedBB[] BOX_FACES = {BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST};
 
-	public BlockGeneticFilter() {    //TODO super resets hardness and resistance
+	public BlockGeneticFilter() {
 		super(Block.Properties.of(Material.WOOD)
 						.strength(0.25f, 3.0f)
-						.dynamicShape()    //TODO maybe?
-				//				setLightOpacity(0);
+						.dynamicShape()
+						.noOcclusion(),
+				false
 		);
-		//		setCreativeTab(CreativeTabForestry.tabForestry);	TODO done in item
 		this.registerDefaultState(this.getStateDefinition().any()
 				.setValue(NORTH, false)
 				.setValue(EAST, false)
@@ -57,20 +59,18 @@ public class BlockGeneticFilter extends BlockForestry {
 				.setValue(DOWN, false));
 	}
 
-	//TODO don't know how this works any more
-	//	@Override
-	//	public BlockState getActualState(BlockState state, IBlockReader worldIn, BlockPos pos) {
-	//		TileGeneticFilter geneticFilter = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
-	//		if (geneticFilter == null) {
-	//			return getDefaultState();
-	//		}
-	//		return state.with(NORTH, geneticFilter.isConnected(Direction.NORTH))
-	//				.with(EAST, geneticFilter.isConnected(Direction.EAST))
-	//				.with(SOUTH, geneticFilter.isConnected(Direction.SOUTH))
-	//				.with(WEST, geneticFilter.isConnected(Direction.WEST))
-	//				.with(UP, geneticFilter.isConnected(Direction.UP))
-	//				.with(DOWN, geneticFilter.isConnected(Direction.DOWN));
-	//	}
+	public BlockState updateShape(BlockState state, Direction direction, BlockState changedState, IWorld world, BlockPos pos, BlockPos changedPos) {
+		TileGeneticFilter geneticFilter = TileUtil.getTile(world, pos, TileGeneticFilter.class);
+		if (geneticFilter == null) {
+			return defaultBlockState();
+		}
+		return state.setValue(NORTH, geneticFilter.isConnected(Direction.NORTH))
+				.setValue(EAST, geneticFilter.isConnected(Direction.EAST))
+				.setValue(SOUTH, geneticFilter.isConnected(Direction.SOUTH))
+				.setValue(WEST, geneticFilter.isConnected(Direction.WEST))
+				.setValue(UP, geneticFilter.isConnected(Direction.UP))
+				.setValue(DOWN, geneticFilter.isConnected(Direction.DOWN));
+	}
 
 	@Override
 	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
@@ -151,20 +151,4 @@ public class BlockGeneticFilter extends BlockForestry {
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileGeneticFilter();
 	}
-
-	//ToDO bounding boxes
-	//	@Override
-	//	public boolean isFullCube(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isFullBlock(BlockState state) {
-	//		return false;
-	//	}
-	//
-	//	@Override
-	//	public boolean isOpaqueCube(BlockState state) {
-	//		return false;
-	//	}
 }

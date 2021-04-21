@@ -20,6 +20,9 @@ import java.util.Map;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +33,7 @@ import forestry.core.ModuleFluids;
 import forestry.core.config.Constants;
 import forestry.core.items.definitions.DrinkProperties;
 import forestry.modules.features.FeatureFluid;
+import forestry.modules.features.FeatureItem;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.ModFeatureRegistry;
 
@@ -60,8 +64,13 @@ public enum ForestryFluids {
 		@Override
 		public List<ItemStack> getOtherContainers() {
 			return Collections.singletonList(
-				new ItemStack(Items.MILK_BUCKET)
+					new ItemStack(Items.MILK_BUCKET)
 			);
+		}
+
+		@Override
+		protected boolean hasBucket() {
+			return false;
 		}
 	},
 	SEED_OIL(new Color(255, 255, 168), 885, 5000, 2),
@@ -83,6 +92,8 @@ public enum ForestryFluids {
 
 	private final ResourceLocation tag;
 	private final FeatureFluid feature;
+	@Nullable
+	private final FeatureItem<BucketItem> bucket;
 
 	ForestryFluids(Color particleColor) {
 		this(particleColor, 1000, 1000);
@@ -94,14 +105,30 @@ public enum ForestryFluids {
 
 	ForestryFluids(Color particleColor, int density, int viscosity, int flammability) {
 		this.feature = ModFeatureRegistry.get(ModuleFluids.class)
-			.fluid(name().toLowerCase(Locale.ENGLISH))
-			.flammability(flammability)
-			.viscosity(viscosity)
-			.density(density)
-			.temperature(getTemperature())
-			.particleColor(particleColor)
-			.create();
+				.fluid(name().toLowerCase(Locale.ENGLISH))
+				.flammability(flammability)
+				.viscosity(viscosity)
+				.density(density)
+				.temperature(getTemperature())
+				.particleColor(particleColor)
+				.bucket(this::getBucket)
+				.create();
+		if (hasBucket()) {
+			this.bucket = ModFeatureRegistry.get(ModuleFluids.class)
+					.item(() -> new BucketItem(this::getFluid, new Item.Properties()
+									.craftRemainder(Items.BUCKET)
+									.stacksTo(1)
+									.tab(ItemGroup.TAB_MISC)),
+							"bucket_" + name().toLowerCase(Locale.ENGLISH)
+					);
+		} else {
+			bucket = null;
+		}
 		this.tag = new ResourceLocation(Constants.MOD_ID, feature.getIdentifier());
+	}
+
+	protected boolean hasBucket() {
+		return true;
 	}
 
 	public int getTemperature() {
@@ -116,9 +143,22 @@ public enum ForestryFluids {
 		return feature;
 	}
 
-	//@Nullable
+	@Nullable
+	public FeatureItem<BucketItem> getBucketFeature() {
+		return bucket;
+	}
+
+	@Nullable
+	public BucketItem getBucket() {
+		return bucket != null ? bucket.getItem() : null;
+	}
+
 	public final Fluid getFluid() {
 		return feature.fluid();
+	}
+
+	public final Fluid getFlowing() {
+		return feature.flowing();
 	}
 
 	public final FluidStack getFluid(int mb) {
@@ -130,7 +170,7 @@ public enum ForestryFluids {
 	}
 
 	public final Color getParticleColor() {
-		return feature.getProperties().particleColor;
+		return feature.properties().particleColor;
 	}
 
 	public final boolean is(Fluid fluid) {
@@ -147,11 +187,7 @@ public enum ForestryFluids {
 
 	@Nullable
 	public static ForestryFluids getFluidDefinition(Fluid fluid) {
-		if (fluid instanceof ForestryFluid) {
-			return tagToFluid.get(fluid.getRegistryName());
-		}
-
-		return null;
+		return tagToFluid.get(fluid.getRegistryName());
 	}
 
 	@Nullable
@@ -175,6 +211,6 @@ public enum ForestryFluids {
 	 */
 	@Nullable
 	public DrinkProperties getDrinkProperties() {
-		return feature.getProperties().properties;
+		return feature.properties().properties;
 	}
 }

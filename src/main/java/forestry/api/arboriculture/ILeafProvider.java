@@ -7,11 +7,7 @@ package forestry.api.arboriculture;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
-
 public interface ILeafProvider {
-
-	void init(IAlleleTreeSpecies treeSpecies);
 
 	ItemStack getDecorativeLeaves();
 

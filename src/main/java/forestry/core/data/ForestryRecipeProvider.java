@@ -599,7 +599,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 			Item comb = ApicultureItems.BEE_COMBS.get(honeyComb).item();
 			Block combBlock = ApicultureBlocks.BEE_COMB.get(honeyComb).block();
 			helper.moduleConditionRecipe(
-					ShapedRecipeBuilder.shaped(combBlock).define('#', comb).pattern("###").pattern("###").pattern("###").unlockedBy("has_comb", has(comb)).group("combs")::save,
+					ShapedRecipeBuilder.shaped(combBlock).define('#', comb).pattern("##").pattern("##").unlockedBy("has_comb", has(comb)).group("combs")::save,
 					ForestryModuleUids.APICULTURE
 			);
 		}

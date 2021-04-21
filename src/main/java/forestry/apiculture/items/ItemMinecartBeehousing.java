@@ -54,7 +54,6 @@ public class ItemMinecartBeehousing extends MinecartItem {
 		DispenserBlock.DISPENSER_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
 	}
 
-	//TODO world.addEntity returns successfully here but nothing ever appears in the world
 	@Override
 	public ActionResultType useOn(ItemUseContext context) {
 		World world = context.getLevel();
@@ -99,6 +98,6 @@ public class ItemMinecartBeehousing extends MinecartItem {
 
 	@Override
 	public String getDescriptionId(ItemStack stack) {
-		return "cart." + type.getSerializedName();
+		return super.getDescriptionId(stack);
 	}
 }

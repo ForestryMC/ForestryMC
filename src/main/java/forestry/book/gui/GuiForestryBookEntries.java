@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -87,6 +86,6 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 
 	@Override
 	public ITextComponent getTitle() {
-		return new StringTextComponent(category.getLocalizedName());
+		return category.getLocalizedName();
 	}
 }

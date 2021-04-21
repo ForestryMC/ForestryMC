@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ITag;
 
 import forestry.api.storage.IBackpackFilterConfigurable;
 import forestry.core.utils.ItemStackUtil;
@@ -23,7 +24,7 @@ public class BackpackFilter implements IBackpackFilterConfigurable {
 	}
 
 	@Override
-	public void acceptTagName(String oreDictName) {
+	public void acceptTag(ITag<Item> tag) {
 		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
 		//			int oreId = OreDictionary.getOreID(oreDictName);
 		//			this.validOreIds.add(oreId);

@@ -6,10 +6,12 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BucketItem;
 import net.minecraft.util.ResourceLocation;
 
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
+import forestry.core.fluids.ForestryFluids;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
 import forestry.cultivation.features.CultivationBlocks;
@@ -42,15 +44,27 @@ public class ForestryItemModelProvider extends ModelProvider {
 		registerModel(ArboricultureItems.SAPLING, new ModelBuilder().parent("forge:item/default").loader(new ResourceLocation(Constants.MOD_ID, "sapling_ge")));
 		for (FeatureItem<ItemCrated> featureCrated : ModuleCrates.crates) {
 			registerModel(featureCrated, new ModelBuilder()
-				.parent(Constants.MOD_ID + ":item/crate-filled")
-				.loader(CrateModel.Loader.LOCATION)
-				.loaderData("variant", new JsonPrimitive(featureCrated.getIdentifier()))
+					.parent(Constants.MOD_ID + ":item/crate-filled")
+					.loader(CrateModel.Loader.LOCATION)
+					.loaderData("variant", new JsonPrimitive(featureCrated.getIdentifier()))
 			);
 		}
 
 		for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
 			Block block = cell.getValue().block();
 			registerModel(block, new ModelBuilder().parent("forestry:block/" + cell.getRowKey().getSerializedName()));
+		}
+		for (ForestryFluids fluid : ForestryFluids.values()) {
+			BucketItem item = fluid.getBucket();
+			if (item == null) {
+				continue;
+			}
+			//"bucket_"
+			registerModel(item, new ModelBuilder()
+					.loader(new ResourceLocation("forge", "bucket"))
+					.parent("forge:item/bucket_drip")
+					.loaderData("fluid", new JsonPrimitive(fluid.getFluid().getRegistryName().toString()))
+			);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package forestry.apiculture.blocks;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -27,7 +29,7 @@ public class BlockHoneyComb extends Block implements IColoredBlock {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public int colorMultiplier(BlockState state, IBlockReader reader, BlockPos pos, int tintIndex) {
+	public int colorMultiplier(BlockState state, @Nullable IBlockReader reader, @Nullable BlockPos pos, int tintIndex) {
 		EnumHoneyComb honeyComb = type;
 		if (tintIndex == 1) {
 			return honeyComb.primaryColor;

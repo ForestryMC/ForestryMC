@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.arboriculture.genetics;
 
+import java.util.function.Function;
+
 import net.minecraftforge.common.PlantType;
 
 import forestry.api.arboriculture.IGermlingModelProvider;
@@ -33,7 +35,7 @@ public interface IAlleleTreeSpeciesBuilder extends IAlleleSpeciesBuilder<IAllele
 	/**
 	 * Provider for the leaf blocks of this species
 	 */
-	IAlleleTreeSpeciesBuilder setLeaf(ILeafProvider leafProvider);
+	IAlleleTreeSpeciesBuilder setLeaf(Function<IAlleleTreeSpecies, ILeafProvider> leafProvider);
 
 	/**
 	 * The leaf sprite provider for this species

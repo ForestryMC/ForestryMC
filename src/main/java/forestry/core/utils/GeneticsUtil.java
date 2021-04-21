@@ -207,7 +207,7 @@ public class GeneticsUtil {
 
 		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			IIndividualRoot<IIndividual> root = definition.cast();
-			Optional<IIndividual> individual = root.getTranslator().translateMember(blockState);
+			Optional<IIndividual> individual = root.translateMember(blockState);
 			if (individual.isPresent()) {
 				return individual;
 			}
@@ -227,7 +227,7 @@ public class GeneticsUtil {
 				continue;
 			}
 			IIndividualRoot<I> root = definition.cast();
-			Optional<I> individual = root.getTranslator().translateMember(itemStack);
+			Optional<I> individual = root.translateMember(itemStack);
 			if (individual.isPresent()) {
 				return individual;
 			}

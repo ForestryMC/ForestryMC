@@ -65,7 +65,7 @@ public class ModuleFluids extends BlankForestryModule {
 			return;
 		}
 		for (ForestryFluids fluid : ForestryFluids.values()) {
-			for (ResourceLocation resource : fluid.getFeature().getProperties().resources) {
+			for (ResourceLocation resource : fluid.getFeature().properties().resources) {
 				event.addSprite(resource);
 			}
 		}

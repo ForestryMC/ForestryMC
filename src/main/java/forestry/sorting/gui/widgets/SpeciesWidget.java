@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -107,8 +108,8 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	}
 
 	@Override
-	public String getName(IAlleleSpecies selectable) {
-		return selectable.getDisplayName().getString();
+	public ITextComponent getName(IAlleleSpecies selectable) {
+		return selectable.getDisplayName();
 	}
 
 	@Nullable

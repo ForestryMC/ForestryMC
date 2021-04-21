@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -75,8 +76,8 @@ public class FarmLogicSlot extends Widget {
 		public void refresh() {
 			toolTip.clear();
 			toolTip.add(getProperties().getDisplayName(getLogic().isManual()));
-			toolTip.add("Fertilizer: " + Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier));
-			toolTip.add("Water: " + getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier()));
+			toolTip.add(new TranslationTextComponent("for.gui.farm.fertilizer", Math.round(getProperties().getFertilizerConsumption(farmController) * Config.fertilizerModifier)));
+			toolTip.add(new TranslationTextComponent("for.gui.farm.water", getProperties().getWaterConsumption(farmController, farmController.getFarmLedgerDelegate().getHydrationModifier())));
 		}
 	};
 }

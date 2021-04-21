@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +15,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.IBookCategory;
 import forestry.api.book.IBookEntry;
 import forestry.api.book.IBookEntryBuilder;
-import forestry.core.utils.Translator;
 
 @OnlyIn(Dist.CLIENT)
 public class BookCategory implements IBookCategory {
@@ -72,8 +73,8 @@ public class BookCategory implements IBookCategory {
 	}
 
 	@Override
-	public String getLocalizedName() {
-		return Translator.translateToLocal("for.gui.book.category." + name + ".title");
+	public ITextComponent getLocalizedName() {
+		return new TranslationTextComponent("for.gui.book.category." + name + ".title");
 	}
 
 	@Override

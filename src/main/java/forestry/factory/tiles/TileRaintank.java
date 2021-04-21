@@ -70,7 +70,6 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		super(FactoryTiles.RAIN_TANK.tileType());
 		setInternalInventory(new InventoryRaintank(this));
 
-		//TODO fluids
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);
 
 		tankManager = new TankManager(this, resourceTank);
@@ -185,13 +184,12 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-			final IFluidHandler fluidHandler;
-			if (facing == Direction.DOWN) {
-				fluidHandler = new DrainOnlyFluidHandlerWrapper(tankManager);
-			} else {
-				fluidHandler = tankManager;
-			}
-			return LazyOptional.of(() -> fluidHandler).cast(); //TODO - I think these can all be made more efficient anyway (more lazy)
+			return LazyOptional.of(() -> {
+				if (facing == Direction.DOWN) {
+					return new DrainOnlyFluidHandlerWrapper(tankManager);
+				}
+				return tankManager;
+			}).cast();
 		}
 		return super.getCapability(capability, facing);
 	}

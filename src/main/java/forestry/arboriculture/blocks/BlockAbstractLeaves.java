@@ -51,6 +51,12 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 
+	//TODO: Default leaves translation ?
+	@Override
+	public String getDescriptionId() {
+		return "block.forestry.leaves";// Use the same for all leaves, so the default leaves don't have an other name than the pollinated ones
+	}
+
 	@Override
 	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
 		ITree tree = getTree(world, pos);
@@ -58,10 +64,9 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			return ItemStack.EMPTY;
 		}
 		IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-		return species.getLeafProvider().getDecorativeLeaves();
+		return species.getDecorativeLeaves();
 	}
 
-	//TODO since loot done in loot table I don't know if this works
 	@Nonnull
 	@Override
 	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
@@ -70,7 +75,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 			tree = TreeDefinition.Oak.createIndividual();
 		}
 		IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-		ItemStack decorativeLeaves = species.getLeafProvider().getDecorativeLeaves();
+		ItemStack decorativeLeaves = species.getDecorativeLeaves();
 		if (decorativeLeaves.isEmpty()) {
 			return Collections.emptyList();
 		} else {

@@ -9,27 +9,18 @@ import java.util.Locale;
 import java.util.Random;
 
 public enum EnumVanillaWoodType implements IWoodType {
-	//TODO - think this should be a tag?
-	OAK(),
-	SPRUCE(),
-	BIRCH(),
-	JUNGLE(),
-	ACACIA(),
-	DARK_OAK();
+	OAK,
+	SPRUCE,
+	BIRCH,
+	JUNGLE,
+	ACACIA,
+	DARK_OAK;
 
 	public static final EnumVanillaWoodType[] VALUES = values();
 
 	public static EnumVanillaWoodType getRandom(Random random) {
 		return VALUES[random.nextInt(VALUES.length)];
 	}
-
-	EnumVanillaWoodType() {
-
-	}
-
-	//	public BlockPlanks.EnumType getVanillaType() {
-	//		return vanillaType;
-	//	}
 
 	@Override
 	public String toString() {

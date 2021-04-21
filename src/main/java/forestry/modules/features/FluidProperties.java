@@ -2,8 +2,10 @@ package forestry.modules.features;
 
 import javax.annotation.Nullable;
 import java.awt.Color;
+import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,6 +26,7 @@ public class FluidProperties {
 	@Nullable
 	public final DrinkProperties properties;
 	public final ResourceLocation[] resources = new ResourceLocation[2];
+	public final Supplier<Item> bucket;
 
 	public FluidProperties(FeatureFluid.Builder builder) {
 		this.density = builder.density;
@@ -38,6 +41,7 @@ public class FluidProperties {
 		if (!resourceExists(resources[1])) {
 			this.resources[1] = resources[0];
 		}
+		this.bucket = builder.bucket;
 	}
 
 	public boolean resourceExists(ResourceLocation location) {

@@ -25,7 +25,7 @@ public enum BlockTypeApiculture implements IBlockType {
 
 	public static final BlockTypeApiculture[] VALUES = values();
 
-	private final IMachineProperties machineProperties;
+	private final IMachineProperties<?> machineProperties;
 
 	<T extends TileForestry> BlockTypeApiculture(Supplier<FeatureTileType<? extends T>> teClass, String name) {
 		this.machineProperties = new MachineProperties.Builder<>(teClass, name).create();

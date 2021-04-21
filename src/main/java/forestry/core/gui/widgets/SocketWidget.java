@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -27,7 +28,6 @@ import forestry.core.circuits.ISolderingIron;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.utils.ItemTooltipUtil;
-import forestry.core.utils.Translator;
 
 public class SocketWidget extends Widget {
 
@@ -62,9 +62,9 @@ public class SocketWidget extends Widget {
 			ItemStack stack = tile.getSocket(slot);
 			if (!stack.isEmpty()) {
 				toolTip.addAll(ItemTooltipUtil.getInformation(stack));
-				toolTip.add(TextFormatting.ITALIC + Translator.translateToLocal("for.gui.socket.remove"));
+				toolTip.add(new TranslationTextComponent("for.gui.socket.remove").withStyle(TextFormatting.ITALIC));
 			} else {
-				toolTip.add(Translator.translateToLocal("for.gui.emptysocket"));
+				toolTip.add(new TranslationTextComponent("for.gui.emptysocket"));
 			}
 		}
 	};
