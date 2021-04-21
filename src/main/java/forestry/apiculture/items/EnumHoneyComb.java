@@ -29,7 +29,7 @@ public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSu
 	PARCHED(new Color(0xdcbe13), new Color(0xffff00)),
 	MYSTERIOUS(new Color(0x161616), new Color(0xe099ff), true),
 	IRRADIATED(new Color(0xeafff3), new Color(0xeeff00), true),
-	POWDERY(new Color(0xe4e4e4), new Color(0xffffff), true),
+	POWDERY(new Color(0x676767), new Color(0xffffff), true),
 	REDDENED(new Color(0x4b0000), new Color(0x6200e7), true),
 	DARKENED(new Color(0x353535), new Color(0x33ebcb), true),
 	OMEGA(new Color(0x191919), new Color(0x6dcff6), true),

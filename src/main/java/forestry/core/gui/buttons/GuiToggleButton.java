@@ -1,6 +1,7 @@
 package forestry.core.gui.buttons;
 
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -11,7 +12,7 @@ public class GuiToggleButton extends Button {
 	private final Drawable[] textures = new Drawable[3];
 
 	public GuiToggleButton(int x, int y, int widthIn, int heightIn, Drawable drawable, IPressable handler) {
-		super(x, y, widthIn, heightIn, null, handler);
+		super(x, y, widthIn, heightIn, StringTextComponent.EMPTY, handler);
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
