@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.individual.IIndividual;
+import forestry.core.gui.elements.DatabaseElement;
 
-import forestry.core.gui.elements.lib.IDatabaseElement;
+import genetics.api.individual.IIndividual;
 
 /**
  * A tab of the database screen that shows some information about a {@link IIndividual}.
@@ -19,10 +19,10 @@ public interface IDatabaseTab<I extends IIndividual> {
 	/**
 	 * Creates the gui elements that are displayed if this tab is selected in the database.
 	 *
-	 * @param individual The individual that is currently in the database selected.
 	 * @param container  A helper to create the gui elements.
+	 * @param individual The individual that is currently in the database selected.
 	 */
-	void createElements(IDatabaseElement container, I individual, ItemStack itemStack);
+	void createElements(DatabaseElement container, I individual, ItemStack itemStack);
 
 	ItemStack getIconStack();
 

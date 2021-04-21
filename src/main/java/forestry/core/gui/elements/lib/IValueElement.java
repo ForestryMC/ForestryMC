@@ -5,7 +5,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public interface IValueElement<V> extends IGuiElement {
+public interface IValueElement<V> {
 
 	V getValue();
 

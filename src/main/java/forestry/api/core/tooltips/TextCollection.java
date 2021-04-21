@@ -12,6 +12,7 @@ public class TextCollection implements ITextInstance<TextCollection, TextCompoun
 	@Nullable
 	private ITextComponent last;
 
+	@Override
 	public TextCompound singleLine() {
 		return new TextCompound(this);
 	}

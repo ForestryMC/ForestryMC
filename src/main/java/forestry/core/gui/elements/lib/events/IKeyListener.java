@@ -1,7 +1,11 @@
 package forestry.core.gui.elements.lib.events;
 
 public interface IKeyListener {
-	default boolean onKeyTyped(int keyCode, int scanCode, int modifiers) {
+	default boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+		return false;
+	}
+
+	default boolean onKeyReleased(int keyCode, int scanCode, int modifiers) {
 		return false;
 	}
 

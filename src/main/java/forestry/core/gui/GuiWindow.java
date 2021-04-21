@@ -13,8 +13,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.lwjgl.glfw.GLFW;
 
-import forestry.core.gui.elements.Window;
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.WindowGui;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 
@@ -23,7 +23,7 @@ import forestry.core.gui.elements.lib.events.GuiEventDestination;
  */
 @OnlyIn(Dist.CLIENT)
 public class GuiWindow extends Screen implements IGuiSizable {
-	protected final Window window;
+	protected final WindowGui window;
 	protected final int xSize;
 	protected final int ySize;
 	protected int guiLeft;
@@ -33,7 +33,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 		super(title);
 		this.xSize = xSize;
 		this.ySize = ySize;
-		this.window = new Window<>(xSize, ySize, this);
+		this.window = new WindowGui<>(xSize, ySize, this);
 		addElements();
 	}
 
@@ -94,14 +94,14 @@ public class GuiWindow extends Screen implements IGuiSizable {
 				this.minecraft.setWindowActive(true);
 			}
 		}
-		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
 		return true;
 	}
 
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
-		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
 		return true;
 	}
@@ -110,7 +110,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		return true; //TODO return type
 	}
@@ -119,7 +119,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int state) {
 		super.mouseReleased(mouseX, mouseY, state);
-		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, state), GuiEventDestination.ALL);
 		//TODO return type
 		return true;

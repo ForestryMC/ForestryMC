@@ -6,39 +6,39 @@ import java.util.Collection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 @OnlyIn(Dist.CLIENT)
 public enum GuiEventOrigin {
 	ANY {
 		@Override
-		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+		public boolean isOrigin(GuiElement origin, @Nullable GuiElement element) {
 			return true;
 		}
 	},
 	SELF {
 		@Override
-		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+		public boolean isOrigin(GuiElement origin, @Nullable GuiElement element) {
 			return element == origin;
 		}
 	},
 	PARENT {
 		@Override
-		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
+		public boolean isOrigin(GuiElement origin, @Nullable GuiElement element) {
 			return element != null && element.getParent() == origin;
 		}
 	},
 	DIRECT_CHILD {
 		@Override
-		public boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element) {
-			if (element == null || !(element instanceof IElementGroup)) {
+		public boolean isOrigin(GuiElement origin, @Nullable GuiElement element) {
+			if (!(element instanceof ElementGroup)) {
 				return false;
 			}
-			Collection<IGuiElement> elements = ((IElementGroup) element).getElements();
+			Collection<GuiElement> elements = ((ElementGroup) element).getElements();
 			return elements.contains(origin);
 		}
 	};
 
-	public abstract boolean isOrigin(IGuiElement origin, @Nullable IGuiElement element);
+	public abstract boolean isOrigin(GuiElement origin, @Nullable GuiElement element);
 }

@@ -12,9 +12,7 @@ package forestry.core.gui.elements;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.core.gui.elements.lib.IItemElement;
-
-public class ItemElement extends AbstractItemElement implements IItemElement {
+public class ItemElement extends AbstractItemElement {
 	/* Attributes */
 	private ItemStack stack;
 
@@ -28,8 +26,7 @@ public class ItemElement extends AbstractItemElement implements IItemElement {
 		return stack;
 	}
 
-	@Override
-	public IItemElement setStack(ItemStack stack) {
+	public ItemElement setStack(ItemStack stack) {
 		this.stack = stack;
 		return this;
 	}

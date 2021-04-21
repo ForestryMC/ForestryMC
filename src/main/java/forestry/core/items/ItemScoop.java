@@ -22,10 +22,10 @@ public class ItemScoop extends ItemForestryTool implements IToolScoop {
 	public static ToolType SCOOP = ToolType.get("scoop");
 
 	public ItemScoop() {
-		super(ItemStack.EMPTY, (new Item.Properties())
+		super(ItemStack.EMPTY, 2, -2, (new Item.Properties())
 				.durability(10)
 				.tab(ItemGroups.tabApiculture)
-			.addToolType(SCOOP, 3));
+				.addToolType(SCOOP, 3));
 		setEfficiencyOnProperMaterial(2.0f);
 	}
 }

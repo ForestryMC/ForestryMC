@@ -20,8 +20,8 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookPages extends GuiForesterBook {
@@ -30,10 +30,10 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	@Nullable
 	private final IBookEntry parent;
 	private final List<GuiButtonSubEntry> subButtons = new ArrayList<>();
-	private List<IGuiElement> pages;
+	private List<GuiElement> pages;
 	private int pageIndex = 0;
-	private IElementGroup leftPage;
-	private IElementGroup rightPage;
+	private ElementGroup leftPage;
+	private ElementGroup rightPage;
 	private int nextPage = -1;
 	private int lastPage = -1;
 

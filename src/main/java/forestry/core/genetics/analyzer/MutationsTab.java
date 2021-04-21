@@ -10,11 +10,11 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
+import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.layouts.ElementLayoutHelper;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
-import forestry.core.gui.elements.lib.IElementLayoutHelper;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAlleleSpecies;
@@ -30,7 +30,7 @@ public class MutationsTab extends DatabaseTab {
 	}
 
 	@Override
-	public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
+	public void createElements(DatabaseElement container, IIndividual individual, ItemStack itemStack) {
 		IGenome genome = individual.getGenome();
 		IForestrySpeciesRoot<IIndividual> speciesRoot = (IForestrySpeciesRoot<IIndividual>) individual.getRoot();
 		IAlleleSpecies species = genome.getPrimary();
@@ -41,7 +41,7 @@ public class MutationsTab extends DatabaseTab {
 		PlayerEntity player = Minecraft.getInstance().player;
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.level, player.getGameProfile());
 
-		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
+		ElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 1, y, 16), 100, 0);
 		Collection<? extends IMutation> mutations = getValidMutations(mutationContainer.getCombinations(species));
 		if (!mutations.isEmpty()) {
 			container.label(Translator.translateToLocal("for.gui.database.mutations.further"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);

@@ -20,10 +20,10 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAlleleValue;
@@ -42,7 +42,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 	}
 
 	@Override
-	public void createElements(IDatabaseElement container, ITree tree, ItemStack itemStack) {
+	public void createElements(DatabaseElement container, ITree tree, ItemStack itemStack) {
 		IAlleleTreeSpecies primarySpecies = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getInactiveAllele(TreeChromosomes.SPECIES);
 		Style speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());

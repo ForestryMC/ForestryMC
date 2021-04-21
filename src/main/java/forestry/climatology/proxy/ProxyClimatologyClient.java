@@ -33,7 +33,7 @@ public class ProxyClimatologyClient extends ProxyClimatology implements IClientM
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutout());
+		RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutoutMipped());
 	}
 
 }

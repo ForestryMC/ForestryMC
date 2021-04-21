@@ -17,9 +17,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.BookContent;
 import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CraftingElement;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 /**
  * A book content that displays one ore more crafting recipes.
@@ -32,7 +32,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null || data.locations.length == 0) {
 			return false;
 		}

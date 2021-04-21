@@ -10,9 +10,9 @@ import javax.annotation.Nullable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 /**
  * The deserialized content data of a book page. It creates a gui element at the moment the entry gets opened.
@@ -42,13 +42,14 @@ public abstract class BookContent<D> {
 	}
 
 	/**
-	 * Adds the content to the page by adding a {@link IGuiElement} or at the content to the previous element.
+	 * Adds the content to the page by adding a {@link GuiElement} or at the content to the previous element.
 	 *
 	 * @param page            The gui element that represents a book page
+	 * @param factory
 	 * @param previous        The content of the previous element.
 	 * @param previousElement The element that was previously added to the page.
 	 * @param pageHeight      The max height of the current page.
 	 * @return True if you added an element.
 	 */
-	public abstract boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight);
+	public abstract boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight);
 }
