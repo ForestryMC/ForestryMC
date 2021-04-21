@@ -1,6 +1,6 @@
 package forestry.core.gui.elements.layouts;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
 public class PaneLayout extends ElementGroup {
 	public PaneLayout(int width, int height) {
@@ -17,7 +17,7 @@ public class PaneLayout extends ElementGroup {
 			return width;
 		}
 		int width = 0;
-		for (IGuiElement element : elements) {
+		for (GuiElement element : elements) {
 			int elementWidth = element.getWidth();
 			if (elementWidth > width) {
 				width = elementWidth;
@@ -32,7 +32,7 @@ public class PaneLayout extends ElementGroup {
 			return height;
 		}
 		int height = 0;
-		for (IGuiElement element : elements) {
+		for (GuiElement element : elements) {
 			int elementHeight = element.getHeight();
 			if (elementHeight > height) {
 				height = elementHeight;

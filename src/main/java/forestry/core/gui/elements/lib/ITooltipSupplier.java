@@ -6,6 +6,7 @@
 package forestry.core.gui.elements.lib;
 
 import forestry.api.core.tooltips.ToolTip;
+import forestry.core.gui.elements.GuiElement;
 
 @FunctionalInterface
 public interface ITooltipSupplier {
@@ -14,5 +15,5 @@ public interface ITooltipSupplier {
 		return true;
 	}
 
-	void addTooltip(ToolTip tooltip, IGuiElement element, int mouseX, int mouseY);
+	void addTooltip(ToolTip tooltip, GuiElement element, int mouseX, int mouseY);
 }

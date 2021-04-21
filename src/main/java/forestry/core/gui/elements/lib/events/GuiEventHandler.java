@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
 @OnlyIn(Dist.CLIENT)
 public final class GuiEventHandler<E extends GuiElementEvent> implements Consumer<E> {
@@ -14,7 +14,7 @@ public final class GuiEventHandler<E extends GuiElementEvent> implements Consume
 	private final Class<? super E> eventClass;
 	private final GuiEventOrigin origin;
 	@Nullable
-	private final IGuiElement relative;
+	private final GuiElement relative;
 
 	public GuiEventHandler(Class<? super E> eventClass, Consumer<E> handlerAction) {
 		this.origin = GuiEventOrigin.ANY;
@@ -23,7 +23,7 @@ public final class GuiEventHandler<E extends GuiElementEvent> implements Consume
 		this.handlerAction = handlerAction;
 	}
 
-	public GuiEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, IGuiElement relative, Consumer<E> handlerAction) {
+	public GuiEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, GuiElement relative, Consumer<E> handlerAction) {
 		this.origin = origin;
 		this.relative = relative;
 		this.eventClass = eventClass;

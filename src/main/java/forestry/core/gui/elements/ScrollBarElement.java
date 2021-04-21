@@ -9,7 +9,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
 
@@ -141,7 +140,7 @@ public class ScrollBarElement extends ElementGroup {
 		if (!isVisible()) {
 			return;
 		}
-		IWindowElement window = getWindow();
+		Window window = getWindow();
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

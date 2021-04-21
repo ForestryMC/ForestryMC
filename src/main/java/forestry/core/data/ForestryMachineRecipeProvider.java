@@ -874,11 +874,6 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				}))
 				.setFluidOutput(ForestryFluids.ICE.getFluid(4000))
 				.build(consumer, id("squeezer", "ice"));
-		new SqueezerRecipeBuilder()
-				.setProcessingTime(8)
-				.setResources(NonNullList.withSize(1, Ingredient.of(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.CAMOUFLAGED_PANELING))))
-				.setFluidOutput(ForestryFluids.BIOMASS.getFluid(150))
-				.build(consumer, id("squeezer", "biomass"));
 
 		int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 		int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");

@@ -5,10 +5,10 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
 @OnlyIn(Dist.CLIENT)
-public interface IGeneticAnalyzer extends IGuiElement {
+public interface IGeneticAnalyzer {
 	IGeneticAnalyzerProvider getProvider();
 
 	/**
@@ -36,7 +36,7 @@ public interface IGeneticAnalyzer extends IGuiElement {
 	/**
 	 * @return
 	 */
-	IGuiElement getItemElement();
+	GuiElement getItemElement();
 
 	void updateSelected();
 

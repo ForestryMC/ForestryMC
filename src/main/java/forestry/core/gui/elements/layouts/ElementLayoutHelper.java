@@ -5,25 +5,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IElementLayout;
-import forestry.core.gui.elements.lib.IElementLayoutHelper;
-import forestry.core.gui.elements.lib.IGuiElement;
 
-public class ElementLayoutHelper implements IElementLayoutHelper {
-	private final List<IElementLayout> layouts = new ArrayList<>();
+public class ElementLayoutHelper {
+	private final List<ElementLayout> layouts = new ArrayList<>();
 	private final LayoutFactory layoutFactory;
 	private final int width;
 	private final int height;
-	private final IElementGroup parent;
+	private final ElementGroup parent;
 	private int xOffset;
 	private int yOffset;
 	@Nullable
-	private IElementLayout currentLayout;
+	private ElementLayout currentLayout;
 	private boolean horizontal;
 
-	public ElementLayoutHelper(LayoutFactory layoutFactory, int width, int height, IElementGroup parent) {
+	public ElementLayoutHelper(LayoutFactory layoutFactory, int width, int height, ElementGroup parent) {
 		this.layoutFactory = layoutFactory;
 		this.width = width;
 		this.height = height;
@@ -33,8 +30,7 @@ public class ElementLayoutHelper implements IElementLayoutHelper {
 	/**
 	 * @return Only false if the helper has no space to add this element.
 	 */
-	@Override
-	public boolean add(IGuiElement element) {
+	public boolean add(GuiElement element) {
 		if (currentLayout == null) {
 			layouts.add(currentLayout = layoutFactory.createLayout(0, 0));
 			this.horizontal = currentLayout instanceof VerticalLayout;
@@ -70,9 +66,12 @@ public class ElementLayoutHelper implements IElementLayoutHelper {
 		return true;
 	}
 
-	@Override
+	public void finish() {
+		finish(false);
+	}
+
 	public void finish(boolean center) {
-		for (IGuiElement element : layouts) {
+		for (GuiElement element : layouts) {
 			if (center) {
 				element.setAlign(GuiElementAlignment.TOP_CENTER);
 			}
@@ -81,7 +80,6 @@ public class ElementLayoutHelper implements IElementLayoutHelper {
 		clear();
 	}
 
-	@Override
 	public void clear() {
 		layouts.clear();
 		currentLayout = null;
@@ -89,8 +87,14 @@ public class ElementLayoutHelper implements IElementLayoutHelper {
 		yOffset = 0;
 	}
 
-	@Override
-	public Collection<IElementLayout> layouts() {
+	public Collection<ElementLayout> layouts() {
 		return layouts;
+	}
+
+	public interface LayoutFactory {
+		/**
+		 * A factory method to create new layouts if the last layout is full.
+		 */
+		ElementLayout createLayout(int xOffset, int yOffset);
 	}
 }

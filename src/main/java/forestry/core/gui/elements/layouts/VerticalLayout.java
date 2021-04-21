@@ -4,10 +4,10 @@ package forestry.core.gui.elements.layouts;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
 @OnlyIn(Dist.CLIENT)
-public class VerticalLayout extends AbstractElementLayout {
+public class VerticalLayout extends ElementLayout {
 	public VerticalLayout(int width) {
 		this(0, 0, width);
 	}
@@ -16,7 +16,8 @@ public class VerticalLayout extends AbstractElementLayout {
 		super(xPos, yPos, width, 0);
 	}
 
-	public <E extends IGuiElement> E add(E element) {
+	@Override
+	public <E extends GuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
 		element.setYPosition(height);
@@ -25,7 +26,8 @@ public class VerticalLayout extends AbstractElementLayout {
 		return element;
 	}
 
-	public <E extends IGuiElement> E remove(E element) {
+	@Override
+	public <E extends GuiElement> E remove(E element) {
 		elements.remove(element);
 		setHeight(height - (element.getHeight() + distance));
 		element.setYPosition(0);
@@ -35,7 +37,7 @@ public class VerticalLayout extends AbstractElementLayout {
 
 	public void layout() {
 		height = 0;
-		for (IGuiElement element : elements) {
+		for (GuiElement element : elements) {
 			element.setYPosition(height);
 			setHeight(height + (element.getHeight() + distance));
 		}
@@ -47,7 +49,7 @@ public class VerticalLayout extends AbstractElementLayout {
 			return width;
 		}
 		int width = 0;
-		for (IGuiElement element : elements) {
+		for (GuiElement element : elements) {
 			int elementWidth = element.getWidth();
 			if (elementWidth > width) {
 				width = elementWidth;

@@ -15,7 +15,6 @@ import forestry.core.genetics.analyzer.AnalyzerTab;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.SoundUtil;
 
@@ -45,7 +44,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 	}
 
 	public IDatabaseTab getSelected() {
-		IGuiElement element = elements.get(selected);
+		GuiElement element = elements.get(selected);
 		if (!(element instanceof Tab) || !element.isVisible()) {
 			return AnalyzerTab.ANALYZE;
 		}
@@ -58,7 +57,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			this.databasePlugin = plugin;
 			IDatabaseTab[] tabs = getTabs();
 			for (int i = 0; i < elements.size(); i++) {
-				IGuiElement element = elements.get(i);
+				GuiElement element = elements.get(i);
 				if (element instanceof Tab) {
 					IDatabaseTab tab = tabs.length > i ? tabs[i] : null;
 					Tab tabElement = (Tab) element;
@@ -98,6 +97,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			return true;
 		}
 
+		@Override
 		public boolean isVisible() {
 			return tab != null;
 		}

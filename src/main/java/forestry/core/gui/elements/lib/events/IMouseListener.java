@@ -1,6 +1,7 @@
 package forestry.core.gui.elements.lib.events;
 
 public interface IMouseListener {
+
 	default boolean onButton(double mouseX, double mouseY, int mouseButton) {
 		return false;
 	}
@@ -13,7 +14,7 @@ public interface IMouseListener {
 		return false;
 	}
 
-	default boolean onWheel(double mouseX, double mouseY, double dWheel) {
+	default boolean onMouseScrolled(double mouseX, double mouseY, double dWheel) {
 		return false;
 	}
 
@@ -21,6 +22,5 @@ public interface IMouseListener {
 	}
 
 	default void onDrag(double mouseX, double mouseY) {
-
 	}
 }

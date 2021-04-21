@@ -918,15 +918,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.define('X', Tags.Items.RODS_WOODEN)
 				.pattern(" # ").pattern(" X ").pattern(" X ")
 				.unlockedBy("has_bronze", has(ForestryTags.Items.INGOTS_BRONZE)).save(consumer);
-		helper.simpleConditionalRecipe(
-				ShapedRecipeBuilder.shaped(CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.CAMOUFLAGED_PANELING).item())
-						.define('W', ItemTags.PLANKS)
-						.define('Y', Tags.Items.DYES_YELLOW)
-						.define('B', Tags.Items.DYES_BLUE)
-						.define('R', Tags.Items.DYES_RED)
-						.pattern("WWW").pattern("YBR").pattern("WWW")
-						.unlockedBy("has_dye", has(Tags.Items.DYES))::save,
-				new NotCondition(new ModuleEnabledCondition(Constants.MOD_ID, ForestryModuleUids.FACTORY)));
 
 		//TODO maybe get clever with a loop here
 		ConditionalRecipe.builder()

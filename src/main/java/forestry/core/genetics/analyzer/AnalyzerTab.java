@@ -7,14 +7,14 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.core.features.CoreItems;
-import forestry.core.gui.elements.lib.IDatabaseElement;
+import forestry.core.gui.elements.DatabaseElement;
 
 import genetics.api.individual.IIndividual;
 
 public enum AnalyzerTab implements IDatabaseTab {
 	ANALYZE {
 		@Override
-		public void createElements(IDatabaseElement container, IIndividual individual, ItemStack itemStack) {
+		public void createElements(DatabaseElement container, IIndividual individual, ItemStack itemStack) {
 
 		}
 

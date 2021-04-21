@@ -16,8 +16,8 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzer;
 import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.core.gui.buttons.GuiToggleButton;
 import forestry.core.gui.elements.GeneticAnalyzer;
+import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.slots.SlotAnalyzer;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
@@ -97,7 +97,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		super.init();
 
 		if (analyzer.isVisible()) {
-			this.leftPos = (this.width - this.imageWidth + analyzer.getWidth() + (screenDistance)) / 2;
+			this.leftPos = (this.width - this.imageWidth + ((GuiElement) analyzer).getWidth() + (screenDistance)) / 2;
 		}
 		window.init(leftPos, topPos + (imageHeight - 166) / 2);
 
@@ -105,7 +105,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		dirty = true;
 
 		if (slotAnalyzer != null) {
-			IGuiElement element = analyzer.getItemElement();
+			GuiElement element = analyzer.getItemElement();
 			int index = slotAnalyzer.index;
 			slotAnalyzer = new SlotAnalyzer((ItemInventoryAlyzer) slotAnalyzer.container, slotAnalyzer.getSlotIndex(), element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
 			slotAnalyzer.index = index;

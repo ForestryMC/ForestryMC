@@ -11,8 +11,7 @@ public enum EnumCraftingMaterial implements IItemSubtype {
 	WOVEN_SILK,
 	DISSIPATION_CHARGE,
 	ICE_SHARD,
-	SCENTED_PANELING,
-	CAMOUFLAGED_PANELING;
+	SCENTED_PANELING;
 
 	public static final EnumCraftingMaterial[] VALUES = values();
 

@@ -82,6 +82,7 @@ public class ButtonElement extends GuiElement {
 		return true;
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}

@@ -43,10 +43,10 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	public static final ToolType GRAFTER = ToolType.get("grafter");
 
 	public ItemGrafter(int maxDamage) {
-		super(ItemStack.EMPTY, (new Item.Properties())
+		super(ItemStack.EMPTY, 0, 0, (new Item.Properties())
 				.durability(maxDamage)
 				.tab(ItemGroups.tabArboriculture)
-			.addToolType(GRAFTER, 3));
+				.addToolType(GRAFTER, 3));
 		setEfficiencyOnProperMaterial(4.0f);
 	}
 
