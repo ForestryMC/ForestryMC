@@ -5,13 +5,12 @@ import com.google.common.collect.Lists;
 import javax.annotation.Nullable;
 
 import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
 
 public class ScrollableElement extends ElementGroup implements IScrollable {
 	@Nullable
-	private IGuiElement content;
+	private GuiElement content;
 	private double scrollPercentage;
 	private float step;
 
@@ -40,7 +39,7 @@ public class ScrollableElement extends ElementGroup implements IScrollable {
 		}
 	}
 
-	public void setContent(@Nullable ICroppedGuiElement content) {
+	public void setContent(@Nullable GuiElement content) {
 		this.content = content;
 		if (content != null) {
 			content.setCroppedZone(this, 0, 0, width, height);

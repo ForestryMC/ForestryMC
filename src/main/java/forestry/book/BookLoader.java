@@ -103,6 +103,7 @@ public class BookLoader implements IResourceManagerReloadListener, IBookLoader {
 		return factory;
 	}
 
+	@Override
 	public IForesterBook loadBook() {
 		if (book != null) {
 			return book;

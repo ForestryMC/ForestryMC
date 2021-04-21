@@ -26,25 +26,20 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.AbstractElementLayout;
 import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ElementLayout;
 import forestry.core.gui.elements.layouts.HorizontalLayout;
 import forestry.core.gui.elements.layouts.PaneLayout;
 import forestry.core.gui.elements.layouts.VerticalLayout;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IElementLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.render.ColourProperties;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
 
-public class GuiElementFactory implements IGuiElementFactory, ISelectiveResourceReloadListener {
+public class GuiElementFactory implements ISelectiveResourceReloadListener {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
@@ -78,22 +73,18 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		binomial = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
-	@Override
-	public IGeneticAnalyzer createAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
+	public IGeneticAnalyzer createAnalyzer(Window window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
 		return new GeneticAnalyzer(window, xPos, yPos, rightBoarder, provider);
 	}
 
-	@Override
-	public AbstractElementLayout createVertical(int xPos, int yPos, int width) {
+	public ElementLayout createVertical(int xPos, int yPos, int width) {
 		return new VerticalLayout(xPos, yPos, width);
 	}
 
-	@Override
-	public AbstractElementLayout createHorizontal(int xPos, int yPos, int height) {
+	public ElementLayout createHorizontal(int xPos, int yPos, int height) {
 		return new HorizontalLayout(xPos, yPos, height);
 	}
 
-	@Override
 	public ElementGroup createPane(int xPos, int yPos, int width, int height) {
 		return new PaneLayout(xPos, yPos, width, height);
 	}
@@ -114,28 +105,28 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return guiStyle;
 	}
 
-	public IGuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset) {
+	public GuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset) {
 		String fertilityString = fertilityAllele.getValue() + " x";
 
-		AbstractElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
-		layout.label(fertilityString).setStyle(getStateStyle(fertilityAllele.isDominant()));
+		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
+		layout.label(fertilityString, getStateStyle(fertilityAllele.isDominant()));
 		layout.drawable(0, -1, new Drawable(TEXTURE, 60, 240 + texOffset, 12, 8));
 		return layout;
 	}
 
-	public IGuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text) {
-		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
+	public GuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text) {
+		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
 		layout.label(text, getStateStyle(species.isDominant()));
 		layout.add(createToleranceInfo(toleranceAllele));
 		return layout;
 	}
 
-	public IElementLayout createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
+	public GuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
 		Style textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
 		ITextComponent component = null;
 
-		IElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
+		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
 		switch (tolerance) {
 			case BOTH_1:
 			case BOTH_2:
@@ -172,10 +163,9 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return layout;
 	}
 
-	@Nullable
-	public IElementGroup createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
+	public GuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
-			IElementGroup element = new PaneLayout(x, y, width, height);
+			ElementGroup element = new PaneLayout(x, y, width, height);
 			IAlyzerPlugin plugin = ((IForestrySpeciesRoot) mutation.getRoot()).getAlyzerPlugin();
 			Map<ResourceLocation, ItemStack> iconStacks = plugin.getIconStacks();
 
@@ -193,7 +183,7 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 	}
 
 	@Nullable
-	public IElementGroup createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
+	public ElementGroup createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
 			PaneLayout element = new PaneLayout(x, y, width, height);
 			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) mutation.getRoot();
@@ -216,14 +206,14 @@ public class GuiElementFactory implements IGuiElementFactory, ISelectiveResource
 		return createUnknownMutationGroup(x, y, width, height, mutation, breedingTracker);
 	}
 
-	private static IElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
+	private static ElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
 		PaneLayout element = new PaneLayout(x, y, width, height);
 
 		element.add(createQuestionMark(0, 0), createProbabilityAdd(mutation, 21, 4), createQuestionMark(32, 0));
 		return element;
 	}
 
-	private static IElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
+	private static ElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		PaneLayout element = new PaneLayout(x, y, width, height);
 
 		element.add(createQuestionMark(0, 0), createQuestionMark(32, 0));

@@ -8,9 +8,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.BookContent;
 import forestry.book.data.IndexData;
 import forestry.book.gui.elements.IndexElement;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.layouts.ElementGroup;
 
 @OnlyIn(Dist.CLIENT)
 public class IndexContent extends BookContent<IndexData> {
@@ -21,7 +21,7 @@ public class IndexContent extends BookContent<IndexData> {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null || data.entries.length <= 0) {
 			return false;
 		}

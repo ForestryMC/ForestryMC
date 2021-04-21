@@ -8,10 +8,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.api.book.BookContent;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.DrawableElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.GuiElementFactory;
+import forestry.core.gui.elements.layouts.ElementGroup;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IGuiElementFactory;
 
 /**
  * A book content that displays a image.
@@ -30,13 +30,13 @@ public class ImageContent extends BookContent<Drawable> {
 	}
 
 	@Override
-	public boolean addElements(IElementGroup page, IGuiElementFactory factory, @Nullable BookContent previous, @Nullable IGuiElement previousElement, int pageHeight) {
+	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null) {
 			return false;
 		}
 		if (center) {
 			page.pane(page.getWidth(), pageHeight - page.getHeight())
-				.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
+					.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.MIDDLE_CENTER);
 		} else {
 			page.add(new DrawableElement(0, 0, width, height, data)).setAlign(GuiElementAlignment.TOP_CENTER);
 		}

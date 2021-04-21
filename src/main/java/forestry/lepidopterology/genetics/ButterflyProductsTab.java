@@ -11,11 +11,11 @@ import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IButterfly;
+import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.ItemElement;
+import forestry.core.gui.elements.layouts.ElementLayoutHelper;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
-import forestry.core.gui.elements.lib.IElementLayoutHelper;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {
@@ -23,8 +23,8 @@ public class ButterflyProductsTab implements IDatabaseTab<IButterfly> {
 	}
 
 	@Override
-	public void createElements(IDatabaseElement container, IButterfly individual, ItemStack itemStack) {
-		IElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
+	public void createElements(DatabaseElement container, IButterfly individual, ItemStack itemStack) {
+		ElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
 		Collection<ItemStack> butterflyLoot = individual.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot().getPossibleStacks();
 		if (!butterflyLoot.isEmpty()) {
 			container.translated("for.gui.loot.butterfly").setAlign(GuiElementAlignment.TOP_CENTER);

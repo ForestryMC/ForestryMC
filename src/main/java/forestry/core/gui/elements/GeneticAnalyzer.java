@@ -25,8 +25,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
@@ -55,7 +53,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 	private final ScrollableElement scrollable;
 	private final DatabaseElement scrollableContent;
 	private final GeneticAnalyzerTabs tabs;
-	private final IGuiElement itemElement;
+	private final GuiElement itemElement;
 	private final ButtonElement leftButton;
 	private final ButtonElement rightButton;
 	private final ButtonElement analyzeButton;
@@ -63,7 +61,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 	/* Attributes - State */
 	private int selectedSlot = -1;
 
-	public GeneticAnalyzer(IWindowElement window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
+	public GeneticAnalyzer(Window window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
 		super(xPos - (rightBoarder ? 6 : 0), yPos, 189 + (rightBoarder ? 6 : 0), 194);
 		window.add(this);
 		this.provider = provider;
@@ -114,6 +112,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		updateSelected();
 	}
 
+	@Override
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
@@ -123,7 +122,8 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		return provider;
 	}
 
-	public IGuiElement getItemElement() {
+	@Override
+	public GuiElement getItemElement() {
 		return itemElement;
 	}
 
@@ -137,7 +137,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		IRootDefinition<IForestrySpeciesRoot> definition = RootUtils.getRoot(stack);
 		if (definition.isPresent()) {
 			IForestrySpeciesRoot root = definition.get();
-			IDatabasePlugin databasePlugin = root.getSpeciesPlugin();
+			IDatabasePlugin<?> databasePlugin = root.getSpeciesPlugin();
 			if (databasePlugin != null) {
 				Optional<IIndividual> optionalIndividual = root.create(stack);
 				if (optionalIndividual.isPresent()) {
@@ -233,6 +233,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		return provider.getSlotCount();
 	}
 
+	@Override
 	public void setSelectedSlot(int selectedSlot) {
 		int oldSelected = this.selectedSlot;
 		this.selectedSlot = selectedSlot;
@@ -252,6 +253,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		return selectedSlot;
 	}
 
+	@Override
 	public void updateSelected() {
 		/*int index = sorted.indexOf(selected);
 		if(index >= 0) {

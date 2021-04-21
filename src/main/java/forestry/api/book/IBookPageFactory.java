@@ -10,7 +10,7 @@ import java.util.Collection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
 /**
  * A factory that creates book pages for a book entry.
@@ -27,5 +27,5 @@ public interface IBookPageFactory {
 	 * @param pageWidth       The width of a book page.
 	 * @return A collection where every member represent a page of the book.
 	 */
-	Collection<IGuiElement> load(IBookEntry entry, int leftPageHeight, int rightPageHeight, int pageWidth);
+	Collection<GuiElement> load(IBookEntry entry, int leftPageHeight, int rightPageHeight, int pageWidth);
 }

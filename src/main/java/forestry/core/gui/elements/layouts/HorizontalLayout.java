@@ -1,14 +1,15 @@
 package forestry.core.gui.elements.layouts;
 
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
 
-public class HorizontalLayout extends AbstractElementLayout {
+public class HorizontalLayout extends ElementLayout {
 
 	public HorizontalLayout(int xPos, int yPos, int height) {
 		super(xPos, yPos, 0, height);
 	}
 
-	public <E extends IGuiElement> E add(E element) {
+	@Override
+	public <E extends GuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
 		element.setXPosition(width);
@@ -17,7 +18,8 @@ public class HorizontalLayout extends AbstractElementLayout {
 		return element;
 	}
 
-	public <E extends IGuiElement> E remove(E element) {
+	@Override
+	public <E extends GuiElement> E remove(E element) {
 		elements.remove(element);
 		setWidth(width - (element.getWidth() + distance));
 		element.setXPosition(0);
@@ -31,7 +33,7 @@ public class HorizontalLayout extends AbstractElementLayout {
 			return height;
 		}
 		int height = 0;
-		for (IGuiElement element : elements) {
+		for (GuiElement element : elements) {
 			int elementHeight = element.getHeight();
 			if (elementHeight > height) {
 				height = elementHeight;

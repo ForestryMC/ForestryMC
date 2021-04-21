@@ -18,9 +18,9 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
@@ -41,7 +41,7 @@ public class BeeDatabaseTab implements IDatabaseTab<IBee> {
 	}
 
 	@Override
-	public void createElements(IDatabaseElement container, IBee bee, ItemStack itemStack) {
+	public void createElements(DatabaseElement container, IBee bee, ItemStack itemStack) {
 		Optional<IOrganismType> optionalType = BeeManager.beeRoot.getTypes().getType(itemStack);
 		if (!optionalType.isPresent()) {
 			return;

@@ -23,11 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.IGuiSizable;
 import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
@@ -37,26 +33,24 @@ import forestry.core.gui.elements.lib.events.GuiEventDestination;
  * This element is the top parent.
  */
 @OnlyIn(Dist.CLIENT)
-public class Window<G extends Screen & IGuiSizable> extends ElementGroup implements IWindowElement {
-	protected final G gui;
+public abstract class Window extends ElementGroup {
 	@Nullable
-	private Minecraft mc = null;
+	protected Minecraft mc = null;
 	//The last x position of the mouse
 	protected int mouseX = -1;
 	//The last y position of the mouse
 	protected int mouseY = -1;
 	@Nullable
-	private IGuiElement mousedOverElement;
+	protected GuiElement mousedOverElement;
 	@Nullable
-	private IGuiElement draggedElement;
+	protected GuiElement draggedElement;
 	@Nullable
-	private IGuiElement focusedElement;
+	protected GuiElement focusedElement;
 
-	public Window(int width, int height, G gui) {
+	public Window(int width, int height) {
 		super(0, 0, width, height);
-		this.gui = gui;
 		addEventHandler(ElementEvent.Deletion.class, deletion -> {
-			IGuiElement element = deletion.getOrigin();
+			GuiElement element = deletion.getOrigin();
 			if (isMouseOver(element)) {
 				setMousedOverElement(null);
 			}
@@ -75,12 +69,12 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	}
 
 	@Override
-	public IWindowElement getWindow() {
+	public Window getWindow() {
 		return this;
 	}
 
 	@Override
-	public IGuiElement setParent(@Nullable IGuiElement parent) {
+	public GuiElement setParent(@Nullable GuiElement parent) {
 		return this;
 	}
 
@@ -90,15 +84,15 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 
 	/* Element Events */
 	@Nullable
-	public IGuiElement getDraggedElement() {
+	public GuiElement getDraggedElement() {
 		return this.draggedElement;
 	}
 
-	public void setDraggedElement(@Nullable IGuiElement widget) {
+	public void setDraggedElement(@Nullable GuiElement widget) {
 		this.setDraggedElement(widget, -1);
 	}
 
-	public void setDraggedElement(@Nullable IGuiElement widget, int button) {
+	public void setDraggedElement(@Nullable GuiElement widget, int button) {
 		if (this.draggedElement == widget) {
 			return;
 		}
@@ -111,13 +105,12 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		}
 	}
 
-	@Override
 	@Nullable
-	public IGuiElement getMousedOverElement() {
+	public GuiElement getMousedOverElement() {
 		return this.mousedOverElement;
 	}
 
-	public void setMousedOverElement(@Nullable IGuiElement widget) {
+	public void setMousedOverElement(@Nullable GuiElement widget) {
 		if (this.mousedOverElement == widget) {
 			return;
 		}
@@ -131,12 +124,12 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	}
 
 	@Nullable
-	public IGuiElement getFocusedElement() {
+	public GuiElement getFocusedElement() {
 		return this.focusedElement;
 	}
 
-	public void setFocusedElement(@Nullable IGuiElement widget) {
-		IGuiElement newElement = widget;
+	public void setFocusedElement(@Nullable GuiElement widget) {
+		GuiElement newElement = widget;
 		if (this.focusedElement == newElement) {
 			return;
 		}
@@ -152,16 +145,15 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		}
 	}
 
-	@Override
-	public boolean isMouseOver(final IGuiElement element) {
+	public boolean isMouseOver(final GuiElement element) {
 		return this.getMousedOverElement() == element;
 	}
 
-	public boolean isDragged(final IGuiElement element) {
+	public boolean isDragged(final GuiElement element) {
 		return this.getDraggedElement() == element;
 	}
 
-	public boolean isFocused(final IGuiElement element) {
+	public boolean isFocused(final GuiElement element) {
 		return this.getFocusedElement() == element;
 	}
 
@@ -173,7 +165,7 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		}
 		updateWindow();
 		onUpdateClient();
-		for (IGuiElement widget : getElements()) {
+		for (GuiElement widget : getElements()) {
 			widget.updateClient();
 		}
 	}
@@ -192,10 +184,10 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	}
 
 	@Nullable
-	private IGuiElement calculateMousedOverElement() {
-		Deque<IGuiElement> queue = this.calculateMousedOverElements();
+	private GuiElement calculateMousedOverElement() {
+		Deque<GuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
-			IGuiElement element = queue.removeFirst();
+			GuiElement element = queue.removeFirst();
 			if (element.isEnabled() && element.isVisible() && element.canMouseOver()) {
 				return element;
 			}
@@ -203,9 +195,9 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		return null;
 	}
 
-	private Deque<IGuiElement> calculateMousedOverElements() {
-		Deque<IGuiElement> list = new ArrayDeque<>();
-		for (IGuiElement element : this.getQueuedElements(this)) {
+	private Deque<GuiElement> calculateMousedOverElements() {
+		Deque<GuiElement> list = new ArrayDeque<>();
+		for (GuiElement element : this.getQueuedElements(this)) {
 			if (element.isMouseOver()) {
 				list.addLast(element);
 			}
@@ -213,24 +205,23 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		return list;
 	}
 
-	private Collection<IGuiElement> getQueuedElements(final IGuiElement element) {
-		List<IGuiElement> widgets = new ArrayList<>();
-		if (element instanceof IElementGroup) {
-			IElementGroup group = (IElementGroup) element;
+	private Collection<GuiElement> getQueuedElements(final GuiElement element) {
+		List<GuiElement> widgets = new ArrayList<>();
+		if (element instanceof ElementGroup) {
+			ElementGroup group = (ElementGroup) element;
 			boolean addChildren = true;
-			if (element instanceof ICroppedGuiElement && ((ICroppedGuiElement) element).isCropped()) {
+			if (element.isCropped()) {
 				int mouseX = getRelativeMouseX(element);
 				int mouseY = getRelativeMouseY(element);
-				ICroppedGuiElement cropped = (ICroppedGuiElement) element;
-				IGuiElement cropRelative = cropped.getCropElement() != null ? cropped.getCropElement() : this;
+				GuiElement cropRelative = element.getCropElement() != null ? element.getCropElement() : this;
 				int posX = cropRelative.getAbsoluteX() - element.getAbsoluteX();
 				int posY = cropRelative.getAbsoluteY() - element.getAbsoluteY();
-				addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + cropped.getCropWidth() && mouseY <= posY + cropped.getCropHeight();
+				addChildren = mouseX >= posX && mouseY >= posY && mouseX <= posX + element.getCropWidth() && mouseY <= posY + element.getCropHeight();
 			}
 			if (addChildren) {
-				ListIterator<IGuiElement> iterator = group.getElements().listIterator(group.getElements().size());
+				ListIterator<GuiElement> iterator = group.getElements().listIterator(group.getElements().size());
 				while (iterator.hasPrevious()) {
-					final IGuiElement child = iterator.previous();
+					final GuiElement child = iterator.previous();
 					widgets.addAll(this.getQueuedElements(child));
 				}
 			}
@@ -253,9 +244,9 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	@Override
 	public ToolTip getTooltip(int mouseX, int mouseY) {
 		ToolTip toolTip = new ToolTip();
-		Deque<IGuiElement> queue = this.calculateMousedOverElements();
+		Deque<GuiElement> queue = this.calculateMousedOverElements();
 		while (!queue.isEmpty()) {
-			IGuiElement element = queue.removeFirst();
+			GuiElement element = queue.removeFirst();
 			if (element.isEnabled() && element.isVisible() && element.hasTooltip()) {
 				toolTip.addAll(element.getTooltip(getRelativeMouseX(element), getRelativeMouseY(element)));
 			}
@@ -281,26 +272,22 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		}
 	}
 
-	@Override
 	public int getMouseX() {
 		return mouseX;
 	}
 
-	@Override
 	public int getMouseY() {
 		return mouseY;
 	}
 
-	@Override
-	public int getRelativeMouseX(@Nullable IGuiElement element) {
+	public int getRelativeMouseX(@Nullable GuiElement element) {
 		if (element == null) {
 			return mouseX;
 		}
 		return mouseX - element.getAbsoluteX();
 	}
 
-	@Override
-	public int getRelativeMouseY(@Nullable IGuiElement element) {
+	public int getRelativeMouseY(@Nullable GuiElement element) {
 		if (element == null) {
 			return mouseY;
 		}
@@ -308,40 +295,19 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 	}
 
 	/* Gui Screen */
-	@Override
-	public int getScreenWidth() {
-		return gui.width;
-	}
+	public abstract int getScreenWidth();
 
-	@Override
-	public int getScreenHeight() {
-		return gui.height;
-	}
+	public abstract int getScreenHeight();
 
-	@Override
-	public int getGuiLeft() {
-		return gui.getGuiLeft();
-	}
+	public abstract int getGuiLeft();
 
-	@Override
-	public int getGuiTop() {
-		return gui.getGuiTop();
-	}
+	public abstract int getGuiTop();
 
-	@Override
-	public G getGui() {
-		return gui;
-	}
+	public abstract Screen getGui();
 
-	@Override
-	public int getGuiHeight() {
-		return gui.getSizeX();
-	}
+	public abstract int getGuiHeight();
 
-	@Override
-	public int getGuiWidth() {
-		return gui.getSizeY();
-	}
+	public abstract int getGuiWidth();
 
 	protected Minecraft getMinecraft() {
 		if (mc == null) {
@@ -350,12 +316,10 @@ public class Window<G extends Screen & IGuiSizable> extends ElementGroup impleme
 		return mc;
 	}
 
-	@Override
 	public TextureManager getTextureManager() {
 		return getMinecraft().getTextureManager();
 	}
 
-	@Override
 	public FontRenderer getFontRenderer() {
 		return getMinecraft().font;
 	}

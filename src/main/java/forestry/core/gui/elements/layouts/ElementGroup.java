@@ -2,6 +2,7 @@ package forestry.core.gui.elements.layouts;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -21,46 +22,62 @@ import forestry.core.gui.Drawable;
 import forestry.core.gui.elements.DrawableElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.ItemElement;
-import forestry.core.gui.elements.LabelElement;
-import forestry.core.gui.elements.SplitTextElement;
 import forestry.core.gui.elements.lib.GuiConstants;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IElementGroup;
-import forestry.core.gui.elements.lib.IElementLayoutHelper;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IItemElement;
-import forestry.core.gui.elements.lib.ILabelElement;
-import forestry.core.gui.elements.lib.ITextElement;
+import forestry.core.gui.elements.text.LabelElement;
 
 @OnlyIn(Dist.CLIENT)
-public class ElementGroup extends GuiElement implements IElementGroup {
-	protected final List<IGuiElement> elements = new ArrayList<>();
+public class ElementGroup extends GuiElement {
+	protected final List<GuiElement> elements = new ArrayList<>();
 
 	public ElementGroup(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
 	}
 
-	public <E extends IGuiElement> E add(E element) {
+	public <E extends GuiElement> E add(E element) {
 		elements.add(element);
 		element.setParent(this);
 		element.onCreation();
 		return element;
 	}
 
-	public <E extends IGuiElement> E remove(E element) {
+	public <E extends GuiElement> E remove(E element) {
 		elements.remove(element);
 		element.onDeletion();
 		return element;
 	}
 
+	public ElementGroup add(GuiElement... elements) {
+		for (GuiElement element : elements) {
+			add(element);
+		}
+		return this;
+	}
+
+	public ElementGroup remove(GuiElement... elements) {
+		for (GuiElement element : elements) {
+			remove(element);
+		}
+		return this;
+	}
+
+	public ElementGroup add(Collection<GuiElement> elements) {
+		elements.forEach(this::add);
+		return this;
+	}
+
+	public ElementGroup remove(Collection<GuiElement> elements) {
+		elements.forEach(this::remove);
+		return this;
+	}
+
 	public void clear() {
-		for (IGuiElement element : new ArrayList<>(elements)) {
+		for (GuiElement element : new ArrayList<>(elements)) {
 			remove(element);
 		}
 	}
 
-	@Override
-	public List<IGuiElement> getElements() {
+	public List<GuiElement> getElements() {
 		return elements;
 	}
 
@@ -78,14 +95,13 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 			return;
 		}
 		onUpdateClient();
-		for (IGuiElement widget : getElements()) {
+		for (GuiElement widget : getElements()) {
 			widget.updateClient();
 		}
 	}
 
 	@Nullable
-	@Override
-	public IGuiElement getLastElement() {
+	public GuiElement getLastElement() {
 		return elements.isEmpty() ? null : elements.get(elements.size() - 1);
 	}
 
@@ -97,30 +113,25 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 		return add(new DrawableElement(x, y, drawable));
 	}
 
-	@Override
-	public IItemElement item(int xPos, int yPos, ItemStack itemStack) {
-		IItemElement element = new ItemElement(xPos, yPos, itemStack);
+	public ItemElement item(int xPos, int yPos, ItemStack itemStack) {
+		ItemElement element = new ItemElement(xPos, yPos, itemStack);
 		add(element);
 		return element;
 	}
 
-	@Override
 	public Style defaultStyle() {
 		return GuiConstants.DEFAULT_STYLE;
 	}
 
-	@Override
-	public ILabelElement label(ITextComponent component) {
-		return add(new LabelElement(component));
+	public LabelElement label(ITextComponent component) {
+		return new LabelElement.Builder(this::add, component).create();
 	}
 
-	@Override
-	public ILabelElement label(IReorderingProcessor component) {
-		return add(new LabelElement.Processor(component));
+	public LabelElement label(IReorderingProcessor component) {
+		return new LabelElement.Builder(this::add, component).create();
 	}
 
-	@Override
-	public ILabelElement translated(String key, Object... args) {
+	public LabelElement translated(String key, Object... args) {
 		return label(new TranslationTextComponent(key, args));
 	}
 
@@ -132,93 +143,55 @@ public class ElementGroup extends GuiElement implements IElementGroup {
 		return labelLine(new TranslationTextComponent(key, args));
 	}
 
-	@Override
 	public LabelElement.Builder labelLine(String text) {
 		return labelLine(new StringTextComponent(text));
 	}
 
-	@Override
-	public ILabelElement label(String text) {
+	public LabelElement label(String text) {
 		return label(text, defaultStyle());
 	}
 
-	@Override
-	public ILabelElement label(String text, Style style) {
+	public LabelElement label(String text, Style style) {
 		return label(text, GuiElementAlignment.TOP_LEFT, style);
 	}
 
-	@Override
-	public ILabelElement label(String text, GuiElementAlignment align) {
+	public LabelElement label(String text, GuiElementAlignment align) {
 		return label(text, align, defaultStyle());
 	}
 
-	@Override
-	public ILabelElement label(String text, GuiElementAlignment align, Style textStyle) {
-		return label(text, -1, 12, align, textStyle);
+	public LabelElement label(String text, GuiElementAlignment align, Style textStyle) {
+		return label(text, 0, 0, -1, 12, align, textStyle);
 	}
 
-	@Override
-	public ILabelElement label(String text, int width, int height, GuiElementAlignment align, Style textStyle) {
-		return label(text, 0, 0, width, height < 0 ? 12 : height, align, textStyle);
+	public LabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
+		return new LabelElement.Builder(this::add, text, (element) -> element.setBounds(x, y, width, height)).fitText().setStyle(textStyle).create();
 	}
 
-	@Override
-	public ILabelElement label(String text, int x, int y, int width, int height, GuiElementAlignment align, Style textStyle) {
-		return add(new LabelElement(x, y, width, height, new StringTextComponent(text), true).setStyle(textStyle));
-	}
-
-	@Override
-	public ITextElement splitText(IFormattableTextComponent text, int width) {
-		return splitText(text, width, defaultStyle());
-	}
-
-	@Override
-	public ITextElement splitText(IFormattableTextComponent text, int width, Style textStyle) {
-		return splitText(text, width, GuiElementAlignment.TOP_LEFT, textStyle);
-	}
-
-	@Override
-	public ITextElement splitText(IFormattableTextComponent text, int width, GuiElementAlignment align, Style textStyle) {
-		return splitText(text, 0, 0, width, align, textStyle);
-	}
-
-	@Override
-	public ITextElement splitText(IFormattableTextComponent text, int x, int y, int width, GuiElementAlignment align, Style textStyle) {
-		return (ITextElement) add(new SplitTextElement(x, y, width, text, textStyle)).setAlign(align);
-	}
-
-	@Override
-	public AbstractElementLayout vertical(int xPos, int yPos, int width) {
+	public ElementLayout vertical(int xPos, int yPos, int width) {
 		return add(new VerticalLayout(xPos, yPos, width));
 	}
 
-	@Override
-	public AbstractElementLayout vertical(int width) {
+	public ElementLayout vertical(int width) {
 		return add(new VerticalLayout(0, 0, width));
 	}
 
-	@Override
-	public AbstractElementLayout horizontal(int xPos, int yPos, int height) {
+	public ElementLayout horizontal(int height) {
+		return horizontal(0, 0, height);
+	}
+
+	public ElementGroup pane(int width, int height) {
+		return pane(0, 0, width, height);
+	}
+
+	public ElementLayout horizontal(int xPos, int yPos, int height) {
 		return add(new HorizontalLayout(xPos, yPos, height));
 	}
 
-	@Override
-	public AbstractElementLayout horizontal(int height) {
-		return add(new HorizontalLayout(0, 0, height));
-	}
-
-	@Override
 	public ElementGroup pane(int xPos, int yPos, int width, int height) {
 		return add(new PaneLayout(xPos, yPos, width, height));
 	}
 
-	@Override
-	public ElementGroup pane(int width, int height) {
-		return add(new PaneLayout(0, 0, width, height));
-	}
-
-	@Override
-	public ElementLayoutHelper layoutHelper(IElementLayoutHelper.LayoutFactory layoutFactory, int width, int height) {
+	public ElementLayoutHelper layoutHelper(ElementLayoutHelper.LayoutFactory layoutFactory, int width, int height) {
 		return new ElementLayoutHelper(layoutFactory, width, height, this);
 	}
 }

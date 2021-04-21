@@ -10,11 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -35,16 +41,22 @@ import forestry.core.features.CoreItems;
 import forestry.core.utils.ItemStackUtil;
 
 public class ItemForestryTool extends ItemForestry {
+	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
 	private final ItemStack remnants;
 	private float efficiencyOnProperMaterial;
 
-	public ItemForestryTool(ItemStack remnants, Item.Properties properties) {
+	public ItemForestryTool(ItemStack remnants, double damageBonus, double speedModifier, Item.Properties properties) {
 		super(properties);
 		efficiencyOnProperMaterial = 6F;
 		this.remnants = remnants;
 		if (!remnants.isEmpty()) {
 			MinecraftForge.EVENT_BUS.register(this);
 		}
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		double damageModifier = 1 + damageBonus;
+		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", damageModifier, AttributeModifier.Operation.ADDITION));
+		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", speedModifier, AttributeModifier.Operation.ADDITION));
+		this.defaultModifiers = builder.build();
 	}
 
 	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
@@ -124,5 +136,10 @@ public class ItemForestryTool extends ItemForestry {
 			stack.hurtAndBreak(1, entityLiving, this::onBroken);
 		}
 		return true;
+	}
+
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		return slot == EquipmentSlotType.MAINHAND ? this.defaultModifiers : super.getAttributeModifiers(slot, stack);
 	}
 }

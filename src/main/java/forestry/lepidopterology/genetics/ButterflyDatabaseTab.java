@@ -16,9 +16,9 @@ import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.genetics.GenericRatings;
+import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IDatabaseElement;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.Translator;
 
@@ -38,7 +38,7 @@ public class ButterflyDatabaseTab implements IDatabaseTab<IButterfly> {
 	}
 
 	@Override
-	public void createElements(IDatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
+	public void createElements(DatabaseElement database, IButterfly butterfly, ItemStack itemStack) {
 		IAlleleButterflySpecies primarySpecies = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
 		IAlleleButterflySpecies secondarySpecies = butterfly.getGenome().getInactiveAllele(ButterflyChromosomes.SPECIES);
 

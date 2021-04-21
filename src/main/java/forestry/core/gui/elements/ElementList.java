@@ -8,8 +8,6 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.IGuiElement;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.event.EventValueChanged;
 
@@ -17,9 +15,9 @@ import forestry.core.gui.event.EventValueChanged;
  * A element list with selectable elements.
  */
 public class ElementList<V> extends VerticalLayout {
-	private final Map<V, IGuiElement> allOptions = new LinkedHashMap<>();
-	private final Map<V, IGuiElement> visibleOptions = new LinkedHashMap<>();
-	private final BiFunction<V, ElementList, IGuiElement> optionFactory;
+	private final Map<V, GuiElement> allOptions = new LinkedHashMap<>();
+	private final Map<V, GuiElement> visibleOptions = new LinkedHashMap<>();
+	private final BiFunction<V, ElementList, GuiElement> optionFactory;
 	@Nullable
 	private final V defaultValue;
 	@Nullable
@@ -27,7 +25,7 @@ public class ElementList<V> extends VerticalLayout {
 	@Nullable
 	private Predicate<V> validator;
 
-	public ElementList(int xPos, int yPos, int width, BiFunction<V, ElementList, IGuiElement> optionFactory, @Nullable V defaultValue) {
+	public ElementList(int xPos, int yPos, int width, BiFunction<V, ElementList, GuiElement> optionFactory, @Nullable V defaultValue) {
 		super(xPos, yPos, width);
 		this.optionFactory = optionFactory;
 		this.defaultValue = defaultValue;
@@ -48,7 +46,7 @@ public class ElementList<V> extends VerticalLayout {
 			final IWidget child = this.optionWidgets.get(value);
 			this.parent.ensureVisible(child.getYPos(), child.getYPos() + child.getHeight(), this.getHeight());
 		}*/
-		IWindowElement window = getWindow();
+		Window window = getWindow();
 		window.postEvent(new EventValueChanged<Object>(this, value), GuiEventDestination.ALL);
 	}
 
@@ -57,7 +55,7 @@ public class ElementList<V> extends VerticalLayout {
 		setHeight(0);
 		visibleOptions.clear();
 
-		for (Map.Entry<V, IGuiElement> entry : this.allOptions.entrySet()) {
+		for (Map.Entry<V, GuiElement> entry : this.allOptions.entrySet()) {
 			if (isVisible(entry.getKey())) {
 				add(entry.getValue());
 				visibleOptions.put(entry.getKey(), entry.getValue());
@@ -117,7 +115,7 @@ public class ElementList<V> extends VerticalLayout {
 		clear();
 		allOptions.clear();
 		for (V option : options) {
-			IGuiElement element = optionFactory.apply(option, this);
+			GuiElement element = optionFactory.apply(option, this);
 			allOptions.put(option, element);
 		}
 		updateVisibleOptions();

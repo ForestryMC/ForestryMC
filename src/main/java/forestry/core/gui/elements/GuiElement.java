@@ -23,15 +23,18 @@ import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.IGuiElement;
 import forestry.core.gui.elements.lib.ITooltipSupplier;
-import forestry.core.gui.elements.lib.IWindowElement;
 import forestry.core.gui.elements.lib.events.ElementEvent;
 import forestry.core.gui.elements.lib.events.GuiElementEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.elements.lib.events.GuiEventHandler;
+import forestry.core.gui.elements.lib.events.GuiEventOrigin;
+import forestry.core.gui.elements.lib.events.IMouseHandler;
+import forestry.core.gui.elements.lib.events.MouseEvent;
+import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiElement {
+public class GuiElement extends AbstractGui {
 	/* Attributes - Final */
 	//Tooltip of the element
 	private final List<ITooltipSupplier> tooltipSuppliers = new ArrayList<>();
@@ -53,7 +56,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 	protected int cropHeight = -1;
 	//The element to that the crop coordinates are relative to.
 	@Nullable
-	protected IGuiElement cropElement = null;
+	protected GuiElement cropElement = null;
 	//Element Alignment relative to the parent
 	private GuiElementAlignment align = GuiElementAlignment.TOP_LEFT;
 
@@ -61,7 +64,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 
 	//The element container that contains this element
 	@Nullable
-	protected IGuiElement parent;
+	protected GuiElement parent;
 
 	public GuiElement(int width, int height) {
 		this(0, 0, width, height);
@@ -74,18 +77,15 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		this.height = height;
 	}
 
-	@Override
 	public void onCreation() {
 		//Default-Implementation
 	}
 
-	@Override
 	public void onDeletion() {
-		IWindowElement window = getWindow();
+		Window window = getWindow();
 		window.postEvent(new ElementEvent.Deletion(this), GuiEventDestination.ALL);
 	}
 
-	@Override
 	public final int getX() {
 		int x = 0;
 		int parentWidth = parent != null ? parent.getWidth() : -1;
@@ -96,7 +96,6 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		return xPos + x + xOffset;
 	}
 
-	@Override
 	public final int getY() {
 		int y = 0;
 		int parentHeight = parent != null ? parent.getHeight() : -1;
@@ -115,7 +114,6 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		return parent == null ? getY() : getY() + parent.getAbsoluteY();
 	}
 
-	@Override
 	public final void draw(MatrixStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
@@ -129,7 +127,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 			MainWindow window = mc.getWindow();
 			double scaleWidth = ((double) window.getScreenWidth()) / window.getGuiScaledWidth();
 			double scaleHeight = ((double) window.getScreenHeight()) / window.getGuiScaledHeight();
-			IGuiElement cropRelative = cropElement != null ? cropElement : this;
+			GuiElement cropRelative = cropElement != null ? cropElement : this;
 			int posX = cropRelative.getAbsoluteX();
 			int posY = cropRelative.getAbsoluteY();
 			GL11.glScissor((int) ((posX + cropX) * scaleWidth), (int) (window.getScreenHeight() - ((posY + cropY + cropHeight) * scaleHeight)), (int) (cropWidth * scaleWidth), (int) (cropHeight * scaleHeight));
@@ -148,79 +146,67 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		//Default-Implementation
 	}
 
-	@Override
 	public int getWidth() {
 		return width;
 	}
 
-	@Override
 	public int getHeight() {
 		return height;
 	}
 
-	@Override
 	public void setHeight(int height) {
 		setSize(width, height);
 	}
 
-	@Override
 	public void setWidth(int width) {
 		setSize(width, height);
 	}
 
-	@Override
-	public IGuiElement setSize(int width, int height) {
+	public GuiElement setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
 		return this;
 	}
 
-	@Override
-	public IGuiElement setOffset(int xOffset, int yOffset) {
+	public GuiElement setOffset(int xOffset, int yOffset) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		return this;
 	}
 
-	@Override
-	public IGuiElement setXPosition(int xPos) {
+	public GuiElement setXPosition(int xPos) {
 		setLocation(xPos, yPos);
 		return this;
 	}
 
-	@Override
-	public IGuiElement setYPosition(int yPos) {
+	public GuiElement setYPosition(int yPos) {
 		setLocation(xPos, yPos);
 		return this;
 	}
 
-	@Override
-	public IGuiElement setLocation(int xPos, int yPos) {
+	public GuiElement setLocation(int xPos, int yPos) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		return this;
 	}
 
-	@Override
-	public IGuiElement setBounds(int xPos, int yPos, int width, int height) {
+	public GuiElement setBounds(int xPos, int yPos, int width, int height) {
 		setLocation(xPos, yPos);
 		setSize(width, height);
 		return this;
 	}
 
-	@Override
-	public IGuiElement setAlign(GuiElementAlignment align) {
+	public GuiElement setAlign(GuiElementAlignment align) {
 		this.align = align;
 		return this;
 	}
 
-	@Override
 	public GuiElementAlignment getAlign() {
 		return align;
 	}
 
 	/* CROPPED */
-	public void setCroppedZone(@Nullable IGuiElement cropElement, int cropX, int cropY, int cropWidth, int cropHeight) {
+	public void setCroppedZone(@Nullable GuiElement cropElement, int cropX, int cropY, int cropWidth, int cropHeight) {
 		this.cropElement = cropElement;
 		this.cropX = cropX;
 		this.cropY = cropY;
@@ -229,7 +215,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 	}
 
 	@Nullable
-	public IGuiElement getCropElement() {
+	public GuiElement getCropElement() {
 		return cropElement;
 	}
 
@@ -253,8 +239,7 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		return cropElement != null && cropWidth >= 0 && cropHeight >= 0;
 	}
 
-	@Override
-	public IWindowElement getWindow() {
+	public Window getWindow() {
 		if (this.parent == null) {
 			throw new IllegalStateException("Tried to access the window element of an element that doesn't had one.");
 		} else {
@@ -262,7 +247,6 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		}
 	}
 
-	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
 		if (!isVisible()) {
 			return false;
@@ -270,15 +254,14 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		return mouseX >= 0 && mouseX < getWidth() && mouseY >= 0 && mouseY < getHeight();
 	}
 
-	@Override
 	public final boolean isMouseOver() {
-		IWindowElement window = getWindow();
+		Window window = getWindow();
 		int mouseX = window.getRelativeMouseX(this);
 		int mouseY = window.getRelativeMouseY(this);
 		if (!isCropped()) {
 			return isMouseOver(mouseX, mouseY);
 		}
-		IGuiElement cropRelative = cropElement != null ? cropElement : this;
+		GuiElement cropRelative = cropElement != null ? cropElement : this;
 		int posX = cropRelative.getAbsoluteX() - this.getAbsoluteX();
 		int posY = cropRelative.getAbsoluteY() - this.getAbsoluteY();
 		boolean inCrop = mouseX >= posX && mouseY >= posY && mouseX <= posX + cropWidth && mouseY <= posY + cropHeight;
@@ -293,7 +276,6 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		//Default-Implementation
 	}
 
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void updateClient() {
 		if (!this.isVisible()) {
@@ -302,76 +284,71 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		this.onUpdateClient();
 	}
 
-	@Override
 	public boolean isVisible() {
 		return visible && (parent == null || parent.isVisible());
 	}
 
-	@Override
 	public void show() {
 		this.visible = true;
 	}
 
-	@Override
 	public void hide() {
 		this.visible = false;
 	}
 
-	@Override
 	public boolean isEnabled() {
 		return parent == null || parent.isEnabled();
 	}
 
+	public boolean canMouseOver() {
+		return hasTooltip();
+	}
+
+	public boolean canFocus() {
+		return false;
+	}
+
 	@Nullable
-	@Override
-	public IGuiElement getParent() {
+	public GuiElement getParent() {
 		return parent;
 	}
 
-	@Override
-	public IGuiElement setParent(@Nullable IGuiElement parent) {
+	public GuiElement setParent(@Nullable GuiElement parent) {
 		this.parent = parent;
 		return this;
 	}
 
-	@Override
 	public ToolTip getTooltip(int mouseX, int mouseY) {
 		ToolTip toolTip = new ToolTip();
 		tooltipSuppliers.stream().filter(ITooltipSupplier::hasTooltip).forEach(supplier -> supplier.addTooltip(toolTip, this, mouseX, mouseY));
 		return toolTip;
 	}
 
-	@Override
-	public IGuiElement addTooltip(ITextComponent line) {
+	public GuiElement addTooltip(ITextComponent line) {
 		//TODO textcomponent
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
 		return this;
 	}
 
-	@Override
-	public IGuiElement addTooltip(Collection<ITextComponent> lines) {
+	public GuiElement addTooltip(Collection<ITextComponent> lines) {
 		//TODO textcomponent
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
 		return this;
 	}
 
-	@Override
-	public IGuiElement addTooltip(ITooltipSupplier supplier) {
+	public GuiElement addTooltip(ITooltipSupplier supplier) {
 		tooltipSuppliers.add(supplier);
 		return this;
 	}
 
-	@Override
 	public boolean hasTooltip() {
 		return !tooltipSuppliers.isEmpty();
 	}
 
-	@Override
 	public void clearTooltip() {
 		tooltipSuppliers.clear();
 	}
 
-	@Override
 	public ToolTip getTooltip() {
 		int mouseX = getWindow().getRelativeMouseX(this);
 		int mouseY = getWindow().getRelativeMouseY(this);
@@ -381,12 +358,10 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 	}
 
 	/* Events */
-	@Override
 	public <E extends GuiElementEvent> void addEventHandler(Consumer<E> eventHandler) {
 		eventHandlers.add(eventHandler);
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public void receiveEvent(GuiElementEvent event) {
 		for (Consumer<? extends GuiElementEvent> eventHandler : eventHandlers) {
@@ -394,15 +369,50 @@ public class GuiElement extends AbstractGui implements IGuiElement, ICroppedGuiE
 		}
 	}
 
+	/**
+	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+	 */
+	public <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
+		addEventHandler(new GuiEventHandler<>(eventClass, eventHandler));
+	}
+
+	/**
+	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+	 */
+	public <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, GuiElement relative, Consumer<E> eventHandler) {
+		addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
+	}
+
+	/**
+	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
+	 */
+	public <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
+		addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
+	}
+
+	public void addMouseListener(MouseEvent type, IMouseHandler handler) {
+	}
+
+	/**
+	 * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
+	 */
+	public void postEvent(GuiElementEvent event, GuiEventDestination destination) {
+		try {
+			destination.sendEvent(this, event);
+		} catch (Exception e) {
+			Log.error("An error has occurred during the posting of the event.", e);
+		}
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("x", getX())
-			.add("y", getY())
-			.add("w", width)
-			.add("h", height)
-			.add("a", align)
-			.add("v", isVisible())
+				.add("x", getX())
+				.add("y", getY())
+				.add("w", width)
+				.add("h", height)
+				.add("a", align)
+				.add("v", isVisible())
 			.add("xO", xOffset)
 			.add("yO", yOffset)
 			.toString();

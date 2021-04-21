@@ -36,8 +36,8 @@ import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
-import forestry.core.gui.elements.Window;
-import forestry.core.gui.elements.lib.IGuiElement;
+import forestry.core.gui.elements.GuiElement;
+import forestry.core.gui.elements.WindowGui;
 import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.ledgers.ClimateLedger;
@@ -61,7 +61,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	protected final WidgetManager widgetManager;
 	protected final LedgerManager ledgerManager;
 	protected final TextLayoutHelper textLayout;
-	protected final Window<?> window;
+	protected final WindowGui<?> window;
 
 	protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
 		this(new ForestryResource(texture), container, inv, title);
@@ -72,7 +72,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 		this.widgetManager = new WidgetManager(this);
 		this.ledgerManager = new LedgerManager(this);
-		this.window = new Window<>(imageWidth, imageHeight, this);
+		this.window = new WindowGui<>(imageWidth, imageHeight, this);
 
 		this.textureFile = texture;
 
@@ -174,7 +174,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
-		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
@@ -184,7 +184,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
 			return true;
 		}
-		IGuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
+		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
 		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		return super.mouseReleased(mouseX, mouseY, mouseButton);
 	}
@@ -196,14 +196,14 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 			this.minecraft.player.closeContainer();
 			return true;
 		}*/
-		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
 		return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
-		IGuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
+		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
 		window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
 		return super.charTyped(codePoint, modifiers);
 	}
