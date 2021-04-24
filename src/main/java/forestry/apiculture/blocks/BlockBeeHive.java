@@ -50,7 +50,7 @@ public class BlockBeeHive extends ContainerBlock {
 
 	public BlockBeeHive(HiveType type) {
 		super(Properties.of(MaterialBeehive.BEEHIVE_WORLD)
-				.lightLevel((state) -> (int) (0.4f * 15)) //TODO - correct?
+				.lightLevel((state) -> 7)
 				.strength(2.5f)
 				.harvestLevel(0)
 				.harvestTool(ItemScoop.SCOOP));
