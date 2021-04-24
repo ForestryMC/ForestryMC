@@ -6,14 +6,19 @@ import java.util.List;
 
 import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import forestry.core.config.Constants;
+import forestry.core.features.FluidsItems;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.GuiForestry;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
@@ -60,12 +65,14 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 
 @JeiPlugin
 @OnlyIn(Dist.CLIENT)
@@ -263,6 +270,21 @@ public class FactoryJeiPlugin implements IModPlugin {
 			registry.addRecipeClickArea(GuiStill.class, 73, 17, 33, 57, ForestryRecipeCategoryUid.STILL);
 		}
 	}
+
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
+		ISubtypeInterpreter subtypeInterpreter = itemStack -> {
+			LazyOptional<IFluidHandlerItem> fluidHandler = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+			return fluidHandler.map(handler -> handler.getFluidInTank(0))
+					.map(fluid -> fluid.getFluid().getRegistryName().toString())
+					.orElse(ISubtypeInterpreter.NONE);
+		};
+
+		for (Item container : FluidsItems.CONTAINERS.itemArray()) {
+			subtypeRegistry.registerSubtypeInterpreter(container, subtypeInterpreter);
+		}
+	}
+
 
 	static class ForestryAdvancedGuiHandler<T extends Container> implements IGuiContainerHandler<GuiForestry<?>> {
 		@Override
