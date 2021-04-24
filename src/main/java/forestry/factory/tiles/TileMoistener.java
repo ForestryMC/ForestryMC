@@ -22,6 +22,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 
@@ -50,6 +51,7 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.RecipeUtils;
 import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
@@ -235,7 +237,10 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	public void checkRecipe() {
-		IMoistenerRecipe sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(getLevel().getRecipeManager(), getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE));
+		RecipeManager manager = RecipeUtils.getRecipeManager(level);
+		IMoistenerRecipe sameRec = manager != null ?
+				RecipeManagers.moistenerManager.findMatchingRecipe(manager, getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE))
+				: null;
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();
