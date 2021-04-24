@@ -36,18 +36,17 @@ import net.minecraftforge.common.ToolType;
 
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.core.ItemGroups;
-import forestry.core.items.ItemForestryTool;
+import forestry.core.items.ItemForestry;
 
-public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
+public class ItemGrafter extends ItemForestry implements IToolGrafter {
 
 	public static final ToolType GRAFTER = ToolType.get("grafter");
 
 	public ItemGrafter(int maxDamage) {
-		super(ItemStack.EMPTY, 0, 0, (new Item.Properties())
+		super(new Item.Properties()
 				.durability(maxDamage)
 				.tab(ItemGroups.tabArboriculture)
 				.addToolType(GRAFTER, 3));
-		setEfficiencyOnProperMaterial(4.0f);
 	}
 
 	@Override
@@ -69,9 +68,17 @@ public class ItemGrafter extends ItemForestryTool implements IToolGrafter {
 	}
 
 	@Override
-	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (!worldIn.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
-			stack.hurtAndBreak(1, entityLiving, (p_220036_0_) -> {
+	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
+		if (state.getBlock().isToolEffective(state, GRAFTER)) {
+			return 4.0F;
+		}
+		return 1.0F;
+	}
+
+	@Override
+	public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entity) {
+		if (!world.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
+			stack.hurtAndBreak(1, entity, (p_220036_0_) -> {
 				p_220036_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
 			});
 		}

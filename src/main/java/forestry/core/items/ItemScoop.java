@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -18,14 +19,21 @@ import net.minecraftforge.common.ToolType;
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
 
-public class ItemScoop extends ItemForestryTool implements IToolScoop {
+public class ItemScoop extends ItemForestry implements IToolScoop {
 	public static ToolType SCOOP = ToolType.get("scoop");
 
 	public ItemScoop() {
-		super(ItemStack.EMPTY, 2, -2, (new Item.Properties())
+		super(new Item.Properties()
 				.durability(10)
 				.tab(ItemGroups.tabApiculture)
 				.addToolType(SCOOP, 3));
-		setEfficiencyOnProperMaterial(2.0f);
+	}
+
+	@Override
+	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
+		if (state.getBlock().isToolEffective(state, SCOOP)) {
+			return 2.0F;
+		}
+		return 1.0F;
 	}
 }
