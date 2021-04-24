@@ -3,12 +3,14 @@ package forestry.core.data;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 
-import java.lang.reflect.Constructor;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.logging.log4j.util.TriConsumer;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -16,6 +18,7 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.data.ShapelessRecipeBuilder;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,7 +28,6 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.NBTIngredient;
 import net.minecraftforge.common.crafting.conditions.AndCondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
@@ -65,6 +67,7 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.items.definitions.EnumElectronTube;
+import forestry.core.recipes.ComplexIngredient;
 import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
@@ -1032,6 +1035,67 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.pattern("# #").pattern(" # ").pattern(" # ")
 				.unlockedBy("has_bronze", has(ForestryTags.Items.INGOTS_BRONZE)).save(consumer);
 
+		// Manure and Fertilizer
+		ShapedRecipeBuilder.shaped(CoreItems.COMPOST, 4)
+				.define('#', Blocks.DIRT)
+				.define('X', Tags.Items.CROPS_WHEAT)
+				.pattern(" X ").pattern("X#X").pattern(" X ")
+				.unlockedBy("has_wheat", has(Tags.Items.CROPS_WHEAT))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "compost_wheat"));
+
+		ShapedRecipeBuilder.shaped(CoreItems.COMPOST, 1)
+				.define('#', Blocks.DIRT)
+				.define('X', ForestryTags.Items.DUSTS_ASH)
+				.pattern(" X ").pattern("X#X").pattern(" X ")
+				.unlockedBy("has_ash", has(ForestryTags.Items.DUSTS_ASH))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "compost_ash"));
+
+		ShapedRecipeBuilder.shaped(CoreItems.FERTILIZER_COMPOUND, 8)
+				.define('#', ItemTags.SAND)
+				.define('X', ForestryTags.Items.GEMS_APATITE)
+				.pattern(" # ").pattern(" X ").pattern(" # ")
+				.unlockedBy("has_apatite", has(ForestryTags.Items.GEMS_APATITE))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "fertilizer_apatite"));
+
+		ShapedRecipeBuilder.shaped(CoreItems.FERTILIZER_COMPOUND, 16)
+				.define('#', ForestryTags.Items.DUSTS_ASH)
+				.define('X', ForestryTags.Items.GEMS_APATITE)
+				.pattern("###").pattern("#X#").pattern("###")
+				.unlockedBy("has_apatite", has(ForestryTags.Items.GEMS_APATITE))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "fertilizer_ash"));
+
+		// Humus
+		ShapedRecipeBuilder.shaped(CoreBlocks.HUMUS, 8)
+				.define('#', Blocks.DIRT)
+				.define('X', CoreItems.COMPOST)
+				.pattern("###").pattern("#X#").pattern("###")
+				.unlockedBy("has_compost", has(CoreItems.COMPOST))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "humus_compost"));
+
+		ShapedRecipeBuilder.shaped(CoreBlocks.HUMUS, 8)
+				.define('#', Blocks.DIRT)
+				.define('X', CoreItems.FERTILIZER_COMPOUND)
+				.pattern("###").pattern("#X#").pattern("###")
+				.unlockedBy("has_fertilizer", has(CoreItems.FERTILIZER_COMPOUND))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "humus_fertilizer"));
+
+		TriConsumer<Integer, ItemStack, String> bogRecipe = (amount, container, name) -> ShapedRecipeBuilder.shaped(CoreBlocks.BOG_EARTH, amount)
+				.define('#', Blocks.DIRT)
+				.define('X', new ComplexIngredient(container))
+				.define('Y', ItemTags.SAND)
+				.pattern("#Y#").pattern("YXY").pattern("#Y#")
+				.unlockedBy("has_sand", has(ItemTags.SAND))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "bog_earth_" + name));
+
+		// Bog earth
+		bogRecipe.accept(6, new ItemStack(Items.WATER_BUCKET), "bucket");
+
+		ItemStack canWater = FluidsItems.getContainer(EnumContainerType.CAN, Fluids.WATER);
+		ItemStack waxCapsuleWater = FluidsItems.getContainer(EnumContainerType.CAPSULE, Fluids.WATER);
+		ItemStack refractoryWater = FluidsItems.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER);
+		bogRecipe.accept(8, canWater, "can");
+		bogRecipe.accept(8, waxCapsuleWater, "wax_capsule");
+		bogRecipe.accept(8, refractoryWater, "refractory");
 	}
 
 	private void registerBookRecipes(RecipeDataHelper helper) {
@@ -1297,21 +1361,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		}
 	}
 
-	//TODO maybe I'm missing something, but this seems like the only reasonable way to do it...
-	private NBTIngredient createNbtIngredient(ItemStack stack) {
-		Constructor<NBTIngredient> constructor;
-		try {
-			constructor = NBTIngredient.class.getDeclaredConstructor(ItemStack.class);
-			constructor.setAccessible(true);
-			return constructor.newInstance(stack);
-
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-
 	private void registerFluidsRecipes(RecipeDataHelper helper) {
 		ForestryFluids milk = ForestryFluids.MILK;
 		for (EnumContainerType containerType : EnumContainerType.values()) {
@@ -1319,10 +1368,9 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				continue;
 			}*/
 			ItemStack filled = FluidsItems.getContainer(containerType, milk);
-			Ingredient ingredientNBT = createNbtIngredient(filled);
 			helper.moduleConditionRecipe(
 					ShapedRecipeBuilder.shaped(Items.CAKE)
-							.define('A', ingredientNBT)
+							.define('A', new ComplexIngredient(filled))
 							.define('B', Items.SUGAR)
 							.define('C', Items.WHEAT)
 							.define('E', Items.EGG)
@@ -1376,11 +1424,11 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				ForestryModuleUids.MAIL);
 		helper.moduleConditionRecipe(
 				ShapedRecipeBuilder.shaped(MailBlocks.BASE.get(BlockTypeMail.TRADE_STATION).block())
-						.define('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BRONZE).getItem())
+						.define('#', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.BRONZE))
 						.define('X', Tags.Items.CHESTS_WOODEN)
 						.define('Y', CoreItems.STURDY_CASING.item())
 						.define('Z', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON).item())
-						.define('W', createNbtIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
+						.define('W', new ComplexIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
 						.pattern("Z#Z").pattern("#Y#").pattern("XWX")
 						.unlockedBy("has_casing", has(CoreItems.STURDY_CASING.item()))::save,
 				ForestryModuleUids.MAIL);
