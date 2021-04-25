@@ -10,8 +10,11 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import net.minecraft.item.Item;
+
 import net.minecraftforge.client.event.ModelBakeEvent;
 
+import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileBase;
@@ -50,4 +53,6 @@ public class ProxyRender implements ISidedModuleHandler {
 	public void registerItemAndBlockColors() {
 	}
 
+	public void setRenderer(Item.Properties properties, IBlockType type) {
+	}
 }
