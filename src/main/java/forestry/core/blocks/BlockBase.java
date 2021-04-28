@@ -17,7 +17,6 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -33,7 +32,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
@@ -64,7 +62,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
 
 	private final boolean hasTESR;
-	private final boolean hasCustom;
 	public final P blockType;
 
 	private final ParticleHelper.Callback particleCallback;
@@ -73,7 +70,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		if (type instanceof IBlockTypeTesr || type instanceof IBlockTypeCustom) {
 			properties = properties.noOcclusion();
 		}
-		return properties.isViewBlocking((state, reader, pos) -> !(type instanceof IBlockTypeTesr) && !(type instanceof IBlockTypeCustom));
+		return properties.strength(2.0f);
 	}
 
 	public BlockBase(P blockType, Block.Properties properties) {
@@ -84,21 +81,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		blockType.getMachineProperties().setBlock(this);
 
 		this.hasTESR = blockType instanceof IBlockTypeTesr;
-		this.hasCustom = blockType instanceof IBlockTypeCustom;
 
 		particleCallback = new MachineParticleCallback<>(this, blockType);
-
-	}
-
-	@Override
-	public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos) {
-		return (!hasTESR && !hasCustom) ? super.getLightBlock(state, world, pos) : 0;
-	}
-
-	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder);
-		builder.add(FACING);
 	}
 
 	public BlockBase(P blockType, Material material) {
@@ -109,12 +93,17 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		this(blockType, Material.METAL);
 	}
 
+	@Override
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(FACING);
+	}
 
-	//TODO: Still needed? Should be replaced with voxel shapes vor every tesr or custom block
-	/*@Override
-	public boolean isNormalCube(BlockState state, IBlockReader reader, BlockPos pos) {
-		return !hasTESR && !hasCustom;
-	}*/
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_) {
+		return 0.2F;
+	}
 
 	@Override
 	public BlockRenderType getRenderShape(BlockState state) {
@@ -136,13 +125,13 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}
 
 
-	private IMachineProperties getDefinition() {
+	private IMachineProperties<?> getDefinition() {
 		return blockType.getMachineProperties();
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-		IMachineProperties definition = getDefinition();
+		IMachineProperties<?> definition = getDefinition();
 		return definition.getShape(state, reader, pos, context);
 	}
 
@@ -216,22 +205,14 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		blockType.getMachineProperties().clientSetup();
 	}
 
-	//TODO isFullCube, block methods
-	//	@Override
-	//	public boolean isFullCube(BlockState state) {
-	//		IMachineProperties definition = getDefinition();
-	//		return definition.isFullCube(state);
-	//	}
-
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
 		Direction facing = state.getValue(FACING);
 		return state.setValue(FACING, rot.rotate(facing));
 	}
 
-	/* Particles */
-	@OnlyIn(Dist.CLIENT)
-	@Override
+	/* Particles - Client Only */
+	/*@Override
 	public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager effectRenderer) {
 		if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
 			if (target.getType() == RayTraceResult.Type.BLOCK) {
@@ -240,19 +221,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 			}
 		}
 		return false;
-	}
+	}*/
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager effectRenderer) {
-		/*if (blockType.getMachineProperties() instanceof IMachinePropertiesTesr) {
-			BlockState blockState = world.getBlockState(pos);
-			return ParticleHelper.addDestroyEffects(world, this, blockState, pos, effectRenderer, particleCallback);
-		}*/
-		return false;
-	}
-
-	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void registerSprites(ISpriteRegistry registry) {
 		IMachineProperties<?> machineProperties = blockType.getMachineProperties();

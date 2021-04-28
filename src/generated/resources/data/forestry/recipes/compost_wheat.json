@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:dirt"
+    },
+    "X": {
+      "tag": "forge:crops/wheat"
+    }
+  },
+  "result": {
+    "item": "forestry:fertilizer_bio",
+    "count": 4
+  }
+}

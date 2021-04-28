@@ -47,6 +47,7 @@ public class BlockCandleWall extends BlockCandle {
 		return Blocks.WALL_TORCH.updateShape(state, direction, blockState, world, pos, blockPos);
 	}
 
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(BlockState p_180655_1_, World p_180655_2_, BlockPos p_180655_3_, Random p_180655_4_) {
 		Blocks.WALL_TORCH.animateTick(p_180655_1_, p_180655_2_, p_180655_3_, p_180655_4_);

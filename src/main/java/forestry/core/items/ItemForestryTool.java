@@ -10,22 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.ShovelItem;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
@@ -34,54 +30,46 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 
 import forestry.core.features.CoreItems;
+import forestry.core.items.definitions.ToolTier;
 import forestry.core.utils.ItemStackUtil;
 
-public class ItemForestryTool extends ItemForestry {
-	private final Multimap<Attribute, AttributeModifier> defaultModifiers;
+public class ItemForestryTool extends ToolItem {
+
 	private final ItemStack remnants;
-	private float efficiencyOnProperMaterial;
 
-	public ItemForestryTool(ItemStack remnants, double damageBonus, double speedModifier, Item.Properties properties) {
-		super(properties);
-		efficiencyOnProperMaterial = 6F;
+	public ItemForestryTool(ItemStack remnants, float damageBonus, float speedModifier, Item.Properties properties) {
+		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? PickaxeItem.DIGGABLES : ShovelItem.DIGGABLES, properties);
 		this.remnants = remnants;
-		if (!remnants.isEmpty()) {
-			MinecraftForge.EVENT_BUS.register(this);
-		}
-		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-		double damageModifier = 1 + damageBonus;
-		builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Tool modifier", damageModifier, AttributeModifier.Operation.ADDITION));
-		builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Tool modifier", speedModifier, AttributeModifier.Operation.ADDITION));
-		this.defaultModifiers = builder.build();
-	}
-
-	public void setEfficiencyOnProperMaterial(float efficiencyOnProperMaterial) {
-		this.efficiencyOnProperMaterial = efficiencyOnProperMaterial;
 	}
 
 	@Override
-	public boolean isCorrectToolForDrops(BlockState block) {
+	public boolean isCorrectToolForDrops(BlockState state) {
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
-			Material material = block.getMaterial();
+			int i = this.getTier().getLevel();
+			if (state.getHarvestTool() == ToolType.PICKAXE) {
+				return i >= state.getHarvestLevel();
+			}
+			Material material = state.getMaterial();
 			return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
+		} else if (CoreItems.BROKEN_BRONZE_SHOVEL.itemEqual(this)) {
+			return state.is(Blocks.SNOW) || state.is(Blocks.SNOW_BLOCK);
 		}
-		return super.isCorrectToolForDrops(block);
+		return super.isCorrectToolForDrops(state);
 	}
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
 		for (ToolType type : getToolTypes(itemstack)) {
 			if (state.getBlock().isToolEffective(state, type)) {
-				return efficiencyOnProperMaterial;
+				return speed;
 			}
 		}
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
-			return material != Material.METAL && material != Material.HEAVY_METAL && material != Material.STONE ? super.getDestroySpeed(itemstack, state) : this.efficiencyOnProperMaterial;
+			return material != Material.METAL && material != Material.HEAVY_METAL && material != Material.STONE ? super.getDestroySpeed(itemstack, state) : speed;
 		}
 		return super.getDestroySpeed(itemstack, state);
 	}
@@ -95,23 +83,35 @@ public class ItemForestryTool extends ItemForestry {
 		Direction facing = context.getClickedFace();
 
 		if (CoreItems.BRONZE_SHOVEL.itemEqual(this)) {
-			ItemStack heldItem = player.getItemInHand(hand);
-			if (!player.mayUseItemAt(pos.relative(facing), facing, heldItem)) {
-				return ActionResultType.FAIL;
+			BlockState state = world.getBlockState(pos);
+			if (facing == Direction.DOWN) {
+				return ActionResultType.PASS;
 			} else {
-				BlockState BlockState = world.getBlockState(pos);
-				Block block = BlockState.getBlock();
-
-				if (facing != Direction.DOWN && world.getBlockState(pos.above()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
-					BlockState BlockState1 = Blocks.GRASS_PATH.defaultBlockState();
+				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolType.SHOVEL);
+				BlockState usedState = null;
+				if (modifiedState != null && world.isEmptyBlock(pos.above())) {
 					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-					if (!world.isClientSide) {
-						world.setBlock(pos, BlockState1, 11);
-						heldItem.hurtAndBreak(1, player, this::onBroken);
+					usedState = modifiedState;
+				} else if (state.getBlock() instanceof CampfireBlock && state.getValue(CampfireBlock.LIT)) {
+					if (!world.isClientSide()) {
+						world.levelEvent(null, 1009, pos, 0);
 					}
 
-					return ActionResultType.SUCCESS;
+					CampfireBlock.dowse(world, pos, state);
+					usedState = state.setValue(CampfireBlock.LIT, Boolean.FALSE);
+				}
+
+				if (usedState != null) {
+					if (!world.isClientSide) {
+						world.setBlock(pos, usedState, 11);
+						if (player != null) {
+							context.getItemInHand().hurtAndBreak(1, player, (entity) -> {
+								onBroken(entity, hand);
+							});
+						}
+					}
+
+					return ActionResultType.sidedSuccess(world.isClientSide);
 				} else {
 					return ActionResultType.PASS;
 				}
@@ -120,26 +120,32 @@ public class ItemForestryTool extends ItemForestry {
 		return ActionResultType.PASS;
 	}
 
-	public void onBroken(LivingEntity player) {
+	public void onBroken(LivingEntity player, Hand hand) {
 		World world = player.level;
 
-		player.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+		player.broadcastBreakEvent(hand);
 
 		if (!world.isClientSide && !remnants.isEmpty()) {
 			ItemStackUtil.dropItemStackAsEntity(remnants.copy(), world, player.getX(), player.getY(), player.getZ());
 		}
 	}
 
+	public void onBroken(LivingEntity player) {
+		onBroken(player, Hand.MAIN_HAND);
+	}
+
 	@Override
-	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (!worldIn.isClientSide && state.getDestroySpeed(worldIn, pos) != 0) {
-			stack.hurtAndBreak(1, entityLiving, this::onBroken);
-		}
+	public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
+		stack.hurtAndBreak(2, player, this::onBroken);
 		return true;
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		return slot == EquipmentSlotType.MAINHAND ? this.defaultModifiers : super.getAttributeModifiers(slot, stack);
+	public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entity) {
+		if (!world.isClientSide && state.getDestroySpeed(world, pos) != 0.0F) {
+			stack.hurtAndBreak(1, entity, this::onBroken);
+		}
+
+		return true;
 	}
 }

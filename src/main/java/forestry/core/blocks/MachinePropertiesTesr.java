@@ -15,12 +15,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
 import forestry.core.render.IForestryRenderer;
-import forestry.core.render.RenderForestryItem;
 import forestry.core.render.RenderForestryTile;
 import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
@@ -68,24 +67,12 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 		return particleTexture;
 	}
 
-	@Override
 	public boolean isFullCube(BlockState state) {
 		return isFullCube;
 	}
 
 	public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
-		DistExecutor.runWhenOn(Dist.CLIENT, () ->
-			() -> {
-				IMachineProperties machineProperties = type.getMachineProperties();
-				if (!(machineProperties instanceof IMachinePropertiesTesr)) {
-					return;
-				}
-				IMachinePropertiesTesr machinePropertiesTesr = (IMachinePropertiesTesr) machineProperties;
-				if (machinePropertiesTesr.getRenderer() == null) {
-					return;
-				}
-				properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
-			});
+		Proxies.render.setRenderer(properties, type);
 		return properties;
 	}
 
@@ -115,6 +102,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 			return this;
 		}
 
+		@Override
 		public MachinePropertiesTesr<T> create() {
 			Preconditions.checkNotNull(type);
 			Preconditions.checkNotNull(name);

@@ -64,11 +64,6 @@ public class MachineProperties<T extends TileForestry> implements IMachineProper
 		return name;
 	}
 
-	@Override
-	public boolean isFullCube(BlockState state) {
-		return true;
-	}
-
 	public static class Builder<T extends TileForestry, B extends Builder<T, ?>> {
 		@Nullable
 		protected Supplier<FeatureTileType<? extends T>> type;

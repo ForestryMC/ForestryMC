@@ -30,10 +30,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
 
-//import net.minecraftforge.common.util.EnumHelper;
-//import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
-//import net.minecraftforge.event.terraingen.TerrainGen;
-
 public class HiveDecorator extends Feature<NoFeatureConfig> {
 	public HiveDecorator() {
 		super(NoFeatureConfig.CODEC);

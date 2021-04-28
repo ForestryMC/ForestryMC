@@ -28,14 +28,14 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 
 	public static final BlockTypeCoreTesr[] VALUES = values();
 
-	private final IMachinePropertiesTesr machineProperties;
+	private final IMachinePropertiesTesr<?> machineProperties;
 
 	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
 		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 				.setParticleTexture(name + ".0")
 				.setShape(VoxelShapes::block)
-			.create();
-		Proxies.render.setRendererAnalyzer(machineProperties);    //TODO distexecutor
+				.create();
+		Proxies.render.setRendererAnalyzer(machineProperties);
 		return machineProperties;
 	}
 
@@ -55,12 +55,12 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 		return machineProperties;
 	}
 
-	BlockTypeCoreTesr(IMachinePropertiesTesr machineProperties) {
+	BlockTypeCoreTesr(IMachinePropertiesTesr<?> machineProperties) {
 		this.machineProperties = machineProperties;
 	}
 
 	@Override
-	public IMachinePropertiesTesr getMachineProperties() {
+	public IMachinePropertiesTesr<?> getMachineProperties() {
 		return machineProperties;
 	}
 

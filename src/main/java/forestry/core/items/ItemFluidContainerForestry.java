@@ -61,7 +61,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
 
 	public ItemFluidContainerForestry(EnumContainerType type) {
-		super((new Item.Properties()).tab(ItemGroups.tabStorage));
+		super(new Item.Properties().tab(ItemGroups.tabStorage));
 		this.type = type;
 	}
 
@@ -189,15 +189,14 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			}
 		} else {
 			if (Config.CapsuleFluidPickup) {
-				RayTraceResult target = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
+				BlockRayTraceResult target = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
 				if (target.getType() != RayTraceResult.Type.BLOCK) {
 					return ActionResult.pass(heldItem);
 				}
-				BlockRayTraceResult blockTarget = (BlockRayTraceResult) target;
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);
 
-				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, blockTarget.getBlockPos(), blockTarget.getDirection());
+				FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, target.getBlockPos(), target.getDirection());
 				if (filledResult.isSuccess()) {
 					ItemHandlerHelper.giveItemToPlayer(player, filledResult.result);
 
