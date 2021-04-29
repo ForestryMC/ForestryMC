@@ -23,7 +23,7 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
 	GOLD(new Color(0xffff8b)),
 	DIAMOND(new Color(0x8CF5E3)),
 	OBSIDIAN(new Color(0x866bc0)),
-	BLAZE(new Color(0xd96600), new Color(0xFFF87E)),
+	BLAZE(new Color(0xd96600), new Color(0xFFFF00)),
 	RUBBER(new Color(0x444444)),
 	EMERALD(new Color(0x00CC41)),
 	APATITE(new Color(0x579CD9)),
