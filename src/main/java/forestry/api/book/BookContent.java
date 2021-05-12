@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 /**
  * The deserialized content data of a book page. It creates a gui element at the moment the entry gets opened.
@@ -51,5 +51,5 @@ public abstract class BookContent<D> {
 	 * @param pageHeight      The max height of the current page.
 	 * @return True if you added an element.
 	 */
-	public abstract boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight);
+	public abstract boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight);
 }

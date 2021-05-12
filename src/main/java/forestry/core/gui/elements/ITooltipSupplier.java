@@ -3,10 +3,9 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.core.gui.elements.lib;
+package forestry.core.gui.elements;
 
 import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.elements.GuiElement;
 
 @FunctionalInterface
 public interface ITooltipSupplier {

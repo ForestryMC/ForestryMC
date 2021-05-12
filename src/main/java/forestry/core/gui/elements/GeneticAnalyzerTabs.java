@@ -14,28 +14,26 @@ import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.core.genetics.analyzer.AnalyzerTab;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.GuiUtil;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.layouts.ContainerElement;
+import forestry.core.gui.elements.layouts.FlexLayout;
 import forestry.core.utils.SoundUtil;
 
-public class GeneticAnalyzerTabs extends VerticalLayout {
+public class GeneticAnalyzerTabs extends ContainerElement {
 	private static final Drawable SELECTED_BACKGROUND = new Drawable(GeneticAnalyzer.TEXTURE, 0, 166, 35, 26);
 	private static final Drawable UNSELECTED_BACKGROUND = new Drawable(GeneticAnalyzer.TEXTURE, 0, 192, 35, 26);
 	@Nullable
-	public IDatabasePlugin databasePlugin;
+	public IDatabasePlugin<?> databasePlugin;
 	public final GeneticAnalyzer analyzer;
 	private int selected = 0;
 
-	public GeneticAnalyzerTabs(int xPos, int yPos, GeneticAnalyzer analyzer) {
-		super(xPos, yPos, 35);
-		setDistance(2);
+	public GeneticAnalyzerTabs(GeneticAnalyzer analyzer) {
+		setSize(35, UNKNOWN_HEIGHT);
+		setLayout(FlexLayout.vertical(2));
 		this.analyzer = analyzer;
-		IDatabaseTab[] tabs = getTabs();
+		IDatabaseTab<?>[] tabs = getTabs();
 		for (int i = 0; i < 4; i++) {
-			IDatabaseTab tab = tabs.length > i ? tabs[i] : null;
-			Tab element = new Tab(0, 0, i);
-			element.setTab(tab);
-			add(element);
+			IDatabaseTab<?> tab = tabs.length > i ? tabs[i] : null;
+			add(new Tab(i, tab));
 		}
 	}
 
@@ -43,7 +41,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 		this.selected = index;
 	}
 
-	public IDatabaseTab getSelected() {
+	public IDatabaseTab<?> getSelected() {
 		GuiElement element = elements.get(selected);
 		if (!(element instanceof Tab) || !element.isVisible()) {
 			return AnalyzerTab.ANALYZE;
@@ -51,15 +49,15 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 		return ((Tab) element).tab;
 	}
 
-	public void setPlugin(@Nullable IDatabasePlugin plugin) {
+	public void setPlugin(@Nullable IDatabasePlugin<?> plugin) {
 		if (databasePlugin != plugin) {
 			this.selected = 0;
 			this.databasePlugin = plugin;
-			IDatabaseTab[] tabs = getTabs();
+			IDatabaseTab<?>[] tabs = getTabs();
 			for (int i = 0; i < elements.size(); i++) {
 				GuiElement element = elements.get(i);
 				if (element instanceof Tab) {
-					IDatabaseTab tab = tabs.length > i ? tabs[i] : null;
+					IDatabaseTab<?> tab = tabs.length > i ? tabs[i] : null;
 					Tab tabElement = (Tab) element;
 					tabElement.setTab(tab);
 				}
@@ -67,7 +65,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 		}
 	}
 
-	private IDatabaseTab[] getTabs() {
+	private IDatabaseTab<?>[] getTabs() {
 		if (databasePlugin == null) {
 			return new IDatabaseTab[]{AnalyzerTab.ANALYZE};
 		}
@@ -77,19 +75,24 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 	private class Tab extends GuiElement {
 		private final int index;
 		@Nullable
-		public IDatabaseTab tab;
+		public IDatabaseTab<?> tab;
 		private ItemStack displayStack = ItemStack.EMPTY;
 
-		public Tab(int xPos, int yPos, int index) {
-			super(xPos, yPos, 35, 26);
+		public Tab(int index, @Nullable IDatabaseTab<?> tab) {
+			setSize(35, 26);
+			setTab(tab);
 			this.index = index;
-			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
-				if (isVisible()) {
-					select(index);
-					SoundUtil.playButtonClick();
-					analyzer.update();
-				}
-			});
+		}
+
+		@Override
+		public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+			if (!isVisible()) {
+				return false;
+			}
+			select(index);
+			SoundUtil.playButtonClick();
+			analyzer.update();
+			return true;
 		}
 
 		@Override
@@ -102,7 +105,7 @@ public class GeneticAnalyzerTabs extends VerticalLayout {
 			return tab != null;
 		}
 
-		public void setTab(@Nullable IDatabaseTab tab) {
+		public void setTab(@Nullable IDatabaseTab<?> tab) {
 			this.tab = tab;
 			if (tab != null) {
 				this.displayStack = tab.getIconStack();

@@ -16,10 +16,6 @@ import net.minecraft.particles.ParticleType;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-@OnlyIn(Dist.CLIENT)
 public class SnowParticleType extends ParticleType<SnowParticleData> {
 	public SnowParticleType() {
 		super(false, SnowParticleData.DESERIALIZER);

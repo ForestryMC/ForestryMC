@@ -4,19 +4,23 @@ import com.google.common.collect.Lists;
 
 import javax.annotation.Nullable;
 
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.layouts.ContainerElement;
 import forestry.core.gui.widgets.IScrollable;
 
-public class ScrollableElement extends ElementGroup implements IScrollable {
+public class ScrollableElement extends ContainerElement implements IScrollable {
 	@Nullable
 	private GuiElement content;
 	private double scrollPercentage;
 	private float step;
 
-	public ScrollableElement(int xPos, int yPos, int width, int height) {
-		super(xPos, yPos, width, height);
-		addSelfEventHandler(GuiEvent.WheelEvent.class, event -> movePercentage(event.getDWheel()));
+	public ScrollableElement() {
+		//addSelfEventHandler(GuiEvent.WheelEvent.class, event -> movePercentage(event.getDWheel()));
+	}
+
+	@Override
+	public boolean onMouseScrolled(double mouseX, double mouseY, double dWheel) {
+		//movePercentage(dWheel);
+		return false;
 	}
 
 	public int getInvisibleArea() {
@@ -24,7 +28,7 @@ public class ScrollableElement extends ElementGroup implements IScrollable {
 		if (content == null) {
 			return 0;
 		}
-		return (int) ((content.getHeight() - height) / (step));
+		return (int) ((content.getLayoutSize().getHeight() - getLayoutSize().getHeight()) / (step));
 	}
 
 	protected void movePercentage(double percentage) {
@@ -35,20 +39,31 @@ public class ScrollableElement extends ElementGroup implements IScrollable {
 	public void onScroll(int value) {
 		scrollPercentage = (value * step);
 		if (content != null) {
-			content.setOffset(0, -((int) scrollPercentage));
+			content.setPos(0, -((int) scrollPercentage));
 		}
 	}
 
-	public void setContent(@Nullable GuiElement content) {
-		this.content = content;
+	public ScrollableElement addContent(@Nullable GuiElement newContent) {
 		if (content != null) {
-			content.setCroppedZone(this, 0, 0, width, height);
+			remove(content);
+			content.setCroppedZone(null, 0, 0, -1, -1);
 		}
+		content = newContent;
+		if (newContent != null) {
+			add(newContent);
+			newContent.setCroppedZone(this, 0, 0, preferredSize.width, preferredSize.height);
+		}
+		return this;
 	}
 
 	@Override
 	public void clear() {
 		remove(Lists.newArrayList(elements));
+	}
+
+	@Override
+	public boolean canMouseOver() {
+		return true;
 	}
 
 	@Override

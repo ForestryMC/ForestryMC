@@ -9,21 +9,22 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.book.data.IndexEntry;
 import forestry.book.gui.GuiForesterBook;
 import forestry.book.gui.GuiForestryBookPages;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.MouseEvent;
+import forestry.core.gui.elements.WrapperElement;
+import forestry.core.gui.elements.layouts.ContainerElement;
+import forestry.core.gui.elements.layouts.FlexLayout;
 import forestry.core.gui.elements.text.LabelElement;
 
 @OnlyIn(Dist.CLIENT)
-public class IndexElement extends VerticalLayout {
+public class IndexElement extends ContainerElement {
 	//TODO Unicode
 	private static final Style INDEX_STYLE = Style.EMPTY.withColor(Color.fromRgb(0x000000));
 
-	public IndexElement(int xPos, int yPos, IndexEntry[] data) {
-		super(xPos, yPos, 108);
+	public IndexElement(IndexEntry[] data) {
+		setSize(108, UNKNOWN_HEIGHT);
+		setLayout(FlexLayout.vertical(0));
 		for (IndexEntry index : data) {
 			//add(new IndexEntryElement(index));
-			LabelElement element = labelLine("- " + index.title)
+			/*LabelElement element = labelLine("- " + index.title)
 					.fitText()
 					.setStyle(INDEX_STYLE)
 					.create();
@@ -41,8 +42,48 @@ public class IndexElement extends VerticalLayout {
 			element.addMouseListener(MouseEvent.LEAVE, (x, y, button) -> {
 				element.setValue("- " + index.title);
 				return true;
-			});
-			add(element);
+			});*/
+			//add(element);
+			add(new Entry(index));
+		}
+	}
+
+	private static class Entry extends WrapperElement<LabelElement> {
+		private final IndexEntry index;
+
+		public Entry(IndexEntry index) {
+			super(new LabelElement.Builder("- " + index.title)
+					.fitText()
+					.setStyle(INDEX_STYLE)
+					.create()
+			);
+			this.index = index;
+		}
+
+		@Override
+		public boolean canMouseOver() {
+			return true;
+		}
+
+		@Override
+		public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+			GuiForesterBook bookGui = GuiForesterBook.getGuiScreen();
+			if (bookGui instanceof GuiForestryBookPages) {
+				GuiForestryBookPages pagesGui = (GuiForestryBookPages) bookGui;
+				pagesGui.switchPage(index.page);
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public void onMouseEnter(double mouseX, double mouseY) {
+			child.setValue(" > " + index.title);
+		}
+
+		@Override
+		public void onMouseLeave(double mouseX, double mouseY) {
+			child.setValue("- " + index.title);
 		}
 	}
 

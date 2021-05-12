@@ -89,23 +89,23 @@ public class TankElement extends GuiElement {
 
 			int fluidColor = attributes.getColor(contents);
 
-			int scaledAmount = contents.getAmount() * height / capacity;
+			int scaledAmount = contents.getAmount() * getHeight() / capacity;
 			if (contents.getAmount() > 0 && scaledAmount < 1) {
 				scaledAmount = 1;
 			}
-			if (scaledAmount > height) {
-				scaledAmount = height;
+			if (scaledAmount > getHeight()) {
+				scaledAmount = getHeight();
 			}
 
 			textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
-			final int xTileCount = width / 16;
-			final int xRemainder = width - xTileCount * 16;
+			final int xTileCount = getWidth() / 16;
+			final int xRemainder = getWidth() - xTileCount * 16;
 			final int yTileCount = scaledAmount / 16;
 			final int yRemainder = scaledAmount - yTileCount * 16;
 
-			final int yStart = height;
+			final int yStart = getHeight();
 
 			for (int xTile = 0; xTile <= xTileCount; xTile++) {
 				for (int yTile = 0; yTile <= yTileCount; yTile++) {

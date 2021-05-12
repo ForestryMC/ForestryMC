@@ -20,7 +20,7 @@ class ProcessorText extends AbstractTextElement<IReorderingProcessor, ProcessorT
 		if (text instanceof IReorderingProcessor) {
 			this.text = (IReorderingProcessor) text;
 		}
-		calculateWidth();
+		requestLayout();
 		return this;
 	}
 

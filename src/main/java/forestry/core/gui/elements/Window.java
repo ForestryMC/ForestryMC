@@ -1,9 +1,11 @@
 package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
+import java.awt.Rectangle;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
@@ -15,7 +17,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,17 +25,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.events.ElementEvent;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 
 /**
  * This element is the top parent.
  */
 @OnlyIn(Dist.CLIENT)
-public abstract class Window extends ElementGroup {
+public abstract class Window extends ContainerElement {
 	@Nullable
 	protected Minecraft mc = null;
 	//The last x position of the mouse
@@ -41,31 +40,32 @@ public abstract class Window extends ElementGroup {
 	//The last y position of the mouse
 	protected int mouseY = -1;
 	@Nullable
-	protected GuiElement mousedOverElement;
+	protected GuiElement mousedOver;
 	@Nullable
-	protected GuiElement draggedElement;
+	protected GuiElement dragged;
 	@Nullable
-	protected GuiElement focusedElement;
+	protected GuiElement focused;
+	/**
+	 * Collections with contains all elements that the mouse is over since the last mouse update.
+	 */
+	protected Collection<GuiElement> hoverElements = Collections.emptyList();
 
 	public Window(int width, int height) {
-		super(0, 0, width, height);
-		addEventHandler(ElementEvent.Deletion.class, deletion -> {
-			GuiElement element = deletion.getOrigin();
-			if (isMouseOver(element)) {
-				setMousedOverElement(null);
-			}
-			if (isDragged(element)) {
-				setDraggedElement(null);
-			}
-			if (isFocused(element)) {
-				setFocusedElement(null);
-			}
-		});
-		this.addEventHandler(GuiEvent.DownEvent.class, event -> {
-			this.setDraggedElement(mousedOverElement, event.getButton());
-			this.setFocusedElement(mousedOverElement);
-		});
-		this.addEventHandler(GuiEvent.UpEvent.class, event -> setDraggedElement(null));
+		//setSize(width, height);
+		//setBounds(0, 0, width, height);
+		setAssignedBounds(new Rectangle(0, 0, width, height));
+	}
+
+	public void onRemove(GuiElement element) {
+		if (isMouseOver(element)) {
+			setMousedOver(null);
+		}
+		if (isDragged(element)) {
+			setDragged(null);
+		}
+		if (isFocused(element)) {
+			setFocused(null);
+		}
 	}
 
 	@Override
@@ -79,82 +79,81 @@ public abstract class Window extends ElementGroup {
 	}
 
 	public void init(int guiLeft, int guiTop) {
-		setLocation(guiLeft, guiTop);
+		setAssignedBounds(new Rectangle(guiLeft, guiTop, bounds.width, bounds.height));
 	}
 
 	/* Element Events */
 	@Nullable
-	public GuiElement getDraggedElement() {
-		return this.draggedElement;
+	public GuiElement getDragged() {
+		return this.dragged;
 	}
 
-	public void setDraggedElement(@Nullable GuiElement widget) {
+	public void setDragged(@Nullable GuiElement widget) {
 		this.setDraggedElement(widget, -1);
 	}
 
 	public void setDraggedElement(@Nullable GuiElement widget, int button) {
-		if (this.draggedElement == widget) {
+		if (this.dragged == widget) {
 			return;
 		}
-		if (this.draggedElement != null) {
-			postEvent(new ElementEvent.EndDrag(this.draggedElement), GuiEventDestination.ALL);
+		if (this.dragged != null) {
+			dragged.onDragEnd(mouseX, mouseY);
 		}
-		this.draggedElement = widget;
-		if (this.draggedElement != null) {
-			postEvent(new ElementEvent.StartDrag(this.draggedElement, button), GuiEventDestination.ALL);
+		this.dragged = widget;
+		if (this.dragged != null) {
+			dragged.onDragStart(mouseX, mouseY);
 		}
 	}
 
 	@Nullable
-	public GuiElement getMousedOverElement() {
-		return this.mousedOverElement;
+	public GuiElement getMousedOver() {
+		return this.mousedOver;
 	}
 
-	public void setMousedOverElement(@Nullable GuiElement widget) {
-		if (this.mousedOverElement == widget) {
+	public void setMousedOver(@Nullable GuiElement widget) {
+		if (this.mousedOver == widget) {
 			return;
 		}
-		if (this.mousedOverElement != null) {
-			postEvent(new ElementEvent.EndMouseOver(this.mousedOverElement), GuiEventDestination.ALL);
+		if (this.mousedOver != null) {
+			mousedOver.onMouseEnter(mouseX, mouseY);
 		}
-		this.mousedOverElement = widget;
-		if (this.mousedOverElement != null) {
-			postEvent(new ElementEvent.StartMouseOver(this.mousedOverElement), GuiEventDestination.ALL);
+		this.mousedOver = widget;
+		if (this.mousedOver != null) {
+			mousedOver.onMouseLeave(mouseX, mouseY);
 		}
 	}
 
 	@Nullable
-	public GuiElement getFocusedElement() {
-		return this.focusedElement;
+	public GuiElement getFocused() {
+		return this.focused;
 	}
 
-	public void setFocusedElement(@Nullable GuiElement widget) {
-		GuiElement newElement = widget;
-		if (this.focusedElement == newElement) {
+	public void setFocused(@Nullable GuiElement widget) {
+		if (this.focused == widget) {
 			return;
 		}
-		if (newElement != null && !newElement.canFocus()) {
-			newElement = null;
+		if (widget != null && !widget.canFocus()) {
+			widget = null;
 		}
-		if (this.focusedElement != null) {
-			postEvent(new ElementEvent.LoseFocus(this.focusedElement), GuiEventDestination.ALL);
+		if (this.focused != null) {
+			//postEvent(new ElementEvent.LoseFocus(this.focusedElement), GuiEventDestination.ALL);
 		}
-		this.focusedElement = newElement;
-		if (this.focusedElement != null) {
-			postEvent(new ElementEvent.GainFocus(this.focusedElement), GuiEventDestination.ALL);
+		this.focused = widget;
+		if (this.focused != null) {
+			//postEvent(new ElementEvent.GainFocus(this.focusedElement), GuiEventDestination.ALL);
 		}
 	}
 
 	public boolean isMouseOver(final GuiElement element) {
-		return this.getMousedOverElement() == element;
+		return this.getMousedOver() == element;
 	}
 
 	public boolean isDragged(final GuiElement element) {
-		return this.getDraggedElement() == element;
+		return this.getDragged() == element;
 	}
 
 	public boolean isFocused(final GuiElement element) {
-		return this.getFocusedElement() == element;
+		return this.getFocused() == element;
 	}
 
 	@Override
@@ -171,23 +170,22 @@ public abstract class Window extends ElementGroup {
 	}
 
 	protected void updateWindow() {
-		this.setMousedOverElement(this.calculateMousedOverElement());
-		if (this.getFocusedElement() != null && (!this.getFocusedElement().isVisible() || !this.getFocusedElement().isEnabled())) {
-			this.setFocusedElement(null);
+		hoverElements = this.calculateHovered();
+		this.setMousedOver(this.calculateMousedOver());
+		if (this.getFocused() != null && (!this.getFocused().isVisible() || !this.getFocused().isEnabled())) {
+			this.setFocused(null);
 		}
 		//|TODO - mousehelper.left down?
 		if (!Minecraft.getInstance().mouseHandler.isLeftPressed()) {
-			if (this.draggedElement != null) {
-				this.setDraggedElement(null);
+			if (this.dragged != null) {
+				this.setDragged(null);
 			}
 		}
 	}
 
 	@Nullable
-	private GuiElement calculateMousedOverElement() {
-		Deque<GuiElement> queue = this.calculateMousedOverElements();
-		while (!queue.isEmpty()) {
-			GuiElement element = queue.removeFirst();
+	private GuiElement calculateMousedOver() {
+		for (GuiElement element : hoverElements) {
 			if (element.isEnabled() && element.isVisible() && element.canMouseOver()) {
 				return element;
 			}
@@ -195,7 +193,7 @@ public abstract class Window extends ElementGroup {
 		return null;
 	}
 
-	private Deque<GuiElement> calculateMousedOverElements() {
+	private Deque<GuiElement> calculateHovered() {
 		Deque<GuiElement> list = new ArrayDeque<>();
 		for (GuiElement element : this.getQueuedElements(this)) {
 			if (element.isMouseOver()) {
@@ -207,8 +205,8 @@ public abstract class Window extends ElementGroup {
 
 	private Collection<GuiElement> getQueuedElements(final GuiElement element) {
 		List<GuiElement> widgets = new ArrayList<>();
-		if (element instanceof ElementGroup) {
-			ElementGroup group = (ElementGroup) element;
+		if (element instanceof ContainerElement) {
+			ContainerElement group = (ContainerElement) element;
 			boolean addChildren = true;
 			if (element.isCropped()) {
 				int mouseX = getRelativeMouseX(element);
@@ -233,20 +231,18 @@ public abstract class Window extends ElementGroup {
 	public void drawTooltip(MatrixStack transform, int mouseX, int mouseY) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
-			GlStateManager._pushMatrix();
+			RenderSystem.pushMatrix();
 			//TODO test
 			MainWindow window = Minecraft.getInstance().getWindow();
 			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
-			GlStateManager._popMatrix();
+			RenderSystem.popMatrix();
 		}
 	}
 
 	@Override
 	public ToolTip getTooltip(int mouseX, int mouseY) {
 		ToolTip toolTip = new ToolTip();
-		Deque<GuiElement> queue = this.calculateMousedOverElements();
-		while (!queue.isEmpty()) {
-			GuiElement element = queue.removeFirst();
+		for (GuiElement element : hoverElements) {
 			if (element.isEnabled() && element.isVisible() && element.hasTooltip()) {
 				toolTip.addAll(element.getTooltip(getRelativeMouseX(element), getRelativeMouseY(element)));
 			}
@@ -259,16 +255,16 @@ public abstract class Window extends ElementGroup {
 		float dx = (float) mouseX - (float) this.mouseX;
 		float dy = (float) mouseY - (float) this.mouseY;
 		if (dx != 0.0f || dy != 0.0f) {
-			if (draggedElement != null) {
-				postEvent(new GuiEvent.DragEvent(draggedElement, dx, dy), GuiEventDestination.ALL);
+			if (dragged != null) {
+				onMouseDrag(mouseX, mouseY);
 			} else {
-				postEvent(new GuiEvent.MoveEvent(this, dx, dy), GuiEventDestination.ALL);
+				onMouseMove(mouseX, mouseY);
 			}
 		}
 		if (mouseX != this.mouseX || mouseY != this.mouseY) {
 			this.mouseX = mouseX;
 			this.mouseY = mouseY;
-			setMousedOverElement(calculateMousedOverElement());
+			setMousedOver(calculateMousedOver());
 		}
 	}
 
@@ -292,6 +288,34 @@ public abstract class Window extends ElementGroup {
 			return mouseY;
 		}
 		return mouseY - element.getAbsoluteY();
+	}
+
+	@Override
+	public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+		return focused != null && focused.onKeyPressed(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean onKeyReleased(int keyCode, int scanCode, int modifiers) {
+		return focused != null && focused.onKeyReleased(keyCode, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean onCharTyped(char keyCode, int modifiers) {
+		return focused != null && focused.onCharTyped(keyCode, modifiers);
+	}
+
+	@Override
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		this.setDraggedElement(mousedOver, mouseButton);
+		this.setFocused(mousedOver);
+		return super.onMouseClicked(mouseX, mouseY, mouseButton);
+	}
+
+	@Override
+	public boolean onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		setDragged(null);
+		return super.onMouseReleased(mouseX, mouseY, mouseButton);
 	}
 
 	/* Gui Screen */

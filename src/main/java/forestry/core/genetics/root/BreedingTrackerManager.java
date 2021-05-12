@@ -6,16 +6,9 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -27,10 +20,10 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	INSTANCE;
 
 	BreedingTrackerManager() {
-		sidedHandler = DistExecutor.runForDist(() -> ClientHandler::new, () -> ServerHandler::new);
+		sidedHandler = DistExecutor.safeRunForDist(() -> ClientBreedingHandler::new, () -> ServerBreedingHandler::new);
 	}
 
-	private static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
+	static final Map<String, IBreedingTrackerHandler> factories = new LinkedHashMap<>();
 
 	@Nullable
 	private SidedHandler sidedHandler = null;
@@ -50,38 +43,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 		return sidedHandler;
 	}
 
-	private interface SidedHandler {
+	interface SidedHandler {
 		<T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player);
-	}
-
-	private static class ServerHandler implements SidedHandler {
-
-		@SuppressWarnings("unchecked")
-		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
-			IBreedingTrackerHandler handler = factories.get(rootUID);
-			String filename = handler.getFileName(player);
-			ServerWorld overworld = ((ServerWorld) world).getServer().getLevel(World.OVERWORLD);
-			T tracker = (T) overworld.getDataStorage().computeIfAbsent(() -> (WorldSavedData) handler.createTracker(filename), filename);
-			handler.populateTracker(tracker, overworld, player);
-			return tracker;
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private static class ClientHandler extends ServerHandler {
-		private final Map<String, IBreedingTracker> trackerByUID = new LinkedHashMap<>();
-
-		@Override
-		@SuppressWarnings("unchecked")
-		public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
-			if (world instanceof ServerWorld) {
-				return super.getTracker(rootUID, world, profile);
-			}
-			IBreedingTrackerHandler handler = factories.get(rootUID);
-			String filename = handler.getFileName(profile);
-			T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));
-			handler.populateTracker(tracker, Minecraft.getInstance().level, profile);
-			return tracker;
-		}
 	}
 }

@@ -27,7 +27,7 @@ public class TextDataElement extends GuiElement {
 		super(xPos, yPos, width, height);
 	}
 
-	@Override
+	/*@Override
 	public int getHeight() {
 		if (height >= 0) {
 			return height;
@@ -69,11 +69,11 @@ public class TextDataElement extends GuiElement {
 			if (data.obfuscated) {
 				modifiers += TextFormatting.OBFUSCATED;
 			}
-			height += fontRenderer.wordWrapHeight(modifiers + data.text, width);
+			height += fontRenderer.wordWrapHeight(modifiers + data.text, getWidth());
 		}
 		//fontRenderer.setBidiFlag(unicode);
 		return height;
-	}
+	}*/
 
 	@Override
 	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
@@ -95,7 +95,7 @@ public class TextDataElement extends GuiElement {
 			}
 
 			String text = getFormattedString(data);
-			List<IReorderingProcessor> split = fontRenderer.split(new StringTextComponent(text), width);
+			List<IReorderingProcessor> split = fontRenderer.split(new StringTextComponent(text), getWidth());
 			for (int i = 0; i < split.size(); i++) {
 				IReorderingProcessor s = split.get(i);
 				int textLength;

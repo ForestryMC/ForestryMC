@@ -35,20 +35,21 @@ import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Constants;
 import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.layouts.ContainerElement;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.StringUtil;
 
 @OnlyIn(Dist.CLIENT)
-public class HabitatSelectionElement extends ElementGroup {
+public class HabitatSelectionElement extends ContainerElement {
 	private static final Comparator<ClimateButton> BUTTON_COMPARATOR = Comparator.comparingDouble(ClimateButton::getComparingCode);
 	private final List<ClimateButton> buttons = new ArrayList<>();
 	private final IClimateTransformer transformer;
 
 	public HabitatSelectionElement(int xPos, int yPos, IClimateTransformer transformer) {
-		super(xPos, yPos, 60, 40);
+		setPos(xPos, yPos);
+		setSize(60, 40);
 		this.transformer = transformer;
+		;
 		int x = 0;
 		int y = 0;
 		for (EnumClimate climate : EnumClimate.values()) {
@@ -102,18 +103,28 @@ public class HabitatSelectionElement extends ElementGroup {
 		final EnumClimate climate;
 
 		private ClimateButton(EnumClimate climate, int xPos, int yPos) {
-			super(xPos, yPos, 20, 20);
+			super(xPos, yPos);
+			setSize(20, 20);
 			this.climate = climate;
-			addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+			/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 				IClimateState climateState = climate.climateState;
 				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				former.setClimate(climateState);
 				former.sendClimateUpdate();
-			});
+			});*/
 			addTooltip((tooltip, element, mouseX, mouseY) -> {
 				tooltip.add(new StringTextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
 				tooltip.add(new StringTextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
 			});
+		}
+
+		@Override
+		public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+			IClimateState climateState = climate.climateState;
+			GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
+			former.setClimate(climateState);
+			former.sendClimateUpdate();
+			return true;
 		}
 
 		@Override

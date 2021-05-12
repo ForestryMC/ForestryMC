@@ -51,6 +51,8 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	private boolean dirtyAnalyzer = false;
 	//True if the individual or the error state changed.
 	private boolean dirty = true;
+	//If the analyzer slot has to bee newly aligned
+	private boolean slotDirty;
 
 	/* Constructors */
 	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
@@ -73,11 +75,12 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
 			Slot slot = containerAnalyzer.getAnalyzerSlot();
 			if (slot instanceof SlotAnalyzer) {
-				((SlotAnalyzer) slot).setGui(analyzer::isVisible);
+				((SlotAnalyzer) slot).setVisibleCallback(analyzer::isVisible);
 				analyzerSlot = (SlotAnalyzer) slot;
 			}
 		}
 		this.slotAnalyzer = analyzerSlot;
+		slotDirty = true;
 	}
 
 	/* Methods */
@@ -104,14 +107,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		addButton(new GuiToggleButton(leftPos + buttonX, topPos + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
 		dirty = true;
 
-		if (slotAnalyzer != null) {
-			GuiElement element = analyzer.getItemElement();
-			int index = slotAnalyzer.index;
-			slotAnalyzer = new SlotAnalyzer((ItemInventoryAlyzer) slotAnalyzer.container, slotAnalyzer.getSlotIndex(), element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
-			slotAnalyzer.index = index;
-			slotAnalyzer.setGui(analyzer::isVisible);
-			container.slots.set(index, slotAnalyzer);
-		}
+		slotDirty = true;
 	}
 
 	@Override
@@ -132,6 +128,19 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 			dirty = false;
 		}
 		super.render(transform, mouseX, mouseY, partialTicks);
+
+		//Called after first render, so the item element was laid out
+		if (slotDirty) {
+			if (slotAnalyzer != null) {
+				GuiElement element = analyzer.getItemElement();
+				int index = slotAnalyzer.index;
+				slotAnalyzer = new SlotAnalyzer((ItemInventoryAlyzer) slotAnalyzer.container, slotAnalyzer.getSlotIndex(), element.getAbsoluteX() - leftPos + 6, element.getAbsoluteY() - topPos + 9);
+				slotAnalyzer.index = index;
+				slotAnalyzer.setVisibleCallback(analyzer::isVisible);
+				container.slots.set(index, slotAnalyzer);
+			}
+			slotDirty = false;
+		}
 	}
 
 	class Handler implements Button.IPressable {

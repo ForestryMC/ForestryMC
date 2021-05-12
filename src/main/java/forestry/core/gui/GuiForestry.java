@@ -36,10 +36,7 @@ import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorSource;
 import forestry.core.config.Config;
-import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.WindowGui;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
 import forestry.core.gui.ledgers.ClimateLedger;
 import forestry.core.gui.ledgers.HintLedger;
 import forestry.core.gui.ledgers.LedgerManager;
@@ -174,19 +171,32 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		// / Handle ledger clicks
 		ledgerManager.handleMouseClicked(mouseX, mouseY, mouseButton);
 		widgetManager.handleMouseClicked(mouseX, mouseY, mouseButton);
-		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
+		if (window.onMouseClicked(mouseX, mouseY, mouseButton)) {
+			return true;
+		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)) {
+		if (widgetManager.handleMouseRelease(mouseX, mouseY, mouseButton)
+				|| window.onMouseReleased(mouseX, mouseY, mouseButton)) {
 			return true;
 		}
-		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
 		return super.mouseReleased(mouseX, mouseY, mouseButton);
+	}
+
+	@Override
+	public void mouseMoved(double mouseX, double mouseY) {
+		window.onMouseMove(mouseX, mouseY);
+	}
+
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double oldMouseX, double oldMouseY) {
+		if (window.onMouseDrag(mouseX, mouseY)) {
+			return true;
+		}
+		return super.mouseDragged(mouseX, mouseY, mouseButton, oldMouseX, oldMouseY);
 	}
 
 	@Override
@@ -196,26 +206,37 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 			this.minecraft.player.closeContainer();
 			return true;
 		}*/
-		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
+		if (window.onKeyPressed(key, scanCode, modifiers)) {
+			return true;
+		}
 		return super.keyPressed(key, scanCode, modifiers);
 	}
 
 	@Override
+	public boolean keyReleased(int key, int scanCode, int modifiers) {
+		if (window.onKeyReleased(key, scanCode, modifiers)) {
+			return true;
+		}
+		return super.keyReleased(key, scanCode, modifiers);
+	}
+
+	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
-		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
+		if (window.onCharTyped(codePoint, modifiers)) {
+			return true;
+		}
 		return super.charTyped(codePoint, modifiers);
 	}
 
 	@Override
-	public boolean mouseScrolled(double x, double y, double w) {
-		super.mouseScrolled(x, y, w);
-		if (w != 0) {
-			window.postEvent(new GuiEvent.WheelEvent(window, x, y, w), GuiEventDestination.ALL);
-
+	public boolean mouseScrolled(double mouseX, double mouseY, double deltaWheel) {
+		super.mouseScrolled(mouseX, mouseY, deltaWheel);
+		if (deltaWheel != 0) {
+			if (window.onMouseScrolled(mouseX, mouseY, deltaWheel)) {
+				return true;
+			}
 		}
-		return super.mouseScrolled(x, y, w);
+		return super.mouseScrolled(mouseX, mouseY, deltaWheel);
 	}
 
 	@Nullable
@@ -302,6 +323,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		RenderSystem.popMatrix();
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+
 		window.draw(transform, mouseX, mouseY);
 
 		bindTexture(textureFile);

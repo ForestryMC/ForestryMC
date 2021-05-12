@@ -1,6 +1,7 @@
 package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
+import java.awt.Insets;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -26,13 +27,9 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.core.config.Constants;
 import forestry.core.genetics.mutations.EnumMutateChance;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.layouts.ElementLayout;
-import forestry.core.gui.elements.layouts.HorizontalLayout;
-import forestry.core.gui.elements.layouts.PaneLayout;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.GuiConstants;
+import forestry.core.gui.elements.layouts.ContainerElement;
+import forestry.core.gui.elements.layouts.FlexLayout;
 import forestry.core.render.ColourProperties;
 
 import genetics.api.alleles.IAllele;
@@ -77,16 +74,42 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		return new GeneticAnalyzer(window, xPos, yPos, rightBoarder, provider);
 	}
 
-	public ElementLayout createVertical(int xPos, int yPos, int width) {
-		return new VerticalLayout(xPos, yPos, width);
+	public static ContainerElement horizontal(int height, int spacing, Insets margin) {
+		return (ContainerElement) new ContainerElement()
+				.setLayout(FlexLayout.horizontal(spacing, margin))
+				.setSize(GuiElement.UNKNOWN_WIDTH, height);
 	}
 
-	public ElementLayout createHorizontal(int xPos, int yPos, int height) {
-		return new HorizontalLayout(xPos, yPos, height);
+	public static ContainerElement vertical(int width, int spacing, Insets margin) {
+		return (ContainerElement) new ContainerElement()
+				.setLayout(FlexLayout.vertical(spacing, margin))
+				.setSize(width, GuiElement.UNKNOWN_HEIGHT);
 	}
 
-	public ElementGroup createPane(int xPos, int yPos, int width, int height) {
-		return new PaneLayout(xPos, yPos, width, height);
+	public static ContainerElement horizontal(int height, int spacing) {
+		return (ContainerElement) new ContainerElement()
+				.setLayout(FlexLayout.horizontal(spacing))
+				.setSize(GuiElement.UNKNOWN_WIDTH, height);
+	}
+
+	public static ContainerElement vertical(int width, int spacing) {
+		return (ContainerElement) new ContainerElement()
+				.setLayout(FlexLayout.vertical(spacing))
+				.setSize(width, GuiElement.UNKNOWN_HEIGHT);
+	}
+
+	public static ContainerElement pane() {
+		return new ContainerElement();
+	}
+
+	public static ContainerElement pane(int width, int height) {
+		return (ContainerElement) new ContainerElement()
+				.setSize(width, height);
+	}
+
+	public static ContainerElement pane(int xPos, int yPos, int width, int height) {
+		return (ContainerElement) new ContainerElement()
+				.setPreferredBounds(xPos, yPos, width, height);
 	}
 
 	public final int getColorCoding(boolean dominant) {
@@ -108,14 +131,14 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	public GuiElement createFertilityInfo(IAlleleValue<Integer> fertilityAllele, int texOffset) {
 		String fertilityString = fertilityAllele.getValue() + " x";
 
-		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
+		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 2);
 		layout.label(fertilityString, getStateStyle(fertilityAllele.isDominant()));
 		layout.drawable(0, -1, new Drawable(TEXTURE, 60, 240 + texOffset, 12, 8));
 		return layout;
 	}
 
 	public GuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele, IAlleleForestrySpecies species, String text) {
-		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(0);
+		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 0);
 		layout.label(text, getStateStyle(species.isDominant()));
 		layout.add(createToleranceInfo(toleranceAllele));
 		return layout;
@@ -126,7 +149,7 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		EnumTolerance tolerance = toleranceAllele.getValue();
 		ITextComponent component = null;
 
-		ElementLayout layout = createHorizontal(0, 0, 0).setDistance(2);
+		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 2);
 		switch (tolerance) {
 			case BOTH_1:
 			case BOTH_2:
@@ -165,7 +188,8 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 
 	public GuiElement createMutationResultant(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
-			ElementGroup element = new PaneLayout(x, y, width, height);
+			ContainerElement element = new ContainerElement();
+			element.setPreferredBounds(x, y, width, height);
 			IAlyzerPlugin plugin = ((IForestrySpeciesRoot) mutation.getRoot()).getAlyzerPlugin();
 			Map<ResourceLocation, ItemStack> iconStacks = plugin.getIconStacks();
 
@@ -183,9 +207,9 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	}
 
 	@Nullable
-	public ElementGroup createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
+	public ContainerElement createMutation(int x, int y, int width, int height, IMutation mutation, IAllele species, IBreedingTracker breedingTracker) {
 		if (breedingTracker.isDiscovered(mutation)) {
-			PaneLayout element = new PaneLayout(x, y, width, height);
+			ContainerElement element = pane(x, y, width, height);
 			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) mutation.getRoot();
 			int speciesIndex = speciesRoot.getKaryotype().getSpeciesType().ordinal();
 			IDatabasePlugin plugin = speciesRoot.getSpeciesPlugin();
@@ -206,22 +230,22 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		return createUnknownMutationGroup(x, y, width, height, mutation, breedingTracker);
 	}
 
-	private static ElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
-		PaneLayout element = new PaneLayout(x, y, width, height);
+	private static ContainerElement createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation) {
+		ContainerElement element = pane(x, y, width, height);
 
 		element.add(createQuestionMark(0, 0), createProbabilityAdd(mutation, 21, 4), createQuestionMark(32, 0));
 		return element;
 	}
 
-	private static ElementGroup createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
-		PaneLayout element = new PaneLayout(x, y, width, height);
+	private static ContainerElement createUnknownMutationGroup(int x, int y, int width, int height, IMutation mutation, IBreedingTracker breedingTracker) {
+		ContainerElement element = pane(x, y, width, height);
 
 		element.add(createQuestionMark(0, 0), createQuestionMark(32, 0));
 		createProbabilityArrow(element, mutation, 18, 4, breedingTracker);
 		return element;
 	}
 
-	private static void createProbabilityArrow(PaneLayout element, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
+	private static void createProbabilityArrow(ContainerElement element, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
 		float chance = combination.getBaseChance();
 		int line = 247;
 		int column = 100;
@@ -254,8 +278,8 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
 			element.label("+")
-				.setStyle(GuiConstants.DEFAULT_STYLE)
-				.setAlign(GuiElementAlignment.TOP_LEFT)
+					.setStyle(GuiConstants.DEFAULT_STYLE)
+					.setAlign(Alignment.TOP_LEFT)
 				.setSize(10, 10)
 				.setLocation(x + 9, y + 1);
 		}

@@ -26,19 +26,19 @@ public class CarpenterElement extends SelectionElement<ICarpenterRecipe> {
 	private static final Drawable CARPENTER_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 0, 108, 60);
 	private static final Drawable CARPENTER_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 1, 16, 58);
 
-	public CarpenterElement(int xPos, int yPos, ItemStack stack) {
-		this(0, 0, new ItemStack[]{stack});
+	public CarpenterElement(ItemStack stack) {
+		this(new ItemStack[]{stack});
 	}
 
-	public CarpenterElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Stream.of(stacks)
+	public CarpenterElement(ItemStack[] stacks) {
+		this(Stream.of(stacks)
 				.map(stack -> RecipeManagers.carpenterManager.getRecipesWithOutput(null, stack))
 				.flatMap(Collection::stream)
 				.toArray(ICarpenterRecipe[]::new));
 	}
 
-	public CarpenterElement(int xPos, int yPos, ICarpenterRecipe[] recipes) {
-		super(xPos, yPos, 108, 62, recipes, 2);
+	public CarpenterElement(ICarpenterRecipe[] recipes) {
+		super(108, 62, recipes, 2);
 
 		drawable(0, 2, CARPENTER_BACKGROUND);
 		add(selectedElement);

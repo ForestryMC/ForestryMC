@@ -1,4 +1,4 @@
-package forestry.core.gui.elements.lib;
+package forestry.core.gui;
 
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.Style;

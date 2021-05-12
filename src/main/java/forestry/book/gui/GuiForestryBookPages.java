@@ -21,7 +21,7 @@ import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
 import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookPages extends GuiForesterBook {
@@ -32,8 +32,8 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	private final List<GuiButtonSubEntry> subButtons = new ArrayList<>();
 	private List<GuiElement> pages;
 	private int pageIndex = 0;
-	private ElementGroup leftPage;
-	private ElementGroup rightPage;
+	private ContainerElement leftPage;
+	private ContainerElement rightPage;
 	private int nextPage = -1;
 	private int lastPage = -1;
 

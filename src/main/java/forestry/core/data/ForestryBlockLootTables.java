@@ -41,6 +41,7 @@ import forestry.core.blocks.EnumResourceType;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;
 import forestry.core.loot.OrganismFunction;
+import forestry.core.utils.Log;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
@@ -49,8 +50,6 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IModFeature;
-
-import genetics.Log;
 
 /**
  * Data generator class that generates the block drop loot tables for forestry blocks.

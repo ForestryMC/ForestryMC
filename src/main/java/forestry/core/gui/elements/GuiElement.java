@@ -3,10 +3,12 @@ package forestry.core.gui.elements;
 import com.google.common.base.MoreObjects;
 
 import javax.annotation.Nullable;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -22,33 +24,34 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.tooltips.ToolTip;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
-import forestry.core.gui.elements.lib.ITooltipSupplier;
-import forestry.core.gui.elements.lib.events.ElementEvent;
-import forestry.core.gui.elements.lib.events.GuiElementEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
-import forestry.core.gui.elements.lib.events.GuiEventHandler;
-import forestry.core.gui.elements.lib.events.GuiEventOrigin;
-import forestry.core.gui.elements.lib.events.IMouseHandler;
-import forestry.core.gui.elements.lib.events.MouseEvent;
-import forestry.core.utils.Log;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiElement extends AbstractGui {
+public abstract class GuiElement extends AbstractGui {
+	public static final int UNKNOWN_HEIGHT = -1;
+	public static final int UNKNOWN_WIDTH = -1;
+	public static final Dimension UNKNOWN_SIZE = new Dimension(-1, -1);
 	/* Attributes - Final */
 	//Tooltip of the element
 	private final List<ITooltipSupplier> tooltipSuppliers = new ArrayList<>();
-	//Event handler of this element
-	private final Collection<Consumer<? extends GuiElementEvent>> eventHandlers = new ArrayList<>();
 	/* Attributes - State*/
 	//Element Position
-	protected int xPos;
-	protected int yPos;
-	protected int xOffset;
-	protected int yOffset;
-	//Size of this element
-	protected int width;
-	protected int height;
+	@Nullable
+	protected Point preferredPos;
+	/**
+	 * The size this widget wants to occupy. If one of the two values is unknown (smaller than zero) the container will
+	 * try to dynamically calculate the value based on size of the sibling widgets. (flex)
+	 * <p>
+	 * This value is only reliable. For the exact values please call {@link #getPreferredSize()}
+	 */
+	protected Dimension preferredSize = UNKNOWN_SIZE;
+	/**
+	 * Position and width of this widget in the parent container.
+	 * <p>
+	 * Null if the layout of the container was not performed yet.
+	 */
+	@Nullable
+	protected Rectangle bounds;
 	//The start coordinates of the crop
 	protected int cropX;
 	protected int cropY;
@@ -58,52 +61,36 @@ public class GuiElement extends AbstractGui {
 	@Nullable
 	protected GuiElement cropElement = null;
 	//Element Alignment relative to the parent
-	private GuiElementAlignment align = GuiElementAlignment.TOP_LEFT;
-
+	private Alignment align = Alignment.TOP_LEFT;
 	protected boolean visible = true;
 
 	//The element container that contains this element
 	@Nullable
 	protected GuiElement parent;
+	protected final ActionConfig actionConfig;
 
-	public GuiElement(int width, int height) {
-		this(0, 0, width, height);
+	@Deprecated
+	protected GuiElement(int xPos, int yPos) {
+		this();
+		setPos(xPos, yPos);
 	}
 
-	public GuiElement(int xPos, int yPos, int width, int height) {
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.width = width;
-		this.height = height;
+	@Deprecated
+	protected GuiElement(int xPos, int yPos, int width, int height) {
+		this();
+		setPreferredBounds(xPos, yPos, width, height);
 	}
 
-	public void onCreation() {
-		//Default-Implementation
-	}
-
-	public void onDeletion() {
-		Window window = getWindow();
-		window.postEvent(new ElementEvent.Deletion(this), GuiEventDestination.ALL);
+	protected GuiElement() {
+		actionConfig = buildActions(ActionConfig.selfBuilder()).create();
 	}
 
 	public final int getX() {
-		int x = 0;
-		int parentWidth = parent != null ? parent.getWidth() : -1;
-		int w = getWidth();
-		if (parentWidth >= 0 && parentWidth > w) {
-			x = (int) ((parentWidth - w) * align.getXOffset());
-		}
-		return xPos + x + xOffset;
+		return bounds != null ? bounds.x : 0;
 	}
 
 	public final int getY() {
-		int y = 0;
-		int parentHeight = parent != null ? parent.getHeight() : -1;
-		int h = getHeight();
-		if (parentHeight >= 0 && parentHeight > h) {
-			y = (int) ((parentHeight - h) * align.getYOffset());
-		}
-		return yPos + y + yOffset;
+		return bounds != null ? bounds.y : 0;
 	}
 
 	public final int getAbsoluteX() {
@@ -114,6 +101,7 @@ public class GuiElement extends AbstractGui {
 		return parent == null ? getY() : getY() + parent.getAbsoluteY();
 	}
 
+	@SuppressWarnings("deprecation")
 	public final void draw(MatrixStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
@@ -142,66 +130,94 @@ public class GuiElement extends AbstractGui {
 		RenderSystem.popMatrix();
 	}
 
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		//Default-Implementation
 	}
 
+	/**
+	 * Called after all elements of the parent were laid out
+	 */
+	public void afterLayout() {
+
+	}
+
 	public int getWidth() {
-		return width;
+		if (bounds != null) {
+			return bounds.width;
+		}
+		return preferredSize.width;
 	}
 
 	public int getHeight() {
-		return height;
+		if (bounds != null) {
+			return bounds.height;
+		}
+		return preferredSize.height;
+	}
+
+	public Dimension getLayoutSize() {
+		return getPreferredSize();
+	}
+
+	public Dimension getPreferredSize() {
+		return preferredSize;
+	}
+
+	@Nullable
+	public Point getPreferredPos() {
+		return preferredPos;
+	}
+
+	@Nullable
+	public Rectangle getBounds() {
+		return bounds;
 	}
 
 	public void setHeight(int height) {
-		setSize(width, height);
+		setSize(preferredSize.width, height);
 	}
 
 	public void setWidth(int width) {
-		setSize(width, height);
+		setSize(width, preferredSize.height);
 	}
 
 	public GuiElement setSize(int width, int height) {
-		this.width = width;
-		this.height = height;
-		return this;
-	}
-
-	public GuiElement setOffset(int xOffset, int yOffset) {
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+		this.preferredSize = new Dimension(width, height);
 		return this;
 	}
 
 	public GuiElement setXPosition(int xPos) {
-		setLocation(xPos, yPos);
+		setLocation(xPos, preferredPos != null ? preferredPos.y : 0);
 		return this;
 	}
 
 	public GuiElement setYPosition(int yPos) {
-		setLocation(xPos, yPos);
+		setLocation(preferredPos != null ? preferredPos.x : 0, yPos);
 		return this;
 	}
 
 	public GuiElement setLocation(int xPos, int yPos) {
-		this.xPos = xPos;
-		this.yPos = yPos;
+		this.preferredPos = new Point(xPos, yPos);
+		requestLayout();
 		return this;
 	}
 
-	public GuiElement setBounds(int xPos, int yPos, int width, int height) {
+	public GuiElement setPreferredBounds(int xPos, int yPos, int width, int height) {
 		setLocation(xPos, yPos);
 		setSize(width, height);
 		return this;
 	}
 
-	public GuiElement setAlign(GuiElementAlignment align) {
+	public void setAssignedBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+
+	public GuiElement setAlign(Alignment align) {
 		this.align = align;
 		return this;
 	}
 
-	public GuiElementAlignment getAlign() {
+	public Alignment getAlign() {
 		return align;
 	}
 
@@ -271,12 +287,10 @@ public class GuiElement extends AbstractGui {
 	/**
 	 * Called if this element get updated on the client side.
 	 */
-	@OnlyIn(Dist.CLIENT)
 	protected void onUpdateClient() {
 		//Default-Implementation
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	public void updateClient() {
 		if (!this.isVisible()) {
 			return;
@@ -325,13 +339,11 @@ public class GuiElement extends AbstractGui {
 	}
 
 	public GuiElement addTooltip(ITextComponent line) {
-		//TODO textcomponent
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
 		return this;
 	}
 
 	public GuiElement addTooltip(Collection<ITextComponent> lines) {
-		//TODO textcomponent
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
 		return this;
 	}
@@ -357,64 +369,86 @@ public class GuiElement extends AbstractGui {
 		return toolTip;
 	}
 
-	/* Events */
-	public <E extends GuiElementEvent> void addEventHandler(Consumer<E> eventHandler) {
-		eventHandlers.add(eventHandler);
+	public ActionConfig getActionConfig() {
+		return actionConfig;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void receiveEvent(GuiElementEvent event) {
-		for (Consumer<? extends GuiElementEvent> eventHandler : eventHandlers) {
-			((Consumer<GuiElementEvent>) eventHandler).accept(event);
-		}
+	public boolean hasOrigin(ActionType type, ActionOrigin origin) {
+		return actionConfig.has(type, origin)
+				|| origin == ActionOrigin.SELF_TOP && actionConfig.has(type, ActionOrigin.SELF)
+				|| (origin == ActionOrigin.SELF || origin == ActionOrigin.SELF_TOP) && actionConfig.has(type, ActionOrigin.ALL);
 	}
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	public <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, eventHandler));
+	protected ActionConfig.Builder buildActions(ActionConfig.Builder builder) {
+		return builder;
 	}
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	public <E extends GuiElementEvent> void addEventHandler(Class<? super E> eventClass, GuiEventOrigin origin, GuiElement relative, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, origin, relative, eventHandler));
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		return false;
 	}
 
-	/**
-	 * Adds an event handler that handles events that this element receives with {@link #receiveEvent(GuiElementEvent)}.
-	 */
-	public <E extends GuiElementEvent> void addSelfEventHandler(Class<? super E> eventClass, Consumer<E> eventHandler) {
-		addEventHandler(new GuiEventHandler<>(eventClass, GuiEventOrigin.SELF, this, eventHandler));
+	public boolean onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		return false;
 	}
 
-	public void addMouseListener(MouseEvent type, IMouseHandler handler) {
+	public boolean onMouseScrolled(double mouseX, double mouseY, double dWheel) {
+		return false;
 	}
 
-	/**
-	 * Distributes the event to the elements that are defined by the {@link GuiEventDestination}.
-	 */
-	public void postEvent(GuiElementEvent event, GuiEventDestination destination) {
-		try {
-			destination.sendEvent(this, event);
-		} catch (Exception e) {
-			Log.error("An error has occurred during the posting of the event.", e);
-		}
+	public void onMouseMove(double mouseX, double mouseY) {
+	}
+
+	public void onMouseEnter(double mouseX, double mouseY) {
+	}
+
+
+	public void onMouseLeave(double mouseX, double mouseY) {
+	}
+
+	public boolean onMouseDrag(double mouseX, double mouseY) {
+		return false;
+	}
+
+	public void onDragStart(double mouseX, double mouseY) {
+	}
+
+	public void onDragEnd(double mouseX, double mouseY) {
+	}
+
+	public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+		return false;
+	}
+
+	public boolean onKeyReleased(int keyCode, int scanCode, int modifiers) {
+		return false;
+	}
+
+	public boolean onCharTyped(char keyCode, int modifiers) {
+		return false;
 	}
 
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-				.add("x", getX())
-				.add("y", getY())
-				.add("w", width)
-				.add("h", height)
+				.add("bounds", bounds)
 				.add("a", align)
 				.add("v", isVisible())
-			.add("xO", xOffset)
-			.add("yO", yOffset)
-			.toString();
+				.toString();
+	}
+
+	public GuiElement setPos(int x, int y) {
+		preferredPos = new Point(x, y);
+		requestLayout();
+		return this;
+	}
+
+	/**
+	 * Request an layout in the next render cycle by marking the parent dirty if there is any
+	 */
+	public void requestLayout() {
+		if (!(parent instanceof ContainerElement)) {
+			return;
+		}
+		((ContainerElement) parent).markDirty();
 	}
 }

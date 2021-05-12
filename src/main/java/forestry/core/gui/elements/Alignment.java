@@ -3,12 +3,12 @@
  *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
-package forestry.core.gui.elements.lib;
+package forestry.core.gui.elements;
 
 /**
- * The alignment of the {@link IGuiElement} defines the position of the element relative to the position of its parent.
+ * The alignment of the {@link GuiElement} defines the position of the element relative to the position of its parent.
  */
-public enum GuiElementAlignment {
+public enum Alignment {
 	TOP_LEFT(0.0f, 0.0f),
 	TOP_CENTER(0.5f, 0.0f),
 	TOP_RIGHT(1.0f, 0.0f),
@@ -22,7 +22,7 @@ public enum GuiElementAlignment {
 	private final float xOffset;
 	private final float yOffset;
 
-	GuiElementAlignment(float xOffset, float yOffset) {
+	Alignment(float xOffset, float yOffset) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}

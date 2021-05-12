@@ -8,11 +8,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.layouts.ContainerElement;
 import forestry.core.gui.widgets.IScrollable;
 
-public class ScrollBarElement extends ElementGroup {
+public class ScrollBarElement extends ContainerElement {
 	/* Attributes - Final */
 	private final GuiElement slider;
 
@@ -21,7 +20,7 @@ public class ScrollBarElement extends ElementGroup {
 	private boolean wasClicked;
 	private boolean vertical = false;
 	private int currentValue;
-	private final ElementGroup interactionField;
+	private final ContainerElement interactionField;
 	private int initialMouseClick;
 
 	/* Attributes - Parameters */
@@ -33,10 +32,9 @@ public class ScrollBarElement extends ElementGroup {
 	private boolean initialised = false;
 	private boolean mouseDown = false;
 
-	public ScrollBarElement(int xPos, int yPos, int width, int height, Drawable sliderTexture) {
-		super(xPos, yPos, width, height);
-
-		interactionField = add(new ElementGroup(0, 0, width, height));
+	public ScrollBarElement(Drawable sliderTexture) {
+		interactionField = add(new ContainerElement());
+		interactionField.setSize(preferredSize.width, preferredSize.height);
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
@@ -44,12 +42,12 @@ public class ScrollBarElement extends ElementGroup {
 		addListeners();
 	}
 
-	public ScrollBarElement(int xPos, int yPos, Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
-		super(xPos, yPos, backgroundTexture.uWidth, backgroundTexture.vHeight);
-
+	public ScrollBarElement(Drawable backgroundTexture, boolean hasBorder, Drawable sliderTexture) {
+		setSize(backgroundTexture.uWidth, backgroundTexture.vHeight);
 		int offset = hasBorder ? 1 : 0;
 
-		interactionField = new ElementGroup(offset, offset, hasBorder ? width - 2 : width, hasBorder ? height - 2 : height);
+		interactionField = new ContainerElement();
+		interactionField.setPreferredBounds(offset, offset, hasBorder ? preferredSize.width - 2 : preferredSize.width, hasBorder ? preferredSize.height - 2 : preferredSize.height);
 		isScrolling = false;
 		wasClicked = false;
 		visible = true;
@@ -60,8 +58,14 @@ public class ScrollBarElement extends ElementGroup {
 		addListeners();
 	}
 
+	@Override
+	public GuiElement setPreferredBounds(int xPos, int yPos, int width, int height) {
+		interactionField.setSize(width, height);
+		return super.setPreferredBounds(xPos, yPos, width, height);
+	}
+
 	protected void addListeners() {
-		addEventHandler(GuiEvent.DownEvent.class, event -> {
+		/*addEventHandler(GuiEvent.DownEvent.class, event -> {
 			mouseDown = true;
 		});
 		addEventHandler(GuiEvent.UpEvent.class, event -> {
@@ -76,7 +80,36 @@ public class ScrollBarElement extends ElementGroup {
 					setValue(currentValue + step);
 				}
 			}
-		});
+		});*/
+	}
+
+	@Override
+	protected ActionConfig.Builder buildActions(ActionConfig.Builder builder) {
+		return builder.all(ActionType.PRESSED, ActionType.RELEASED, ActionType.SCROLLED);
+	}
+
+	@Override
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		mouseDown = true;
+		return false;
+	}
+
+	@Override
+	public boolean onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		mouseDown = false;
+		return false;
+	}
+
+	@Override
+	public boolean onMouseScrolled(double mouseX, double mouseY, double dWheel) {
+		if (listener == null || listener.isFocused((int) mouseX, (int) mouseY) || isMouseOver()) {
+			if (dWheel > 0) {
+				setValue(currentValue - step);
+			} else if (dWheel < 0) {
+				setValue(currentValue + step);
+			}
+		}
+		return false;
 	}
 
 	public ScrollBarElement setVertical() {
@@ -107,28 +140,32 @@ public class ScrollBarElement extends ElementGroup {
 
 	public ScrollBarElement setValue(int value) {
 		initialised = true;
+		int oldValue = this.currentValue;
 		currentValue = MathHelper.clamp(value, minValue, maxValue);
+		if (oldValue == currentValue) {
+			return this;
+		}
 		if (listener != null) {
 			listener.onScroll(currentValue);
 		}
 		if (vertical) {
 			int offset;
 			if (value >= maxValue) {
-				offset = interactionField.getWidth() - slider.width;
+				offset = interactionField.getWidth() - slider.getWidth();
 			} else if (value <= minValue) {
 				offset = 0;
 			} else {
-				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getWidth() - slider.width));
+				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getWidth() - slider.getWidth()));
 			}
 			slider.setXPosition(offset);
 		} else {
 			int offset;
 			if (value >= maxValue) {
-				offset = interactionField.getHeight() - slider.height;
+				offset = interactionField.getHeight() - slider.getHeight();
 			} else if (value <= minValue) {
 				offset = 0;
 			} else {
-				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getHeight() - slider.height));
+				offset = (int) (((float) (currentValue - minValue) / (maxValue - minValue)) * (float) (interactionField.getHeight() - slider.getHeight()));
 			}
 			slider.setYPosition(offset);
 		}
@@ -164,7 +201,7 @@ public class ScrollBarElement extends ElementGroup {
 		//Clicked on the slider and scrolling
 		if (this.isScrolling) {
 			int range = maxValue - minValue;
-			float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
+			float value = (float) (pos - initialMouseClick) / (float) (vertical ? (interactionField.getWidth() - slider.getWidth()) : (interactionField.getHeight() - slider.getHeight()));
 			value *= (float) range;
 			if (value < (float) step / 2f) {
 				setValue(minValue);
@@ -180,7 +217,7 @@ public class ScrollBarElement extends ElementGroup {
 			}
 		} else if (mouseDown && !wasClicked && isMouseOver()) { //clicked on the bar but not on the slider
 			int range = maxValue - minValue;
-			float value = ((float) pos - (vertical ? slider.width : slider.height) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.width) : (interactionField.getHeight() - slider.height));
+			float value = ((float) pos - (vertical ? slider.getWidth() : slider.getHeight()) / 2.0F) / (float) (vertical ? (interactionField.getWidth() - slider.getWidth()) : (interactionField.getHeight() - slider.getHeight()));
 			value *= (float) range;
 			if (value < (float) step / 2f) {
 				setValue(minValue);

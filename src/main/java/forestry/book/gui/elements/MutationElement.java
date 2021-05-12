@@ -7,13 +7,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import genetics.api.mutation.IMutation;
-
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.GuiConstants;
+import forestry.core.gui.elements.Alignment;
+
+import genetics.api.mutation.IMutation;
 
 @OnlyIn(Dist.CLIENT)
 public class MutationElement extends SelectionElement<IMutation> {
@@ -21,10 +21,10 @@ public class MutationElement extends SelectionElement<IMutation> {
 	private static final Drawable MUTATION_PLUS = new Drawable(GuiForesterBook.TEXTURE, 0, 241, 15, 15);
 	private static final Drawable MUTATION_ARROW = new Drawable(GuiForesterBook.TEXTURE, 15, 241, 18, 15);
 
-	public MutationElement(int xPos, int yPos, IMutation[] mutations) {
-		super(xPos, yPos, 108, 20, mutations, 2);
+	public MutationElement(IMutation[] mutations) {
+		super(108, 20, mutations, 2);
 
-		setAlign(GuiElementAlignment.TOP_CENTER);
+		setAlign(Alignment.TOP_CENTER);
 
 		drawable(0, 2, SLOT);
 		drawable(21, 4, MUTATION_PLUS);
@@ -36,7 +36,7 @@ public class MutationElement extends SelectionElement<IMutation> {
 
 	@Override
 	protected void onIndexUpdate(int index, IMutation mutation) {
-		IForestrySpeciesRoot root = (IForestrySpeciesRoot) mutation.getRoot();
+		IForestrySpeciesRoot<?> root = (IForestrySpeciesRoot<?>) mutation.getRoot();
 		//
 		Collection<ITextComponent> conditions = mutation.getSpecialConditions();
 		String conditionText;

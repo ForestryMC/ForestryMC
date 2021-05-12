@@ -32,19 +32,19 @@ public class FabricatorElement extends SelectionElement<IFabricatorRecipe> {
 	private static final Drawable FABRICATOR_BACKGROUND = new Drawable(BOOK_CRAFTING_TEXTURE, 0, 60, 108, 56);
 	private static final Drawable FABRICATOR_TANK_OVERLAY = new Drawable(BOOK_CRAFTING_TEXTURE, 109, 61, 16, 16);
 
-	public FabricatorElement(int xPos, int yPos, ItemStack stack) {
-		this(0, 0, new ItemStack[]{stack});
+	public FabricatorElement(ItemStack stack) {
+		this(new ItemStack[]{stack});
 	}
 
-	public FabricatorElement(int xPos, int yPos, ItemStack[] stacks) {
-		this(0, 0, Stream.of(stacks)
+	public FabricatorElement(ItemStack[] stacks) {
+		this(Stream.of(stacks)
 				.map(stack -> RecipeManagers.fabricatorManager.getRecipesWithOutput(null, stack))
 				.flatMap(Collection::stream)
 				.toArray(IFabricatorRecipe[]::new));
 	}
 
-	public FabricatorElement(int xPos, int yPos, IFabricatorRecipe[] recipes) {
-		super(xPos, yPos, 108, 58, recipes, 2);
+	public FabricatorElement(IFabricatorRecipe[] recipes) {
+		super(108, 58, recipes, 2);
 
 		drawable(0, 2, FABRICATOR_BACKGROUND);
 		add(selectedElement);

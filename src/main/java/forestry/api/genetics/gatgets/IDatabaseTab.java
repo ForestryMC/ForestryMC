@@ -1,8 +1,8 @@
 package forestry.api.genetics.gatgets;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,9 +29,8 @@ public interface IDatabaseTab<I extends IIndividual> {
 	/**
 	 * Can be used to give the tab a custom tooltip.
 	 */
-	@Nullable
-	default String getTooltip(I individual) {
-		return null;
+	default ITextComponent getTooltip(I individual) {
+		return StringTextComponent.EMPTY;
 	}
 
 	default DatabaseMode getMode() {

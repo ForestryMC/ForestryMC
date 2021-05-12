@@ -72,10 +72,12 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		return this;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public int getHeight() {
 		return texture.getHeight();
 	}

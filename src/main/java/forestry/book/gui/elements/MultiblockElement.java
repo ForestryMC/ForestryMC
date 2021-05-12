@@ -39,7 +39,6 @@ import forestry.book.data.structure.StructureBlockAccess;
 import forestry.book.data.structure.StructureInfo;
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class MultiblockElement extends GuiElement {
@@ -78,8 +77,20 @@ public class MultiblockElement extends GuiElement {
 		rotX = 25;
 		rotY = -45;
 
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> lastClick = new double[]{event.getX(), event.getY()});
-		addSelfEventHandler(GuiEvent.UpEvent.class, event -> lastClick = null);
+		//addSelfEventHandler(GuiEvent.DownEvent.class, event -> lastClick = new double[]{event.getX(), event.getY()});
+		//addSelfEventHandler(GuiEvent.UpEvent.class, event -> lastClick = null);
+	}
+
+	@Override
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		lastClick = new double[]{mouseX, mouseY};//TODO: Check if this need not relative pos
+		return false;
+	}
+
+	@Override
+	public boolean onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		lastClick = null;
+		return false;
 	}
 
 	@Override

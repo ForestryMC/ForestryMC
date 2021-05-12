@@ -9,23 +9,24 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.gui.GuiForesterBook;
 import forestry.core.gui.Drawable;
+import forestry.core.gui.elements.Alignment;
 import forestry.core.gui.elements.IngredientElement;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
 
 @OnlyIn(Dist.CLIENT)
 public class CraftingElement extends SelectionElement<IRecipe> {
 	private static final Drawable CRAFTING_GRID = new Drawable(GuiForesterBook.TEXTURE, 158, 181, 98, 58);
 
-	public CraftingElement(int xPos, int yPos, IRecipe[] recipes) {
-		super(xPos, yPos, 98, 62, recipes, 2);
+	public CraftingElement(IRecipe[] recipes) {
+		super(98, 62, recipes, 2);
 
-		setAlign(GuiElementAlignment.TOP_CENTER);
+		setAlign(Alignment.TOP_CENTER);
 		//Background
 		drawable(0, 2, CRAFTING_GRID);
 		add(selectedElement);
 		setIndex(0);
 	}
 
+	@Override
 	protected void onIndexUpdate(int index, IRecipe recipe) {
 		NonNullList<Ingredient> ingredients = recipe.getIngredients();
 		//Output

@@ -32,7 +32,7 @@ import forestry.book.data.structure.StructureData;
 import forestry.book.gui.elements.MultiblockElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 import forestry.core.utils.Log;
 
 /**
@@ -70,7 +70,7 @@ public class StructureContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (structureFile == null) {
 			return false;
 		}

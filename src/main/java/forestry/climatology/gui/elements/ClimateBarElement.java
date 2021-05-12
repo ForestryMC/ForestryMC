@@ -27,7 +27,6 @@ import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.gui.elements.GuiElement;
-import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.StringUtil;
 
 @OnlyIn(Dist.CLIENT)
@@ -39,11 +38,12 @@ public class ClimateBarElement extends GuiElement {
 	private boolean dragging;
 
 	public ClimateBarElement(int xPos, int yPos, IClimateTransformer transformer, ClimateType type) {
-		super(xPos, yPos, 52, 12);
+		super(xPos, yPos);
+		setSize(52, 12);
 		this.transformer = transformer;
 		this.type = type;
 
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (Screen.hasControlDown()) {
 				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				IClimateState climateState = former.getClimate();
@@ -61,7 +61,7 @@ public class ClimateBarElement extends GuiElement {
 				GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 				former.sendClimateUpdate();
 			}
-		});
+		});*/
 		addTooltip((tooltip, element, mouseX, mouseY) -> {
 			IClimateState targetedState = transformer.getTarget();
 			IClimateState state = transformer.getCurrent();
@@ -70,6 +70,31 @@ public class ClimateBarElement extends GuiElement {
 			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
 			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
+	}
+
+	@Override
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (Screen.hasControlDown()) {
+			GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
+			IClimateState climateState = former.getClimate();
+			IClimateState newState = climateState.toImmutable().setClimate(type, transformer.getDefault().getTemperature());
+			former.setClimate(newState);
+			former.sendClimateUpdate();
+			return true;
+		}
+		dragging = true;
+		return handleMouse((int) mouseX, (int) mouseY);
+	}
+
+	@Override
+	public boolean onMouseReleased(double mouseX, double mouseY, int mouseButton) {
+		if (!dragging) {
+			return false;
+		}
+		dragging = false;
+		GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
+		former.sendClimateUpdate();
+		return true;
 	}
 
 	@Override
@@ -94,7 +119,7 @@ public class ClimateBarElement extends GuiElement {
 
 	private int getProgressScaled() {
 		float value = transformer.getCurrent().getClimate(type);
-		return (int) (value * (width - 2) / MAX_VALUE);
+		return (int) (value * (preferredSize.width - 2) / MAX_VALUE);
 	}
 
 	private int getPointerPosition() {
@@ -115,19 +140,20 @@ public class ClimateBarElement extends GuiElement {
 		RenderSystem.color4f(red, green, blue, 1.0F);
 	}
 
-	private void handleMouse(int mouseX, int mouseY) {
+	private boolean handleMouse(int mouseX, int mouseY) {
 		if (!dragging) {
-			return;
+			return false;
 		}
-		if (mouseX < 1 || mouseY < 1 || mouseX > width - 1 || mouseY > height - 1) {
-			return;
+		if (mouseX < 1 || mouseY < 1 || mouseX > preferredSize.width - 1 || mouseY > preferredSize.height - 1) {
+			return false;
 		}
-		final float quotient = MathHelper.clamp((mouseX - 1) / (float) (width - 3), 0.0F, 1.0F);
+		final float quotient = MathHelper.clamp((mouseX - 1) / (float) (preferredSize.width - 3), 0.0F, 1.0F);
 		final float value = MAX_VALUE * quotient;
 		GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 		IClimateState climateState = former.getClimate();
 
 		IClimateState newState = climateState.toImmutable().setClimate(type, value);
 		former.setClimate(newState);
+		return true;
 	}
 }

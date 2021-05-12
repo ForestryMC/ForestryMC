@@ -13,17 +13,16 @@ public class DrawableElement extends GuiElement {
 	}
 
 	public DrawableElement(int xPos, int yPos, Drawable drawable) {
-		super(xPos, yPos, drawable.uWidth, drawable.vHeight);
-		this.drawable = drawable;
-	}
-
-	public DrawableElement(int xPos, int yPos, int width, int height, Drawable drawable) {
-		super(xPos, yPos, width, height);
+		super(xPos, yPos);
+		setSize(drawable.uWidth, drawable.vHeight);
 		this.drawable = drawable;
 	}
 
 	@Override
 	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
-		drawable.draw(transform, 0, width, height, 0);
+		if (bounds == null) {
+			return;
+		}
+		drawable.draw(transform, 0, bounds.width, bounds.height, 0);
 	}
 }

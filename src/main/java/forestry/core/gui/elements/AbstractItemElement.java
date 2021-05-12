@@ -26,12 +26,9 @@ import forestry.core.utils.ItemTooltipUtil;
 
 public abstract class AbstractItemElement extends GuiElement {
 
-	public AbstractItemElement(int xPos, int yPos, int width, int height) {
-		super(xPos, yPos, width, height);
-	}
-
 	public AbstractItemElement(int xPos, int yPos) {
-		super(xPos, yPos, 16, 16);
+		super(xPos, yPos);
+		setSize(16, 16);
 	}
 
 	@Override

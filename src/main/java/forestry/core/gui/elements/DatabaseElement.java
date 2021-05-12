@@ -15,11 +15,8 @@ import net.minecraft.util.text.Style;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.gatgets.DatabaseMode;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.layouts.ElementLayout;
-import forestry.core.gui.elements.layouts.PaneLayout;
-import forestry.core.gui.elements.layouts.VerticalLayout;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.layouts.ContainerElement;
+import forestry.core.gui.elements.layouts.FlexLayout;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAllele;
@@ -29,7 +26,7 @@ import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 
-public class DatabaseElement extends VerticalLayout {
+public class DatabaseElement extends ContainerElement {
 	private DatabaseMode mode = DatabaseMode.ACTIVE;
 	@Nullable
 	private IIndividual individual;
@@ -37,7 +34,8 @@ public class DatabaseElement extends VerticalLayout {
 	private int thirdColumn = 0;
 
 	public DatabaseElement(int width) {
-		super(0, 0, width);
+		setSize(width, UNKNOWN_HEIGHT);
+		setLayout(FlexLayout.vertical(0));
 		this.secondColumn = width / 2;
 	}
 
@@ -142,53 +140,51 @@ public class DatabaseElement extends VerticalLayout {
 	}
 
 	public void addLine(String firstText, String secondText, Style firstStyle, Style secondStyle) {
-		ElementLayout first = addSplitText(width, firstText, firstStyle);
-		ElementLayout second = addSplitText(width, secondText, secondStyle);
+		ContainerElement first = addSplitText(preferredSize.width, firstText, firstStyle);
+		ContainerElement second = addSplitText(preferredSize.width, secondText, secondStyle);
 		addLine(first, second);
 	}
 
-	private ElementLayout addSplitText(int width, String text, Style style) {
+	private ContainerElement addSplitText(int width, String text, Style style) {
 		FontRenderer fontRenderer = Minecraft.getInstance().font;
-		ElementLayout vertical = new VerticalLayout(width);
-		for (IReorderingProcessor splitText : fontRenderer.split(new StringTextComponent(text), 70)) {
+		ContainerElement vertical = GuiElementFactory.vertical(width, 0);
+		for (IReorderingProcessor splitText : fontRenderer.split(new StringTextComponent(text), width)) {
 			vertical.label(splitText).setStyle(style);
 		}
 		return vertical;
 	}
 
 	private void addLine(String chromosomeName, GuiElement right) {
-		int center = width / 2;
+		int center = preferredSize.width / 2;
 		GuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
 		addLine(first, right);
 	}
 
 	private void addLine(String chromosomeName, GuiElement second, GuiElement third) {
-		int center = width / 2;
+		int center = preferredSize.width / 2;
 		GuiElement first = addSplitText(center, chromosomeName, GuiElementFactory.INSTANCE.guiStyle);
 		addLine(first, second, third);
 	}
 
 	private void addLine(GuiElement first, GuiElement second, GuiElement third) {
-		ElementGroup panel = new PaneLayout(width, 0);
-		first.setAlign(GuiElementAlignment.MIDDLE_LEFT);
-		second.setAlign(GuiElementAlignment.MIDDLE_LEFT);
-		third.setAlign(GuiElementAlignment.MIDDLE_LEFT);
+		ContainerElement panel = pane(preferredSize.width, UNKNOWN_HEIGHT);
+		first.setAlign(Alignment.MIDDLE_LEFT);
+		second.setAlign(Alignment.MIDDLE_LEFT);
+		third.setAlign(Alignment.MIDDLE_LEFT);
 		panel.add(first);
 		panel.add(second);
 		panel.add(third);
 		second.setXPosition(secondColumn);
 		third.setXPosition(thirdColumn);
-		add(panel);
 	}
 
 	private void addLine(GuiElement first, GuiElement second) {
-		ElementGroup panel = new PaneLayout(width, 0);
-		first.setAlign(GuiElementAlignment.MIDDLE_LEFT);
-		second.setAlign(GuiElementAlignment.MIDDLE_LEFT);
+		ContainerElement panel = pane(preferredSize.width, UNKNOWN_HEIGHT);
+		first.setAlign(Alignment.MIDDLE_LEFT);
+		second.setAlign(Alignment.MIDDLE_LEFT);
 		panel.add(first);
 		panel.add(second);
 		second.setXPosition(secondColumn);
-		add(panel);
 	}
 
 	public <A extends IAllele> void addLine(String chromosomeName, BiFunction<A, Boolean, String> toText, IChromosomeType chromosome) {

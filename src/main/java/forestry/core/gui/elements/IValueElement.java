@@ -1,4 +1,4 @@
-package forestry.core.gui.elements.lib;
+package forestry.core.gui.elements;
 
 
 import net.minecraftforge.api.distmarker.Dist;

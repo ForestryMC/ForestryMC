@@ -1,5 +1,7 @@
 package forestry.core.gui.elements.text;
 
+import java.awt.Dimension;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -19,7 +21,7 @@ public abstract class AbstractTextElement<T, E extends AbstractTextElement<T, E>
 	protected boolean shadow = false;
 
 	public AbstractTextElement(T text) {
-		this(0, 0, -1, DEFAULT_HEIGHT, text, true);
+		this(0, 0, UNKNOWN_WIDTH, DEFAULT_HEIGHT, text, true);
 	}
 
 	public AbstractTextElement(int xPos, int yPos, int width, int height, T text, boolean fitText) {
@@ -33,7 +35,7 @@ public abstract class AbstractTextElement<T, E extends AbstractTextElement<T, E>
 	@SuppressWarnings("unchecked")
 	public E setFitText(boolean fitText) {
 		this.fitText = fitText;
-		calculateWidth();
+		requestLayout();
 		return (E) this;
 	}
 
@@ -64,7 +66,7 @@ public abstract class AbstractTextElement<T, E extends AbstractTextElement<T, E>
 		if (text instanceof IFormattableTextComponent) {
 			((IFormattableTextComponent) text).setStyle(style);
 		}
-		calculateWidth();
+		requestLayout();
 		return (E) this;
 	}
 
@@ -74,7 +76,7 @@ public abstract class AbstractTextElement<T, E extends AbstractTextElement<T, E>
 
 	public boolean setText(T value) {
 		this.text = value;
-		calculateWidth();
+
 		return true;
 	}
 
@@ -84,20 +86,11 @@ public abstract class AbstractTextElement<T, E extends AbstractTextElement<T, E>
 	protected abstract int calcWidth(FontRenderer font);
 
 	@Override
-	public int getWidth() {
-		if (width < 0) {
-			calculateWidth();
+	public Dimension getLayoutSize() {
+		Dimension layoutSize = super.getLayoutSize();
+		if (fitText || layoutSize.width < 0) {
+			return new Dimension(calcWidth(FONT_RENDERER), layoutSize.height);
 		}
-		return width;
+		return layoutSize;
 	}
-
-	protected void calculateWidth() {
-		if (fitText) {
-			setWidth(calcWidth(FONT_RENDERER));
-		} else {
-			setWidth(originalWidth);
-		}
-	}
-
-
 }

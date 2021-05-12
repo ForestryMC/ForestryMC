@@ -12,10 +12,6 @@ class ComponentText extends AbstractTextElement<ITextComponent, ComponentText> {
 		super(component);
 	}
 
-	public ComponentText(int xPos, int yPos, int width, int height, ITextComponent component, boolean fitText) {
-		super(xPos, yPos, width, height, component, fitText);
-	}
-
 	@Override
 	public LabelElement setValue(Object text) {
 		if (text instanceof ITextComponent) {
@@ -23,7 +19,7 @@ class ComponentText extends AbstractTextElement<ITextComponent, ComponentText> {
 		} else if (text instanceof String) {
 			this.text = new StringTextComponent((String) text);
 		}
-		calculateWidth();
+		requestLayout();
 		return this;
 	}
 

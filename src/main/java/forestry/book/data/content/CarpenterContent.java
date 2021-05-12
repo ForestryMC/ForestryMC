@@ -10,7 +10,7 @@ import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CarpenterElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 /**
  * A book content that displays a carpenter recipe.
@@ -25,14 +25,14 @@ public class CarpenterContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
 			return false;
 		}
 		if (!data.stack.isEmpty()) {
-			page.add(new CarpenterElement(0, 0, data.stack));
+			page.add(new CarpenterElement(data.stack));
 		} else {
-			page.add(new CarpenterElement(0, 0, data.stacks));
+			page.add(new CarpenterElement(data.stacks));
 		}
 		return true;
 	}

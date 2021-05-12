@@ -494,10 +494,6 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.drawLine(transform, fertilityString, x, textColor);
 	}
 
-	public TextLayoutHelper getTextLayout() {
-		return textLayout;
-	}
-
 	public WidgetManager getWidgetManager() {
 		return widgetManager;
 	}

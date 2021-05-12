@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
@@ -24,8 +23,7 @@ import forestry.api.genetics.gatgets.IGeneticAnalyzerProvider;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
-import forestry.core.gui.elements.layouts.ElementGroup;
-import forestry.core.gui.elements.lib.events.GuiEvent;
+import forestry.core.gui.elements.layouts.ContainerElement;
 import forestry.core.gui.widgets.IScrollable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.utils.NetworkUtil;
@@ -35,7 +33,7 @@ import genetics.api.root.IRootDefinition;
 import genetics.utils.RootUtils;
 
 @OnlyIn(Dist.CLIENT)
-public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, IScrollable {
+public class GeneticAnalyzer extends ContainerElement implements IGeneticAnalyzer, IScrollable {
 	/* Textures */
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/analyzer_screen.png");
 
@@ -62,38 +60,44 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 	private int selectedSlot = -1;
 
 	public GeneticAnalyzer(Window window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
-		super(xPos - (rightBoarder ? 6 : 0), yPos, 189 + (rightBoarder ? 6 : 0), 194);
+		setSize(189 + (rightBoarder ? 6 : 0), 194);
+		setPos(xPos - (rightBoarder ? 6 : 0), yPos);
 		window.add(this);
 		this.provider = provider;
 
 		//Background Texture
 		drawable(32, 0, new Drawable(TEXTURE, 0, 0, 163 + (rightBoarder ? 0 : -6), 166));
 		//Text Area
-		scrollable = new ScrollableElement(32 + 10, 8, 145, 150);
+		scrollable = new ScrollableElement();
+		scrollable.setPreferredBounds(32 + 10, 8, 145, 150);
 		add(scrollable);
 		scrollableContent = new DatabaseElement(145);
-		scrollable.setContent(scrollableContent);
-		scrollable.add(scrollableContent);
+		scrollableContent.setPos(0, 0);
+		scrollable.addContent(scrollableContent);
 		//Scrollbar
-		scrollBar = new ScrollBarElement(width - 10 - (rightBoarder ? 6 : 0), 12, SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
+		scrollBar = new ScrollBarElement(SCROLLBAR_BACKGROUND, false, SCROLLBAR_SLIDER);
+		scrollBar.setPos(preferredSize.width - 10 - (rightBoarder ? 6 : 0), 12);
 		scrollBar.hide();
 		add(scrollBar);
 		//Side ItemGroups
-		tabs = new GeneticAnalyzerTabs(0, 5, this);
+		tabs = new GeneticAnalyzerTabs(this);
+		tabs.setPos(0, 5);
 		add(tabs);
+		ContainerElement container = pane();
+		container.setPos((preferredSize.width + 32 - SELECTION_BAR.uWidth) / 2, 162);
 		//Selection Bar at the bottom
-		itemElement = drawable((getWidth() + 32 - SELECTION_BAR.uWidth) / 2, 162, SELECTION_BAR);
+		itemElement = container.drawable(SELECTION_BAR);
 
-		leftButton = add(new ButtonElement(itemElement.getX() + 30, itemElement.getY() + 9, StandardButtonTextureSets.LEFT_BUTTON, (button) -> subtract()));
-		rightButton = add(new ButtonElement(itemElement.getX() + 64, itemElement.getY() + 9, StandardButtonTextureSets.RIGHT_BUTTON, (button) -> add()));
-		analyzeButton = add(new ButtonElement(itemElement.getX() + 80, itemElement.getY() + 2, ANALYZER_BUTTON, (button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, provider.getSelectedSlot(selectedSlot)))));
-		add(new AbstractItemElement(itemElement.getX() + 44, itemElement.getY() + 9) {
+		leftButton = container.add(new ButtonElement(itemElement.getX() + 30, itemElement.getY() + 9, StandardButtonTextureSets.LEFT_BUTTON, (button) -> subtract()));
+		rightButton = container.add(new ButtonElement(itemElement.getX() + 64, itemElement.getY() + 9, StandardButtonTextureSets.RIGHT_BUTTON, (button) -> add()));
+		analyzeButton = container.add(new ButtonElement(itemElement.getX() + 80, itemElement.getY() + 2, ANALYZER_BUTTON, (button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, provider.getSelectedSlot(selectedSlot)))));
+		container.add(new AbstractItemElement(itemElement.getX() + 44, itemElement.getY() + 9) {
 			@Override
 			protected ItemStack getStack() {
 				return provider.getSpecimen(selectedSlot);
 			}
 		});
-		addEventHandler(GuiEvent.KeyEvent.class, event -> {
+		/*addEventHandler(GuiEvent.KeyEvent.class, event -> {
 			int keyCode = event.getKeyCode();
 			if ((keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
 				rightButton.onPressed();
@@ -102,7 +106,22 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 			} else if (keyCode == GLFW.GLFW_KEY_ENTER && analyzeButton.isEnabled()) {
 				analyzeButton.onPressed();
 			}
-		});
+		});*/
+	}
+
+	@Override
+	public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+		if ((keyCode == GLFW.GLFW_KEY_DOWN || keyCode == GLFW.GLFW_KEY_RIGHT) && rightButton.isEnabled()) {
+			rightButton.onPressed();
+			return true;
+		} else if ((keyCode == GLFW.GLFW_KEY_UP || keyCode == GLFW.GLFW_KEY_LEFT) && leftButton.isEnabled()) {
+			leftButton.onPressed();
+			return true;
+		} else if (keyCode == GLFW.GLFW_KEY_ENTER && analyzeButton.isEnabled()) {
+			analyzeButton.onPressed();
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -150,6 +169,7 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 						//Create the new elements
 						scrollableContent.init(tab.getMode(), individual, scrollableContent.getWidth() / 2, 0);
 						tab.createElements(scrollableContent, individual, stack);
+						scrollableContent.forceLayout();
 						//Update the scrollbar
 						int invisibleArea = scrollable.getInvisibleArea();
 						if (invisibleArea > 0) {
@@ -172,35 +192,13 @@ public class GeneticAnalyzer extends ElementGroup implements IGeneticAnalyzer, I
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
 		//}
-		List<IReorderingProcessor> lines = fontRenderer.split(new TranslationTextComponent(key), scrollable.getWidth());
+		List<IReorderingProcessor> lines = fontRenderer.split(new TranslationTextComponent(key), scrollable.getPreferredSize().width);
 		for (IReorderingProcessor text : lines) {
 			scrollableContent.label(text);
 		}
 		//Disable the scrollbar
 		scrollBar.hide();
 	}
-
-	@Override
-	public void drawTooltip(Screen gui, int mouseX, int mouseY) {
-		if (!visible) {
-			return;
-		}
-		/*ToolTip lines = getTooltip(mouseX, mouseY);
-		if (!lines.isEmpty()) {
-			GlStateManager._pushMatrix();
-			MainWindow window = Minecraft.getInstance().getWindow();
-			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
-			GlStateManager._popMatrix();
-		}*/
-	}
-
-	/*@Override
-	public boolean mouseClicked(int mouseX, int mouseY, int mouseEvent, IGuiState state) {
-		if(!visible){
-			return false;
-		}
-		return super.mouseClicked(mouseX, mouseY, mouseEvent);
-	}*/
 
 	@Override
 	public boolean isFocused(int mouseX, int mouseY) {

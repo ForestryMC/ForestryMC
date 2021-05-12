@@ -8,11 +8,12 @@ import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.arboriculture.genetics.ITree;
+import forestry.core.gui.elements.Alignment;
 import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.gui.elements.ItemElement;
-import forestry.core.gui.elements.layouts.ElementLayoutHelper;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
+import forestry.core.gui.elements.layouts.FlexLayout;
+import forestry.core.gui.elements.layouts.LayoutHelper;
 
 import genetics.api.individual.IIndividual;
 
@@ -23,10 +24,10 @@ public class ProductsTab extends DatabaseTab {
 
 	@Override
 	public void createElements(DatabaseElement container, IIndividual individual, ItemStack itemStack) {
-		ElementLayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.INSTANCE.createHorizontal(x + 4, y, 18).setDistance(2), 90, 0);
+		LayoutHelper groupHelper = container.layoutHelper((x, y) -> GuiElementFactory.horizontal(18, 2, FlexLayout.LEFT_MARGIN), 90, 0);
 		Collection<ItemStack> products = getProducts(individual);
 		if (!products.isEmpty()) {
-			container.translated("for.gui.beealyzer.produce").setAlign(GuiElementAlignment.TOP_CENTER);
+			container.translated("for.gui.beealyzer.produce").setAlign(Alignment.TOP_CENTER);
 			products.forEach(product -> groupHelper.add(new ItemElement(0, 0, product)));
 			groupHelper.finish();
 		}
@@ -36,7 +37,7 @@ public class ProductsTab extends DatabaseTab {
 			return;
 		}
 
-		container.translated("for.gui.beealyzer.specialty").setAlign(GuiElementAlignment.TOP_CENTER);
+		container.translated("for.gui.beealyzer.specialty").setAlign(Alignment.TOP_CENTER);
 		specialties.forEach(specialty -> groupHelper.add(new ItemElement(0, 0, specialty)));
 		groupHelper.finish();
 	}

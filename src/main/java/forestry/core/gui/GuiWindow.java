@@ -13,13 +13,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.lwjgl.glfw.GLFW;
 
-import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.WindowGui;
-import forestry.core.gui.elements.lib.events.GuiEvent;
-import forestry.core.gui.elements.lib.events.GuiEventDestination;
 
 /**
- * GuiScreen implementation of a gui that contains {@link IGuiElement}s.
+ * GuiScreen implementation of a gui that contains {@link forestry.core.gui.elements.GuiElement}s.
  */
 @OnlyIn(Dist.CLIENT)
 public class GuiWindow extends Screen implements IGuiSizable {
@@ -55,7 +52,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
 		super.render(transform, mouseX, mouseY, partialTicks);
-		window.draw(transform, mouseY, mouseX);
+		window.draw(transform, mouseX, mouseY);
 	}
 
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
@@ -65,7 +62,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);
 			RenderSystem.pushMatrix();
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
-			window.drawTooltip(transform, mouseY, mouseX);
+			window.drawTooltip(transform, mouseX, mouseY);
 			RenderSystem.popMatrix();
 		}
 	}
@@ -86,6 +83,19 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
+	public void mouseMoved(double mouseX, double mouseY) {
+		window.onMouseMove(mouseX, mouseY);
+	}
+
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int mouseButton, double oldMouseX, double oldMouseY) {
+		if (window.onMouseDrag(mouseX, mouseY)) {
+			return true;
+		}
+		return super.mouseDragged(mouseX, mouseY, mouseButton, oldMouseX, oldMouseY);
+	}
+
+	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
 		if (key == GLFW.GLFW_KEY_ESCAPE) {    //TODO - keybinds?
 			this.minecraft.setScreen(null);
@@ -94,56 +104,52 @@ public class GuiWindow extends Screen implements IGuiSizable {
 				this.minecraft.setWindowActive(true);
 			}
 		}
-		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.KeyEvent(origin, key, scanCode, modifiers), GuiEventDestination.ALL);
-		return true;
+		if (window.onKeyPressed(key, scanCode, modifiers)) {
+			return true;
+		}
+		return super.keyPressed(key, scanCode, modifiers);
+	}
+
+	@Override
+	public boolean keyReleased(int key, int scanCode, int modifiers) {
+		if (window.onKeyPressed(key, scanCode, modifiers)) {
+			return true;
+		}
+		return super.keyReleased(key, scanCode, modifiers);
 	}
 
 	@Override
 	public boolean charTyped(char codePoint, int modifiers) {
-		GuiElement origin = (window.getFocusedElement() == null) ? this.window : this.window.getFocusedElement();
-		window.postEvent(new GuiEvent.CharEvent(origin, codePoint, modifiers), GuiEventDestination.ALL);
-		return true;
+		if (window.onCharTyped(codePoint, modifiers)) {
+			return true;
+		}
+		return super.charTyped(codePoint, modifiers);
 	}
 
-	//TODO onMouseClicked
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.DownEvent(origin, mouseX, mouseY, mouseButton), GuiEventDestination.ALL);
-		return true; //TODO return type
-	}
-
-	//TODO onMouseRelease
-	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int state) {
-		super.mouseReleased(mouseX, mouseY, state);
-		GuiElement origin = (window.getMousedOverElement() == null) ? this.window : this.window.getMousedOverElement();
-		window.postEvent(new GuiEvent.UpEvent(origin, mouseX, mouseY, state), GuiEventDestination.ALL);
-		//TODO return type
-		return true;
+		if (window.onMouseClicked(mouseX, mouseY, mouseButton)) {
+			return true;
+		}
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
-	public boolean mouseScrolled(double x, double y, double w) {
-		super.mouseScrolled(x, y, w);
-		if (w != 0) {
-			window.postEvent(new GuiEvent.WheelEvent(window, x, y, w), GuiEventDestination.ALL);
+	public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+		if (window.onMouseReleased(mouseX, mouseY, mouseButton)) {
+			return true;
+		}
+		return super.mouseReleased(mouseX, mouseY, mouseButton);
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double deltaWheel) {
+		if (deltaWheel != 0 && window.onMouseScrolled(mouseX, mouseY, deltaWheel)) {
+			return true;
 
 		}
-		return true;
+		return super.mouseScrolled(mouseX, mouseY, deltaWheel);
 	}
-
-	//TODO above is how to do dwheel? maybe?
-	//	@Override
-	//	public void handleMouseInput() {
-	//		super.handleMouseInput();
-	//		int dWheel = Mouse.getDWheel();
-	//		if (dWheel != 0) {
-	//			window.postEvent(new GuiEvent.WheelEvent(window, dWheel), GuiEventDestination.ALL);
-	//		}
-	//	}
 
 	@Override
 	public int getGuiLeft() {

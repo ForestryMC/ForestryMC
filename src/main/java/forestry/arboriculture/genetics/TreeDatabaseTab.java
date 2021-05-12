@@ -20,10 +20,10 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.gatgets.DatabaseMode;
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
+import forestry.core.gui.GuiConstants;
+import forestry.core.gui.elements.Alignment;
 import forestry.core.gui.elements.DatabaseElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.lib.GuiConstants;
-import forestry.core.gui.elements.lib.GuiElementAlignment;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAlleleValue;
@@ -47,7 +47,7 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 		IAlleleTreeSpecies species = mode == DatabaseMode.ACTIVE ? primarySpecies : tree.getGenome().getInactiveAllele(TreeChromosomes.SPECIES);
 		Style speciesStyle = GuiElementFactory.INSTANCE.getStateStyle(species.isDominant());
 
-		container.translated("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name").setStyle(GuiElementFactory.INSTANCE.databaseTitle).setAlign(GuiElementAlignment.TOP_CENTER);
+		container.translated("for.gui.database.tab." + (mode == DatabaseMode.ACTIVE ? "active" : "inactive") + "_species.name").setStyle(GuiElementFactory.INSTANCE.databaseTitle).setAlign(Alignment.TOP_CENTER);
 
 		container.addLine(Translator.translateToLocal("for.gui.species"), TreeChromosomes.SPECIES);
 
@@ -64,29 +64,29 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
 		container.addLine(Translator.translateToLocal("for.gui.native"), Translator.translateToLocal("for.gui." + primarySpecies.getPlantType().toString().toLowerCase(Locale.ENGLISH)), species.isDominant());
 
-		container.label(Translator.translateToLocal("for.gui.supports"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+		container.label(Translator.translateToLocal("for.gui.supports"), Alignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
 		List<IFruitFamily> families = new ArrayList<>(primarySpecies.getSuitableFruit());
 
 		for (IFruitFamily fruitFamily : families) {
-			container.label(fruitFamily.getName().getString(), GuiElementAlignment.TOP_CENTER, speciesStyle);
+			container.label(fruitFamily.getName().getString(), Alignment.TOP_CENTER, speciesStyle);
 		}
 
 		IAlleleFruit fruit = mode == DatabaseMode.ACTIVE ? tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS) : tree.getGenome().getInactiveAllele(TreeChromosomes.FRUITS);
 		Style textStyle = GuiElementFactory.INSTANCE.getStateStyle(tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).isDominant());
 
-		container.translated("for.gui.fruits").setStyle(GuiConstants.UNDERLINED_STYLE).setAlign(GuiElementAlignment.TOP_CENTER);
+		container.translated("for.gui.fruits").setStyle(GuiConstants.UNDERLINED_STYLE).setAlign(Alignment.TOP_CENTER);
 		Style fruitStyle = textStyle;
 		String strike = "";
 		if (!species.getSuitableFruit().contains(fruit.getProvider().getFamily()) && fruit != AlleleFruits.fruitNone) {
 			fruitStyle = fruitStyle.setStrikethrough(true);
 		}
-		container.label(fruit.getProvider().getDescription()).setStyle(fruitStyle).setAlign(GuiElementAlignment.TOP_CENTER);
+		container.label(fruit.getProvider().getDescription()).setStyle(fruitStyle).setAlign(Alignment.TOP_CENTER);
 
 		IFruitFamily family = fruit.getProvider().getFamily();
 
 		if (family != null && !family.getUID().equals(EnumFruitFamily.NONE.getUID())) {
-			container.label(Translator.translateToLocal("for.gui.family"), GuiElementAlignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
-			container.label(family.getName().getString(), GuiElementAlignment.TOP_CENTER, textStyle);
+			container.label(Translator.translateToLocal("for.gui.family"), Alignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
+			container.label(family.getName().getString(), Alignment.TOP_CENTER, textStyle);
 		}
 
 	}

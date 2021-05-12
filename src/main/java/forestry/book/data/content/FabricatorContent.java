@@ -10,7 +10,7 @@ import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.FabricatorElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 @OnlyIn(Dist.CLIENT)
 public class FabricatorContent extends BookContent<CraftingData> {
@@ -21,14 +21,14 @@ public class FabricatorContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null || (data.stack.isEmpty() && data.stacks.length == 0)) {
 			return false;
 		}
 		if (!data.stack.isEmpty()) {
-			page.add(new FabricatorElement(0, 0, data.stack));
+			page.add(new FabricatorElement(data.stack));
 		} else {
-			page.add(new FabricatorElement(0, 0, data.stacks));
+			page.add(new FabricatorElement(data.stacks));
 		}
 		return true;
 	}

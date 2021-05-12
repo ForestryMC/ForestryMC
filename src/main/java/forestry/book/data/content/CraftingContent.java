@@ -19,7 +19,7 @@ import forestry.book.data.CraftingData;
 import forestry.book.gui.elements.CraftingElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 /**
  * A book content that displays one ore more crafting recipes.
@@ -32,7 +32,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null || data.locations.length == 0) {
 			return false;
 		}
@@ -45,7 +45,7 @@ public class CraftingContent extends BookContent<CraftingData> {
 				recipes.add(recipe);
 			}
 		}
-		page.add(new CraftingElement(0, 0, recipes.toArray(new IRecipe[0])));
+		page.add(new CraftingElement(recipes.toArray(new IRecipe[0])));
 		return true;
 	}
 }

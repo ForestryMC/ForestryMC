@@ -10,7 +10,7 @@ import forestry.book.data.TextData;
 import forestry.book.gui.elements.TextDataElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 /**
  * A book content that displays one or more texts.
@@ -23,7 +23,7 @@ public class TextContent extends BookContent<TextData> {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent<?> previous, @Nullable GuiElement previousElement, int pageHeight) {
 		if (data == null) {
 			return false;
 		}

@@ -29,7 +29,7 @@ import net.minecraft.util.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
 
-import genetics.Log;
+import forestry.core.utils.Log;
 
 public class ForestryLootTableProvider implements IDataProvider {
 

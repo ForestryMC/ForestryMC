@@ -22,6 +22,7 @@ public class ContainerAnalyzerProvider<T extends TileEntity> extends ContainerTi
 	}
 
 	/* Methods - Implement IContainerAnalyzerProvider */
+	@Override
 	@Nullable
 	public Slot getAnalyzerSlot() {
 		return providerHelper.getAnalyzerSlot();

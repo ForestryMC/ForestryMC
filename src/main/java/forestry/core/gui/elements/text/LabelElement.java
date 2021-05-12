@@ -27,6 +27,7 @@ public abstract class LabelElement extends GuiElement {
 	public abstract LabelElement setValue(Object text);
 
 	public static class Builder implements ITextInstance<Builder, Builder, LabelElement> {
+		@Nullable
 		private final Consumer<GuiElement> parentAdder;
 		@Nullable
 		private final Function<LabelElement, GuiElement> finisher;
@@ -34,11 +35,15 @@ public abstract class LabelElement extends GuiElement {
 		boolean fitText = false;
 		boolean shadow = false;
 
-		public Builder(Consumer<GuiElement> parentAdder, Object root) {
+		public Builder(Object root) {
+			this(null, root, null);
+		}
+
+		public Builder(@Nullable Consumer<GuiElement> parentAdder, Object root) {
 			this(parentAdder, root, null);
 		}
 
-		public Builder(Consumer<GuiElement> parentAdder, Object root, @Nullable Function<LabelElement, GuiElement> finisher) {
+		public Builder(@Nullable Consumer<GuiElement> parentAdder, Object root, @Nullable Function<LabelElement, GuiElement> finisher) {
 			this.parentAdder = parentAdder;
 			this.finisher = finisher;
 			if (root instanceof String) {
@@ -92,7 +97,9 @@ public abstract class LabelElement extends GuiElement {
 			if (finisher != null) {
 				element = (LabelElement) finisher.apply(element);
 			}
-			parentAdder.accept(element);
+			if (parentAdder != null) {
+				parentAdder.accept(element);
+			}
 			return element;
 		}
 

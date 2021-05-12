@@ -2,8 +2,9 @@ package forestry.core.genetics.analyzer;
 
 import java.util.function.Supplier;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import forestry.api.genetics.gatgets.IDatabaseTab;
 
@@ -24,9 +25,8 @@ public abstract class DatabaseTab<I extends IIndividual> implements IDatabaseTab
 		return stackSupplier.get();
 	}
 
-	//TODO -side issues
 	@Override
-	public String getTooltip(IIndividual individual) {
-		return I18n.get("for.gui.database.tab." + name + ".name");
+	public ITextComponent getTooltip(IIndividual individual) {
+		return new TranslationTextComponent("for.gui.database.tab." + name + ".name");
 	}
 }

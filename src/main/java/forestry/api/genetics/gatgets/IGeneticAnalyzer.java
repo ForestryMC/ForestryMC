@@ -1,7 +1,5 @@
 package forestry.api.genetics.gatgets;
 
-import net.minecraft.client.gui.screen.Screen;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,11 +25,6 @@ public interface IGeneticAnalyzer {
 	 * Updates the displayed content of the analyzer.
 	 */
 	void update();
-
-	/**
-	 * Draws the tooltip of the element that is under the mouse.
-	 */
-	void drawTooltip(Screen gui, int mouseX, int mouseY);
 
 	/**
 	 * @return

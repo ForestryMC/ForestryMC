@@ -7,7 +7,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
 import forestry.core.gui.buttons.StandardButtonTextureSets;
-import forestry.core.gui.elements.lib.events.GuiEvent;
 import forestry.core.utils.SoundUtil;
 
 public class ButtonElement extends GuiElement {
@@ -23,48 +22,61 @@ public class ButtonElement extends GuiElement {
 	}
 
 	public ButtonElement(int xPos, int yPos, int width, int height, Drawable disabledDrawable, Drawable enabledDrawable, Drawable mouseOverDrawable, Consumer<ButtonElement> onClicked) {
-		super(xPos, yPos, width, height);
+		super(xPos, yPos);
+		setSize(width, height);
 		this.onClicked = onClicked;
 		textures[0] = disabledDrawable;
 		textures[1] = enabledDrawable;
 		textures[2] = mouseOverDrawable;
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
 			onPressed();
 			SoundUtil.playButtonClick();
-		});
+		});*/
 	}
 
 	public ButtonElement(int xPos, int yPos, Drawable drawable, Consumer<ButtonElement> onClicked) {
-		super(xPos, yPos, drawable.uWidth, drawable.vHeight);
+		super(xPos, yPos);
+		setSize(drawable.uWidth, drawable.vHeight);
 		this.onClicked = onClicked;
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
 			onPressed();
 			SoundUtil.playButtonClick();
-		});
+		});*/
 	}
 
 	public ButtonElement(int xPos, int yPos, StandardButtonTextureSets textureSets, Consumer<ButtonElement> onClicked) {
-		super(xPos, yPos, textureSets.getWidth(), textureSets.getHeight());
+		super(xPos, yPos);
+		setSize(textureSets.getWidth(), textureSets.getHeight());
 		this.onClicked = onClicked;
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(textureSets.getTexture(), textureSets.getX(), textureSets.getY() + textureSets.getHeight() * i, textureSets.getWidth(), textureSets.getHeight());
 		}
-		addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
+		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			if (!enabled) {
 				return;
 			}
 			onPressed();
 			SoundUtil.playButtonClick();
-		});
+		});*/
+	}
+
+	@Override
+	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
+		if (!enabled) {
+			return false;
+		}
+		onPressed();
+		SoundUtil.playButtonClick();
+		return true;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class SlotAnalyzer extends SlotFiltered {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
-	public void setGui(@Nullable Supplier<Boolean> visibleSupplier) {
+	public void setVisibleCallback(@Nullable Supplier<Boolean> visibleSupplier) {
 		this.visibleSupplier = visibleSupplier;
 	}
 

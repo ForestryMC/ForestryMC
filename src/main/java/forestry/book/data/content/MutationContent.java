@@ -11,7 +11,7 @@ import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.book.gui.elements.MutationElement;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.GuiElementFactory;
-import forestry.core.gui.elements.layouts.ElementGroup;
+import forestry.core.gui.elements.layouts.ContainerElement;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
@@ -34,7 +34,7 @@ public class MutationContent extends BookContent {
 	}
 
 	@Override
-	public boolean addElements(ElementGroup page, GuiElementFactory factory, @Nullable BookContent previous, @Nullable GuiElement previousElement, int pageHeight) {
+	public boolean addElements(ContainerElement page, GuiElementFactory factory, @Nullable BookContent previous, @Nullable GuiElement previousElement, int pageHeight) {
 		IAllele allele = AlleleUtils.getAlleleOrNull(species);
 		if (!(allele instanceof IAlleleForestrySpecies)) {
 			return false;
@@ -42,7 +42,7 @@ public class MutationContent extends BookContent {
 		IAlleleForestrySpecies s = (IAlleleForestrySpecies) allele;
 		IForestrySpeciesRoot<IIndividual> root = (IForestrySpeciesRoot<IIndividual>) s.getRoot();
 		IMutationContainer<IIndividual, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);
-		page.add(new MutationElement(0, 0, container.getResultantMutations(s).toArray(new IMutation[0])));
+		page.add(new MutationElement(container.getResultantMutations(s).toArray(new IMutation[0])));
 		return true;
 	}
 }
