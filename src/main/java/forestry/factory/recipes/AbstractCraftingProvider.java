@@ -58,11 +58,10 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	 */
 	protected static RecipeManager adjust(@Nullable RecipeManager recipeManager) {
 		if (recipeManager == null) {
-			return DistExecutor.safeRunForDist(() -> ClientCraftingHelper::adjustClient, () -> () -> {
-				throw new NullPointerException("RecipeManager was null on the dedicated server");
-			});
+			return DistExecutor.safeRunForDist(() -> ClientCraftingHelper::adjustClient, () -> ServerCraftingHelper::adjustServer);
 		} else {
 			return recipeManager;
 		}
 	}
+
 }
