@@ -9,8 +9,10 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
@@ -88,9 +90,11 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
 		boolean unicode = minecraft.font.isBidirectional();
 		//minecraft.fontRenderer.setBidiFlag(true);
-		//TODO textcomponent
-		//drawCenteredString(minecraft.fontRenderer, title.applyTextStyle(TextFormatting.UNDERLINE).getString(), guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
-
+		ITextComponent title = getTitle();
+		if (title instanceof IFormattableTextComponent) {
+			((IFormattableTextComponent) title).withStyle(TextFormatting.UNDERLINE);
+		}
+		drawCenteredString(transform, font, title, guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		drawText(transform);
 
 		//minecraft.fontRenderer.setBidiFlag(unicode);

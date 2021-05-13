@@ -26,7 +26,7 @@ public interface Layout {
 		}
 		if (direction == null || direction == Direction.HORIZONTAL) {
 			if (parent.height >= 0 && parent.height > element.height) {
-				element.y = (int) ((parent.height - element.height) * align.getXOffset()) + element.y;
+				element.y = (int) ((parent.height - element.height) * align.getYOffset()) + element.y;
 			}
 		}
 	}

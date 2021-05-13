@@ -13,10 +13,10 @@ import forestry.core.gui.elements.Alignment;
 import forestry.core.gui.elements.IngredientElement;
 
 @OnlyIn(Dist.CLIENT)
-public class CraftingElement extends SelectionElement<IRecipe> {
+public class CraftingElement extends SelectionElement<IRecipe<?>> {
 	private static final Drawable CRAFTING_GRID = new Drawable(GuiForesterBook.TEXTURE, 158, 181, 98, 58);
 
-	public CraftingElement(IRecipe[] recipes) {
+	public CraftingElement(IRecipe<?>[] recipes) {
 		super(98, 62, recipes, 2);
 
 		setAlign(Alignment.TOP_CENTER);
@@ -27,7 +27,7 @@ public class CraftingElement extends SelectionElement<IRecipe> {
 	}
 
 	@Override
-	protected void onIndexUpdate(int index, IRecipe recipe) {
+	protected void onIndexUpdate(int index, IRecipe<?> recipe) {
 		NonNullList<Ingredient> ingredients = recipe.getIngredients();
 		//Output
 		selectedElement.item(81, 21, recipe.getResultItem());

@@ -1,5 +1,7 @@
 package forestry.book.gui.elements;
 
+import javax.annotation.Nullable;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ import forestry.core.gui.elements.GuiElement;
 public class TextDataElement extends GuiElement {
 
 	private final List<TextData> textElements = new ArrayList<>();
+	@Nullable
+	private Dimension layoutSize;
 
 	public TextDataElement(int xPos, int yPos, int width, int height) {
 		super(xPos, yPos, width, height);
@@ -76,6 +80,59 @@ public class TextDataElement extends GuiElement {
 	}*/
 
 	@Override
+	public Dimension getLayoutSize() {
+		if (layoutSize == null) {
+			Dimension size = new Dimension(super.getLayoutSize());
+			if (size.height < 0) {
+				int height = 0;
+				FontRenderer fontRenderer = Minecraft.getInstance().font;
+				boolean unicode = fontRenderer.isBidirectional();
+				//fontRenderer.setBidiFlag(true);
+				boolean lastEmpty = false;
+				for (TextData data : textElements) {
+					if (data.text.equals("\n")) {
+						if (lastEmpty) {
+							height += fontRenderer.lineHeight;
+						}
+						lastEmpty = true;
+						continue;
+					}
+					lastEmpty = false;
+
+					if (data.paragraph) {
+						height += fontRenderer.lineHeight * 1.6D;
+					}
+
+					String modifiers = "";
+
+					modifiers += TextFormatting.getByName(data.color);
+
+					if (data.bold) {
+						modifiers += TextFormatting.BOLD;
+					}
+					if (data.italic) {
+						modifiers += TextFormatting.ITALIC;
+					}
+					if (data.underlined) {
+						modifiers += TextFormatting.UNDERLINE;
+					}
+					if (data.strikethrough) {
+						modifiers += TextFormatting.STRIKETHROUGH;
+					}
+					if (data.obfuscated) {
+						modifiers += TextFormatting.OBFUSCATED;
+					}
+					height += fontRenderer.wordWrapHeight(modifiers + data.text, getWidth());
+				}
+				size.height = height;
+				//fontRenderer.setBidiFlag(unicode);
+			}
+			layoutSize = size;
+		}
+		return layoutSize;
+	}
+
+	@Override
 	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		FontRenderer fontRenderer = Minecraft.getInstance().font;
 		boolean unicode = fontRenderer.isBidirectional();
@@ -97,13 +154,13 @@ public class TextDataElement extends GuiElement {
 			String text = getFormattedString(data);
 			List<IReorderingProcessor> split = fontRenderer.split(new StringTextComponent(text), getWidth());
 			for (int i = 0; i < split.size(); i++) {
-				IReorderingProcessor s = split.get(i);
+				IReorderingProcessor component = split.get(i);
 				int textLength;
 				//TODO correct?
 				if (data.dropshadow) {
-					textLength = fontRenderer.draw(transform, s, x, y, 0);
+					textLength = fontRenderer.drawShadow(transform, component, x, y, 0);
 				} else {
-					textLength = fontRenderer.drawShadow(transform, s, x, y, 0);
+					textLength = fontRenderer.draw(transform, component, x, y, 0);
 				}
 				if (i == split.size() - 1) {
 					x += textLength;

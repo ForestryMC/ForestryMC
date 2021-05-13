@@ -10,7 +10,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,7 +43,7 @@ public class GuiButtonEntry extends Button {
 
 			boolean unicode = fontRenderer.isBidirectional();
 			//fontRenderer.setBidiFlag(true);
-			fontRenderer.draw(transform, text.getString(), this.x + 9, this.y, 0);
+			fontRenderer.draw(transform, text, this.x + 9, this.y, 0);
 			//fontRenderer.setBidiFlag(unicode);
 
 			ItemStack stack = entry.getStack();
@@ -52,11 +51,11 @@ public class GuiButtonEntry extends Button {
 				RenderSystem.pushMatrix();
 				RenderSystem.translatef(x, y, getBlitOffset());    //TODO correct?
 				//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
-				GlStateManager._enableRescaleNormal();
-				GlStateManager._scalef(0.5F, 0.5F, 0.5F);
+				RenderSystem.enableRescaleNormal();
+				RenderSystem.scalef(0.5F, 0.5F, 0.5F);
 				GuiUtil.drawItemStack(fontRenderer, stack, 0, 0);
 				RenderHelper.turnOff();
-				GlStateManager._popMatrix();
+				RenderSystem.popMatrix();
 			}
 		}
 	}

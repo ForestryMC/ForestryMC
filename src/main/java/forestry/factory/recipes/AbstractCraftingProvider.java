@@ -44,6 +44,7 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 		Set<T> recipes = new HashSet<>(globalRecipes);
 
 		for (IRecipe<IInventory> recipe : adjust(recipeManager).byType(type).values()) {
+			//noinspection unchecked
 			recipes.add((T) recipe);
 		}
 

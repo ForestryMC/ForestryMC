@@ -34,13 +34,12 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 
 	private final ResourceLocation id;
 	private final int packagingTime;
-	@Nullable
 	private final FluidStack liquid;
 	private final Ingredient box;
 	private final ICraftingRecipe recipe;
 	private final ItemStack result;
 
-	public CarpenterRecipe(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, ICraftingRecipe recipe, @Nullable ItemStack result) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ICraftingRecipe recipe, @Nullable ItemStack result) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(recipe);
@@ -64,7 +63,6 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	@Nullable
 	public FluidStack getFluidResource() {
 		return liquid;
 	}
@@ -89,7 +87,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public CarpenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			int packagingTime = JSONUtils.getAsInt(json, "time");
-			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid")) : null;
+			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid")) : FluidStack.EMPTY;
 			Ingredient box = RecipeSerializers.deserialize(json.get("box"));
 			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.fromJson(recipeId, JSONUtils.getAsJsonObject(json, "recipe"));
 			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "result")) : internal.getResultItem();
@@ -100,7 +98,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		@Override
 		public CarpenterRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 			int packagingTime = buffer.readVarInt();
-			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : null;
+			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : FluidStack.EMPTY;
 			Ingredient box = Ingredient.fromNetwork(buffer);
 			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.fromNetwork(buffer);
 			ItemStack result = buffer.readItem();
@@ -112,7 +110,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		public void toNetwork(PacketBuffer buffer, CarpenterRecipe recipe) {
 			buffer.writeVarInt(recipe.packagingTime);
 
-			if (recipe.liquid != null) {
+			if (!recipe.liquid.isEmpty()) {
 				buffer.writeBoolean(true);
 				recipe.liquid.writeToPacket(buffer);
 			} else {
