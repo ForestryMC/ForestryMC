@@ -15,6 +15,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.inventory.IInventory;
@@ -32,6 +35,8 @@ import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
 
 public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private final IRecipeType<T> type;
 	private final Set<T> globalRecipes = new HashSet<>();
@@ -73,9 +78,6 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	private static final RecipeManager DUMMY = new RecipeManager();
-
-	@OnlyIn(Dist.CLIENT)
 	private static RecipeManager adjustClient() {
 		Minecraft minecraft = Minecraft.getInstance();
 		IntegratedServer integratedServer = minecraft.getSingleplayerServer();
@@ -90,7 +92,8 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 
 		if (connection == null) {
 			// Usage of this code path is probably a bug
-			return DUMMY;
+			LOGGER.warn("The code should not end up here. If you're seeing this, please report it to the ForestryMC issue tracker on https://github.com/ForestryMC/ForestryMC/issues/", new RuntimeException());
+			return new RecipeManager();
 		} else {
 			return connection.getRecipeManager();
 		}
