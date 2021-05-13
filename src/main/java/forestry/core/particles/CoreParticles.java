@@ -2,7 +2,6 @@ package forestry.core.particles;
 
 import net.minecraft.client.Minecraft;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -13,7 +12,7 @@ import forestry.core.config.Constants;
 import forestry.core.registration.ParticleTypeDeferredRegister;
 import forestry.core.registration.ParticleTypeRegistryObject;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Bus.MOD)
 public class CoreParticles {
 	public static final ParticleTypeDeferredRegister PARTICLE_TYPES = new ParticleTypeDeferredRegister(Constants.MOD_ID);
 
