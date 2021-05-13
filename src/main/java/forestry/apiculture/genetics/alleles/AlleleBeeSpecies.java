@@ -15,24 +15,17 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
-import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
-import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IAlleleBeeSpeciesBuilder;
 import forestry.api.apiculture.genetics.IBeeRoot;
 import forestry.api.core.ISetupListener;
 import forestry.api.genetics.products.IDynamicProductList;
-import forestry.apiculture.genetics.DefaultBeeModelProvider;
 import forestry.apiculture.genetics.DefaultBeeSpriteColourProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.ProductListWrapper;
@@ -41,7 +34,6 @@ import forestry.core.genetics.alleles.AlleleForestrySpecies;
 import genetics.api.individual.IGenome;
 
 public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBeeSpecies, ISetupListener {
-	private final IBeeModelProvider beeModelProvider;
 	private final IBeeSpriteColourProvider beeSpriteColourProvider;
 	private final IJubilanceProvider jubilanceProvider;
 	private final boolean nocturnal;
@@ -52,7 +44,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	public AlleleBeeSpecies(Builder builder) {
 		super(builder);
 
-		beeModelProvider = builder.beeModelProvider;
 		beeSpriteColourProvider = builder.beeSpriteColourProvider;
 		jubilanceProvider = builder.jubilanceProvider;
 		products = builder.products;
@@ -93,12 +84,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ModelResourceLocation getModel(EnumBeeType type) {
-		return beeModelProvider.getModel(type);
-	}
-
-	@Override
 	public int getSpriteColour(int renderPass) {
 		return beeSpriteColourProvider.getSpriteColour(renderPass);
 	}
@@ -106,7 +91,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 	public static class Builder extends AbstractBuilder<IAlleleBeeSpeciesBuilder> implements IAlleleBeeSpeciesBuilder {
 		private final ProductListWrapper products = ProductListWrapper.create();
 		private final ProductListWrapper specialties = ProductListWrapper.create();
-		private IBeeModelProvider beeModelProvider = DefaultBeeModelProvider.instance;
 		@Nullable
 		private IBeeSpriteColourProvider beeSpriteColourProvider;
 		private IJubilanceProvider jubilanceProvider = JubilanceDefault.instance;
@@ -165,12 +149,6 @@ public class AlleleBeeSpecies extends AlleleForestrySpecies implements IAlleleBe
 		@Override
 		public IAlleleBeeSpeciesBuilder setNocturnal() {
 			nocturnal = true;
-			return this;
-		}
-
-		@Override
-		public IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider) {
-			this.beeModelProvider = beeIconProvider;
 			return this;
 		}
 

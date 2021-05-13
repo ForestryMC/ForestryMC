@@ -215,7 +215,8 @@ public class Config {
 	}*/
 
 	private static void loadConfigCommon(Dist side) {
-
+		//ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		//builder.translation()
 		String[] gameModes = new String[]{"EASY", "NORMAL", "HARD", "OP"};
 		gameMode = configCommon.getStringLocalized("difficulty", "game.mode", "EASY", gameModes);
 

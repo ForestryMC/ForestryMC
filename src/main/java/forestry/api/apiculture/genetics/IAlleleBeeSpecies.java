@@ -5,16 +5,11 @@
  ******************************************************************************/
 package forestry.api.apiculture.genetics;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IGenome;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 import forestry.api.genetics.products.IDynamicProductList;
+
+import genetics.api.individual.IGenome;
 
 public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 
@@ -46,6 +41,4 @@ public interface IAlleleBeeSpecies extends IAlleleForestrySpecies {
 	 */
 	boolean isJubilant(IGenome genome, IBeeHousing housing);
 
-	@OnlyIn(Dist.CLIENT)
-	ModelResourceLocation getModel(EnumBeeType type);
 }

@@ -37,6 +37,7 @@ public class FeatureItemGroup<I extends Item, S extends IItemSubtype> extends Fe
 			this.constructor = constructor;
 		}
 
+		@Override
 		public FeatureItemGroup<I, S> create() {
 			return new FeatureItemGroup<>(this);
 		}

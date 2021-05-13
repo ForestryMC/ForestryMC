@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 
-import forestry.api.apiculture.IBeeModelProvider;
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.genetics.alleles.IAlleleSpeciesBuilder;
@@ -51,11 +50,6 @@ public interface IAlleleBeeSpeciesBuilder extends IAlleleSpeciesBuilder<IAlleleB
 	 * Make this species only active at night.
 	 */
 	IAlleleBeeSpeciesBuilder setNocturnal();
-
-	/**
-	 * Use this if you have custom icons for bees.
-	 */
-	IAlleleBeeSpeciesBuilder setCustomBeeModelProvider(IBeeModelProvider beeIconProvider);
 
 	/**
 	 * Use this if you have custom icon colours for bees (other than the default static primary + secondary colours).

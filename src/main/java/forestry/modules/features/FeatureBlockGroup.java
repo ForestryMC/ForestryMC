@@ -75,6 +75,7 @@ public class FeatureBlockGroup<B extends Block, S extends IBlockSubtype> extends
 			return this;
 		}
 
+		@Override
 		public FeatureBlockGroup<B, S> create() {
 			return new FeatureBlockGroup<>(this);
 		}
