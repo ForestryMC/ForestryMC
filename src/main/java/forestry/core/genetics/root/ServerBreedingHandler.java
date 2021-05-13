@@ -11,6 +11,7 @@ import com.mojang.authlib.GameProfile;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IBreedingTrackerHandler;
+import forestry.core.utils.WorldUtils;
 
 public class ServerBreedingHandler implements BreedingTrackerManager.SidedHandler {
 
@@ -19,7 +20,7 @@ public class ServerBreedingHandler implements BreedingTrackerManager.SidedHandle
 	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
 		IBreedingTrackerHandler handler = BreedingTrackerManager.factories.get(rootUID);
 		String filename = handler.getFileName(player);
-		ServerWorld overworld = ((ServerWorld) world).getServer().getLevel(World.OVERWORLD);
+		ServerWorld overworld = WorldUtils.asServer(world).getServer().getLevel(World.OVERWORLD);
 		T tracker = (T) overworld.getDataStorage().computeIfAbsent(() -> (WorldSavedData) handler.createTracker(filename), filename);
 		handler.populateTracker(tracker, overworld, player);
 		return tracker;

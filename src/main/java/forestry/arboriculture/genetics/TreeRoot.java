@@ -251,6 +251,11 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 			return activeTreekeepingMode;
 		}
 
+		//Fallback for world gen
+		if (!(world instanceof World)) {
+			return TreekeepingMode.normal;
+		}
+
 		// No Treekeeping mode yet, item it.
 		IArboristTracker tracker = getBreedingTracker(world, null);
 		String modeName = tracker.getModeName();
