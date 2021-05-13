@@ -23,12 +23,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import forestry.core.registration.ParticleTypeRegistryObject;
 
-@OnlyIn(Dist.CLIENT)
 public class BeeParticleData implements IParticleData {
 
 	public static final IDeserializer<BeeParticleData> DESERIALIZER = new IDeserializer<BeeParticleData>() {
