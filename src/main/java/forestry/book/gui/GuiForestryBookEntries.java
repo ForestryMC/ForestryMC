@@ -3,7 +3,6 @@ package forestry.book.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 
@@ -16,6 +15,7 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonEntry;
 import forestry.book.gui.buttons.GuiButtonPage;
+import forestry.core.gui.GuiUtil;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookEntries extends GuiForesterBook {
@@ -52,7 +52,7 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 		for (int i = indexStart; i < maxIndex; i++) {
 			IBookEntry entry = entries.get(i);
 			addButton(new GuiButtonEntry(guiLeft + xStart, guiTop + yStart + yOffset, entry, this::actionPerformed));
-			yOffset += Minecraft.getInstance().font.lineHeight + 2;
+			yOffset += font.lineHeight + 2;
 		}
 	}
 
@@ -76,12 +76,12 @@ public class GuiForestryBookEntries extends GuiForesterBook {
 			displayCategories();
 		} else if (button instanceof GuiButtonEntry) {
 			GuiButtonEntry entry = (GuiButtonEntry) button;
-			Minecraft.getInstance().setScreen(new GuiForestryBookPages(book, category, entry.entry, null));
+			GuiUtil.showScreen(new GuiForestryBookPages(book, category, entry.entry, null));
 		}
 	}
 
 	private void displayCategories() {
-		Minecraft.getInstance().setScreen(new GuiForestryBookCategories(book));
+		GuiUtil.showScreen(new GuiForestryBookCategories(book));
 	}
 
 	@Override

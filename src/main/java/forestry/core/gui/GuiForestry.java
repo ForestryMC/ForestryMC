@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -367,8 +369,8 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	public Minecraft getMC() {
-		return minecraft;
+	public Minecraft getGameInstance() {
+		return Preconditions.checkNotNull(minecraft);
 	}
 
 	public List<Rectangle2d> getExtraGuiAreas() {

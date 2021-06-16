@@ -29,8 +29,6 @@ import forestry.core.gui.GuiUtil;
 import forestry.core.gui.GuiWindow;
 import forestry.core.gui.IGuiSizable;
 
-import genetics.Log;
-
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/almanac/almanac.png");
@@ -49,10 +47,9 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	protected final IForesterBook book;
 
 	protected GuiForesterBook(IForesterBook book) {
-		super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));    //TODO localise
+		super(X_SIZE, Y_SIZE, StringTextComponent.EMPTY);
 		this.book = book;
 		setGuiScreen(this);
-		Log.info("Open Book!");
 	}
 
 	public IForesterBook getBook() {
@@ -85,7 +82,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-		TextureManager manager = this.minecraft.textureManager;
+		TextureManager manager = getGameInstance().textureManager;
 
 		manager.bind(TEXTURE);
 		blit(transform, guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
@@ -107,13 +104,13 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	@Override
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawTooltips(transform, mouseY, mouseX);
-		PlayerInventory playerInv = minecraft.player.inventory;
+		PlayerInventory playerInv = getPlayer().inventory;
 
 		if (playerInv.getCarried().isEmpty()) {
 			List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
-				MainWindow mainWindow = getMC().getWindow();
-				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getGuiScaledWidth(), mainWindow.getGuiScaledHeight(), -1, getMC().font);
+				MainWindow mainWindow = getGameInstance().getWindow();
+				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getGuiScaledWidth(), mainWindow.getGuiScaledHeight(), -1, getGameInstance().font);
 			}
 		}
 	}

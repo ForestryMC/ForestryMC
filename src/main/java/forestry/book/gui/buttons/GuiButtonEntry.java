@@ -5,7 +5,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -35,14 +34,12 @@ public class GuiButtonEntry extends Button {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
 			ITextComponent text = getMessage();
+			TextFormatting color = TextFormatting.DARK_GRAY;
 			if (isHovered) {
-				((IFormattableTextComponent) text).withStyle(TextFormatting.GOLD);
-			} else {
-				((IFormattableTextComponent) text).withStyle(TextFormatting.DARK_GRAY);
+				color = TextFormatting.GOLD;
 			}
-
 			GuiUtil.enableUnicode();
-			fontRenderer.draw(transform, text, this.x + 9, this.y, 0);
+			fontRenderer.draw(transform, text.copy().withStyle(color), this.x + 9, this.y, -1);
 			GuiUtil.resetUnicode();
 
 			ItemStack stack = entry.getStack();
