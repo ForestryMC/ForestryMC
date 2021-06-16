@@ -26,7 +26,7 @@ public class VillagerJigsaw {
 	}
 
 	private static void addVillagerHouse(String type, String biome, int weight) {
-		addToJigsawPattern(new ResourceLocation("village/" + biome + "/houses"), JigsawPiece.single("forestry" + ":village/" + type + "_house_" + biome + "_1").apply(JigsawPattern.PlacementBehaviour.RIGID), weight);
+		addToJigsawPattern(new ResourceLocation("village/" + biome + "/houses"), JigsawPiece.legacy("forestry" + ":village/" + type + "_house_" + biome + "_1").apply(JigsawPattern.PlacementBehaviour.RIGID), weight);
 	}
 
 	/**
@@ -48,6 +48,6 @@ public class VillagerJigsaw {
 				jigsawPieces.add(newPiece);
 			}
 		}
-
+		oldPool.rawTemplates.forEach(jigsawPieceIntegerPair -> System.out.println(jigsawPieceIntegerPair.getSecond()));
 	}
 }

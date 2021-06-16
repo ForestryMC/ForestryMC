@@ -216,9 +216,10 @@ public class Forestry {
 	}
 
 	private void setup(FMLCommonSetupEvent event) {
-		packetHandler = new PacketHandlerServer();
-
+		// Forestry's villager houses
 		event.enqueueWork(VillagerJigsaw::init);
+
+		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
