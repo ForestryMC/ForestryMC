@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -83,6 +84,17 @@ public abstract class GuiElement extends AbstractGui {
 
 	protected GuiElement() {
 		actionConfig = buildActions(ActionConfig.selfBuilder()).create();
+	}
+
+	protected GuiElement(ElementBuilder<?, ?> builder) {
+		setSize(builder.size.width, builder.size.height);
+		if (builder.pos != null) {
+			setPos(builder.pos.x, builder.pos.y);
+		}
+		setAlign(builder.align);
+		visible = builder.defaultVisibility;
+		tooltipSuppliers.addAll(builder.tooltipSuppliers);
+		actionConfig = buildActions(builder.actionsCallback.apply(ActionConfig.builder(builder.defaultOrigin))).create();
 	}
 
 	public final int getX() {
@@ -345,6 +357,11 @@ public abstract class GuiElement extends AbstractGui {
 
 	public GuiElement addTooltip(Collection<ITextComponent> lines) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
+		return this;
+	}
+
+	public GuiElement addTooltip(Supplier<ITextComponent> line) {
+		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line.get()));
 		return this;
 	}
 

@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
+//TODO: Convert to drawables ?
 public enum StandardButtonTextureSets implements IButtonTextureSet {
 	LARGE_BUTTON(0, 0, 20, 200),
 	SMALL_BUTTON(0, 80, 15, 200),

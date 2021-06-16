@@ -50,6 +50,7 @@ import forestry.core.config.Constants;
 import forestry.core.data.ForestryTags;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreContainers;
+import forestry.core.features.CoreFeatures;
 import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.GuiAlyzer;
@@ -140,6 +141,7 @@ public class ModuleCore extends BlankForestryModule {
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
+		CoreFeatures.registerOres();
 	}
 
 	@Override

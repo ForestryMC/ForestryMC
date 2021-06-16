@@ -17,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.book.data.TextData;
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.GuiElement;
 
 //TODO Move to component system
@@ -31,54 +32,6 @@ public class TextDataElement extends GuiElement {
 		super(xPos, yPos, width, height);
 	}
 
-	/*@Override
-	public int getHeight() {
-		if (height >= 0) {
-			return height;
-		}
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
-		boolean unicode = fontRenderer.isBidirectional();
-		//fontRenderer.setBidiFlag(true);
-		boolean lastEmpty = false;
-		for (TextData data : textElements) {
-			if (data.text.equals("\n")) {
-				if (lastEmpty) {
-					height += fontRenderer.lineHeight;
-				}
-				lastEmpty = true;
-				continue;
-			}
-			lastEmpty = false;
-
-			if (data.paragraph) {
-				height += fontRenderer.lineHeight * 1.6D;
-			}
-
-			String modifiers = "";
-
-			modifiers += TextFormatting.getByName(data.color);
-
-			if (data.bold) {
-				modifiers += TextFormatting.BOLD;
-			}
-			if (data.italic) {
-				modifiers += TextFormatting.ITALIC;
-			}
-			if (data.underlined) {
-				modifiers += TextFormatting.UNDERLINE;
-			}
-			if (data.strikethrough) {
-				modifiers += TextFormatting.STRIKETHROUGH;
-			}
-			if (data.obfuscated) {
-				modifiers += TextFormatting.OBFUSCATED;
-			}
-			height += fontRenderer.wordWrapHeight(modifiers + data.text, getWidth());
-		}
-		//fontRenderer.setBidiFlag(unicode);
-		return height;
-	}*/
-
 	@Override
 	public Dimension getLayoutSize() {
 		if (layoutSize == null) {
@@ -86,8 +39,7 @@ public class TextDataElement extends GuiElement {
 			if (size.height < 0) {
 				int height = 0;
 				FontRenderer fontRenderer = Minecraft.getInstance().font;
-				boolean unicode = fontRenderer.isBidirectional();
-				//fontRenderer.setBidiFlag(true);
+				GuiUtil.enableUnicode();
 				boolean lastEmpty = false;
 				for (TextData data : textElements) {
 					if (data.text.equals("\n")) {
@@ -125,7 +77,7 @@ public class TextDataElement extends GuiElement {
 					height += fontRenderer.wordWrapHeight(modifiers + data.text, getWidth());
 				}
 				size.height = height;
-				//fontRenderer.setBidiFlag(unicode);
+				GuiUtil.resetUnicode();
 			}
 			layoutSize = size;
 		}
@@ -135,8 +87,7 @@ public class TextDataElement extends GuiElement {
 	@Override
 	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		FontRenderer fontRenderer = Minecraft.getInstance().font;
-		boolean unicode = fontRenderer.isBidirectional();
-		//fontRenderer.setBidiFlag(true);
+		GuiUtil.enableUnicode();
 		int x = 0;
 		int y = 0;
 		for (TextData data : textElements) {
@@ -156,8 +107,7 @@ public class TextDataElement extends GuiElement {
 			for (int i = 0; i < split.size(); i++) {
 				IReorderingProcessor component = split.get(i);
 				int textLength;
-				//TODO correct?
-				if (data.dropshadow) {
+				if (data.dropShadow) {
 					textLength = fontRenderer.drawShadow(transform, component, x, y, 0);
 				} else {
 					textLength = fontRenderer.draw(transform, component, x, y, 0);
@@ -169,7 +119,7 @@ public class TextDataElement extends GuiElement {
 				}
 			}
 		}
-		//fontRenderer.setBidiFlag(unicode);
+		GuiUtil.resetUnicode();
 	}
 
 	private String getFormattedString(TextData data) {

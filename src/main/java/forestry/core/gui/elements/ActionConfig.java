@@ -12,11 +12,15 @@ public class ActionConfig {
 	}
 
 	public static Builder selfBuilder() {
-		return new Builder(ActionOrigin.SELF);
+		return builder(ActionOrigin.SELF);
 	}
 
 	public static Builder allBuilder() {
-		return new Builder(ActionOrigin.ALL);
+		return builder(ActionOrigin.ALL);
+	}
+
+	public static Builder builder(ActionOrigin origin) {
+		return new Builder(origin);
 	}
 
 	private final EnumMap<ActionType, ActionOrigin> actionOrigins;

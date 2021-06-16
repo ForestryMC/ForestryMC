@@ -41,10 +41,9 @@ public class GuiButtonEntry extends Button {
 				((IFormattableTextComponent) text).withStyle(TextFormatting.DARK_GRAY);
 			}
 
-			boolean unicode = fontRenderer.isBidirectional();
-			//fontRenderer.setBidiFlag(true);
+			GuiUtil.enableUnicode();
 			fontRenderer.draw(transform, text, this.x + 9, this.y, 0);
-			//fontRenderer.setBidiFlag(unicode);
+			GuiUtil.resetUnicode();
 
 			ItemStack stack = entry.getStack();
 			if (!stack.isEmpty()) {

@@ -25,8 +25,11 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.core.config.Constants;
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.GuiWindow;
 import forestry.core.gui.IGuiSizable;
+
+import genetics.Log;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
@@ -49,6 +52,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 		super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));    //TODO localise
 		this.book = book;
 		setGuiScreen(this);
+		Log.info("Open Book!");
 	}
 
 	public IForesterBook getBook() {
@@ -88,16 +92,14 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
 		super.render(transform, mouseX, mouseY, partialTicks);
 
-		boolean unicode = minecraft.font.isBidirectional();
-		//minecraft.fontRenderer.setBidiFlag(true);
+		GuiUtil.enableUnicode();
 		ITextComponent title = getTitle();
 		if (title instanceof IFormattableTextComponent) {
 			((IFormattableTextComponent) title).withStyle(TextFormatting.UNDERLINE);
 		}
 		drawCenteredString(transform, font, title, guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		drawText(transform);
-
-		//minecraft.fontRenderer.setBidiFlag(unicode);
+		GuiUtil.resetUnicode();
 
 		drawTooltips(transform, mouseY, mouseX);
 	}

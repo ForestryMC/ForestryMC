@@ -20,6 +20,8 @@ import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
 import forestry.core.utils.Translator;
 
+import genetics.Log;
+
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {
 	public static final Drawable LOGO = new Drawable(new ResourceLocation(Constants.MOD_ID, "textures/gui/almanac/logo.png"), 0, 0, 256, 58, 256, 58);
@@ -31,12 +33,14 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 	@Override
 	public void init() {
 		super.init();
+		Log.info("Init Book!");
 		int x = 0;
 		int y = 0;
 		for (IBookCategory category : book.getCategories()) {
 			if (category.getEntries().isEmpty()) {
 				continue;
 			}
+			Log.info("Init category!");
 			addButton(new GuiButtonBookCategory(guiLeft + LEFT_PAGE_START_X + x * 36, guiTop + 25 + y * 36, category, this::actionPerformed));
 			x++;
 			if (x == 3) {

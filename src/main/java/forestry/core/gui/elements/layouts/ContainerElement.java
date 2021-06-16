@@ -168,7 +168,7 @@ public class ContainerElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawElement(MatrixStack transform, int mouseX, int mouseY) {
 		doLayout();
 		int mX = mouseX - getX();
 		int mY = mouseY - getY();

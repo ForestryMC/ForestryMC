@@ -11,6 +11,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
+import genetics.Genetics;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.individual.IChromosomeAllele;
@@ -21,8 +22,6 @@ import genetics.api.organism.IOrganism;
 import genetics.api.organism.IOrganismType;
 import genetics.api.root.IIndividualRoot;
 import genetics.api.root.IRootDefinition;
-
-import genetics.Genetics;
 import genetics.individual.GeneticSaveHandler;
 
 public class Organism<I extends IIndividual> implements IOrganism<I> {

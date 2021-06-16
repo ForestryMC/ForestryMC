@@ -44,6 +44,7 @@ public class Drawable {
 		draw(transform, yOffset, uWidth, vHeight, xOffset);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void draw(MatrixStack transform, int yOffset, int width, int height, int xOffset) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(textureLocation);
@@ -54,6 +55,5 @@ public class Drawable {
 
 		AbstractGui.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
 		RenderSystem.disableAlphaTest();
-		//AbstractGui.blit(xOffset, yOffset, u, v, uWidth, vHeight, width, height, textureWidth, textureHeight);
 	}
 }

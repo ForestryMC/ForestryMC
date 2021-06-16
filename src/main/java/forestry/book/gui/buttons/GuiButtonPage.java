@@ -1,7 +1,5 @@
 package forestry.book.gui.buttons;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -12,12 +10,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.tooltips.IToolTipProvider;
-import forestry.api.core.tooltips.ToolTip;
 import forestry.book.gui.GuiForesterBook;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiButtonPage extends Button implements IToolTipProvider {
+public class GuiButtonPage extends Button {
 	public boolean left;
 
 	public GuiButtonPage(int x, int y, boolean left, IPressable action) {
@@ -39,17 +35,6 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 			GlStateManager._enableBlend();
 			GlStateManager._disableAlphaTest();
 		}
-	}
-
-	@Nullable
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return null;
-	}
-
-	@Override
-	public boolean isToolTipVisible() {
-		return false;
 	}
 
 	@Override

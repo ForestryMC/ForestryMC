@@ -82,12 +82,22 @@ public class GuiUtil {
 			if (tips == null) {
 				continue;
 			}
-			boolean mouseOver = provider.isMouseOver(mX, mY);
+			boolean mouseOver = provider.isHovering(mX, mY);
 			tips.onTick(mouseOver);
 			if (mouseOver && tips.isReady()) {
 				tips.refresh();
 				drawToolTips(transform, gui, provider, tips, mouseX, mouseY);
 			}
 		}
+	}
+
+	public static void enableUnicode() {
+		Minecraft instance = Minecraft.getInstance();
+		instance.selectMainFont(true);
+	}
+
+	public static void resetUnicode() {
+		Minecraft instance = Minecraft.getInstance();
+		instance.selectMainFont(instance.isEnforceUnicode());
 	}
 }

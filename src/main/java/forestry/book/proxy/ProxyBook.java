@@ -17,4 +17,8 @@ public class ProxyBook {
 
 	public void setupAPI() {
 	}
+
+	public void bookOpenGui() {
+
+	}
 }

@@ -182,7 +182,12 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	private class CircleButton extends ButtonElement {
 
 		private CircleButton(int xPos, int yPos) {
-			super(xPos, yPos, 18, 18, CIRCLE_DISABLED_BUTTON, CIRCLE_ENABLED_BUTTON, button -> ((CircleButton) button).onButtonPressed());
+			super(new ButtonElement.Builder()
+					.size(18)
+					.textures(CIRCLE_DISABLED_BUTTON, CIRCLE_ENABLED_BUTTON)
+					.action(button -> ((CircleButton) button).onButtonPressed())
+					.pos(xPos, yPos)
+			);
 			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
 		}
 
@@ -192,7 +197,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		}
 
 		@Override
-		protected int getHoverState(boolean mouseOver) {
+		protected int getTextureIndex(boolean mouseOver) {
 			return transformer.isCircular() ? 1 : 0;
 		}
 	}
