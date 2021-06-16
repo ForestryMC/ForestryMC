@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import forestry.core.worldgen.VillagerJigsaw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -216,6 +217,8 @@ public class Forestry {
 
 	private void setup(FMLCommonSetupEvent event) {
 		packetHandler = new PacketHandlerServer();
+
+		event.enqueueWork(VillagerJigsaw::init);
 
 		// Register event handler
 		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
