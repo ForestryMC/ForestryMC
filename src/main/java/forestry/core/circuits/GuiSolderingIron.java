@@ -30,6 +30,7 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.render.ColourProperties;
+import forestry.core.utils.ClientUtils;
 import forestry.core.utils.Translator;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
@@ -55,7 +56,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		for (int i = 0; i < 4; i++) {
 			String description;
 			ItemStack tube = itemInventory.getItem(i + 2);
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(null, layout, tube);
+			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(ClientUtils.getRecipeManager(), layout, tube);
 			if (recipe == null) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {

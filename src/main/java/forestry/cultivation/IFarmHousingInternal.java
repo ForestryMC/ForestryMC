@@ -14,6 +14,7 @@ import forestry.farming.multiblock.IFarmInventoryInternal;
 
 public interface IFarmHousingInternal extends IFarmHousing, ILiquidTankTile {
 
+	@Override
 	ITankManager getTankManager();
 
 	@Override

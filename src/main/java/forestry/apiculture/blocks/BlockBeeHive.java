@@ -40,8 +40,8 @@ import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.apiculture.hives.IHiveTile;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
+import forestry.apiculture.items.ItemScoop;
 import forestry.apiculture.tiles.TileHive;
-import forestry.core.items.ItemScoop;
 import forestry.core.tiles.TileUtil;
 
 public class BlockBeeHive extends ContainerBlock {

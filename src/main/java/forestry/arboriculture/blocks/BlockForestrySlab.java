@@ -20,8 +20,6 @@ public class BlockForestrySlab extends SlabBlock implements IWoodTyped {
 		super(Block.Properties.copy(plank));
 		this.fireproof = plank.isFireproof();
 		this.woodType = plank.getWoodType();
-
-		//		useNeighborBrightness = true;	//TODO where has this moved.
 	}
 
 	@Override

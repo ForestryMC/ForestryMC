@@ -8,7 +8,7 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.apiculture.items;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
@@ -18,6 +18,7 @@ import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemForestry;
 
 public class ItemScoop extends ItemForestry implements IToolScoop {
 	public static ToolType SCOOP = ToolType.get("scoop");
