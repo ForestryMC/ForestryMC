@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -34,17 +33,17 @@ public class FeatureSilverLime extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		for (BlockPos branchEnd : branchEnds) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+		for (BlockPos branchEnd : contour.getBranchEnds()) {
+			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, girth, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 		float radius = 1;
 		while (leafSpawn > 1) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, radius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, radius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 			radius += 0.25;
 		}
 	}

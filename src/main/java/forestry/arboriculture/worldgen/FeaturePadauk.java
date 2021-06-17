@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -72,12 +71,12 @@ public class FeaturePadauk extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 3f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 3f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 
 		int count = 0;
 		int max = 3;
@@ -86,7 +85,7 @@ public class FeaturePadauk extends FeatureTree {
 
 		while (leafSpawn > 3 && count < canopyHeight) {
 			int yCenter = leafSpawn--;
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, yCenter, 0), girth, 4.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, yCenter, 0), girth, 4.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 			count++;
 		}
 	}

@@ -15,7 +15,10 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -27,15 +30,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import genetics.api.individual.IGenome;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
+import forestry.core.data.ForestryTags;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.utils.BlockUtil;
+
+import genetics.api.individual.IGenome;
 
 public class FruitProviderPod extends FruitProviderNone {
 
@@ -115,5 +119,17 @@ public class FruitProviderPod extends FruitProviderNone {
 	@Override
 	public String getModelName() {
 		return type.getModelName();
+	}
+
+	@Override
+	public ITag<Block> getLogTag() {
+		switch (type) {
+			case DATES:
+				return ForestryTags.Blocks.PALM_LOGS;
+			case PAPAYA:
+				return ForestryTags.Blocks.PAPAYA_LOGS;
+			default:
+				return BlockTags.JUNGLE_LOGS;
+		}
 	}
 }

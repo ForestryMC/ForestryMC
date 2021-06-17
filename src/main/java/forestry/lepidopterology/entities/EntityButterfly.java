@@ -236,6 +236,7 @@ public class EntityButterfly extends CreatureEntity implements IEntityButterfly 
 		return size;
 	}
 
+	@Override
 	public float getSpeed() {
 		return contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED);
 	}

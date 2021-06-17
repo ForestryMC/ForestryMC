@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -44,16 +43,16 @@ public class FeatureKapok extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int leafSpawn = height + 1;
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, 1.9f + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 
-		for (BlockPos branchEnd : branchEnds) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd.above(), 2.0f + girth, 2, FeatureHelper.EnumReplaceMode.AIR);
+		for (BlockPos branchEnd : contour.getBranchEnds()) {
+			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd.above(), 2.0f + girth, 2, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 
 		// Add some smaller twigs below for flavour
@@ -64,7 +63,7 @@ public class FeatureKapok extends FeatureTree {
 			}
 			int x_off = -1 + rand.nextInt(3);
 			int y_off = -1 + rand.nextInt(3);
-			FeatureHelper.generateSphere(world, startPos.offset(x_off, h, y_off), 1 + rand.nextInt(1), leaf, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateSphere(world, startPos.offset(x_off, h, y_off), 1 + rand.nextInt(1), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 	}
 }

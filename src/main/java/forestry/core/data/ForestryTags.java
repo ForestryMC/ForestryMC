@@ -21,6 +21,8 @@ public class ForestryTags {
 		public static final ITag.INamedTag<Block> ORES_COPPER = forgeTag("ores/copper");
 		public static final ITag.INamedTag<Block> ORES_TIN = forgeTag("ores/tin");
 		public static final ITag.INamedTag<Block> ORES_APATITE = forgeTag("ores/apatite");
+		public static final ITag.INamedTag<Block> PALM_LOGS = tag("palm_logs");
+		public static final ITag.INamedTag<Block> PAPAYA_LOGS = tag("papaya_logs");
 
 		private static ITag.INamedTag<Block> tag(String name) {
 			return BlockTags.bind(Constants.MOD_ID + ":" + name);
@@ -35,6 +37,7 @@ public class ForestryTags {
 		}
 
 		private Blocks() {
+
 		}
 	}
 

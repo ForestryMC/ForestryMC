@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -39,13 +38,13 @@ public class FeatureMahoe extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		for (BlockPos branchEnd : branchEnds) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, 2 + girth, 2, FeatureHelper.EnumReplaceMode.AIR);
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+		for (BlockPos branchEnd : contour.getBranchEnds()) {
+			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, 2 + girth, 2, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, 3 + rand.nextInt(girth), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 	}
 }

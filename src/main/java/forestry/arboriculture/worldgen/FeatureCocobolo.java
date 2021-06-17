@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,19 +31,19 @@ public class FeatureCocobolo extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int leafSpawn = height;
 
-		for (BlockPos treeTop : branchEnds) {
-			FeatureHelper.addBlock(world, treeTop.above(), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		for (BlockPos treeTop : contour.getBranchEnds()) {
+			FeatureHelper.addBlock(world, treeTop.above(), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 		leafSpawn--;
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 1 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 
 		if (height > 10) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 2 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, 2 + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 		}
-		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 
 		leafSpawn--;
 
@@ -55,7 +54,7 @@ public class FeatureCocobolo extends FeatureTree {
 			}
 
 			float radius = (leafSpawn % 2 == 0) ? 2 + girth : girth;
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(offset, leafSpawn, offset), girth, radius, 1, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(offset, leafSpawn, offset), girth, radius, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
 
 			leafSpawn--;
 		}

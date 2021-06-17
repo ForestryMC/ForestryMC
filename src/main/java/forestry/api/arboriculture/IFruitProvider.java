@@ -8,7 +8,10 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -156,4 +159,11 @@ public interface IFruitProvider extends ISetupListener {
 	 */
 	@OnlyIn(Dist.CLIENT)
 	void registerSprites(TextureStitchEvent.Pre event);
+
+	/**
+	 * Tag for the log that the is placed on
+	 */
+	default ITag<Block> getLogTag() {
+		return BlockTags.JUNGLE_LOGS;
+	}
 }

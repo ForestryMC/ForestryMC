@@ -135,12 +135,15 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
 		manager.writeData(data);
 	}
 
 	@Override
 	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
 		manager.readData(data);
+
 	}
 
 	@Override

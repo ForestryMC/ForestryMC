@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.util.math.BlockPos;
@@ -26,12 +25,12 @@ public class FeaturePoplar extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int leafSpawn = height + 1;
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		while (leafSpawn > girth - 1) {
-			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafSpawn--, 0), girth, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 		}
 	}
 }
