@@ -10,15 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,16 +31,6 @@ import forestry.modules.IClientModuleHandler;
 @OnlyIn(Dist.CLIENT)
 public class ProxyApicultureClient extends ProxyApiculture implements IClientModuleHandler {
 
-	@OnlyIn(Dist.CLIENT)
-	@Nullable
-	private static TextureAtlasSprite beeSprite;
-
-	@OnlyIn(Dist.CLIENT)
-	public static TextureAtlasSprite getBeeSprite() {
-		Preconditions.checkNotNull(beeSprite, "Bee sprite has not been registered");
-		return beeSprite;
-	}
-
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
@@ -58,25 +43,13 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 	}
 
 	@Override
-	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (!event.getMap().location().equals(AtlasTexture.LOCATION_PARTICLES)) {
-			return;
-		}
-		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-			event.addSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
-		}
-		event.addSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
-	}
-
-	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
 		AtlasTexture map = event.getMap();
 		if (!map.location().equals(AtlasTexture.LOCATION_PARTICLES)) {
 			return;
 		}
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {
-			ParticleSnow.sprites[i] = map.getSprite(new ResourceLocation("forestry:entity/particles/snow." + (i + 1)));
+			ParticleSnow.sprites[i] = map.getSprite(new ResourceLocation("forestry:particle/snow." + (i + 1)));
 		}
-		beeSprite = map.getSprite(new ResourceLocation("forestry:entity/particles/swarm_bee"));
 	}
 }
