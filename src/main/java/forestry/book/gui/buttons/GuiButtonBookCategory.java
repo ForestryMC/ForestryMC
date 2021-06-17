@@ -35,10 +35,9 @@ public class GuiButtonBookCategory extends Button implements IToolTipProvider {
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			FontRenderer fontRenderer = Minecraft.getInstance().font;
 			RenderSystem.pushMatrix();
-			RenderSystem.translatef(x, y, getBlitOffset());    //TODO correct?
+			RenderSystem.translatef(x, y, getBlitOffset());
 			RenderSystem.scalef(2F, 2F, 2F);
 			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
 			RenderSystem.enableRescaleNormal();
 			GuiUtil.drawItemStack(fontRenderer, stack, 0, 0);
 			RenderHelper.turnOff();

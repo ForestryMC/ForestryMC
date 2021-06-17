@@ -45,8 +45,7 @@ public class GuiButtonEntry extends Button {
 			ItemStack stack = entry.getStack();
 			if (!stack.isEmpty()) {
 				RenderSystem.pushMatrix();
-				RenderSystem.translatef(x, y, getBlitOffset());    //TODO correct?
-				//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
+				RenderSystem.translatef(x, y, getBlitOffset());
 				RenderSystem.enableRescaleNormal();
 				RenderSystem.scalef(0.5F, 0.5F, 0.5F);
 				GuiUtil.drawItemStack(fontRenderer, stack, 0, 0);

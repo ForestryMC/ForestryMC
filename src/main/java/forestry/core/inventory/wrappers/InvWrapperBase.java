@@ -60,17 +60,6 @@ public abstract class InvWrapperBase implements IInventory {
 		inv.setItem(slot, itemstack);
 	}
 
-	//TODO inventory name
-	//	@Override
-	//	public String getName() {
-	//		return inv.getName();
-	//	}
-	//
-	//	@Override
-	//	public ITextComponent getDisplayName() {
-	//		return inv.getDisplayName();
-	//	}
-
 	@Override
 	public int getMaxStackSize() {
 		return inv.getMaxStackSize();
@@ -96,32 +85,10 @@ public abstract class InvWrapperBase implements IInventory {
 		inv.stopOpen(player);
 	}
 
-	//TODO inventory name
-	//	@Override
-	//	public boolean hasCustomName() {
-	//		return inv.hasCustomName();
-	//	}
-
 	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
 		return !checkItems || inv.canPlaceItem(slot, stack);
 	}
-
-	//TODO inventory field
-	//	@Override
-	//	public int getField(int id) {
-	//		return inv.getField(id);
-	//	}
-	//
-	//	@Override
-	//	public void setField(int id, int value) {
-	//		inv.setField(id, value);
-	//	}
-	//
-	//	@Override
-	//	public int getFieldCount() {
-	//		return inv.getFieldCount();
-	//	}
 
 	@Override
 	public void clearContent() {

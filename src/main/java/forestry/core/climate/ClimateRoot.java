@@ -55,6 +55,7 @@ public class ClimateRoot implements IClimateRoot {
 		return climateHolder.getState(pos);
 	}
 
+	@Override
 	public IClimateState getBiomeState(World worldObj, BlockPos coordinates) {
 		Biome biome = worldObj.getBiome(coordinates);
 		return ClimateStateHelper.of(biome.getTemperature(coordinates), biome.getDownfall());

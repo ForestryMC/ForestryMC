@@ -2,6 +2,7 @@ package forestry.arboriculture.charcoal;
 
 import com.google.common.base.Preconditions;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +34,17 @@ public class CharcoalManager implements ICharcoalManager {
 	@Override
 	public void registerWall(ICharcoalPileWall wall) {
 		walls.add(wall);
+	}
+
+	@Nullable
+	@Override
+	public ICharcoalPileWall getWall(BlockState state) {
+		for (ICharcoalPileWall wall : walls) {
+			if (wall.matches(state)) {
+				return wall;
+			}
+		}
+		return null;
 	}
 
 	@Override

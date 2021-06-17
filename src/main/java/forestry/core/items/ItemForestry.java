@@ -30,7 +30,6 @@ public class ItemForestry extends Item {
 
 	private final int burnTime;
 
-	//TODO may be worth removing this
 	public ItemForestry() {
 		this(ItemGroupForestry.tabForestry);
 	}
@@ -44,7 +43,6 @@ public class ItemForestry extends Item {
 	}
 
 	public ItemForestry(Item.Properties properties) {
-		//TODO - do the below at registration
 		super(properties);
 		if (properties instanceof ItemProperties) {
 			this.burnTime = ((ItemProperties) properties).burnTime;

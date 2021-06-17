@@ -18,6 +18,7 @@ import net.minecraft.client.settings.GraphicsFanciness;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -68,6 +69,11 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
+	public void registerModels(ModelBakeEvent event) {
+		ClientManager.getInstance().onBakeModels(event);
+	}
+
+	@Override
 	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
 		machineProperties.setRenderer(new RenderMachine(baseTexture));
 	}
@@ -110,4 +116,6 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 		}
 		properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
 	}
+
+
 }

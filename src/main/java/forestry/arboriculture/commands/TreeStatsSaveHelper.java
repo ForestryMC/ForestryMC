@@ -16,13 +16,13 @@ import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
-import genetics.utils.AlleleUtils;
-
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.commands.IStatsSaveHelper;
+
+import genetics.utils.AlleleUtils;
 
 public class TreeStatsSaveHelper implements IStatsSaveHelper {
 
@@ -47,7 +47,6 @@ public class TreeStatsSaveHelper implements IStatsSaveHelper {
 
 	@Override
 	public IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile) {
-		//TODO world cast
 		return TreeManager.treeRoot.getBreedingTracker(world, gameProfile);
 	}
 

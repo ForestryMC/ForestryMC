@@ -34,7 +34,6 @@ public class FarmLedger extends Ledger {
 		super(ledgerManager, "farm");
 		this.delegate = delegate;
 
-		//TODO textcomponent
 		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
 		this.maxHeight = titleHeight + 110;
 	}

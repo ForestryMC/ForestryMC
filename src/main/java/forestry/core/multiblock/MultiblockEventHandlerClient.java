@@ -22,13 +22,17 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import net.minecraftforge.fml.common.Mod;
+
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockController;
+import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class MultiblockEventHandlerClient {
 
 	//TODO - register event handler

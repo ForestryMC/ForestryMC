@@ -20,31 +20,13 @@ import net.minecraft.item.Item;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 
-import forestry.core.ClimateHandlerClient;
-import forestry.core.TickHandlerCoreClient;
 import forestry.core.models.ClientManager;
-import forestry.core.multiblock.MultiblockClientTickHandler;
-import forestry.core.multiblock.MultiblockEventHandlerClient;
 import forestry.core.render.TextureManagerForestry;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
 public class ProxyClient extends ProxyCommon {
-
-	@Override
-	public void registerTickHandlers() {
-		super.registerTickHandlers();
-		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
-		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
-	}
-
-	@Override
-	public void registerEventHandlers() {
-		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandlerClient());
-		MinecraftForge.EVENT_BUS.register(new ClimateHandlerClient());
-	}
 
 	@Override
 	public void registerBlock(Block block) {

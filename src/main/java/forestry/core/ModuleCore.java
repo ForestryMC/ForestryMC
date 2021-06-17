@@ -26,12 +26,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import forestry.api.circuits.ChipsetManager;
@@ -57,7 +56,6 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
@@ -72,6 +70,7 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
 	public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
@@ -123,9 +122,6 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public void preInit() {
 		GameProfileDataSerializer.register();
-
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
 
 		rootCommand.then(CommandModules.register());
 	}
@@ -258,12 +254,6 @@ public class ModuleCore extends BlankForestryModule {
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// research note items are not useful without actually having completed research
 		hiddenItems.add(CoreItems.RESEARCH_NOTE.stack());
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onBakeModels(ModelBakeEvent event) {
-		ClientManager.getInstance().onBakeModels(event);
 	}
 
 	@Override

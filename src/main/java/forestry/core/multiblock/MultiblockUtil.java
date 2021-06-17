@@ -48,8 +48,7 @@ public class MultiblockUtil {
 		List<IMultiblockComponent> neighborParts = new ArrayList<>();
 		AbstractChunkProvider chunkProvider = world.getChunkSource();
 		for (BlockPos neighbor : neighbors) {
-			//TODO loaded chunk bool
-			if (chunkProvider.getChunk(neighbor.getX() >> 4, neighbor.getZ() >> 4, true) == null) {
+			if (!chunkProvider.hasChunk(neighbor.getX() >> 4, neighbor.getZ() >> 4)) {
 				// Chunk not loaded, skip it.
 				continue;
 			}

@@ -27,15 +27,19 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
 
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.minecraftforge.fml.common.Mod;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.WorldUtils;
 import forestry.modules.ModuleManager;
 
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class TickHandlerCoreServer {
 
 	private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();

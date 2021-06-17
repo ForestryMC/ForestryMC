@@ -188,10 +188,9 @@ public class BlockWoodPile extends Block {
 		int i = 0;
 		while (i < Config.charcoalWallCheckRange && world.hasChunkAt(testPos) && !world.isEmptyBlock(testPos)) {
 			BlockState state = world.getBlockState(testPos);
-			for (ICharcoalPileWall wall : walls) {
-				if (wall.matches(state)) {
-					return wall.getCharcoalAmount();
-				}
+			ICharcoalPileWall wall = charcoalManager.getWall(state);
+			if (wall != null) {
+				return wall.getCharcoalAmount();
 			}
 			testPos.move(facing);
 			i++;

@@ -151,7 +151,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 			}
 
 			if (!worldIn.isClientSide) {
-				ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO - hopefully safe because it's the server?
+				ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;
 				tile.openGui(sPlayer, pos);
 			}
 		}
@@ -164,7 +164,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
-	//TODO think this is the correct method
 	@Override
 	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.playerWillDestroy(world, pos, state, player);

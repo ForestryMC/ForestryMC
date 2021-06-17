@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
@@ -34,6 +35,9 @@ public interface ICharcoalManager {
 	 * Registers your implementation of the {@link ICharcoalPileWall} interface.
 	 */
 	void registerWall(ICharcoalPileWall wall);
+
+	@Nullable
+	ICharcoalPileWall getWall(BlockState state);
 
 	/**
 	 * Remove a wall associated with the given block. Not guaranteed to work depending on how {@link ICharcoalPileWall} is implemented.

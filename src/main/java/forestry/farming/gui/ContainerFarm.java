@@ -29,7 +29,7 @@ public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
 	public static ContainerFarm fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
 		TileFarm tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFarm.class);
-		return new ContainerFarm(windowId, inv, tile);    //TODO nullability.
+		return new ContainerFarm(windowId, inv, tile);
 	}
 
 	public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {

@@ -43,9 +43,8 @@ public class GuiButtonSubEntry extends Button {
 
 		blit(transform, x, y, 48 + (active ? 24 : 0), 201, 24, 21);
 
-		RenderSystem.translatef(x + 8.0F, y + 4.0F, getBlitOffset());    //TODO
+		RenderSystem.translatef(x + 8.0F, y + 4.0F, getBlitOffset());
 		RenderSystem.scalef(0.85F, 0.85F, 0.85F);
-		//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
 		RenderSystem.enableRescaleNormal();
 
 		GuiUtil.drawItemStack(Minecraft.getInstance().font, subEntry.getStack(), 0, 0);
