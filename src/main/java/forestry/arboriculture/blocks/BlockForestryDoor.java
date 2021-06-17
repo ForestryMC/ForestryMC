@@ -31,7 +31,8 @@ public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 				.strength(woodType.getHardness(), woodType.getHardness() * 1.5F)
 				.sound(SoundType.WOOD)
 				.harvestTool(ToolType.AXE)
-				.harvestLevel(0));
+				.harvestLevel(0)
+				.noOcclusion());
 		this.woodType = woodType;
 	}
 
