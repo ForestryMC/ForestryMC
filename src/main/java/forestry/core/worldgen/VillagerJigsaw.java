@@ -18,7 +18,7 @@ public class VillagerJigsaw {
 		DesertVillagePools.bootstrap();
 		TaigaVillagePools.bootstrap();
 
-		addVillagerHouse("apiarist", "plains", 2);
+		addVillagerHouse("apiarist", "plains", 6);
 		addVillagerHouse("apiarist", "snowy", 4);
 		addVillagerHouse("apiarist", "savanna", 6);
 		addVillagerHouse("apiarist", "desert", 5);
@@ -48,6 +48,5 @@ public class VillagerJigsaw {
 				jigsawPieces.add(newPiece);
 			}
 		}
-		oldPool.rawTemplates.forEach(jigsawPieceIntegerPair -> System.out.println(jigsawPieceIntegerPair.getSecond()));
 	}
 }
