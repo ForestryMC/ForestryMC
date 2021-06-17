@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import forestry.core.worldgen.VillagerJigsaw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -215,6 +216,9 @@ public class Forestry {
 	}
 
 	private void setup(FMLCommonSetupEvent event) {
+		// Forestry's villager houses
+		event.enqueueWork(VillagerJigsaw::init);
+
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
