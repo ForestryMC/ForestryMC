@@ -69,7 +69,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
-	public void registerModels(ModelBakeEvent event) {
+	public void bakeModels(ModelBakeEvent event) {
 		ClientManager.getInstance().onBakeModels(event);
 	}
 

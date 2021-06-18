@@ -28,9 +28,8 @@ public class ClimateHandlerClient {
 		ClimateHandlerClient.currentState = currentState;
 	}
 
-	//TODO - register event handler
 	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.CLIENT) {
 			return;
 		}

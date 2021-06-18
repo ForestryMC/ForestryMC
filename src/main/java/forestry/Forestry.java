@@ -15,7 +15,6 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
-import forestry.core.worldgen.VillagerJigsaw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -100,7 +99,6 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.loot.ConditionLootModifier;
 import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ModelBlockCached;
-import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
 import forestry.core.proxy.Proxies;
@@ -115,6 +113,7 @@ import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ForgeUtils;
+import forestry.core.worldgen.VillagerJigsaw;
 import forestry.factory.recipes.CarpenterRecipe;
 import forestry.factory.recipes.CentrifugeRecipe;
 import forestry.factory.recipes.FabricatorRecipe;
@@ -222,10 +221,6 @@ public class Forestry {
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
-		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
-		MinecraftForge.EVENT_BUS.register(Config.class);
-		Proxies.common.registerEventHandlers();
-		Proxies.common.registerTickHandlers();
 		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);

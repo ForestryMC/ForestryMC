@@ -28,19 +28,18 @@ import forestry.core.utils.GeneticsUtil;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class TickHandlerCoreClient {
 
-	private boolean hasNaturalistEye;
+	private static boolean hasNaturalistEye;
 
-	//TODO - register event handlers
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
+	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {
 				PlayerEntity player = minecraft.player;
 				if (player != null) {
 					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
-					if (this.hasNaturalistEye != hasNaturalistEye) {
-						this.hasNaturalistEye = hasNaturalistEye;
+					if (TickHandlerCoreClient.hasNaturalistEye != hasNaturalistEye) {
+						TickHandlerCoreClient.hasNaturalistEye = hasNaturalistEye;
 						//TODO - I think this is the correct field
 						WorldRenderer renderGlobal = minecraft.levelRenderer;
 						if (renderGlobal != null) {

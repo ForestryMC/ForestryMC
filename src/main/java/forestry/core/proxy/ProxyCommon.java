@@ -25,12 +25,6 @@ public class ProxyCommon {
 
 	}
 
-	public void registerTickHandlers() {
-	}
-
-	public void registerEventHandlers() {
-	}
-
 	public File getForestryRoot() {
 		return new File(".");
 	}
