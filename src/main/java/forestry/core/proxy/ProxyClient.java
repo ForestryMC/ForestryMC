@@ -14,8 +14,6 @@ import java.io.File;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,15 +45,6 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public File getForestryRoot() {
 		return Minecraft.getInstance().gameDirectory;
-	}
-
-	@Override
-	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
-		if (PlayerEntity instanceof ClientPlayerEntity) {
-			return Minecraft.getInstance().gameMode.getPickRange();
-		} else {
-			return 4f;
-		}
 	}
 
 }

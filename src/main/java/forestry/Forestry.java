@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -198,7 +197,6 @@ public class Forestry {
 
 		ModuleManager.getModuleHandler().runSetup();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
 		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
 	}
 
@@ -236,11 +234,6 @@ public class Forestry {
 		ModuleManager.getModuleHandler().runInit();
 		callSetupListeners(false);
 		ModuleManager.getModuleHandler().runPostInit();
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void setupClient(FMLClientSetupEvent event) {
-		ModuleManager.getModuleHandler().runClientSetup();
 	}
 
 	//TODO: Move to somewhere else
@@ -320,11 +313,6 @@ public class Forestry {
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void registerObjects(RegistryEvent.Register<?> event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
-		}
-
-		@SubscribeEvent
-		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
-			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
 		}
 
 		@SubscribeEvent

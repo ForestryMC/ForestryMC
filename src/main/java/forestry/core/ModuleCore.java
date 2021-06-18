@@ -94,8 +94,6 @@ public class ModuleCore extends BlankForestryModule {
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 
-		//LootFunctionManager.registerFunction(new OrganismFunction.Serializer());
-
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 
 		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
@@ -209,16 +207,6 @@ public class ModuleCore extends BlankForestryModule {
 		crateRegistry.registerCrate(new ItemStack(Blocks.SPRUCE_SAPLING, 1));
 		crateRegistry.registerCrate(new ItemStack(Blocks.ACACIA_SAPLING, 1));
 		crateRegistry.registerCrate(new ItemStack(Blocks.DARK_OAK_SAPLING, 1));
-	}
-
-	@Override
-	public void registerRecipes() {
-		/* SMELTING RECIPES */
-		// TODO: Re-enable
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1), CoreItems.APATITE.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1), CoreItems.INGOT_COPPER.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1), CoreItems.INGOT_TIN.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
 	}
 
 	@Override

@@ -11,10 +11,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import forestry.api.modules.IForestryModule;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
 public class ClientModuleHandler extends CommonModuleHandler {
@@ -22,17 +20,6 @@ public class ClientModuleHandler extends CommonModuleHandler {
 	public ClientModuleHandler() {
 		super();
 		ForgeUtils.registerSubscriber(this);
-	}
-
-	@Override
-	public void runClientSetup() {
-		stage = Stage.CLIENT_SETUP;
-		for (IForestryModule module : modules) {
-			Log.debug("Init Start: {}", module);
-			module.clientSetup();
-			Log.debug("Init Complete: {}", module);
-		}
-		registry.clientSetup();
 	}
 
 	@Override

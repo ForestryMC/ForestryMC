@@ -15,13 +15,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -126,11 +123,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ArboricultureFilterRuleType.init();
 		}
-	}
-
-	@Override
-	public void addLootPoolNames(Set<String> lootPoolNames) {
-		lootPoolNames.add("forestry_arboriculture_items");
 	}
 
 	@Override
@@ -272,13 +264,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// sapling itemBlock is different from the normal item
 		hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
-	}
-
-	@Override
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
-			//TreeDecorator.decorateTrees(world, rand, chunkX, chunkZ);
-		}
 	}
 
 	//@SubscribeEvent

@@ -21,13 +21,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -90,7 +87,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	private static float secondSerumChance = 0;
 
 	public ModuleLepidopterology() {
-		proxy = DistExecutor.runForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
+		proxy = DistExecutor.safeRunForDist(() -> ProxyLepidopterologyClient::new, () -> ProxyLepidopterology::new);
 		ForgeUtils.registerSubscriber(this);
 
 		MinecraftForge.EVENT_BUS.register(ForgeEvents.class);
@@ -154,27 +151,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 	public void postInit() {
 		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
 		loadConfig(configFile);
-	}
-
-	@Override
-	public void populateChunk(ChunkGenerator chunkGenerator, World world, Random rand, int chunkX, int chunkZ,
-		boolean hasVillageGenerated) {
-		if (generateCocoons) {
-			if (generateCocoonsAmount > 0.0) {
-				//TODO worldgen
-				//				CocoonDecorator.decorateCocoons(chunkGenerator, world, rand, chunkX, chunkZ, hasVillageGenerated);
-			}
-		}
-	}
-
-	@Override
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		if (generateCocoons) {
-			if (generateCocoonsAmount > 0.0) {
-				//TODO worldgen
-				//				CocoonDecorator.decorateCocoons(world, rand, chunkX, chunkZ);
-			}
-		}
 	}
 
 	private static void loadConfig(File configFile) {

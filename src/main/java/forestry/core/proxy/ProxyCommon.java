@@ -13,7 +13,6 @@ package forestry.core.proxy;
 import java.io.File;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 
 public class ProxyCommon {
@@ -27,10 +26,6 @@ public class ProxyCommon {
 
 	public File getForestryRoot() {
 		return new File(".");
-	}
-
-	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
-		return 4f;
 	}
 
 }

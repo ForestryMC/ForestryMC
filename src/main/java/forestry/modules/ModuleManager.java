@@ -246,25 +246,4 @@ public class ModuleManager implements IModuleManager {
 				.filter(Objects::nonNull)
 				.forEach(dispatcher::register);
 	}
-
-
-	public static Set<String> getLootPoolNames() {
-		Set<String> lootPoolNames = new HashSet<>();
-		for (IForestryModule module : loadedModules) {
-			module.addLootPoolNames(lootPoolNames);
-		}
-		return lootPoolNames;
-	}
-
-	public static Set<String> getLootTableFiles() {
-		Set<String> lootTableNames = new HashSet<>();
-		for (IForestryModule module : loadedModules) {
-			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			String lootTableFolder = info.lootTable();
-			if (!lootTableFolder.isEmpty()) {
-				lootTableNames.add(lootTableFolder);
-			}
-		}
-		return lootTableNames;
-	}
 }
