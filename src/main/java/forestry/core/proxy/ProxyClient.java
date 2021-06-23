@@ -69,13 +69,4 @@ public class ProxyClient extends ProxyCommon {
 		return Minecraft.getInstance().gameDirectory;
 	}
 
-	@Override
-	public double getBlockReachDistance(PlayerEntity PlayerEntity) {
-		if (PlayerEntity instanceof ClientPlayerEntity) {
-			return Minecraft.getInstance().gameMode.getPickRange();
-		} else {
-			return 4f;
-		}
-	}
-
 }
