@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
+import forestry.core.fluids.ForestryFluids;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -46,6 +47,8 @@ import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.modules.IClientModuleHandler;
 
+import static net.minecraft.client.renderer.RenderTypeLookup.setRenderLayer;
+
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
 
 	@Override
@@ -59,7 +62,12 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
 			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
 		}
-		CoreBlocks.BASE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		CoreBlocks.BASE.getBlocks().forEach((block) -> setRenderLayer(block, RenderType.cutoutMipped()));
+		//RegistryFluids.FLUID_BLOCKS.forEach((fluidBlock) -> setRenderLayer(fluidBlock, RenderType.translucent()));
+		for (ForestryFluids fluid : ForestryFluids.values()){
+			setRenderLayer(fluid.getFluid(), RenderType.translucent());
+			setRenderLayer(fluid.getFlowing(), RenderType.translucent());
+		}
 	}
 
 	@Override

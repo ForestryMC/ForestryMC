@@ -12,6 +12,7 @@ package forestry.core.proxy;
 
 import java.io.File;
 
+import forestry.core.FluidFogEventHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -38,6 +39,7 @@ public class ProxyClient extends ProxyCommon {
 		super.registerTickHandlers();
 		MinecraftForge.EVENT_BUS.register(new TickHandlerCoreClient());
 		MinecraftForge.EVENT_BUS.register(new MultiblockClientTickHandler());
+		MinecraftForge.EVENT_BUS.register(new FluidFogEventHandler());
 	}
 
 	@Override
