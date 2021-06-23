@@ -63,7 +63,6 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
 		}
 		CoreBlocks.BASE.getBlocks().forEach((block) -> setRenderLayer(block, RenderType.cutoutMipped()));
-		//RegistryFluids.FLUID_BLOCKS.forEach((fluidBlock) -> setRenderLayer(fluidBlock, RenderType.translucent()));
 		for (ForestryFluids fluid : ForestryFluids.values()){
 			setRenderLayer(fluid.getFluid(), RenderType.translucent());
 			setRenderLayer(fluid.getFlowing(), RenderType.translucent());
