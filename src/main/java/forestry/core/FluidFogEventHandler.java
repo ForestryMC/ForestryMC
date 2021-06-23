@@ -1,5 +1,6 @@
 package forestry.core;
 
+import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
@@ -9,10 +10,12 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.awt.*;
 
 @OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class FluidFogEventHandler {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onFogColorRender(EntityViewRenderEvent.FogColors event) {
