@@ -19,6 +19,7 @@ import net.minecraft.client.settings.GraphicsFanciness;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -72,6 +73,11 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	@Override
 	public void registerModels(ModelRegistryEvent event) {
 		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
+	}
+
+	@Override
+	public void bakeModels(ModelBakeEvent event) {
+		ClientManager.getInstance().onBakeModels(event);
 	}
 
 	@Override
