@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.File;
 
+import forestry.core.FluidFogEventHandler;
 import forestry.core.worldgen.VillagerJigsaw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -202,6 +203,8 @@ public class Forestry {
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
+		MinecraftForge.EVENT_BUS.register(new FluidFogEventHandler()); // [HOTFIX] I need register here because Mod.EventBusSubscriber doesn't get called
+
 		ModuleManager.getModuleHandler().registerGuiFactories();
 	}
 
