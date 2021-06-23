@@ -18,7 +18,7 @@ import java.awt.*;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class FluidFogEventHandler {
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onFogColorRender(EntityViewRenderEvent.FogColors event) {
+	public static void onFogColorRender(EntityViewRenderEvent.FogColors event) {
 		if (event.getInfo().getFluidInCamera().getType() != Fluids.EMPTY)
 			for (ForestryFluids fluid : ForestryFluids.values()){
 				if (event.getInfo().getFluidInCamera().getType() == fluid.getFluid()){
@@ -37,7 +37,7 @@ public class FluidFogEventHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public void onFogDenseRender(EntityViewRenderEvent.FogDensity event) {
+	public static void onFogDenseRender(EntityViewRenderEvent.FogDensity event) {
 		if (event.getInfo().getFluidInCamera().getType() != Fluids.EMPTY)
 			for (ForestryFluids fluid : ForestryFluids.values()){
 				if (event.getInfo().getFluidInCamera().getType() == fluid.getFluid()){

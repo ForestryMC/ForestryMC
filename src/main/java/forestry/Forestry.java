@@ -203,8 +203,6 @@ public class Forestry {
 	}
 
 	public void clientStuff(FMLClientSetupEvent e) {
-		MinecraftForge.EVENT_BUS.register(new FluidFogEventHandler()); // [HOTFIX] I need register here because Mod.EventBusSubscriber doesn't get called
-
 		ModuleManager.getModuleHandler().registerGuiFactories();
 	}
 
