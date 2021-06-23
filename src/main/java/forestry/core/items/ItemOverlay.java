@@ -48,12 +48,6 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 		this.overlay = overlay;
 	}
 
-	//TODO: Why is this needed ?
-	@Override
-	public boolean canBeDepleted() {
-		return false;
-	}
-
 	@Override
 	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {

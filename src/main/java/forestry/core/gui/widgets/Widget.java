@@ -65,15 +65,13 @@ public abstract class Widget implements IToolTipProvider {
 		return null;
 	}
 
-	// Not fully implemented
-	@Override
-	public boolean isToolTipVisible() {
-		return true;
+	public boolean isMouseOver(double mouseX, double mouseY) {
+		return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;
 	}
 
 	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
-		return mouseX >= xPos && mouseX <= xPos + this.width && mouseY >= yPos && mouseY <= yPos + this.height;
+	public boolean isHovering(double mouseX, double mouseY) {
+		return isMouseOver(mouseX, mouseY);
 	}
 
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {

@@ -19,6 +19,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +57,7 @@ public abstract class BlockUtil {
 	}
 
 	public static boolean tryPlantCocoaPod(IWorld world, BlockPos pos) {
-		Direction facing = getValidPodFacing(world, pos);
+		Direction facing = getValidPodFacing(world, pos, BlockTags.JUNGLE_LOGS);
 		if (facing == null) {
 			return false;
 		}
@@ -67,23 +68,23 @@ public abstract class BlockUtil {
 	}
 
 	@Nullable
-	public static Direction getValidPodFacing(IWorld world, BlockPos pos) {
+	public static Direction getValidPodFacing(IWorld world, BlockPos pos, ITag<Block> logTag) {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
-			if (isValidPodLocation(world, pos, facing)) {
+			if (isValidPodLocation(world, pos, facing, logTag)) {
 				return facing;
 			}
 		}
 		return null;
 	}
 
-	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction) {
+	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction, ITag<Block> logTag) {
 		pos = pos.relative(direction);
 		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		return block.is(BlockTags.JUNGLE_LOGS);
+		return block.is(logTag);
 	}
 
 	public static boolean isBreakableBlock(World world, BlockPos pos) {

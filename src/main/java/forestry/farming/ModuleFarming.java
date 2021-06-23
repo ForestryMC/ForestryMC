@@ -169,6 +169,7 @@ public class ModuleFarming extends BlankForestryModule {
 		FarmDefinition.init();
 	}
 
+	@Override
 	public void registerObjects() {
 
 	}

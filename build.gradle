@@ -111,6 +111,7 @@ repositories {
 		url = 'http://maven.mcmoddev.com'
 	}*/
 	maven {
+		name 'JEI'
 		url "http://dvs1.progwml6.com/files/maven"
 	}
 	/*maven {

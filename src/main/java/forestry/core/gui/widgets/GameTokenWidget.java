@@ -13,6 +13,7 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
@@ -85,8 +86,7 @@ public class GameTokenWidget extends Widget {
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			//TODO no idea if this is right at all
-			manager.gui.blit(transform, startX + xPos + 3, startY + yPos + 3, (int) (startX + xPos + 3 + icon.getU1()), (int) (startY + yPos + 3 + icon.getV1()), 16, 16);
+			AbstractGui.blit(transform, startX + xPos + 3, startY + yPos + 3, manager.gui.getBlitOffset(), 16, 16, icon);
 		}
 		RenderSystem.enableDepthTest();
 	}

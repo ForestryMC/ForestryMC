@@ -65,7 +65,6 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private final FarmManager manager;
 
-	private int platformHeight = -1;
 	private BlockPlanter.Mode mode;
 	private final IFarmProperties properties;
 	@Nullable
@@ -94,12 +93,6 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	public ITextComponent getDisplayName() {
 		String name = getBlockType(BlockTypePlanter.ARBORETUM).getSerializedName();
 		return new TranslationTextComponent("block.forestry.planter." + (mode.getSerializedName()), new TranslationTextComponent("block.forestry." + name));
-	}
-
-	@Override
-	public void setPosition(BlockPos posIn) {
-		super.setPosition(posIn);
-		this.platformHeight = posIn.getY() - 2;
 	}
 
 	@Override
@@ -142,12 +135,15 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public void writeGuiData(PacketBufferForestry data) {
+		super.writeGuiData(data);
 		manager.writeData(data);
 	}
 
 	@Override
 	public void readGuiData(PacketBufferForestry data) throws IOException {
+		super.readGuiData(data);
 		manager.readData(data);
+
 	}
 
 	@Override
@@ -230,7 +226,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 
 	@Override
 	public boolean isValidPlatform(World world, BlockPos pos) {
-		return pos.getY() == platformHeight;
+		return pos.getY() == getBlockPos().getY() - 2;
 	}
 
 	@Override

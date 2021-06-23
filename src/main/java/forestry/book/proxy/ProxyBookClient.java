@@ -18,7 +18,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.book.BookManager;
+import forestry.api.book.IForesterBook;
 import forestry.book.BookLoader;
+import forestry.book.gui.GuiForesterBook;
+import forestry.book.gui.GuiForestryBookCategories;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
@@ -36,5 +39,17 @@ public class ProxyBookClient extends ProxyBook {
 			IReloadableResourceManager manager = (IReloadableResourceManager) resourceManager;
 			manager.registerReloadListener(BookLoader.INSTANCE);
 		}
+	}
+
+	@Override
+	public void bookOpenGui() {
+		IForesterBook book = BookLoader.INSTANCE.loadBook();
+		GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();
+		if (guiScreen != null && guiScreen.getBook() != book) {
+			GuiForesterBook.setGuiScreen(null);
+			guiScreen = null;
+		}
+		GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
+		Minecraft.getInstance().setScreen(bookGui);
 	}
 }

@@ -60,12 +60,15 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			BlockPos posBlock = randomPos.offset(housing.getCoordinates()).offset(offset);
 
 			// Put snow on the ground
-			if (world.hasChunkAt(posBlock) && true) {//TODO solve this world.isSideSolid(posBlock.down(), Direction.UP, false)) {
+			if (world.hasChunkAt(posBlock)) {
 				BlockState state = world.getBlockState(posBlock);
 				Block block = state.getBlock();
+				if (!state.isAir(world, posBlock) && block != Blocks.SNOW || !Blocks.SNOW.defaultBlockState().canSurvive(world, posBlock)) {
+					continue;
+				}
 
 				if (block == Blocks.SNOW) {
-					Integer layers = state.getValue(SnowBlock.LAYERS);
+					int layers = state.getValue(SnowBlock.LAYERS);
 					if (layers < 7) {
 						BlockState moreSnow = state.setValue(SnowBlock.LAYERS, layers + 1);
 						world.setBlockAndUpdate(posBlock, moreSnow);

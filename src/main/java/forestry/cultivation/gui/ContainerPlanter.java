@@ -17,7 +17,7 @@ public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 
 	public static ContainerPlanter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		TilePlanter planter = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TilePlanter.class);
-		return new ContainerPlanter(windowId, playerInv, planter);    //TODO what to do if Planter null
+		return new ContainerPlanter(windowId, playerInv, planter);
 	}
 
 	public ContainerPlanter(int windowId, PlayerInventory playerInventory, TilePlanter tileForestry) {

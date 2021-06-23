@@ -70,6 +70,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 		addClimateLedger(tile);
 		ledgerManager.add(new FarmLedger(ledgerManager, tile.getFarmLedgerDelegate()));
 		addOwnerLedger(tile);
+		addPowerLedger(tile.getEnergyManager());
 	}
 
 	@Override

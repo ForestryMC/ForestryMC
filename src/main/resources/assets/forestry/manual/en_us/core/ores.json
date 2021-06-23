@@ -1,9 +1,9 @@
 {
 	"title": "Ores",
 	"icon":{
-		"item": "forestry:resources",
-		"data": 1
-	},
+      "item": "forestry:resource_ore_tin",
+      "data": 1
+    },
 	"content": [
 		[
 			{

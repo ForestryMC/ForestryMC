@@ -10,14 +10,12 @@ import java.util.Collections;
 import java.util.Set;
 
 import net.minecraft.command.CommandSource;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.IForgeRegistry;
 
 /**
  * Defines a Forestry module.
@@ -61,10 +59,6 @@ public interface IForestryModule {
 	default void disabledSetupAPI() {
 	}
 
-	default void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
-
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	default void registerGuiFactories() {
 
@@ -89,18 +83,10 @@ public interface IForestryModule {
 	default void doInit() {
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	default void clientSetup() {
-
-	}
-
 	/**
 	 * Can be used to register recipes. Called after {@link #doInit()}.
 	 */
 	default void registerRecipes() {
-	}
-
-	default void addLootPoolNames(Set<String> lootPoolNames) {
 	}
 
 	default void postInit() {

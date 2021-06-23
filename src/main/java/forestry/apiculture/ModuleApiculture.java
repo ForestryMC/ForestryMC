@@ -17,13 +17,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -132,8 +130,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	public static boolean doSelfPollination = true;
 
 	public static int maxFlowersSpawnedPerHive = 20;
-	@Nullable
-	public static VillagerProfession villagerApiarist;
 
 	public static ProxyApiculture proxy;
 
@@ -198,15 +194,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		MinecraftForge.EVENT_BUS.register(this);
 
-		if (Config.enableVillagers) {
-			// Register village components with the Structure registry.
-			//			VillageCreationApiculture.registerVillageComponents();
-			//TODO villages
-		}
-
 		// Commands
-		//TODO - commands
-				ModuleCore.rootCommand.then(CommandBee.register());
+		ModuleCore.rootCommand.then(CommandBee.register());
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ApicultureFilterRuleType.init();
@@ -448,7 +437,6 @@ public class ModuleApiculture extends BlankForestryModule {
 				Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
 				Ingredient.of(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE, 1)),
 				PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.REGENERATION));
-
 	}
 
 	private static void registerBeehiveDrops() {
@@ -494,17 +482,6 @@ public class ModuleApiculture extends BlankForestryModule {
 			new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
 			new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
-	}
-
-	//TODO - just done by datapacks now?
-	//	private static void registerDungeonLoot() {
-	//		LootTables.register(Constants.VILLAGE_NATURALIST_LOOT_KEY);
-	//	}
-
-	@Override
-	public void addLootPoolNames(Set<String> lootPoolNames) {
-		lootPoolNames.add("forestry_apiculture_items");
-		lootPoolNames.add("forestry_apiculture_bees");
 	}
 
 	private static void createHives() {

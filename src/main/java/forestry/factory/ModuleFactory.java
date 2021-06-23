@@ -15,7 +15,6 @@ import com.google.common.collect.Maps;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluid;
@@ -205,11 +204,6 @@ public class ModuleFactory extends BlankForestryModule {
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
 
-	}
-
-	@Override
-	public void addLootPoolNames(Set<String> lootPoolNames) {
-		lootPoolNames.add("forestry_factory_items");
 	}
 
 	@Override

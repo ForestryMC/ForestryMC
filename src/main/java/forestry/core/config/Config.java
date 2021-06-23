@@ -30,6 +30,8 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 
+import net.minecraftforge.fml.common.Mod;
+
 import forestry.Forestry;
 import forestry.apiculture.HiveConfig;
 import forestry.core.config.forge_old.Property;
@@ -39,6 +41,7 @@ import forestry.core.utils.Translator;
 import forestry.factory.ModuleFactory;
 import forestry.mail.gui.GuiMailboxInfo;
 
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class Config {
 
 	public static final String CATEGORY_COMMON = "common";

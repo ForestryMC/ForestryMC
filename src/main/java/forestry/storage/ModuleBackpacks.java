@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Blocks;
@@ -500,10 +499,5 @@ public class ModuleBackpacks extends BlankForestryModule {
 		//				'X', "gemDiamond",
 		//				'W', wovenSilk,
 		//				'T', backpackT1);	//TODO fluids
-	}
-
-	@Override
-	public void addLootPoolNames(Set<String> lootPoolNames) {
-		lootPoolNames.add("forestry_storage_items");
 	}
 }

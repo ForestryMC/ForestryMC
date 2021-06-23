@@ -88,9 +88,9 @@ public class GeneticAnalyzer extends ContainerElement implements IGeneticAnalyze
 		//Selection Bar at the bottom
 		itemElement = container.drawable(SELECTION_BAR);
 
-		leftButton = container.add(new ButtonElement(itemElement.getX() + 30, itemElement.getY() + 9, StandardButtonTextureSets.LEFT_BUTTON, (button) -> subtract()));
-		rightButton = container.add(new ButtonElement(itemElement.getX() + 64, itemElement.getY() + 9, StandardButtonTextureSets.RIGHT_BUTTON, (button) -> add()));
-		analyzeButton = container.add(new ButtonElement(itemElement.getX() + 80, itemElement.getY() + 2, ANALYZER_BUTTON, (button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, provider.getSelectedSlot(selectedSlot)))));
+		leftButton = container.add(new ButtonElement.Builder().pos(itemElement.getX() + 30, itemElement.getY() + 9).textures(StandardButtonTextureSets.LEFT_BUTTON).action((button) -> subtract()).create());
+		rightButton = container.add(new ButtonElement.Builder().pos(itemElement.getX() + 64, itemElement.getY() + 9).textures(StandardButtonTextureSets.RIGHT_BUTTON).action((button) -> add()).create());
+		analyzeButton = container.add(new ButtonElement.Builder().pos(itemElement.getX() + 80, itemElement.getY() + 2).textures(ANALYZER_BUTTON).action((button) -> NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, provider.getSelectedSlot(selectedSlot)))).create());
 		container.add(new AbstractItemElement(itemElement.getX() + 44, itemElement.getY() + 9) {
 			@Override
 			protected ItemStack getStack() {

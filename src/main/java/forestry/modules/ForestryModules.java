@@ -1,5 +1,6 @@
 package forestry.modules;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Collection;
 
@@ -14,6 +15,7 @@ import forestry.core.config.forge_old.Property;
 public class ForestryModules implements IModuleContainer {
 	private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
 	private static final String CONFIG_CATEGORY = "modules";
+	@Nullable
 	private static Configuration config;
 
 	@Override
@@ -31,7 +33,7 @@ public class ForestryModules implements IModuleContainer {
 		return getModulesConfiguration();
 	}
 
-	public static final Configuration getModulesConfiguration() {
+	public static Configuration getModulesConfiguration() {
 		if (config == null) {
 			config = new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
 		}

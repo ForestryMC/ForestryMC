@@ -31,19 +31,22 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import net.minecraftforge.fml.common.Mod;
+
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.WorldUtils;
 import forestry.modules.ModuleManager;
 
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class TickHandlerCoreServer {
 
-	private final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
-	private final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
+	private static final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
+	private static final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
 
 
 	@SubscribeEvent
-	public void onWorldTick(TickEvent.WorldTickEvent event) {
+	public static void onWorldTick(TickEvent.WorldTickEvent event) {
 		if (event.phase != TickEvent.Phase.END) {
 			return;
 		}
@@ -97,7 +100,7 @@ public class TickHandlerCoreServer {
 	}
 
 	@SubscribeEvent
-	public void chunkSaveEventHandler(ChunkDataEvent.Save event) {
+	public static void chunkSaveEventHandler(ChunkDataEvent.Save event) {
 		CompoundNBT tag = new CompoundNBT();
 		if (Config.doRetrogen) {
 			tag.putBoolean("retrogen", true);
@@ -108,7 +111,7 @@ public class TickHandlerCoreServer {
 	}
 
 	@SubscribeEvent
-	public void chunkLoadEventHandler(ChunkDataEvent.Load event) {
+	public static void chunkLoadEventHandler(ChunkDataEvent.Load event) {
 		if (Config.doRetrogen) {
 			CompoundNBT eventData = event.getData();
 			if (eventData.contains(Constants.MOD_ID)) {

@@ -140,4 +140,9 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	public boolean isMouseOver(double mouseX, double mouseY) {
 		return isMouseOverButton(mouseX, mouseY);
 	}
+
+	@Override
+	public boolean isHovering(double mouseX, double mouseY) {
+		return isMouseOver(mouseX, mouseY);
+	}
 }

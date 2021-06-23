@@ -35,7 +35,7 @@ import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
 import forestry.api.genetics.products.Product;
 import forestry.arboriculture.features.ArboricultureTiles;
-import forestry.core.config.Constants;
+import forestry.arboriculture.genetics.alleles.AlleleFruits;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.core.utils.BlockUtil;
@@ -50,7 +50,7 @@ public class TileFruitPod extends TileEntity implements IFruitBearer, IStreamabl
 
 	private static final short MAX_MATURITY = 2;
 	private static final IGenome defaultGenome = TreeManager.treeRoot.getKaryotype().getDefaultGenome();
-	private static final IAlleleFruit defaultAllele = (IAlleleFruit) AlleleUtils.getAllele(Constants.MOD_ID + ".fruitCocoa").get();
+	private static final IAlleleFruit defaultAllele = AlleleFruits.fruitCocoa;
 
 	private IGenome genome = defaultGenome;
 	private IAlleleFruit allele = defaultAllele;

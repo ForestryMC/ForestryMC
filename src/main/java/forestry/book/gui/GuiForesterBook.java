@@ -25,6 +25,7 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.core.config.Constants;
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.GuiWindow;
 import forestry.core.gui.IGuiSizable;
 
@@ -46,7 +47,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	protected final IForesterBook book;
 
 	protected GuiForesterBook(IForesterBook book) {
-		super(X_SIZE, Y_SIZE, new StringTextComponent("FORESTER_BOOK_TITLE"));    //TODO localise
+		super(X_SIZE, Y_SIZE, StringTextComponent.EMPTY);
 		this.book = book;
 		setGuiScreen(this);
 	}
@@ -81,23 +82,21 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 
 	@Override
 	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
-		TextureManager manager = this.minecraft.textureManager;
+		TextureManager manager = getGameInstance().textureManager;
 
 		manager.bind(TEXTURE);
 		blit(transform, guiLeft, guiTop, 0, 0, X_SIZE, Y_SIZE);
 
 		super.render(transform, mouseX, mouseY, partialTicks);
 
-		boolean unicode = minecraft.font.isBidirectional();
-		//minecraft.fontRenderer.setBidiFlag(true);
+		GuiUtil.enableUnicode();
 		ITextComponent title = getTitle();
 		if (title instanceof IFormattableTextComponent) {
 			((IFormattableTextComponent) title).withStyle(TextFormatting.UNDERLINE);
 		}
 		drawCenteredString(transform, font, title, guiLeft + LEFT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
 		drawText(transform);
-
-		//minecraft.fontRenderer.setBidiFlag(unicode);
+		GuiUtil.resetUnicode();
 
 		drawTooltips(transform, mouseY, mouseX);
 	}
@@ -105,13 +104,13 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	@Override
 	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
 		super.drawTooltips(transform, mouseY, mouseX);
-		PlayerInventory playerInv = minecraft.player.inventory;
+		PlayerInventory playerInv = getPlayer().inventory;
 
 		if (playerInv.getCarried().isEmpty()) {
 			List<ITextComponent> tooltip = getTooltip(mouseX, mouseY);
 			if (!tooltip.isEmpty()) {
-				MainWindow mainWindow = getMC().getWindow();
-				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getGuiScaledWidth(), mainWindow.getGuiScaledHeight(), -1, getMC().font);
+				MainWindow mainWindow = getGameInstance().getWindow();
+				GuiUtils.drawHoveringText(transform, tooltip, mouseX, mouseY, mainWindow.getGuiScaledWidth(), mainWindow.getGuiScaledHeight(), -1, getGameInstance().font);
 			}
 		}
 	}

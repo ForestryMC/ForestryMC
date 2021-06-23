@@ -102,7 +102,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean isMouseOver(double mouseX, double mouseY) {
+	public boolean isHovering(double mouseX, double mouseY) {
 		return mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16;
 	}
 }

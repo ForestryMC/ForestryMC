@@ -182,8 +182,8 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
-
-		Direction facing = BlockUtil.getValidPodFacing(world, pos);
+		IFruitProvider provider = allele.getProvider();
+		Direction facing = BlockUtil.getValidPodFacing(world, pos, provider.getLogTag());
 		if (facing != null && ArboricultureBlocks.PODS.has(allele)) {
 
 			BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();

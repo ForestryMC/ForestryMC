@@ -2,7 +2,6 @@ package forestry.book.items;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -12,13 +11,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import forestry.api.book.IForesterBook;
-import forestry.book.BookLoader;
-import forestry.book.gui.GuiForesterBook;
-import forestry.book.gui.GuiForestryBookCategories;
+import forestry.book.ModuleBook;
 import forestry.core.ItemGroupForestry;
 import forestry.core.items.ItemWithGui;
 import forestry.core.network.PacketBufferForestry;
@@ -32,7 +25,9 @@ public class ItemForesterBook extends ItemWithGui {
 
 	@Override
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		bookOpenGui(playerIn, playerIn.getItemInHand(handIn));
+		if (worldIn.isClientSide) {
+			ModuleBook.proxy.bookOpenGui();
+		}
 
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		return ActionResult.success(stack);
@@ -45,18 +40,6 @@ public class ItemForesterBook extends ItemWithGui {
 
 	@Override
 	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private void bookOpenGui(PlayerEntity player, ItemStack stack) {
-		IForesterBook book = BookLoader.INSTANCE.loadBook();
-		GuiForesterBook guiScreen = GuiForesterBook.getGuiScreen();
-		if (guiScreen != null && guiScreen.getBook() != book) {
-			GuiForesterBook.setGuiScreen(null);
-			guiScreen = null;
-		}
-		GuiForesterBook bookGui = guiScreen != null ? guiScreen : new GuiForestryBookCategories(book);
-		Minecraft.getInstance().setScreen(bookGui);    //TODO does this work
 	}
 
 	@Nullable

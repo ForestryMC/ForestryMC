@@ -40,11 +40,21 @@ public abstract class SelectionElement<R> extends ContainerElement {
 		if (recipes.length > 1) {
 			drawable(0, 0, CRAFTING_COUNT).setAlign(Alignment.BOTTOM_CENTER);
 			text = pane(width, getHeight());
-			leftButton = add(new ButtonElement(-27, -2, LEFT_BUTTON, e -> setIndex(index - 1)));
-			leftButton.setAlign(Alignment.BOTTOM_CENTER);
+			leftButton = add(new ButtonElement.Builder()
+					.pos(-27, -2)
+					.textures(LEFT_BUTTON)
+					.action(e -> setIndex(index - 1))
+					.align(Alignment.BOTTOM_CENTER)
+					.create()
+			);
 
-			rightButton = add(new ButtonElement(27, -2, RIGHT_BUTTON, e -> setIndex(index + 1)));
-			rightButton.setAlign(Alignment.BOTTOM_CENTER);
+			rightButton = add(new ButtonElement.Builder()
+					.pos(27, -2)
+					.textures(RIGHT_BUTTON)
+					.action(e -> setIndex(index + 1))
+					.align(Alignment.BOTTOM_CENTER)
+					.create()
+			);
 		} else {
 			text = null;
 			leftButton = null;

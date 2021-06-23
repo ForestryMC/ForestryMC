@@ -1,27 +1,24 @@
 package forestry.book.gui.buttons;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.text.StringTextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.core.tooltips.IToolTipProvider;
-import forestry.api.core.tooltips.ToolTip;
 import forestry.book.gui.GuiForesterBook;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiButtonPage extends Button implements IToolTipProvider {
+public class GuiButtonPage extends Button {
 	public boolean left;
 
 	public GuiButtonPage(int x, int y, boolean left, IPressable action) {
-		super(x, y, 18, 10, null, action);
+		super(x, y, 18, 10, StringTextComponent.EMPTY, action);
 		this.left = left;
 	}
 
@@ -32,24 +29,13 @@ public class GuiButtonPage extends Button implements IToolTipProvider {
 
 			TextureManager manager = Minecraft.getInstance().textureManager;
 			manager.bind(GuiForesterBook.TEXTURE);
-			GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager._enableAlphaTest();
-			GlStateManager._disableBlend();
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.enableAlphaTest();
+			RenderSystem.disableBlend();
 			blit(transform, x, y, isHovered ? 18 : 0, 181 + (left ? 10 : 0), 18, 10);
-			GlStateManager._enableBlend();
-			GlStateManager._disableAlphaTest();
+			RenderSystem.enableBlend();
+			RenderSystem.disableAlphaTest();
 		}
-	}
-
-	@Nullable
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		return null;
-	}
-
-	@Override
-	public boolean isToolTipVisible() {
-		return false;
 	}
 
 	@Override

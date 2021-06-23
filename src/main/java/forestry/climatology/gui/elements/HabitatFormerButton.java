@@ -32,7 +32,12 @@ public class HabitatFormerButton extends ButtonElement {
 	private final ItemStack iconStack;
 
 	public HabitatFormerButton(int xPos, int yPos, boolean selectionButton, Consumer<Boolean> onClicked) {
-		super(xPos, yPos, 22, 22, DISABLED_BUTTON, ENABLED_BUTTON, button -> onClicked.accept(selectionButton));
+		super(new ButtonElement.Builder()
+				.action(button -> onClicked.accept(selectionButton))
+				.size(22)
+				.textures(DISABLED_BUTTON, ENABLED_BUTTON)
+				.pos(xPos, yPos)
+		);
 		this.iconStack = selectionButton ? CoreItems.ELECTRON_TUBES.stack(EnumElectronTube.GOLD, 1) : CoreItems.GEAR_BRONZE.stack();
 	}
 

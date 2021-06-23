@@ -26,10 +26,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -50,13 +47,13 @@ import forestry.core.config.Constants;
 import forestry.core.data.ForestryTags;
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreContainers;
+import forestry.core.features.CoreFeatures;
 import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
 import forestry.core.gui.GuiEscritoire;
 import forestry.core.gui.GuiNaturalistInventory;
-import forestry.core.models.ClientManager;
 import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
@@ -66,7 +63,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
-import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
@@ -76,9 +72,6 @@ public class ModuleCore extends BlankForestryModule {
 	public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
-		MinecraftForge.EVENT_BUS.register(this);
-		ForgeUtils.registerSubscriber(this);
-
 		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
@@ -101,8 +94,6 @@ public class ModuleCore extends BlankForestryModule {
 		AlleleManager.climateHelper = new ClimateUtil();
 		AlleleManager.alleleFactory = new AlleleFactory();
 
-		//LootFunctionManager.registerFunction(new OrganismFunction.Serializer());
-
 		MultiblockManager.logicFactory = new MultiblockLogicFactory();
 
 		RecipeManagers.hygroregulatorManager = new HygroregulatorManager();
@@ -123,9 +114,6 @@ public class ModuleCore extends BlankForestryModule {
 	public void preInit() {
 		GameProfileDataSerializer.register();
 
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new ClimateHandlerServer());
-
 		rootCommand.then(CommandModules.register());
 	}
 
@@ -140,6 +128,7 @@ public class ModuleCore extends BlankForestryModule {
 		ForestryModEnvWarningCallable.register();
 
 		Proxies.render.initRendering();
+		CoreFeatures.registerOres();
 	}
 
 	@Override
@@ -221,16 +210,6 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerRecipes() {
-		/* SMELTING RECIPES */
-		// TODO: Re-enable
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.APATITE, 1), CoreItems.APATITE.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.COPPER, 1), CoreItems.INGOT_COPPER.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreBlocks.RESOURCE_ORE.stack(EnumResourceType.TIN, 1), CoreItems.INGOT_TIN.stack(), 0.5f);
-		// RecipeUtil.addSmelting(CoreItems.PEAT.stack(), CoreItems.ASH.stack(), 0.0f);
-	}
-
-	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryCore();
 	}
@@ -256,12 +235,6 @@ public class ModuleCore extends BlankForestryModule {
 	public void getHiddenItems(List<ItemStack> hiddenItems) {
 		// research note items are not useful without actually having completed research
 		hiddenItems.add(CoreItems.RESEARCH_NOTE.stack());
-	}
-
-	@SubscribeEvent
-	@OnlyIn(Dist.CLIENT)
-	public void onBakeModels(ModelBakeEvent event) {
-		ClientManager.getInstance().onBakeModels(event);
 	}
 
 	@Override

@@ -8,16 +8,21 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
-package forestry.core.items;
+package forestry.apiculture.items;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
+import forestry.core.items.ItemForestry;
 
 public class ItemScoop extends ItemForestry implements IToolScoop {
 	public static ToolType SCOOP = ToolType.get("scoop");
@@ -35,5 +40,20 @@ public class ItemScoop extends ItemForestry implements IToolScoop {
 			return 2.0F;
 		}
 		return 1.0F;
+	}
+
+	@Override
+	public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
+		stack.hurtAndBreak(2, player, (living) -> living.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+		return true;
+	}
+
+	@Override
+	public boolean mineBlock(ItemStack stack, World world, BlockState blockState, BlockPos pos, LivingEntity player) {
+		if (!world.isClientSide && blockState.getDestroySpeed(world, pos) != 0.0F) {
+			stack.hurtAndBreak(1, player, (living) -> living.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+		}
+
+		return true;
 	}
 }

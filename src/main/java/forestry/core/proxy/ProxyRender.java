@@ -12,8 +12,6 @@ package forestry.core.proxy;
 
 import net.minecraft.item.Item;
 
-import net.minecraftforge.client.event.ModelBakeEvent;
-
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.tiles.TileAnalyzer;
@@ -45,9 +43,6 @@ public class ProxyRender implements ISidedModuleHandler {
 	}
 
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-	}
-
-	public void registerModels(ModelBakeEvent event) {
 	}
 
 	public void registerItemAndBlockColors() {

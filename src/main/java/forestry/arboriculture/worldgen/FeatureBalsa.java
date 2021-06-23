@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.util.Direction;
@@ -27,23 +26,23 @@ public class FeatureBalsa extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		BlockPos topPos = startPos.offset(0, height + 1, 0);
 		BlockPos.Mutable leafCenter = new BlockPos.Mutable();
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
-		FeatureHelper.addBlock(world, leafCenter.set(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.addBlock(world, leafCenter.set(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 		leafCenter.move(Direction.DOWN);
-		FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+		FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 		leafCenter.move(Direction.DOWN);
 
 		if (height > 10) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 			leafCenter.move(Direction.DOWN);
 		}
 
 		while (leafCenter.getY() > topPos.getY() - 6) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT);
+			FeatureHelper.generateCylinderFromPos(world, leaf, leafCenter, leafRadius + girth, 1, FeatureHelper.EnumReplaceMode.SOFT, contour);
 			leafCenter.move(Direction.DOWN);
 		}
 	}

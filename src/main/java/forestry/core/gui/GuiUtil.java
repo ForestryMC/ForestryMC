@@ -16,6 +16,7 @@ import java.util.Collection;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.item.ItemStack;
 
@@ -58,7 +59,7 @@ public class GuiUtil {
 				RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
 			MainWindow window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
-			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getMC().font);
+			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getGameInstance().font);
 			RenderSystem.popMatrix();
 		}
 	}
@@ -82,12 +83,27 @@ public class GuiUtil {
 			if (tips == null) {
 				continue;
 			}
-			boolean mouseOver = provider.isMouseOver(mX, mY);
+			boolean mouseOver = provider.isHovering(mX, mY);
 			tips.onTick(mouseOver);
 			if (mouseOver && tips.isReady()) {
 				tips.refresh();
 				drawToolTips(transform, gui, provider, tips, mouseX, mouseY);
 			}
 		}
+	}
+
+	public static void enableUnicode() {
+		Minecraft instance = Minecraft.getInstance();
+		instance.selectMainFont(true);
+	}
+
+	public static void resetUnicode() {
+		Minecraft instance = Minecraft.getInstance();
+		instance.selectMainFont(instance.isEnforceUnicode());
+	}
+
+	public static void showScreen(Screen screen) {
+		Minecraft instance = Minecraft.getInstance();
+		instance.setScreen(screen);
 	}
 }

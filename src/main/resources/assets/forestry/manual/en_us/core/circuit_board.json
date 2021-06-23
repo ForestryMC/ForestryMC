@@ -1,33 +1,29 @@
 {
 	"title": "Circuit Board",
 	"icon":{
-		"item": "forestry:chipsets"
-	},
+      "item": "forestry:circuit_board_basic"
+    },
 	"content": [
 		[
 			{
 				"type": "carpenter",
 				"stacks": [
-					{
-						"item": "forestry:chipsets",
-						"data": 0,
-						"nbt": "{\"T\":0s}"
-					},
-					{
-						"item": "forestry:chipsets",
-						"data": 1,
-						"nbt": "{\"T\":1s}"
-					},
-					{
-						"item": "forestry:chipsets",
-						"data": 2,
-						"nbt": "{\"T\":2s}"
-					},
-					{
-						"item": "forestry:chipsets",
-						"data": 3,
-						"nbt": "{\"T\":3s}"
-					}
+                  {
+                    "item": "forestry:circuit_board_basic",
+                    "nbt": "{\"1\":0s}"
+                  },
+                  {
+                    "item": "forestry:circuit_board_refined",
+                    "nbt": "{\"T\":1s}"
+                  },
+                  {
+                    "item": "forestry:circuit_board_enhanced",
+                    "nbt": "{\"T\":2s}"
+                  },
+                  {
+                    "item": "forestry:circuit_board_intricate",
+                    "nbt": "{\"T\":3s}"
+                  }
 				]
 			},
 			{

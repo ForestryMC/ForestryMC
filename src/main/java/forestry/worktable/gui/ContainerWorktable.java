@@ -47,7 +47,7 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 
 	public static ContainerWorktable fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
 		TileWorktable worktable = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileWorktable.class);
-		return new ContainerWorktable(windowId, playerInv, worktable);    //TODO what to do if Worktable null
+		return new ContainerWorktable(windowId, playerInv, worktable);
 	}
 
 	public ContainerWorktable(int windowId, PlayerInventory inv, TileWorktable tile) {

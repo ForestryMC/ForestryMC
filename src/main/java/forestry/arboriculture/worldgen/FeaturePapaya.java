@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -33,13 +32,13 @@ public class FeaturePapaya extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		for (BlockPos branchEnd : branchEnds) {
-			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, 1 + girth, 1, FeatureHelper.EnumReplaceMode.AIR);
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+		for (BlockPos branchEnd : contour.getBranchEnds()) {
+			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, 1 + girth, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 
 		int yCenter = height - girth;
 		yCenter = yCenter > 3 ? yCenter : 4;
-		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, Math.round((2 + rand.nextInt(girth)) * (height / 8.0f)), leaf, FeatureHelper.EnumReplaceMode.AIR);
+		FeatureHelper.generateSphereFromTreeStartPos(world, startPos.offset(0, yCenter, 0), girth, Math.round((2 + rand.nextInt(girth)) * (height / 8.0f)), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 	}
 }

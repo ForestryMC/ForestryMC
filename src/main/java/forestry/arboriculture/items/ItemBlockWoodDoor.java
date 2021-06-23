@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 
 import forestry.arboriculture.blocks.BlockForestryDoor;
 
-//TODO eg    public static final Item OAK_DOOR = register(new TallBlockItem(Blocks.OAK_DOOR, (new Item.Properties()).group(ItemGroup.REDSTONE)));
 public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
 
 	public ItemBlockWoodDoor(BlockForestryDoor block) {

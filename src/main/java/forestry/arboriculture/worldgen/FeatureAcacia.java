@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -62,15 +61,15 @@ public class FeatureAcacia extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
-		for (BlockPos branchEnd : branchEnds) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+		for (BlockPos branchEnd : contour.getBranchEnds()) {
 			int leafSpawn = branchEnd.getY() - startPos.getY();
 			int canopyThickness = Math.max(1, Math.round(leafSpawn / 10.0f));
 			float canopyMultiplier = (1.5f * height - leafSpawn + 2) / 4.0f;
 			float canopyWidth = rand.nextBoolean() ? 1.0f : 1.5f;
 			BlockPos center = new BlockPos(branchEnd.getX(), leafSpawn - canopyThickness + 1 + startPos.getY(), branchEnd.getZ());
 			float radius = Math.max(1, canopyMultiplier * canopyWidth + girth);
-			FeatureHelper.generateCylinderFromPos(world, leaf, center, radius, canopyThickness, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateCylinderFromPos(world, leaf, center, radius, canopyThickness, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 	}
 }

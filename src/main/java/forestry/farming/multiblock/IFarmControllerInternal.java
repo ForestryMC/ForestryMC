@@ -26,5 +26,6 @@ public interface IFarmControllerInternal extends IFarmController, IMultiblockCon
 
 	IInventoryAdapter getInternalInventory();
 
+	@Override
 	ITankManager getTankManager();
 }

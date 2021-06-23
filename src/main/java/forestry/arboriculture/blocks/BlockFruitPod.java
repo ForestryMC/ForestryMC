@@ -106,7 +106,7 @@ public class BlockFruitPod extends CocoaBlock {
 	@Override
 	public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
 		Direction facing = state.getValue(FACING);
-		return BlockUtil.isValidPodLocation(world, pos, facing);
+		return BlockUtil.isValidPodLocation(world, pos, facing, fruit.getProvider().getLogTag());
 	}
 
 	//TODO onBlockHarvested??

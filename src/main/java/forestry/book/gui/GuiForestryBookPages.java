@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 
@@ -20,6 +19,7 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBack;
 import forestry.book.gui.buttons.GuiButtonPage;
 import forestry.book.gui.buttons.GuiButtonSubEntry;
+import forestry.core.gui.GuiUtil;
 import forestry.core.gui.elements.GuiElement;
 import forestry.core.gui.elements.layouts.ContainerElement;
 
@@ -129,7 +129,7 @@ public class GuiForestryBookPages extends GuiForesterBook {
 			}
 		} else if (button instanceof GuiButtonSubEntry) {
 			GuiButtonSubEntry subEntry = (GuiButtonSubEntry) button;
-			Minecraft.getInstance().setScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
+			GuiUtil.showScreen(new GuiForestryBookPages(book, category, subEntry.subEntry, parent != null ? parent : entry));
 		} else if (button instanceof GuiButtonBack || pages.isEmpty()) {
 			if (lastPage >= 0) {
 				setPages(lastPage);
@@ -142,6 +142,6 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	}
 
 	private void displayEntries() {
-		Minecraft.getInstance().setScreen(new GuiForestryBookEntries(book, category));
+		GuiUtil.showScreen(new GuiForestryBookEntries(book, category));
 	}
 }

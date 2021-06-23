@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.ITextComponent;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,20 +38,19 @@ public class GuiButtonSubEntry extends Button {
 		boolean active = subEntry == selectedEntry;
 		TextureManager manager = Minecraft.getInstance().textureManager;
 		manager.bind(GuiForesterBook.TEXTURE);
-		GlStateManager._pushMatrix();
-		GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		blit(transform, x, y, 48 + (active ? 24 : 0), 201, 24, 21);
 
-		GlStateManager._translatef(x + 8.0F, y + 4.0F, getBlitOffset());    //TODO
-		GlStateManager._scalef(0.85F, 0.85F, 0.85F);
-		//RenderHelper.enableGUIStandardItemLighting(); TODO: Gui Item Light
-		GlStateManager._enableRescaleNormal();
+		RenderSystem.translatef(x + 8.0F, y + 4.0F, getBlitOffset());
+		RenderSystem.scalef(0.85F, 0.85F, 0.85F);
+		RenderSystem.enableRescaleNormal();
 
 		GuiUtil.drawItemStack(Minecraft.getInstance().font, subEntry.getStack(), 0, 0);
 
 		RenderHelper.turnOff();
-		GlStateManager._popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	public List<ITextComponent> getToolTip() {

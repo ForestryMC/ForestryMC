@@ -31,7 +31,6 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 
 	@Override
 	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
-		//TODO world cast
 		return TreeManager.treeRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}
 

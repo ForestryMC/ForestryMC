@@ -22,7 +22,6 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -100,7 +99,6 @@ import forestry.core.gui.elements.GuiElementFactory;
 import forestry.core.loot.ConditionLootModifier;
 import forestry.core.loot.OrganismFunction;
 import forestry.core.models.ModelBlockCached;
-import forestry.core.multiblock.MultiblockEventHandler;
 import forestry.core.network.NetworkHandler;
 import forestry.core.network.PacketHandlerServer;
 import forestry.core.proxy.Proxies;
@@ -115,6 +113,7 @@ import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.ForgeUtils;
+import forestry.core.worldgen.VillagerJigsaw;
 import forestry.factory.recipes.CarpenterRecipe;
 import forestry.factory.recipes.CentrifugeRecipe;
 import forestry.factory.recipes.FabricatorRecipe;
@@ -199,7 +198,6 @@ public class Forestry {
 
 		ModuleManager.getModuleHandler().runSetup();
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> modEventBus.addListener(this::setupClient));
 		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
 	}
 
@@ -222,10 +220,6 @@ public class Forestry {
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
-		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
-		MinecraftForge.EVENT_BUS.register(Config.class);
-		Proxies.common.registerEventHandlers();
-		Proxies.common.registerTickHandlers();
 		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
 		//TODO - config
 		Config.load(Dist.DEDICATED_SERVER);
@@ -241,11 +235,6 @@ public class Forestry {
 		ModuleManager.getModuleHandler().runInit();
 		callSetupListeners(false);
 		ModuleManager.getModuleHandler().runPostInit();
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void setupClient(FMLClientSetupEvent event) {
-		ModuleManager.getModuleHandler().runClientSetup();
 	}
 
 	//TODO: Move to somewhere else
@@ -325,11 +314,6 @@ public class Forestry {
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public static void registerObjects(RegistryEvent.Register<?> event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
-		}
-
-		@SubscribeEvent
-		public static void registerEntityTypes(RegistryEvent.Register<EntityType<?>> event) {
-			ModuleManager.getModuleHandler().registerEntityTypes(event.getRegistry());
 		}
 
 		@SubscribeEvent

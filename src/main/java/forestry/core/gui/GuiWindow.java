@@ -1,5 +1,7 @@
 package forestry.core.gui;
 
+import com.google.common.base.Preconditions;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -172,8 +174,8 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	public Minecraft getMC() {
-		return minecraft;
+	public Minecraft getGameInstance() {
+		return Preconditions.checkNotNull(minecraft);
 	}
 
 }

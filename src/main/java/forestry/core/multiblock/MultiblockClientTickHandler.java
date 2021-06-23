@@ -7,12 +7,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import net.minecraftforge.fml.common.Mod;
+
+import forestry.core.config.Constants;
+
 @OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class MultiblockClientTickHandler {
 
-	//TODO - register event handler
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
+	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
 			MultiblockRegistry.tickStart(Minecraft.getInstance().level);
 		}

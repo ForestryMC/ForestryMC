@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.worldgen.ITreeBlockType;
 import forestry.arboriculture.worldgen.TreeBlockType;
+import forestry.arboriculture.worldgen.TreeContour;
 import forestry.core.utils.VectUtil;
 //import forestry.arboriculture.worldgen.ITreeBlockType;
 //import forestry.arboriculture.worldgen.TreeBlockType;
@@ -30,6 +31,10 @@ import forestry.core.utils.VectUtil;
 public class FeatureHelper {
 
 	public static boolean addBlock(IWorld world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode) {
+		return addBlock(world, pos, type, replaceMode, TreeContour.EMPTY);
+	}
+
+	public static boolean addBlock(IWorld world, BlockPos pos, ITreeBlockType type, EnumReplaceMode replaceMode, TreeContour contour) {
 		if (!world.hasChunkAt(pos)) {
 			return false;
 		}
@@ -37,6 +42,7 @@ public class FeatureHelper {
 		BlockState blockState = world.getBlockState(pos);
 		if (replaceMode.canReplace(blockState, world, pos)) {
 			type.setBlock(world, pos);
+			contour.addLeaf(pos);
 			return true;
 		}
 		return false;
@@ -45,35 +51,37 @@ public class FeatureHelper {
 	/**
 	 * Uses centerPos and girth of a tree to calculate the center
 	 */
-	public static void generateCylinderFromTreeStartPos(IWorld world, ITreeBlockType block, BlockPos startPos, int girth, float radius, int height, EnumReplaceMode replace) {
-		generateCylinderFromPos(world, block, startPos.offset(girth / 2, 0, girth / 2), radius, height, replace);
+	public static void generateCylinderFromTreeStartPos(IWorld world, ITreeBlockType block, BlockPos startPos, int girth, float radius, int height, EnumReplaceMode replace, TreeContour contour) {
+		generateCylinderFromPos(world, block, startPos.offset(girth / 2, 0, girth / 2), radius, height, replace, contour);
 	}
 
 	/**
 	 * Center is the bottom middle of the cylinder
 	 */
-	public static void generateCylinderFromPos(IWorld world, ITreeBlockType block, BlockPos center, float radius, int height, EnumReplaceMode replace) {
+	public static void generateCylinderFromPos(IWorld world, ITreeBlockType block, BlockPos center, float radius, int height, EnumReplaceMode replace, TreeContour contour) {
 		BlockPos start = new BlockPos(center.getX() - radius, center.getY(), center.getZ() - radius);
 		for (int x = 0; x < radius * 2 + 1; x++) {
 			for (int y = height - 1; y >= 0; y--) { // generating top-down is faster for lighting calculations
 				for (int z = 0; z < radius * 2 + 1; z++) {
 					BlockPos position = start.offset(x, y, z);
 					Vector3i treeCenter = new Vector3i(center.getX(), position.getY(), center.getZ());
-					if (position.distSqr(treeCenter) <= radius * radius + 0.01) {
+					if (position.distSqr(treeCenter.getX(), treeCenter.getY(), treeCenter.getZ(), false) <= radius * radius + 0.01) {
 						Direction direction = VectUtil.direction(position, treeCenter);
 						block.setDirection(direction);
-						addBlock(world, position, block, replace);
+						if (addBlock(world, position, block, replace)) {
+							contour.addLeaf(position);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	public static void generateCircleFromTreeStartPos(IWorld world, Random rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
-		generateCircle(world, rand, startPos.offset(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace);
+	public static void generateCircleFromTreeStartPos(IWorld world, Random rand, BlockPos startPos, int girth, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
+		generateCircle(world, rand, startPos.offset(girth / 2, 0, girth / 2), radius, width, height, block, chance, replace, contour);
 	}
 
-	public static void generateCircle(IWorld world, Random rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace) {
+	public static void generateCircle(IWorld world, Random rand, BlockPos center, float radius, int width, int height, ITreeBlockType block, float chance, EnumReplaceMode replace, TreeContour contour) {
 		Vector3i start = new Vector3i(center.getX() - radius, center.getY(), center.getZ() - radius);
 		Vector3i area = new Vector3i(radius * 2 + 1, height, radius * 2 + 1);
 
@@ -88,18 +96,20 @@ public class FeatureHelper {
 
 					double distance = mutablePos.set(x, y, z).distSqr(center.getX(), y, center.getZ(), false);
 					if ((radius - width - 0.01) * (radius - width - 0.01) < distance && distance <= (radius + 0.01) * (radius + 0.01)) {
-						addBlock(world, new BlockPos(x, y, z), block, replace);
+						if (addBlock(world, mutablePos, block, replace)) {
+							contour.addLeaf(mutablePos);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	public static void generateSphereFromTreeStartPos(IWorld world, BlockPos startPos, int girth, int radius, ITreeBlockType block, EnumReplaceMode replace) {
-		generateSphere(world, startPos.offset(girth / 2, 0, girth / 2), radius, block, replace);
+	public static void generateSphereFromTreeStartPos(IWorld world, BlockPos startPos, int girth, int radius, ITreeBlockType block, EnumReplaceMode replace, TreeContour contour) {
+		generateSphere(world, startPos.offset(girth / 2, 0, girth / 2), radius, block, replace, contour);
 	}
 
-	public static void generateSphere(IWorld world, BlockPos center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
+	public static void generateSphere(IWorld world, BlockPos center, int radius, ITreeBlockType block, EnumReplaceMode replace, TreeContour contour) {
 		Vector3i start = new Vector3i(center.getX() - radius, center.getY() - radius, center.getZ() - radius);
 		Vector3i area = new Vector3i(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
@@ -108,7 +118,9 @@ public class FeatureHelper {
 				for (int z = start.getZ(); z < start.getZ() + area.getZ(); z++) {
 					//center.getDistance(x, y, z) <= radius + 0.01
 					if (center.closerThan(mutablePos.set(x, y, z), radius + 0.01)) {
-						addBlock(world, mutablePos, block, replace);
+						if (addBlock(world, mutablePos, block, replace)) {
+							contour.addLeaf(mutablePos);
+						}
 					}
 				}
 			}

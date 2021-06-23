@@ -4,20 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.minecraftforge.fml.InterModComms;
@@ -46,7 +40,6 @@ public class CommonModuleHandler {
 		PRE_INIT, // register handlers, triggers, definitions, and anything that depends on basic items
 		BACKPACKS_CRATES, // backpacks, crates
 		INIT, // anything that depends on PreInit stages, recipe registration
-		CLIENT_SETUP, // setup anything that only exists on the client side
 		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
 		FINISHED
 	}
@@ -122,12 +115,6 @@ public class CommonModuleHandler {
 		}
 	}
 
-	public void registerEntityTypes(IForgeRegistry<EntityType<?>> registry) {
-		for (IForestryModule module : modules) {
-			module.registerEntityTypes(registry);
-		}
-	}
-
 	public void registerGuiFactories() {
 		for (IForestryModule module : modules) {
 			module.registerGuiFactories();
@@ -186,9 +173,6 @@ public class CommonModuleHandler {
 		}
 	}
 
-	public void runClientSetup() {
-	}
-
 	public void runClientInit() {
 
 	}
@@ -230,31 +214,6 @@ public class CommonModuleHandler {
 				}
 			}
 		});
-	}
-
-	//TODO - worldgen
-	//	public void populateChunk(IChunkGenerator chunkProvider, World world, Random rand, int chunkX, int chunkZ, boolean hasVillageGenerated) {
-	//		for (BlankForestryModule module : modules) {
-	//			module.populateChunk(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated);
-	//		}
-	//	}
-
-	public void addBiomeDecorations(Biome biome) {
-		for (BlankForestryModule module : modules) {
-			module.addBiomeDecorations(biome);
-		}
-	}
-
-	public void decorateBiome(World world, Random rand, BlockPos pos) {
-		for (BlankForestryModule module : modules) {
-			module.decorateBiome(world, rand, pos);
-		}
-	}
-
-	public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {
-		for (BlankForestryModule module : modules) {
-			module.populateChunkRetroGen(world, rand, chunkX, chunkZ);
-		}
 	}
 
 	public List<ItemStack> getHiddenItems() {

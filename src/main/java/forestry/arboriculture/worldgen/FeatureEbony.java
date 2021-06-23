@@ -11,7 +11,6 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -44,7 +43,7 @@ public class FeatureEbony extends FeatureTree {
 					trunksGenerated++;
 				} else {
 					for (int i = 0; i < 1; i++) {
-						world.setBlock(new BlockPos(x, i, z), Blocks.AIR.defaultBlockState(), 18);
+						world.setBlock(startPos.offset(x, i, z), Blocks.AIR.defaultBlockState(), 18);
 					}
 				}
 			}
@@ -59,7 +58,7 @@ public class FeatureEbony extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, List<BlockPos> branchEnds, BlockPos startPos) {
+	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		for (int times = 0; times < 2 * height; times++) {
 			int h = 2 * girth + rand.nextInt(height - girth);
 			if (rand.nextBoolean() && h < height / 2) {
@@ -71,7 +70,7 @@ public class FeatureEbony extends FeatureTree {
 
 			BlockPos center = startPos.offset(x_off, h, y_off);
 			int radius = 1 + rand.nextInt(girth);
-			FeatureHelper.generateSphere(world, center, radius, leaf, FeatureHelper.EnumReplaceMode.AIR);
+			FeatureHelper.generateSphere(world, center, radius, leaf, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}
 	}
 }

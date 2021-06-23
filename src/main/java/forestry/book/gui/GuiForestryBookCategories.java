@@ -1,10 +1,10 @@
 package forestry.book.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -18,7 +18,6 @@ import forestry.api.book.IForesterBook;
 import forestry.book.gui.buttons.GuiButtonBookCategory;
 import forestry.core.config.Constants;
 import forestry.core.gui.Drawable;
-import forestry.core.utils.Translator;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiForestryBookCategories extends GuiForesterBook {
@@ -53,11 +52,10 @@ public class GuiForestryBookCategories extends GuiForesterBook {
 
 	@Override
 	protected void drawText(MatrixStack transform) {
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
-		drawCenteredString(transform, fontRenderer, TextFormatting.UNDERLINE + Translator.translateToLocal("for.gui.book.about.title"), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
-		ITextComponent about = new TranslationTextComponent("for.gui.book.about");
-		fontRenderer.drawWordWrap(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
-		fontRenderer.draw(transform, Translator.translateToLocal("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + fontRenderer.wordWrapHeight(about.getString(), 108), 0);
+		drawCenteredString(transform, font, new TranslationTextComponent("for.gui.book.about.title").withStyle(TextFormatting.UNDERLINE), guiLeft + RIGHT_PAGE_START_X + 52, guiTop + PAGE_START_Y, 0xD3D3D3);
+		TextComponent about = new TranslationTextComponent("for.gui.book.about");
+		font.drawWordWrap(about, guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y, 108, 0);
+		font.draw(transform, new TranslationTextComponent("for.gui.book.about.author"), guiLeft + RIGHT_PAGE_START_X, guiTop + LEFT_PAGE_START_Y + font.wordWrapHeight(about.getString(), 108), 0);
 		LOGO.draw(transform, guiTop + LEFT_PAGE_START_Y + 110, 108, 24, guiLeft + RIGHT_PAGE_START_X);
 	}
 

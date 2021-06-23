@@ -106,34 +106,6 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 		return getSpecies(itemstack).getGermlingColour(type, renderPass);
 	}
 
-	/* MODELS */
-	//TODO: Wood Models
-	/*@OnlyIn(Dist.CLIENT)
-	@Override
-	public void registerModel(Item item, IModelManager manager) {
-		manager.registerItemModel(item, new GermlingMeshDefinition());
-		for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				((IAlleleTreeSpecies) allele).registerModels(item, manager, type);
-			}
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	private class GermlingMeshDefinition implements ItemMeshDefinition {
-		@Override
-		public ModelResourceLocation getModelLocation(ItemStack stack) {
-			IAlleleTreeSpecies treeSpecies;
-			if (!stack.hasTag()) {
-				treeSpecies = TreeDefinition.Oak.getGenome().getPrimary();
-			} else {
-				treeSpecies = getSpecies(stack);
-			}
-			return treeSpecies.getGermlingModel(type);
-		}
-	}*/
-
-
 	@Override
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		BlockRayTraceResult traceResult = (BlockRayTraceResult) getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.ANY);

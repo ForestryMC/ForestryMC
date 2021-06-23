@@ -62,6 +62,8 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.items.definitions.EnumElectronTube;
+import forestry.mail.features.MailItems;
+import forestry.mail.items.ItemLetter;
 import forestry.modules.features.FeatureItem;
 import forestry.storage.ModuleCrates;
 import forestry.storage.features.CrateItems;
@@ -410,6 +412,16 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 					.recipe(ShapelessRecipeBuilder.shapeless(itemCrated.getContained().getItem(), 9).requires(itemCrated))
 					.build(consumer, id("carpenter", "crates", "unpack", itemCrated.identifier));
 		}
+
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(10)
+				.setLiquid(new FluidStack(Fluids.WATER, 250))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shaped(MailItems.LETTERS.get(ItemLetter.Size.EMPTY, ItemLetter.State.FRESH).item())
+						.pattern("###")
+						.pattern("###")
+						.define('#', CoreItems.WOOD_PULP))
+				.build(consumer, id("carpenter", "letter_pulp"));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
