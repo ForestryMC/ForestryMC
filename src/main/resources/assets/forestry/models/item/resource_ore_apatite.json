@@ -1,5 +1,5 @@
 {
-  "parent": "forestry:block/ores/apatite",
+  "parent": "forestry:block/ores/apatite0",
   "display": {
     "thirdperson": {
       "rotation": [

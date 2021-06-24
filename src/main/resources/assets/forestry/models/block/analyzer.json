@@ -1,5 +1,12 @@
 {
+  "parent": "block/cube",
   "textures": {
-    "particle": "forestry:block/analyzer.0"
+    "particle": "forestry:block/analyzer.4",
+    "down": "forestry:block/analyzer.0",
+    "up": "forestry:block/analyzer.1",
+    "north": "forestry:block/analyzer.2",
+    "east": "forestry:block/analyzer.4",
+    "south": "forestry:block/analyzer.4",
+    "west": "forestry:block/analyzer.4"
   }
 }
