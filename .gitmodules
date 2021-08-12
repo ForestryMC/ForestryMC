@@ -3,7 +3,7 @@
 	url = https://github.com/GTNewHorizons/Forestry-Localization.git
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
-	url = https://github.com/Texasjake95/RedstoneFlux-API.git
+url=https://github.com/GTNewHorizons/RedstoneFlux-API.git
 [submodule "api/forestry"]
 	path = api/forestry
 url=https://github.com/GTNewHorizons/ForestryAPI.git
