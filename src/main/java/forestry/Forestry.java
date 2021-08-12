@@ -12,6 +12,7 @@ package forestry;
 
 import java.io.File;
 
+import forestry.core.ClimateManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -74,6 +75,7 @@ public class Forestry {
 
 	public Forestry() {
 		ForestryAPI.instance = this;
+		ForestryAPI.climateManager = new ClimateManager();
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		EnumErrorCode.init();

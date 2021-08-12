@@ -11,11 +11,13 @@
 package forestry.core.genetics.mutations;
 
 import forestry.api.apiculture.IBeeHousing;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -40,7 +42,7 @@ public class MutationConditionRequiresResourceOreDict implements IMutationCondit
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 /*
 		Block block;
 		int meta;

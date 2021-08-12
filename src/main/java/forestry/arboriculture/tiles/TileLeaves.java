@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import com.mojang.authlib.GameProfile;
 
@@ -39,6 +40,9 @@ import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreekeepingMode;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IEffectData;
@@ -575,5 +579,20 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	public boolean canNurse(IButterfly butterfly) {
 		ITree tree = getTree();
 		return !isDecorative && !isDestroyed(tree, damage) && caterpillar == null;
+	}
+
+	@Override
+	public BiomeGenBase getBiome() {
+		return worldObj.getBiomeGenForCoords(xCoord, zCoord);
+	}
+
+	@Override
+	public EnumTemperature getTemperature() {
+		return EnumTemperature.getFromBiome(getBiome(), xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public EnumHumidity getHumidity() {
+		return EnumHumidity.getFromValue(ForestryAPI.climateManager.getHumidity(worldObj, xCoord, yCoord, zCoord));
 	}
 }

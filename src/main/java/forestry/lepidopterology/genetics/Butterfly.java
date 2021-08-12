@@ -248,7 +248,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 		}
 
 		for (IButterflyMutation mutation : ButterflyManager.butterflyRoot.getMutations(true)) {
-			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1);
+			float chance = mutation.getChance(nursery, allele0, allele1, genome0, genome1, nursery);
 			if (chance > rand.nextFloat() * 100) {
 				return ButterflyManager.butterflyRoot.templateAsChromosomes(mutation.getTemplate());
 			}
