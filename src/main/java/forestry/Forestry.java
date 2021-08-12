@@ -12,7 +12,6 @@ package forestry;
 
 import java.io.File;
 
-import forestry.core.ClimateManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -34,6 +33,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 import forestry.api.core.ForestryAPI;
+import forestry.core.ClimateManager;
 import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core;
 
-import forestry.api.core.IClimateProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.IClimateManager;
+import forestry.api.core.IClimateProvider;
 
 public class ClimateManager implements IClimateManager {
 

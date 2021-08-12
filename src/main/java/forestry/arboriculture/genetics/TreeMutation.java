@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import forestry.api.core.ForestryAPI;
 import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
@@ -18,6 +17,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutationCustom;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
