@@ -33,6 +33,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
 
 import forestry.api.core.ForestryAPI;
+import forestry.core.ClimateManager;
 import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -74,6 +75,7 @@ public class Forestry {
 
 	public Forestry() {
 		ForestryAPI.instance = this;
+		ForestryAPI.climateManager = new ClimateManager();
 		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		EnumErrorCode.init();

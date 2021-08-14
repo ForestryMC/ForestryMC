@@ -42,7 +42,7 @@ public class BeeMutation extends Mutation implements IBeeMutationCustom {
 		int y = housingCoordinates.posY;
 		int z = housingCoordinates.posZ;
 
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1, housing);
 		if (processedChance <= 0) {
 			return 0;
 		}

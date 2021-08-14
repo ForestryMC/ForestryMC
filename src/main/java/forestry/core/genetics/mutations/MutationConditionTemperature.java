@@ -11,9 +11,9 @@
 package forestry.core.genetics.mutations;
 
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.core.EnumTemperature;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
@@ -31,9 +31,8 @@ public class MutationConditionTemperature implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(x, z);
-		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, x, y, z);
+	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+		EnumTemperature biomeTemperature = climate.getTemperature();
 
 		if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
 			return 0;

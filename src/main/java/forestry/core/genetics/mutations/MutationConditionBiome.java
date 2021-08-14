@@ -19,6 +19,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 import net.minecraftforge.common.BiomeDictionary;
 
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
@@ -33,8 +34,8 @@ public class MutationConditionBiome implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
-		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+		BiomeGenBase biome = climate.getBiome();
 		for (BiomeDictionary.Type type : validBiomeTypes) {
 			if (BiomeDictionary.isBiomeOfType(biome, type)) {
 				return 1;

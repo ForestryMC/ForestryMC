@@ -17,6 +17,7 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.ITreeMutationCustom;
 import forestry.api.arboriculture.ITreeRoot;
 import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.ForestryAPI;
 import forestry.api.genetics.IAllele;
 import forestry.core.genetics.mutations.Mutation;
 
@@ -33,7 +34,7 @@ public class TreeMutation extends Mutation implements ITreeMutationCustom {
 
 	@Override
 	public float getChance(World world, int x, int y, int z, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, ITreeGenome genome0, ITreeGenome genome1) {
-		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+		float processedChance = super.getChance(world, x, y, z, allele0, allele1, genome0, genome1, ForestryAPI.climateManager.getDefaultClimate(world, x, y, z));
 		if (processedChance <= 0) {
 			return 0;
 		}
