@@ -380,6 +380,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
 		}
 
+		// Recipe registering for Pam's Harvest the Nether
 		if (ModUtil.isModLoaded(HCN)) {
 			for (String netherCropName : genericNetherCrops) {
 				ItemStack genericNetherCropSeed = GameRegistry.findItemStack(HCN, netherCropName + "seedItem", 1);
@@ -387,9 +388,18 @@ public class PluginHarvestCraft extends ForestryPlugin {
 				if (genericNetherCropSeed != null) {
 					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{genericNetherCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
 				}
+
 				if (PluginManager.Module.FARMING.isEnabled() && genericNetherCropSeed != null && genericNetherCropBlock != null) {
-					Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+					// Add all crops to orchard farms
 					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(genericNetherCropBlock, 7));
+					
+					if (netherCropName == "glowflower") {
+						// Add glowflowers to managed and manual crop farms
+						Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+					} else {
+						// Add every other crop to infernal farms, since they only grow on soul sand
+						Farmables.farmables.get(FarmableReference.Infernal.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+					}
 				}
 			}
 		}
