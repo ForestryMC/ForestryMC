@@ -39,6 +39,7 @@ import forestry.plugins.PluginManager;
 public class PluginHarvestCraft extends ForestryPlugin {
 
 	private static final String HC = "harvestcraft";
+	private static final String HCN = "harvestthenether";
 
 	@Override
 	public boolean isAvailable() {
@@ -190,6 +191,17 @@ public class PluginHarvestCraft extends ForestryPlugin {
 
 		ImmutableList<String> genericCrops = genericCropsBuilder.build();
 
+		// Pam's Harvest The Nether Crops
+		ImmutableList.Builder<String> genericNetherCropsBuilder = ImmutableList.builder();
+		genericNetherCropsBuilder.add(
+				"glowflower",
+				"fleshroot",
+				"bloodleaf",
+				"marrowberry"
+		);
+		
+		ImmutableList<String> genericNetherCrops = genericNetherCropsBuilder.build();
+
 		ImmutableList.Builder<String> plants = ImmutableList.builder();
 
 		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
@@ -309,6 +321,7 @@ public class PluginHarvestCraft extends ForestryPlugin {
 			}
 			plants.add(cropName);
 		}
+
 		ItemStack mustardCropSeed = GameRegistry.findItemStack(HC, "mustard" + "seedItem", 1);
 		Block mustardCropBlock = GameRegistry.findBlock(HC, "pam" + "mustardseeds" + "Crop");
 		ItemStack mustardFruit = GameRegistry.findItemStack(HC, "mustard" + "seedsItem", 1);
@@ -365,6 +378,30 @@ public class PluginHarvestCraft extends ForestryPlugin {
 		ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);
 		if (hcBeeswaxItem != null) {
 			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
+		}
+
+		// Recipe registering for Pam's Harvest the Nether
+		if (ModUtil.isModLoaded(HCN)) {
+			for (String netherCropName : genericNetherCrops) {
+				ItemStack genericNetherCropSeed = GameRegistry.findItemStack(HCN, netherCropName + "seedItem", 1);
+				Block genericNetherCropBlock = GameRegistry.findBlock(HCN, netherCropName + "Crop");
+				if (genericNetherCropSeed != null) {
+					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{genericNetherCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+				}
+
+				if (PluginManager.Module.FARMING.isEnabled() && genericNetherCropSeed != null && genericNetherCropBlock != null) {
+					// Add all crops to orchard farms
+					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(genericNetherCropBlock, 7));
+					
+					if (netherCropName == "glowflower") {
+						// Add glowflowers to managed and manual crop farms
+						Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+					} else {
+						// Add every other crop to infernal farms, since they only grow on soul sand
+						Farmables.farmables.get(FarmableReference.Infernal.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+					}
+				}
+			}
 		}
 	}
 
