@@ -191,6 +191,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 			return false;
 		}
 
+		if (!world.blockExists(x, y, z))
+			return false;
+
 		Set<IFlowerAcceptableRule> acceptedCustom = this.registeredRules.get(flowerType);
 		for (IFlowerAcceptableRule acceptableFlower : acceptedCustom) {
 			if (acceptableFlower.isAcceptableFlower(flowerType, world, x, y, z)) {
