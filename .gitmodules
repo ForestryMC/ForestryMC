@@ -1,9 +1,0 @@
-[submodule "lang"]
-	path = lang
-	url = https://github.com/GTNewHorizons/Forestry-Localization.git
-[submodule "api/redstoneflux"]
-	path = api/redstoneflux
-url=https://github.com/GTNewHorizons/RedstoneFlux-API.git
-[submodule "api/forestry"]
-	path = api/forestry
-url=https://github.com/GTNewHorizons/ForestryAPI.git

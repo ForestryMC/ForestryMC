@@ -1,0 +1,8 @@
+// Add your dependencies here
+
+dependencies {
+    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    compile("com.mod-buildcraft:buildcraft:7.1.23:dev")
+
+    compile("com.github.GTNewHorizons:NotEnoughItems:unified-build-script-SNAPSHOT:dev")
+}
