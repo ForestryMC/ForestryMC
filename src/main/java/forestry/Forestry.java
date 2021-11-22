@@ -56,9 +56,9 @@ import forestry.plugins.PluginManager;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD,
-		name = "Forestry",
-		version = Version.VERSION,
+		modid = Constants.ID,
+		name = Constants.MOD,
+		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.4.1566,);"
 				+ "after:Buildcraft|Core@[6.1.7,);"
