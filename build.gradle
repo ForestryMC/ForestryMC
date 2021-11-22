@@ -448,6 +448,21 @@ artifacts {
     }
 }
 
+install{
+    repositories{
+        mavenInstaller{
+            pom.withXml {
+                def repositoriesNode = asNode().appendNode("repositories")
+                project.repositories.each { repository ->
+                    def repositoryNode = repositoriesNode.appendNode("repository")
+                    repositoryNode.appendNode("name", repository.name)
+                    repositoryNode.appendNode("url", repository.properties.get("url"))
+                }
+            }
+        }
+    }
+}
+
 // Updating
 task updateBuildScript {
     doLast {
