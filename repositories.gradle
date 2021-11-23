@@ -1,0 +1,18 @@
+// Add any additional repositiroes for your dependencies here
+
+repositories {
+    maven {
+        name = "ic2"
+        url = "http://maven.ic2.player.to/"
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+    }
+    maven {
+        url "https://cursemaven.com"
+    }
+    maven {
+        url = "https://jitpack.io"
+    }
+}
