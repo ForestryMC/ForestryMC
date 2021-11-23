@@ -5,4 +5,5 @@ dependencies {
     compile("com.mod-buildcraft:buildcraft:7.1.23:dev")
 
     compile("com.github.GTNewHorizons:NotEnoughItems:master-SNAPSHOT:dev")
+    compile("com.github.GTNewHorizons:inventory-tweaks:master-SNAPSHOT:api")
 }
