@@ -56,7 +56,7 @@ import forestry.plugins.PluginManager;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.ID,
+		modid = Constants.MOD,
 		name = Constants.MOD,
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
