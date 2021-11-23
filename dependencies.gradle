@@ -1,9 +1,12 @@
 // Add your dependencies here
 
 dependencies {
+    compile("com.github.GTNewHorizons:NotEnoughItems:master-SNAPSHOT:dev")
+    compile("com.github.GTNewHorizons:inventory-tweaks:master-SNAPSHOT:api")
+
     compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
     compile("com.mod-buildcraft:buildcraft:7.1.23:dev")
 
-    compile("com.github.GTNewHorizons:NotEnoughItems:master-SNAPSHOT:dev")
-    compile("com.github.GTNewHorizons:inventory-tweaks:master-SNAPSHOT:api")
+    // buildcraft shades cofh-core
+    //compileOnly("curse.maven:cofh-core-69162:2388751")
 }
