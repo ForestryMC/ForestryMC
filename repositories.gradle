@@ -9,10 +9,9 @@ repositories {
             artifact()
         }
     }
-    // buildcraft shades cofh-core
-    /*maven {
+    maven {
         url "https://cursemaven.com"
-    }*/
+    }
     maven {
         url = "https://jitpack.io"
     }
