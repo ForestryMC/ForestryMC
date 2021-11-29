@@ -1,0 +1,17 @@
+{
+  "type": "forestry:carpenter",
+  "time": 5,
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+      {
+        "item": "forestry:crated/minecraft/jungle_log"
+      }
+    ],
+    "result": {
+      "item": "minecraft:jungle_log",
+      "count": 9
+    }
+  }
+}
