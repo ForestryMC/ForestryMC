@@ -34,7 +34,6 @@ public class Circuits {
 	public static ICircuit farmOrchidManual;
 	public static ICircuit farmGourdManual;
 	public static ICircuit farmCocoaManual;
-	public static ICircuit farmRubberManual;
 
 	public static ICircuit machineSpeedUpgrade1;
 	public static ICircuit machineSpeedUpgrade2;
