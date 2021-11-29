@@ -7,38 +7,28 @@ package forestry.api.storage;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.item.crafting.Ingredient;
 
 /**
  * A configurable backpack filter. Useful for implementers of {@link IBackpackDefinition}.
  * Get a new instance from {@link IBackpackInterface#createBackpackFilter()}.
  */
 public interface IBackpackFilterConfigurable extends Predicate<ItemStack> {
-	/**
-	 * Adds an item as valid for this backpack to pick up.
-	 */
-	void acceptItem(ItemStack validItem);
 
 	/**
-	 * Adds an item as invalid for this backpack, used to make exceptions to oreDictionary matches.
+	 * Adds an item or tag as valid for this filter
 	 *
-	 * @see #acceptTag(ITag)
+	 * @param ingredient The items or tags to allow
 	 */
-	void rejectItem(ItemStack invalidItem);
+	void accept(Ingredient ingredient);
 
 	/**
-	 * Adds an ore dictionary name as valid for this backpack.
-	 * The backpack will pick up any item that has this tag.
+	 * Adds an item or tag as invalid for this filter
+	 *
+	 * @param ingredient The items or tags to reject
 	 */
-	void acceptTag(ITag<Item> tag);
-
-	/**
-	 * Removes an ore dictionary name as valid for this backpack.
-	 * The backpack will not pick up any item that has this oreDictName.
-	 */
-	void rejectOreDictName(String oreDictName);
+	void reject(Ingredient ingredient);
 
 	/**
 	 * Clear all the rules from this filter.

@@ -20,8 +20,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.apiculture.entities.AIAvoidPlayers;
 
-//import net.minecraft.entity.ai.goal.GoalSelector.EntityAITaskEntry;
-
 public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 
 	public AlleleEffectRepulsion() {
@@ -42,13 +40,6 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 	}
 
 	private boolean isMobAvoidingPlayers(MonsterEntity mob) {
-		mob.goalSelector.getRunningGoals().forEach(g -> {
-			//TODO - hmm
-			//			EntityAITaskEntry task = (EntityAITaskEntry) g;
-			//			if (g instanceof AIAvoidPlayers) {
-			//				return true;
-			//			}
-		});
-		return false;
+		return mob.goalSelector.getRunningGoals().anyMatch(task -> task.getGoal() instanceof AIAvoidPlayers);
 	}
 }

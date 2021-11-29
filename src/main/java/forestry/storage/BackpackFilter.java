@@ -1,57 +1,32 @@
 package forestry.storage;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.item.crafting.Ingredient;
 
 import forestry.api.storage.IBackpackFilterConfigurable;
-import forestry.core.utils.ItemStackUtil;
 
 public class BackpackFilter implements IBackpackFilterConfigurable {
-	private final Set<String> acceptedItemStacks = new HashSet<>();
-	private final Set<String> rejectedItemStacks = new HashSet<>();
-	private final Set<Integer> validOreIds = new HashSet<>();
+
+	private final List<Ingredient> accept = new ArrayList<>();
+	private final List<Ingredient> reject = new ArrayList<>();
 
 	@Override
-	public void acceptItem(ItemStack validItem) {
-		String itemStackString = ItemStackUtil.getStringForItemStack(validItem);
-		if (itemStackString != null) {
-			this.acceptedItemStacks.add(itemStackString);
-		}
+	public void accept(Ingredient ingredient) {
+		accept.add(ingredient);
 	}
 
 	@Override
-	public void acceptTag(ITag<Item> tag) {
-		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
-		//			int oreId = OreDictionary.getOreID(oreDictName);
-		//			this.validOreIds.add(oreId);
-		//		}	//TODO tags
-	}
-
-	@Override
-	public void rejectOreDictName(String oreDictName) {
-		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
-		//			int oreId = OreDictionary.getOreID(oreDictName);
-		//			this.validOreIds.remove(oreId);
-		//		} //TODO tags
-	}
-
-	@Override
-	public void rejectItem(ItemStack invalidItem) {
-		String itemStackString = ItemStackUtil.getStringForItemStack(invalidItem);
-		if (itemStackString != null) {
-			this.rejectedItemStacks.add(itemStackString);
-		}
+	public void reject(Ingredient ingredient) {
+		reject.add(ingredient);
 	}
 
 	@Override
 	public void clear() {
-		acceptedItemStacks.clear();
-		rejectedItemStacks.clear();
-		validOreIds.clear();
+		accept.clear();
+		reject.clear();
 	}
 
 	@Override
@@ -60,42 +35,12 @@ public class BackpackFilter implements IBackpackFilterConfigurable {
 			return false;
 		}
 
-		Item item = itemStack.getItem();
-		String itemStackStringWild = ItemStackUtil.getItemNameFromRegistryAsString(item);
-		if (rejectedItemStacks.contains(itemStackStringWild)) {
-			return false;
+		// I think that the backpack allows anything except what is rejected, but from what is rejected you can say
+		// what will be allowed (like an override)
+		if (reject.stream().anyMatch(ingredient -> ingredient.test(itemStack))) {
+			return accept.stream().anyMatch(ingredient -> ingredient.test(itemStack));
+		} else {
+			return true;
 		}
-		return acceptedItemStacks.contains(itemStackStringWild);
-
-		//		int meta = itemStack.getMetadata();
-		//		if (meta != OreDictionary.WILDCARD_VALUE) {
-		//			String itemStackString = itemStackStringWild + ':' + meta;
-		//			if (rejectedItemStacks.contains(itemStackString)) {
-		//				return false;
-		//			}
-		//			if (acceptedItemStacks.contains(itemStackString)) {
-		//				return true;
-		//			}
-		//		}
-		//
-		//		int[] oreIds = OreDictionary.getOreIDs(itemStack);
-		//		for (int oreId : oreIds) {
-		//			if (validOreIds.contains(oreId)) {
-		//				acceptedItemStacks.add(itemStackStringWild);
-		//				return true;
-		//			}
-		//		}	//TODO tags
-	}
-
-	public Set<Integer> getValidOreIds() {
-		return validOreIds;
-	}
-
-	public Set<String> getAcceptedItemStacks() {
-		return acceptedItemStacks;
-	}
-
-	public Set<String> getRejectedItemStacks() {
-		return rejectedItemStacks;
 	}
 }
