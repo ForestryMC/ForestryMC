@@ -15,18 +15,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.command.CommandSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags;
 
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -36,16 +33,12 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.modules.ForestryModule;
 import forestry.api.multiblock.MultiblockManager;
 import forestry.api.recipes.RecipeManagers;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
 import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandModules;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.data.ForestryTags;
-import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreFeatures;
 import forestry.core.features.CoreItems;
@@ -134,79 +127,6 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public ISaveEventHandler getSaveEventHandler() {
 		return new SaveEventHandlerCore();
-	}
-
-	@Override
-	public void registerCrates() {
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-
-		// forestry items
-		crateRegistry.registerCrate(CoreItems.PEAT.stack());
-		crateRegistry.registerCrate(CoreItems.APATITE.stack());
-		crateRegistry.registerCrate(CoreItems.FERTILIZER_COMPOUND.stack());
-		crateRegistry.registerCrate(CoreItems.MULCH.stack());
-		crateRegistry.registerCrate(CoreItems.PHOSPHOR.stack());
-		crateRegistry.registerCrate(CoreItems.ASH.stack());
-		crateRegistry.registerCrate(ForestryTags.Items.INGOTS_TIN);
-		crateRegistry.registerCrate(ForestryTags.Items.INGOTS_COPPER);
-		crateRegistry.registerCrate(ForestryTags.Items.INGOTS_BRONZE);
-
-		// forestry blocks
-		crateRegistry.registerCrate(CoreBlocks.HUMUS.stack());
-		crateRegistry.registerCrate(CoreBlocks.BOG_EARTH.stack());
-
-		// vanilla items
-		crateRegistry.registerCrate(Tags.Items.CROPS_WHEAT);
-		crateRegistry.registerCrate(Items.COOKIE);
-		crateRegistry.registerCrate(Tags.Items.DUSTS_REDSTONE);
-		crateRegistry.registerCrate(Tags.Items.GEMS_LAPIS);
-		crateRegistry.registerCrate(Items.SUGAR_CANE);
-		crateRegistry.registerCrate(Items.CLAY_BALL);
-		crateRegistry.registerCrate(Tags.Items.DUSTS_GLOWSTONE);
-		crateRegistry.registerCrate(Items.APPLE);
-		crateRegistry.registerCrate(Items.NETHER_WART);
-		crateRegistry.registerCrate(Items.COAL);
-		crateRegistry.registerCrate(Items.CHARCOAL);
-		crateRegistry.registerCrate(Items.WHEAT_SEEDS);
-		crateRegistry.registerCrate(Tags.Items.CROPS_POTATO);
-		crateRegistry.registerCrate(Tags.Items.CROPS_CARROT);
-		crateRegistry.registerCrate(Tags.Items.CROPS_BEETROOT);
-		crateRegistry.registerCrate(Tags.Items.CROPS_NETHER_WART);
-
-		// vanilla blocks
-		crateRegistry.registerCrate(Items.OAK_LOG);    //TODO - use tags?
-		crateRegistry.registerCrate(Items.BIRCH_LOG);
-		crateRegistry.registerCrate(Items.JUNGLE_LOG);
-		crateRegistry.registerCrate(Items.SPRUCE_LOG);
-		crateRegistry.registerCrate(Items.ACACIA_LOG);
-		crateRegistry.registerCrate(Items.DARK_OAK_LOG);
-		crateRegistry.registerCrate(Tags.Items.COBBLESTONE);
-		crateRegistry.registerCrate(Items.DIRT);
-		crateRegistry.registerCrate(Items.GRASS_BLOCK);
-		crateRegistry.registerCrate(Tags.Items.STONE);
-		crateRegistry.registerCrate(Items.GRANITE);
-		crateRegistry.registerCrate(Items.DIORITE);
-		crateRegistry.registerCrate(Items.ANDESITE);
-		crateRegistry.registerCrate(Items.PRISMARINE);
-		crateRegistry.registerCrate(Items.PRISMARINE_BRICKS);
-		crateRegistry.registerCrate(Items.DARK_PRISMARINE);
-		crateRegistry.registerCrate(Items.BRICKS);
-		crateRegistry.registerCrate(Items.CACTUS);
-		crateRegistry.registerCrate(Items.SAND);
-		crateRegistry.registerCrate(Items.RED_SAND);
-		crateRegistry.registerCrate(Tags.Items.OBSIDIAN);
-		crateRegistry.registerCrate(Tags.Items.NETHERRACK);
-		crateRegistry.registerCrate(Items.SOUL_SAND);
-		crateRegistry.registerCrate(Tags.Items.SANDSTONE);
-		crateRegistry.registerCrate(Items.NETHER_BRICKS);
-		crateRegistry.registerCrate(Items.MYCELIUM);
-		crateRegistry.registerCrate(Tags.Items.GRAVEL);
-		crateRegistry.registerCrate(Items.OAK_SAPLING);
-		crateRegistry.registerCrate(Items.BIRCH_SAPLING);
-		crateRegistry.registerCrate(Items.JUNGLE_SAPLING);
-		crateRegistry.registerCrate(Items.SPRUCE_SAPLING);
-		crateRegistry.registerCrate(Items.ACACIA_SAPLING);
-		crateRegistry.registerCrate(Items.DARK_OAK_SAPLING);
 	}
 
 	@Override

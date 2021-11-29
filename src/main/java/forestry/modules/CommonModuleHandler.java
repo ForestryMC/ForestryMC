@@ -185,13 +185,6 @@ public class CommonModuleHandler {
 
 	public void runRegisterBackpacksAndCrates() {
 		stage = Stage.BACKPACKS_CRATES;
-		for (BlankForestryModule module : modules) {
-			if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.CRATE)) {
-				Log.debug("Crates Start: {}", module);
-				module.registerCrates();
-				Log.debug("Crates Complete: {}", module);
-			}
-		}
 	}
 
 	public void runBookInit() {

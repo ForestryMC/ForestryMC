@@ -36,7 +36,6 @@ import forestry.api.modules.ForestryModule;
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackFilterConfigurable;
-import forestry.api.storage.StorageManager;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
@@ -66,18 +65,16 @@ public class ModuleBackpacks extends BlankForestryModule {
 	private final Map<String, List<String>> backpackAcceptedItemDefaults = new HashMap<>();
 
 	private final List<String> forestryBackpackUids = Arrays.asList(
-		BackpackManager.MINER_UID,
-		BackpackManager.DIGGER_UID,
-		BackpackManager.FORESTER_UID,
-		BackpackManager.HUNTER_UID,
-		BackpackManager.ADVENTURER_UID,
-		BackpackManager.BUILDER_UID
+			BackpackManager.MINER_UID,
+			BackpackManager.DIGGER_UID,
+			BackpackManager.FORESTER_UID,
+			BackpackManager.HUNTER_UID,
+			BackpackManager.ADVENTURER_UID,
+			BackpackManager.BUILDER_UID
 	);
 
 	@Override
 	public void setupAPI() {
-		StorageManager.crateRegistry = new CrateRegistry();
-
 		BackpackManager.backpackInterface = new BackpackInterface();
 
 		BackpackDefinition definition;
@@ -149,218 +146,218 @@ public class ModuleBackpacks extends BlankForestryModule {
 	//TODO - in 1.13 just ship json file that people can edit, don't have config in code.
 	private void setDefaultsForConfig() {
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.MINER_UID, Arrays.asList(
-			"obsidian",
-			"ore[A-Z].*",
-			"dust[A-Z].*",
-			"gem[A-Z].*",
-			"ingot[A-Z].*",
-			"nugget[A-Z].*",
-			"crushed[A-Z].*",
-			"cluster[A-Z].*",
-			"denseore[A-Z].*"
+				"obsidian",
+				"ore[A-Z].*",
+				"dust[A-Z].*",
+				"gem[A-Z].*",
+				"ingot[A-Z].*",
+				"nugget[A-Z].*",
+				"crushed[A-Z].*",
+				"cluster[A-Z].*",
+				"denseore[A-Z].*"
 		));
 
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.DIGGER_UID, Arrays.asList(
-			"cobblestone",
-			"dirt",
-			"grass",
-			"grass[A-Z].*",
-			"gravel",
-			"netherrack",
-			"stone",
-			"stone[A-Z].*",
-			"sandstone",
-			"sand"
+				"cobblestone",
+				"dirt",
+				"grass",
+				"grass[A-Z].*",
+				"gravel",
+				"netherrack",
+				"stone",
+				"stone[A-Z].*",
+				"sandstone",
+				"sand"
 		));
 
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.HUNTER_UID, Arrays.asList(
-			"bone",
-			"egg",
-			"enderpearl",
-			"feather",
-			"fish[A-Z].*",
-			"gunpowder",
-			"leather",
-			"slimeball",
-			"string"
+				"bone",
+				"egg",
+				"enderpearl",
+				"feather",
+				"fish[A-Z].*",
+				"gunpowder",
+				"leather",
+				"slimeball",
+				"string"
 		));
 
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.FORESTER_UID, Arrays.asList(
-			"logWood",
-			"stickWood",
-			"woodStick",
-			"saplingTree",
-			"treeSapling",
-			"vine",
-			"sugarcane",
-			"blockCactus",
-			"crop[A-Z].*",
-			"seed[A-Z].*",
-			"tree[A-Z].*"
+				"logWood",
+				"stickWood",
+				"woodStick",
+				"saplingTree",
+				"treeSapling",
+				"vine",
+				"sugarcane",
+				"blockCactus",
+				"crop[A-Z].*",
+				"seed[A-Z].*",
+				"tree[A-Z].*"
 		));
 
 		backpackAcceptedOreDictRegexpDefaults.put(BackpackManager.BUILDER_UID, Arrays.asList(
-			"block[A-Z].*",
-			"paneGlass[A-Z].*",
-			"slabWood[A-Z].*",
-			"stainedClay[A-Z].*",
-			"stainedGlass[A-Z].*",
-			"stone",
-			"sandstone",
-			OreDictUtil.PLANK_WOOD,
-			OreDictUtil.STAIR_WOOD,
-			OreDictUtil.SLAB_WOOD,
-			OreDictUtil.FENCE_WOOD,
-			OreDictUtil.FENCE_GATE_WOOD,
-			OreDictUtil.TRAPDOOR_WOOD,
-			"glass",
-			"paneGlass",
-			"torch",
-			"chest",
-			"chest[A-Z].*",
-			"workbench",
-			"doorWood"
+				"block[A-Z].*",
+				"paneGlass[A-Z].*",
+				"slabWood[A-Z].*",
+				"stainedClay[A-Z].*",
+				"stainedGlass[A-Z].*",
+				"stone",
+				"sandstone",
+				OreDictUtil.PLANK_WOOD,
+				OreDictUtil.STAIR_WOOD,
+				OreDictUtil.SLAB_WOOD,
+				OreDictUtil.FENCE_WOOD,
+				OreDictUtil.FENCE_GATE_WOOD,
+				OreDictUtil.TRAPDOOR_WOOD,
+				"glass",
+				"paneGlass",
+				"torch",
+				"chest",
+				"chest[A-Z].*",
+				"workbench",
+				"doorWood"
 		));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.MINER_UID, getItemStrings(Arrays.asList(
-			new ItemStack(Blocks.COAL_ORE),
-			new ItemStack(Items.COAL),
-			CoreItems.BRONZE_PICKAXE.stack(),
-			CoreItems.KIT_PICKAXE.stack(),
-			CoreItems.BROKEN_BRONZE_PICKAXE.stack()
+				new ItemStack(Blocks.COAL_ORE),
+				new ItemStack(Items.COAL),
+				CoreItems.BRONZE_PICKAXE.stack(),
+				CoreItems.KIT_PICKAXE.stack(),
+				CoreItems.BROKEN_BRONZE_PICKAXE.stack()
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.DIGGER_UID, getItemStrings(Arrays.asList(
-			//			new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE), TODO tags
-			new ItemStack(Items.FLINT),
-			new ItemStack(Items.CLAY_BALL),
-			new ItemStack(Items.SNOWBALL),
-			new ItemStack(Blocks.SOUL_SAND),
-			new ItemStack(Blocks.CLAY),
-			new ItemStack(Blocks.SNOW),
-			CoreItems.BRONZE_SHOVEL.stack(),
-			CoreItems.KIT_SHOVEL.stack(),
-			CoreItems.BROKEN_BRONZE_SHOVEL.stack()
+				//			new ItemStack(Blocks.DIRT, 1, OreDictionary.WILDCARD_VALUE), TODO tags
+				new ItemStack(Items.FLINT),
+				new ItemStack(Items.CLAY_BALL),
+				new ItemStack(Items.SNOWBALL),
+				new ItemStack(Blocks.SOUL_SAND),
+				new ItemStack(Blocks.CLAY),
+				new ItemStack(Blocks.SNOW),
+				CoreItems.BRONZE_SHOVEL.stack(),
+				CoreItems.KIT_SHOVEL.stack(),
+				CoreItems.BROKEN_BRONZE_SHOVEL.stack()
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.FORESTER_UID, getItemStrings(Arrays.asList(
-			new ItemStack(Blocks.RED_MUSHROOM),
-			new ItemStack(Blocks.BROWN_MUSHROOM),
-			new ItemStack(Blocks.POPPY),    //TODO tag
-			new ItemStack(Blocks.GRASS),    //TODO tag
-			new ItemStack(Blocks.SUNFLOWER),    //TODO tag tall flowers
-			new ItemStack(Blocks.PUMPKIN),
-			new ItemStack(Blocks.MELON),
-			new ItemStack(Items.GOLDEN_APPLE),
-			new ItemStack(Items.NETHER_WART),
-			new ItemStack(Items.WHEAT_SEEDS),
-			new ItemStack(Items.PUMPKIN_SEEDS),
-			new ItemStack(Items.MELON_SEEDS),
-			new ItemStack(Items.BEETROOT_SEEDS),
-			new ItemStack(Items.BEETROOT),
-			new ItemStack(Items.CHORUS_FRUIT),
-			new ItemStack(Blocks.CHORUS_PLANT),
-			new ItemStack(Items.APPLE)
+				new ItemStack(Blocks.RED_MUSHROOM),
+				new ItemStack(Blocks.BROWN_MUSHROOM),
+				new ItemStack(Blocks.POPPY),    //TODO tag
+				new ItemStack(Blocks.GRASS),    //TODO tag
+				new ItemStack(Blocks.SUNFLOWER),    //TODO tag tall flowers
+				new ItemStack(Blocks.PUMPKIN),
+				new ItemStack(Blocks.MELON),
+				new ItemStack(Items.GOLDEN_APPLE),
+				new ItemStack(Items.NETHER_WART),
+				new ItemStack(Items.WHEAT_SEEDS),
+				new ItemStack(Items.PUMPKIN_SEEDS),
+				new ItemStack(Items.MELON_SEEDS),
+				new ItemStack(Items.BEETROOT_SEEDS),
+				new ItemStack(Items.BEETROOT),
+				new ItemStack(Items.CHORUS_FRUIT),
+				new ItemStack(Blocks.CHORUS_PLANT),
+				new ItemStack(Items.APPLE)
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.HUNTER_UID, getItemStrings(Arrays.asList(
-			new ItemStack(Items.BLAZE_POWDER),
-			new ItemStack(Items.BLAZE_ROD),
-			new ItemStack(Items.ROTTEN_FLESH),
-			new ItemStack(Items.SKELETON_SKULL),    //TODO tag
-			new ItemStack(Items.GHAST_TEAR),
-			new ItemStack(Items.GOLD_NUGGET),
-			new ItemStack(Items.ARROW),
-			new ItemStack(Items.SPECTRAL_ARROW),
-			new ItemStack(Items.TIPPED_ARROW),
-			new ItemStack(Items.PORKCHOP),
-			new ItemStack(Items.COOKED_PORKCHOP),
-			new ItemStack(Items.BEEF),
-			new ItemStack(Items.COOKED_BEEF),
-			new ItemStack(Items.CHICKEN),
-			new ItemStack(Items.COOKED_CHICKEN),
-			new ItemStack(Items.MUTTON),
-			new ItemStack(Items.COOKED_MUTTON),
-			new ItemStack(Items.RABBIT),
-			new ItemStack(Items.COOKED_RABBIT),
-			new ItemStack(Items.RABBIT_FOOT),
-			new ItemStack(Items.RABBIT_HIDE),
-			new ItemStack(Items.SPIDER_EYE),
-			new ItemStack(Items.FERMENTED_SPIDER_EYE),
-			new ItemStack(Items.BONE_MEAL),    //TODO correct item?
-			new ItemStack(Blocks.HAY_BLOCK),
-			new ItemStack(Blocks.WHITE_WOOL),    //TODO tag
-			new ItemStack(Items.ENDER_EYE),
-			new ItemStack(Items.MAGMA_CREAM),
-			new ItemStack(Items.GLISTERING_MELON_SLICE),    //TODO right item?
-			new ItemStack(Items.COD),    //TODO tag
-			new ItemStack(Items.COOKED_COD),    //TODO tag
-			new ItemStack(Items.LEAD),
-			new ItemStack(Items.FISHING_ROD),
-			new ItemStack(Items.NAME_TAG),
-			new ItemStack(Items.SADDLE),
-			new ItemStack(Items.DIAMOND_HORSE_ARMOR),
-			new ItemStack(Items.GOLDEN_HORSE_ARMOR),
-			new ItemStack(Items.IRON_HORSE_ARMOR)
+				new ItemStack(Items.BLAZE_POWDER),
+				new ItemStack(Items.BLAZE_ROD),
+				new ItemStack(Items.ROTTEN_FLESH),
+				new ItemStack(Items.SKELETON_SKULL),    //TODO tag
+				new ItemStack(Items.GHAST_TEAR),
+				new ItemStack(Items.GOLD_NUGGET),
+				new ItemStack(Items.ARROW),
+				new ItemStack(Items.SPECTRAL_ARROW),
+				new ItemStack(Items.TIPPED_ARROW),
+				new ItemStack(Items.PORKCHOP),
+				new ItemStack(Items.COOKED_PORKCHOP),
+				new ItemStack(Items.BEEF),
+				new ItemStack(Items.COOKED_BEEF),
+				new ItemStack(Items.CHICKEN),
+				new ItemStack(Items.COOKED_CHICKEN),
+				new ItemStack(Items.MUTTON),
+				new ItemStack(Items.COOKED_MUTTON),
+				new ItemStack(Items.RABBIT),
+				new ItemStack(Items.COOKED_RABBIT),
+				new ItemStack(Items.RABBIT_FOOT),
+				new ItemStack(Items.RABBIT_HIDE),
+				new ItemStack(Items.SPIDER_EYE),
+				new ItemStack(Items.FERMENTED_SPIDER_EYE),
+				new ItemStack(Items.BONE_MEAL),    //TODO correct item?
+				new ItemStack(Blocks.HAY_BLOCK),
+				new ItemStack(Blocks.WHITE_WOOL),    //TODO tag
+				new ItemStack(Items.ENDER_EYE),
+				new ItemStack(Items.MAGMA_CREAM),
+				new ItemStack(Items.GLISTERING_MELON_SLICE),    //TODO right item?
+				new ItemStack(Items.COD),    //TODO tag
+				new ItemStack(Items.COOKED_COD),    //TODO tag
+				new ItemStack(Items.LEAD),
+				new ItemStack(Items.FISHING_ROD),
+				new ItemStack(Items.NAME_TAG),
+				new ItemStack(Items.SADDLE),
+				new ItemStack(Items.DIAMOND_HORSE_ARMOR),
+				new ItemStack(Items.GOLDEN_HORSE_ARMOR),
+				new ItemStack(Items.IRON_HORSE_ARMOR)
 		)));
 
 		backpackAcceptedItemDefaults.put(BackpackManager.BUILDER_UID, getItemStrings(Arrays.asList(
-			new ItemStack(Blocks.REDSTONE_TORCH),
-			new ItemStack(Blocks.REDSTONE_LAMP),
-			new ItemStack(Blocks.SEA_LANTERN),
-			new ItemStack(Blocks.END_ROD),
-			new ItemStack(Blocks.STONE_BRICKS),    //TODO tag
-			new ItemStack(Blocks.BRICKS),
-			new ItemStack(Blocks.CLAY),
-			new ItemStack(Blocks.TERRACOTTA),    //TODO tag?
-			new ItemStack(Blocks.WHITE_TERRACOTTA),    //TODO tag
-			new ItemStack(Blocks.WHITE_GLAZED_TERRACOTTA),    //TODO tag
-			new ItemStack(Blocks.PACKED_ICE),
-			new ItemStack(Blocks.NETHER_BRICKS),
-			new ItemStack(Blocks.NETHER_BRICK_FENCE),
-			new ItemStack(Blocks.CRAFTING_TABLE),
-			new ItemStack(Blocks.FURNACE),
-			new ItemStack(Blocks.LEVER),
-			new ItemStack(Blocks.DISPENSER),
-			new ItemStack(Blocks.DROPPER),
-			new ItemStack(Blocks.LADDER),
-			new ItemStack(Blocks.IRON_BARS),
-			new ItemStack(Blocks.QUARTZ_BLOCK),    //TODO tag
-			new ItemStack(Blocks.QUARTZ_STAIRS),
-			new ItemStack(Blocks.SANDSTONE_STAIRS),
-			new ItemStack(Blocks.RED_SANDSTONE_STAIRS),
-			new ItemStack(Blocks.COBBLESTONE_WALL),    //TODO tag
-			new ItemStack(Blocks.STONE_BUTTON),
-			new ItemStack(Blocks.OAK_BUTTON),    //TODO tag
-			new ItemStack(Blocks.STONE_SLAB),    //TODO tag
-			new ItemStack(Blocks.SANDSTONE_SLAB),    //TODO tag
-			new ItemStack(Blocks.OAK_SLAB),    //TODO tag
-			new ItemStack(Blocks.PURPUR_BLOCK),
-			new ItemStack(Blocks.PURPUR_PILLAR),
-			new ItemStack(Blocks.PURPUR_STAIRS),
-			new ItemStack(Blocks.PURPUR_SLAB),
-			new ItemStack(Blocks.END_STONE_BRICKS),
-			new ItemStack(Blocks.WHITE_CARPET),    //TODO tag
-			new ItemStack(Blocks.IRON_TRAPDOOR),
-			new ItemStack(Blocks.STONE_PRESSURE_PLATE),
-			new ItemStack(Blocks.OAK_PRESSURE_PLATE),    //TODO tag
-			new ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
-			new ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE),
-			new ItemStack(Items.OAK_SIGN),    //TODO tag
-			new ItemStack(Items.ITEM_FRAME),
-			new ItemStack(Items.ACACIA_DOOR),
-			new ItemStack(Items.BIRCH_DOOR),
-			new ItemStack(Items.DARK_OAK_DOOR),
-			new ItemStack(Items.IRON_DOOR),
-			new ItemStack(Items.JUNGLE_DOOR),
-			new ItemStack(Items.OAK_DOOR),
-			new ItemStack(Items.SPRUCE_DOOR)
+				new ItemStack(Blocks.REDSTONE_TORCH),
+				new ItemStack(Blocks.REDSTONE_LAMP),
+				new ItemStack(Blocks.SEA_LANTERN),
+				new ItemStack(Blocks.END_ROD),
+				new ItemStack(Blocks.STONE_BRICKS),    //TODO tag
+				new ItemStack(Blocks.BRICKS),
+				new ItemStack(Blocks.CLAY),
+				new ItemStack(Blocks.TERRACOTTA),    //TODO tag?
+				new ItemStack(Blocks.WHITE_TERRACOTTA),    //TODO tag
+				new ItemStack(Blocks.WHITE_GLAZED_TERRACOTTA),    //TODO tag
+				new ItemStack(Blocks.PACKED_ICE),
+				new ItemStack(Blocks.NETHER_BRICKS),
+				new ItemStack(Blocks.NETHER_BRICK_FENCE),
+				new ItemStack(Blocks.CRAFTING_TABLE),
+				new ItemStack(Blocks.FURNACE),
+				new ItemStack(Blocks.LEVER),
+				new ItemStack(Blocks.DISPENSER),
+				new ItemStack(Blocks.DROPPER),
+				new ItemStack(Blocks.LADDER),
+				new ItemStack(Blocks.IRON_BARS),
+				new ItemStack(Blocks.QUARTZ_BLOCK),    //TODO tag
+				new ItemStack(Blocks.QUARTZ_STAIRS),
+				new ItemStack(Blocks.SANDSTONE_STAIRS),
+				new ItemStack(Blocks.RED_SANDSTONE_STAIRS),
+				new ItemStack(Blocks.COBBLESTONE_WALL),    //TODO tag
+				new ItemStack(Blocks.STONE_BUTTON),
+				new ItemStack(Blocks.OAK_BUTTON),    //TODO tag
+				new ItemStack(Blocks.STONE_SLAB),    //TODO tag
+				new ItemStack(Blocks.SANDSTONE_SLAB),    //TODO tag
+				new ItemStack(Blocks.OAK_SLAB),    //TODO tag
+				new ItemStack(Blocks.PURPUR_BLOCK),
+				new ItemStack(Blocks.PURPUR_PILLAR),
+				new ItemStack(Blocks.PURPUR_STAIRS),
+				new ItemStack(Blocks.PURPUR_SLAB),
+				new ItemStack(Blocks.END_STONE_BRICKS),
+				new ItemStack(Blocks.WHITE_CARPET),    //TODO tag
+				new ItemStack(Blocks.IRON_TRAPDOOR),
+				new ItemStack(Blocks.STONE_PRESSURE_PLATE),
+				new ItemStack(Blocks.OAK_PRESSURE_PLATE),    //TODO tag
+				new ItemStack(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE),
+				new ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE),
+				new ItemStack(Items.OAK_SIGN),    //TODO tag
+				new ItemStack(Items.ITEM_FRAME),
+				new ItemStack(Items.ACACIA_DOOR),
+				new ItemStack(Items.BIRCH_DOOR),
+				new ItemStack(Items.DARK_OAK_DOOR),
+				new ItemStack(Items.IRON_DOOR),
+				new ItemStack(Items.JUNGLE_DOOR),
+				new ItemStack(Items.OAK_DOOR),
+				new ItemStack(Items.SPRUCE_DOOR)
 		)));
 
 		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
 			backpackAcceptedItemDefaults.get(BackpackManager.BUILDER_UID).addAll(getItemStrings(Arrays.asList(
-				ApicultureBlocks.CANDLE.stack(),    //TODO tag
-				ApicultureBlocks.STUMP.stack()
+					ApicultureBlocks.CANDLE.stack(),    //TODO tag
+					ApicultureBlocks.STUMP.stack()
 			)));
 		}
 

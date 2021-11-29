@@ -168,19 +168,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerCrates() {
-		//TODO: Tags
-		//		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		//		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.LEMON.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.PLUM.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.DATES.getStack());
-	}
-
-	@Override
 	public void registerRecipes() {
 		//TODO: Recipes
 		//		ItemRegistryCore coreItems = ModuleCore.getItems();

@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraftforge.fml.DistExecutor;
 
 import forestry.api.modules.ForestryModule;
-import forestry.api.storage.StorageManager;
 import forestry.core.config.Constants;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
@@ -30,11 +29,6 @@ public class ModuleCrates extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		StorageManager.crateRegistry = new CrateRegistry();
-	}
-
-	public static void registerCrate(FeatureItem<ItemCrated> crate) {
-		crates.add(crate);
 	}
 
 	@Override

@@ -31,10 +31,9 @@ import forestry.core.utils.ItemStackUtil;
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
 
-	public ItemCrated() {
-		this(ItemStack.EMPTY);
-	}
-
+	/**
+	 * @param contained The contained item. For display only; the recipes should define what is actually contained
+	 */
 	public ItemCrated(ItemStack contained) {
 		super(ItemGroups.tabStorage);
 		this.contained = contained;
@@ -91,11 +90,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		ItemColors colors = Minecraft.getInstance().getItemColors();
+
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}
-		int color = colors.getColor(contained, renderPass);
-		return color;
-	}
 
+		return colors.getColor(contained, renderPass);
+	}
 }
