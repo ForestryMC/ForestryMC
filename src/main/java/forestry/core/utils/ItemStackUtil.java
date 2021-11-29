@@ -79,18 +79,7 @@ public abstract class ItemStackUtil {
 			return null;
 		}
 
-		Item item = itemStack.getItem();
-		String itemStackString = getItemNameFromRegistryAsString(item);
-		if (itemStackString == null) {
-			return null;
-		}
-
-		//		int meta = itemStack.getItemDamage();
-		if (false) {//meta != OreDictionary.WILDCARD_VALUE) {
-			return itemStackString;//+ ':' + meta;
-		} else {
-			return itemStackString;
-		}
+		return getItemNameFromRegistryAsString(itemStack.getItem());
 	}
 
 	/**

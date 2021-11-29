@@ -45,48 +45,4 @@ public final class ModuleHelper {
 		}
 		backpackInterface.addItemToForestryBackpack(backpackUid, stack);
 	}
-
-	public static void registerCrate(@Nullable ItemStack stack) {
-		if (stack == null || stack.isEmpty()) {
-			return;
-		}
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if (crateRegistry == null) {
-			return;
-		}
-		crateRegistry.registerCrate(stack);
-	}
-
-	public static void registerCrate(@Nullable Item item) {
-		if (item == null) {
-			return;
-		}
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if (crateRegistry == null) {
-			return;
-		}
-		crateRegistry.registerCrate(item);
-	}
-
-	public static void registerCrate(@Nullable Block block) {
-		if (block == null) {
-			return;
-		}
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if (crateRegistry == null) {
-			return;
-		}
-		crateRegistry.registerCrate(block);
-	}
-
-	public static void registerCrate(@Nullable String oreDict) {
-		if (oreDict == null || oreDict.isEmpty()) {
-			return;
-		}
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		if (crateRegistry == null) {
-			return;
-		}
-		crateRegistry.registerCrate(oreDict);
-	}
 }

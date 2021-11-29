@@ -392,25 +392,12 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 		for (FeatureItem<ItemCrated> crated : ModuleCrates.crates) {
 			ItemCrated itemCrated = crated.getItem();
+
 			if (itemCrated == null) {
 				continue;
 			}
-			new CarpenterRecipeBuilder()
-					.setPackagingTime(Constants.CARPENTER_CRATING_CYCLES)
-					.setLiquid(new FluidStack(Fluids.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY))
-					.setBox(Ingredient.of(CrateItems.CRATE))
-					.recipe(ShapedRecipeBuilder.shaped(itemCrated, 1)
-							.pattern("###")
-							.pattern("###")
-							.pattern("###")
-							.define('#', Ingredient.of(itemCrated.getContained())))
-					.build(consumer, id("carpenter", "crates", "pack", itemCrated.identifier));
-			new CarpenterRecipeBuilder()
-					.setPackagingTime(Constants.CARPENTER_UNCRATING_CYCLES)
-					.setLiquid(null)
-					.setBox(Ingredient.EMPTY)
-					.recipe(ShapelessRecipeBuilder.shapeless(itemCrated.getContained().getItem(), 9).requires(itemCrated))
-					.build(consumer, id("carpenter", "crates", "unpack", itemCrated.identifier));
+
+			buildCrateRecipes(consumer, itemCrated);
 		}
 
 		new CarpenterRecipeBuilder()
@@ -422,6 +409,31 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.pattern("###")
 						.define('#', CoreItems.WOOD_PULP))
 				.build(consumer, id("carpenter", "letter_pulp"));
+	}
+
+	private void buildCrateRecipes(Consumer<IFinishedRecipe> consumer, ItemCrated crated) {
+		ResourceLocation name = crated.getContained().getItem().getRegistryName();
+
+		if (name == null) {
+			return;
+		}
+
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(Constants.CARPENTER_CRATING_CYCLES)
+				.setLiquid(new FluidStack(Fluids.WATER, Constants.CARPENTER_CRATING_LIQUID_QUANTITY))
+				.setBox(Ingredient.of(CrateItems.CRATE))
+				.recipe(ShapedRecipeBuilder.shaped(crated, 1)
+						.pattern("###")
+						.pattern("###")
+						.pattern("###")
+						.define('#', Ingredient.of(crated.getContained())))
+				.build(consumer, id("carpenter", "crates", "pack", name.getNamespace(), name.getPath()));
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(Constants.CARPENTER_UNCRATING_CYCLES)
+				.setLiquid(null)
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapelessRecipeBuilder.shapeless(crated.getContained().getItem(), 9).requires(crated))
+				.build(consumer, id("carpenter", "crates", "unpack", name.getNamespace(), name.getPath()));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {

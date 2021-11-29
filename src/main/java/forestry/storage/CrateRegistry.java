@@ -10,17 +10,12 @@
  ******************************************************************************/
 package forestry.storage;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.api.core.IItemProvider;
 import forestry.api.storage.ICrateRegistry;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.Log;
@@ -29,52 +24,6 @@ import forestry.modules.features.ModFeatureRegistry;
 import forestry.storage.items.ItemCrated;
 
 public class CrateRegistry implements ICrateRegistry {
-
-	private static void registerCrate(Item item, @Nullable String tagName) {
-		registerCrate(new ItemStack(item), tagName);
-	}
-
-	private static void registerCrate(ItemStack stack, @Nullable String tagName) {
-		if (stack.isEmpty()) {
-			Log.error("Tried to make a crate without an item");
-			return;
-		}
-
-		String crateName;
-		String identifier;
-		if (tagName != null) {
-			crateName = "crated_" + tagName;
-			identifier = tagName;
-		} else {
-			String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
-			if (stringForItemStack == null) {
-				Log.error("Could not get string name for itemStack {}", stack);
-				return;
-			}
-			String itemName = stringForItemStack.replace(':', '_');
-			itemName = itemName.replace("minecraft_", "");
-			crateName = "crated_" + itemName;
-			identifier = itemName;
-		}
-
-		IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
-		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack, tagName, identifier), crateName));
-	}
-
-	@Override
-	public void registerCrate(String oreDictName) {
-		if (ModuleCrates.cratesRejectedOreDict.contains(oreDictName)) {
-			return;
-		}
-		//		if (OreDictionary.doesOreNameExist(oreDictName)) {
-		//			for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
-		//				if (stack != null) {
-		//					registerCrate(stack, oreDictName);
-		//					break;
-		//				}
-		//			}
-		//		}	//TODO tags
-	}
 
 	@Override
 	public void registerCrate(ITag<Item> tag) {
@@ -92,35 +41,27 @@ public class CrateRegistry implements ICrateRegistry {
 	}
 
 	@Override
-	public void registerCrate(Block block) {
-		registerCrate(new ItemStack(block), null);
-	}
-
-	@Override
 	public void registerCrate(Item item) {
-		registerCrate(new ItemStack(item), null);
-	}
-
-	@Override
-	public void registerCrate(IItemProvider provider) {
-		if (provider.hasItem()) {
-			registerCrate(provider.item());
-		}
+		registerCrate(new ItemStack(item));
 	}
 
 	@Override
 	public void registerCrate(ItemStack stack) {
-		Collection<ItemStack> testStacks = ModuleCrates.cratesRejectedItem.get(stack.getItem());
-		for (ItemStack testStack : testStacks) {
-			if (ItemStackUtil.areItemStacksEqualIgnoreCount(stack, testStack)) {
-				return;
-			}
+		if (stack.isEmpty()) {
+			Log.error("Tried to make a crate without an item");
+			return;
 		}
-		registerCrate(stack, null);
-	}
 
-	@Override
-	public void blacklistCrate(ItemStack stack) {
-		ModuleCrates.cratesRejectedItem.put(stack.getItem(), stack);
+		String stringForItemStack = ItemStackUtil.getStringForItemStack(stack);
+
+		if (stringForItemStack == null) {
+			Log.error("Could not get string name for itemStack {}", stack);
+			return;
+		}
+
+		String crateName = "crated/" + stringForItemStack.replace(':', '/');
+
+		IFeatureRegistry registry = ModFeatureRegistry.get(ModuleCrates.class);
+		ModuleCrates.registerCrate(registry.item(() -> new ItemCrated(stack), crateName));
 	}
 }

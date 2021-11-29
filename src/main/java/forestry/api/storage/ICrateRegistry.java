@@ -5,12 +5,9 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;
-
-import forestry.api.core.IItemProvider;
 
 /**
  * Makes a new crate, registers it with the game registry,
@@ -24,23 +21,7 @@ public interface ICrateRegistry {
 
 	void registerCrate(Item item);
 
-	void registerCrate(Block block);
-
 	void registerCrate(ItemStack stack);
 
-	void registerCrate(String oreDictName);
-
 	void registerCrate(ITag<Item> tag);
-
-	void registerCrate(IItemProvider provider);
-
-	/**
-	 * prevent a crate from being registered
-	 *
-	 * @param stack the ItemStack to blacklist
-	 */
-	default void blacklistCrate(ItemStack stack) {
-
-	}
-
 }
