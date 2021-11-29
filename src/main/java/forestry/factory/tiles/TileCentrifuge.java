@@ -49,10 +49,6 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 
-//import forestry.factory.triggers.FactoryTriggers;
-//
-//import buildcraft.api.statements.ITriggerExternal;
-
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 3200;
@@ -212,16 +208,6 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 
 		return hasResource;
 	}
-
-	//TODO - buildcraft
-	//	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(FactoryTriggers.lowResource25);
-	//		triggers.add(FactoryTriggers.lowResource10);
-	//	}
 
 	/* ISocketable */
 	@Override

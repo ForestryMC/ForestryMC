@@ -53,9 +53,6 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
-//import forestry.factory.triggers.FactoryTriggers;
-
-//import buildcraft.api.statements.ITriggerExternal;
 
 public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
@@ -359,15 +356,6 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 		}
 		return super.getCapability(capability, facing);
 	}
-
-	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(FactoryTriggers.lowResource25);
-	//		triggers.add(FactoryTriggers.lowResource10);
-	//	}
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {

@@ -52,16 +52,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.statements.IStatementContainer;
-//import buildcraft.api.statements.ITriggerExternal;
-//import buildcraft.api.statements.ITriggerInternal;
-//import buildcraft.api.statements.ITriggerInternalSided;
-//import buildcraft.api.statements.ITriggerProvider;
-//
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {//, ITriggerProvider {
+public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -182,21 +173,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	public World getWorldObj() {
 		return level;
 	}
-
-	/* ITriggerProvider */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	//	}
-	//
-	//	@Override
-	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-	//	}
-	//
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//	}
 
 	// / REDSTONE INFO
 	protected boolean isRedstoneActivated() {

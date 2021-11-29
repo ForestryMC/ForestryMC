@@ -15,17 +15,6 @@ import forestry.core.config.Config;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 import forestry.energy.compat.EnergyStorageWrapper;
-import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.tesla.TeslaHelper;
-
-//import buildcraft.api.mj.IMjConnector;
-//import buildcraft.api.mj.IMjPassiveProvider;
-//import buildcraft.api.mj.IMjReadable;
-//import buildcraft.api.mj.IMjReceiver;
-//import buildcraft.api.mj.IMjRedstoneReceiver;
-//import net.darkhax.tesla.api.ITeslaConsumer;
-//import net.darkhax.tesla.api.ITeslaHolder;
-//import net.darkhax.tesla.api.ITeslaProducer;
 
 public class EnergyManager extends EnergyStorage implements IStreamable, INbtReadable, INbtWritable {
 	private EnergyTransferMode externalMode = EnergyTransferMode.BOTH;
@@ -128,36 +117,6 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 		if (capability == CapabilityEnergy.ENERGY) {
 			IEnergyStorage energyStorage = new EnergyStorageWrapper(this, externalMode);
 			return LazyOptional.of(() -> energyStorage).cast();
-		} else if (TeslaHelper.isTeslaCapability(capability)) {
-			//			Capability<ITeslaProducer> teslaProducer = TeslaHelper.TESLA_PRODUCER;
-			//			Capability<ITeslaConsumer> teslaConsumer = TeslaHelper.TESLA_CONSUMER;
-			//			Capability<ITeslaHolder> teslaHolder = TeslaHelper.TESLA_HOLDER;
-			//
-			//			if (capability == teslaProducer && externalMode.canExtract()) {
-			//				return teslaProducer.cast(new TeslaProducerWrapper(this));
-			//			} else if (capability == teslaConsumer && externalMode.canReceive()) {
-			//				return teslaConsumer.cast(new TeslaConsumerWrapper(this));
-			//			} else if (capability == teslaHolder) {
-			//				return teslaHolder.cast(new TeslaHolderWrapper(this));
-			//			}
-		} else if (MjHelper.isMjCapability(capability)) {
-			//			Capability<IMjConnector> mjConnector = MjHelper.CAP_CONNECTOR;
-			//			Capability<IMjPassiveProvider> mjPassiveProvider = MjHelper.CAP_PASSIVE_PROVIDER;
-			//			Capability<IMjReadable> mjReadable = MjHelper.CAP_READABLE;
-			//			Capability<IMjReceiver> mjReceiver = MjHelper.CAP_RECEIVER;
-			//			Capability<IMjRedstoneReceiver> mjRedstoneReceiver = MjHelper.CAP_REDSTONE_RECEIVER;
-			//
-			//			if (capability == mjPassiveProvider && externalMode.canExtract()) {
-			//				return mjPassiveProvider.cast(new MjPassiveProviderWrapper(this));
-			//			} else if (capability == mjReceiver && externalMode.canReceive()) {
-			//				return mjReceiver.cast(new MjReceiverWrapper(this));
-			//			} else if (capability == mjRedstoneReceiver && externalMode.canReceive()) {
-			//				return mjRedstoneReceiver.cast(new MjRedstoneReceiverWrapper(this));
-			//			} else if (capability == mjReadable) {
-			//				return mjReadable.cast(new MjReadableWrapper(this));
-			//			} else if (capability == mjConnector) {
-			//				return mjConnector.cast(new MjConnectorWrapper(this));
-			//			}
 		}
 		return LazyOptional.empty();
 	}

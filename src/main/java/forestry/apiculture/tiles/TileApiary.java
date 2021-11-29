@@ -39,10 +39,6 @@ import forestry.apiculture.inventory.IApiaryInventory;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.network.PacketBufferForestry;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.statements.ITriggerExternal;
-
 public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeModifier beeModifier = new ApiaryBeeModifier();
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
@@ -83,16 +79,6 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	public Iterable<IBeeListener> getBeeListeners() {
 		return Collections.singleton(beeListener);
 	}
-
-	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(ApicultureTriggers.missingQueen);
-	//		triggers.add(ApicultureTriggers.missingDrone);
-	//		triggers.add(ApicultureTriggers.noFrames);
-	//	}
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {

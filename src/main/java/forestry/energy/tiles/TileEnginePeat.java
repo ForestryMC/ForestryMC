@@ -41,10 +41,6 @@ import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.statements.ITriggerExternal;
-
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private ItemStack fuel = ItemStack.EMPTY;
 	private int burnTime;
@@ -309,15 +305,6 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		burnTime = data.readInt();
 		totalBurnTime = data.readInt();
 	}
-
-	/* ITriggerProvider */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(FactoryTriggers.lowFuel25);
-	//		triggers.add(FactoryTriggers.lowFuel10);
-	//	}
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {

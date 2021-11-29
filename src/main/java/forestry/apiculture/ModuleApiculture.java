@@ -84,7 +84,6 @@ import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.particles.ApicultureParticles;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
-import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.villagers.RegisterVillager;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
@@ -201,11 +200,6 @@ public class ModuleApiculture extends BlankForestryModule {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
-	}
-
-	@Override
-	public void registerTriggers() {
-		ApicultureTriggers.initialize();
 	}
 
 	@Override
@@ -348,27 +342,27 @@ public class ModuleApiculture extends BlankForestryModule {
 				Blocks.DANDELION,
 				Blocks.POPPY,
 				Blocks.BLUE_ORCHID,
-			Blocks.ALLIUM,
-			Blocks.AZURE_BLUET,
-			Blocks.RED_TULIP,
-			Blocks.ORANGE_TULIP,
-			Blocks.WHITE_TULIP,
-			Blocks.PINK_TULIP,
-			Blocks.OXEYE_DAISY,
-			Blocks.CORNFLOWER,
-			Blocks.WITHER_ROSE,
-			Blocks.LILY_OF_THE_VALLEY,
+				Blocks.ALLIUM,
+				Blocks.AZURE_BLUET,
+				Blocks.RED_TULIP,
+				Blocks.ORANGE_TULIP,
+				Blocks.WHITE_TULIP,
+				Blocks.PINK_TULIP,
+				Blocks.OXEYE_DAISY,
+				Blocks.CORNFLOWER,
+				Blocks.WITHER_ROSE,
+				Blocks.LILY_OF_THE_VALLEY,
 		};
 		Block[] pottedStandardFlowers = new Block[]{
-			Blocks.POTTED_POPPY,
-			Blocks.POTTED_BLUE_ORCHID,
-			Blocks.POTTED_ALLIUM,
-			Blocks.POTTED_AZURE_BLUET,
-			Blocks.POTTED_RED_TULIP,
-			Blocks.POTTED_ORANGE_TULIP,
-			Blocks.POTTED_WHITE_TULIP,
-			Blocks.POTTED_PINK_TULIP,
-			Blocks.POTTED_OXEYE_DAISY,
+				Blocks.POTTED_POPPY,
+				Blocks.POTTED_BLUE_ORCHID,
+				Blocks.POTTED_ALLIUM,
+				Blocks.POTTED_AZURE_BLUET,
+				Blocks.POTTED_RED_TULIP,
+				Blocks.POTTED_ORANGE_TULIP,
+				Blocks.POTTED_WHITE_TULIP,
+				Blocks.POTTED_PINK_TULIP,
+				Blocks.POTTED_OXEYE_DAISY,
 				Blocks.POTTED_CORNFLOWER,
 				Blocks.POTTED_LILY_OF_THE_VALLEY,
 				Blocks.POTTED_WITHER_ROSE,
@@ -444,43 +438,43 @@ public class ModuleApiculture extends BlankForestryModule {
 		HiveRegistry hiveRegistry = getHiveRegistry();
 
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1);
 		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
+				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1);
 		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
+				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1);
 		hiveRegistry.addDrops(HiveType.END.getHiveUid(),
-			new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
+				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1);
 		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
+				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1);
 		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
+				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
 	}
 

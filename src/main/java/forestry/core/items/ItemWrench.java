@@ -26,12 +26,7 @@ import net.minecraftforge.common.ToolType;
 
 import forestry.core.ItemGroupForestry;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.tools.IToolWrench;
-
-//@Optional.Interface(iface = "buildcraft.api.tools.IToolWrench", modid = Constants.BCLIB_MOD_ID)
-public class ItemWrench extends ItemForestry {//implements IToolWrench {
+public class ItemWrench extends ItemForestry {
 
 	public ItemWrench() {
 		super((new Item.Properties())

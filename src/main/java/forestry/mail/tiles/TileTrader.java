@@ -305,20 +305,6 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerWorld) level, getOwnerHandler().getOwner(), address);
 	}
 
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(MailTriggers.lowPaper64);
-	//		triggers.add(MailTriggers.lowPaper32);
-	//		triggers.add(MailTriggers.lowInput25);
-	//		triggers.add(MailTriggers.lowInput10);
-	//		triggers.add(MailTriggers.lowPostage40);
-	//		triggers.add(MailTriggers.lowPostage20);
-	//		triggers.add(MailTriggers.highBuffer90);
-	//		triggers.add(MailTriggers.highBuffer75);
-	//	}
-
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		if (isLinked()) {    //TODO does this sync over?
