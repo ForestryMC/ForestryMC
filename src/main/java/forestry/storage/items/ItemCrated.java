@@ -32,7 +32,7 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
 
 	/**
-	 * @param contained The contained item. For display only; the recipes should define what is actually contained
+	 * @param contained The item which should be dropped on use, or be uncrated into
 	 */
 	public ItemCrated(ItemStack contained) {
 		super(ItemGroups.tabStorage);

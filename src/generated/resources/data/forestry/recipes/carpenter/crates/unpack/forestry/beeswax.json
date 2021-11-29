@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/forestry/beeswax"
+        "item": "forestry:crated_beeswax"
       }
     ],
     "result": {

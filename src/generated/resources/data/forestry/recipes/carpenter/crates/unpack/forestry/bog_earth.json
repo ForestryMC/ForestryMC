@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/forestry/bog_earth"
+        "item": "forestry:crated_bog_earth"
       }
     ],
     "result": {

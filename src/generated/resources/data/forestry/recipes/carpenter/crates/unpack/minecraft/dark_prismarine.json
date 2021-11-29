@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/minecraft/dark_prismarine"
+        "item": "forestry:crated_dark_prismarine"
       }
     ],
     "result": {

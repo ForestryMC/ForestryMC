@@ -28,7 +28,7 @@ public class CrateItems {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCrates.class);
 
 	// TODO map of item to crate or similar?
-	public static final FeatureItem<ItemCrated> CRATE = register(Items.AIR, "crate");
+	public static final FeatureItem<ItemCrated> CRATE = REGISTRY.item(() -> new ItemCrated(ItemStack.EMPTY), "crate");
 
 	// Core
 	public static final FeatureItem<ItemCrated> CRATED_PEAT = register(CoreItems.PEAT, "crated_peat");
@@ -52,13 +52,13 @@ public class CrateItems {
 	public static final FeatureItem<ItemCrated> CRATED_CLAY_BALL = register(Items.CLAY_BALL, "crated_clay_ball");
 	public static final FeatureItem<ItemCrated> CRATED_GLOWSTONE = register(Items.GLOWSTONE_DUST, "crated_glowstone");
 	public static final FeatureItem<ItemCrated> CRATED_APPLE = register(Items.APPLE, "crated_apple");
-	public static final FeatureItem<ItemCrated> CRATED_COAL = register(Items.NETHER_WART, "crated_coal");
-	public static final FeatureItem<ItemCrated> CRATED_CHARCOAL = register(Items.COAL, "crated_charcoal");
-	public static final FeatureItem<ItemCrated> CRATED_SEEDS = register(Items.CHARCOAL, "crated_seeds");
-	public static final FeatureItem<ItemCrated> CRATED_POTATO = register(Items.WHEAT_SEEDS, "crated_potato");
-	public static final FeatureItem<ItemCrated> CRATED_CARROT = register(Items.POTATO, "crated_carrot");
-	public static final FeatureItem<ItemCrated> CRATED_BEETROOT = register(Items.CARROT, "crated_beetroot");
-	public static final FeatureItem<ItemCrated> CRATED_NETHER_WART = register(Items.BEETROOT, "crated_nether_wart");
+	public static final FeatureItem<ItemCrated> CRATED_COAL = register(Items.COAL, "crated_coal");
+	public static final FeatureItem<ItemCrated> CRATED_CHARCOAL = register(Items.CHARCOAL, "crated_charcoal");
+	public static final FeatureItem<ItemCrated> CRATED_SEEDS = register(Items.WHEAT_SEEDS, "crated_seeds");
+	public static final FeatureItem<ItemCrated> CRATED_POTATO = register(Items.POTATO, "crated_potato");
+	public static final FeatureItem<ItemCrated> CRATED_CARROT = register(Items.CARROT, "crated_carrot");
+	public static final FeatureItem<ItemCrated> CRATED_BEETROOT = register(Items.BEETROOT, "crated_beetroot");
+	public static final FeatureItem<ItemCrated> CRATED_NETHER_WART = register(Items.NETHER_WART, "crated_nether_wart");
 
 	public static final FeatureItem<ItemCrated> CRATED_OAK_LOG = register(Items.OAK_LOG, "crated_oak_log");
 	public static final FeatureItem<ItemCrated> CRATED_BIRCH_LOG = register(Items.BIRCH_LOG, "crated_birch_log");

@@ -17,11 +17,11 @@
     ],
     "key": {
       "#": {
-        "item": "minecraft:nether_wart"
+        "tag": "forge:crops/nether_wart"
       }
     },
     "result": {
-      "item": "forestry:crated/minecraft/nether_wart"
+      "item": "forestry:crated_nether_wart"
     }
   }
 }

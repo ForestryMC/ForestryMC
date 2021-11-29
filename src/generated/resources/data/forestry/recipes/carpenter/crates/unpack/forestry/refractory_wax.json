@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/forestry/refractory_wax"
+        "item": "forestry:crated_refractory_wax"
       }
     ],
     "result": {

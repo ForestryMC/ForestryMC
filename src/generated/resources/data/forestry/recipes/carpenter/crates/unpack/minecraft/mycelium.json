@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/minecraft/mycelium"
+        "item": "forestry:crated_mycelium"
       }
     ],
     "result": {

@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/forestry/bee_comb_silky"
+        "item": "forestry:crated_bee_comb_silky"
       }
     ],
     "result": {

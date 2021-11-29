@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/minecraft/clay_ball"
+        "item": "forestry:crated_clay_ball"
       }
     ],
     "result": {

@@ -6,7 +6,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
       {
-        "item": "forestry:crated/minecraft/cookie"
+        "item": "forestry:crated_cookie"
       }
     ],
     "result": {
