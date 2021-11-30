@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 
 import forestry.core.FluidFogEventHandler;
+import forestry.core.data.ForestryBackpackTagProvider;
 import forestry.core.worldgen.VillagerJigsaw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -261,6 +262,7 @@ public class Forestry {
 			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
 			generator.addProvider(blockTagsProvider);
 			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
+			generator.addProvider(new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
 			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));
 			generator.addProvider(new ForestryLootTableProvider(generator));
 			generator.addProvider(new WoodBlockStateProvider(generator));

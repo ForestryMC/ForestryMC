@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:logs",
+    "#minecraft:saplings",
+    "#forge:crops",
+    "#forge:seeds",
+    "#minecraft:saplings",
+    "minecraft:stick",
+    "minecraft:vine",
+    "minecraft:sugar_cane",
+    "minecraft:cactus",
+    "minecraft:red_mushroom",
+    "minecraft:brown_mushroom",
+    "minecraft:poppy",
+    "minecraft:grass",
+    "minecraft:sunflower",
+    "minecraft:pumpkin",
+    "minecraft:melon",
+    "minecraft:golden_apple",
+    "minecraft:nether_wart",
+    "minecraft:wheat_seeds",
+    "minecraft:pumpkin_seeds",
+    "minecraft:melon_seeds",
+    "minecraft:beetroot_seeds",
+    "minecraft:beetroot",
+    "minecraft:chorus_fruit",
+    "minecraft:chorus_plant",
+    "minecraft:apple"
+  ]
+}

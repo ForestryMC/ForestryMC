@@ -73,10 +73,27 @@ public class ForestryTags {
 		public static final ITag.INamedTag<Item> ORES_TIN = forgeTag("ores/tin");
 		public static final ITag.INamedTag<Item> ORES_APATITE = forgeTag("ores/apatite");
 
-
 		public static final ITag.INamedTag<Item> STAMPS = tag("stamps");
 
 		public static final ITag.INamedTag<Item> FRUITS = tag("forestry_fruits");
+
+		public static final ITag.INamedTag<Item> MINER_ALLOW = tag("backpack/allow/miner");
+		public static final ITag.INamedTag<Item> MINER_REJECT = tag("backpack/reject/miner");
+
+		public static final ITag.INamedTag<Item> DIGGER_ALLOW = tag("backpack/allow/digger");
+		public static final ITag.INamedTag<Item> DIGGER_REJECT = tag("backpack/reject/digger");
+
+		public static final ITag.INamedTag<Item> FORESTER_ALLOW = tag("backpack/allow/forester");
+		public static final ITag.INamedTag<Item> FORESTER_REJECT = tag("backpack/reject/forester");
+
+		public static final ITag.INamedTag<Item> ADVENTURER_ALLOW = tag("backpack/allow/adventurer");
+		public static final ITag.INamedTag<Item> ADVENTURER_REJECT = tag("backpack/reject/adventurer");
+
+		public static final ITag.INamedTag<Item> BUILDER_ALLOW = tag("backpack/allow/builder");
+		public static final ITag.INamedTag<Item> BUILDER_REJECT = tag("backpack/reject/builder");
+
+		public static final ITag.INamedTag<Item> HUNTER_ALLOW = tag("backpack/allow/hunter");
+		public static final ITag.INamedTag<Item> HUNTER_REJECT = tag("backpack/reject/hunter");
 
 		private static ITag.INamedTag<Item> tag(String name) {
 			return ItemTags.bind(Constants.MOD_ID + ":" + name);

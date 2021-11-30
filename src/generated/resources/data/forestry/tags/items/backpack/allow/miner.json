@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:obsidian",
+    "#forge:ores",
+    "#forge:dusts",
+    "#forge:gems",
+    "#forge:ingots",
+    "#forge:nuggets",
+    "#minecraft:coals",
+    "forestry:bronze_pickaxe",
+    "forestry:kit_pickaxe",
+    "forestry:broken_bronze_pickaxe"
+  ]
+}

@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 
+import forestry.api.storage.IBackpackDefinition;
 import net.minecraftforge.event.RegistryEvent;
 
 import net.minecraftforge.fml.network.IContainerFactory;
@@ -41,9 +42,9 @@ public interface IFeatureRegistry {
 
 	<I extends Item> FeatureItem<I> item(Supplier<I> constructor, String identifier);
 
-	FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier);
+	FeatureItem<Item> backpack(IBackpackDefinition definition, EnumBackpackType type, String identifier);
 
-	FeatureItem<Item> naturalistBackpack(String backpackUid, String rootUid, ItemGroup tab, String identifier);
+	FeatureItem<Item> naturalistBackpack(IBackpackDefinition definition, String rootUid, ItemGroup tab, String identifier);
 
 	<I extends Item, S extends IItemSubtype> FeatureItemGroup<I, S> itemGroup(Function<S, I> constructor, String identifier, S[] subTypes);
 

@@ -1,0 +1,31 @@
+{
+  "type": "forestry:carpenter",
+  "time": 200,
+  "liquid": {
+    "FluidName": "minecraft:water",
+    "Amount": 1000
+  },
+  "box": [],
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      "WXW",
+      "WTW",
+      "WWW"
+    ],
+    "key": {
+      "W": {
+        "item": "forestry:woven_silk"
+      },
+      "X": {
+        "item": "minecraft:diamond"
+      },
+      "T": {
+        "item": "forestry:adventurer_bag"
+      }
+    },
+    "result": {
+      "item": "forestry:adventurer_bag_woven"
+    }
+  }
+}

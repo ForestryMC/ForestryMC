@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "forestry:humus",
+    "#forge:cobblestone",
+    "#forge:gravel",
+    "#forge:netherrack",
+    "#forge:stone",
+    "#forge:sandstone",
+    "#forge:sand",
+    "minecraft:flint",
+    "minecraft:clay_ball",
+    "minecraft:snowball",
+    "minecraft:soul_sand",
+    "minecraft:clay",
+    "minecraft:snow",
+    "forestry:bronze_pickaxe",
+    "forestry:kit_pickaxe",
+    "forestry:broken_bronze_pickaxe"
+  ]
+}

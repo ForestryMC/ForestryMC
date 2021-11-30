@@ -27,6 +27,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 
+import forestry.modules.features.FeatureItem;
+import forestry.storage.features.BackpackItems;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -422,6 +424,28 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.pattern("###")
 						.define('#', CoreItems.WOOD_PULP))
 				.build(consumer, id("carpenter", "letter_pulp"));
+
+		wovenBackpack(consumer, "miner", BackpackItems.MINER_BACKPACK, BackpackItems.MINER_BACKPACK_T_2);
+		wovenBackpack(consumer, "digger", BackpackItems.DIGGER_BACKPACK, BackpackItems.DIGGER_BACKPACK_T_2);
+		wovenBackpack(consumer, "forester", BackpackItems.FORESTER_BACKPACK, BackpackItems.FORESTER_BACKPACK_T_2);
+		wovenBackpack(consumer, "hunter", BackpackItems.HUNTER_BACKPACK, BackpackItems.HUNTER_BACKPACK_T_2);
+		wovenBackpack(consumer, "adventurer", BackpackItems.ADVENTURER_BACKPACK, BackpackItems.ADVENTURER_BACKPACK_T_2);
+		wovenBackpack(consumer, "builder", BackpackItems.BUILDER_BACKPACK, BackpackItems.BUILDER_BACKPACK_T_2);
+	}
+
+	private void wovenBackpack(Consumer<IFinishedRecipe> consumer, String id, FeatureItem<?> tier1, FeatureItem<?> tier2) {
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(200)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shaped(tier2)
+						.pattern("WXW")
+						.pattern("WTW")
+						.pattern("WWW")
+						.define('W', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK).getItem())
+						.define('X', Items.DIAMOND)
+						.define('T', tier1))
+				.build(consumer, id("woven_backpack", id));
 	}
 
 	private void registerCentrifuge(Consumer<IFinishedRecipe> consumer) {
