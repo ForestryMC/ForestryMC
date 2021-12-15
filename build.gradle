@@ -59,6 +59,9 @@ minecraft {
                     source sourceSets.main
                 }
             }
+
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
@@ -125,6 +128,8 @@ repositories {
 	maven {
 		url = 'https://mod-buildcraft.com/maven'
 	}*/
+
+	maven { url 'https://maven.blamejared.com' }
 }
 
 dependencies {
@@ -134,6 +139,10 @@ dependencies {
 	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
 
 	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
+
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
 	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
 	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
 	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/
