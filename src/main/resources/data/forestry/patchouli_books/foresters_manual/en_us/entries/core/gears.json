@@ -1,0 +1,17 @@
+{
+  "icon": "forestry:gear_bronze",
+  "name": "Gears",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:gear_bronze",
+      "text": "Gears are a basic crafting component."
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:gear_copper",
+      "recipe2": "forestry:gear_tin"
+    }
+  ]
+}

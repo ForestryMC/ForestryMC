@@ -1,0 +1,8 @@
+{
+  "name": "item.forestry.book_forester",
+  "landing_text": "$(italic)These scraps of knowledge have been obtained and compiled by Binnie, and represent the remains of Beekeeping 101 and Forester's Almanac, two books by a mad apiarist know only as 'Sir' Sengir.$()$(br)             | Binnie, Editor",
+  "book_texture": "forestry:textures/gui/almanac/foresters_manual.png",
+  "model": "forestry:book_forester",
+  "advancement_namespaces": [ "forestry" ],
+  "creative_tab": "Forestry"
+}

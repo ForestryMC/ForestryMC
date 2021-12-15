@@ -1,0 +1,6 @@
+{
+  "name": "Mail",
+  "description": "Send and receive letters and packages from your friends using the postal system.",
+  "icon": "forestry:mailbox",
+  "sortnum": 4
+}

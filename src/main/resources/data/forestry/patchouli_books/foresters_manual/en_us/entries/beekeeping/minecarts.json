@@ -1,0 +1,16 @@
+{
+  "name": "Bees on Rails",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:cart_bee_house",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "One of my simpler inventions are bee house minecarts. You simply put a bee house or a apiary in a minecart."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:cart_apiary",
+      "recipe2": "forestry:cert_bee_house"
+    }
+  ]
+}

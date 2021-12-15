@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:squeezer",
+  "name": "Squeezer",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:squeezer",
+      "text": "The Squeezer is a machine that is tasked with squeezing liquids from item. For example, you can squeeze Honey Drops into Liquid Honey."
+    },
+    {
+      "type": "text",
+      "text": "It can also be used to retrieve the liquids from the inside of cans, bottles, capsules, etc., with a small chance of retrieving some of the container's resources (such as Tin Ingots)."
+    }
+  ]
+}

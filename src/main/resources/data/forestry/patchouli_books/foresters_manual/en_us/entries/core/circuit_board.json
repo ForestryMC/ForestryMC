@@ -1,0 +1,23 @@
+{
+  "icon": "forestry:circuit_board_basic",
+  "name": "Circuit Boards",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "spotlight",
+      "title": "Circuit Boards",
+      "item": "forestry:circuit_board_intricate",
+      "text": "Circuit Boards can be fitted with Electron Tubes by using a Soldering Iron. Once complete, they can be placed in the sockets on machine guis. Use a Soldering Iron to remove them from a socket."
+    },
+    {
+      "type": "forestry:carpenter/double",
+      "item": "forestry:circuit_board_basic",
+      "item2": "forestry:circuit_board_enhanced"
+    },
+    {
+      "type": "forestry:carpenter/double",
+      "item": "forestry:circuit_board_refined",
+      "item2": "forestry:circuit_board_intricate"
+    }
+  ]
+}

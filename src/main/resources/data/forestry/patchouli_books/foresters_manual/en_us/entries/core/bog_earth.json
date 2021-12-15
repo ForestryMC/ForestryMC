@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:bog_earth",
+  "name": "Bog Earth",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:bog_earth_wax_capsule",
+      "text": "Slowly turns into peat if left to soak near water for a while."
+    },
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:bog_earth"
+    }
+  ]
+}

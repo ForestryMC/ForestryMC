@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:trade_station",
+  "name": "Trade Station",
+  "category": "forestry:mail",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:trade_station",
+      "text": "The trade station allows players on a server to easily setup a trade network using the mail system."
+    }
+  ]
+}

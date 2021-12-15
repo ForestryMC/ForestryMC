@@ -1,0 +1,6 @@
+{
+  "name": "Genetics",
+  "description": "Filter and store your various specimens according to their genetic traits.",
+  "icon": "forestry:genetic_filter",
+  "sortnum": 3
+}

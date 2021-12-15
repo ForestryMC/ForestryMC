@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:fertilizer_compound",
+  "name": "Fertilizer",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:fertilizer_ash",
+      "recipe2": "forestry:fertilizer_apatite"
+    },
+    {
+      "type": "text",
+      "text": "Rich fertilizer. Can be used as bonemeal on crops and saplings. Required in order to run a Forestry farm."
+    }
+  ]
+}

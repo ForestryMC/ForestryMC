@@ -1,0 +1,61 @@
+{
+  "icon": "forestry:electron_tube_copper",
+  "name": "Electron Tubes",
+  "category": "forestry:core",
+  "pages": [
+    // TODO: Fabricator tube recipes
+//    {
+//      "type": "fabricator",
+//      "stacks": [
+//        {
+//          "item": "forestry:thermionic_tube_tin"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_copper"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_bronze"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_iron"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_gold"
+//        },
+//        {
+//          "item": "forestry:thermionic_obsidian"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_blaze"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_emerald"
+//        },
+//        {
+//          "item": "forestry:thermionic_apatite"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_diamond"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_lapis"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_ender"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_rubber"
+//        },
+//        {
+//          "item": "forestry:thermionic_tube_orchid"
+//        }
+//      ]
+//    },
+    {
+      "type": "spotlight",
+      "title": "Electron Tubes",
+      "item": "forestry:electron_tube_copper",
+      "text": "Electron Tubes can be attached to Circuit Boards using a Soldering Iron. They have many purposes displayed on the tooltip, which depend on the circuit type selected in the Soldering Iron. Once soldered, they cannot be removed from a Circuit Board."
+    }
+  ]
+}

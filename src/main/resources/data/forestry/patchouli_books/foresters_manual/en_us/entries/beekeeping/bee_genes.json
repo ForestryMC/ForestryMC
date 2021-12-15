@@ -1,0 +1,37 @@
+{
+  "name": "Bee Genes",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:bee_larvae_ge{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(l:beekeeping/bee_genes#2)> Species$(/l)$(br)$(l:beekeeping/bee_genes#2)> Speed$(/l)$(br)$(l:beekeeping/bee_genes#2)> Lifespan$(/l)$(br)$(l:beekeeping/bee_genes#3)> Fertility$(/l)$(br)$(l:beekeeping/bee_genes#3)> Temp. and Humid. Tolerance$(/l)$(br)$(l:beekeeping/bee_genes#4)> Never Sleeps$(/l)$(br)$(l:beekeeping/bee_genes#4)> Tolerates Rain$(/l)$(br)$(l:beekeeping/bee_genes#4)> Cave Dwelling$(/l)$(br)$(l:beekeeping/bee_genes#5)> Flower$(/l)$(br)$(l:beekeeping/bee_genes#5)> Flowering$(/l)$(br)$(l:beekeeping/bee_genes#5)> Territory$(/l)$(br)$(l:beekeeping/bee_genes#6)> Effect$(/l)$(br)",
+      "anchor": 1
+    },
+    {
+      "type": "patchouli:text",
+      "text": "§nSpecies$(br)The species of a bee specifies which products a bee queen produces, if the bee is only active at night and which climate the bee prefers.$(br2)§nSpeed$(br)The speed of a bee defines how long the queen needs to produce products.$(br2)§nLifespan$(br)A long lifespan is good to produce lots of resources, but a short lifespan is good for bee breeding.$(br2)",
+      "anchor": 2
+    },
+    {
+      "type": "patchouli:text",
+      "text": "§nFertility$(br)How many drones the bee produces after it dies.$(br2)§nTemperature and Humidity §nTolerance$(br)The difference from its preferred Climate / Humidity a bee will be able to work in. This can range from zero to three, in one or both directions.",
+      "anchor": 3
+    },
+    {
+      "type": "patchouli:text",
+      "text": "§nNever Sleeps$(br)This trait determines if a naturally diurnal bee can work during the night and if a naturally nocturnal bee can work during the day.$(br2)§nTolerates Rain$(br)This trait determines if the bee can fly while it's raining.$(br2)§nCave Dwelling$(br)This trait determines if the bee can work without a clear view of the sky.",
+      "anchor": 4
+    },
+    {
+      "type": "patchouli:text",
+      "text": "§nFlower$(br)This trait specifies which type of flower the bee needs to work.$(br2)§nFlowering$(br)Bees with a high flowering trait spread flowers around the hive faster and pollinate trees more often.$(br2)§nTerritory$(br)The territory trait determines how far bees pollinate trees and flowers, and the range of a bee's effect.",
+      "anchor": 5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "§nEffect$(br)Some bees have special effects like poison other entities or speed up the growth of crops.",
+      "anchor": 6
+    }
+  ]
+}

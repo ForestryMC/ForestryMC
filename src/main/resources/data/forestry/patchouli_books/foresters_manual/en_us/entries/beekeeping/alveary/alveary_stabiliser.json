@@ -1,0 +1,16 @@
+{
+  "name": "Alveary Stabiliser",
+  "category": "forestry:alveary",
+  "icon": "forestry:alveary_stabiliser",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:alveary_stabiliser",
+      "text": "The Alveary Stabiliser prevents the offspring of the queen from mutating into new species."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "To use it, replace one of the blocks of the Alveary in the bottom two layers of the multiblock structure."
+    }
+  ]
+}

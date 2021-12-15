@@ -1,0 +1,17 @@
+{
+  "icon": "forestry:humus",
+  "name": "Humus",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:humus_compost",
+      "recipe2": "forestry:humus_fertilizer"
+    },
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:humus",
+      "text": "Rich soil that can grow plants and doesn't require water. Degrades into sand over time."
+    }
+  ]
+}

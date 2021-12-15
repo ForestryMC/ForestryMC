@@ -1,0 +1,21 @@
+{
+  "include": [
+    {
+      "template": "forestry:carpenter/base",
+      "as": "recipe",
+      "using": {
+        "item": "#item"
+      },
+      "x": 0,
+      "y": 4
+    }
+  ],
+  "components": [
+    {
+      "type": "text",
+      "text": "#text",
+      "x": 0,
+      "y": 69
+    }
+  ]
+}

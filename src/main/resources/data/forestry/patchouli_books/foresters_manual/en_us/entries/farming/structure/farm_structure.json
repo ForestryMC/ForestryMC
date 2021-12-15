@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:farm_plain_brick",
+  "name": "Farm Structure",
+  "category": "forestry:structure",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The Farm Block is the main structural block of the Farm, and because the Farm is multi-block structure, you will need several of them, depending on how big you want it. The third layer of the farm must entirely consist of these. All other block in the structure are interchangeable with any of the other component block though."
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:farm_plain_brick",
+      "text": "The Bricks in the recipe can be repaced with Stone Bricks (Any variation), Smooth/Chiseled Sandstone or Quartz. The chosen material will dictate what the Farm looks like. Different materials can be combined for decorative purposes."
+    }
+  ]
+}

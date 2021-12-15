@@ -1,0 +1,27 @@
+{
+  "icon": "forestry:stamp_1n",
+  "name": "Stamps",
+  "category": "forestry:mail",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_1n",
+      "text": "The higher the value of the stamp, the more items you can attach to a letter. A single 1n stamp is sufficient to send a letter containing only text. Each item attached to a letter will require an additional stamp."
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_2n",
+      "recipe2": "forestry:stamp_5n"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_10n",
+      "recipe2": "forestry:stamp_20n"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_50n",
+      "recipe2": "forestry:stamp_100n"
+    }
+  ]
+}

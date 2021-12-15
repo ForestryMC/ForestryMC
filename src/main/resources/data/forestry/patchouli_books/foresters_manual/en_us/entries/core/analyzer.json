@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:analyzer",
+  "name": "Analyzer",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:analyzer",
+      "text": "A stationary version of the various hand-held analyzers. Any bees, trees or butterflies placed in the left hand slots will be analyzed and placed in the slots on the bottom right."
+    }
+  ]
+}

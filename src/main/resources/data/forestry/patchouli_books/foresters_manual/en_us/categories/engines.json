@@ -1,0 +1,7 @@
+{
+  "name": "Engines",
+  "parent": "forestry:core",
+  "description": "",
+  "icon": "forestry:engine_biogas",
+  "sortnum": 1
+}

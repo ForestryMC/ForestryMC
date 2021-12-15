@@ -1,0 +1,16 @@
+{
+  "name": "Scented Paneling",
+  "category": "forestry:alveary",
+  "icon": "forestry:scented_paneling",
+  "pages": [
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:scented_paneling",
+      "text": "Each alveary block is very costly, consisting of scented paneling, which requires honey from bees working away in your many apiaries, and seed oil to construct sturdy casings."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "This means making an alveary is something that takes many days of hard graft, but it is well worth the effort. By arranging the paneling securely around the sturdy casing you'll end up with firm solid home for your bees, and the scent of the panels will spur them on to work far harder than anything you could achieve in the apiary."
+    }
+  ]
+}

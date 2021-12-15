@@ -1,0 +1,6 @@
+{
+  "name": "Farm Structure",
+  "parent": "forestry:farming",
+  "description": "The Farm is a multi-block structure which can be customized to suit your needs.",
+  "icon": "forestry:farm_plain_brick"
+}

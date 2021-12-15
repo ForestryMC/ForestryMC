@@ -1,0 +1,6 @@
+{
+  "name": "Core",
+  "description": "All the resources and contraptions which are essential to the modern forester.",
+  "icon": "forestry:wrench",
+  "sortnum": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Frames",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:frame_untreated",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:frame_untreated",
+      "recipe2": "forestry:frame_impregnated"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Wooden frames increase the production speed of the queen in an apiary. Better quality frames increase the production speed of the queen more than lower quality frames.$(br2)By myself, I currently had no success with inserting wooden frames into an alveary or a bee house. At the moment I only discovered 3 frames: the Untreated Frame, the Impregnated Frame and the Proven Frame."
+    }
+  ]
+}

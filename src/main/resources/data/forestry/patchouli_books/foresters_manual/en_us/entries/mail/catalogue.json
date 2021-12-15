@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:catalogue",
+  "name": "Catalogue",
+  "category": "forestry:mail",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:catalogue",
+      "text": "Use the mail order catalogue to browse the trade stations available on your server. Clicking 'Use' will save the station's address and automatically fill it in the next time you open a letter for writing."
+    }
+  ]
+}

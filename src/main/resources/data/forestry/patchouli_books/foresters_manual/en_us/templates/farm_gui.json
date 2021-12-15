@@ -1,0 +1,27 @@
+{
+  "components": [
+    {
+      "type": "header",
+      "text": "Farm GUI",
+      "x": -1,
+      "y": -5
+    },
+    {
+      "type": "image",
+      "image": "forestry:textures/gui/almanac/guis/multi_farm_1024.png",
+      "width": 512,
+      "height": 256,
+      "texture_width": 648,
+      "texture_height": 648,
+      "scale": 0.25,
+      "x": 5,
+      "y": 8
+    },
+    {
+      "type": "text",
+      "text": "#text",
+      "x": 0,
+      "y": 78
+    }
+  ]
+}

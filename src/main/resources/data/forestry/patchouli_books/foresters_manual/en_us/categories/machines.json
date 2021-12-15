@@ -1,0 +1,7 @@
+{
+  "name": "Machines",
+  "parent": "forestry:core",
+  "description": "",
+  "icon": "forestry:carpenter",
+  "sortnum": 0
+}

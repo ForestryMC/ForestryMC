@@ -1,0 +1,31 @@
+{
+  "icon": "minecraft:glass",
+  "name": "Farm GUI",
+  "category": "forestry:farming",
+  "pages": [
+    {
+      "type": "forestry:farm_gui",
+      "text": "$(l:farming/farm_gui#2)> I - Water Input Slot$(/l)$(br)$(l:farming/farm_gui#2)> II - Water Tank$(/l)$(br)$(l:farming/farm_gui#3)> III - Circuit Board Socket$(/l)$(br)$(l:farming/farm_gui#4)> IV - Fertilizer Slot$(/l)$(br)$(l:farming/farm_gui#4)> V - Soil Inventory$(/l)$(br)$(l:farming/farm_gui#5)> VI - Germlings Inventory$(/l)$(br)$(l:farming/farm_gui#5)> VII - Output Inventory$(/l)"
+    },
+    {
+      "type": "text",
+      "text": "The GUI is divided into seven areas:$(br2)$(bold)I - Water Input Slot$()$(br)Place Water Buckets/Cans/Capsules in here in order to fill the Water Tank (II).$(br2)$(bold)II - Water Tank$()$(br)This shows how much water the Multi-Farm currently has. It can be filled through (I) or through Farm Valve block.",
+      "anchor": 2
+    },
+    {
+      "type": "text",
+      "text": "$(bold)III - Circuit Board Socket$()$(br)This area shows the current configuration of the MultiFarm. It has a socket in the center for you to place (or remove, using a Soldering Iron) Circuit Boards in order to place Electron Tubes that will alter the Multi-Farm's behaviour. See Configuring the Farm for more information.",
+      "anchor": 3
+    },
+    {
+      "type": "text",
+      "text": "$(bold)IV - Fertilizer Slot$()$(br)Most farm configurations will need Fertilizer for operation. Place Fertilizer in here or pipe it into the Multi-Farm.$(br2)$(bold)V - Soil Inventory$()$(br)This is where you will place the necessary soil for the farm to either lay down the farmland (if it's a Managed Farm) or to replace decayed soil block.",
+      "anchor": 4
+    },
+    {
+      "type": "text",
+      "text": "$(bold)VI - Germlings Inventory$()$(br)This is where you will place the germlings (Saplings, Seeds, Cactus, etc.) for use in the farm.$(br2)$(bold)VII - Output Inventory$()$(br2)Any waste or harvested resources end here.",
+      "anchor": 5
+    }
+  ]
+}

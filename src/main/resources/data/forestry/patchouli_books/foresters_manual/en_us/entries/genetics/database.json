@@ -1,0 +1,26 @@
+{
+  "icon": "forestry:database",
+  "name": "Database",
+  "category": "forestry:genetics",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The database is storage block for bees, trees, butterflies and other genetic items. It can store up to 136 different item stacks and has a search bar.$(br2)You can craft it using any two unique Forestry chests."
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_tree_chest_butterfly_chest",
+      "recipe2": "forestry:database_bee_chest_butterfly_chest"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_bee_chest_tree_chest",
+      "recipe2": "forestry:database_butterfly_chest_tree_chest"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_tree_chest_bee_chest",
+      "recipe2": "forestry:database_butterfly_chest_bee_chest"
+    }
+  ]
+}

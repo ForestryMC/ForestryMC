@@ -1,0 +1,17 @@
+{
+  "icon": "forestry:sturdy_machine",
+  "name": "Casings",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:sturdy_machine",
+      "text": "Casings are crafting components that are used in the construction of nearly every machine."
+    },
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:hardened_machine"
+    }
+    //TODO: Fabricator flexible casing recipe
+  ]
+}

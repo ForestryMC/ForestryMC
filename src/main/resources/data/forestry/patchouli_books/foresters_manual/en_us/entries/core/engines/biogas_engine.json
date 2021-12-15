@@ -1,0 +1,28 @@
+{
+  "icon": "forestry:engine_biogas",
+  "name": "Biogas Engine",
+  "category": "forestry:engines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:engine_biogas",
+      "text": "Want to get rid of your surplus saplings?$(br2)Too many milk buckets in your chests?$(br2)Use a biogas engine to power your tree farms!"
+    },
+    {
+      "type": "text",
+      "text": "Biogas engines need to be activated by a redstone current like any other BuildCraft engine. However, biogas engines have one additional quirk: They cannot explode from overheating, but they need a minimum operating temperature. You can fill a biogas engine up to the brim with delicious fuel and it will still refuse to start up. The reason is quite simply that it needs to reach a certain temperature before it can begin to burn fuel."
+    },
+    {
+      "type": "text",
+      "text": "To start the engine when it's new or whenever it has cooled down - for example when it has used up all fuel and has idled for too long - you will need to dump lava into the secondary tank on the right hand side. The engine will then start to heat up and once it has reached minimum operating temperature it will start to produce energy. Producing energy generates itself heat, so after the initial warmup a running biogas engine will keep itself heated without using up any further lava from"
+    },
+    {
+      "type": "text",
+      "text": "its supply. Also, if the activating redstone signal is interrupted, the burning of fuel will pause completely: fuel will not be lost, but if the Engine stays off for too long, it will need to consume some Lava to heat up again once the redstone signal is re-applied.$(br2)However, there is one important exception: If you use just plain water or milk to power your engine, the engine will not generate enough heat to counter the natural heat dissipation."
+    },
+    {
+      "type": "text",
+      "text": "A biogas engine that uses those fuels will burn quite literally through it's whole lava supply, while one constantly supplied with fruit juice, liquid biomass, seed oil or liquid honey will happily chug along all day without so much as touching the lava. A water or milk fueled engine will invariably use up all the lava in the secondary tank and stop producing energy. However, you can pipe in lava using BuildCraft pipes if you choose to do so."
+    }
+  ]
+}

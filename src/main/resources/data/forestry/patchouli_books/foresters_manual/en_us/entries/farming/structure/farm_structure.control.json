@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:farm_control_brick",
+  "name": "Farm Control",
+  "category": "forestry:structure",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:farm_control_brick",
+      "text": "You can control which fields your farm works on by applying redstone signals to the control block. You can either shut down the whole farm by applying a redstone signal from top or below or you can disable a specific side by applying a redstone"
+    },
+    {
+      "type": "text",
+      "text": "signal on the matching side of the control block."
+    }
+  ]
+}

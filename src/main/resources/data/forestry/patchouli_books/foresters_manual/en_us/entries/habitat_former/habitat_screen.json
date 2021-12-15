@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:habitat_screen",
+  "name": "Habitat Screen",
+  "category": "forestry:habitat_former",
+  "pages": [
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:habitat_screen",
+      "text": "The Habitat Screen can be used to get the climate at a position by right clicking on a block."
+    },
+    {
+      "type": "text",
+      "text": "Additionally, you can link the screen to a habitat former by sneaking and right clicking the habitat former. After that you can enable and disable an area preview to see how big the area is that the former manipulates."
+    }
+  ]
+}

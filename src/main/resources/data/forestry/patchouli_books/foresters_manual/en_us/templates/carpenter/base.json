@@ -1,0 +1,79 @@
+{
+  "processor": "forestry.book.patchouli.processor.CarpenterProcessor",
+  "components": [
+    {
+      "type": "header",
+      "text": "#output->iname",
+      "x": -1,
+      "y": -10
+    },
+    {
+      "type": "image",
+      "image": "forestry:textures/gui/almanac/crafting.png",
+      "width": 108,
+      "height": 60,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "item",
+      "item": "#ingredient1",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "type": "item",
+      "item": "#ingredient2",
+      "x": 20,
+      "y": 3
+    },
+    {
+      "type": "item",
+      "item": "#ingredient3",
+      "x": 39,
+      "y": 3
+    },
+    {
+      "type": "item",
+      "item": "#ingredient4",
+      "x": 1,
+      "y": 22
+    },
+    {
+      "type": "item",
+      "item": "#ingredient5",
+      "x": 20,
+      "y": 22
+    },
+    {
+      "type": "item",
+      "item": "#ingredient6",
+      "x": 39,
+      "y": 22
+    },
+    {
+      "type": "item",
+      "item": "#ingredient7",
+      "x": 1,
+      "y": 41
+    },
+    {
+      "type": "item",
+      "item": "#ingredient8",
+      "x": 20,
+      "y": 41
+    },
+    {
+      "type": "item",
+      "item": "#ingredient9",
+      "x": 39,
+      "y": 41
+    },
+    {
+      "type": "item",
+      "item": "#output",
+      "x": 71,
+      "y": 41
+    }
+  ]
+}

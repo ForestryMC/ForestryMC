@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:moistener",
+  "name": "Moistener",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:moistener",
+      "text": "Moisteners are used to produce mycelium from wheat, seeds and water for use in mushroom farms. They can also be used to create mossy cobblestone and mossy stone bricks.$(br)Moisteners work best in dark locations."
+    }
+  ]
+}
