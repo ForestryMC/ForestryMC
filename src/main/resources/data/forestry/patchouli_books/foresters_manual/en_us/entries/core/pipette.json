@@ -1,12 +1,12 @@
 {
   "icon": "forestry:pipette",
-  "name": "Pipette",
+  "name": "for.gui.book.patchouli.entry.core.pipette",
   "category": "forestry:core",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:pipette",
-      "text": "Can pick up small amounts of liquid. In Forestry GUIs, you can hold a pipette and click the tanks to fill or drain them directly."
+      "text": "for.gui.book.patchouli.entry.core.pipette1"
     }
   ]
 }

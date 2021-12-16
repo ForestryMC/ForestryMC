@@ -1,26 +1,26 @@
 {
   "icon": "forestry:resource_ore_tin",
-  "name": "Ores",
+  "name": "for.gui.book.patchouli.entry.core.ores",
   "category": "forestry:core",
   "pages": [
     {
       "type": "text",
-      "text": "Forestry adds three ores to the terrain generation: Copper, Tin and Apatite. Each ore has different uses, from Fertilizer to machines."
+      "text": "for.gui.book.patchouli.entry.core.ores1"
     },
     {
       "type": "spotlight",
       "item": "forestry:resource_ore_apatite",
-      "text": "It occurs in large, but uncommon veins in layers above level 56, and when mined with a Pickaxe, it drops between 1 and 4 Apatite (gems), which can then be used for making Fertilizer.$(br2)Fortune can be used to increase drop rates, and Silk Touch can be used to obtain the ore block."
+      "text": "for.gui.book.patchouli.entry.core.ores2"
     },
     {
       "type": "spotlight",
       "item": "forestry:resource_ore_copper",
-      "text": "Copper is a mineral that is commonly used in making Bronze, which is then used for tools and machines.$(br2)It occurs on layers above level 32, and when mined, it drops a block of Copper Ore."
+      "text": "for.gui.book.patchouli.entry.core.ores3"
     },
     {
       "type": "spotlight",
       "item": "forestry:resource_ore_tin",
-      "text": "Tin is a mineral that is commonly used in making Bronze, tools and Cans.$(br2)It occurs on layers above level 32, and when mined, it drops a block of Tin Ore."
+      "text": "for.gui.book.patchouli.entry.core.ores4"
     }
   ]
 }

@@ -1,16 +1,16 @@
 {
   "icon": "forestry:squeezer",
-  "name": "Squeezer",
+  "name": "for.gui.book.patchouli.entry.core.machine.squeezer",
   "category": "forestry:machines",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:squeezer",
-      "text": "The Squeezer is a machine that is tasked with squeezing liquids from item. For example, you can squeeze Honey Drops into Liquid Honey."
+      "text": "for.gui.book.patchouli.entry.core.machine.squeezer1"
     },
     {
       "type": "text",
-      "text": "It can also be used to retrieve the liquids from the inside of cans, bottles, capsules, etc., with a small chance of retrieving some of the container's resources (such as Tin Ingots)."
+      "text": "for.gui.book.patchouli.entry.core.machine.squeezer2"
     }
   ]
 }

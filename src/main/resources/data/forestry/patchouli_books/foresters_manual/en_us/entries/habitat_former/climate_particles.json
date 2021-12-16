@@ -1,11 +1,11 @@
 {
   "icon": "minecraft:redstone",
-  "name": "Climate Particles",
+  "name": "for.gui.book.patchouli.entry.habitat_former.climate_particles",
   "category": "forestry:habitat_former",
   "pages": [
       {
         "type": "text",
-        "text": "To visualize the change of the climate particles are spawned around the player if he is located in an area that currently is affected by a habitatformer. The particles have the color of the current climate in the area."
+        "text": "for.gui.book.patchouli.entry.habitat_former.climate_particles1"
       }
   ]
 }

@@ -1,34 +1,34 @@
 {
   "icon": "forestry:resource_storage_bronze",
-  "name": "Resource Blocks",
+  "name": "for.gui.book.patchouli.entry.core.resources",
   "category": "forestry:core",
   "pages": [
     {
       "type": "text",
-      "text": "Apatite and all metal ingots of forestry can be crafted into blocks and back."
+      "text": "for.gui.book.patchouli.entry.core.resources1"
     },
     {
       "type": "crafting",
-      "title": "Apatite",
+      "title": "for.gui.book.patchouli.entry.core.resources2",
       "recipe": "forestry:resource_storage_apatite",
       "recipe2": "forestry:apatite"
     },
     {
       "type": "crafting",
-      "title": "Copper",
+      "title": "for.gui.book.patchouli.entry.core.resources3",
       "recipe": "forestry:resource_storage_copper",
       "recipe2": "forestry:ingot_copper"
     },
     {
       "type": "crafting",
-      "title": "Tin",
+      "title": "for.gui.book.patchouli.entry.core.resources4",
       "recipe": "forestry:resource_storage_tin",
       "recipe2": "forestry:ingot_tin"
     }
   ,
     {
       "type": "crafting",
-      "title": "Bronze",
+      "title": "for.gui.book.patchouli.entry.core.resources5",
       "recipe": "forestry:resource_storage_bronze",
       "recipe2": "forestry:ingot_bronze"
     }

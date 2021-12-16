@@ -1,11 +1,11 @@
 {
   "icon": "forestry:database",
-  "name": "Database",
+  "name": "for.gui.book.patchouli.entry.genetics.database",
   "category": "forestry:genetics",
   "pages": [
     {
       "type": "text",
-      "text": "The database is storage block for bees, trees, butterflies and other genetic items. It can store up to 136 different item stacks and has a search bar.$(br2)You can craft it using any two unique Forestry chests."
+      "text": "for.gui.book.patchouli.entry.genetics.database1"
     },
     {
       "type": "crafting",

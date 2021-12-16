@@ -1,6 +1,6 @@
 {
-  "name": "Beekeeping",
-  "description": "Bees are small yellow insects found in hives, scattered around our remarkably polygonal world.",
+  "name": "for.gui.book.patchouli.category.beekeeping.title",
+  "description": "for.gui.book.patchouli.category.beekeeping.desc",
   "icon": "forestry:bee_comb_honey",
   "sortnum": 0
 }

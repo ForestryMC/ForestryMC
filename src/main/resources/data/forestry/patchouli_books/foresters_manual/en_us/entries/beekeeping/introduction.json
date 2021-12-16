@@ -1,15 +1,15 @@
 {
-  "name": "Introduction",
+  "name": "for.gui.book.patchouli.entry.beekeeping.intro",
   "category": "forestry:beekeeping",
   "icon": "minecraft:book",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Some people ask me why I bother with bees. I've been burned, poisoned and blown up countless times, and once they even devoured my home. But although I am now covered in scars, I have been rewarded with gifts beyond my wildest dreams. The honey they have given me has nourished me through those cold Creeper-filled nights, and the silk has provided me with more than one sturdy backpack."
+      "text": "for.gui.book.patchouli.entry.beekeeping.intro1"
     },
     {
       "type": "patchouli:text",
-      "text": "If you are willing to endure these hardships, read on, else turn back now and forever hold your peace…"
+      "text": "for.gui.book.patchouli.entry.beekeeping.intro2"
     }
   ]
 }

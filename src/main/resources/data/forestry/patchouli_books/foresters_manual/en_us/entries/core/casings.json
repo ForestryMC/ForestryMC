@@ -1,12 +1,12 @@
 {
   "icon": "forestry:sturdy_machine",
-  "name": "Casings",
+  "name": "for.gui.book.patchouli.entry.core.casings",
   "category": "forestry:core",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:sturdy_machine",
-      "text": "Casings are crafting components that are used in the construction of nearly every machine."
+      "text": "for.gui.book.patchouli.entry.core.casings1"
     },
     {
       "type": "forestry:carpenter/single",

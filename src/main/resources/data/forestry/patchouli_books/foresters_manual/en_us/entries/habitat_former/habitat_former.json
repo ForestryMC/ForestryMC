@@ -1,24 +1,24 @@
 {
   "icon": "forestry:habitat_former",
-  "name": "Habitat Former",
+  "name": "for.gui.book.patchouli.entry.habitat_former.habitat_former",
   "category": "forestry:habitat_former",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:habitat_former",
-      "text": "The Habitat Former can be used to manipulate the climate in an specific region. The size (1-16) and the shape (square or circle) of the area can be change with the slider and the button on the upper left side of the gui."
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former1"
     },
     {
       "type": "text",
-      "text": "The former always tries to reach the targeted climate. It needs two things to reach this climate.$(br2)The first is a Fluid (water, lava or crushed ice) to change the humidity of the area.$(br2)The second is Energy (FE/RF/Tesla/MJ) to change the temperature of the area.$(br2)The former needs more resources (fluid/energy) for bigger areas."
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former2"
     },
     {
       "type": "text",
-      "text": "Currently there are 4 ways to select the targeted climate.$(br2)1. You can change the targeted climate by clicking on one of the bars in the upper center of the gui.$(br2)2. You can use one of the two text fields to type the targeted climate. (Number from 0 - 200)$(br2)3. You can select one of the default habitats next to the text fields."
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former3"
     },
     {
       "type": "text",
-      "text": "4. You can click with a bee in the hand on the slot with the shape of a hexagon next to the habitats. That changes the targeted climate automatically to the preferred climate of the bee."
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former4"
     }
   ]
 }

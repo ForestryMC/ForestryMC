@@ -1,7 +1,7 @@
 {
-  "name": "Arboriculture",
+  "name": "for.gui.book.patchouli.category.arboriculture.title",
   "_description": "Generations of foresters have wondered at the noticeable lack of diversity in Minecraftia's tree species. Scientists theorize that parasites wiped out all but the most hardy trees. This almanac will attempt to lay out the known basics for the beginning forester.",
-  "description": "This almanac will attempt to lay out the known basics for the beginning forester.",
+  "description": "for.gui.book.patchouli.category.arboriculture.desc",
   "icon": "forestry:sapling{Individual:{Genome:{Chromosomes:[{UID1:\"forestry:tree_cherry\",UID0:\"forestry:tree_cherry\",Slot:0b}]}}}",
   "sortnum": 6
 }

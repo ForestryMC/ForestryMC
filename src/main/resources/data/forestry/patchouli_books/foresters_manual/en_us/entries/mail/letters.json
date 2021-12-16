@@ -1,17 +1,17 @@
 {
   "icon": "forestry:letter_empty_fresh",
-  "name": "Letters",
+  "name": "for.gui.book.patchouli.entry.mail.letters",
   "category": "forestry:mail",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:letter_empty_fresh",
-      "text": "Letters can be used in a Mailbox to be sent to other mailboxes or Trade Stations. For a letter to be sent, you need to right click a mailbox with the letter in hand."
+      "text": "for.gui.book.patchouli.entry.mail.letters1"
     },
     {
       "type": "forestry:carpenter/single",
       "item": "forestry:letter_empty_fresh",
-      "text": "For a letter to be able to be sent, you need $(l:mail/stamps)Stamps$(/l)."
+      "text": "for.gui.book.patchouli.entry.mail.letters2"
     }
   ]
 }

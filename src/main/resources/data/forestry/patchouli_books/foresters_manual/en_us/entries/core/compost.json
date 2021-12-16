@@ -1,6 +1,6 @@
 {
   "icon": "forestry:fertilizer_bio",
-  "name": "Compost",
+  "name": "for.gui.book.patchouli.entry.core.compost",
   "category": "forestry:core",
   "pages": [
     {

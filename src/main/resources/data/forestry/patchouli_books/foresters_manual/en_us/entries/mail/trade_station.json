@@ -6,7 +6,7 @@
     {
       "type": "crafting",
       "recipe": "forestry:trade_station",
-      "text": "The trade station allows players on a server to easily setup a trade network using the mail system."
+      "text": "for.gui.book.patchouli.entry.mail.trade_station1"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "icon": "forestry:fertilizer_compound",
-  "name": "Fertilizer",
+  "name": "for.gui.book.patchouli.entry.core.fertilizer_compound",
   "category": "forestry:core",
   "pages": [
     {
@@ -10,7 +10,7 @@
     },
     {
       "type": "text",
-      "text": "Rich fertilizer. Can be used as bonemeal on crops and saplings. Required in order to run a Forestry farm."
+      "text": "for.gui.book.patchouli.entry.core.fertilizer_compound"
     }
   ]
 }

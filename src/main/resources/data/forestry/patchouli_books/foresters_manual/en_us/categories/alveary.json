@@ -1,7 +1,7 @@
 {
-  "name": "Alveary",
+  "name": "for.gui.book.patchouli.category.beekeeping.alveary.title",
   "parent": "forestry:beekeeping",
-  "description": "After a while, you will begin to notice that the primitive Apiary is not reaping the full potential of your bees. When you reach this point, it's time to upgrade. The alveary is three times the size of the apiary, but I've seen bees produce ten times the honey.",
+  "description": "for.gui.book.patchouli.category.beekeeping.alveary.desc",
   "icon": "forestry:alveary_plain",
   "sortnum": 0
 }

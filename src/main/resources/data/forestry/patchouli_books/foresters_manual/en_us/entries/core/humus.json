@@ -1,6 +1,6 @@
 {
   "icon": "forestry:humus",
-  "name": "Humus",
+  "name": "for.gui.book.patchouli.entry.core.humus",
   "category": "forestry:core",
   "pages": [
     {
@@ -11,7 +11,7 @@
     {
       "type": "forestry:carpenter/single",
       "item": "forestry:humus",
-      "text": "Rich soil that can grow plants and doesn't require water. Degrades into sand over time."
+      "text": "for.gui.book.patchouli.entry.core.humus1"
     }
   ]
 }

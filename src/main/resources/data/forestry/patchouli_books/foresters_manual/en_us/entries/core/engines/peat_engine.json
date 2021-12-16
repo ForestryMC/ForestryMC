@@ -1,16 +1,16 @@
 {
   "icon": "forestry:engine_peat",
-  "name": "Peat-Fired Engine",
+  "name": "for.gui.book.patchouli.entry.core.engine.peat",
   "category": "forestry:engines",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:engine_peat",
-      "text": "Peat-Fired engines use peat as fuel (or the upgraded version of peat, Bituminous peat) and produce Ash as a by-product."
+      "text": "for.gui.book.patchouli.entry.core.engine.peat1"
     },
     {
       "type": "text",
-      "text": "Peat burns for 5000 ticks and produces 10 RF every tick, 1 peat makes 0.66 Ash, so you get 2 Ash for burning 3 peat.$(br2)Bituminous Peat burns for 6000 ticks and produces 20 RF/tick."
+      "text": "for.gui.book.patchouli.entry.core.engine.peat2"
     }
   ]
 }

@@ -1,45 +1,45 @@
 {
   "icon": "forestry:electron_tube_gold",
-  "name": "Farm Configuration",
+  "name": "for.gui.book.patchouli.entry.farming.farm_configuration",
   "category": "forestry:farming",
   "pages": [
     {
       "type": "text",
-      "text": "$(l:farming/farm_configuration#2)> Arboretum$(/l)$(br)$(l:farming/farm_configuration#2)> Peat Bog$(/l)$(br)$(l:farming/farm_configuration#3)> Crop Farm$(/l)$(br)$(l:farming/farm_configuration#3)> Infernal Farm$(/l)$(br)$(l:farming/farm_configuration#4)> Shroom Farm$(/l)$(br)$(l:farming/farm_configuration#4)> Orchard$(/l)$(br)$(l:farming/farm_configuration#5)> Succulent Farm$(/l)$(br)$(l:farming/farm_configuration#5)> Reed Farm$(/l)$(br)$(l:farming/farm_configuration#6)> Gourd Farm$(/l)$(br)$(l:farming/farm_configuration#6)> Cocoa Farm$(/l)$(br)$(l:farming/farm_configuration#7)> Rubber Farm$(/l)$(br)$(l:farming/farm_configuration#7)> Red Orchid Farm$(/l)$(br)$(l:farming/farm_configuration#8)> Ender Farm$(/l)"
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration1"
     },
     {
       "type": "text",
-      "text": "§nArboretum$(br)Tube: Golden Electron Tube$(br)Soil: Dirt, Humus$(br)Water: 10 mB$(br)Fertilizer: 30 mU$(br)Germlings: Saplings$(br)Harvest: Wood, Saplings, Apples$(br2)§nPeat Bog$(br)Tube: Obsidian Electron Tube$(br)Soil: Bog Earth$(br)Water: 20 mB$(br)Fertilizer: 10 mU$(br)Germlings: None$(br)Harvest: Peat, Dirt",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration2",
       "anchor": 2
     },
     {
       "type": "text",
-      "text": "§nCrop Farm$(br)Tube: Bronze Electron Tube$(br)Soil: Dirt$(br)Water: 20 mB$(br)Fertilizer: 10 mU$(br)Germlings: Crop Seeds$(br)Harvest: Crops$(br2)§nInfernal Farm$(br)Tube: Blazing Electron Tube$(br)Soil: Soul Sand$(br)Water: None$(br)Fertilizer: 20 mU$(br)Germlings: Nether Wart$(br)Harvest: Nether Wart (Grown)",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration3",
       "anchor": 3
     },
     {
       "type": "text",
-      "text": "§nShroom Farm$(br)Tube: Apatine Electron Tube$(br)Soil: Mycelium$(br)Water: 80 mB$(br)Fertilizer: 20 mU$(br)Germlings: Mushrooms$(br)Harvest: Large mushrooms$(br2)§nOrchard$(br)Tube: Emerald Electron Tube$(br)Soil: Dirt$(br)Water: 40$(br)Fertilizer: 10 mU$(br)Germlings: Trees (grown)$(br)Harvest: Any fruits",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration4",
       "anchor": 4
     },
     {
       "type": "text",
-      "text": "§nSucculent Farm$(br)Tube: Copper Electron Tube$(br)Soil: Sand$(br)Water: 1 mB$(br)Fertilizer: 10 mU$(br)Germlings: Cactus$(br)Harvest: Cactus (3-tall)$(br2)§nReed Farm$(br)Tube: Tin Electron Tube$(br)Soil: Sand/Dirt$(br)Water: 20$(br)Fertilizer: 10 mU$(br)Germlings: Sugar Canes$(br)Harvest: Sugar Canes (3-tall)",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration5",
       "anchor": 5
     },
     {
       "type": "text",
-      "text": "§nGourd Farm$(br)Tube: Lapis Electron Tube$(br)Soil: Dirt$(br)Water: 40 mB$(br)Fertilizer: 10 mU$(br)Germlings: Pumpkin/Melon Seeds$(br)Harvest: Pumpkins, Melons$(br2)§nCocoa Plantation$(br)Tube: Diamantine Electron Tube$(br)Soil: Jungle Wood$(br)Water: 20 mB$(br)Fertilizer: 120 mU$(br)Germlings: Cocoa Beans$(br)Harvest: Cocoa Plants",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration6",
       "anchor": 6
     },
     {
       "type": "text",
-      "text": "§nRubber Plantation$(br)Tube: Rubberised  Electron Tube$(br)Soil: Dirt$(br)Water: 5 mB$(br)Fertilizer: 10 mU$(br)Germlings: Rubber Saplings$(br)Harvest: Sticky Resin$(br2)§nRed Orchid Farm$(br)Tube: Orchid Electron Tube$(br)Soil: Redstone Ore$(br)Water: None$(br)Fertilizer: 20 mU$(br)Germlings: Red Orchid$(br)Harvest: Redstone",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration7",
       "anchor": 7
     },
     {
       "type": "text",
-      "text": "§nEnder Farm$(br)Tube: Ender Electron Tube$(br)Soil: End Stone$(br)Water: None$(br)Fertilizer: 20 mU$(br)Germlings: Chorus Flower or Ender Lilly Seeds$(br)Harvest: Chorus Fruit & Chorus Flower or Ender Pearls",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration8",
       "anchor": 8
     }
   ]

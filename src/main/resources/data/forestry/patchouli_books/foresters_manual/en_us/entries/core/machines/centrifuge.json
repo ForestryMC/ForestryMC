@@ -1,12 +1,12 @@
 {
   "icon": "forestry:centrifuge",
-  "name": "Centrifuge",
+  "name": "for.gui.book.patchouli.entry.core.machine.centrifuge",
   "category": "forestry:machines",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:centrifuge",
-      "text": "The Centrifuge is a machine that is tasked with the extraction of bee products from their honey combs."
+      "text": "for.gui.book.patchouli.entry.core.machine.centrifuge1"
     }
   ]
 }

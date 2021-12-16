@@ -1,6 +1,6 @@
 {
-  "name": "Farming",
-  "description": "The Farm is a multi-block structure which can be customized to suit your needs.",
+  "name": "for.gui.book.patchouli.category.farming.title",
+  "description": "for.gui.book.patchouli.category.farming.desc",
   "icon": "minecraft:wheat",
   "sortnum": 5
 }

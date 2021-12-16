@@ -1,15 +1,15 @@
 {
   "icon": "minecraft:paper",
-  "name": "Multi-Farms",
+  "name": "for.gui.book.patchouli.entry.farming.multi_farms",
   "category": "forestry:farming",
   "pages": [
     {
       "type": "text",
-      "text": "Multi-Farms are multi-block structures that are built using special Farm block and building block (stones/bricks). The size of the farm can be modified in common.cfg by changing the I:size variable. By default this is set to 2.$(br2)(2 x (width of central structure x <size>) + width of central structure)"
+      "text": "for.gui.book.patchouli.entry.farming.multi_farms1"
     },
     {
       "type": "text",
-      "text": "By default the smallest farm size is 15×15 while the largest is 25×25.$(br2)Multi-Farms also support specialized Farm block to add functionality, the Farm Gearbox being the only one required (as it's the only way to supply power to the multi-farm). There is also a Farm Valve, Farm Hatch and Farm Control. See Farm Structure for more information."
+      "text": "for.gui.book.patchouli.entry.farming.multi_farms2"
     }
   ]
 }

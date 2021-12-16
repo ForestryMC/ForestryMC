@@ -1,20 +1,20 @@
 {
   "icon": "forestry:genetic_filter",
-  "name": "Genetic Filter",
+  "name": "for.gui.book.patchouli.entry.genetics.filter",
   "category": "forestry:genetics",
   "pages": [
       {
         "type": "crafting",
         "recipe": "forestry:genetic_filter",
-        "text": "The genetic filter is a pipe block that can be used to sort item. It allows helpful sorting options for item passing passing through the pipe. The gui of the filter has six rows with seven item slots each and one filter slot, one row for each side of the filter."
+        "text": "for.gui.book.patchouli.entry.genetics.filter1"
       },
       {
         "type": "text",
-        "text": "The first slot at the left is a buffer slot. In this slot item get stored before they get transported in the direction of the row. The second slot is the filter slot, you can select a filter by clicking on the slot. The other six slots can be used to sort genetic item passing through the filter by the species of genetic individum. Each set of two slots, separated by a colored bar and with a 0-1 in brackets at the bottom, represents one type of the genetic individum."
+        "text": "for.gui.book.patchouli.entry.genetics.filter2"
       },
       {
         "type": "text",
-        "text": "There are two slots so that bees can be sorted by active and inactive traits. The species on the left side, with the 0 below it, is the active trait. The species on the right side, with the 1 below it, is the inactive trait. If one trait is not set, then any genetic item with the trait that is set will pass that direction. If there is more than one valid direction for an item to travel, then it will pick one at random."
+        "text": "for.gui.book.patchouli.entry.genetics.filter3"
       }
   ]
 }

@@ -1,16 +1,16 @@
 {
-  "name": "Alveary Sieve",
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve",
   "category": "forestry:alveary",
   "icon": "forestry:alveary_sieve",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:alveary_sieve",
-      "text": "The Alveary Sieve collects pollen from nearby trees that would've pollinated another tree and stores it in its inventory."
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve1"
     },
     {
       "type": "patchouli:text",
-      "text": "To use it, replace one of the blocks of the Alveary in the bottom two layers of the multiblock structure and place a Woven Silk in its left item slot."
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve2"
     }
   ]
 }

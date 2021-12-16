@@ -1,16 +1,16 @@
 {
-  "name": "Bee House",
+  "name": "for.gui.book.patchouli.entry.beekeeping.house",
   "category": "forestry:beekeeping",
   "icon": "forestry:bee_house",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:bee_house",
-      "text": "To rear your newly found bees into a bee family brimming with honey, you'll need a bee house or an apiary. These small wooden boxes can contain a family of these little blighters, and collect honeycombs for your troubles."
+      "text": "for.gui.book.patchouli.entry.beekeeping.house1"
     },
     {
       "type": "patchouli:text",
-      "text": "The bee house was one of my earliest discoveries. The discovery of this small bee housing was more like a coincidence. I forgot a honey comb in a small wooden box that I had crafted out of some wooden planks and wooden slabs. After a while, the box was full with bees; they had started to build their home in this box. I crafted a similar box like I had crafted before, placed a comb in it, and named it \"Bee House\"."
+      "text": "for.gui.book.patchouli.entry.beekeeping.house2"
     }
   ]
 }

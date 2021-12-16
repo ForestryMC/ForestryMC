@@ -1,12 +1,12 @@
 {
   "icon": "forestry:bog_earth",
-  "name": "Bog Earth",
+  "name": "for.gui.book.patchouli.entry.core.bog_earth",
   "category": "forestry:core",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:bog_earth_wax_capsule",
-      "text": "Slowly turns into peat if left to soak near water for a while."
+      "text": "for.gui.book.patchouli.entry.core.bog_earth1"
     },
     {
       "type": "forestry:carpenter/single",

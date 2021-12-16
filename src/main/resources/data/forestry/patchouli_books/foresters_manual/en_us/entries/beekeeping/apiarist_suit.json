@@ -1,11 +1,11 @@
 {
-  "name": "Apiarist's Clothes",
+  "name": "for.gui.book.patchouli.entry.beekeeping.suit",
   "category": "forestry:beekeeping",
   "icon": "forestry:apiarist_chest",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Tired of getting poisoned by those pesky Tropical Bees?$(br2)Fear that their Silk Wisps have no use?$(br2)Well, fear not, because you can turn those Wisps into Woven Silk and turn that into suits! Bee-Suits!The Apiarist's Clothes can be equipped to lessen or even nullify the negative effects of Bees (such as Poison from Tropical Bees)."
+      "text": "for.gui.book.patchouli.entry.beekeeping.suit1"
     },
     {
       "type": "patchouli:crafting",
@@ -19,7 +19,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The more pieces of clothing you wear, the more often Bees will leave you alone."
+      "text": "for.gui.book.patchouli.entry.beekeeping.suit2"
     }
   ]
 }

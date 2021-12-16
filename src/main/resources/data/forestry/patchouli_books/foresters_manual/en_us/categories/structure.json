@@ -1,6 +1,6 @@
 {
-  "name": "Farm Structure",
+  "name": "for.gui.book.patchouli.category.farming.structure.title",
   "parent": "forestry:farming",
-  "description": "The Farm is a multi-block structure which can be customized to suit your needs.",
+  "description": "for.gui.book.patchouli.category.farming.structure.desc",
   "icon": "forestry:farm_plain_brick"
 }

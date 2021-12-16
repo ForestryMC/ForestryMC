@@ -1,16 +1,16 @@
 {
   "icon": "forestry:engine_clockwork",
-  "name": "Clockwork Engine",
+  "name": "for.gui.book.patchouli.entry.core.engine.clockwork",
   "category": "forestry:engines",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:engine_clockwork",
-      "text": "The Clockwork Engine is an excellent alternative to other early-game power sources. It will output between 5 and 15 RF/tick depending on how much it is wound. Right-clicking on the engine block will wind it.$(br)As the engine works, it will gradually lose tick strength."
+      "text": "for.gui.book.patchouli.entry.core.engine.clockwork1"
     },
     {
       "type": "text",
-      "text": "The Clockwork Engine has no GUI. To wind the engine, simply right-click on the block in the world. The piston will pause moving while you wind it, allowing you to see the current state of the engine.$(br)"
+      "text": "for.gui.book.patchouli.entry.core.engine.clockwork2"
     }
   ]
 }

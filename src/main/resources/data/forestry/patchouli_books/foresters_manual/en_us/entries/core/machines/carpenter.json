@@ -1,16 +1,16 @@
 {
   "icon": "forestry:carpenter",
-  "name": "Carpenter",
+  "name": "for.gui.book.patchouli.entry.core.machine.carpenter",
   "category": "forestry:machines",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:carpenter",
-      "text": "The Carpenter is similar to an Automatic Crafting Table from the Buildcraft Mod, except it has a specific recipe set. For example, you aren't able to automatically craft Stone into Stone Bricks."
+      "text": "for.gui.book.patchouli.entry.core.machine.carpenter1"
     },
     {
       "type": "text",
-      "text": "The Carpenter’s main task is the creation of Bog Earth, Humus (although there are methods to make these item without this machine, they aren't as efficient) and the [Crating] of some item and block for more compact storage.$(br2)It is also used in the creation of the Portable Analyzer and the various Woven Backpacks, among other machines, tools and item that are needed for Forestry and other mods."
+      "text": "for.gui.book.patchouli.entry.core.machine.carpenter2"
     }
   ]
 }

@@ -1,16 +1,16 @@
 {
-  "name": "Scoop",
+  "name": "for.gui.book.patchouli.entry.beekeeping.scoop",
   "category": "forestry:beekeeping",
   "icon": "forestry:scoop",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:scoop",
-      "text": "To get bees out you need to catch them with one of my most remarkable inventions, the scoop. Sadly my alternative names of “bee capturing implement” and “net-on-a-stick” did not catch on."
+      "text": "for.gui.book.patchouli.entry.beekeeping.scoop1"
     },
     {
       "type": "patchouli:text",
-      "text": "Somehow, beating in a repetitive manner on these hives reveals the bees, who are rather large and colourful. To create the scoop, you will need to assemble it using sticks and string, although I'll leave the art of tying a net from string to you."
+      "text": "for.gui.book.patchouli.entry.beekeeping.scoop2"
     }
   ]
 }

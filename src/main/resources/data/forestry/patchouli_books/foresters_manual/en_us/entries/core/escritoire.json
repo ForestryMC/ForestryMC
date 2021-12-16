@@ -1,12 +1,12 @@
 {
   "icon": "forestry:escritoire",
-  "name": "Escritoire",
+  "name": "for.gui.book.patchouli.entry.core.escritoire",
   "category": "forestry:core",
   "pages": [
     {
       "type": "forestry:carpenter/single",
       "item": "forestry:escritoire",
-      "text": "Play a matching mini-game to research bee, tree, and butterfly mutations. Gives research notes that boost mutation rates, and other rewards."
+      "text": "for.gui.book.patchouli.entry.core.escritoire1"
     }
   ]
 }

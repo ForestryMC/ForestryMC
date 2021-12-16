@@ -1,20 +1,20 @@
 {
-  "name": "Apiary",
+  "name": "for.gui.book.patchouli.entry.beekeeping.apiary",
   "category": "forestry:beekeeping",
   "icon": "forestry:apiary",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:apiary",
-      "text": "Like the bee house, the apiary can contain a family of bees, and collect honeycombs for your troubles."
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary1"
     },
     {
       "type": "patchouli:text",
-      "text": "To obtain the apiary I had to go through a long and arduous journey of trial and error, involving creepers, lapis lazuli and a few sheep, but luckily I recorded these steps for future generations. I first started with the squeezing of my many seeds into seed oil. The arrangement of eight logs (of any tree) in a carpenter along with my seed oil resulted in an impregnated casing which could hold the bee. To secure this casing in the world, I then arranged it"
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary2"
     },
     {
       "type": "patchouli:text",
-      "text": "on my crafting table with wooden planks and wooden slabs to form an acceptable home for my bees. The resultant apiary can then be placed in the world wherever I want.$(br2)Actually, I lied. I traded for an apiary with a friendly beekeeper in a village. Just thought I'd let you go through the effort of making it first. If I could see you now, I'd be laughing."
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary3"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "name": "Habitat Former",
-  "description": "The Habitat Former can be used to manipulate the climate in a specific region.",
+  "name": "for.gui.book.patchouli.category.habitat_former.title",
+  "description": "for.gui.book.patchouli.category.habitat_former.desc",
   "icon": "forestry:habitat_former",
   "sortnum": 2
 }

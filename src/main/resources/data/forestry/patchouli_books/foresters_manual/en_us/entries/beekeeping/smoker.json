@@ -1,12 +1,12 @@
 {
-  "name": "Smoker",
+  "name": "for.gui.book.patchouli.entry.beekeeping.smoker",
   "category": "forestry:beekeeping",
   "icon": "forestry:smoker",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:smoker",
-      "text": "The hive bees will sting you a little bit if you're too close, health regeneration covers it. They only get aggressive if you hit the hive, and can really hurt if you break the hive without smoking them first."
+      "text": "for.gui.book.patchouli.entry.beekeeping.smoker1"
     }
   ]
 }

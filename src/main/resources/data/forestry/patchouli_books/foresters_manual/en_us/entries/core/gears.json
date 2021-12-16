@@ -1,12 +1,12 @@
 {
   "icon": "forestry:gear_bronze",
-  "name": "Gears",
+  "name": "for.gui.book.patchouli.entry.core.gears",
   "category": "forestry:core",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:gear_bronze",
-      "text": "Gears are a basic crafting component."
+      "text": "for.gui.book.patchouli.entry.core.gears1"
     },
     {
       "type": "crafting",

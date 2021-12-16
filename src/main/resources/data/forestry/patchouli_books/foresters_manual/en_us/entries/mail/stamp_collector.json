@@ -1,12 +1,12 @@
 {
   "icon": "forestry:stamp_collector",
-  "name": "Stamp Collector",
+  "name": "for.gui.book.patchouli.entry.mail.stamp_collector",
   "category": "forestry:mail",
   "pages": [
     {
       "type": "spotlight",
       "item": "forestry:stamp_collector",
-      "text": "The Stamp Collector is an admin machine that cannot be crafted.$(br2)As the name suggests, the 'Stamp Collector' collects all the stamps spent by players on server. Anyone who has permission to interact with it can get the spent stamps."
+      "text": "for.gui.book.patchouli.entry.mail.stamp_collector1"
     }
   ]
 }

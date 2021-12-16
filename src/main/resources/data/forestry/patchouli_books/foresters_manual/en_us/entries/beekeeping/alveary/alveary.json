@@ -1,5 +1,5 @@
 {
-  "name": "Alveary",
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary",
   "category": "forestry:alveary",
   "icon": "forestry:alveary_plain",
   "pages": [
@@ -7,20 +7,20 @@
       "type": "patchouli:spotlight",
       "item": "forestry:alveary_plain",
       "link_recipe": true,
-      "text": "After a while, you will begin to notice that the primitive Apiary is not reaping the full potential of your bees. When you reach this point it is time to upgrade. The alveary is three times the size of the apiary, and I have seen the bees produce up to ten times more honey in an alveary than an apiary."
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary1"
     },
     {
       "type": "patchouli:image",
       "images": [ "forestry:textures/gui/almanac/scraps/alveary_2.png" ],
-      "text": "To create this massive contraption, you'll need 27 of these alveary blocks."
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary2"
     },
     {
       "type": "patchouli:text",
-      "text": "Once you have them, you can form them into a cube to create the body of the alveary. You'll also need to block off the roof, for which I recommend placing wooden slabs across the top. If you construct it correctly, you should see small holes form for the bees to dwell in. The usage of this alveary is identical to that of the apiary, although I haven't yet had any success with inserting wooden frames into it."
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary3"
     },
     {
       "type": "patchouli:multiblock",
-      "name": "Alveary",
+      "name": "for.gui.book.patchouli.entry.beekeeping.alveary",
       // TODO: Implement multiblock in code
       "multiblock": {
         "pattern": [

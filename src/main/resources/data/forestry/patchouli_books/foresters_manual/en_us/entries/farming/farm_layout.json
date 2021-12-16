@@ -1,16 +1,16 @@
 {
   "icon": "forestry:wrench",
-  "name": "Farm Layouts",
+  "name": "for.gui.book.patchouli.entry.farming.farm_layout",
   "category": "forestry:farming",
   "pages": [
     {
       "type": "text",
-      "text": "$(l:farming/farm_layout#2)> Small$(/l)$(br)$(l:farming/farm_layout#3)> Medium$(/l)$(br)$(l:farming/farm_layout#4)> Medium Large$(/l)$(br)$(l:farming/farm_layout#5)> Large$(/l)$(br)$(l:farming/farm_layout#6)> Very Large$(/l)$(br)"
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout1"
     },
     {
       "type": "forestry:farm_layout",
-      "text": "§nSmall$()$(br)W×L×H: 3×3×4$(br)Radius: 7 block$(br)Space (W×L): 17×17$(br)Farm block: 36$(br)Farm Land: 126",
-      "image": "forestry:textures/gui/almanac/fam_layouts/3x3_256.png",
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout2",
+      "image": "forestry:textures/gui/almanac/fam_layouts/3x3_512.png",
       "texture_width": 256,
       "texture_height": 256,
       "width": 89,
@@ -19,8 +19,8 @@
     },
     {
       "type": "forestry:farm_layout",
-      "text": "§nMedium$(br)W×L×H: 3×4×4$(br)Radius: 9 block$(br)Space (W×L): 21×22$(br)Farm block: 48$(br)Farm Land: 270",
-      "image": "forestry:textures/gui/almanac/fam_layouts/3x4_256.png",
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout3",
+      "image": "forestry:textures/gui/almanac/fam_layouts/3x4_512.png",
       "texture_width": 256,
       "texture_height": 256,
       "width": 85,
@@ -29,8 +29,8 @@
     },
     {
       "type": "forestry:farm_layout",
-      "text": "§nMedium Large$(br)W×L×H: 4×4×4$(br)Radius: 9 block$(br)Space (W×L): 22×22$(br)Farm block: 64$(br)Farm Land: 288",
-      "image": "forestry:textures/gui/almanac/fam_layouts/4x4_256.png",
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout4",
+      "image": "forestry:textures/gui/almanac/fam_layouts/4x4_512.png",
       "texture_width": 256,
       "texture_height": 256,
       "width": 89,
@@ -39,7 +39,7 @@
     },
     {
       "type": "forestry:farm_layout_large",
-      "text": "§nLarge$(br)W×L×H: 3×5×4$(br)Radius: 11 block$(br)Space (W×L): 25×27$(br)Farm block: 60$(br)Farm Land: 396",
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout5",
       "image": "forestry:textures/gui/almanac/fam_layouts/3x5_512.png",
       "texture_width": 512,
       "texture_height": 512,
@@ -49,7 +49,7 @@
     },
     {
       "type": "forestry:farm_layout_large",
-      "text": "§nVery Large$(br)W×L×H: 5×5×4$(br)Radius: 11 block$(br)Space (W×L): 27×27$(br)Farm block: 100$(br)Farm Land: 440",
+      "text": "for.gui.book.patchouli.entry.farming.farm_layout6",
       "image": "forestry:textures/gui/almanac/fam_layouts/5x5_512.png",
       "texture_width": 512,
       "texture_height": 512,

@@ -1,20 +1,20 @@
 {
   "icon": "forestry:mailbox",
-  "name": "Mailbox",
+  "name": "for.gui.book.patchouli.entry.mail.mailbox",
   "category": "forestry:mail",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:mailbox",
-      "text": "Mailboxes are a convenient, quick way to send mail between other players on a server. Letters inserted into a mailbox are rapidly transferred to the recipient's mailbox for pickup."
+      "text": "for.gui.book.patchouli.entry.mail.mailbox1"
     },
     {
       "type": "text",
-      "text": "Any player wishing to join the mailing network need only place a Mailbox down in the world. Usually, somewhere easily accessible and near their home is preferred. Letters may be simply notes getting sent between players, although it is a trivial matter to include several item in a mail package. These item will remain safely ensconced within the recipient's mailbox until such a time when the owner of the mailbox removes the item and opens the package."
+      "text": "for.gui.book.patchouli.entry.mail.mailbox2"
     },
     {
       "type": "text",
-      "text": "Mailboxes can be set to private, which will prevent other players from seeing what is inside a mailbox in addition to preventing them from breaking them."
+      "text": "for.gui.book.patchouli.entry.mail.mailbox3"
     }
   ]
 }

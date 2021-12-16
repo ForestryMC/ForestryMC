@@ -2,7 +2,7 @@
   "components": [
     {
       "type": "header",
-      "text": "Farm GUI",
+      "text": "for.gui.book.patchouli.template.farm_gui.header",
       "x": -1,
       "y": -5
     },

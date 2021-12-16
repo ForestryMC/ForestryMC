@@ -1,16 +1,16 @@
 {
-  "name": "Alveary Swarmer",
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.swarmer",
   "category": "forestry:alveary",
   "icon": "forestry:alveary_swarmer",
   "pages": [
     {
       "type": "patchouli:crafting",
       "recipe": "forestry:alveary_swarmer",
-      "text": "The Swarmer is a special Alveary block, which has a 1% chance of spawning a Swarm Hive near the Apiary per Royal Jelly that's inside it."
+      "text": ""
     },
     {
       "type": "patchouli:text",
-      "text": "The bees found in those Swarms are the same as the one in the Alveary, but the princesses are always Ignoble."
+      "text": ""
     }
   ]
 }

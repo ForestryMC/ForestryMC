@@ -1,6 +1,6 @@
 {
-  "name": "Core",
-  "description": "All the resources and contraptions which are essential to the modern forester.",
+  "name": "for.gui.book.patchouli.category.core.title",
+  "description": "for.gui.book.patchouli.category.core.desc",
   "icon": "forestry:wrench",
   "sortnum": 1
 }

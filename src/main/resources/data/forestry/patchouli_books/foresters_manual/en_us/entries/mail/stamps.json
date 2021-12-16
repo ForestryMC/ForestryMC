@@ -1,12 +1,12 @@
 {
   "icon": "forestry:stamp_1n",
-  "name": "Stamps",
+  "name": "for.gui.book.patchouli.entry.mail.stamps",
   "category": "forestry:mail",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:stamp_1n",
-      "text": "The higher the value of the stamp, the more items you can attach to a letter. A single 1n stamp is sufficient to send a letter containing only text. Each item attached to a letter will require an additional stamp."
+      "text": "for.gui.book.patchouli.entry.mail.stamps1"
     },
     {
       "type": "crafting",

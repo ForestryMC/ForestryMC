@@ -1,12 +1,12 @@
 {
-	"name": "Wrench",
+	"name": "for.gui.book.patchouli.entry.core.wrench",
 	"icon": "forestry:wrench",
 	"category": "forestry:core",
 	"pages": [
 		{
 			"type": "crafting",
 			"recipe": "forestry:wrench",
-			"text": "The wrench allows the player to rotate all forestry machines and engines."
+			"text": "for.gui.book.patchouli.entry.core.wrench1"
 		}
 	]
 }

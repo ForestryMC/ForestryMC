@@ -1,19 +1,19 @@
 {
-  "name": "First Mutations",
+  "name": "for.gui.book.patchouli.entry.beekeeping.mutations",
   "category": "forestry:beekeeping",
   "icon": "forestry:bee_queen_ge{Genome:{Chromosomes:[{UID1:\"forestry.speciesCommon\",UID0:\"forestry.speciesCommon\",Slot:0b}]}}",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The children of two different bees will have a mixture of the genes of the two parents, and may even be a new species that you are yet to discover. By allowing these so called 'mutations' to occur, I discovered that these few species of naturally occurring bee opened up a world of possibilities, with many weird and exotic species to be found."
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations1"
     },
     {
       "type": "patchouli:text",
-      "text": "I will explain the many species that I discovered later on in the guide, along with tips to how I obtained them. A true apiarist never shares his secrets after all. From these bees, and the other mundane species, I discovered the Common and Cultivated bees. These bees are staples of any apiarist’s collection, and the common bee is considered the beginner apiarist’s badge of participation."
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations2"
     },
     {
       "type": "patchouli:text",
-      "text": "Although the common bee is not particularly interesting, its descendant the cultivated bee is fast working, producing more honey in a shorter amount of time. It also thinks anything but opera is underneath it, meaning it was $(italic)$(bold)this$() far away from being called the snobby bee."
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations3"
     }
     // TODO: Mutation visualization
   ]

@@ -1,6 +1,6 @@
 {
   "icon": "forestry:electron_tube_copper",
-  "name": "Electron Tubes",
+  "name": "for.gui.book.patchouli.entry.core.tubes",
   "category": "forestry:core",
   "pages": [
     // TODO: Fabricator tube recipes
@@ -55,7 +55,7 @@
       "type": "spotlight",
       "title": "Electron Tubes",
       "item": "forestry:electron_tube_copper",
-      "text": "Electron Tubes can be attached to Circuit Boards using a Soldering Iron. They have many purposes displayed on the tooltip, which depend on the circuit type selected in the Soldering Iron. Once soldered, they cannot be removed from a Circuit Board."
+      "text": "for.gui.book.patchouli.entry.core.tubes"
     }
   ]
 }

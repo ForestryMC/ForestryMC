@@ -1,19 +1,19 @@
 {
-  "name": "Bees",
+  "name": "for.gui.book.patchouli.entry.beekeeping.bees",
   "category": "forestry:beekeeping",
   "icon": "forestry:bee_comb_honey",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Bees sting. Bees are yellow and stripy. Bees buzz. You may already know these things, but the first rule of beekeeping is know your enemy (actually the first rule is you must always talk about beekeeping club). Bees are small yellow insects found in hives, scattered around our remarkably polygonal world. There are five different hives I have discovered in this world, and another which I dare not speak"
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees1"
     },
     {
       "type": "patchouli:text",
-      "text": "about. The easiest way to find the hives is to explore at night, as the glow of working bees guided me to them (as well as mobs, as I found to my cost)$(br2)Outside of apiaries and alvearies (more later) bees seem to be both totally docile and immortal. The first thing I noticed about bees were that they were clearly split into three castes. In the hives I found both princess and drones, where the princesses were distinguisable by their"
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees2"
     },
     {
       "type": "patchouli:text",
-      "text": "more regal appearance. But when the two are brought together somewhere special the princess can transform into the queen. The queen will spend her lifespan creating things such as honey combs until she eventually dies, spawning a new princess and multiple drones. This means that your bee population will grow exponentially, meaning you'll need plenty of storage."
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees3"
     }
   ]
 }

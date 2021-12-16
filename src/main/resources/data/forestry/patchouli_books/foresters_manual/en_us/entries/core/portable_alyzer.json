@@ -1,16 +1,16 @@
 {
   "icon": "forestry:portable_alyzer",
-  "name": "Portable Analyzer",
+  "name": "for.gui.book.patchouli.entry.core.portable_alyzer",
   "category": "forestry:core",
   "pages": [
     {
       "type": "forestry:carpenter/single",
       "item": "forestry:portable_alyzer",
-      "text": "All these genetics can get pretty confusing pretty fast. Especially since every offspring will have its own genome built more or less randomly from both parents. So, if you don't keep crossbreeding the same offspring from that same"
+      "text": "for.gui.book.patchouli.entry.core.portable_alyzer1"
     },
     {
       "type": "text",
-      "text": "Forest queen you knocked off a tree ages ago, you will have lots of specimens with funny genomes. But where would you get that genome information? Luckily there is the Portable Analyzer to help. It provides a non-invasive way to glean every last bit of information from your specimens, butterflies and trees. Just provide a honey or honeydew drop to pacify the specimen to have everything you ever wanted to know but were afraid to ask at your fingertips."
+      "text": "for.gui.book.patchouli.entry.core.portable_alyzer2"
     }
   ]
 }

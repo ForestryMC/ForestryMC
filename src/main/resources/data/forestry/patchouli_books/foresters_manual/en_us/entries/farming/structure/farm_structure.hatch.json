@@ -1,12 +1,12 @@
 {
   "icon": "forestry:farm_hatch_brick",
-  "name": "Farm Hatch (Pipe Connectivity)",
+  "name": "for.gui.book.patchouli.entry.farming.structure.farm_structure.hatch",
   "category": "forestry:structure",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:farm_hatch_brick",
-      "text": "You can supply and extract item from the Farm by using Farm Hatches that are connected to Pipe systems."
+      "text": "for.gui.book.patchouli.entry.farming.structure.farm_structure.hatch1"
     }
   ]
 }

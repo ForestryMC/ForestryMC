@@ -1,16 +1,16 @@
 {
   "icon": "forestry:worktable",
-  "name": "Worktable",
+  "name": "for.gui.book.patchouli.entry.core.worktable",
   "category": "forestry:core",
   "pages": [
     {
       "type": "crafting",
       "recipe": "forestry:worktable",
-      "text": "A manual crafting table which remembers the last nine used recipes. Left click one of the recipes shown in the right-hand side to automatically fill in the crafting grid. Right-click to lock a memorized recipe and prevent a newer recipe from bumping it off."
+      "text": "for.gui.book.patchouli.entry.core.worktable1"
     },
     {
       "type": "text",
-      "text": "Resources need to go into the internal inventory. The crafting matrix is only a visual representation."
+      "text": "for.gui.book.patchouli.entry.core.worktable2"
     }
   ]
 }
