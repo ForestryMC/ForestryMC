@@ -1,0 +1,114 @@
+{
+  "processor": "forestry.book.patchouli.processor.FabricatorProcessor",
+  "components": [
+    {
+      "type": "header",
+      "text": "#output->iname",
+      "x": -1,
+      "y": -10
+    },
+    {
+      "type": "image",
+      "image": "forestry:textures/gui/almanac/crafting.png",
+      "width": 108,
+      "height": 60,
+      "u": 0,
+      "v": 60,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "type": "item",
+      "item": "#ingredient1",
+      "x": 21,
+      "y": 1
+    },
+    {
+      "type": "item",
+      "item": "#ingredient2",
+      "x": 40,
+      "y": 1
+    },
+    {
+      "type": "item",
+      "item": "#ingredient3",
+      "x": 59,
+      "y": 1
+    },
+    {
+      "type": "item",
+      "item": "#ingredient4",
+      "x": 21,
+      "y": 20
+    },
+    {
+      "type": "item",
+      "item": "#ingredient5",
+      "x": 40,
+      "y": 20
+    },
+    {
+      "type": "item",
+      "item": "#ingredient6",
+      "x": 59,
+      "y": 20
+    },
+    {
+      "type": "item",
+      "item": "#ingredient7",
+      "x": 21,
+      "y": 39
+    },
+    {
+      "type": "item",
+      "item": "#ingredient8",
+      "x": 40,
+      "y": 39
+    },
+    {
+      "type": "item",
+      "item": "#ingredient9",
+      "x": 59,
+      "y": 39
+    },
+    {
+      "type": "item",
+      "item": "#plan",
+      "x": 78,
+      "y": 1
+    },
+    {
+      "type": "item",
+      "item": "#metal",
+      "x": 1,
+      "y": 6
+    },
+    {
+      "type": "item",
+      "item": "#output",
+      "x": 91,
+      "y": 39
+    },
+    {
+      "type": "custom",
+      "class": "forestry.book.patchouli.component.FluidComponent",
+      "fluid": "#fluid",
+      "amount": "#fluidAmount",
+      "max": 2000,
+      "width": 16,
+      "height": 16,
+      "x": 1,
+      "y": 33
+    },
+    {
+      "type": "image",
+      "image": "forestry:textures/gui/almanac/crafting.png",
+      "width": 18,
+      "height": 18,
+      "u": 108,
+      "v": 60,
+      "x": 0,
+      "y": 32
+    }
+  ]
+}

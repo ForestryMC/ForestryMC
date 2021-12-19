@@ -3,59 +3,41 @@
   "name": "for.gui.book.patchouli.entry.core.tubes",
   "category": "forestry:core",
   "pages": [
-    // TODO: Fabricator tube recipes
-//    {
-//      "type": "fabricator",
-//      "stacks": [
-//        {
-//          "item": "forestry:thermionic_tube_tin"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_copper"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_bronze"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_iron"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_gold"
-//        },
-//        {
-//          "item": "forestry:thermionic_obsidian"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_blaze"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_emerald"
-//        },
-//        {
-//          "item": "forestry:thermionic_apatite"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_diamond"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_lapis"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_ender"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_rubber"
-//        },
-//        {
-//          "item": "forestry:thermionic_tube_orchid"
-//        }
-//      ]
-//    },
     {
       "type": "spotlight",
       "title": "Electron Tubes",
       "item": "forestry:electron_tube_copper",
       "text": "for.gui.book.patchouli.entry.core.tubes"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_tin",
+      "item2": "forestry:electron_tube_copper"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_bronze",
+      "item2": "forestry:electron_tube_gold"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_obsidian",
+      "item2": "forestry:electron_tube_blaze"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_emerald",
+      "item2": "forestry:electron_tube_apatite"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_diamond",
+      "item2": "forestry:electron_tube_lapis"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_ender",
+      "item2": "forestry:electron_tube_copper"
     }
   ]
 }

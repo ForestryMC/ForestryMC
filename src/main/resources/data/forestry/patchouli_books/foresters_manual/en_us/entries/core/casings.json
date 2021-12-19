@@ -9,9 +9,13 @@
       "text": "for.gui.book.patchouli.entry.core.casings1"
     },
     {
-      "type": "forestry:carpenter/single",
-      "item": "forestry:hardened_machine"
+      "type": "forestry:carpenter/double",
+      "item": "forestry:hardened_machine",
+      "item2": "forestry:impregnated_casing"
+    },
+    {
+      "type": "forestry:fabricator/single",
+      "item": "forestry:flexible_casing"
     }
-    //TODO: Fabricator flexible casing recipe
   ]
 }
