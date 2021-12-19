@@ -1,7 +1,7 @@
 {
   "icon": "forestry:soldering_iron",
-  "name": "for.gui.book.patchouli.entry.core.soldering_iron1",
-    "category": "forestry:core",
+  "name": "for.gui.book.patchouli.entry.core.soldering_iron",
+  "category": "forestry:core",
   "pages": [
     {
       "type": "forestry:carpenter/single",
