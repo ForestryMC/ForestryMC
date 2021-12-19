@@ -74,6 +74,27 @@
       "item": "#output",
       "x": 71,
       "y": 41
+    },
+    {
+      "type": "custom",
+      "class": "forestry.book.patchouli.component.FluidComponent",
+      "fluid": "#fluid",
+      "amount": "#fluidAmount",
+      "max": 10000,
+      "width": 16,
+      "height": 58,
+      "x": 91,
+      "y": 1
+    },
+    {
+      "type": "image",
+      "image": "forestry:textures/gui/almanac/crafting.png",
+      "width": 18,
+      "height": 60,
+      "u": 108,
+      "v": 0,
+      "x": 90,
+      "y": 0
     }
   ]
 }

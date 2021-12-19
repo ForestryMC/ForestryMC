@@ -60,7 +60,9 @@ public class CarpenterProcessor implements IComponentProcessor {
         if (key.equals("output")) {
             return IVariable.from(this.recipe.getResult());
         } else if (key.equals("fluid")) {
-            return IVariable.from(this.recipe.getFluidResource());
+            return IVariable.wrap(this.recipe.getFluidResource().getFluid().getRegistryName().toString());
+        } else if (key.equals("fluidAmount")) {
+            return IVariable.wrap(this.recipe.getFluidResource().getAmount());
         } else if (key.startsWith("ingredient")) {
             int index = Integer.parseInt(key.substring("ingredient".length()));
             if (index < 1 || index > 9) return IVariable.empty();
