@@ -12,6 +12,7 @@
  ******************************************************************************/
 package forestry.book.data.structure;
 
+import com.google.common.base.Preconditions;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NBTUtil;
@@ -22,15 +23,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class StructureInfo {
 	public BlockState[][][] data;
-	public int blockCount = 0;
-	public int[] countPerLevel;
-	public int structureHeight = 0;
-	public int structureLength = 0;
-	public int structureWidth = 0;
+	public int structureHeight;
+	public int structureLength;
+	public int structureWidth;
 	public int showLayer = -1;
 
-	private int blockIndex = 0;
-	private int maxBlockIndex;
+	private final int maxBlockIndex;
+	private int blockIndex;
 
 	public StructureInfo(int length, int height, int width, BlockData[] blockData) {
 		this.structureWidth = width;
@@ -43,7 +42,9 @@ public class StructureInfo {
 				for (int z = 0; z < width; z++) {
 					for (BlockData data : blockData) {
 						if (inside(x, y, z, data.pos, data.endPos)) {
-							states[y][x][z] = NBTUtil.readBlockState(data.state);
+							if (data.state != null) {
+								states[y][x][z] = NBTUtil.readBlockState(data.state);
+							}
 							break;
 						}
 					}

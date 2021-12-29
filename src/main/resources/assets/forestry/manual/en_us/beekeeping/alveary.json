@@ -1,7 +1,7 @@
 {
 	"title": "Alveary",
 	"icon":{
-		"item": "forestry:alveary.plain"
+		"item": "forestry:alveary_plain"
 	},
 	"content": [
 		[
@@ -23,13 +23,13 @@
 				"type": "image",
 				"u": 0,
 				"v": 0,
-				"uWidth": 300,
-				"vHeight": 169,
+				"uWidth": 100,
+				"vHeight": 54,
 				"textureLocation": "forestry:textures/gui/almanac/scraps/alveary.png",
-				"textureWidth": 300,
-				"textureHeight": 169,
-				"width": 108,
-				"height": 60
+				"textureWidth": 100,
+				"textureHeight": 54,
+				"width": 54,
+				"height": 30
 			},
 			{
               "text": "To create this massive contraption you'll need to construct around twenty seven of these alveary block. Once you have these block you can form them into a cube, thus forming the"
