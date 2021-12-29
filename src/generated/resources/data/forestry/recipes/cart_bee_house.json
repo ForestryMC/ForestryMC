@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "module": "apiculture",
+          "container": "forestry",
+          "type": "forestry:module"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "minecraft:minecart"
+          },
+          {
+            "item": "forestry:bee_house"
+          }
+        ],
+        "result": {
+          "item": "forestry:cart_bee_house"
+        }
+      }
+    }
+  ]
+}
