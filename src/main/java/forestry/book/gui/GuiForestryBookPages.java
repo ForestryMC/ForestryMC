@@ -90,6 +90,8 @@ public class GuiForestryBookPages extends GuiForesterBook {
 	public void init() {
 		super.init();
 		IBookEntry firstEntry = parent != null ? parent : entry;
+		subButtons.forEach((b) -> b.active = false); // Deactivate the buttons before clearing
+		subButtons.clear();
 		subButtons.add(addButton(new GuiButtonSubEntry(guiLeft + -24, guiTop + 12, firstEntry, entry, this::actionPerformed)));
 		IBookEntry[] subEntries = firstEntry.getSubEntries();
 		for (int i = 0; i < subEntries.length; i++) {
