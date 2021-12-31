@@ -59,6 +59,7 @@ public abstract class GuiForesterBook extends GuiWindow implements IGuiSizable {
 	@Override
 	public void init() {
 		super.init();
+		this.buttons.forEach((b)-> b.active = false); // Deactivate all buttons before clearing them
 		this.buttons.clear();
 		if (hasButtons()) {
 			GuiButtonPage leftButton = addButton(new GuiButtonPage(guiLeft + 24, guiTop + Y_SIZE - 20, true, this::actionPerformed));
