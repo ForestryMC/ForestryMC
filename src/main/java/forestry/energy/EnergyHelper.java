@@ -11,8 +11,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
-import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.tiles.TileEngine;
 
 public class EnergyHelper {
@@ -84,14 +82,6 @@ public class EnergyHelper {
 			}
 		}
 
-		if (Config.enableTesla && TeslaHelper.isEnergyReceiver(tile, side)) {
-			return TeslaHelper.sendEnergy(tile, side, extractable, simulate);
-		}
-
-		if (Config.enableMJ && MjHelper.isEnergyReceiver(tile, side)) {
-			return MjHelper.sendEnergy(tile, side, extractable, simulate);
-		}
-
 		return 0;
 	}
 
@@ -115,7 +105,6 @@ public class EnergyHelper {
 			return energyStorage.orElse(null).canReceive();
 		}
 
-		return TeslaHelper.isEnergyReceiver(tile, side) ||
-			MjHelper.isEnergyReceiver(tile, side);
+		return false;
 	}
 }

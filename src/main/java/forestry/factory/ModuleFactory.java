@@ -207,11 +207,6 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTriggers() {
-		//		FactoryTriggers.initialize();
-	}
-
-	@Override
 	public void registerObjects() {
 		Circuits.machineSpeedUpgrade1 = new CircuitSpeedUpgrade("machine.speed.boost.1", 0.125f, 0.05f);
 		Circuits.machineSpeedUpgrade2 = new CircuitSpeedUpgrade("machine.speed.boost.2", 0.250f, 0.10f);

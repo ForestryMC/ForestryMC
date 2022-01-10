@@ -70,12 +70,6 @@ public interface IForestryModule {
 	default void preInit() {
 	}
 
-	/**
-	 * Can be used to register Buildcraft triggers.
-	 */
-	default void registerTriggers() {
-	}
-
 	default void registerObjects() {
 
 	}

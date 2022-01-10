@@ -88,13 +88,6 @@ public class TileMailbox extends TileBase {
 		return result;
 	}
 
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		// triggers.add(MailTriggers.triggerHasMail);
-	//	}
-
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
 		return new ContainerMailbox(windowId, inv, this);

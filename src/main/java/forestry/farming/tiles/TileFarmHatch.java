@@ -29,16 +29,7 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.features.FarmingTiles;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.statements.IStatementContainer;
-//import buildcraft.api.statements.ITriggerExternal;
-//import buildcraft.api.statements.ITriggerInternal;
-//import buildcraft.api.statements.ITriggerInternalSided;
-//import buildcraft.api.statements.ITriggerProvider;
-//
-//@Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = Constants.BCLIB_MOD_ID)
-public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {//}, ITriggerProvider {
+public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {
 
 	private static final Direction[] dumpDirections = new Direction[]{Direction.DOWN};
 
@@ -81,23 +72,4 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 		}
 		return super.getCapability(capability, facing);
 	}
-
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalTriggers(Collection<ITriggerInternal> triggers, IStatementContainer container) {
-	//	}
-	//
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addInternalSidedTriggers(Collection<ITriggerInternalSided> triggers, IStatementContainer container, @Nonnull Direction side) {
-	//	}
-	//
-	//	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		if (getMultiblockLogic().isConnected()) {
-	//			triggers.addAll(FarmingTriggers.allExternalTriggers);
-	//		}
-	//	}
 }

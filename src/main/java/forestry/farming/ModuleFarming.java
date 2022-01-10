@@ -51,7 +51,6 @@ import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.farming.logic.farmables.FarmableStacked;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
-import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
@@ -150,11 +149,6 @@ public class ModuleFarming extends BlankForestryModule {
 		ChipsetManager.circuitRegistry.registerLayout(layoutManaged);
 		ICircuitLayout layoutManual = new CircuitLayout("farms.manual", CircuitSocketType.FARM);
 		ChipsetManager.circuitRegistry.registerLayout(layoutManual);
-	}
-
-	@Override
-	public void registerTriggers() {
-		FarmingTriggers.initialize();
 	}
 
 	@Override

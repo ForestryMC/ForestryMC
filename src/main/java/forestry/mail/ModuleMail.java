@@ -33,7 +33,6 @@ import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.gui.GuiTradeName;
 import forestry.mail.gui.GuiTrader;
 import forestry.mail.network.PacketRegistryMail;
-import forestry.mail.triggers.MailTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 
@@ -65,11 +64,6 @@ public class ModuleMail extends BlankForestryModule {
 		if (Config.mailAlertEnabled) {
 			MinecraftForge.EVENT_BUS.register(new EventHandlerMailAlert());
 		}
-	}
-
-	@Override
-	public void registerTriggers() {
-		MailTriggers.initialize();
 	}
 
 	@Override
