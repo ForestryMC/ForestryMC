@@ -1,9 +1,0 @@
-{
-  "table": "minecraft:chests/desert_pyramid",
-  "extensions": [
-    "apiculture",
-    "arboriculture",
-    "factory"
-  ],
-  "type": "forestry:condition_modifier"
-}

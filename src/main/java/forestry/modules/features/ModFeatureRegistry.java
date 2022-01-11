@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -29,6 +30,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 
+import forestry.api.storage.IBackpackDefinition;
+import forestry.storage.ModuleBackpacks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +44,6 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
 import forestry.api.modules.ForestryModule;
-import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
@@ -52,6 +54,10 @@ public class ModFeatureRegistry {
 
 	public static ModFeatureRegistry get(String modId) {
 		return registries.computeIfAbsent(modId, ModFeatureRegistry::new);
+	}
+
+	public static Map<String, ModFeatureRegistry> getRegistries() {
+		return registries;
 	}
 
 	public static IFeatureRegistry get(Class<?> clazz) {
@@ -165,13 +171,13 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public FeatureItem<Item> backpack(String backpackUid, EnumBackpackType type, String identifier) {
-			return item(() -> BackpackManager.backpackInterface.createBackpack(backpackUid, type), identifier);
+		public FeatureItem<Item> backpack(IBackpackDefinition definition, EnumBackpackType type, String identifier) {
+			return item(() -> ModuleBackpacks.BACKPACK_INTERFACE.createBackpack(definition, type), identifier);
 		}
 
 		@Override
-		public FeatureItem<Item> naturalistBackpack(String backpackUid, String rootUid, ItemGroup tab, String identifier) {
-			return item(() -> BackpackManager.backpackInterface.createNaturalistBackpack(backpackUid, rootUid, tab), identifier);
+		public FeatureItem<Item> naturalistBackpack(IBackpackDefinition definition, String rootUid, ItemGroup tab, String identifier) {
+			return item(() -> ModuleBackpacks.BACKPACK_INTERFACE.createNaturalistBackpack(definition, rootUid, tab), identifier);
 		}
 
 		@Override

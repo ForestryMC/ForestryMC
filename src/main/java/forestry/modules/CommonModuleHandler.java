@@ -204,12 +204,4 @@ public class CommonModuleHandler {
 			}
 		});
 	}
-
-	public List<ItemStack> getHiddenItems() {
-		List<ItemStack> hiddenItems = new ArrayList<>();
-		for (BlankForestryModule module : modules) {
-			module.getHiddenItems(hiddenItems);
-		}
-		return hiddenItems;
-	}
 }

@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/simple_dungeon",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

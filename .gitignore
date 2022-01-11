@@ -6,7 +6,7 @@
 !/forestry_techne
 !/gradle/wrapper
 !/src
-/src/generated/resources/.cache/cache
+/src/generated/
 
 # files
 !/.gitignore

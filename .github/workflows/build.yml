@@ -16,6 +16,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
+      - name: Generate data
+        run: ./gradlew runData
+        # IDK how to ignore that datagen does a System.exit() or something
+        continue-on-error: true
       - name: Build
         run: ./gradlew build
       - name: Upload artifacts

@@ -60,11 +60,6 @@ public class ForestryAPI {
 	public static IFarmRegistry farmRegistry;
 
 	/**
-	 * The currently active {@link IGameMode}.
-	 */
-	public static IGameMode activeMode;
-
-	/**
 	 * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
 	 */
 	public static IForestryConstants forestryConstants;

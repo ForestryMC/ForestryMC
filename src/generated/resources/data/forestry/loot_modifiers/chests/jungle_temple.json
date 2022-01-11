@@ -1,8 +1,0 @@
-{
-  "table": "minecraft:chests/jungle_temple",
-  "extensions": [
-    "apiculture",
-    "arboriculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

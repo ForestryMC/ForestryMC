@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "side": "forestry:block/wood/planks.greenheart",
-    "top": "forestry:block/wood/planks.greenheart",
-    "bottom": "forestry:block/wood/planks.greenheart",
-    "particle": "forestry:block/wood/planks.greenheart"
-  }
-}

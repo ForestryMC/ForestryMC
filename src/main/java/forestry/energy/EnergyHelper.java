@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -15,8 +16,7 @@ import forestry.energy.tiles.TileEngine;
 
 public class EnergyHelper {
 	public static int scaleForDifficulty(int energyValue) {
-		float energyModifier = ForestryAPI.activeMode.getFloatSetting("energy.demand.modifier");
-		return Math.round(energyValue * energyModifier);
+		return Math.round(energyValue * Preference.ENERGY_DEMAND_MODIFIER);
 	}
 
 	/**

@@ -12,12 +12,10 @@ package forestry.core;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.command.CommandSource;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -41,7 +39,6 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreFeatures;
-import forestry.core.features.CoreItems;
 import forestry.core.genetics.alleles.AlleleFactory;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.GuiAnalyzer;
@@ -149,12 +146,6 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	public IPickupHandler getPickupHandler() {
 		return new PickupHandlerCore();
-	}
-
-	@Override
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		// research note items are not useful without actually having completed research
-		hiddenItems.add(CoreItems.RESEARCH_NOTE.stack());
 	}
 
 	@Override

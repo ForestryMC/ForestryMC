@@ -31,19 +31,24 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.arboriculture.EnumForestryWoodType;
+import forestry.api.arboriculture.EnumVanillaWoodType;
+import forestry.api.arboriculture.IWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.circuits.ICircuit;
-import forestry.api.core.ForestryAPI;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.EnumPropolis;
+import forestry.climatology.features.ClimatologyItems;
 import forestry.core.blocks.BlockTypeCoreTesr;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.config.Constants;
-import forestry.core.config.GameMode;
+import forestry.core.config.Preference;
 import forestry.core.data.builder.CarpenterRecipeBuilder;
 import forestry.core.data.builder.CentrifugeRecipeBuilder;
 import forestry.core.data.builder.FabricatorRecipeBuilder;
@@ -64,6 +69,8 @@ import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.items.definitions.EnumElectronTube;
 import forestry.mail.features.MailItems;
 import forestry.mail.items.ItemLetter;
+import forestry.modules.features.FeatureItem;
+import forestry.storage.features.BackpackItems;
 import forestry.storage.features.CrateItems;
 import forestry.storage.items.ItemCrated;
 
@@ -376,6 +383,19 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.define('R', Tags.Items.DUSTS_REDSTONE))
 				.build(consumer, id("carpenter", "circuits", "intricate"));
 
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(100)
+				.setLiquid(new FluidStack(Fluids.WATER, 2000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shaped(ClimatologyItems.HABITAT_SCREEN)
+						.pattern("IPI")
+						.pattern("IPI")
+						.pattern("GDG")
+						.define('G', CoreItems.GEAR_BRONZE)
+						.define('P', Tags.Items.GLASS_PANES)
+						.define('I', CoreItems.INGOT_BRONZE)
+						.define('D', Tags.Items.GEMS_DIAMOND))
+				.build(consumer, id("carpenter", "habitat_screen"));
 		// / Crates
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(20)
@@ -473,6 +493,28 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.pattern("###")
 						.define('#', CoreItems.WOOD_PULP))
 				.build(consumer, id("carpenter", "letter_pulp"));
+
+		wovenBackpack(consumer, "miner", BackpackItems.MINER_BACKPACK, BackpackItems.MINER_BACKPACK_T_2);
+		wovenBackpack(consumer, "digger", BackpackItems.DIGGER_BACKPACK, BackpackItems.DIGGER_BACKPACK_T_2);
+		wovenBackpack(consumer, "forester", BackpackItems.FORESTER_BACKPACK, BackpackItems.FORESTER_BACKPACK_T_2);
+		wovenBackpack(consumer, "hunter", BackpackItems.HUNTER_BACKPACK, BackpackItems.HUNTER_BACKPACK_T_2);
+		wovenBackpack(consumer, "adventurer", BackpackItems.ADVENTURER_BACKPACK, BackpackItems.ADVENTURER_BACKPACK_T_2);
+		wovenBackpack(consumer, "builder", BackpackItems.BUILDER_BACKPACK, BackpackItems.BUILDER_BACKPACK_T_2);
+	}
+
+	private void wovenBackpack(Consumer<IFinishedRecipe> consumer, String id, FeatureItem<?> tier1, FeatureItem<?> tier2) {
+		new CarpenterRecipeBuilder()
+				.setPackagingTime(200)
+				.setLiquid(new FluidStack(Fluids.WATER, 1000))
+				.setBox(Ingredient.EMPTY)
+				.recipe(ShapedRecipeBuilder.shaped(tier2)
+						.pattern("WXW")
+						.pattern("WTW")
+						.pattern("WWW")
+						.define('W', CoreItems.CRAFTING_MATERIALS.stack(EnumCraftingMaterial.WOVEN_SILK).getItem())
+						.define('X', Items.DIAMOND)
+						.define('T', tier1))
+				.build(consumer, id("woven_backpack", id));
 	}
 
 	private void crate(Consumer<IFinishedRecipe> consumer, ItemCrated crated, Ingredient ingredient) {
@@ -749,6 +791,40 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.define('B', Tags.Items.SLIMEBALLS)
 						.define('E', Tags.Items.GEMS_EMERALD))
 				.build(consumer, id("fabricator", "electron_tubes", "flexible_casing"));
+
+		for (EnumForestryWoodType type : EnumForestryWoodType.values()) {
+			addFireproofRecipes(consumer, type);
+		}
+
+		for (EnumVanillaWoodType type : EnumVanillaWoodType.values()) {
+			addFireproofRecipes(consumer, type);
+		}
+	}
+
+	private void addFireproofRecipes(Consumer<IFinishedRecipe> consumer, IWoodType type) {
+		FluidStack liquidGlass = ForestryFluids.GLASS.getFluid(500);
+
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shaped(TreeManager.woodAccess.getBlock(type, WoodBlockKind.LOG, true).getBlock())
+						.pattern(" # ")
+						.pattern("#X#")
+						.pattern(" # ")
+						.define('#', CoreItems.REFRACTORY_WAX)
+						.define('X', TreeManager.woodAccess.getBlock(type, WoodBlockKind.LOG, false).getBlock()))
+				.build(consumer, id("fabricator", "fireproof", "logs", type.toString()));
+
+		new FabricatorRecipeBuilder()
+				.setPlan(Ingredient.EMPTY)
+				.setMolten(liquidGlass)
+				.recipe(ShapedRecipeBuilder.shaped(TreeManager.woodAccess.getBlock(type, WoodBlockKind.PLANKS, true).getBlock(), 5)
+						.pattern("X#X")
+						.pattern("#X#")
+						.pattern("X#X")
+						.define('#', CoreItems.REFRACTORY_WAX)
+						.define('X', TreeManager.woodAccess.getBlock(type, WoodBlockKind.PLANKS, false).getBlock()))
+				.build(consumer, id("fabricator", "fireproof", "planks", type.toString()));
 	}
 
 	private void registerFabricatorSmelting(Consumer<IFinishedRecipe> consumer) {
@@ -779,32 +855,30 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerFermenter(Consumer<IFinishedRecipe> consumer) {
-		ForestryAPI.activeMode = new GameMode("EASY");
-
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.of(Items.BROWN_MUSHROOM))
-				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setFermentationValue(Preference.FERMENTED_MUSHROOM)
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
 				.build(consumer, id("fermenter", "brown_mushroom_honey"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.of(Items.BROWN_MUSHROOM))
-				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setFermentationValue(Preference.FERMENTED_MUSHROOM)
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
 				.build(consumer, id("fermenter", "brown_mushroom_juice"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.of(Items.RED_MUSHROOM))
-				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setFermentationValue(Preference.FERMENTED_MUSHROOM)
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.HONEY.getFluid(1))
 				.build(consumer, id("fermenter", "red_mushroom_honey"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.of(Items.RED_MUSHROOM))
-				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.mushroom"))
+				.setFermentationValue(Preference.FERMENTED_MUSHROOM)
 				.setModifier(1.5f)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(ForestryFluids.JUICE.getFluid(1))
@@ -822,11 +896,39 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.build(consumer, id("fermenter", "honeydew"));
 		new FermenterRecipeBuilder()
 				.setResource(Ingredient.of(ItemTags.SAPLINGS))
-				.setFermentationValue(ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"))
+				.setFermentationValue(Preference.FERMENTED_SAPLING)
 				.setModifier(1)
 				.setOutput(ForestryFluids.BIOMASS.getFluid())
 				.setFluidResource(new FluidStack(Fluids.WATER, 1000))
 				.build(consumer, id("fermenter", "sapling"));
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.of(Items.CACTUS))
+				.setFermentationValue(Preference.FERMENTED_CACTI)
+				.setModifier(1)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(new FluidStack(Fluids.WATER, 1000))
+				.build(consumer, id("fermenter", "cactus"));
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.of(Tags.Items.CROPS_WHEAT))
+				.setFermentationValue(Preference.FERMENTED_WHEAT)
+				.setModifier(1)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(new FluidStack(Fluids.WATER, 1000))
+				.build(consumer, id("fermenter", "wheat"));
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.of(Tags.Items.CROPS_POTATO))
+				.setFermentationValue(2 * Preference.FERMENTED_WHEAT) // TODO: Its own thing?
+				.setModifier(1)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(new FluidStack(Fluids.WATER, 1000))
+				.build(consumer, id("fermenter", "potato"));
+		new FermenterRecipeBuilder()
+				.setResource(Ingredient.of(Items.SUGAR_CANE))
+				.setFermentationValue(Preference.FERMENTED_CANE)
+				.setModifier(1)
+				.setOutput(ForestryFluids.BIOMASS.getFluid())
+				.setFluidResource(new FluidStack(Fluids.WATER, 1000))
+				.build(consumer, id("fermenter", "sugar_cane"));
 	}
 
 	private void registerHygroregulator(Consumer<IFinishedRecipe> consumer) {
@@ -928,7 +1030,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setFluidOutput(new FluidStack(Fluids.LAVA, 1600))
 				.build(consumer, id("squeezer", "lava"));
 
-		int seedOilAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+		int seedOilAmount = Preference.SQUEEZED_LIQUID_SEED;
 
 		new SqueezerRecipeBuilder()
 				.setProcessingTime(10)
@@ -936,8 +1038,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setFluidOutput(ForestryFluids.SEED_OIL.getFluid(seedOilAmount))
 				.build(consumer, id("squeezer", "seeds"));
 
-		int appleMulchAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
-		int appleJuiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+		int appleMulchAmount = Preference.SQUEEZED_MULCH_APPLE;
+		int appleJuiceAmount = Preference.SQUEEZED_LIQUID_APPLE;
 		FluidStack appleJuice = ForestryFluids.JUICE.getFluid(appleJuiceAmount);
 
 		new SqueezerRecipeBuilder()
@@ -964,8 +1066,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.setFluidOutput(ForestryFluids.ICE.getFluid(4000))
 				.build(consumer, id("squeezer", "ice"));
 
-		int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+		int seedOilMultiplier = Preference.SQUEEZED_LIQUID_SEED;
+		int juiceMultiplier = Preference.SQUEEZED_LIQUID_APPLE;
 
 		ItemStack mulch = new ItemStack(CoreItems.MULCH);
 		Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();

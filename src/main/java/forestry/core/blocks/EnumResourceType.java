@@ -15,32 +15,12 @@ import java.util.Locale;
 import forestry.api.core.IBlockSubtype;
 
 public enum EnumResourceType implements IBlockSubtype {
-	APATITE(0),
-	COPPER(1),
-	TIN(2),
-	BRONZE(3, false);
+	APATITE(),
+	COPPER(),
+	TIN(),
+	BRONZE();
 
 	public static final EnumResourceType[] VALUES = values();
-
-	private final int meta;
-	private final boolean hasOre;
-
-	EnumResourceType(int meta) {
-		this(meta, true);
-	}
-
-	EnumResourceType(int meta, boolean hasOre) {
-		this.meta = meta;
-		this.hasOre = hasOre;
-	}
-
-	public int getMeta() {
-		return meta;
-	}
-
-	public boolean hasOre() {
-		return hasOre;
-	}
 
 	@Override
 	public String getSerializedName() {

@@ -21,7 +21,7 @@
 			},
 			{
 				"type": "mutation",
-				"species": "forestry.speciesCommon"
+				"species": "forestry.species_common"
 			}
 		]
 	]

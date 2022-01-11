@@ -8,48 +8,40 @@
  * Various Contributors including, but not limited to:
  * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
  ******************************************************************************/
+
 package forestry.core.items;
 
 import java.util.Locale;
 
-import net.minecraft.item.Item;
-
 import forestry.api.core.IItemSubtype;
-import forestry.core.utils.OreDictUtil;
+
+import net.minecraft.item.Item;
 
 public class ItemFruit extends ItemForestryFood {
 
 	public enum EnumFruit implements IItemSubtype {
-		CHERRY(OreDictUtil.CROP_CHERRY),
-		WALNUT(OreDictUtil.CROP_WALNUT),
-		CHESTNUT(OreDictUtil.CROP_CHESTNUT),
-		LEMON(OreDictUtil.CROP_LEMON),
-		PLUM(OreDictUtil.CROP_PLUM),
-		DATES(OreDictUtil.CROP_DATE),
-		PAPAYA(OreDictUtil.CROP_PAPAYA);
-		//, COCONUT("cropCoconut");
-		public static final EnumFruit[] VALUES = values();
+		CHERRY,
+		WALNUT,
+		CHESTNUT,
+		LEMON,
+		PLUM,
+		DATES,
+		PAPAYA,
+		COCONUT;
 
-		private final String oreDict;
 		private final String name;
 
-		//TODO tags
-		EnumFruit(String oreDict) {
-			this.oreDict = oreDict;
-			this.name = this.toString().toLowerCase(Locale.ENGLISH);
+		EnumFruit() {
+			this.name = name().toLowerCase(Locale.ENGLISH);
 		}
 
 		@Override
 		public String getSerializedName() {
 			return name;
 		}
-
-		//		public String getOreDict() {
-		//			return oreDict;
-		//		}
 	}
 
-	private EnumFruit type;
+	private final EnumFruit type;
 
 	public ItemFruit(EnumFruit type) {
 		super(1, 0.2f, (new Item.Properties()));
@@ -64,5 +56,4 @@ public class ItemFruit extends ItemForestryFood {
 	public boolean canBeDepleted() {
 		return false;
 	}
-
 }

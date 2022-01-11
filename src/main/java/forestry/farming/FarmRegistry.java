@@ -1,10 +1,5 @@
 package forestry.farming;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Multimap;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.item.ItemStack;
+import javax.annotation.Nullable;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmPropertiesBuilder;
 import forestry.api.farming.IFarmRegistry;
@@ -29,6 +27,10 @@ import forestry.core.utils.Log;
 import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public final class FarmRegistry implements IFarmRegistry {
 
@@ -139,17 +141,16 @@ public final class FarmRegistry implements IFarmRegistry {
 				Log.error("Forestry failed to parse a entry of the fertilizer config.");
 				continue;
 			}
+
 			String itemName = spited[0];
-			ItemStack fertilizerItem = ItemStackUtil.parseItemStackString(itemName, 0);//TODO oredict OreDictionary.WILDCARD_VALUE);
-			if (fertilizerItem == null || fertilizerItem.isEmpty()) {
-				Log.error("Forestry failed to parse a entry of the fertilizer config, because the item doesn't exists.");
-				continue;
-			}
+			ItemStack fertilizerItem = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)));
 			String value = spited[1];
 			int fertilizerValue = Integer.parseInt(value);
+
 			if (fertilizerValue > 0) {
 				fertilizerMap.put(fertilizerItem, fertilizerValue);
 			}
+
 			configEntries.put(itemName, value);
 		}
 		return configEntries;
@@ -158,7 +159,7 @@ public final class FarmRegistry implements IFarmRegistry {
 	private Map<String, String> getItemStrings() {
 		Map<String, String> itemStrings = new HashMap<>(fertilizers.size());
 		for (Entry<ItemStack, Integer> itemStack : fertilizers.entrySet()) {
-			String itemString = ItemStackUtil.getStringForItemStack(itemStack.getKey());
+			String itemString = String.valueOf(itemStack.getKey().getItem().getRegistryName());
 			itemStrings.put(itemString, itemString + ";" + itemStack.getValue());
 		}
 		return itemStrings;

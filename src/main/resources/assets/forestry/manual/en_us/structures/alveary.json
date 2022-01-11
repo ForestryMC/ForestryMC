@@ -4,11 +4,13 @@
     {
       "pos": [0, 0, 0],
       "endPos": [2, 2, 2],
-      "block": "forestry:alveary.plain"
+      "state": {},
+      "block": "forestry:alveary_plain"
     },
     {
       "pos": [0, 2, 0],
       "endPos": [2, 3, 2],
+      "state": {},
       "block": "wooden_slab"
     }
   ]

@@ -63,8 +63,6 @@ public interface IMutationBuilder {
 	 */
 	IMutationBuilder requireResource(BlockState... acceptedBlockStates);
 
-	IMutationBuilder requireResource(String oreDictName);
-
 	/**
 	 * Require some other custom mutation condition
 	 */

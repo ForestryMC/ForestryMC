@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "side": "forestry:block/wood/planks.ebony",
-    "top": "forestry:block/wood/planks.ebony",
-    "bottom": "forestry:block/wood/planks.ebony",
-    "particle": "forestry:block/wood/planks.ebony"
-  }
-}

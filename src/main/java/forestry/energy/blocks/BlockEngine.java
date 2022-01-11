@@ -31,6 +31,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.ForestryAPI;
@@ -58,9 +59,10 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 
 	@Override
 	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
-		if (blockType == BlockTypeEngine.CLOCKWORK && ForestryAPI.activeMode != null && !ForestryAPI.activeMode.getBooleanSetting("energy.engine.clockwork")) {
+		if (blockType == BlockTypeEngine.CLOCKWORK && !Preference.CLOCKWORK_ENGINE) {
 			return;
 		}
+
 		super.fillItemCategory(group, stacks);
 	}
 
