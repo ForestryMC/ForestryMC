@@ -18,7 +18,6 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -32,8 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -48,37 +45,6 @@ import net.minecraftforge.client.model.SimpleModelTransform;
 public class ResourceUtil {
 
 	private ResourceUtil() {
-	}
-
-	public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
-	}
-
-	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, String defaultKey) {
-		return tryTranslate(optionalKey, () -> new TranslationTextComponent(defaultKey));
-	}
-
-	public static ITextComponent tryTranslate(String optionalKey, Supplier<ITextComponent> defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
-	}
-
-	/**
-	 * Tries to translate the optional key component. Returns the default key component if the first can't be translated.
-	 *
-	 * @return The optional component if it can be translated the other component otherwise.
-	 */
-	public static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
-		TranslationTextComponent component = optionalKey.get();
-		if (canTranslate(component)) {
-			return component;
-		} else {
-			return defaultKey.get();
-		}
-	}
-
-	public static boolean canTranslate(TranslationTextComponent component) {
-		String translatedText = component.getString();
-		return !translatedText.startsWith(component.getKey());
 	}
 
 	public static Minecraft client() {
@@ -162,7 +128,7 @@ public class ResourceUtil {
 
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
 		ResourceLocation file = new ResourceLocation(location.getNamespace(),
-			"models/" + location.getPath() + ".json");
+				"models/" + location.getPath() + ".json");
 		IResource iresource = resourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
 	}

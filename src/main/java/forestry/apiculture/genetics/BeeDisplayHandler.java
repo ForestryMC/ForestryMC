@@ -21,7 +21,6 @@ import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
 import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.core.genetics.GenericRatings;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.ResourceUtil;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAllele;
@@ -67,7 +66,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 			IAlleleValue<Integer> speedAllele = getActive(genome);
 			TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." +
 					speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
-			if (ResourceUtil.canTranslate(customSpeed)) {
+			if (Translator.canTranslate(customSpeed)) {
 				toolTip.singleLine()
 						.add(customSpeed)
 						.style(TextFormatting.GRAY)

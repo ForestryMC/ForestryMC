@@ -26,7 +26,7 @@ import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.items.definitions.IColoredItem;
-import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.Translator;
 
 public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> implements IColoredItem {
 
@@ -53,7 +53,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 	public static ITextComponent getDisplayName(ITree tree) {
 		IAlleleTreeSpecies primary = (IAlleleTreeSpecies) tree.getGenome().getPrimary();
 		String customTreeKey = "for.trees.custom.leaves." + primary.getSpeciesIdentifier();
-		return ResourceUtil.tryTranslate(customTreeKey, () -> {
+		return Translator.tryTranslate(customTreeKey, () -> {
 			ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
 			return new TranslationTextComponent("for.trees.grammar.leaves", primary.getDisplayName(), leaves);
 		});

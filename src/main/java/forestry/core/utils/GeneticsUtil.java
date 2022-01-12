@@ -80,7 +80,7 @@ public class GeneticsUtil {
 				type.getName() +
 				'.' +
 				allele.getSpeciesIdentifier();
-		return ResourceUtil.tryTranslate(customKey, allele::getDisplayName);
+		return Translator.tryTranslate(customKey, allele::getDisplayName);
 	}
 
 	public static ITextComponent getItemName(IOrganismType type, IAlleleForestrySpecies allele) {
@@ -90,7 +90,7 @@ public class GeneticsUtil {
 				type.getName() +
 				'.' +
 				allele.getSpeciesIdentifier();
-		return ResourceUtil.tryTranslate(customKey, () -> {
+		return Translator.tryTranslate(customKey, () -> {
 			ITextComponent speciesName = allele.getDisplayName();
 			ITextComponent typeName = new TranslationTextComponent(prefix + ".grammar." + type.getName() + ".type");
 			return new TranslationTextComponent(prefix + ".grammar." + type.getName(), speciesName, typeName);

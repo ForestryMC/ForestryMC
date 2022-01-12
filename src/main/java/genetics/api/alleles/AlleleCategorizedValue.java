@@ -3,7 +3,7 @@ package genetics.api.alleles;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.Translator;
 
 
 /**
@@ -40,6 +40,6 @@ public class AlleleCategorizedValue<V> extends AlleleValue<V> {
 	@Override
 	public ITextComponent getDisplayName() {
 		String customName = modId + '.' + "allele." + category + '.' + valueName;
-		return ResourceUtil.tryTranslate(customName, modId + '.' + "allele." + valueName);
+		return Translator.tryTranslate(customName, modId + '.' + "allele." + valueName);
 	}
 }
