@@ -55,7 +55,7 @@ import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.definitions.DrinkProperties;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.items.definitions.FluidHandlerItemForestry;
-import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.Translator;
 
 public class ItemFluidContainerForestry extends ItemForestry {
 	private final EnumContainerType type;
@@ -107,10 +107,10 @@ public class ItemFluidContainerForestry extends ItemForestry {
 			FluidStack fluid = getContained(stack);
 			if (!fluid.isEmpty()) {
 				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + fluid.getFluid().getRegistryName();
-				return ResourceUtil.tryTranslate(exactTranslationKey, () -> {
-					String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
-					return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
-				});
+				return Translator.tryTranslate(exactTranslationKey, () -> {
+							String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
+							return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
+						});
 			} else {
 				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".empty";
 				return new TranslationTextComponent(unlocalizedname);

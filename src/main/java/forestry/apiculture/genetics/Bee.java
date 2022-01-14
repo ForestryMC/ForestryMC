@@ -67,7 +67,7 @@ import forestry.core.genetics.GenericRatings;
 import forestry.core.genetics.IndividualLiving;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.GeneticsUtil;
-import forestry.core.utils.ResourceUtil;
+import forestry.core.utils.Translator;
 import forestry.core.utils.VectUtil;
 
 import genetics.api.alleles.IAllele;
@@ -379,7 +379,7 @@ public class Bee extends IndividualLiving implements IBee {
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
 
 		TranslationTextComponent customSpeed = new TranslationTextComponent("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
-		if (ResourceUtil.canTranslate(customSpeed)) {
+		if (Translator.canTranslate(customSpeed)) {
 			toolTip.singleLine()
 				.add(customSpeed)
 				.style(TextFormatting.GRAY)
