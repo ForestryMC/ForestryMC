@@ -1,7 +1,8 @@
 {
-  "variants": {
-    "": {
-      "model": "forestry:block/ores/apatite"
-    }
-  }
+    "variants": {
+        "": [ { "model": "forestry:block/ores/apatite0", "weight":1 }
+,{ "model": "forestry:block/ores/apatite1", "weight":1 }
+,{ "model": "forestry:block/ores/apatite2", "weight":1 }
+,{ "model": "forestry:block/ores/apatite3", "weight":1 }
+ ]   }
 }

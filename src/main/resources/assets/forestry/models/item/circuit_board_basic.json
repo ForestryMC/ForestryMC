@@ -1,7 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "forestry:item/chipsets.1",
-    "layer1": "forestry:item/chipsets.0"
+    "layer0": "forestry:item/circuit_board_basic"
   }
 }
