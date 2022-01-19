@@ -3,5 +3,6 @@
   "landing_text": "for.gui.book.patchouli.landing_text",
   "book_texture": "forestry:textures/gui/almanac/foresters_manual.png",
   "model": "forestry:book_forester",
-  "i18n": true
+  "i18n": true,
+  "creative_tab": "forestry"
 }
