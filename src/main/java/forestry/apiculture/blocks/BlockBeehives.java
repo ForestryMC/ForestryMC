@@ -199,7 +199,8 @@ public class BlockBeehives extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int i, int j) {
 		if (j == 0 || j > 8) {
-			return null;
+			// placeholder for not causing NPE
+			return icons[3];
 		}
 
 		if (i == 0 || i == 1) {
