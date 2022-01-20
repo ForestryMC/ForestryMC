@@ -22,7 +22,7 @@ version = computeVersion()
 archivesBaseName = "forestry_" + mcversion
 
 String computeVersion() {
-	return "$version_major.$version_minor.${System.getenv("BUILD") ?: "999+local"}"
+	return "$version_major.$version_minor.${System.getenv("BUILD_NUMBER") ?: "999+local"}"
 }
 
 repositories {
@@ -33,10 +33,10 @@ repositories {
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${mcversion}-${forgeversion}"
+	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
-	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
+	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 }
 
 java {
@@ -58,7 +58,7 @@ sourceSets {
 }
 
 minecraft {
-	mappings channel: "official", version: mcversion
+	mappings channel: "official", version: minecraft_version
 
 	accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
@@ -222,7 +222,7 @@ if (System.getenv("CURSEFORGE")) {
 			changelogType = "markdown"
 			changelog = System.getenv("CHANGELOG")
 			releaseType = "release"
-			addGameVersion project.mcversion
+			addGameVersion project.minecraft_version
 			addGameVersion "Forge"
 
 			mainArtifact(jar.archiveFile) {
@@ -249,7 +249,7 @@ task publishModrinth(type: TaskModrinthUpload) {
 	versionNumber = project.version
 	versionType = VersionType.RELEASE
 	uploadFile = jar
-	addGameVersion(project.mcversion)
+	addGameVersion(project.minecraft_version)
 	addLoader('forge')
 }
 
