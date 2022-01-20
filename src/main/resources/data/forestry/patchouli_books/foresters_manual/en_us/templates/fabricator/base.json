@@ -1,5 +1,5 @@
 {
-  "processor": "forestry.book.patchouli.processor.FabricatorProcessor",
+  "processor": "forestry.core.patchouli.processor.FabricatorProcessor",
   "components": [
     {
       "type": "header",
@@ -91,7 +91,7 @@
     },
     {
       "type": "custom",
-      "class": "forestry.book.patchouli.component.FluidComponent",
+      "class": "forestry.core.patchouli.component.FluidComponent",
       "fluid": "#fluid",
       "amount": "#fluidAmount",
       "max": 2000,
