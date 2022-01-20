@@ -1,0 +1,45 @@
+name: Publish
+
+# for testing
+on:
+  - push
+
+#on:
+#  push:
+#    branches:
+#      - 'dev/**'
+
+jobs:
+  build:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      # Generate a build number unique to the branch
+      - name: Generate build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v3
+        with:
+          token: ${{ secrets.github_token }}
+          prefix: ${{ github.ref }}
+      - name: Generate data
+        run: ./gradlew runData
+      - name: Build
+        run: ./gradlew build
+      - name: Publish to Maven
+        # todo: actually switch to modmaven once this works
+        run: ./gradlew publishAllPublicationsToProjectRepository
+        env:
+          MODMAVEN_USER: ${{ secrets.MODMAVEN_USER }}
+          MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
+      - name: Upload to CurseForge
+        run: echo upload to cf
+      - name: Upload to Modrinth
+        run: echo upload to modrinth
