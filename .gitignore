@@ -17,6 +17,7 @@
 !/README.md
 !/gradle.properties
 !/build.gradle
+!/settings.gradle
 !/build.xml
 !/gradlew
 !/gradlew.bat
