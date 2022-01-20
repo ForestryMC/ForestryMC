@@ -29,16 +29,19 @@ jobs:
       - name: Build
         run: ./gradlew build
       - name: Publish to Maven
+        if: "! contains(toJSON(github.event.commits.*.message), '[maven skip]')"
         run: ./gradlew publishAllPublicationsToModmavenRepository
         env:
           MODMAVEN_USER: ${{ secrets.MODMAVEN_USER }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
       - name: Upload to CurseForge
+        if: "! contains(toJSON(github.event.commits.*.message), '[curseforge skip]')"
         run: ./gradlew curseforge
         env:
           CHANGELOG: ${{ github.event.head_commit.message }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
       - name: Upload to Modrinth
+        if: "! contains(toJSON(github.event.commits.*.message), '[modrinth skip]')"
         run: ./gradlew publishModrinth
         env:
           CHANGELOG: ${{ github.event.head_commit.message }}
