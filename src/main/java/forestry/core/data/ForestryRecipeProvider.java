@@ -50,7 +50,6 @@ import forestry.apiculture.items.EnumPropolis;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.arboriculture.features.CharcoalBlocks;
-import forestry.book.features.BookItems;
 import forestry.climatology.features.ClimatologyBlocks;
 import forestry.climatology.features.ClimatologyItems;
 import forestry.core.blocks.BlockTypeCoreTesr;
@@ -844,25 +843,25 @@ public class ForestryRecipeProvider extends RecipeProvider {
 
 	private void registerBookRecipes(RecipeDataHelper helper) {
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapeless(BookItems.BOOK.item())
+				ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 						.requires(Items.BOOK)
 						.requires(ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).item())
 						.unlockedBy("has_book", has(Items.BOOK))::save,
-				new ResourceLocation(Constants.MOD_ID, "book_forester_drop"),
+				new ResourceLocation(Constants.MOD_ID, "foresters_manual_honeydrop"),
 				ForestryModuleUids.BOOK, ForestryModuleUids.APICULTURE);
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapeless(BookItems.BOOK.item())
+				ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 						.requires(Items.BOOK)
 						.requires(ItemTags.SAPLINGS)
 						.unlockedBy("has_book", has(Items.BOOK))::save,
-				new ResourceLocation(Constants.MOD_ID, "book_forester_sapling"),
+				new ResourceLocation(Constants.MOD_ID, "foresters_manual_sapling"),
 				ForestryModuleUids.BOOK);
 		helper.moduleConditionRecipe(
-				ShapelessRecipeBuilder.shapeless(BookItems.BOOK.item())
+				ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 						.requires(Items.BOOK)
 						.requires(LepidopterologyItems.BUTTERFLY_GE.item())
 						.unlockedBy("has_book", has(Items.BOOK))::save,
-				new ResourceLocation(Constants.MOD_ID, "book_forester_butterfly"),
+				new ResourceLocation(Constants.MOD_ID, "foresters_manual_butterfly"),
 				ForestryModuleUids.BOOK, ForestryModuleUids.LEPIDOPTEROLOGY);
 	}
 

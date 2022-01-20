@@ -72,7 +72,7 @@ public class ForestryAdvancementProvider implements IDataProvider {
 				.rewards(new AdvancementRewards(0, new ResourceLocation[]{
 						new ResourceLocation(Constants.MOD_ID, "grant_guide")
 				}, new ResourceLocation[0], FunctionObject.CacheableFunction.NONE))
-				.save(consumer, "root");
+				.save(consumer, Constants.MOD_ID + ":root");
 	}
 
 	private static Path createPath(Path outputFolder, Advancement advancement) {

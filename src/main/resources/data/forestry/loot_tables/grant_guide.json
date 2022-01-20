@@ -6,13 +6,7 @@
       "entries": [
         {
           "type": "item",
-          "name": "patchouli:guide_book",
-          "functions": [
-            {
-              "function": "set_nbt",
-              "tag": "{\"patchouli:book\": \"forestry:foresters_manual\"}"
-            }
-          ]
+          "name": "forestry:foresters_manual"
         }
       ]
     }
