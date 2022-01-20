@@ -12,7 +12,7 @@ buildscript {
 plugins {
 	id "maven-publish"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "se.bjurr.gitchangelog.git-changelog-gradle-plugin" version "1.71.7"
+	id "com.modrinth.minotaur" version "1.2.1"
 }
 
 apply plugin: "net.minecraftforge.gradle"
@@ -194,6 +194,12 @@ publishing {
 		}
 
 		maven {
+			name = "Test"
+			// please dont use this
+			url = "https://tiny-potato.xyz/half"
+		}
+
+		maven {
 			credentials {
 				username System.getenv("MODMAVEN_USER")
 				password System.getenv("MODMAVEN_PASSWORD")
@@ -204,3 +210,47 @@ publishing {
 		}
 	}
 }
+
+////////////////
+// Curse Forge
+if (System.getenv("CURSEFORGE")) {
+	curseforge {
+		apiKey = System.getenv("CURSEFORGE")
+
+		project {
+			id = project.curseforge_project
+			changelogType = "markdown"
+			changelog = System.getenv("CHANGELOG")
+			releaseType = "release"
+			addGameVersion project.mcversion
+			addGameVersion "Forge"
+
+			mainArtifact(jar.archiveFile) {
+				displayName = "${project.version}"
+			}
+		}
+	}
+}
+
+////////////////
+// Modrinth
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.request.VersionType
+
+task publishModrinth(type: TaskModrinthUpload) {
+	onlyIf {
+		System.getenv("MODRINTH")
+	}
+
+	token = System.getenv("MODRINTH")
+	changelog = System.getenv("CHANGELOG")
+	projectId = project.modrinth_project
+	versionName = project.version
+	versionNumber = project.version
+	versionType = VersionType.RELEASE
+	uploadFile = jar
+	addGameVersion(project.mcversion)
+	addLoader('forge')
+}
+
+publishModrinth.dependsOn jar

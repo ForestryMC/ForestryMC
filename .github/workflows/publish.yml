@@ -10,7 +10,7 @@ on:
 #      - 'dev/**'
 
 jobs:
-  build:
+  publish:
     if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
     runs-on: ubuntu-20.04
     steps:
@@ -35,11 +35,19 @@ jobs:
         run: ./gradlew build
       - name: Publish to Maven
         # todo: actually switch to modmaven once this works
-        run: ./gradlew publishAllPublicationsToProjectRepository
+        run: ./gradlew publishAllPublicationsToTestRepository
         env:
           MODMAVEN_USER: ${{ secrets.MODMAVEN_USER }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
       - name: Upload to CurseForge
-        run: echo upload to cf
+        # run: ./gradlew curseforge
+        run: echo changelog - $CHANGELOG
+        env:
+          CHANGELOG: ${{ github.event.head_commit.message }}
+          CURSEFORGE: ${{ secrets.CURSEFORGE }}
       - name: Upload to Modrinth
-        run: echo upload to modrinth
+        # run: ./gradlew publishModrinth
+        run: echo changelog - $CHANGELOG
+        env:
+          CHANGELOG: ${{ github.event.head_commit.message }}
+          MODRINTH: ${{ secrets.MODRINTH }}
