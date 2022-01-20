@@ -19,7 +19,7 @@ apply plugin: "net.minecraftforge.gradle"
 
 group = "net.sengir.forestry"
 version = computeVersion()
-archivesBaseName = "forestry_" + mcversion
+archivesBaseName = "forestry_" + minecraft_version
 
 String computeVersion() {
 	return "$version_major.$version_minor.${System.getenv("BUILD_NUMBER") ?: "999+local"}"
