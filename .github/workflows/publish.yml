@@ -1,13 +1,9 @@
 name: Publish
 
-# for testing
 on:
-  - push
-
-#on:
-#  push:
-#    branches:
-#      - 'dev/**'
+  push:
+    branches:
+      - 'dev/**'
 
 jobs:
   publish:
@@ -24,7 +20,6 @@ jobs:
           java-version: 8
       # Generate a build number unique to the branch
       - name: Generate build number
-        id: buildnumber
         uses: einaregilsson/build-number@v3
         with:
           token: ${{ secrets.github_token }}
@@ -34,20 +29,17 @@ jobs:
       - name: Build
         run: ./gradlew build
       - name: Publish to Maven
-        # todo: actually switch to modmaven once this works
-        run: ./gradlew publishAllPublicationsToTestRepository
+        run: ./gradlew publishAllPublicationsToModmavenRepository
         env:
           MODMAVEN_USER: ${{ secrets.MODMAVEN_USER }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
       - name: Upload to CurseForge
-        # run: ./gradlew curseforge
-        run: echo changelog - $CHANGELOG
+        run: ./gradlew curseforge
         env:
           CHANGELOG: ${{ github.event.head_commit.message }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
       - name: Upload to Modrinth
-        # run: ./gradlew publishModrinth
-        run: echo changelog - $CHANGELOG
+        run: ./gradlew publishModrinth
         env:
           CHANGELOG: ${{ github.event.head_commit.message }}
           MODRINTH: ${{ secrets.MODRINTH }}

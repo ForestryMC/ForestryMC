@@ -19,7 +19,7 @@ apply plugin: "net.minecraftforge.gradle"
 
 group = "net.sengir.forestry"
 version = computeVersion()
-archivesBaseName = "forestry_" + minecraft_version
+archivesBaseName = "forestry-$minecraft_version"
 
 String computeVersion() {
 	return "$version_major.$version_minor.${System.getenv("BUILD_NUMBER") ?: "999+local"}"
@@ -33,10 +33,10 @@ repositories {
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
-	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
-	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
+	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
 }
 
 java {
@@ -46,13 +46,13 @@ java {
 }
 
 tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+	options.encoding = "UTF-8"
 }
 
 sourceSets {
 	main {
 		resources {
-			srcDir 'src/generated/resources'
+			srcDir "src/generated/resources"
 		}
 	}
 }
@@ -64,14 +64,14 @@ minecraft {
 
 	runs {
 		def commonRunProperties = {
-			workingDirectory project.file('run')
+			workingDirectory project.file("run")
 
-			property 'forge.logging.console.level', 'debug'
-			property 'fml.earlyprogresswindow', 'false'
+			property "forge.logging.console.level", "debug"
+			property "fml.earlyprogresswindow", "false"
 
 			// See https://github.com/Vazkii/Patchouli#mixin-troubleshooting
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+			property "mixin.env.remapRefMap", "true"
+			property "mixin.env.refMapRemappingFile", "$projectDir/build/createSrgToMcp/output.srg"
 
 			mods {
 				forestry {
@@ -97,15 +97,15 @@ minecraft {
 }
 
 processResources {
-	exclude '.cache'
+	exclude ".cache"
 
 	filesMatching("META-INF/mods.toml") {
-		expand 'version': project.version
+		expand "version": project.version
 	}
 }
 
 jar {
-	finalizedBy 'reobfJar'
+	finalizedBy "reobfJar"
 
 	from sourceSets.main.output.classesDirs
 	from sourceSets.main.output.resourcesDir
@@ -131,8 +131,8 @@ javadoc {
 	source = sourceSets.main.allJava
 	classpath = sourceSets.main.compileClasspath + sourceSets.main.output
 
-	options.addStringOption('Xdoclint:none', '-quiet')
-	options.encoding = 'UTF-8'
+	options.addStringOption("Xdoclint:none", "-quiet")
+	options.encoding = "UTF-8"
 }
 
 javadoc publicApiIncludePatterns
@@ -194,12 +194,6 @@ publishing {
 		}
 
 		maven {
-			name = "Test"
-			// please dont use this
-			url = "https://tiny-potato.xyz/half"
-		}
-
-		maven {
 			credentials {
 				username System.getenv("MODMAVEN_USER")
 				password System.getenv("MODMAVEN_PASSWORD")
@@ -250,7 +244,7 @@ task publishModrinth(type: TaskModrinthUpload) {
 	versionType = VersionType.RELEASE
 	uploadFile = jar
 	addGameVersion(project.minecraft_version)
-	addLoader('forge')
+	addLoader("forge")
 }
 
 publishModrinth.dependsOn jar
