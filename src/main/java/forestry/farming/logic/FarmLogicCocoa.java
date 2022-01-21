@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -46,7 +46,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 	}
 
 	@Override
-	public boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+	public boolean cultivate(Level world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (maintainSoil(world, farmHousing, pos, direction, extent)) {
 			return true;
 		}
@@ -58,7 +58,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		return result;
 	}
 
-	protected boolean maintainSoil(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+	protected boolean maintainSoil(Level world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		if (!farmHousing.canPlantSoil(isManual)) {
 			return false;
 		}
@@ -136,7 +136,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		return (distance % LAYOUT_POSITIONS.length) == (layoutExtent);
 	}
 
-	protected boolean trySetSoil(World world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, BlockState ground) {
+	protected boolean trySetSoil(Level world, IFarmHousing farmHousing, BlockPos position, ItemStack resource, BlockState ground) {
 		NonNullList<ItemStack> resources = NonNullList.create();
 		resources.add(resource);
 		if (!farmHousing.getFarmInventory().hasResources(resources)) {
@@ -150,7 +150,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+	public Collection<ICrop> harvest(Level world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		housing.increaseExtent(direction, pos, extent);
@@ -158,8 +158,8 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		return crops;
 	}
 
-	private boolean tryPlantingCocoa(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
-		BlockPos.Mutable current = new BlockPos.Mutable();
+	private boolean tryPlantingCocoa(Level world, IFarmHousing farmHousing, BlockPos position, FarmDirection farmDirection) {
+		BlockPos.MutableBlockPos current = new BlockPos.MutableBlockPos();
 		BlockState blockState = world.getBlockState(current.set(position));
 		while (isJungleTreeTrunk(blockState)) {
 			for (Direction direction : Direction.Plane.HORIZONTAL) {
@@ -186,7 +186,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		return block == Blocks.JUNGLE_LOG;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
+	private Collection<ICrop> getHarvestBlocks(Level world, BlockPos position) {
 
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
@@ -222,7 +222,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
+	private List<BlockPos> processHarvestBlock(Level world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return

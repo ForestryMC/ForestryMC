@@ -3,10 +3,10 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -28,12 +28,12 @@ import genetics.utils.RootUtils;
 
 public class ContainerAnalyzerProviderHelper {
 	/* Attributes - Final*/
-	private final PlayerEntity player;
+	private final Player player;
 	private final ContainerForestry container;
 	@Nullable
 	private final ItemInventoryAlyzer alyzerInventory;
 
-	public ContainerAnalyzerProviderHelper(ContainerForestry container, PlayerInventory playerInventory) {
+	public ContainerAnalyzerProviderHelper(ContainerForestry container, Inventory playerInventory) {
 		this.player = playerInventory.player;
 		this.container = container;
 

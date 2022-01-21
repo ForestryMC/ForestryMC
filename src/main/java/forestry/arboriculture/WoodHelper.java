@@ -1,7 +1,7 @@
 package forestry.arboriculture;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -12,17 +12,17 @@ import forestry.core.utils.Translator;
 
 public class WoodHelper {
 
-	public static ITextComponent getDisplayName(IWoodTyped wood, IWoodType woodType) {
+	public static Component getDisplayName(IWoodTyped wood, IWoodType woodType) {
 		WoodBlockKind blockKind = wood.getBlockKind();
 
-		ITextComponent displayName;
+		Component displayName;
 
 		if (woodType instanceof EnumForestryWoodType) {
 			String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
 			if (Translator.canTranslateToLocal(customUnlocalizedName)) {
-				displayName = new TranslationTextComponent(customUnlocalizedName);
+				displayName = new TranslatableComponent(customUnlocalizedName);
 			} else {
-				displayName = new TranslationTextComponent("for." + blockKind + ".grammar", new TranslationTextComponent("for.trees.woodType." + woodType));
+				displayName = new TranslatableComponent("for." + blockKind + ".grammar", new TranslatableComponent("for.trees.woodType." + woodType));
 			}
 		} else if (woodType instanceof EnumVanillaWoodType) {
 			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getHoverName();
@@ -31,7 +31,7 @@ public class WoodHelper {
 		}
 
 		if (wood.isFireproof()) {
-			displayName = new TranslationTextComponent("block.forestry.fireproof", displayName);
+			displayName = new TranslatableComponent("block.forestry.fireproof", displayName);
 		}
 
 		return displayName;

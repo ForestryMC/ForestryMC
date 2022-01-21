@@ -1,7 +1,7 @@
 package forestry.cultivation.tiles;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import forestry.core.features.CoreBlocks;
 import forestry.core.features.CoreItems;

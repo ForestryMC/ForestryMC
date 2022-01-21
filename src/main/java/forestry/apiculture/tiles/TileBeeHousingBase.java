@@ -12,13 +12,13 @@ package forestry.apiculture.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,7 +53,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileBeeHousingBase(TileEntityType<?> type, String hintKey) {
+	protected TileBeeHousingBase(BlockEntityType<?> type, String hintKey) {
 		super(type);
 		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
@@ -73,7 +73,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		beeLogic.write(compoundNBT);
 		ownerHandler.write(compoundNBT);
@@ -81,15 +81,15 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		beeLogic.read(compoundNBT);
 		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT updateTag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag updateTag = super.getUpdateTag();
 		beeLogic.write(updateTag);
 		ownerHandler.write(updateTag);
 		return updateTag;
@@ -97,7 +97,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(BlockState state, CompoundTag tag) {
 		super.handleUpdateTag(state, tag);
 		beeLogic.read(tag);
 		ownerHandler.read(tag);
@@ -152,7 +152,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void doPollenFX(World world, double xCoord, double yCoord, double zCoord) {
+	public static void doPollenFX(Level world, double xCoord, double yCoord, double zCoord) {
 		double fxX = xCoord + 0.5F;
 		double fxY = yCoord + 0.25F;
 		double fxZ = zCoord + 0.5F;
@@ -217,7 +217,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
-		return new Vector3d(getBlockPos().getX() + 0.5, getBlockPos().getY() + 0.5, getBlockPos().getZ() + 0.5);
+	public Vec3 getBeeFXCoordinates() {
+		return new Vec3(getBlockPos().getX() + 0.5, getBlockPos().getY() + 0.5, getBlockPos().getZ() + 0.5);
 	}
 }

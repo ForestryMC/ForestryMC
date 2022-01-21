@@ -7,10 +7,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,7 +31,7 @@ public class PacketHandlerClient {
 
 		IForestryPacketHandlerClient packetHandler = id.getPacketHandler();
 
-		PlayerEntity player = Minecraft.getInstance().player;
+		Player player = Minecraft.getInstance().player;
 
 		if (player == null) {
 			LOGGER.warn("the player was null, event: {}", event);
@@ -50,10 +50,10 @@ public class PacketHandlerClient {
 
 	public static void sendPacket(IForestryPacketServer packet) {
 		Minecraft minecraft = Minecraft.getInstance();
-		ClientPlayNetHandler netHandler = minecraft.getConnection();
+		ClientPacketListener netHandler = minecraft.getConnection();
 		if (netHandler != null) {
-			Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-			ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
+			Pair<FriendlyByteBuf, Integer> packetData = packet.getPacketData();
+			ICustomPacket<Packet<?>> payload = NetworkDirection.PLAY_TO_SERVER.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
 			netHandler.send(payload.getThis());
 		}
 	}

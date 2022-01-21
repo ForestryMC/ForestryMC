@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import forestry.api.core.IItemSubtype;
 import forestry.core.ItemGroupForestry;
@@ -40,7 +40,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	protected final IOverlayInfo overlay;
 
-	public ItemOverlay(ItemGroup tab, IOverlayInfo overlay) {
+	public ItemOverlay(CreativeModeTab tab, IOverlayInfo overlay) {
 		super((new Item.Properties())
 				.tab(tab)
 				.tab(ItemGroupForestry.tabForestry));
@@ -49,7 +49,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			if (Config.isDebug || !overlay.isSecret()) {
 				subItems.add(new ItemStack(this));

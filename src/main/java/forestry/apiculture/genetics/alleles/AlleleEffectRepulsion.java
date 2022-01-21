@@ -12,7 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.world.entity.monster.Monster;
 
 import genetics.api.individual.IGenome;
 
@@ -28,8 +28,8 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
-		for (MonsterEntity mob : mobs) {
+		List<Monster> mobs = getEntitiesInRange(genome, housing, Monster.class);
+		for (Monster mob : mobs) {
 			if (!isMobAvoidingPlayers(mob)) {
 				mob.goalSelector.addGoal(3, new AIAvoidPlayers(mob, 6.0f, 0.25f, 0.3f));
 				mob.goalSelector.tick();    //TODO - I think
@@ -39,7 +39,7 @@ public class AlleleEffectRepulsion extends AlleleEffectThrottled {
 		return storedData;
 	}
 
-	private boolean isMobAvoidingPlayers(MonsterEntity mob) {
+	private boolean isMobAvoidingPlayers(Monster mob) {
 		return mob.goalSelector.getRunningGoals().anyMatch(task -> task.getGoal() instanceof AIAvoidPlayers);
 	}
 }

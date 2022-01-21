@@ -13,12 +13,12 @@ package forestry.arboriculture;
 import java.awt.Color;
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.products.IProductList;
@@ -70,7 +70,7 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(IGenome genome, Level world, BlockPos pos, int ripeningTime) {
 		NonNullList<ItemStack> product = NonNullList.create();
 		products.addProducts(world, pos, product, Product::getChance, world.random);
 
@@ -83,12 +83,12 @@ public class FruitProviderRipening extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, LevelAccessor world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+	public int getColour(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime) {
 		float stage = getRipeningStage(ripeningTime);
 		return getColour(stage);
 	}

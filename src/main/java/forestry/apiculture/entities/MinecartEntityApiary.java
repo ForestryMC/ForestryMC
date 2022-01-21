@@ -15,15 +15,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -53,11 +53,11 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	private final InventoryApiary inventory = new InventoryApiary();
 
-	public MinecartEntityApiary(EntityType<? extends MinecartEntityApiary> type, World world) {
+	public MinecartEntityApiary(EntityType<? extends MinecartEntityApiary> type, Level world) {
 		super(type, world);
 	}
 
-	public MinecartEntityApiary(World world, double posX, double posY, double posZ) {
+	public MinecartEntityApiary(Level world, double posX, double posY, double posZ) {
 		super(ApicultureEntities.APIARY_MINECART.entityType(), world, posX, posY, posZ);
 	}
 
@@ -113,12 +113,12 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerMinecartBeehouse(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
-	protected void openGui(ServerPlayerEntity player) {
+	protected void openGui(ServerPlayer player) {
 		NetworkHooks.openGui(player, this, p -> {
 			PacketBufferForestry fP = new PacketBufferForestry(p);
 			fP.writeEntityById(getEntity());

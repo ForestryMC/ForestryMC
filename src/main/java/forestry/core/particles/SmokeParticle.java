@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.particles;
 
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class SmokeParticle extends Particle {
 	private final float ignitionParticleScale = 1.0f;
 
-	public SmokeParticle(ClientWorld world, double x, double y, double z) {
+	public SmokeParticle(ClientLevel world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
 		this.xd *= 0.8;
 		this.yd *= 0.8;
@@ -69,13 +69,13 @@ public class SmokeParticle extends Particle {
 	}
 
 	@Override
-	public void render(IVertexBuilder iVertexBuilder, ActiveRenderInfo activeRenderInfo, float v) {
+	public void render(VertexConsumer iVertexBuilder, Camera activeRenderInfo, float v) {
 
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
 	}
 
 	@Override

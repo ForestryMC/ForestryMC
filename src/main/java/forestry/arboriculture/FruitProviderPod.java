@@ -15,16 +15,16 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -74,7 +74,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(@Nullable IGenome genome, Level world, BlockPos pos, int ripeningTime) {
 		if (ripeningTime >= 2) {
 			return products.getPossibleStacks();
 		}
@@ -83,7 +83,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos) {
 		if (rand.nextFloat() > getFruitChance(genome, world, pos)) {
 			return false;
 		}
@@ -97,7 +97,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+	public ResourceLocation getSprite(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime) {
 		return null;
 	}
 
@@ -122,7 +122,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public ITag<Block> getLogTag() {
+	public Tag<Block> getLogTag() {
 		switch (type) {
 			case DATES:
 				return ForestryTags.Blocks.PALM_LOGS;

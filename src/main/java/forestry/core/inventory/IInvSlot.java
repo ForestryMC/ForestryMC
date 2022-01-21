@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * This Interface represents an abstract inventory slot. It provides a unified interface for interfacing with Inventories.

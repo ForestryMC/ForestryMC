@@ -15,16 +15,16 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,13 +49,13 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 
-public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory, IItemStackDisplay {
+public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyContainer, IItemStackDisplay {
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 3200;
 	private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
 
 	private final InventoryAdapter sockets = new InventoryAdapter(1, "sockets");
-	private final CraftResultInventory craftPreviewInventory;
+	private final ResultContainer craftPreviewInventory;
 	@Nullable
 	private ICentrifugeRecipe currentRecipe;
 
@@ -64,22 +64,22 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	public TileCentrifuge() {
 		super(FactoryTiles.CENTRIFUGE.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
-		craftPreviewInventory = new CraftResultInventory();
+		craftPreviewInventory = new ResultContainer();
 	}
 
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		compound = super.save(compound);
 
 		sockets.write(compound);
 
-		ListNBT nbttaglist = new ListNBT();
+		ListTag nbttaglist = new ListTag();
 		ItemStack[] offspring = pendingProducts.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				CompoundNBT products = new CompoundNBT();
+				CompoundTag products = new CompoundTag();
 				products.putByte("Slot", (byte) i);
 				offspring[i].save(products);
 				nbttaglist.add(products);
@@ -90,12 +90,12 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 
-		ListNBT nbttaglist = compound.getList("PendingProducts", 10);
+		ListTag nbttaglist = compound.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
-			CompoundNBT CompoundNBT1 = nbttaglist.getCompound(i);
+			CompoundTag CompoundNBT1 = nbttaglist.getCompound(i);
 			pendingProducts.add(ItemStack.of(CompoundNBT1));
 		}
 		sockets.read(compound);
@@ -254,11 +254,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerCentrifuge(windowId, player.inventory, this);
 	}
 
-	public IInventory getCraftPreviewInventory() {
+	public Container getCraftPreviewInventory() {
 		return craftPreviewInventory;
 	}
 

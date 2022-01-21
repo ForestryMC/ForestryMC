@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.moistener;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
@@ -79,7 +79,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<MoistenerRec
 	}
 
 	@Override
-	public void draw(MoistenerRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(MoistenerRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		arrow.draw(matrixStack, 78, 2);
 		progressBar.draw(matrixStack, 109, 22);
 	}

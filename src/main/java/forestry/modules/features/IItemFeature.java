@@ -2,7 +2,7 @@ package forestry.modules.features;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -11,7 +11,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import forestry.api.core.IItemProvider;
 import forestry.core.proxy.Proxies;
 
-public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I>, net.minecraft.util.IItemProvider {
+public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I>, net.minecraft.world.level.ItemLike {
 
 	Supplier<I> getItemConstructor();
 

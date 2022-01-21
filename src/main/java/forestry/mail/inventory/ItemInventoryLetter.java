@@ -13,10 +13,10 @@ package forestry.mail.inventory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -32,9 +32,9 @@ import forestry.mail.items.ItemStamp;
 public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	private final ILetter letter;
 
-	public ItemInventoryLetter(PlayerEntity player, ItemStack itemstack) {
+	public ItemInventoryLetter(Player player, ItemStack itemstack) {
 		super(player, 0, itemstack);
-		CompoundNBT tagCompound = itemstack.getTag();
+		CompoundTag tagCompound = itemstack.getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter = new Letter(tagCompound);
 	}
@@ -56,7 +56,7 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	@Override
 	public ItemStack removeItem(int index, int count) {
 		ItemStack result = letter.removeItem(index, count);
-		CompoundNBT tagCompound = getParent().getTag();
+		CompoundTag tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter.write(tagCompound);
 		return result;
@@ -65,7 +65,7 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	@Override
 	public void setItem(int index, ItemStack itemstack) {
 		letter.setItem(index, itemstack);
-		CompoundNBT tagCompound = getParent().getTag();
+		CompoundTag tagCompound = getParent().getTag();
 		Preconditions.checkNotNull(tagCompound);
 		letter.write(tagCompound);
 	}
@@ -86,7 +86,7 @@ public class ItemInventoryLetter extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return letter.stillValid(player);
 	}
 

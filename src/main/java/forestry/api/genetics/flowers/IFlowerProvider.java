@@ -5,11 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics.flowers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import genetics.api.individual.IIndividual;
 
@@ -17,7 +17,7 @@ import forestry.api.genetics.ICheckPollinatable;
 
 public interface IFlowerProvider {
 
-	boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable);
+	boolean isAcceptedPollinatable(Level world, ICheckPollinatable pollinatable);
 
 	/**
 	 * @return The unique type used for the IFlowerRegistry
@@ -28,7 +28,7 @@ public interface IFlowerProvider {
 	/**
 	 * @return Short, human-readable identifier used in the beealyzer.
 	 */
-	ITextComponent getDescription();
+	Component getDescription();
 
 	/**
 	 * Allows the flower provider to affect the produce at the given location.
@@ -36,5 +36,5 @@ public interface IFlowerProvider {
 	 *
 	 * @return Array of itemstacks being the (modified or unmodified) produce.
 	 */
-	NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
+	NonNullList<ItemStack> affectProducts(Level world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products);
 }

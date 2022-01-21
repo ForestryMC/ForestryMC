@@ -13,14 +13,14 @@ package forestry.climatology.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -180,11 +180,11 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 		if (recipe == null) {
 			return 0;
 		}
-		return Math.round((1.0F + MathHelper.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
+		return Math.round((1.0F + Mth.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
 	}
 
 	private int getEnergyCost(IClimateState state) {
-		return Math.round((1.0F + MathHelper.abs(state.getTemperature())) * transformer.getCostModifier());
+		return Math.round((1.0F + Mth.abs(state.getTemperature())) * transformer.getCostModifier());
 	}
 
 	@Override
@@ -220,7 +220,7 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerHabitatFormer(windowId, inv, this);
 	}
 
@@ -260,24 +260,24 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	/* Methods - SAVING & LOADING */
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
+	public CompoundTag save(CompoundTag data) {
 		super.save(data);
 
 		tankManager.write(data);
 
-		data.put(TRANSFORMER_KEY, transformer.write(new CompoundNBT()));
+		data.put(TRANSFORMER_KEY, transformer.write(new CompoundTag()));
 
 		return data;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
+	public void load(BlockState state, CompoundTag data) {
 		super.load(state, data);
 
 		tankManager.read(data);
 
 		if (data.contains(TRANSFORMER_KEY)) {
-			CompoundNBT nbtTag = data.getCompound(TRANSFORMER_KEY);
+			CompoundTag nbtTag = data.getCompound(TRANSFORMER_KEY);
 			transformer.read(nbtTag);
 		}
 	}

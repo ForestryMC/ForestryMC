@@ -13,13 +13,13 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -81,20 +81,20 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerContainerRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SqueezerContainerRecipe> {
 
 		@Override
 		public SqueezerContainerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			ItemStack emptyContainer = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "container"));
-			int processingTime = JSONUtils.getAsInt(json, "time");
-			ItemStack remnants = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "remnants"));
-			float remnantsChance = JSONUtils.getAsFloat(json, "remnantsChance");
+			ItemStack emptyContainer = RecipeSerializers.item(GsonHelper.getAsJsonObject(json, "container"));
+			int processingTime = GsonHelper.getAsInt(json, "time");
+			ItemStack remnants = RecipeSerializers.item(GsonHelper.getAsJsonObject(json, "remnants"));
+			float remnantsChance = GsonHelper.getAsFloat(json, "remnantsChance");
 
 			return new SqueezerContainerRecipe(recipeId, emptyContainer, processingTime, remnants, remnantsChance);
 		}
 
 		@Override
-		public SqueezerContainerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public SqueezerContainerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			ItemStack emptyContainer = buffer.readItem();
 			int processingTime = buffer.readVarInt();
 			ItemStack remnants = buffer.readItem();
@@ -104,7 +104,7 @@ public class SqueezerContainerRecipe implements ISqueezerContainerRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, SqueezerContainerRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, SqueezerContainerRecipe recipe) {
 			buffer.writeItem(recipe.emptyContainer);
 			buffer.writeVarInt(recipe.processingTime);
 			buffer.writeItem(recipe.remnants);

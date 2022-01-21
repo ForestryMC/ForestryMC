@@ -12,6 +12,8 @@ package forestry.core.genetics;
 
 import genetics.classification.Classification;
 
+import genetics.api.classification.IClassification.EnumClassLevel;
+
 public class Branch extends Classification {
 
 	public Branch(String uid, String scientific) {

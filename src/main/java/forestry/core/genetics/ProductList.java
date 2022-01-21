@@ -10,10 +10,10 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import forestry.api.genetics.products.IDynamicProductList;
 import forestry.api.genetics.products.IMutableProductList;
@@ -53,7 +53,7 @@ public final class ProductList implements IDynamicProductList {
 	}
 
 	@Override
-	public void addProducts(IBlockReader reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+	public void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
 		constantProducts.forEach(product -> {
 			if (rand.nextFloat() < modifier.apply(product)) {
 				stacks.add(product.copyStack());

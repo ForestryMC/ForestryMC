@@ -12,22 +12,22 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -48,14 +48,14 @@ public abstract class BlockStructure extends BlockForestry {
 	protected long previousMessageTick = 0;
 
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
 		if (playerIn.isShiftKeyDown()) { //isSneaking
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		MultiblockTileEntityForestry part = TileUtil.getTile(worldIn, pos, MultiblockTileEntityForestry.class);
 		if (part == null) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		IMultiblockController controller = part.getMultiblockLogic().getController();
 
@@ -69,38 +69,38 @@ public abstract class BlockStructure extends BlockForestry {
 					if (validationError != null) {
 						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(new StringTextComponent(validationError), Util.NIL_UUID);
+							playerIn.sendMessage(new TextComponent(validationError), Util.NIL_UUID);
 							previousMessageTick = tick;
 						}
-						return ActionResultType.SUCCESS;
+						return InteractionResult.SUCCESS;
 					}
 				}
 			} else {
-				playerIn.sendMessage(new TranslationTextComponent("for.multiblock.error.notConnected"), Util.NIL_UUID);
-				return ActionResultType.SUCCESS;
+				playerIn.sendMessage(new TranslatableComponent("for.multiblock.error.notConnected"), Util.NIL_UUID);
+				return InteractionResult.SUCCESS;
 			}
 		}
 
 		// Don't open the GUI if the multiblock isn't assembled
 		if (controller == null || !controller.isAssembled()) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		if (!worldIn.isClientSide) {
-			part.openGui((ServerPlayerEntity) playerIn, pos);    //TODO cast is safe because on server?
+			part.openGui((ServerPlayer) playerIn, pos);    //TODO cast is safe because on server?
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (world.isClientSide) {
 			return;
 		}
 
-		if (placer instanceof PlayerEntity) {
+		if (placer instanceof Player) {
 			TileUtil.actOnTile(world, pos, MultiblockTileEntityForestry.class, tile -> {
-				PlayerEntity player = (PlayerEntity) placer;
+				Player player = (Player) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				tile.setOwner(gameProfile);
 			});
@@ -108,7 +108,7 @@ public abstract class BlockStructure extends BlockForestry {
 	}
 
 	@Override
-	public void playerDestroy(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity te, ItemStack stack) {
+	public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
 		if (world.isClientSide) {
 			return;
 		}
@@ -116,8 +116,8 @@ public abstract class BlockStructure extends BlockForestry {
 		TileUtil.actOnTile(world, pos, IMultiblockComponent.class, tile -> {
 			// drop inventory if we're the last part remaining
 			if (MultiblockUtil.getNeighboringParts(world, tile).isEmpty()) {
-				if (tile instanceof IInventory) {
-					InventoryUtil.dropInventory((IInventory) tile, world, pos);
+				if (tile instanceof Container) {
+					InventoryUtil.dropInventory((Container) tile, world, pos);
 				}
 				if (tile instanceof ISocketable) {
 					InventoryUtil.dropSockets((ISocketable) tile, world, pos);

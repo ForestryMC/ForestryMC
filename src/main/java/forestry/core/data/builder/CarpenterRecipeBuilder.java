@@ -15,14 +15,14 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.criterion.ImpossibleTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -35,7 +35,7 @@ public class CarpenterRecipeBuilder {
 	@Nullable
 	private FluidStack liquid;
 	private Ingredient box;
-	private IFinishedRecipe recipe;
+	private FinishedRecipe recipe;
 	@Nullable
 	private ItemStack result;
 
@@ -55,15 +55,15 @@ public class CarpenterRecipeBuilder {
 	}
 
 	public CarpenterRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
-		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
+		Holder<FinishedRecipe> holder = new Holder<>();
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.TriggerInstance()).save(holder::set);
 		this.recipe = holder.get();
 		return this;
 	}
 
 	public CarpenterRecipeBuilder recipe(ShapelessRecipeBuilder recipe) {
-		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
+		Holder<FinishedRecipe> holder = new Holder<>();
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.TriggerInstance()).save(holder::set);
 		this.recipe = holder.get();
 		return this;
 	}
@@ -79,21 +79,21 @@ public class CarpenterRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, packagingTime, liquid, box, recipe, result));
 	}
 
-	public static class Result implements IFinishedRecipe {
+	public static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final int packagingTime;
 		@Nullable
 		private final FluidStack liquid;
 		private final Ingredient box;
-		private final IFinishedRecipe recipe;
+		private final FinishedRecipe recipe;
 		@Nullable
 		private final ItemStack result;
 
-		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, IFinishedRecipe recipe, @Nullable ItemStack result) {
+		public Result(ResourceLocation id, int packagingTime, @Nullable FluidStack liquid, Ingredient box, FinishedRecipe recipe, @Nullable ItemStack result) {
 			this.id = id;
 			this.packagingTime = packagingTime;
 			this.liquid = liquid;
@@ -124,7 +124,7 @@ public class CarpenterRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return ICarpenterRecipe.Companion.SERIALIZER;
 		}
 

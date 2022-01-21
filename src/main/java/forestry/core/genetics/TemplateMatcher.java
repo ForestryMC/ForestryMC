@@ -2,7 +2,7 @@ package forestry.core.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;

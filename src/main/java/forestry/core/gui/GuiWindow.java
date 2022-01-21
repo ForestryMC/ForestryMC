@@ -3,11 +3,11 @@ package forestry.core.gui;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,7 +28,7 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	protected int guiLeft;
 	protected int guiTop;
 
-	public GuiWindow(int xSize, int ySize, ITextComponent title) {
+	public GuiWindow(int xSize, int ySize, Component title) {
 		super(title);
 		this.xSize = xSize;
 		this.ySize = ySize;
@@ -51,14 +51,14 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack transform, int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
 		super.render(transform, mouseX, mouseY, partialTicks);
 		window.draw(transform, mouseX, mouseY);
 	}
 
-	protected void drawTooltips(MatrixStack transform, int mouseY, int mouseX) {
-		PlayerInventory playerInv = minecraft.player.inventory;
+	protected void drawTooltips(PoseStack transform, int mouseY, int mouseX) {
+		Inventory playerInv = minecraft.player.inventory;
 
 		if (playerInv.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);

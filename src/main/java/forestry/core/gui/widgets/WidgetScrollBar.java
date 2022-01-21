@@ -3,9 +3,9 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
@@ -75,11 +75,11 @@ public class WidgetScrollBar extends Widget {
 	}
 
 	public int getValue() {
-		return MathHelper.clamp(currentValue, minValue, maxValue);
+		return Mth.clamp(currentValue, minValue, maxValue);
 	}
 
 	public int setValue(int value) {
-		currentValue = MathHelper.clamp(value, minValue, maxValue);
+		currentValue = Mth.clamp(value, minValue, maxValue);
 		if (listener != null) {
 			listener.onScroll(currentValue);
 		}
@@ -96,7 +96,7 @@ public class WidgetScrollBar extends Widget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		if (!isVisible()) {
 			return;
 		}

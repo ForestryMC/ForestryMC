@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.farming.logic.crops;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
@@ -33,7 +33,7 @@ public class CropBasicGrowthCraft extends Crop {
 	private final boolean isRice;
 	private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, BlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
+	public CropBasicGrowthCraft(Level world, BlockState blockState, BlockPos position, boolean isRice, boolean isGrape) {
 		super(world, position);
 		this.blockState = blockState;
 		this.isRice = isRice;
@@ -41,17 +41,17 @@ public class CropBasicGrowthCraft extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
+	protected boolean isCrop(Level world, BlockPos pos) {
 		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(Level world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		NonNullList<ItemStack> harvest = NonNullList.create();
 		//TODO cast
-		LootContext.Builder ctx = new LootContext.Builder((ServerWorld) world)
-				.withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(pos));
+		LootContext.Builder ctx = new LootContext.Builder((ServerLevel) world)
+				.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
 		harvest.addAll(block.getDrops(blockState, ctx));
 		if (harvest.size() > 1) {
 			harvest.remove(0); //Hops have rope as first drop.

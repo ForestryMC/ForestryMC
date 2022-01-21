@@ -13,14 +13,14 @@ package forestry.apiculture.multiblock;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -67,7 +67,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	public AlvearyController(World world) {
+	public AlvearyController(Level world) {
 		super(world, AlvearyMultiblockSizeLimits.instance);
 		this.inventory = new InventoryBeeHousing(9);
 		this.beekeepingLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
@@ -111,7 +111,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundTag data) {
 		this.read(data);
 	}
 
@@ -292,7 +292,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		data = super.write(data);
 
 		data.putFloat("TempChange", tempChange);
@@ -304,7 +304,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		super.read(data);
 
 		tempChange = data.getFloat("TempChange");
@@ -315,13 +315,13 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public void formatDescriptionPacket(CompoundNBT data) {
+	public void formatDescriptionPacket(CompoundTag data) {
 		this.write(data);
 		beekeepingLogic.write(data);
 	}
 
 	@Override
-	public void decodeDescriptionPacket(CompoundNBT data) {
+	public void decodeDescriptionPacket(CompoundTag data) {
 		this.read(data);
 		beekeepingLogic.read(data);
 	}
@@ -335,9 +335,9 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
+	public Vec3 getBeeFXCoordinates() {
 		BlockPos coord = getCenterCoord();
-		return new Vector3d(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
+		return new Vec3(coord.getX() + 0.5, coord.getY() + 1.5, coord.getZ() + 0.5);
 	}
 
 	@Override

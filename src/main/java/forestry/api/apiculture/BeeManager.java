@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.genetics.IBeeFactory;
 import forestry.api.apiculture.genetics.IBeeMutationFactory;

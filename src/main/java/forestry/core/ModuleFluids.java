@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.core.config.Preference;
 import net.minecraftforge.api.distmarker.Dist;
@@ -62,7 +62,7 @@ public class ModuleFluids extends BlankForestryModule {
 	@SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
-		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
+		if (event.getMap().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		for (ForestryFluids fluid : ForestryFluids.values()) {

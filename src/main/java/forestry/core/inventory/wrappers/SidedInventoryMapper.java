@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 
 /**
  * Wrapper class used to bake the side variable into the object itself instead
@@ -20,16 +20,16 @@ import net.minecraft.util.Direction;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryMapper extends InvWrapperBase implements ISidedInventory {
+public class SidedInventoryMapper extends InvWrapperBase implements WorldlyContainer {
 
-	private final ISidedInventory inv;
+	private final WorldlyContainer inv;
 	private final Direction side;
 
-	public SidedInventoryMapper(ISidedInventory inv, Direction side) {
+	public SidedInventoryMapper(WorldlyContainer inv, Direction side) {
 		this(inv, side, true);
 	}
 
-	public SidedInventoryMapper(ISidedInventory inv, Direction side, boolean checkItems) {
+	public SidedInventoryMapper(WorldlyContainer inv, Direction side, boolean checkItems) {
 		super(inv, checkItems);
 		this.inv = inv;
 		this.side = side;

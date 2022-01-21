@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -23,7 +23,7 @@ import forestry.factory.tiles.TileStill;
 public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	private final TileStill tile;
 
-	public GuiStill(ContainerStill container, PlayerInventory inventory, ITextComponent title) {
+	public GuiStill(ContainerStill container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/still.png", container, inventory, title);
 		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 35, 15, 0));
@@ -31,7 +31,7 @@ public class GuiStill extends GuiForestryTitled<ContainerStill> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		blit(transform, leftPos + 81, topPos + 57, 176, 60, 14, 14);

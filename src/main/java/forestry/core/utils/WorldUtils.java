@@ -3,13 +3,13 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.IServerWorldInfo;
-import net.minecraft.world.storage.IWorldInfo;
-import net.minecraft.world.storage.ServerWorldInfo;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.storage.ServerLevelData;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.level.storage.PrimaryLevelData;
 
 public final class WorldUtils {
 
@@ -17,38 +17,38 @@ public final class WorldUtils {
 	}
 
 	@Nullable
-	public static ClientWorld clientSafe() {
+	public static ClientLevel clientSafe() {
 		return Minecraft.getInstance().level;
 	}
 
-	public static ClientWorld client() {
-		ClientWorld world = clientSafe();
+	public static ClientLevel client() {
+		ClientLevel world = clientSafe();
 		if (world == null) {
 			throw new IllegalStateException("Failed to get client side world.");
 		}
 		return world;
 	}
 
-	public static ClientWorld asClient(IWorld world) {
-		if (!(world instanceof ClientWorld)) {
+	public static ClientLevel asClient(LevelAccessor world) {
+		if (!(world instanceof ClientLevel)) {
 			throw new IllegalStateException("Failed to cast world to its client version.");
 		}
-		return (ClientWorld) world;
+		return (ClientLevel) world;
 	}
 
-	public static ServerWorld asServer(IWorld world) {
-		if (!(world instanceof ServerWorld)) {
+	public static ServerLevel asServer(LevelAccessor world) {
+		if (!(world instanceof ServerLevel)) {
 			throw new IllegalStateException("Failed to cast world to its server version.");
 		}
-		return (ServerWorld) world;
+		return (ServerLevel) world;
 	}
 
-	public static IServerWorldInfo getServerInfo(World world) {
-		IWorldInfo info = world.getLevelData();
-		if (!(info instanceof ServerWorldInfo)) {
+	public static ServerLevelData getServerInfo(Level world) {
+		LevelData info = world.getLevelData();
+		if (!(info instanceof PrimaryLevelData)) {
 			throw new IllegalStateException("Failed to cast the world to its server version.");
 		}
-		return (ServerWorldInfo) info;
+		return (PrimaryLevelData) info;
 	}
 
 }

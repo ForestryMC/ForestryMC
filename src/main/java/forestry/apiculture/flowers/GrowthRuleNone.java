@@ -12,9 +12,9 @@ package forestry.apiculture.flowers;
 
 import java.util.Collection;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.api.genetics.flowers.IFlowerGrowthHelper;
 import forestry.api.genetics.flowers.IFlowerGrowthRule;
@@ -22,7 +22,7 @@ import forestry.api.genetics.flowers.IFlowerGrowthRule;
 public class GrowthRuleNone implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerLevel world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return true;
 	}
 }

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerSocketed;
 import forestry.core.gui.slots.SlotFiltered;
@@ -26,12 +26,12 @@ import forestry.factory.tiles.TileCentrifuge;
 
 public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 
-	public static ContainerCentrifuge fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerCentrifuge fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileCentrifuge tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileCentrifuge.class);
 		return new ContainerCentrifuge(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerCentrifuge(int windowId, PlayerInventory player, TileCentrifuge tile) {
+	public ContainerCentrifuge(int windowId, Inventory player, TileCentrifuge tile) {
 		super(windowId, FactoryContainers.CENTRIFUGE.containerType(), player, tile, 8, 84);
 
 		// Resource
@@ -54,7 +54,7 @@ public class ContainerCentrifuge extends ContainerSocketed<TileCentrifuge> {
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		IInventory craftPreviewInventory = tile.getCraftPreviewInventory();
+		Container craftPreviewInventory = tile.getCraftPreviewInventory();
 
 		ItemStack newCraftPreview = craftPreviewInventory.getItem(0);
 		if (!ItemStack.matches(oldCraftPreview, newCraftPreview)) {

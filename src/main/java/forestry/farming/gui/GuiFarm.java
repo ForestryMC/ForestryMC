@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
@@ -26,7 +26,7 @@ import forestry.farming.tiles.TileFarm;
 public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	private final TileFarm tile;
 
-	public GuiFarm(ContainerFarm container, PlayerInventory inv, ITextComponent title) {
+	public GuiFarm(ContainerFarm container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/mfarm.png", container, inv, title);
 		this.tile = container.getTile();
 
@@ -56,7 +56,7 @@ public class GuiFarm extends GuiForestryTitled<ContainerFarm> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining

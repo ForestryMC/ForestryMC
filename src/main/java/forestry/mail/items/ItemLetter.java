@@ -14,22 +14,22 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -87,26 +87,26 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		if (heldItem.getCount() == 1) {
 			return super.use(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(new TranslationTextComponent("for.chat.mail.wrongstacksize"), Util.NIL_UUID);
-			return ActionResult.fail(heldItem);
+			playerIn.sendMessage(new TranslatableComponent("for.chat.mail.wrongstacksize"), Util.NIL_UUID);
+			return InteractionResultHolder.fail(heldItem);
 		}
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, world, list, flag);
 
-		CompoundNBT compoundNBT = itemstack.getTag();
+		CompoundTag compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
-			list.add(new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.blank").append(">"))
-					.withStyle(TextFormatting.GRAY));
+			list.add(new TextComponent("<")
+					.append(new TranslatableComponent("for.gui.blank").append(">"))
+					.withStyle(ChatFormatting.GRAY));
 			return;
 		}
 
@@ -115,7 +115,7 @@ public class ItemLetter extends ItemWithGui {
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
+	public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> stacks) {
 		if (allowdedIn(group) && state == State.FRESH && size == Size.EMPTY) {
 			stacks.add(new ItemStack(this));
 		}
@@ -123,7 +123,7 @@ public class ItemLetter extends ItemWithGui {
 
 	@Nullable
 	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		return new ContainerLetter(windowId, player, new ItemInventoryLetter(player, heldItem));
 	}
 }

@@ -13,19 +13,21 @@ package forestry.apiculture.particles;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class BeeTargetParticleData implements IParticleData {
+import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
-	public static final IDeserializer<BeeTargetParticleData> DESERIALIZER = new IDeserializer<BeeTargetParticleData>() {
+public class BeeTargetParticleData implements ParticleOptions {
+
+	public static final Deserializer<BeeTargetParticleData> DESERIALIZER = new Deserializer<BeeTargetParticleData>() {
 		@Nonnull
 		@Override
 		public BeeTargetParticleData fromCommand(@Nonnull ParticleType<BeeTargetParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
@@ -37,7 +39,7 @@ public class BeeTargetParticleData implements IParticleData {
 		}
 
 		@Override
-		public BeeTargetParticleData fromNetwork(@Nonnull ParticleType<BeeTargetParticleData> type, PacketBuffer buf) {
+		public BeeTargetParticleData fromNetwork(@Nonnull ParticleType<BeeTargetParticleData> type, FriendlyByteBuf buf) {
 			return new BeeTargetParticleData(buf.readInt(), buf.readInt());
 		}
 	};
@@ -64,7 +66,7 @@ public class BeeTargetParticleData implements IParticleData {
 	}
 
 	@Override
-	public void writeToNetwork(@Nonnull PacketBuffer buffer) {
+	public void writeToNetwork(@Nonnull FriendlyByteBuf buffer) {
 		buffer.writeLong(entity);
 		buffer.writeInt(color);
 	}

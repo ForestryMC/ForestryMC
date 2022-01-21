@@ -9,20 +9,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -70,16 +70,16 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Nullable
 	private IFarmLogic logic;
 	@Nullable
-	private Vector3i offset;
+	private Vec3i offset;
 	@Nullable
-	private Vector3i area;
+	private Vec3i area;
 
 	public void setManual(BlockPlanter.Mode mode) {
 		this.mode = mode;
 		logic = properties.getLogic(this.mode == BlockPlanter.Mode.MANUAL);
 	}
 
-	protected TilePlanter(TileEntityType type, String identifier) {
+	protected TilePlanter(BlockEntityType type, String identifier) {
 		super(type, 150, 1500);
 		this.properties = Preconditions.checkNotNull(FarmRegistry.getInstance().getProperties(identifier));
 		mode = BlockPlanter.Mode.MANAGED;
@@ -90,9 +90,9 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		String name = getBlockType(BlockTypePlanter.ARBORETUM).getSerializedName();
-		return new TranslationTextComponent("block.forestry.planter." + (mode.getSerializedName()), new TranslationTextComponent("block.forestry." + name));
+		return new TranslatableComponent("block.forestry.planter." + (mode.getSerializedName()), new TranslatableComponent("block.forestry." + name));
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
+	public CompoundTag save(CompoundTag data) {
 		data = super.save(data);
 		manager.write(data);
 		ownerHandler.write(data);
@@ -126,7 +126,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
+	public void load(BlockState state, CompoundTag data) {
 		super.load(state, data);
 		manager.read(data);
 		ownerHandler.read(data);
@@ -177,22 +177,22 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public Vector3i getArea() {
+	public Vec3i getArea() {
 		if (area == null) {
 			int basisArea = 5;
 			if (Config.ringFarms) {
 				basisArea = basisArea + 1 + Config.ringSize * 2;
 			}
-			area = new Vector3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
+			area = new Vec3i(basisArea + Config.planterExtend, 13, basisArea + Config.planterExtend);
 		}
 		return area;
 	}
 
 	@Override
-	public Vector3i getOffset() {
+	public Vec3i getOffset() {
 		if (offset == null) {
-			Vector3i area = getArea();
-			offset = new Vector3i(-area.getX() / 2, -2, -area.getZ() / 2);
+			Vec3i area = getArea();
+			offset = new Vec3i(-area.getX() / 2, -2, -area.getZ() / 2);
 		}
 		return offset;
 	}
@@ -219,13 +219,13 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction) {
-		PlayerEntity player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
+	public boolean plantGermling(IFarmable farmable, Level world, BlockPos pos, FarmDirection direction) {
+		Player player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
 		return player != null && inventory.plantGermling(farmable, player, pos, direction);
 	}
 
 	@Override
-	public boolean isValidPlatform(World world, BlockPos pos) {
+	public boolean isValidPlatform(Level world, BlockPos pos) {
 		return pos.getY() == getBlockPos().getY() - 2;
 	}
 
@@ -283,8 +283,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT data = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag data = super.getUpdateTag();
 		manager.write(data);
 		return data;
 	}
@@ -294,7 +294,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerPlanter(windowId, inv, this);
 	}
 

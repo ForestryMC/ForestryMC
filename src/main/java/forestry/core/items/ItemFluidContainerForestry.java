@@ -12,29 +12,29 @@ package forestry.core.items;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.FoodStats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,7 +67,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
@@ -101,7 +101,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack stack) {
+	public Component getName(ItemStack stack) {
 		Item item = stack.getItem();
 		if (item instanceof ItemFluidContainerForestry) {
 			FluidStack fluid = getContained(stack);
@@ -109,11 +109,11 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + fluid.getFluid().getRegistryName();
 				return Translator.tryTranslate(exactTranslationKey, () -> {
 							String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
-							return new TranslationTextComponent(grammarKey, fluid.getDisplayName());
+							return new TranslatableComponent(grammarKey, fluid.getDisplayName());
 						});
 			} else {
 				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".empty";
-				return new TranslationTextComponent(unlocalizedname);
+				return new TranslatableComponent(unlocalizedname);
 			}
 		}
 		return super.getName(stack);
@@ -123,19 +123,19 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	 * DRINKS
 	 */
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
 		DrinkProperties drinkProperties = getDrinkProperties(stack);
 		if (drinkProperties != null) {
-			if (entityLiving instanceof PlayerEntity && !((PlayerEntity) entityLiving).isCreative()) {
-				PlayerEntity player = (PlayerEntity) entityLiving;
+			if (entityLiving instanceof Player && !((Player) entityLiving).isCreative()) {
+				Player player = (Player) entityLiving;
 				if (!player.abilities.instabuild) {
 					stack.shrink(1);
 				}
 
 				if (!worldIn.isClientSide) {
-					FoodStats foodStats = player.getFoodData();
+					FoodData foodStats = player.getFoodData();
 					foodStats.eat(drinkProperties.getHealAmount(), drinkProperties.getSaturationModifier());
-					worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
+					worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
 				}
 
 				player.awardStat(Stats.ITEM_USED.get(this));
@@ -167,31 +167,31 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack itemstack) {
+	public UseAnim getUseAnimation(ItemStack itemstack) {
 		DrinkProperties drinkProperties = getDrinkProperties(itemstack);
 		if (drinkProperties != null) {
-			return UseAction.DRINK;
+			return UseAnim.DRINK;
 		} else {
-			return UseAction.NONE;
+			return UseAnim.NONE;
 		}
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand handIn) {
 		ItemStack heldItem = player.getItemInHand(handIn);
 		DrinkProperties drinkProperties = getDrinkProperties(heldItem);
 		if (drinkProperties != null) {
 			if (player.canEat(false)) {
 				player.startUsingItem(handIn);
-				return new ActionResult<>(ActionResultType.SUCCESS, heldItem);
+				return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldItem);
 			} else {
-				return new ActionResult<>(ActionResultType.FAIL, heldItem);
+				return new InteractionResultHolder<>(InteractionResult.FAIL, heldItem);
 			}
 		} else {
 			if (Config.CapsuleFluidPickup) {
-				BlockRayTraceResult target = getPlayerPOVHitResult(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
-				if (target.getType() != RayTraceResult.Type.BLOCK) {
-					return ActionResult.pass(heldItem);
+				BlockHitResult target = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+				if (target.getType() != HitResult.Type.BLOCK) {
+					return InteractionResultHolder.pass(heldItem);
 				}
 				ItemStack singleBucket = heldItem.copy();
 				singleBucket.setCount(1);
@@ -205,7 +205,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 						heldItem.shrink(1);
 					}
 
-					return ActionResult.success(heldItem);
+					return InteractionResultHolder.success(heldItem);
 				}
 			}
 			return super.use(world, player, handIn);
@@ -213,7 +213,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return new FluidHandlerItemForestry(stack, type);
 	}
 }

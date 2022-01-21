@@ -3,19 +3,19 @@ package forestry.core.render;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 public class RenderHelper {
 	public static final Vector3f ORIGIN = new Vector3f(0.0F, 0.0F, 0.0F);
@@ -23,8 +23,8 @@ public class RenderHelper {
 	// The current partial ticks
 	public float partialTicks;
 	// The current transformation
-	public MatrixStack transformation;
-	public IRenderTypeBuffer buffer;
+	public PoseStack transformation;
+	public MultiBufferSource buffer;
 	public int combinedLight;
 	public int packetLight;
 	public float rColor = 1.0f;
@@ -38,7 +38,7 @@ public class RenderHelper {
 
 	private Vector3f baseRotation = ORIGIN;
 
-	public void update(float partialTicks, MatrixStack transformation, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
+	public void update(float partialTicks, PoseStack transformation, MultiBufferSource buffer, int combinedLight, int packetLight) {
 		this.packetLight = packetLight;
 		this.combinedLight = combinedLight;
 		this.partialTicks = partialTicks;
@@ -46,7 +46,7 @@ public class RenderHelper {
 		this.buffer = buffer;
 	}
 
-	private ItemEntity dummyItem(World world) {
+	private ItemEntity dummyItem(Level world) {
 		if (dummyEntityItem == null) {
 			dummyEntityItem = new ItemEntity(world, 0, 0, 0);
 		} else {
@@ -55,7 +55,7 @@ public class RenderHelper {
 		return dummyEntityItem;
 	}
 
-	public void renderItem(ItemStack stack, World world) {
+	public void renderItem(ItemStack stack, Level world) {
 		ItemEntity dummyItem = dummyItem(world);
 		dummyItem.setItem(stack);
 
@@ -64,7 +64,7 @@ public class RenderHelper {
 			dummyItem.tick();
 		}
 
-		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
+		EntityRenderDispatcher renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
 		renderManager.render(dummyItem, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, transformation, buffer, combinedLight);
 
 		dummyItem.level = null;
@@ -105,16 +105,16 @@ public class RenderHelper {
 		transformation.pushPose();
 	}
 
-	public void renderModel(IVertexBuilder builder, ModelRenderer... renderers) {
+	public void renderModel(VertexConsumer builder, ModelPart... renderers) {
 		renderModel(builder, ORIGIN, renderers);
 	}
 
-	public void renderModel(ResourceLocation location, ModelRenderer... renderers) {
+	public void renderModel(ResourceLocation location, ModelPart... renderers) {
 		renderModel(location, ORIGIN, renderers);
 	}
 
-	public void renderModel(IVertexBuilder builder, Vector3f rotation, ModelRenderer... renderers) {
-		for (ModelRenderer renderer : renderers) {
+	public void renderModel(VertexConsumer builder, Vector3f rotation, ModelPart... renderers) {
+		for (ModelPart renderer : renderers) {
 			renderer.xRot = baseRotation.x() + rotation.x();
 			renderer.yRot = baseRotation.y() + rotation.y();
 			renderer.zRot = baseRotation.z() + rotation.z();
@@ -122,7 +122,7 @@ public class RenderHelper {
 		}
 	}
 
-	public void renderModel(ResourceLocation location, Vector3f rotation, ModelRenderer... renderers) {
+	public void renderModel(ResourceLocation location, Vector3f rotation, ModelPart... renderers) {
 		renderModel(buffer.getBuffer(RenderType.entityCutout(location)), rotation, renderers);
 	}
 }

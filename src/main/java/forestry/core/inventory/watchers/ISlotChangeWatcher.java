@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory.watchers;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
 public interface ISlotChangeWatcher {
-	void onSlotChanged(IInventory inventory, int slot);
+	void onSlotChanged(Container inventory, int slot);
 }

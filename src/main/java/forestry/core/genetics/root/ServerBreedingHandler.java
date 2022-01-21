@@ -2,10 +2,10 @@ package forestry.core.genetics.root;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import com.mojang.authlib.GameProfile;
 
@@ -17,11 +17,11 @@ public class ServerBreedingHandler implements BreedingTrackerManager.SidedHandle
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player) {
+	public <T extends IBreedingTracker> T getTracker(String rootUID, LevelAccessor world, @Nullable GameProfile player) {
 		IBreedingTrackerHandler handler = BreedingTrackerManager.factories.get(rootUID);
 		String filename = handler.getFileName(player);
-		ServerWorld overworld = WorldUtils.asServer(world).getServer().getLevel(World.OVERWORLD);
-		T tracker = (T) overworld.getDataStorage().computeIfAbsent(() -> (WorldSavedData) handler.createTracker(filename), filename);
+		ServerLevel overworld = WorldUtils.asServer(world).getServer().getLevel(Level.OVERWORLD);
+		T tracker = (T) overworld.getDataStorage().computeIfAbsent(() -> (SavedData) handler.createTracker(filename), filename);
 		handler.populateTracker(tracker, overworld, player);
 		return tracker;
 	}

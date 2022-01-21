@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import forestry.core.gui.IContainerLiquidTanks;
 import forestry.core.network.ForestryPacket;
@@ -38,7 +38,7 @@ public class PacketPipetteClick extends ForestryPacket implements IForestryPacke
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			int slot = data.readVarInt();
 			if (player.containerMenu instanceof IContainerLiquidTanks) {
 				((IContainerLiquidTanks) player.containerMenu).handlePipetteClick(slot, player);

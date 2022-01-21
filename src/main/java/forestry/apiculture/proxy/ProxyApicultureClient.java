@@ -11,10 +11,10 @@
 package forestry.apiculture.proxy;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,17 +35,17 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 	public void setupClient(FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
-		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutout()));
-		RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE.block(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ApicultureBlocks.CANDLE_WALL.block(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP.block(), RenderType.cutout());
-		RenderTypeLookup.setRenderLayer(ApicultureBlocks.STUMP_WALL.block(), RenderType.cutout());
+		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()));
+		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.CANDLE.block(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.CANDLE_WALL.block(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.STUMP.block(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.STUMP_WALL.block(), RenderType.cutout());
 	}
 
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
-		AtlasTexture map = event.getMap();
-		if (!map.location().equals(AtlasTexture.LOCATION_PARTICLES)) {
+		TextureAtlas map = event.getMap();
+		if (!map.location().equals(TextureAtlas.LOCATION_PARTICLES)) {
 			return;
 		}
 		for (int i = 0; i < ParticleSnow.sprites.length; i++) {

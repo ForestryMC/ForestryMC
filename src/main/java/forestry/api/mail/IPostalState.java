@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 public interface IPostalState {
 	/**
@@ -16,5 +16,5 @@ public interface IPostalState {
 	/**
 	 * Localized description of the postal state
 	 */
-	ITextComponent getDescription();
+	Component getDescription();
 }

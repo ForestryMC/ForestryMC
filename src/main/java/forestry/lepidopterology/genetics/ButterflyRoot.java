@@ -14,14 +14,14 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -68,7 +68,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	}
 
 	@Override
-	public IButterfly create(CompoundNBT compound) {
+	public IButterfly create(CompoundTag compound) {
 		return new Butterfly(compound);
 	}
 
@@ -113,12 +113,12 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	}
 
 	@Override
-	public EntityButterfly spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z) {
+	public EntityButterfly spawnButterflyInWorld(Level world, IButterfly butterfly, double x, double y, double z) {
 		return EntityUtil.spawnEntity(world, EntityButterfly.create(LepidopterologyEntities.BUTTERFLY.entityType(), world, butterfly, new BlockPos(x, y, z)), x, y, z);
 	}
 
 	@Override
-	public BlockPos plantCocoon(IWorld world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
+	public BlockPos plantCocoon(LevelAccessor world, BlockPos coordinates, @Nullable IButterfly caterpillar, GameProfile owner, int age, boolean createNursery) {
 		if (caterpillar == null) {
 			return BlockPos.ZERO;
 		}
@@ -151,7 +151,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		return pos;
 	}
 
-	private BlockPos getValidCocoonPos(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+	private BlockPos getValidCocoonPos(LevelAccessor world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		if (isPositionValid(world, pos.below(), caterpillar, gameProfile, createNursery)) {
 			return pos.below();
 		}
@@ -167,7 +167,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 		return BlockPos.ZERO;
 	}
 
-	public boolean isPositionValid(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
+	public boolean isPositionValid(LevelAccessor world, BlockPos pos, IButterfly caterpillar, GameProfile gameProfile, boolean createNursery) {
 		BlockState blockState = world.getBlockState(pos);
 		if (BlockUtil.canReplace(blockState, world, pos)) {
 			BlockPos nurseryPos = pos.above();
@@ -194,7 +194,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 	/* BREEDING TRACKER */
 	@Override
-	public ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+	public ILepidopteristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player) {
 		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
@@ -209,7 +209,7 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	}
 
 	@Override
-	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
 		if (!(tracker instanceof LepidopteristTracker)) {
 			return;
 		}

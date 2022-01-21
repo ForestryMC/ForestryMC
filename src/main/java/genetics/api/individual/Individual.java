@@ -3,7 +3,7 @@ package genetics.api.individual;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.GeneticsAPI;
 
@@ -29,7 +29,7 @@ public abstract class Individual implements IIndividual {
 		this.mate = mate;
 	}
 
-	public Individual(CompoundNBT compound) {
+	public Individual(CompoundTag compound) {
 		IKaryotype karyotype = getRoot().getKaryotype();
 		if (compound.contains(NBT_GENOME)) {
 			genome = GeneticsAPI.apiInstance.getGeneticFactory().createGenome(karyotype, compound.getCompound(NBT_GENOME));
@@ -93,10 +93,10 @@ public abstract class Individual implements IIndividual {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
-		compound.put(NBT_GENOME, genome.writeToNBT(new CompoundNBT()));
+	public CompoundTag write(CompoundTag compound) {
+		compound.put(NBT_GENOME, genome.writeToNBT(new CompoundTag()));
 		if (mate != null) {
-			compound.put(NBT_MATE, mate.writeToNBT(new CompoundNBT()));
+			compound.put(NBT_MATE, mate.writeToNBT(new CompoundTag()));
 		}
 		compound.putBoolean(NBT_ANALYZED, isAnalyzed);
 		return compound;

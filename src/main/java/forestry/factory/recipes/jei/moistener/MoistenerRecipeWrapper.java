@@ -3,9 +3,9 @@ package forestry.factory.recipes.jei.moistener;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 

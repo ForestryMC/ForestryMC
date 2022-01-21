@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -91,9 +91,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(ITag.INamedTag<Item> tag, ITag.INamedTag<Item>... providers) {
-		TagsProvider.Builder<Item> builder = tag(tag);
-		for (ITag.INamedTag<Item> provider : providers) {
+	protected final void addToTag(Tag.Named<Item> tag, Tag.Named<Item>... providers) {
+		TagsProvider.TagAppender<Item> builder = tag(tag);
+		for (Tag.Named<Item> provider : providers) {
 			builder.addTag(provider);
 		}
 	}

@@ -18,11 +18,11 @@ import java.util.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.biome.Biome;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,7 +65,7 @@ public class HabitatSelectionElement extends ContainerElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
@@ -113,8 +113,8 @@ public class HabitatSelectionElement extends ContainerElement {
 				former.sendClimateUpdate();
 			});*/
 			addTooltip((tooltip, element, mouseX, mouseY) -> {
-				tooltip.add(new StringTextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
-				tooltip.add(new StringTextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
+				tooltip.add(new TextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
+				tooltip.add(new TextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
 			});
 		}
 
@@ -128,7 +128,7 @@ public class HabitatSelectionElement extends ContainerElement {
 		}
 
 		@Override
-		public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+		public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));

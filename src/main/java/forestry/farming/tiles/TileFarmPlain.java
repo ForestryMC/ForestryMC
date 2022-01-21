@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
 import forestry.farming.blocks.BlockFarm;

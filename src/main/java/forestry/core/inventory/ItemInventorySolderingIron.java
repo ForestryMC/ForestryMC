@@ -12,9 +12,9 @@ package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -37,7 +37,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	private static final short ingredientSlot1 = 2;
 	private static final short ingredientSlotCount = 4;
 
-	public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
+	public ItemInventorySolderingIron(Player player, ItemStack itemStack) {
 		super(player, 6, itemStack);
 
 		layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
@@ -84,7 +84,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
+	public void onSlotClick(int slotIndex, Player player) {
 		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 			return;
 		}

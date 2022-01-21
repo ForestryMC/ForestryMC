@@ -1,9 +1,9 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
@@ -17,7 +17,7 @@ public class ItemBlockWoodSlab extends BlockItem {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		BlockForestrySlab wood = (BlockForestrySlab) getBlock();
 		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);

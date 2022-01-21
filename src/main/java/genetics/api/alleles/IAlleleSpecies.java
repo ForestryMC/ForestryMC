@@ -1,6 +1,6 @@
 package genetics.api.alleles;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import genetics.api.classification.IClassification;
 import genetics.api.individual.IIndividual;
@@ -25,7 +25,7 @@ public interface IAlleleSpecies extends IAllele {
 	/**
 	 * @return Localized short description of this species. (May be null.)
 	 */
-	ITextComponent getDescription();
+	Component getDescription();
 
 	/**
 	 * Binomial name of the species sans genus ("Apis"). Returning "humboldti" will have the bee species flavour name be "Apis humboldti". Feel free to use fun

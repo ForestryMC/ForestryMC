@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.config.Constants;
@@ -26,14 +26,14 @@ import forestry.factory.tiles.TileBottler;
 public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 	private final TileBottler tile;
 
-	public GuiBottler(ContainerBottler container, PlayerInventory inventory, ITextComponent title) {
+	public GuiBottler(ContainerBottler container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", container, inventory, title);
 		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 80, 14, 0));
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		bindTexture(textureFile);
 
 		int x = (width - imageWidth) / 2;

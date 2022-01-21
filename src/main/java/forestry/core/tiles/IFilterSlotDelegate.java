@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IFilterSlotDelegate {
 

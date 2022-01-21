@@ -18,20 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -172,14 +172,14 @@ public class ModuleApiculture extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
-		ScreenManager.register(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
-		ScreenManager.register(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
-		ScreenManager.register(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
-		ScreenManager.register(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
-		ScreenManager.register(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
-		ScreenManager.register(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
-		ScreenManager.register(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
+		MenuScreens.register(ApicultureContainers.ALVEARY.containerType(), GuiAlveary::new);
+		MenuScreens.register(ApicultureContainers.ALVEARY_HYGROREGULATOR.containerType(), GuiAlvearyHygroregulator::new);
+		MenuScreens.register(ApicultureContainers.ALVEARY_SIEVE.containerType(), GuiAlvearySieve::new);
+		MenuScreens.register(ApicultureContainers.ALVEARY_SWARMER.containerType(), GuiAlvearySwarmer::new);
+		MenuScreens.register(ApicultureContainers.BEE_HOUSING.containerType(), GuiBeeHousing<ContainerBeeHousing>::new);
+		MenuScreens.register(ApicultureContainers.HABITAT_LOCATOR.containerType(), GuiHabitatLocator::new);
+		MenuScreens.register(ApicultureContainers.IMPRINTER.containerType(), GuiImprinter::new);
+		MenuScreens.register(ApicultureContainers.BEEHOUSE_MINECART.containerType(), GuiBeeHousing<ContainerMinecartBeehouse>::new);
 	}
 
 	@Override
@@ -553,9 +553,9 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
-		public boolean isAcceptableFlower(BlockState blockState, World world, BlockPos pos, String flowerType) {
+		public boolean isAcceptableFlower(BlockState blockState, Level world, BlockPos pos, String flowerType) {
 			Biome biomeGenForCoords = world.getBiome(pos);
-			return Biome.Category.THEEND == biomeGenForCoords.getBiomeCategory();
+			return Biome.BiomeCategory.THEEND == biomeGenForCoords.getBiomeCategory();
 		}
 	}
 }

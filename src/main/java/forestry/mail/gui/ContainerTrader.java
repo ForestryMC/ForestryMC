@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
@@ -25,12 +25,12 @@ import forestry.mail.tiles.TileTrader;
 
 public class ContainerTrader extends ContainerTile<TileTrader> {
 
-	public static ContainerTrader fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerTrader fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileTrader tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileTrader.class);
 		return new ContainerTrader(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerTrader(int windowId, PlayerInventory inv, TileTrader tile) {
+	public ContainerTrader(int windowId, Inventory inv, TileTrader tile) {
 		super(windowId, MailContainers.TRADER.containerType(), inv, tile, 33, 138);
 
 		// Trade good

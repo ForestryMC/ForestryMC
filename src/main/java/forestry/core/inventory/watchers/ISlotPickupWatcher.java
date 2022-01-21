@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory.watchers;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface ISlotPickupWatcher {
-	void onTake(int slotIndex, PlayerEntity player);
+	void onTake(int slotIndex, Player player);
 }

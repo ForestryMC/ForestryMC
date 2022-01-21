@@ -1,7 +1,7 @@
 package genetics.api.alleles;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 import forestry.core.utils.Translator;
 
@@ -28,7 +28,7 @@ public class AlleleCategorized extends Allele {
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		String customName = modId + '.' + "allele." + category + '.' + valueName;
 		return Translator.tryTranslate(customName, getLocalisationKey());
 	}

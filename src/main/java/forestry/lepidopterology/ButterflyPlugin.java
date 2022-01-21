@@ -1,9 +1,9 @@
 package forestry.lepidopterology;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -104,7 +104,7 @@ public class ButterflyPlugin implements IGeneticPlugin {
 					}
 
 					@Override
-					public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+					public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, Level world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 						ItemStack serum = ((IIndividualRoot<IIndividual>) species.getRoot()).getTypes().createStack(individual.copy(), EnumFlutterType.SERUM);
 						NonNullList<ItemStack> bounty = NonNullList.create();
 						bounty.add(serum);

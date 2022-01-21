@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
@@ -28,14 +28,14 @@ import forestry.core.utils.NetworkUtil;
 public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImprinter> implements IGuiSelectable {
 
 	//TODO dedupe this
-	public static ContainerImprinter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
+	public static ContainerImprinter fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
+		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		Player player = playerInv.player;
 		ItemInventoryImprinter inv = new ItemInventoryImprinter(player, player.getItemInHand(hand));
 		return new ContainerImprinter(windowId, player.inventory, inv);
 	}
 
-	public ContainerImprinter(int windowId, PlayerInventory inventoryplayer, ItemInventoryImprinter inventory) {
+	public ContainerImprinter(int windowId, Inventory inventoryplayer, ItemInventoryImprinter inventory) {
 		super(windowId, inventory, inventoryplayer, 8, 103, ApicultureContainers.IMPRINTER.containerType());
 
 		// Input
@@ -45,7 +45,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		if (primary == 0) {
 			if (secondary == 0) {
 				inventory.advancePrimary();

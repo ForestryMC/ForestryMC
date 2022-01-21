@@ -12,9 +12,11 @@ package forestry.lepidopterology.entities;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AIButterflyFlee extends AIButterflyMovement {
 
@@ -27,7 +29,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 	@Override
 	public boolean canUse() {
 
-		PlayerEntity player = entity.level.getNearestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
+		Player player = entity.level.getNearestPlayer(entity, entity.getButterfly().getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getFlightDistance());
 
 		if (player == null || player.isShiftKeyDown()) {
 			return false;

@@ -2,14 +2,14 @@ package forestry.core.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.genetics.gatgets.IGeneticAnalyzer;
@@ -23,7 +23,7 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.tiles.ITitled;
 
-public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForestryTitled<C> implements IGeneticAnalyzerProvider, ISlotChangeWatcher {
+public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> extends GuiForestryTitled<C> implements IGeneticAnalyzerProvider, ISlotChangeWatcher {
 	/* Attributes - Constants */
 	protected static final Drawable SELECTED_COMB_SLOT = new Drawable(GeneticAnalyzer.TEXTURE, 163, 0, 22, 22);
 	protected static final Drawable TOGGLE_BUTTON = new Drawable(GeneticAnalyzer.TEXTURE, 35, 166, 18, 20);
@@ -55,12 +55,12 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	private boolean slotDirty;
 
 	/* Constructors */
-	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
+	public GuiAnalyzerProvider(String texture, C container, Inventory inv, ITitled titled, int buttonX, int buttonY, int slots, int firstSlot) {
 		this(texture, container, inv, titled, buttonX, buttonY, 0, false, slots, firstSlot);
 	}
 
-	public GuiAnalyzerProvider(String texture, C container, PlayerInventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
-		super(texture, container, inv, new TranslationTextComponent(titled.getUnlocalizedTitle()));
+	public GuiAnalyzerProvider(String texture, C container, Inventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
+		super(texture, container, inv, new TranslatableComponent(titled.getUnlocalizedTitle()));
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
 		this.screenDistance = screenDistance;
@@ -92,7 +92,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		analyzer.setVisible(!deactivated && analyzerVisible);
 	}
 
-	protected abstract void drawSelectedSlot(MatrixStack transform, int selectedSlot);
+	protected abstract void drawSelectedSlot(PoseStack transform, int selectedSlot);
 
 	/* Methods - Implement GuiScreen */
 	@Override
@@ -111,7 +111,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 	}
 
 	@Override
-	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack transform, int mouseX, int mouseY, float partialTicks) {
 		boolean ledger = hasErrors();
 		if (!deactivated && ledger || !ledger && deactivated) {
 			deactivated = ledger;
@@ -143,7 +143,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 		}
 	}
 
-	class Handler implements Button.IPressable {
+	class Handler implements Button.OnPress {
 		@Override
 		public void onPress(Button button) {
 			if (button instanceof GuiToggleButton) {
@@ -156,7 +156,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement GuiContainer */
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
@@ -169,7 +169,7 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 
 	/* Methods - Implement ISlotChangeWatcher*/
 	@Override
-	public void onSlotChanged(IInventory inventory, int slot) {
+	public void onSlotChanged(Container inventory, int slot) {
 		if (slot == analyzer.getSelected()) {
 			dirty = true;
 		}

@@ -14,10 +14,10 @@ import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
 
 //TODO: Add needsGuiUpdate() method, so we only send one gui update packet.
-public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
+public abstract class ContainerTile<T extends BlockEntity> extends ContainerForestry {
 	protected final T tile;
 	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
@@ -41,24 +41,24 @@ public abstract class ContainerTile<T extends TileEntity> extends ContainerFores
 	private int previousWorkCounter = 0;
 	private int previousTicksPerWorkCycle = 0;
 
-	protected ContainerTile(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+	protected ContainerTile(int windowId, MenuType<?> type, Inventory playerInventory, T tile, int xInv, int yInv) {
 		super(windowId, type);
 		addPlayerInventory(playerInventory, xInv, yInv);
 		this.tile = tile;
 	}
 
-	protected ContainerTile(int windowId, ContainerType<?> type, T tile) {
+	protected ContainerTile(int windowId, MenuType<?> type, T tile) {
 		super(windowId, type);
 		this.tile = tile;
 	}
 
 	@Override
-	protected final boolean canAccess(PlayerEntity player) {
+	protected final boolean canAccess(Player player) {
 		return true;
 	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity PlayerEntity) {
+	public final boolean stillValid(Player PlayerEntity) {
 		return TileUtil.isUsableByPlayer(PlayerEntity, tile);
 	}
 

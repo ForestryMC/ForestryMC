@@ -3,7 +3,7 @@ package forestry.api.genetics.alyzer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IIndividual;
@@ -25,6 +25,6 @@ public interface IAlyzerDisplayProvider<I extends IIndividual> {
 	/**
 	 * Used to display the handled allele on the alyzer.
 	 */
-	default void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
+	default void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, PoseStack transform) {
 	}
 }

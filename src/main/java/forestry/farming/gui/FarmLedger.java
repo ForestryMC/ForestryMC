@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,7 +40,7 @@ public class FarmLedger extends Ledger {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 
 		// Draw background
 		drawBackground(transform, y, x);
@@ -52,7 +52,7 @@ public class FarmLedger extends Ledger {
 
 		// Draw icon
 		TextureAtlasSprite textureAtlasSprite = ResourceUtil.getBlockSprite("item/water_bucket");
-		drawSprite(transform, textureAtlasSprite, xIcon, y, AtlasTexture.LOCATION_BLOCKS);
+		drawSprite(transform, textureAtlasSprite, xIcon, y, TextureAtlas.LOCATION_BLOCKS);
 		y += 4;
 
 		if (!isFullyOpened()) {
@@ -83,9 +83,9 @@ public class FarmLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
+	public Component getTooltip() {
 		float hydrationModifier = delegate.getHydrationModifier();
-		return new StringTextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
-			.append(new TranslationTextComponent("for.gui.hydration"));
+		return new TextComponent(StringUtil.floatAsPercent(hydrationModifier) + ' ')
+			.append(new TranslatableComponent("for.gui.hydration"));
 	}
 }

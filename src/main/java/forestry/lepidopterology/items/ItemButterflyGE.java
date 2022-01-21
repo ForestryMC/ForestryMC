@@ -13,17 +13,17 @@ package forestry.lepidopterology.items;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,6 +54,8 @@ import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismType;
 import genetics.utils.AlleleUtils;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColoredItem {
 
@@ -88,12 +90,12 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return GeneticHelper.createOrganism(stack, type, ButterflyHelper.getRoot().getDefinition());
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
@@ -213,12 +215,12 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 	//	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
-		World world = context.getLevel();
-		PlayerEntity player = context.getPlayer();
+	public InteractionResult useOn(UseOnContext context) {
+		Level world = context.getLevel();
+		Player player = context.getPlayer();
 		BlockPos pos = context.getClickedPos();
 		if (world.isClientSide) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		ItemStack stack = player.getItemInHand(context.getHand());
@@ -235,15 +237,15 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				if (!player.isCreative()) {
 					stack.shrink(1);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			} else {
-				return ActionResultType.PASS;
+				return InteractionResult.PASS;
 			}
 		} else if (type == EnumFlutterType.CATERPILLAR) {
 			IButterflyNursery nursery = GeneticsUtil.getOrCreateNursery(player.getGameProfile(), world, pos, true);
 			if (nursery != null) {
 				if (!nursery.canNurse(flutter)) {
-					return ActionResultType.PASS;
+					return InteractionResult.PASS;
 				}
 
 				nursery.setCaterpillar(flutter);
@@ -255,11 +257,11 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 				if (!player.isCreative()) {
 					stack.shrink(1);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		} else {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 	}
 
@@ -270,9 +272,9 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
 			return;
 		}
-		CompoundNBT tagCompound = cocoon.getTag();
+		CompoundTag tagCompound = cocoon.getTag();
 		if (tagCompound == null) {
-			cocoon.setTag(tagCompound = new CompoundNBT());
+			cocoon.setTag(tagCompound = new CompoundTag());
 		}
 		tagCompound.putInt(NBT_AGE, age);
 	}
@@ -284,7 +286,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (ButterflyManager.butterflyRoot.getTypes().getType(cocoon).orElse(null) != EnumFlutterType.COCOON) {
 			return 0;
 		}
-		CompoundNBT tagCompound = cocoon.getTag();
+		CompoundTag tagCompound = cocoon.getTag();
 		if (tagCompound == null) {
 			return 0;
 		}

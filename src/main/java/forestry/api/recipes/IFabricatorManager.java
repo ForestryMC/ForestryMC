@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -20,7 +20,7 @@ public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe>
 
 	void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern);
 
-	Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources);
+	Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, Level world, FluidStack fluidStack, ItemStack plan, Container resources);
 
 	boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan);
 

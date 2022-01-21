@@ -13,13 +13,13 @@ package forestry.apiculture.worldgen;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class HiveGenGround extends HiveGen {
 
@@ -34,21 +34,21 @@ public class HiveGenGround extends HiveGen {
 	}
 
 	@Override
-	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+	public boolean isValidLocation(WorldGenLevel world, BlockPos pos) {
 		BlockState groundBlockState = world.getBlockState(pos.below());
 		Material groundBlockMaterial = groundBlockState.getMaterial();
 		return groundMaterials.contains(groundBlockMaterial);
 	}
 
 	@Override
-	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
+	public BlockPos getPosForHive(WorldGenLevel world, int x, int z) {
 		// get to the ground
-		final BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
+		final BlockPos topPos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
 
-		final BlockPos.Mutable pos = new BlockPos.Mutable();
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		pos.set(topPos);
 
 		BlockState blockState = world.getBlockState(pos);

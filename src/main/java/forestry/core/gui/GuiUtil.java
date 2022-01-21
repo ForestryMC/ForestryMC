@@ -13,14 +13,14 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,8 +37,8 @@ public class GuiUtil {
 		drawItemStack(gui.getFontRenderer(), stack, xPos, yPos);
 	}
 
-	public static void drawItemStack(FontRenderer fontRenderer, ItemStack stack, int xPos, int yPos) {
-		FontRenderer font = null;
+	public static void drawItemStack(Font fontRenderer, ItemStack stack, int xPos, int yPos) {
+		Font font = null;
 		if (!stack.isEmpty()) {
 			font = stack.getItem().getFontRenderer(stack);
 		}
@@ -52,19 +52,19 @@ public class GuiUtil {
 	}
 
 	//TODO hopefully this is client side...
-	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
 		if (!toolTips.isEmpty()) {
 			RenderSystem.pushMatrix();
 			if (provider == null || provider.isRelativeToGui()) {
 				RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			MainWindow window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
+			Window window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
 			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getGameInstance().font);
 			RenderSystem.popMatrix();
 		}
 	}
 
-	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
 			if (!(obj instanceof IToolTipProvider)) {
 				continue;

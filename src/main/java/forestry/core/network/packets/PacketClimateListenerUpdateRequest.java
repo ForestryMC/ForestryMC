@@ -1,8 +1,8 @@
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -34,9 +34,9 @@ public class PacketClimateListenerUpdateRequest extends ForestryPacket implement
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			BlockPos pos = data.readBlockPos();
-			TileEntity tileEntity = player.level.getBlockEntity(pos);
+			BlockEntity tileEntity = player.level.getBlockEntity(pos);
 			if (tileEntity != null) {
 				LazyOptional<IClimateListener> listener = tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER);
 				listener.ifPresent(l -> l.syncToClient(player));

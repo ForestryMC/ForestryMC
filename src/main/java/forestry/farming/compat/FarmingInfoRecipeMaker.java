@@ -3,7 +3,7 @@ package forestry.farming.compat;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;

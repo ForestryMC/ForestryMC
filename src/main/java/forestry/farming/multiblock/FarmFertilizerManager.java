@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -61,12 +61,12 @@ public class FarmFertilizerManager implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		storedFertilizer = data.getInt("StoredFertilizer");
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		data.putInt("StoredFertilizer", storedFertilizer);
 		return data;
 	}

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.LevelAccessor;
 
 public interface ISaveEventHandler {
 
-	default void onWorldLoad(IWorld world) {
+	default void onWorldLoad(LevelAccessor world) {
 	}
 
-	default void onWorldUnload(IWorld world) {
+	default void onWorldUnload(LevelAccessor world) {
 	}
 
-	default void onWorldSave(IWorld world) {
+	default void onWorldSave(LevelAccessor world) {
 	}
 
 }

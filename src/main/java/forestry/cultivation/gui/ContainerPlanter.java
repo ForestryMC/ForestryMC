@@ -1,7 +1,7 @@
 package forestry.cultivation.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
@@ -15,12 +15,12 @@ import forestry.cultivation.tiles.TilePlanter;
 
 public class ContainerPlanter extends ContainerLiquidTanks<TilePlanter> {
 
-	public static ContainerPlanter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+	public static ContainerPlanter fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
 		TilePlanter planter = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TilePlanter.class);
 		return new ContainerPlanter(windowId, playerInv, planter);
 	}
 
-	public ContainerPlanter(int windowId, PlayerInventory playerInventory, TilePlanter tileForestry) {
+	public ContainerPlanter(int windowId, Inventory playerInventory, TilePlanter tileForestry) {
 		super(windowId, CultivationContainers.PLANTER.containerType(), playerInventory, tileForestry, 21, 110);
 
 		// Resources

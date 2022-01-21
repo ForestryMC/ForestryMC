@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.core.utils.WorldUtils;
@@ -22,8 +22,8 @@ import genetics.commands.SpeciesNotFoundException;
 
 public class ForestSpawner implements ITreeSpawner {
 	@Override
-	public int spawn(CommandSource source, ITree tree, PlayerEntity player) throws SpeciesNotFoundException {
-		Vector3d look = player.getLookAngle();
+	public int spawn(CommandSourceStack source, ITree tree, Player player) throws SpeciesNotFoundException {
+		Vec3 look = player.getLookAngle();
 
 		int x = (int) Math.round(player.getX() + 16 * look.x);
 		int y = (int) Math.round(player.getY());

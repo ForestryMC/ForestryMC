@@ -3,7 +3,7 @@ package forestry.cultivation;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;

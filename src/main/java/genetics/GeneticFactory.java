@@ -3,8 +3,8 @@ package genetics;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.alleles.AlleleTemplate;
 import genetics.alleles.AlleleTemplateBuilder;
@@ -52,7 +52,7 @@ public enum GeneticFactory implements IGeneticFactory {
 	}
 
 	@Override
-	public IGenome createGenome(IKaryotype karyotype, CompoundNBT compound) {
+	public IGenome createGenome(IKaryotype karyotype, CompoundTag compound) {
 		return new Genome(karyotype, compound);
 	}
 

@@ -12,8 +12,8 @@ package forestry.lepidopterology.proxy;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,7 +43,7 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology implements 
 	public void setupClient(FMLClientSetupEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(LepidopterologyEntities.BUTTERFLY.entityType(), ButterflyEntityRenderer::new);
 		AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
-			ImmutableList.Builder<IBakedModel> models = new ImmutableList.Builder<>();
+			ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
 			for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {
 				ModelLoader.addSpecialModel(allele.getCocoonItemModel(age));
 			}

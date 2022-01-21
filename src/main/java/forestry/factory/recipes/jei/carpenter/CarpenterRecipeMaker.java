@@ -3,7 +3,7 @@ package forestry.factory.recipes.jei.carpenter;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;

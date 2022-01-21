@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 /**
  * Any housing, hatchery or nest with a location in the world.

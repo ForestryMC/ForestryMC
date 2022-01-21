@@ -1,7 +1,7 @@
 package forestry.mail;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.mail.IPostalState;
 
@@ -18,7 +18,7 @@ public class ResponseNotMailable implements IPostalState {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent("for.chat.mail.response.not.mailable.format", state.getDescription());
+	public Component getDescription() {
+		return new TranslatableComponent("for.chat.mail.response.not.mailable.format", state.getDescription());
 	}
 }

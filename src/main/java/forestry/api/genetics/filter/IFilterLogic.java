@@ -3,11 +3,11 @@ package forestry.api.genetics.filter;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,10 +18,10 @@ import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 
 public interface IFilterLogic extends INbtWritable, INbtReadable {
-	void writeGuiData(PacketBuffer data);
+	void writeGuiData(FriendlyByteBuf data);
 
 	@OnlyIn(Dist.CLIENT)
-	void readGuiData(PacketBuffer data);
+	void readGuiData(FriendlyByteBuf data);
 
 	Collection<Direction> getValidDirections(ItemStack itemStack, Direction from);
 
@@ -52,6 +52,6 @@ public interface IFilterLogic extends INbtWritable, INbtReadable {
 		 *
 		 * @param player The player that changed the filter.
 		 */
-		void sendToPlayers(IFilterLogic logic, ServerWorld server, PlayerEntity player);
+		void sendToPlayers(IFilterLogic logic, ServerLevel server, Player player);
 	}
 }

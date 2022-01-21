@@ -12,10 +12,10 @@ package forestry.core.commands;
 
 import java.util.stream.Stream;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -24,14 +24,14 @@ import com.mojang.brigadier.context.CommandContext;
 
 import genetics.commands.CommandHelpers;
 
-public class CommandModeInfo implements Command<CommandSource> {
+public class CommandModeInfo implements Command<CommandSourceStack> {
 	private final ICommandModeHelper modeHelper;
 
 	public CommandModeInfo(ICommandModeHelper modeHelper) {
 		this.modeHelper = modeHelper;
 	}
 
-	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
+	public static ArgumentBuilder<CommandSourceStack, ?> register(ICommandModeHelper modeHelper) {
 		return Commands.literal("info")
 				.then(Commands.argument("mode", StringArgumentType.word()).suggests((ctx, builder) -> {
 					Stream.of(modeHelper.getModeNames()).forEach(builder::suggest);
@@ -41,13 +41,13 @@ public class CommandModeInfo implements Command<CommandSource> {
 	}
 
     @Override
-	public int run(CommandContext<CommandSource> ctxContext) {
+	public int run(CommandContext<CommandSourceStack> ctxContext) {
 
 		String modeName = ctxContext.getArgument("mode", String.class);
 
 
 		Style green = Style.EMPTY;
-		green.withColor(TextFormatting.GREEN);
+		green.withColor(ChatFormatting.GREEN);
 		CommandHelpers.sendLocalizedChatMessage(ctxContext.getSource(), green, modeName);
 
 		for (String desc : modeHelper.getDescription(modeName)) {

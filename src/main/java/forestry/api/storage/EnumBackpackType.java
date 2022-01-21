@@ -7,13 +7,13 @@ package forestry.api.storage;
 
 import java.util.Locale;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.util.StringRepresentable;
 
 import forestry.core.config.Constants;
 import forestry.storage.BackpackMode;
 
-public enum EnumBackpackType implements IStringSerializable {
+public enum EnumBackpackType implements StringRepresentable {
 	NORMAL, WOVEN, NATURALIST;
 
 	@Override

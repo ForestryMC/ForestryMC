@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import forestry.api.multiblock.IMultiblockLogicFarm;
 import forestry.core.multiblock.MultiblockLogic;
@@ -30,7 +30,7 @@ public class MultiblockLogicFarm extends MultiblockLogic<IFarmControllerInternal
 	}
 
 	@Override
-	public IFarmControllerInternal createNewController(World world) {
+	public IFarmControllerInternal createNewController(Level world) {
 		return new FarmController(world);
 	}
 }

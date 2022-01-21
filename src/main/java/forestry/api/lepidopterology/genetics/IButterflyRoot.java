@@ -7,11 +7,11 @@ package forestry.api.lepidopterology.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -22,16 +22,16 @@ public interface IButterflyRoot extends IForestrySpeciesRoot<IButterfly> {
 
 	/* BUTTERFLY SPECIFIC */
 	@Override
-	ILepidopteristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+	ILepidopteristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player);
 
 	/**
 	 * Spawns the given butterfly in the world.
 	 *
 	 * @return butterfly entity on success, null otherwise.
 	 */
-	MobEntity spawnButterflyInWorld(World world, IButterfly butterfly, double x, double y, double z);
+	Mob spawnButterflyInWorld(Level world, IButterfly butterfly, double x, double y, double z);
 
-	BlockPos plantCocoon(IWorld world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
+	BlockPos plantCocoon(LevelAccessor world, BlockPos pos, IButterfly caterpillar, GameProfile owner, int age, boolean createNursery);
 
 	/**
 	 * @return true if passed item is mated.

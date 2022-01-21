@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.entities;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 
-public class ParticleSnow extends SpriteTexturedParticle {
+public class ParticleSnow extends TextureSheetParticle {
 	public static final TextureAtlasSprite[] sprites = new TextureAtlasSprite[3];
 
-	public ParticleSnow(ClientWorld world, double x, double y, double z) {
+	public ParticleSnow(ClientLevel world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		this.setSprite(sprites[random.nextInt(sprites.length)]);
@@ -56,7 +56,7 @@ public class ParticleSnow extends SpriteTexturedParticle {
 	}*/
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 }

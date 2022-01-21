@@ -2,20 +2,20 @@ package forestry.core.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
@@ -41,13 +41,13 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(DEGRADE);
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
 		if (world.isClientSide || world.random.nextInt(140) != 0) {
 			return;
 		}
@@ -57,7 +57,7 @@ public class BlockHumus extends Block {
 		}
 	}
 
-	private static boolean isEnrooted(World world, BlockPos pos) {
+	private static boolean isEnrooted(Level world, BlockPos pos) {
 		for (int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++) {
 				if (i == 0 && j == 0) {
@@ -66,7 +66,7 @@ public class BlockHumus extends Block {
 				BlockPos blockPos = pos.offset(i, 1, j);
 				BlockState state = world.getBlockState(blockPos);
 				Block block = state.getBlock();
-				if (block.is(BlockTags.LOGS) || block instanceof IGrowable) {
+				if (block.is(BlockTags.LOGS) || block instanceof BonemealableBlock) {
 					return true;
 				}
 			}
@@ -78,7 +78,7 @@ public class BlockHumus extends Block {
 	/**
 	 * If a tree or sapling is in the vicinity, there is a chance, that the soil will degrade.
 	 */
-	private static void degradeSoil(World world, final BlockPos pos) {
+	private static void degradeSoil(Level world, final BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 
 		int degrade = blockState.getValue(DEGRADE);
@@ -94,7 +94,7 @@ public class BlockHumus extends Block {
 	}
 
 	@Override
-	public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction direction, IPlantable plantable) {
+	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction direction, IPlantable plantable) {
 		PlantType plantType = plantable.getPlantType(world, pos);
 		return plantType == PlantType.CROP || plantType == PlantType.PLAINS;
 	}

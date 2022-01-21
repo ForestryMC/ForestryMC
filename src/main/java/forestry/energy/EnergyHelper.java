@@ -2,8 +2,8 @@ package forestry.energy;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
 
 import forestry.core.config.Preference;
 import net.minecraftforge.common.util.LazyOptional;
@@ -44,7 +44,7 @@ public class EnergyHelper {
 	 *
 	 * @return amount sent
 	 */
-	public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable TileEntity tile) {
+	public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable BlockEntity tile) {
 		return sendEnergy(energyManager, orientation, tile, Integer.MAX_VALUE, false);
 	}
 
@@ -54,7 +54,7 @@ public class EnergyHelper {
 	 *
 	 * @return amount sent
 	 */
-	public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable TileEntity tile, int amount, boolean simulate) {
+	public static int sendEnergy(EnergyManager energyManager, Direction orientation, @Nullable BlockEntity tile, int amount, boolean simulate) {
 		int extractable = energyManager.extractEnergy(amount, true);
 		if (extractable > 0) {
 			Direction side = orientation.getOpposite();
@@ -65,7 +65,7 @@ public class EnergyHelper {
 		return 0;
 	}
 
-	private static int sendEnergyToTile(@Nullable TileEntity tile, Direction side, int extractable, boolean simulate) {
+	private static int sendEnergyToTile(@Nullable BlockEntity tile, Direction side, int extractable, boolean simulate) {
 		if (tile == null) {
 			return 0;
 		}
@@ -88,11 +88,11 @@ public class EnergyHelper {
 	/**
 	 * @return whether this can send energy to the target tile
 	 */
-	public static boolean canSendEnergy(EnergyManager energyManager, Direction orientation, TileEntity tile) {
+	public static boolean canSendEnergy(EnergyManager energyManager, Direction orientation, BlockEntity tile) {
 		return sendEnergy(energyManager, orientation, tile, Integer.MAX_VALUE, true) > 0;
 	}
 
-	public static boolean isEnergyReceiverOrEngine(Direction side, @Nullable TileEntity tile) {
+	public static boolean isEnergyReceiverOrEngine(Direction side, @Nullable BlockEntity tile) {
 		if (tile == null) {
 			return false;
 		}

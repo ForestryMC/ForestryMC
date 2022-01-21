@@ -1,18 +1,24 @@
 package forestry.core.worldgen;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
 import net.minecraft.world.gen.feature.structure.*;
 
 import java.util.List;
 
+import net.minecraft.data.worldgen.DesertVillagePools;
+import net.minecraft.data.worldgen.PlainVillagePools;
+import net.minecraft.data.worldgen.SavannaVillagePools;
+import net.minecraft.data.worldgen.SnowyVillagePools;
+import net.minecraft.data.worldgen.TaigaVillagePools;
+
 public class VillagerJigsaw {
 	public static void init()
 	{
-		PlainsVillagePools.bootstrap();
+		PlainVillagePools.bootstrap();
 		SnowyVillagePools.bootstrap();
 		SavannaVillagePools.bootstrap();
 		DesertVillagePools.bootstrap();
@@ -26,7 +32,7 @@ public class VillagerJigsaw {
 	}
 
 	private static void addVillagerHouse(String type, String biome, int weight) {
-		addToJigsawPattern(new ResourceLocation("village/" + biome + "/houses"), JigsawPiece.legacy("forestry" + ":village/" + type + "_house_" + biome + "_1").apply(JigsawPattern.PlacementBehaviour.RIGID), weight);
+		addToJigsawPattern(new ResourceLocation("village/" + biome + "/houses"), StructurePoolElement.legacy("forestry" + ":village/" + type + "_house_" + biome + "_1").apply(StructureTemplatePool.Projection.RIGID), weight);
 	}
 
 	/**
@@ -38,11 +44,11 @@ public class VillagerJigsaw {
 	 *
 	 * @author abigailfails / abnormals
 	 */
-	public static void addToJigsawPattern(ResourceLocation toAdd, JigsawPiece newPiece, int weight) {
-		JigsawPattern oldPool = (JigsawPattern)WorldGenRegistries.TEMPLATE_POOL.get(toAdd);
+	public static void addToJigsawPattern(ResourceLocation toAdd, StructurePoolElement newPiece, int weight) {
+		StructureTemplatePool oldPool = (StructureTemplatePool)BuiltinRegistries.TEMPLATE_POOL.get(toAdd);
 		if (oldPool != null) {
 			oldPool.rawTemplates.add(Pair.of(newPiece, weight));
-			List<JigsawPiece> jigsawPieces = oldPool.templates;
+			List<StructurePoolElement> jigsawPieces = oldPool.templates;
 
 			for(int i = 0; i < weight; ++i) {
 				jigsawPieces.add(newPiece);

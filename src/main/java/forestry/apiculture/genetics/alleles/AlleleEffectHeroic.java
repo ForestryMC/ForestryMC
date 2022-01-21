@@ -12,8 +12,8 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.damagesource.DamageSource;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -30,8 +30,8 @@ public class AlleleEffectHeroic extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<MonsterEntity> mobs = getEntitiesInRange(genome, housing, MonsterEntity.class);
-		for (MonsterEntity mob : mobs) {
+		List<Monster> mobs = getEntitiesInRange(genome, housing, Monster.class);
+		for (Monster mob : mobs) {
 			mob.hurt(damageSourceBeeHeroic, 2);
 		}
 

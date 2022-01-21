@@ -17,14 +17,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.ITree;
@@ -51,13 +51,13 @@ public class FarmableGE implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
+	public boolean isSaplingAt(Level world, BlockPos pos, BlockState blockState) {
 		return ArboricultureBlocks.SAPLING_GE.blockEqual(blockState);
 	}
 
 	@Override
 	@Nullable
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+	public ICrop getCropAt(Level world, BlockPos pos, BlockState blockState) {
 		Block block = blockState.getBlock();
 
 		if (!block.is(BlockTags.LOGS)) {
@@ -68,7 +68,7 @@ public class FarmableGE implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(Player player, ItemStack germling, Level world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 
 		ITree tree = treeRoot.create(germling).orElse(null);

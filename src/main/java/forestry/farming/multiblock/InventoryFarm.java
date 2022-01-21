@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.farming.IFarmable;
 
@@ -33,7 +33,7 @@ public class InventoryFarm extends InventoryPlantation<FarmController> implement
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos) {
+	public boolean plantGermling(IFarmable germling, Player player, BlockPos pos) {
 		for (int i = 0; i < germlingsInventory.getContainerSize(); i++) {
 			ItemStack germlingStack = germlingsInventory.getItem(i);
 			if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {

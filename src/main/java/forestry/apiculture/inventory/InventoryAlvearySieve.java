@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.apiculture.multiblock.TileAlvearySieve;
 import forestry.core.features.CoreItems;
@@ -59,7 +59,7 @@ public class InventoryAlvearySieve extends InventoryAdapterTile<TileAlvearySieve
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onTake(int slotIndex, PlayerEntity player) {
+	public void onTake(int slotIndex, Player player) {
 		if (slotIndex == SLOT_SIEVE) {
 			for (int i = SLOT_POLLEN_1; i < SLOT_POLLEN_1 + SLOTS_POLLEN_COUNT; i++) {
 				setItem(i, ItemStack.EMPTY);

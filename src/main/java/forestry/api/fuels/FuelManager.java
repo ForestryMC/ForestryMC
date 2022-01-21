@@ -7,8 +7,8 @@ package forestry.api.fuels;
 
 import java.util.Map;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.ItemStack;
 
 public class FuelManager {
 	/**

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapterTile;

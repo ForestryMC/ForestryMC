@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -20,7 +20,7 @@ import forestry.mail.tiles.TileStampCollector;
 public class GuiStampCollector extends GuiForestry<ContainerStampCollector> {
 	private final TileStampCollector tile;
 
-	public GuiStampCollector(ContainerStampCollector container, PlayerInventory inv, ITextComponent title) {
+	public GuiStampCollector(ContainerStampCollector container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/philatelist.png", container, inv, title);
 		this.tile = container.getTile();
 		this.imageWidth = 176;

@@ -29,9 +29,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.CommandDispatcher;
 
@@ -239,7 +239,7 @@ public class ModuleManager implements IModuleManager {
 	}
 
 	public static void serverStarting(MinecraftServer server) {
-		CommandDispatcher<CommandSource> dispatcher = server.getCommands().getDispatcher();
+		CommandDispatcher<CommandSourceStack> dispatcher = server.getCommands().getDispatcher();
 
 		loadedModules.stream()
 				.map(IForestryModule::register)

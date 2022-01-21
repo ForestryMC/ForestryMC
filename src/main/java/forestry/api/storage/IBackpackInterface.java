@@ -12,9 +12,9 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * The Backpack Interface allows you to add items to Forestry backpacks or create your own backpacks.
@@ -48,7 +48,7 @@ public interface IBackpackInterface {
 	 * @param tab
 	 * @return Created backpack item.
 	 */
-	Item createNaturalistBackpack(IBackpackDefinition definition, String rootUid, ItemGroup tab);
+	Item createNaturalistBackpack(IBackpackDefinition definition, String rootUid, CreativeModeTab tab);
 
 	/**
 	 * Makes a new naturalist backpack filter. Only accepts items from a specific {@link IForestrySpeciesRoot}.

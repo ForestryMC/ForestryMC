@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.util.Collections;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.fuels.RainSubstrate;
 
@@ -28,20 +28,20 @@ public class RainmakerRecipeWrapper implements IRecipeCategoryExtension {
 	}
 
 	@Override
-	public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+	public void drawInfo(int recipeWidth, int recipeHeight, PoseStack matrixStack, double mouseX, double mouseY) {
+		Font fontRenderer = Minecraft.getInstance().font;
 		fontRenderer.draw(matrixStack, getEffectString(), 24, 0, Color.darkGray.getRGB());
-		fontRenderer.draw(matrixStack, new TranslationTextComponent("for.jei.rainmaker.speed", substrate.getSpeed()), 24, 10, Color.gray.getRGB());
+		fontRenderer.draw(matrixStack, new TranslatableComponent("for.jei.rainmaker.speed", substrate.getSpeed()), 24, 10, Color.gray.getRGB());
 		if (!substrate.isReverse()) {
-			fontRenderer.draw(matrixStack, new TranslationTextComponent("for.jei.rainmaker.duration", substrate.getDuration()), 24, 20, Color.gray.getRGB());
+			fontRenderer.draw(matrixStack, new TranslatableComponent("for.jei.rainmaker.duration", substrate.getDuration()), 24, 20, Color.gray.getRGB());
 		}
 	}
 
-	private TranslationTextComponent getEffectString() {
+	private TranslatableComponent getEffectString() {
 		if (substrate.isReverse()) {
-			return new TranslationTextComponent("for.jei.rainmaker.stops.rain");
+			return new TranslatableComponent("for.jei.rainmaker.stops.rain");
 		} else {
-			return new TranslationTextComponent("for.jei.rainmaker.causes.rain");
+			return new TranslatableComponent("for.jei.rainmaker.causes.rain");
 		}
 	}
 }

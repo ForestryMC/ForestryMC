@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public interface INbtReadable {
-	void read(CompoundNBT nbt);
+	void read(CompoundTag nbt);
 }

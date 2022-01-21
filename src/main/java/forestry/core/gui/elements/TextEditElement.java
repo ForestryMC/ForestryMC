@@ -5,15 +5,15 @@ import java.awt.Rectangle;
 import java.util.function.Predicate;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public class TextEditElement extends GuiElement implements IValueElement<String> {
 
 	@Nullable
-	private TextFieldWidget field;
+	private EditBox field;
 	private int maxLength;
 	private Predicate<String> validator;
 
@@ -57,7 +57,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	@Override
 	public void setAssignedBounds(Rectangle bounds) {
 		super.setAssignedBounds(bounds);
-		field = new TextFieldWidget(Minecraft.getInstance().font, 0, 0, bounds.width, bounds.height, StringTextComponent.EMPTY);
+		field = new EditBox(Minecraft.getInstance().font, 0, 0, bounds.width, bounds.height, TextComponent.EMPTY);
 		field.setBordered(false);
 		if (maxLength > 0) {
 			field.setMaxLength(maxLength);
@@ -118,7 +118,7 @@ public class TextEditElement extends GuiElement implements IValueElement<String>
 	//TODO - maybe need to supply start/end points now?
 	//TODO third param probably partial ticks. Is it being 0 a problem?
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		if (field == null) {
 			return;
 		}

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerForestry;
@@ -37,7 +37,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 		}
 	}
 
-	public GuiBeeHousing(C container, PlayerInventory inv, ITextComponent title) {
+	public GuiBeeHousing(C container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + container.getIcon().path, container, inv, container.getDelegate(), 25, 7, 2, 0);
 		this.delegate = container.getDelegate();
 		this.imageHeight = 190;
@@ -53,7 +53,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		bindTexture(textureFile);
@@ -61,12 +61,12 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 	}
 
 	@Override
-	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
+	protected void drawSelectedSlot(PoseStack transform, int selectedSlot) {
 		Slot slot = container.getForestrySlot(1 + selectedSlot);
 		SELECTED_COMB_SLOT.draw(transform, topPos + slot.y - 3, leftPos + slot.x - 3);
 	}
 
-	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
+	private void drawHealthMeter(PoseStack transform, int x, int y, int height, EnumTankLevel rated) {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 

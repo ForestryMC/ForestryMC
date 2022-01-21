@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -84,11 +84,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	private int noPowerTime = 0;
 
 	@Nullable
-	private Vector3i offset;
+	private Vec3i offset;
 	@Nullable
-	private Vector3i area;
+	private Vec3i area;
 
-	public FarmController(World world) {
+	public FarmController(Level world) {
 		super(world, FarmMultiblockSizeLimits.instance);
 
 		this.inventory = new InventoryFarm(this);
@@ -118,7 +118,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data) {
+	public void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundTag data) {
 		this.read(data);
 	}
 
@@ -237,7 +237,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		data = super.write(data);
 		sockets.write(data);
 		manager.write(data);
@@ -246,7 +246,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		super.read(data);
 		sockets.read(data);
 		manager.read(data);
@@ -256,13 +256,13 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public void formatDescriptionPacket(CompoundNBT data) {
+	public void formatDescriptionPacket(CompoundTag data) {
 		sockets.write(data);
 		manager.write(data);
 	}
 
 	@Override
-	public void decodeDescriptionPacket(CompoundNBT data) {
+	public void decodeDescriptionPacket(CompoundTag data) {
 		sockets.read(data);
 		manager.read(data);
 
@@ -344,18 +344,18 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public Vector3i getOffset() {
+	public Vec3i getOffset() {
 		if (offset == null) {
-			Vector3i area = getArea();
-			offset = new Vector3i(-area.getX() / 2, -2, -area.getZ() / 2);
+			Vec3i area = getArea();
+			offset = new Vec3i(-area.getX() / 2, -2, -area.getZ() / 2);
 		}
 		return offset;
 	}
 
 	@Override
-	public Vector3i getArea() {
+	public Vec3i getArea() {
 		if (area == null) {
-			area = new Vector3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
+			area = new Vec3i(7 + allowedExtent * 2, 13, 7 + allowedExtent * 2);
 		}
 		return area;
 	}
@@ -409,8 +409,8 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, World world, BlockPos pos, FarmDirection direction) {
-		PlayerEntity player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
+	public boolean plantGermling(IFarmable germling, Level world, BlockPos pos, FarmDirection direction) {
+		Player player = PlayerUtil.getFakePlayer(world, getOwnerHandler().getOwner());
 		return player != null && inventory.plantGermling(germling, player, pos);
 	}
 
@@ -493,7 +493,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
-	public boolean isValidPlatform(World world, BlockPos pos) {
+	public boolean isValidPlatform(Level world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		return FarmHelper.bricks.contains(blockState.getBlock());
 	}

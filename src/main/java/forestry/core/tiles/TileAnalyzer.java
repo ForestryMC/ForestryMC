@@ -13,17 +13,17 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,14 +57,14 @@ import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.utils.RootUtils;
 
-public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
+public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private final IInventory invInput;
-	private final IInventory invOutput;
+	private final Container invInput;
+	private final Container invOutput;
 
 	@Nullable
 	private IIndividual specimenToAnalyze;
@@ -83,14 +83,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
@@ -271,7 +271,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerAnalyzer(windowId, player.inventory, this);
 	}
 }

@@ -12,10 +12,10 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.core.tooltips.IToolTipProvider;
 import forestry.api.core.tooltips.ToolTip;
@@ -29,7 +29,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	@Nullable
 	private ToolTip toolTips;
 
-	public SlotForestry(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	public SlotForestry(Container inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 		this.stackLimit = -1;
 	}
@@ -70,7 +70,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 	}
 
 	@Override
-	public boolean mayPickup(PlayerEntity stack) {
+	public boolean mayPickup(Player stack) {
 		return !isPhantom();
 	}
 

@@ -12,10 +12,10 @@ package forestry.climatology.blocks;
 
 import java.util.Locale;
 
-import net.minecraft.state.EnumProperty;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.util.StringRepresentable;
 
-public enum State implements IStringSerializable {
+public enum State implements StringRepresentable {
 	ON, OFF;
 
 	public static final EnumProperty<State> PROPERTY = EnumProperty.create("state", State.class);

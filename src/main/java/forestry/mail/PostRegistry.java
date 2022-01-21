@@ -15,11 +15,11 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -51,12 +51,12 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address is valid for PO Boxes.
 	 */
 	@Override
-	public boolean isValidPOBox(World world, IMailAddress address) {
+	public boolean isValidPOBox(Level world, IMailAddress address) {
 		return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	@Nullable
-	public static POBox getPOBox(ServerWorld world, IMailAddress address) {
+	public static POBox getPOBox(ServerLevel world, IMailAddress address) {
 
 		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
@@ -70,7 +70,7 @@ public class PostRegistry implements IPostRegistry {
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(ServerWorld world, IMailAddress add) {
+	public static POBox getOrCreatePOBox(ServerLevel world, IMailAddress add) {
 		POBox pobox = getPOBox(world, add);
 
 		if (pobox == null) {
@@ -78,7 +78,7 @@ public class PostRegistry implements IPostRegistry {
 			pobox.setDirty();
 			cachedPOBoxes.put(add, pobox);
 
-			PlayerEntity player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
+			Player player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
 			if (player != null) {
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
@@ -93,7 +93,7 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address can be an address for a trade station
 	 */
 	@Override
-	public boolean isValidTradeAddress(World world, IMailAddress address) {
+	public boolean isValidTradeAddress(Level world, IMailAddress address) {
 		return address.getType() == EnumAddressee.TRADER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
@@ -103,12 +103,12 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the trade address has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address) {
+	public boolean isAvailableTradeAddress(ServerLevel world, IMailAddress address) {
 		return getTradeStation(world, address) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(ServerWorld world, IMailAddress address) {
+	public TradeStation getTradeStation(ServerLevel world, IMailAddress address) {
 		if (cachedTradeStations.containsKey(address)) {
 			return (TradeStation) cachedTradeStations.get(address);
 		}
@@ -127,7 +127,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address) {
+	public TradeStation getOrCreateTradeStation(ServerLevel world, GameProfile owner, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
@@ -141,7 +141,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(ServerWorld world, IMailAddress address) {
+	public void deleteTradeStation(ServerLevel world, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 		if (trade == null) {
 			return;
@@ -159,7 +159,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public IPostOffice getPostOffice(ServerWorld world) {
+	public IPostOffice getPostOffice(ServerLevel world) {
 		if (cachedPostOffice != null) {
 			return cachedPostOffice;
 		}
@@ -207,7 +207,7 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public ItemStack createLetterStack(ILetter letter) {
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		letter.write(compoundNBT);
 
 		ItemStack letterStack = LetterProperties.createStampedLetterStack(letter);

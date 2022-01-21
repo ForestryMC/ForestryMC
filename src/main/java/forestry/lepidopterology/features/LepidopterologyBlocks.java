@@ -1,7 +1,7 @@
 package forestry.lepidopterology.features;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemBlockBase;

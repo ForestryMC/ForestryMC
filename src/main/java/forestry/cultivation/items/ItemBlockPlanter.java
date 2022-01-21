@@ -1,8 +1,8 @@
 package forestry.cultivation.items;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.core.items.ItemBlockForestry;
 import forestry.cultivation.blocks.BlockPlanter;
@@ -14,8 +14,8 @@ public class ItemBlockPlanter extends ItemBlockForestry<BlockPlanter> {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack stack) {
+	public Component getName(ItemStack stack) {
 		String name = getBlock().blockType.getSerializedName();
-		return new TranslationTextComponent("block.forestry.planter." + (getBlock().getMode().getSerializedName()), new TranslationTextComponent("block.forestry." + name));
+		return new TranslatableComponent("block.forestry.planter." + (getBlock().getMode().getSerializedName()), new TranslatableComponent("block.forestry." + name));
 	}
 }

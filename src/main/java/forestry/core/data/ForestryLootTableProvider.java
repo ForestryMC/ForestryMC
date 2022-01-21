@@ -18,26 +18,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.loot.LootParameterSet;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTableManager;
-import net.minecraft.loot.ValidationTracker;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
 
 import forestry.core.utils.Log;
 
-public class ForestryLootTableProvider implements IDataProvider {
+public class ForestryLootTableProvider implements DataProvider {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	private final DataGenerator dataGenerator;
-	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
-			ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootParameterSets.BLOCK), Pair.of(ForestryChestLootTables::new, LootParameterSets.CHEST));
+	private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables =
+			ImmutableList.of(Pair.of(ForestryBlockLootTables::new, LootContextParamSets.BLOCK), Pair.of(ForestryChestLootTables::new, LootContextParamSets.CHEST));
 
 	public ForestryLootTableProvider(DataGenerator dataGeneratorIn) {
 		this.dataGenerator = dataGeneratorIn;
@@ -47,7 +47,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 	 * Performs this provider's action.
 	 */
 	@Override
-	public void run(DirectoryCache cache) {
+	public void run(HashCache cache) {
 		Path path = this.dataGenerator.getOutputFolder();
 		Map<ResourceLocation, LootTable> map = Maps.newHashMap();
 		tables.forEach((entry) -> entry.getFirst().get().accept((location, builder) -> {
@@ -55,7 +55,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 				throw new IllegalStateException("Duplicate loot table " + location);
 			}
 		}));
-		ValidationTracker validationtracker = new ValidationTracker(LootParameterSets.ALL_PARAMS, (location) -> null, map::get);
+		ValidationContext validationtracker = new ValidationContext(LootContextParamSets.ALL_PARAMS, (location) -> null, map::get);
 
 		validate(map, validationtracker);
 
@@ -68,7 +68,7 @@ public class ForestryLootTableProvider implements IDataProvider {
 				Path path1 = getPath(path, location);
 
 				try {
-					IDataProvider.save(GSON, cache, LootTableManager.serialize(table), path1);
+					DataProvider.save(GSON, cache, LootTables.serialize(table), path1);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save loot table {}", path1, ioexception);
 				}
@@ -77,12 +77,12 @@ public class ForestryLootTableProvider implements IDataProvider {
 		}
 	}
 
-	protected void validate(Map<ResourceLocation, LootTable> map, ValidationTracker tracker) {
+	protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext tracker) {
 		/*for (ResourceLocation resourcelocation : Sets.difference(LootTables.all(), map.keySet())) {
 			validationtracker.reportProblem("Missing built-in table: " + resourcelocation);
 		}*/
 
-		map.forEach((location, loot) -> LootTableManager.validate(tracker, location, loot));
+		map.forEach((location, loot) -> LootTables.validate(tracker, location, loot));
 	}
 
 	private static Path getPath(Path path, ResourceLocation id) {

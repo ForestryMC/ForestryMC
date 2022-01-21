@@ -6,15 +6,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -50,7 +50,7 @@ public class RegisterVillager {
 
 	@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Registers {
-		public static final DeferredRegister<PointOfInterestType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
+		public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
 		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Constants.MOD_ID);
 
 		// public static final RegistryObject<PointOfInterestType> POI_TREE_CHEST = POINTS_OF_INTEREST.register("tree_chest", () -> RegisterVillagerPointOfInterest.create("tree_chest", RegisterVillagerPointOfInterest.assembleStates(ArboricultureBlocks.TREE_CHEST.getBlock())));
@@ -61,7 +61,7 @@ public class RegisterVillager {
 	public static class Events {
 		@SubscribeEvent
 		public void villagerTrades(VillagerTradesEvent event) {
-			Int2ObjectMap<List<VillagerTrades.ITrade>> trades = event.getTrades();
+			Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 			if (ARBORIST.equals(event.getType().getRegistryName())) {
 				event.getTrades().get(1).add(new GivePlanksForEmeralds(new VillagerTrade.PriceInterval(1, 4), new VillagerTrade.PriceInterval(10, 32), 8, 2, 0F));
 				event.getTrades().get(1).add(new GivePollenForEmeralds(new VillagerTrade.PriceInterval(1, 1), new VillagerTrade.PriceInterval(1, 3), EnumGermlingType.SAPLING, 4, 8, 2, 0F));
@@ -80,7 +80,7 @@ public class RegisterVillager {
 		}
 	}
 
-	private static class GivePlanksForEmeralds implements VillagerTrades.ITrade {
+	private static class GivePlanksForEmeralds implements VillagerTrades.ItemListing {
 		final VillagerTrade.PriceInterval emeraldsPriceInfo;
 		final VillagerTrade.PriceInterval sellingPriceInfo;
 		final int maxUses;
@@ -106,7 +106,7 @@ public class RegisterVillager {
 		}
 	}
 
-	private static class GiveLogsForEmeralds implements VillagerTrades.ITrade {
+	private static class GiveLogsForEmeralds implements VillagerTrades.ItemListing {
 		final VillagerTrade.PriceInterval emeraldsPriceInfo;
 		final VillagerTrade.PriceInterval sellingPriceInfo;
 		final int maxUses;
@@ -132,7 +132,7 @@ public class RegisterVillager {
 		}
 	}
 
-	private static class GivePollenForEmeralds implements VillagerTrades.ITrade {
+	private static class GivePollenForEmeralds implements VillagerTrades.ItemListing {
 		final VillagerTrade.PriceInterval buyingPriceInfo;
 		final VillagerTrade.PriceInterval sellingPriceInfo;
 		final IOrganismType type;

@@ -12,12 +12,12 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.IPlantable;
 
@@ -37,9 +37,9 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		Vector3i area = getModifiedArea(genome, housing);
+		Vec3i area = getModifiedArea(genome, housing);
 
 		int blockX = getRandomOffset(world.random, housingCoordinates.getX(), area.getX());
 		int blockZ = getRandomOffset(world.random, housingCoordinates.getZ(), area.getZ());
@@ -63,11 +63,11 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 		return centrePos + random.nextInt(offset) - offset / 2;
 	}
 
-	private static boolean tryTickColumn(World world, int x, int z, int maxY, int minY) {
+	private static boolean tryTickColumn(Level world, int x, int z, int maxY, int minY) {
 		for (int y = maxY; y >= minY; --y) {
 			BlockState state = world.getBlockState(new BlockPos(x, y, z));
 			Block block = state.getBlock();
-			if (block.isRandomlyTicking(state) && (block instanceof IGrowable || block instanceof IPlantable)) {
+			if (block.isRandomlyTicking(state) && (block instanceof BonemealableBlock || block instanceof IPlantable)) {
 				world.getBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
 				return true;
 			}

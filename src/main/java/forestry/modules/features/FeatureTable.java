@@ -9,8 +9,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.core.IFeatureSubtype;
 import forestry.api.core.IItemProvider;

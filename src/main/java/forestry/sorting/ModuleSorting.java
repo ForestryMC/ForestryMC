@@ -1,6 +1,6 @@
 package forestry.sorting;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,7 +39,7 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
+		MenuScreens.register(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
 	}
 
 	@Override

@@ -14,37 +14,37 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 
 public class HintLedger extends Ledger {
 
-	private final ITextComponent hintString;
-	private final ITextComponent hintTooltip;
+	private final Component hintString;
+	private final Component hintTooltip;
 
 	public HintLedger(LedgerManager manager, List<String> hints) {
 		super(manager, "hint");
 		int position = new Random().nextInt(hints.size());
 		String hint = hints.get(position);
 
-		hintString = new TranslationTextComponent("for.hints." + hint + ".desc");
-		hintTooltip = new TranslationTextComponent("for.hints." + hint + ".tag");
+		hintString = new TranslatableComponent("for.hints." + hint + ".desc");
+		hintTooltip = new TranslatableComponent("for.hints." + hint + ".tag");
 
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer fontRenderer = minecraft.font;
+		Font fontRenderer = minecraft.font;
 		//TODO text component
 		int lineCount = fontRenderer.split(hintString, maxTextWidth).size();
 		maxHeight = (lineCount + 1) * fontRenderer.lineHeight + 20;
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 
 		// Draw background
 		drawBackground(transform, y, x);
@@ -62,7 +62,7 @@ public class HintLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
+	public Component getTooltip() {
 		return hintTooltip;
 	}
 }

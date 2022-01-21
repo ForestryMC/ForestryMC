@@ -16,11 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import forestry.core.config.Preference;
 import net.minecraftforge.api.distmarker.Dist;
@@ -128,15 +128,15 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
-		ScreenManager.register(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
-		ScreenManager.register(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
-		ScreenManager.register(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
-		ScreenManager.register(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
-		ScreenManager.register(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
-		ScreenManager.register(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
-		ScreenManager.register(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
-		ScreenManager.register(FactoryContainers.STILL.containerType(), GuiStill::new);
+		MenuScreens.register(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
+		MenuScreens.register(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
+		MenuScreens.register(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
+		MenuScreens.register(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
+		MenuScreens.register(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
+		MenuScreens.register(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
+		MenuScreens.register(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
+		MenuScreens.register(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
+		MenuScreens.register(FactoryContainers.STILL.containerType(), GuiStill::new);
 	}
 
 	@Override

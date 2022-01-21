@@ -15,13 +15,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.Level;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -50,14 +50,14 @@ public class PreviewHandlerClient {
 
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent tickEvent) {
-		PlayerEntity player = Minecraft.getInstance().player;
+		Player player = Minecraft.getInstance().player;
 		if (player == null) {
 			return;
 		}
-		World world = player.level;
+		Level world = player.level;
 		tickHelper.onTick();
 		if (tickHelper.updateOnInterval(100)) {
-			ItemStack stack = player.getItemInHand(Hand.MAIN_HAND);
+			ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 			if (stack.isEmpty()
 					|| !ClimatologyItems.HABITAT_SCREEN.itemEqual(stack)
 					|| !ItemHabitatScreen.isValid(stack, player.level)
@@ -89,7 +89,7 @@ public class PreviewHandlerClient {
 
 	private class PreviewRenderer {
 		private final Set<BlockPos> previewPositions = new HashSet<>();
-		private final AxisAlignedBB boundingBox = VoxelShapes.block().bounds().deflate(0.125F);
+		private final AABB boundingBox = Shapes.block().bounds().deflate(0.125F);
 		private boolean addedToBus = false;
 		@Nullable
 		private BlockPos previewOrigin = null;
@@ -153,7 +153,7 @@ public class PreviewHandlerClient {
 				return;
 			}
 			float partialTicks = event.getPartialTicks();
-			PlayerEntity player = Minecraft.getInstance().player;
+			Player player = Minecraft.getInstance().player;
 			double playerX = player.xOld + (player.getX() - player.xOld) * partialTicks;
 			double playerY = player.yOld + (player.getY() - player.yOld) * partialTicks;
 			double playerZ = player.zOld + (player.getZ() - player.zOld) * partialTicks;
@@ -165,7 +165,7 @@ public class PreviewHandlerClient {
 			RenderSystem.disableDepthTest();
 
 			for (BlockPos position : previewPositions) {
-				AxisAlignedBB boundingBox = this.boundingBox.move(position);
+				AABB boundingBox = this.boundingBox.move(position);
 				//				WorldRenderer.renderFilledBox(boundingBox, 0.75F, 0.5F, 0.0F, 0.45F);
 				//TODO rendering
 			}

@@ -1,6 +1,6 @@
 package genetics.api.individual;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.IGeneticFactory;
 import genetics.api.alleles.IAllele;
@@ -141,5 +141,5 @@ public interface IGenome {
 	 * <p>
 	 * You can read the NBT-Data with {@link IGeneticFactory#createGenome(IKaryotype, IChromosome[])}.
 	 */
-	CompoundNBT writeToNBT(CompoundNBT compound);
+	CompoundTag writeToNBT(CompoundTag compound);
 }

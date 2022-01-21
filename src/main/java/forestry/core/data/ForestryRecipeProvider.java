@@ -9,22 +9,22 @@ import java.util.function.Consumer;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.data.CookingRecipeBuilder;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
@@ -102,7 +102,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
+	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
 		RecipeDataHelper helper = new RecipeDataHelper(consumer);
 		registerArboricultureRecipes(helper);
 		registerApicultureRecipes(helper);
@@ -599,30 +599,30 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerCoreRecipes(RecipeDataHelper helper) {
-		Consumer<IFinishedRecipe> consumer = helper.getConsumer();
+		Consumer<FinishedRecipe> consumer = helper.getConsumer();
 
-		CookingRecipeBuilder.smelting(
+		SimpleCookingRecipeBuilder.smelting(
 				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)),
 				CoreItems.APATITE,
 				0.5F,
 				200)
 				.unlockedBy("has_apatite_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_blasting"));
-		CookingRecipeBuilder.smelting(
+		SimpleCookingRecipeBuilder.smelting(
 				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)),
 				CoreItems.INGOT_TIN,
 				0.5F,
 				200)
 				.unlockedBy("has_tin_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_blasting"));
-		CookingRecipeBuilder.smelting(
+		SimpleCookingRecipeBuilder.smelting(
 				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)),
 				CoreItems.INGOT_COPPER,
 				0.5F,
 				200)
 				.unlockedBy("has_copper_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "copper_ingot_from_blasting"));
-		CookingRecipeBuilder.smelting(
+		SimpleCookingRecipeBuilder.smelting(
 				Ingredient.of(CoreItems.PEAT),
 				CoreItems.ASH.item(),
 				0.0F,
@@ -1217,7 +1217,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void saveAdvancement(DirectoryCache cache, JsonObject advancementJson, Path pathIn) {
+	protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path pathIn) {
 		//NOOP - We dont replace any of the advancement things yet...
 	}
 

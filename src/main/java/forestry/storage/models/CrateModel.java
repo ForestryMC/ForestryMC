@@ -12,20 +12,20 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -66,14 +66,14 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 	}
 
 	@Nullable
-	private IBakedModel getCustomContentModel(ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform transform) {
+	private BakedModel getCustomContentModel(ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform) {
 		ResourceLocation registryName = crated.getRegistryName();
 		if (registryName == null) {
 			return null;
 		}
 		String containedName = registryName.getPath().replace("crated.", "");
 		ResourceLocation location = new ResourceLocation(CUSTOM_CRATES + containedName);
-		IUnbakedModel model;
+		UnbakedModel model;
 		if (!ResourceUtil.resourceExists(new ResourceLocation(location.getNamespace(), "models/" + location.getPath() + ".json"))) {
 			return null;
 		}
@@ -86,9 +86,9 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 	}
 
 	@Override
-	public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform transform, ItemOverrideList overrides, ResourceLocation modelLocation) {
+	public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, ResourceLocation modelLocation) {
 		if (bakedQuads.isEmpty()) {
-			IBakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
+			BakedModel bakedModel = bakery.getBakedModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
 				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), EmptyModelData.INSTANCE)) {
@@ -96,9 +96,9 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 				}
 			}
 		}
-		IBakedModel model;
+		BakedModel model;
 		List<BakedQuad> quads = new LinkedList<>(bakedQuads);
-		IBakedModel contentModel = getCustomContentModel(bakery, spriteGetter, transform);
+		BakedModel contentModel = getCustomContentModel(bakery, spriteGetter, transform);
 		if (contentModel == null) {
 			model = new CrateBakedModel(quads, contained);
 		} else {
@@ -109,7 +109,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 	}
 
 	@Override
-	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+	public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return Collections.emptyList();
 	}
 
@@ -118,13 +118,13 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 		public static final ResourceLocation LOCATION = new ResourceLocation(Constants.MOD_ID, "crate-filled");
 
 		@Override
-		public void onResourceManagerReload(IResourceManager resourceManager) {
+		public void onResourceManagerReload(ResourceManager resourceManager) {
 			clearCachedQuads();
 		}
 
 		@Override
 		public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
-			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, JSONUtils.getAsString(modelContents, "variant"));
+			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, GsonHelper.getAsString(modelContents, "variant"));
 			Item item = ForgeRegistries.ITEMS.getValue(registryName);
 			if (!(item instanceof ItemCrated)) {
 				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CrateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);

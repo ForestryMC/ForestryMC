@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 
 public class GuiBackpack extends GuiForestry<ContainerBackpack> {
 
-	public GuiBackpack(ContainerBackpack container, PlayerInventory inv, ITextComponent title) {
+	public GuiBackpack(ContainerBackpack container, Inventory inv, Component title) {
 		super(getTextureString(container), container, inv, title);
 		ContainerBackpack.Size size = container.getSize();
 

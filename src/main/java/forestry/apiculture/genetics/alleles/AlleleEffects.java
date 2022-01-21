@@ -3,7 +3,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffects;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeEffect;
@@ -37,8 +37,8 @@ public class AlleleEffects {
 			effectNone = new AlleleEffectNone("none", true),
 			effectAggressive = new AlleleEffectAggressive(),
 			effectHeroic = new AlleleEffectHeroic(),
-				effectBeatific = new AlleleEffectPotion("beatific", false, Effects.REGENERATION, 100),
-				effectMiasmic = new AlleleEffectPotion("miasmic", false, Effects.POISON, 600, 100, 0.1f),
+				effectBeatific = new AlleleEffectPotion("beatific", false, MobEffects.REGENERATION, 100),
+				effectMiasmic = new AlleleEffectPotion("miasmic", false, MobEffects.POISON, 600, 100, 0.1f),
 				effectMisanthrope = new AlleleEffectMisanthrope(),
 				effectGlacial = new AlleleEffectGlacial(),
 				effectRadioactive = new AlleleEffectRadioactive(),
@@ -47,7 +47,7 @@ public class AlleleEffects {
 				effectExploration = new AlleleEffectExploration(),
 				effectFestiveEaster = new AlleleEffectNone("festive_easter", true),
 				effectSnowing = new AlleleEffectSnowing(),
-				effectDrunkard = new AlleleEffectPotion("drunkard", false, Effects.CONFUSION, 100),
+				effectDrunkard = new AlleleEffectPotion("drunkard", false, MobEffects.CONFUSION, 100),
 				effectReanimation = new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
 				effectResurrection = new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
 				effectRepulsion = new AlleleEffectRepulsion(),

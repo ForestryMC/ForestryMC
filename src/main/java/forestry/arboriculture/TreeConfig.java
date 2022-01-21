@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -60,7 +60,7 @@ public class TreeConfig {
 	private final float defaultRarity;
 	private final Set<String> blacklistedDimensions = new HashSet<>();
 	private final Set<String> whitelistedDimensions = new HashSet<>();
-	private final Set<Biome.Category> blacklistedBiomeTypes = new HashSet<>();
+	private final Set<Biome.BiomeCategory> blacklistedBiomeTypes = new HashSet<>();
 	private final Set<Biome> blacklistedBiomes = new HashSet<>();
 	private float spawnRarity;
 
@@ -84,7 +84,7 @@ public class TreeConfig {
 		blacklistedDimensions.addAll(Arrays.asList(config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "blacklist", new String[0]).getStringList()));
 		whitelistedDimensions.addAll(Arrays.asList(config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".dimensions", "whitelist", new String[0]).getStringList()));
 		for (String typeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "types", new String[0]).getStringList()) {
-			blacklistedBiomeTypes.add(Biome.Category.byName(typeName));
+			blacklistedBiomeTypes.add(Biome.BiomeCategory.byName(typeName));
 		}
 		for (String biomeName : config.get(CONFIG_CATEGORY_TREE + "." + treeName + ".biomes.blacklist", "names", new String[0]).getStringList()) {
 			Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
@@ -115,7 +115,7 @@ public class TreeConfig {
 		treeConfig.whitelistedDimensions.add(dimID);
 	}
 
-	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, RegistryKey<World> dimID) {
+	public static boolean isValidDimension(@Nullable ResourceLocation treeUID, ResourceKey<Level> dimID) {
 		TreeConfig treeConfig = configs.get(treeUID);
 		return treeConfig != null ? treeConfig.isValidDimension(dimID.getRegistryName()) : GLOBAL.isValidDimension(dimID.getRegistryName());
 	}
@@ -136,7 +136,7 @@ public class TreeConfig {
 		if (blacklistedBiomes.contains(biome)) {
 			return false;
 		}
-		return Arrays.stream(Biome.Category.values()).noneMatch(blacklistedBiomeTypes::contains);
+		return Arrays.stream(Biome.BiomeCategory.values()).noneMatch(blacklistedBiomeTypes::contains);
 	}
 
 	public static float getSpawnRarity(@Nullable ResourceLocation treeUID) {

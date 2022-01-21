@@ -12,12 +12,12 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
@@ -38,14 +38,14 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	private final POBox mailInventory;
 
 
-	public static ContainerMailbox fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerMailbox fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileMailbox tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileMailbox.class);
 		return new ContainerMailbox(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerMailbox(int windowId, PlayerInventory playerInventory, TileMailbox tile) {
+	public ContainerMailbox(int windowId, Inventory playerInventory, TileMailbox tile) {
 		super(windowId, MailContainers.MAILBOX.containerType(), playerInventory, tile, 35, 145);
-		IInventory inventory = tile.getOrCreateMailInventory(playerInventory.player.level, playerInventory.player.getGameProfile());
+		Container inventory = tile.getOrCreateMailInventory(playerInventory.player.level, playerInventory.player.getGameProfile());
 
 		if (inventory instanceof POBox) {
 			this.mailInventory = (POBox) inventory;
@@ -61,7 +61,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
 		ItemStack stack = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {

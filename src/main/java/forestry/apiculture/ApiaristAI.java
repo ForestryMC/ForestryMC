@@ -11,14 +11,14 @@
 
 package forestry.apiculture;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.apiculture.blocks.BlockApiculture;
@@ -28,17 +28,17 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
 public class ApiaristAI extends MoveToBlockGoal {
-	private final VillagerEntity villager;
+	private final Villager villager;
 	private boolean hasDrone;
 	private boolean hasPrincess;
-	private final Inventory villagerInventory;
+	private final SimpleContainer villagerInventory;
 
 	private static final int SLOT_PRODUCT_1 = InventoryBeeHousing.SLOT_PRODUCT_1;
 	private static final int SLOT_PRODUCT_COUNT = InventoryBeeHousing.SLOT_PRODUCT_COUNT;
 	private static final int SLOT_QUEEN = InventoryBeeHousing.SLOT_QUEEN;
 	private static final int SLOT_DRONE = InventoryBeeHousing.SLOT_DRONE;
 
-	public ApiaristAI(VillagerEntity villager, double speed) {
+	public ApiaristAI(Villager villager, double speed) {
 		super(villager, speed, 16);
 		this.villager = villager;
 		villagerInventory = villager.getInventory();
@@ -60,7 +60,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 		BlockPos housePos = this.blockPos.north().above();
 		this.villager.getLookControl().setLookAt(housePos.getX() + 0.5D, housePos.getY(), housePos.getZ() + 0.5D, 10.0F, this.villager.getMaxHeadXRot());
 		if (this.isReachedTarget()) {
-			World world = this.villager.level;
+			Level world = this.villager.level;
 
 			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, housePos);
 			if (beeHouse == null) {
@@ -128,7 +128,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 	}
 
 	@Override
-	protected boolean isValidTarget(IWorldReader world, BlockPos pos) {
+	protected boolean isValidTarget(LevelReader world, BlockPos pos) {
 		pos = pos.north().above();
 		Block block = world.getBlockState(pos).getBlock();
 		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse) {

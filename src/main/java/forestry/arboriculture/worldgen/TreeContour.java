@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 /**
  * Helper class for storing data that is relevant to generating trees
@@ -25,18 +25,18 @@ public interface TreeContour {
 	class Impl implements TreeContour {
 		public final Set<BlockPos> leavePositions;
 		public final List<BlockPos> branchEnds;
-		public final MutableBoundingBox boundingBox;
+		public final BoundingBox boundingBox;
 
 		public Impl(List<BlockPos> branchEnds) {
 			this.leavePositions = new HashSet<>();
 			this.branchEnds = branchEnds;
-			this.boundingBox = MutableBoundingBox.getUnknownBox();
+			this.boundingBox = BoundingBox.getUnknownBox();
 		}
 
 		@Override
 		public void addLeaf(BlockPos pos) {
 			leavePositions.add(pos.immutable());
-			boundingBox.expand(new MutableBoundingBox(pos, pos));
+			boundingBox.expand(new BoundingBox(pos, pos));
 		}
 
 		@Override

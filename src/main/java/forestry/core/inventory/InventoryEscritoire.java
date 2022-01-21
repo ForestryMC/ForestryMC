@@ -12,9 +12,9 @@ package forestry.core.inventory;
 
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import forestry.api.genetics.ForestryComponentKeys;
 import forestry.api.genetics.IResearchHandler;
@@ -89,7 +89,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 					super.setItem(SLOT_ANALYZE, ersatz);
 				}
 			}
-			World world = tile.getLevel();
+			Level world = tile.getLevel();
 			if (world != null && !world.isClientSide) {
 				EscritoireGame game = tile.getGame();
 				game.initialize(getItem(SLOT_ANALYZE));

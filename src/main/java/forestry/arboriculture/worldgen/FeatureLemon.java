@@ -12,8 +12,8 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
@@ -25,7 +25,7 @@ public class FeatureLemon extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int yCenter = height - girth;
 		yCenter = yCenter > 2 ? yCenter : 3;
 		int radius = Math.round((2 + rand.nextInt(girth)) * (height / 4.0f));

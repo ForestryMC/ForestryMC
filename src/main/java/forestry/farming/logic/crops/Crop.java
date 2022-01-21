@@ -12,25 +12,25 @@ package forestry.farming.logic.crops;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.ICrop;
 
 public abstract class Crop implements ICrop {
-	private final World world;
+	private final Level world;
 	protected final BlockPos position;
 
-	protected Crop(World world, BlockPos position) {
+	protected Crop(Level world, BlockPos position) {
 		this.world = world;
 		this.position = position;
 	}
 
-	protected abstract boolean isCrop(World world, BlockPos pos);
+	protected abstract boolean isCrop(Level world, BlockPos pos);
 
-	protected abstract NonNullList<ItemStack> harvestBlock(World world, BlockPos pos);
+	protected abstract NonNullList<ItemStack> harvestBlock(Level world, BlockPos pos);
 
 	@Nullable
 	@Override

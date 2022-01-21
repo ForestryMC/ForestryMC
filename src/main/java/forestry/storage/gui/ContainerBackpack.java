@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFilteredInventory;
@@ -46,13 +46,13 @@ public class ContainerBackpack extends ContainerItemInventory<ItemInventoryBackp
 
 	private final Size size;
 
-	public static ContainerBackpack fromNetwork(int windowID, PlayerInventory inv, PacketBuffer extraData) {
+	public static ContainerBackpack fromNetwork(int windowID, Inventory inv, FriendlyByteBuf extraData) {
 		Size size = extraData.readEnum(Size.class);
 		ItemStack parent = extraData.readItem();
 		return new ContainerBackpack(windowID, inv.player, size, parent);
 	}
 
-	public ContainerBackpack(int windowID, PlayerEntity player, Size size, ItemStack parent) {
+	public ContainerBackpack(int windowID, Player player, Size size, ItemStack parent) {
 		super(windowID, new ItemInventoryBackpack(player, size.getSize(), parent), player.inventory, 8, 11 + size.startY + size.rows * 18, BackpackContainers.BACKPACK.containerType());
 		this.size = size;
 		// Inventory

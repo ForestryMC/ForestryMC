@@ -3,11 +3,11 @@ package genetics.commands;
 
 import java.util.Optional;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -21,12 +21,12 @@ import genetics.api.individual.IIndividual;
 
 public class CommandListAlleles {
 
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("listAlleles").requires(PermLevel.ADMIN).executes(CommandListAlleles::execute);
 	}
 
-	public static int execute(CommandContext<CommandSource> context) throws CommandException, CommandSyntaxException {
-		PlayerEntity player = context.getSource().getPlayerOrException();
+	public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException, CommandSyntaxException {
+		Player player = context.getSource().getPlayerOrException();
 
 		ItemStack stack = player.getMainHandItem();
 

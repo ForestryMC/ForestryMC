@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
@@ -41,7 +41,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void load(CompoundNBT compoundNBT) {
+	public void load(CompoundTag compoundNBT) {
 
 		queensTotal = compoundNBT.getInt("QueensTotal");
 		princessesTotal = compoundNBT.getInt("PrincessesTotal");
@@ -52,7 +52,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundnbt) {
+	public CompoundTag save(CompoundTag compoundnbt) {
 
 		compoundnbt.putInt("QueensTotal", queensTotal);
 		compoundnbt.putInt("PrincessesTotal", princessesTotal);
@@ -114,7 +114,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+	protected IBreedingTracker getBreedingTracker(Player player) {
 		//TODO world cast
 		return BeeManager.beeRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}

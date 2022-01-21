@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -31,7 +31,7 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 	private final IGuiBeeHousingDelegate delegate;
 	private final GuiBeeHousing.Icon icon;
 
-	public static ContainerBeeHousing fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerBeeHousing fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		PacketBufferForestry buf = new PacketBufferForestry(data);
 		TileBeeHousingBase tile = TileUtil.getTile(inv.player.level, buf.readBlockPos(), TileBeeHousingBase.class);
 		boolean hasFrames = buf.readBoolean();
@@ -40,14 +40,14 @@ public class ContainerBeeHousing extends ContainerAnalyzerProvider<TileBeeHousin
 	}
 
 	//TODO hack icon in GUI by checking title. Then it isn't needed here.
-	public ContainerBeeHousing(int windowId, PlayerInventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
+	public ContainerBeeHousing(int windowId, Inventory player, TileBeeHousingBase tile, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ApicultureContainers.BEE_HOUSING.containerType(), player, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, hasFrames);
 
 		tile.getBeekeepingLogic().clearCachedValues();
 		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getLevel(), tile.getBlockPos());
-		if (player.player instanceof ServerPlayerEntity) {
-			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) player.player));
+		if (player.player instanceof ServerPlayer) {
+			listener.ifPresent(l -> l.syncToClient((ServerPlayer) player.player));
 		}
 
 		delegate = tile;

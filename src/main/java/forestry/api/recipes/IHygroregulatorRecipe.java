@@ -5,19 +5,19 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IHygroregulatorRecipe extends IForestryRecipe {
 
-	IRecipeType<IHygroregulatorRecipe> TYPE = RecipeManagers.create("forestry:hygroregulator");
+	RecipeType<IHygroregulatorRecipe> TYPE = RecipeManagers.create("forestry:hygroregulator");
 
 	class Companion {
 		@ObjectHolder("forestry:hygroregulator")
-		public static final IRecipeSerializer<IHygroregulatorRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IHygroregulatorRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -41,12 +41,12 @@ public interface IHygroregulatorRecipe extends IForestryRecipe {
 	float getTempChange();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

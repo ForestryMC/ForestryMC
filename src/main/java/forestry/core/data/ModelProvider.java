@@ -21,20 +21,20 @@ import java.util.Objects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.model.BlockFaceUV;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Vec3i;
 
 import forestry.modules.features.FeatureItem;
 
 //TODO: Migrate to forge system
-public abstract class ModelProvider implements IDataProvider {
+public abstract class ModelProvider implements DataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	protected final String folder;
@@ -47,7 +47,7 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	@Override
-	public void run(DirectoryCache cache) throws IOException {
+	public void run(HashCache cache) throws IOException {
 		this.pathToBuilder.clear();
 		this.registerModels();
 		pathToBuilder.forEach((key, builder) -> {
@@ -192,14 +192,14 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	public static class Element {
-		private final Vector3i from;
-		private final Vector3i to;
+		private final Vec3i from;
+		private final Vec3i to;
 		private final Face[] faces = new Face[6];
 		private boolean shade = true;
 		@Nullable
 		public Rotation rotation;
 
-		public Element(Vector3i from, Vector3i to) {
+		public Element(Vec3i from, Vec3i to) {
 			this.from = from;
 			this.to = to;
 		}
@@ -242,7 +242,7 @@ public abstract class ModelProvider implements IDataProvider {
 	}
 
 	public static class Rotation {
-		private Vector3i origin = Vector3i.ZERO;
+		private Vec3i origin = Vec3i.ZERO;
 		@Nullable
 		private Direction.Axis axis;
 		@Nullable
@@ -250,7 +250,7 @@ public abstract class ModelProvider implements IDataProvider {
 		@Nullable
 		private Boolean rescale = null;
 
-		public Rotation origin(Vector3i origin) {
+		public Rotation origin(Vec3i origin) {
 			this.origin = origin;
 			return this;
 		}
@@ -275,7 +275,7 @@ public abstract class ModelProvider implements IDataProvider {
 			if (axis != null) {
 				obj.addProperty("axis", axis.getSerializedName());
 			}
-			if (origin == Vector3i.ZERO) {
+			if (origin == Vec3i.ZERO) {
 				obj.add("origin", serializeVex(origin));
 			}
 			if (angle != null) {
@@ -335,7 +335,7 @@ public abstract class ModelProvider implements IDataProvider {
 		}
 	}
 
-	private static JsonElement serializeVex(Vector3i vector) {
+	private static JsonElement serializeVex(Vec3i vector) {
 		JsonArray array = new JsonArray();
 		array.add(vector.getX());
 		array.add(vector.getY());

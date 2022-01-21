@@ -13,12 +13,12 @@ package forestry.apiculture.gui;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -42,7 +42,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 
 	private final Map<String, ItemStack> iconStacks = new HashMap<>();
 
-	public GuiImprinter(ContainerImprinter container, PlayerInventory inventoryplayer, ITextComponent title) {
+	public GuiImprinter(ContainerImprinter container, Inventory inventoryplayer, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/imprinter.png", container, inventoryplayer, title);
 
 		this.itemInventory = container.getItemInventory();
@@ -62,7 +62,7 @@ public class GuiImprinter extends GuiForestry<ContainerImprinter> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		int offset = (138 - getFontRenderer().width(Translator.translateToLocal("for.gui.imprinter"))) / 2;

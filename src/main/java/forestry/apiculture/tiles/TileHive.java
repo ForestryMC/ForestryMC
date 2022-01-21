@@ -17,28 +17,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import com.mojang.authlib.GameProfile;
 
@@ -77,7 +77,7 @@ import forestry.core.utils.TickHelper;
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IGenome;
 
-public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTile, IActivatable, IBeeHousing {
+public class TileHive extends BlockEntity implements TickableBlockEntity, IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
 
 	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
@@ -121,12 +121,12 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 				if (calmTime == 0) {
 					if (canWork) {
 						if (angry && ModuleApiculture.hiveDamageOnAttack && (level.getLevelData().getDifficulty() != Difficulty.PEACEFUL || ModuleApiculture.hivesDamageOnPeaceful)) {
-							AxisAlignedBB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
+							AABB boundingBox = AlleleEffect.getBounding(getContainedBee().getGenome(), this);
 							List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, boundingBox, beeTargetPredicate);
 							if (!entities.isEmpty()) {
 								Collections.shuffle(entities);
 								LivingEntity entity = entities.get(0);
-								if ((entity instanceof PlayerEntity || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
+								if ((entity instanceof Player || !ModuleApiculture.hivesDamageOnlyPlayers) && (!entity.isInWater() || ModuleApiculture.hivesDamageUnderwater)) {
 									attack(entity, 2);
 								}
 							}
@@ -185,7 +185,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		contained.read(compoundNBT);
 		beeLogic.read(compoundNBT);
@@ -193,7 +193,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		contained.write(compoundNBT);
 		beeLogic.write(compoundNBT);
@@ -213,14 +213,14 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public void onAttack(World world, BlockPos pos, PlayerEntity player) {
+	public void onAttack(Level world, BlockPos pos, Player player) {
 		if (calmTime == 0) {
 			angry = true;
 		}
 	}
 
 	@Override
-	public void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest) {
+	public void onBroken(Level world, BlockPos pos, Player player, boolean canHarvest) {
 		if (calmTime == 0) {
 			attack(player, 10);
 		}
@@ -265,21 +265,21 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(worldPosition, 0, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(worldPosition, 0, getUpdateTag());
 	}
 
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT nbt = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag nbt = super.getUpdateTag();
 		nbt.putBoolean("active", calmTime == 0);
 		beeLogic.write(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(BlockState state, CompoundTag tag) {
 		super.handleUpdateTag(state, tag);
 		setActive(tag.getBoolean("active"));
 		beeLogic.read(tag);
@@ -287,9 +287,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getTag();
+		CompoundTag nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
@@ -342,7 +342,7 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return level;
 	}
 
@@ -358,9 +358,9 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
+	public Vec3 getBeeFXCoordinates() {
 		BlockPos pos = getBlockPos();
-		return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
+		return new Vec3(pos.getX() + 0.5, pos.getY() + 0.25, pos.getZ() + 0.5);
 	}
 
 	@Override
@@ -384,13 +384,13 @@ public class TileHive extends TileEntity implements ITickableTileEntity, IHiveTi
 		@Override
 		public boolean apply(@Nullable LivingEntity input) {
 			if (input != null && input.isAlive() && !input.isInvisible()) {
-				if (input instanceof PlayerEntity) {
-					return EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(input);
+				if (input instanceof Player) {
+					return EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(input);
 				} else if (hive.isAngry()) {
 					return true;
-				} else if (input instanceof IMob) {
+				} else if (input instanceof Enemy) {
 					// don't attack semi-passive vanilla mobs
-					return !(input instanceof EndermanEntity) && !(input instanceof ZombifiedPiglinEntity);
+					return !(input instanceof EnderMan) && !(input instanceof ZombifiedPiglin);
 				}
 			}
 			return false;

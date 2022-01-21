@@ -12,9 +12,9 @@ package forestry.core.inventory;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.tileentity.FurnaceTileEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 
 /**
  * This interface is used with several of the functions in IItemTransfer to
@@ -34,7 +34,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
 	FUEL {
 		@Override
 		public boolean test(ItemStack stack) {
-			return FurnaceTileEntity.getFuel().get(stack.getItem()) > 0;
+			return FurnaceBlockEntity.getFuel().get(stack.getItem()) > 0;
 		}
 	},
 	//TODO - where is this used?

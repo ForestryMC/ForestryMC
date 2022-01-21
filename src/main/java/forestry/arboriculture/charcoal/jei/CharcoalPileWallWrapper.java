@@ -2,8 +2,8 @@ package forestry.arboriculture.charcoal.jei;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.core.features.CoreItems;

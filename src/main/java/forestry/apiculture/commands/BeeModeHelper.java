@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeekeepingMode;
@@ -34,12 +34,12 @@ public class BeeModeHelper implements ICommandModeHelper {
 	}
 
 	@Override
-	public String getModeName(World world) {
+	public String getModeName(Level world) {
 		return BeeManager.beeRoot.getBeekeepingMode(world).getName();
 	}
 
 	@Override
-	public boolean setMode(World world, String modeName) {
+	public boolean setMode(Level world, String modeName) {
 		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(modeName);
 		if (mode != null) {
 			BeeManager.beeRoot.setBeekeepingMode(world, mode);

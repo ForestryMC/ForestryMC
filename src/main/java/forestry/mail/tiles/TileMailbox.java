@@ -10,16 +10,16 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -44,7 +44,7 @@ public class TileMailbox extends TileBase {
 
 	/* GUI */
 	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		if (level.isClientSide) {
 			return;
 		}
@@ -64,13 +64,13 @@ public class TileMailbox extends TileBase {
 	}
 
 	/* MAIL HANDLING */
-	public IInventory getOrCreateMailInventory(World world, GameProfile playerProfile) {
+	public Container getOrCreateMailInventory(Level world, GameProfile playerProfile) {
 		if (world.isClientSide) {
 			return getInternalInventory();
 		}
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(playerProfile);
-		return PostRegistry.getOrCreatePOBox((ServerWorld) world, address);
+		return PostRegistry.getOrCreatePOBox((ServerLevel) world, address);
 	}
 
 	private IPostalState tryDispatchLetter(ItemStack letterStack) {
@@ -79,7 +79,7 @@ public class TileMailbox extends TileBase {
 
 		if (letter != null) {
 			//this is only called after !world.isRemote has been checked, so I believe the cast is OK
-			ServerWorld world = (ServerWorld) this.level;
+			ServerLevel world = (ServerLevel) this.level;
 			result = PostManager.postRegistry.getPostOffice(world).lodgeLetter(world, letterStack, true);
 		} else {
 			result = EnumDeliveryState.NOT_MAILABLE;
@@ -89,7 +89,7 @@ public class TileMailbox extends TileBase {
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerMailbox(windowId, inv, this);
 	}
 }

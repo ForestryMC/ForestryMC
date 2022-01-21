@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 public class DatabaseFilterToolTip extends DatabaseFilter {
 	public DatabaseFilterToolTip(Pattern pattern) {
@@ -15,7 +15,7 @@ public class DatabaseFilterToolTip extends DatabaseFilter {
 
 	@Override
 	public boolean test(ItemStack itemStack) {
-		List<ITextComponent> lines = itemStack.getTooltipLines(Minecraft.getInstance().player, ITooltipFlag.TooltipFlags.NORMAL);
+		List<Component> lines = itemStack.getTooltipLines(Minecraft.getInstance().player, TooltipFlag.Default.NORMAL);
 		if (lines.size() <= 1) {
 			return false;
 		}

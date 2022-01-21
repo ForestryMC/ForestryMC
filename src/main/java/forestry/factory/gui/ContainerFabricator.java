@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.SimpleContainerData;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,14 +33,14 @@ import forestry.factory.tiles.TileFabricator;
 
 public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> implements IContainerCrafting {
 
-	public static ContainerFabricator fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerFabricator fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileFabricator tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFabricator.class);
 		return new ContainerFabricator(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerFabricator(int windowId, PlayerInventory playerInventory, TileFabricator tile) {
+	public ContainerFabricator(int windowId, Inventory playerInventory, TileFabricator tile) {
 		super(windowId, FactoryContainers.FABRICATOR.containerType(), playerInventory, tile, 8, 129);
-		addDataSlots(new IntArray(4));
+		addDataSlots(new SimpleContainerData(4));
 
 		// Internal inventory
 		for (int i = 0; i < 2; i++) {
@@ -67,7 +67,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 	}
 
 	@Override
-	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
+	public void onCraftMatrixChanged(Container iinventory, int slot) {
 
 	}
 
@@ -83,7 +83,7 @@ public class ContainerFabricator extends ContainerLiquidTanks<TileFabricator> im
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		for (IContainerListener crafter : containerListeners) {
+		for (ContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

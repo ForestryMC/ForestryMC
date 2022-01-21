@@ -12,7 +12,7 @@ package forestry.farming.circuits;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmCircuit;
@@ -45,7 +45,7 @@ public class CircuitFarmLogic extends Circuit implements IFarmCircuit {
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return properties.getDisplayName(logic.isManual());
 	}
 

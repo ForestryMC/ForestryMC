@@ -12,11 +12,11 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -78,7 +78,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		energyManager.read(compoundNBT);
 		workingTime = compoundNBT.getInt("Heating");
@@ -86,7 +86,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		energyManager.write(compoundNBT);
 		compoundNBT.putInt("Heating", workingTime);
@@ -95,13 +95,13 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* Network */
 	@Override
-	protected void encodeDescriptionPacket(CompoundNBT packetData) {
+	protected void encodeDescriptionPacket(CompoundTag packetData) {
 		super.encodeDescriptionPacket(packetData);
 		packetData.putBoolean("Active", active);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(CompoundNBT packetData) {
+	protected void decodeDescriptionPacket(CompoundTag packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
 	}

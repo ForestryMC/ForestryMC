@@ -2,16 +2,16 @@ package forestry.storage;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 
 public class BackpackFilter implements Predicate<ItemStack> {
 
-	private final ITag<Item> accept;
-	private final ITag<Item> reject;
+	private final Tag<Item> accept;
+	private final Tag<Item> reject;
 
-	public BackpackFilter(ITag<Item> accept, ITag<Item> reject) {
+	public BackpackFilter(Tag<Item> accept, Tag<Item> reject) {
 		this.accept = accept;
 		this.reject = reject;
 	}

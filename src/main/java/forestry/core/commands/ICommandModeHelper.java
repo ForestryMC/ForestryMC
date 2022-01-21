@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 public interface ICommandModeHelper {
 	String[] getModeNames();
 
-	String getModeName(World world);
+	String getModeName(Level world);
 
-	boolean setMode(World world, String modeName);
+	boolean setMode(Level world, String modeName);
 
 	Iterable<String> getDescription(String modeName);
 }

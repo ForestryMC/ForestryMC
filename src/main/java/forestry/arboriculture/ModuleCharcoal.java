@@ -1,7 +1,7 @@
 package forestry.arboriculture;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.CreativeModeTab;
 
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
@@ -35,7 +35,7 @@ public class ModuleCharcoal extends BlankForestryModule {
 		}
 	}
 
-	public static ItemGroup getGroup() {
+	public static CreativeModeTab getGroup() {
 		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
 	}
 }

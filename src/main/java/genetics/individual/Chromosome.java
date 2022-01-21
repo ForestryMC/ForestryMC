@@ -5,8 +5,8 @@ import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleRegistry;
@@ -37,7 +37,7 @@ public class Chromosome implements IChromosome {
 		this.type = type;
 	}
 
-	public static Chromosome create(@Nullable ResourceLocation primarySpeciesUid, @Nullable ResourceLocation secondarySpeciesUid, IChromosomeType type, CompoundNBT nbt) {
+	public static Chromosome create(@Nullable ResourceLocation primarySpeciesUid, @Nullable ResourceLocation secondarySpeciesUid, IChromosomeType type, CompoundTag nbt) {
 		IAllele firstAllele = AlleleUtils.getAlleleOrNull(nbt.getString(ACTIVE_ALLELE_TAG));
 		IAllele secondAllele = AlleleUtils.getAlleleOrNull(nbt.getString(INACTIVE_ALLELE_TAG));
 		return create(primarySpeciesUid, secondarySpeciesUid, type, firstAllele, secondAllele);
@@ -83,12 +83,12 @@ public class Chromosome implements IChromosome {
 		return new Chromosome(allele, geneType);
 	}
 
-	static Optional<IAllele> getActiveAllele(CompoundNBT chromosomeNBT) {
+	static Optional<IAllele> getActiveAllele(CompoundTag chromosomeNBT) {
 		String alleleUid = chromosomeNBT.getString(Chromosome.ACTIVE_ALLELE_TAG);
 		return AlleleUtils.getAllele(alleleUid);
 	}
 
-	static Optional<IAllele> getInactiveAllele(CompoundNBT chromosomeNBT) {
+	static Optional<IAllele> getInactiveAllele(CompoundTag chromosomeNBT) {
 		String alleleUid = chromosomeNBT.getString(Chromosome.INACTIVE_ALLELE_TAG);
 		return AlleleUtils.getAllele(alleleUid);
 	}
@@ -122,7 +122,7 @@ public class Chromosome implements IChromosome {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbttagcompound) {
+	public CompoundTag writeToNBT(CompoundTag nbttagcompound) {
 		nbttagcompound.putString(ACTIVE_ALLELE_TAG, active.getRegistryName().toString());
 		nbttagcompound.putString(INACTIVE_ALLELE_TAG, inactive.getRegistryName().toString());
 		return nbttagcompound;

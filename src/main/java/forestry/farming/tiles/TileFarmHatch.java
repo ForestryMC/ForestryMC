@@ -12,9 +12,9 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.util.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -29,7 +29,7 @@ import forestry.core.tiles.AdjacentTileCache;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.features.FarmingTiles;
 
-public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmComponent.Active {
+public class TileFarmHatch extends TileFarm implements WorldlyContainer, IFarmComponent.Active {
 
 	private static final Direction[] dumpDirections = new Direction[]{Direction.DOWN};
 
@@ -50,7 +50,7 @@ public class TileFarmHatch extends TileFarm implements ISidedInventory, IFarmCom
 	@Override
 	public void updateServer(int tickCount) {
 		if (tickCount % 40 == 0) {
-			IInventory productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
+			Container productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
 			IItemHandler productItemHandler = new InvWrapper(productInventory);
 
 			if (!InventoryUtil.moveOneItemToPipe(productItemHandler, tileCache, dumpDirections)) {

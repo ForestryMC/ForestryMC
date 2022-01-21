@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public enum FarmDirection {
 	NORTH(Direction.NORTH),

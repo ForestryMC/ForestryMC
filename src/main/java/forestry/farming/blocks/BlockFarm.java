@@ -13,19 +13,19 @@ package forestry.farming.blocks;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import net.minecraftforge.common.ToolType;
 
@@ -43,7 +43,7 @@ public class BlockFarm extends BlockStructure {
 
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
-	public enum State implements IStringSerializable {
+	public enum State implements StringRepresentable {
 		PLAIN, BAND;
 
 		@Override
@@ -63,13 +63,13 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> list) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
 		super.fillItemCategory(tab, list);
 	}
 
@@ -82,7 +82,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		switch (type) {
 			case GEARBOX:
 				return new TileFarmGearbox();
@@ -103,7 +103,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
 		return getType() == EnumFarmBlockType.CONTROL;
 	}
 }

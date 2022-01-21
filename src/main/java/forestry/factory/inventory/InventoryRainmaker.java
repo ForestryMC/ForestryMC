@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;

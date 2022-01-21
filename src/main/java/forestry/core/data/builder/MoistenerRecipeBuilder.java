@@ -5,11 +5,11 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.factory.recipes.RecipeSerializers;
@@ -35,11 +35,11 @@ public class MoistenerRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, timePerItem, resource, product));
 	}
 
-	private static class Result implements IFinishedRecipe {
+	private static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final int timePerItem;
 		private final Ingredient resource;
@@ -65,7 +65,7 @@ public class MoistenerRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return IMoistenerRecipe.Companion.SERIALIZER;
 		}
 

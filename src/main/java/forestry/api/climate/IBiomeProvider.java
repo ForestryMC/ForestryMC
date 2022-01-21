@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 
 /**
  * Provides information about the biome an object is based in.

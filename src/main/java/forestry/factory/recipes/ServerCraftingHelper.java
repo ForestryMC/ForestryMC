@@ -1,6 +1,6 @@
 package forestry.factory.recipes;
 
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 public class ServerCraftingHelper {
 

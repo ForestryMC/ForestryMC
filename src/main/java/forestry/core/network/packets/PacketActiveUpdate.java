@@ -11,10 +11,10 @@
 package forestry.core.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,12 +51,12 @@ public class PacketActiveUpdate extends ForestryPacket implements IForestryPacke
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, Player player) {
 			BlockPos pos = data.readBlockPos();
 			boolean active = data.readBoolean();
 
-			ClientWorld world = Minecraft.getInstance().level;
-			TileEntity tile = TileUtil.getTile(world, pos);
+			ClientLevel world = Minecraft.getInstance().level;
+			BlockEntity tile = TileUtil.getTile(world, pos);
 			if (tile instanceof IActivatable) {
 				((IActivatable) tile).setActive(active);
 			} else if (tile instanceof IMultiblockComponent) {

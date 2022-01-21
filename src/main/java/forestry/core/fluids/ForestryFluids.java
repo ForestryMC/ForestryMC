@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -118,7 +118,7 @@ public enum ForestryFluids {
 					.item(() -> new BucketItem(this::getFluid, new Item.Properties()
 									.craftRemainder(Items.BUCKET)
 									.stacksTo(1)
-									.tab(ItemGroup.TAB_MISC)),
+									.tab(CreativeModeTab.TAB_MISC)),
 							"bucket_" + name().toLowerCase(Locale.ENGLISH)
 					);
 		} else {

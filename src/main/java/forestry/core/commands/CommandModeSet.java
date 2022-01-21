@@ -12,9 +12,9 @@ package forestry.core.commands;
 
 import java.util.stream.Stream;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.world.World;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.level.Level;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -24,14 +24,14 @@ import com.mojang.brigadier.context.CommandContext;
 import genetics.commands.CommandHelpers;
 import genetics.commands.PermLevel;
 
-public final class CommandModeSet implements Command<CommandSource> {
+public final class CommandModeSet implements Command<CommandSourceStack> {
 	private final ICommandModeHelper modeSetter;
 
 	public CommandModeSet(ICommandModeHelper modeSetter) {
 		this.modeSetter = modeSetter;
 	}
 
-	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
+	public static ArgumentBuilder<CommandSourceStack, ?> register(ICommandModeHelper modeHelper) {
 		return Commands.literal("set").requires(PermLevel.ADMIN)
 				.then(Commands.argument("name", StringArgumentType.string())
 						.suggests((ctx, builder) -> {
@@ -43,8 +43,8 @@ public final class CommandModeSet implements Command<CommandSource> {
 	}
 
 	@Override
-	public int run(CommandContext<CommandSource> ctx) {
-		World world = ctx.getSource().getLevel();
+	public int run(CommandContext<CommandSourceStack> ctx) {
+		Level world = ctx.getSource().getLevel();
 
 		String modeName = ctx.getArgument("name", String.class);
 

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.elements;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemElement extends AbstractItemElement {
 	/* Attributes */

@@ -5,13 +5,13 @@ import java.awt.Insets;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Style;
 
 import net.minecraftforge.resource.IResourceType;
 import net.minecraftforge.resource.ISelectiveResourceReloadListener;
@@ -61,13 +61,13 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	}
 
 	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-		dominantStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
-		recessiveStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
-		guiStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
-		guiTitleStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
-		databaseTitle = Style.EMPTY.withColor(Color.fromRgb(0xcfb53b)).setUnderlined(true);
-		binomial = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
+	public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+		dominantStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
+		recessiveStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
+		guiStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
+		guiTitleStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
+		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).setUnderlined(true);
+		binomial = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
 	public IGeneticAnalyzer createAnalyzer(Window window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
@@ -147,7 +147,7 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	public GuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
 		Style textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		ITextComponent component = null;
+		Component component = null;
 
 		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 2);
 		switch (tolerance) {
@@ -174,11 +174,11 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 				break;
 			default:
 				layout.add(createNoneSymbol(0, -1));
-				component = new StringTextComponent("(0)");
+				component = new TextComponent("(0)");
 				break;
 		}
 		if (component == null) {
-			component = new StringTextComponent("(")
+			component = new TextComponent("(")
 					.append(toleranceAllele.getDisplayName())
 					.append(")");
 		}

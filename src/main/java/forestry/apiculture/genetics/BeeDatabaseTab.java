@@ -3,7 +3,7 @@ package forestry.apiculture.genetics;
 import java.util.Optional;
 import java.util.function.Function;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

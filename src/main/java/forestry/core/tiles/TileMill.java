@@ -12,7 +12,7 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +27,7 @@ public abstract class TileMill extends TileBase {
 	public int charge = 0;
 	public float progress;
 
-	protected TileMill(TileEntityType<?> type) {
+	protected TileMill(BlockEntityType<?> type) {
 		super(type);
 		speed = 0.01F;
 	}

@@ -12,19 +12,19 @@ package forestry.core.entities;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.common.util.ITeleporter;
 
@@ -33,29 +33,29 @@ import forestry.core.tiles.IFilterSlotDelegate;
 import forestry.core.utils.InventoryUtil;
 
 //TODO: large type hierarchy here. If no other modules use other than apiculture then compress this.
-public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements ISidedInventory, IFilterSlotDelegate, INamedContainerProvider {
+public abstract class MinecartEntityContainerForestry extends MinecartEntityForestry implements WorldlyContainer, IFilterSlotDelegate, MenuProvider {
 	/**
 	 * When set to true, the minecart will drop all items when setDead() is called. When false (such as when travelling
 	 * dimensions) it preserves its contents.
 	 */
 	private boolean dropContentsWhenDead = true;
 
-	public MinecartEntityContainerForestry(EntityType<? extends MinecartEntityContainerForestry> type, World world) {
+	public MinecartEntityContainerForestry(EntityType<? extends MinecartEntityContainerForestry> type, Level world) {
 		super(type, world);
 	}
 
-	public MinecartEntityContainerForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
+	public MinecartEntityContainerForestry(EntityType<?> type, Level world, double posX, double posY, double posZ) {
 		super(type, world, posX, posY, posZ);
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compoundNBT) {
+	protected void readAdditionalSaveData(CompoundTag compoundNBT) {
 		super.readAdditionalSaveData(compoundNBT);
 		getInternalInventory().read(compoundNBT);
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compoundNBT) {
+	protected void addAdditionalSaveData(CompoundTag compoundNBT) {
 		super.addAdditionalSaveData(compoundNBT);
 		getInternalInventory().write(compoundNBT);
 	}
@@ -71,14 +71,14 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	//TODO tbh super() method looks pretty good too
 	@Override
 	protected void applyNaturalSlowdown() {
-		int redstoneLevel = 15 - Container.getRedstoneSignalFromContainer(this);
+		int redstoneLevel = 15 - AbstractContainerMenu.getRedstoneSignalFromContainer(this);
 		double drag = 0.98F + redstoneLevel * 0.001F;
 		this.setDeltaMovement(this.getDeltaMovement().multiply(drag, 0.0D, drag));
 	}
 
 	@Nullable
 	@Override
-	public Entity changeDimension(ServerWorld p_241206_1_, ITeleporter teleporter) {
+	public Entity changeDimension(ServerLevel p_241206_1_, ITeleporter teleporter) {
 		this.dropContentsWhenDead = false;
 		return super.changeDimension(p_241206_1_, teleporter);
 	}
@@ -93,7 +93,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return isAlive() && player.distanceTo(this) <= 64.0D;
 	}
 
@@ -128,18 +128,18 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public final void startOpen(PlayerEntity player) {
+	public final void startOpen(Player player) {
 		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void stopOpen(PlayerEntity player) {
+	public final void stopOpen(Player player) {
 		getInternalInventory().stopOpen(player);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent("MINECART_TITLE_GOES_HERE");
+	public Component getDisplayName() {
+		return new TextComponent("MINECART_TITLE_GOES_HERE");
 		//TODO inventory names return getInternalInventory().getDisplayName();
 	}
 

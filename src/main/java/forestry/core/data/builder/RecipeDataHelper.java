@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
@@ -20,39 +20,39 @@ import forestry.core.recipes.ModuleEnabledCondition;
  */
 public class RecipeDataHelper {
 
-	private final Consumer<IFinishedRecipe> consumer;
+	private final Consumer<FinishedRecipe> consumer;
 
-	public RecipeDataHelper(Consumer<IFinishedRecipe> consumer) {
+	public RecipeDataHelper(Consumer<FinishedRecipe> consumer) {
 		this.consumer = consumer;
 	}
 
-	public Consumer<IFinishedRecipe> getConsumer() {
+	public Consumer<FinishedRecipe> getConsumer() {
 		return consumer;
 	}
 
-	public void simpleConditionalRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, ICondition... conditions) {
+	public void simpleConditionalRecipe(Consumer<Consumer<FinishedRecipe>> recipe, ICondition... conditions) {
 		simpleConditionalRecipe(recipe, null, conditions);
 	}
 
-	public void simpleConditionalRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, ICondition... conditions) {
+	public void simpleConditionalRecipe(Consumer<Consumer<FinishedRecipe>> recipe, @Nullable ResourceLocation id, ICondition... conditions) {
 		ConditionalRecipe.Builder builder = ConditionalRecipe.builder();
 		for (ICondition condition : conditions) {
 			builder.addCondition(condition);
 		}
 
-		Holder<IFinishedRecipe> finishedRecipeHolder = new Holder<>();
+		Holder<FinishedRecipe> finishedRecipeHolder = new Holder<>();
 		recipe.accept(finishedRecipeHolder::set);
 
-		IFinishedRecipe finishedRecipe = finishedRecipeHolder.get();
+		FinishedRecipe finishedRecipe = finishedRecipeHolder.get();
 		builder.addRecipe(finishedRecipe);
 		builder.build(consumer, id == null ? finishedRecipe.getId() : id);
 	}
 
-	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, @Nullable ResourceLocation id, String... moduleUIDs) {
+	public void moduleConditionRecipe(Consumer<Consumer<FinishedRecipe>> recipe, @Nullable ResourceLocation id, String... moduleUIDs) {
 		simpleConditionalRecipe(recipe, id, Arrays.stream(moduleUIDs).map(u -> new ModuleEnabledCondition(Constants.MOD_ID, u)).toArray(ICondition[]::new));
 	}
 
-	public void moduleConditionRecipe(Consumer<Consumer<IFinishedRecipe>> recipe, String... moduleUIDs) {
+	public void moduleConditionRecipe(Consumer<Consumer<FinishedRecipe>> recipe, String... moduleUIDs) {
 		moduleConditionRecipe(recipe, null, moduleUIDs);
 	}
 }

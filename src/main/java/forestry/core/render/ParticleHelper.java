@@ -10,18 +10,18 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.DiggingParticle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.particle.TerrainParticle;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,14 +35,14 @@ public class ParticleHelper {
 
 	//TODO see ParticleManager.addBlockHitEffects which is almost the same (or maybe should replace this...)
 	@OnlyIn(Dist.CLIENT)
-	public static boolean addBlockHitEffects(World world, BlockPos pos, Direction side, ParticleManager effectRenderer, Callback callback) {
+	public static boolean addBlockHitEffects(Level world, BlockPos pos, Direction side, ParticleEngine effectRenderer, Callback callback) {
 		BlockState blockState = world.getBlockState(pos);
-		if (blockState.getRenderShape() != BlockRenderType.INVISIBLE) {
+		if (blockState.getRenderShape() != RenderShape.INVISIBLE) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			float f = 0.1F;
-			AxisAlignedBB axisalignedbb = blockState.getShape(world, pos).bounds();
+			AABB axisalignedbb = blockState.getShape(world, pos).bounds();
 			double px = x + world.random.nextDouble() * (axisalignedbb.maxX - axisalignedbb.minX - f * 2.0F) + f + axisalignedbb.minX;
 			double py = y + world.random.nextDouble() * (axisalignedbb.maxY - axisalignedbb.minY - f * 2.0F) + f + axisalignedbb.minY;
 			double pz = z + world.random.nextDouble() * (axisalignedbb.maxZ - axisalignedbb.minZ - f * 2.0F) + f + axisalignedbb.minZ;
@@ -74,7 +74,7 @@ public class ParticleHelper {
 			//         this.addEffect((new DiggingParticle(this.world, d0, d1, d2, 0.0D, 0.0D, 0.0D, blockstate)).setBlockPos(pos).multiplyVelocity(0.2F).multipleParticleScaleBy(0.6F));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
 			//			DiggingParticle fx = (DiggingParticle) effectRenderer.addEffect(EnumParticleTypes.BLOCK_DUST.getParticleID(), px, py, pz, 0.0D, 0.0D, 0.0D, Block.getStateId(blockState));
-			DiggingParticle fx = new DiggingParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
+			TerrainParticle fx = new TerrainParticle(WorldUtils.asClient(world), px, py, pz, 0.0D, 0.0D, 0.0D, blockState);
 			effectRenderer.add(fx);
 			callback.addHitEffects(fx, world, pos, blockState);
 			fx.init(new BlockPos(x, y, z)).setPower(0.2F).scale(0.6F);
@@ -91,7 +91,7 @@ public class ParticleHelper {
 	 * @return True to prevent vanilla break particles from spawning.
 	 */
 	@OnlyIn(Dist.CLIENT)
-	public static boolean addDestroyEffects(World world, Block block, BlockState state, BlockPos pos, ParticleManager effectRenderer, Callback callback) {
+	public static boolean addDestroyEffects(Level world, Block block, BlockState state, BlockPos pos, ParticleEngine effectRenderer, Callback callback) {
 		if (block != state.getBlock()) {
 			return false;
 		}
@@ -121,10 +121,10 @@ public class ParticleHelper {
 	public interface Callback {
 
 		@OnlyIn(Dist.CLIENT)
-		void addHitEffects(DiggingParticle fx, World world, BlockPos pos, BlockState state);
+		void addHitEffects(TerrainParticle fx, Level world, BlockPos pos, BlockState state);
 
 		@OnlyIn(Dist.CLIENT)
-		void addDestroyEffects(DiggingParticle fx, World world, BlockPos pos, BlockState state);
+		void addDestroyEffects(TerrainParticle fx, Level world, BlockPos pos, BlockState state);
 	}
 
 	public static class DefaultCallback<B extends Block> implements ParticleHelper.Callback {
@@ -137,21 +137,21 @@ public class ParticleHelper {
 
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public void addHitEffects(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
+		public void addHitEffects(TerrainParticle fx, Level world, BlockPos pos, BlockState state) {
 			setTexture(fx, world, pos, state);
 		}
 
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public void addDestroyEffects(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
+		public void addDestroyEffects(TerrainParticle fx, Level world, BlockPos pos, BlockState state) {
 			setTexture(fx, world, pos, state);
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
+		protected void setTexture(TerrainParticle fx, Level world, BlockPos pos, BlockState state) {
 			Minecraft minecraft = Minecraft.getInstance();
-			BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRenderer();
-			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShaper();
+			BlockRenderDispatcher blockRendererDispatcher = minecraft.getBlockRenderer();
+			BlockModelShaper blockModelShapes = blockRendererDispatcher.getBlockModelShaper();
 			//			fx.sprite = blockModelShapes.getTexture(state);	//TODO At on field SpriteTexturedParticle.sprite but it's protected so idk. Reflection?
 		}
 	}

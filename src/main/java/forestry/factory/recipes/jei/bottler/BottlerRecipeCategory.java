@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.bottler;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
@@ -78,7 +78,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipeW
 	}
 
 	@Override
-	public void draw(BottlerRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(BottlerRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		slot.draw(matrixStack, 0, 0);
 		arrowDown.draw(matrixStack, 3, 26);
 		slot.draw(matrixStack, 0, 42);

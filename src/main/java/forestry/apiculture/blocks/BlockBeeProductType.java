@@ -2,9 +2,9 @@ package forestry.apiculture.blocks;
 
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum BlockBeeProductType implements IStringSerializable {
+public enum BlockBeeProductType implements StringRepresentable {
 	BEE_COMBS,
 	BEESWAX;
 

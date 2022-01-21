@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -31,7 +31,7 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	 * @return {@link IArboristTracker} associated with the passed world.
 	 */
 	@Override
-	IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+	IArboristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player);
 
 	/* TREE SPECIFIC */
 
@@ -45,29 +45,29 @@ public interface ITreeRoot extends ISpeciesRootPollinatable<ITree> {
 	Collection<ILeafTickHandler> getLeafTickHandlers();
 
 	@Nullable
-	ITree getTree(World world, BlockPos pos);
+	ITree getTree(Level world, BlockPos pos);
 
 	//TODO: Why is there a world ?
-	ITree getTree(World world, IGenome genome);
+	ITree getTree(Level world, IGenome genome);
 
 	@Nullable
-	ITree getTree(TileEntity tileEntity);
+	ITree getTree(BlockEntity tileEntity);
 
-	boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos);
+	boolean plantSapling(Level world, ITree tree, GameProfile owner, BlockPos pos);
 
-	boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
+	boolean setFruitBlock(LevelAccessor world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos);
 
 	/* GAME MODE */
 	List<ITreekeepingMode> getTreekeepingModes();
 
-	ITreekeepingMode getTreekeepingMode(IWorld world);
+	ITreekeepingMode getTreekeepingMode(LevelAccessor world);
 
 	@Nullable
 	ITreekeepingMode getTreekeepingMode(String name);
 
 	void registerTreekeepingMode(ITreekeepingMode mode);
 
-	void setTreekeepingMode(IWorld world, ITreekeepingMode mode);
+	void setTreekeepingMode(LevelAccessor world, ITreekeepingMode mode);
 
 	Collection<IFruitProvider> getFruitProvidersForFruitFamily(IFruitFamily fruitFamily);
 }

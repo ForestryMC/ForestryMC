@@ -12,12 +12,12 @@ package forestry.core.utils;
 
 import java.util.List;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ResultSlot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
 
@@ -27,7 +27,7 @@ public abstract class SlotUtil {
 		return slotIndex >= start && slotIndex < start + count;
 	}
 
-	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, ClickType clickTypeIn, PlayerEntity player) {
+	public static ItemStack slotClickPhantom(SlotForestry slot, int mouseButton, ClickType clickTypeIn, Player player) {
 		ItemStack stack = ItemStack.EMPTY;
 
 		ItemStack stackSlot = slot.getItem();
@@ -38,7 +38,7 @@ public abstract class SlotUtil {
 		if (mouseButton == 2) {
 			fillPhantomSlot(slot, ItemStack.EMPTY, mouseButton);
 		} else if (mouseButton == 0 || mouseButton == 1) {
-			PlayerInventory playerInv = player.inventory;
+			Inventory playerInv = player.inventory;
 
 			ItemStack stackHeld = playerInv.getCarried();
 
@@ -56,7 +56,7 @@ public abstract class SlotUtil {
 				}
 			}
 		} else if (mouseButton == 5) {
-			PlayerInventory playerInv = player.inventory;
+			Inventory playerInv = player.inventory;
 			ItemStack stackHeld = playerInv.getCarried();
 			if (!slot.hasItem()) {
 				fillPhantomSlot(slot, stackHeld, mouseButton);
@@ -65,13 +65,13 @@ public abstract class SlotUtil {
 		return stack;
 	}
 
-	public static ItemStack transferStackInSlot(List<Slot> inventorySlots, PlayerEntity player, int slotIndex) {
+	public static ItemStack transferStackInSlot(List<Slot> inventorySlots, Player player, int slotIndex) {
 		Slot slot = inventorySlots.get(slotIndex);
 		if (slot == null || !slot.hasItem()) {
 			return ItemStack.EMPTY;
 		}
 
-		boolean fromCraftingSlot = slot instanceof CraftingResultSlot;
+		boolean fromCraftingSlot = slot instanceof ResultSlot;
 
 		int numSlots = inventorySlots.size();
 		ItemStack stackInSlot = slot.getItem();

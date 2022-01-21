@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.arboriculture.genetics.ITree;

@@ -11,14 +11,14 @@
 package forestry.storage.items;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,11 +44,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack heldItem = playerIn.getItemInHand(handIn);
 		if (!worldIn.isClientSide) {
 			if (contained.isEmpty() || heldItem.isEmpty()) {
-				return ActionResult.pass(heldItem);
+				return InteractionResultHolder.pass(heldItem);
 			}
 
 			heldItem.shrink(1);
@@ -57,16 +57,16 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 			dropStack.setCount(9);
 			ItemStackUtil.dropItemStackAsEntity(dropStack, worldIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), 40);
 		}
-		return ActionResult.success(heldItem);
+		return InteractionResultHolder.success(heldItem);
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		if (contained.isEmpty()) {
-			return new TranslationTextComponent("item.forestry.crate");
+			return new TranslatableComponent("item.forestry.crate");
 		} else {
-			ITextComponent containedName = contained.getHoverName();
-			return new TranslationTextComponent("for.item.crated.grammar", containedName);
+			Component containedName = contained.getHoverName();
+			return new TranslatableComponent("for.item.crated.grammar", containedName);
 		}
 	}
 

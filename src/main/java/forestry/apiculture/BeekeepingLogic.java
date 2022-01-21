@@ -20,17 +20,17 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -96,12 +96,12 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	// / SAVING & LOADING
 	@Override
-	public void read(CompoundNBT compoundNBT) {
+	public void read(CompoundTag compoundNBT) {
 		beeProgress = compoundNBT.getInt("BreedingTime");
 		queenWorkCycleThrottle = compoundNBT.getInt("Throttle");
 
 		if (compoundNBT.contains("queen")) {
-			CompoundNBT queenNBT = compoundNBT.getCompound("queen");
+			CompoundTag queenNBT = compoundNBT.getCompound("queen");
 			queenStack = ItemStack.of(queenNBT);
 			queen = BeeManager.beeRoot.create(queenStack).orElse(null);
 		}
@@ -110,19 +110,19 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		hasFlowersCache.read(compoundNBT);
 
-		ListNBT nbttaglist = compoundNBT.getList("Offspring", 10);
+		ListTag nbttaglist = compoundNBT.getList("Offspring", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
 			spawn.add(ItemStack.of(nbttaglist.getCompound(i)));
 		}
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		compoundNBT.putInt("BreedingTime", beeProgress);
 		compoundNBT.putInt("Throttle", queenWorkCycleThrottle);
 
 		if (!queenStack.isEmpty()) {
-			CompoundNBT queenNBT = new CompoundNBT();
+			CompoundTag queenNBT = new CompoundTag();
 			queenStack.save(queenNBT);
 			compoundNBT.put("queen", queenNBT);
 		}
@@ -133,9 +133,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		Stack<ItemStack> spawnCopy = new Stack<>();
 		spawnCopy.addAll(spawn);
-		ListNBT nbttaglist = new ListNBT();
+		ListTag nbttaglist = new ListTag();
 		while (!spawnCopy.isEmpty()) {
-			CompoundNBT compoundNBT1 = new CompoundNBT();
+			CompoundTag compoundNBT1 = new CompoundTag();
 			spawnCopy.pop().save(compoundNBT1);
 			nbttaglist.add(compoundNBT1);
 		}
@@ -144,7 +144,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeData(PacketBuffer data) {
+	public void writeData(FriendlyByteBuf data) {
 		data.writeBoolean(active);
 		if (active) {
 			data.writeItem(queenStack);
@@ -153,7 +153,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBuffer data) throws IOException {
+	public void readData(FriendlyByteBuf data) throws IOException {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
@@ -293,7 +293,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 			queenWorkCycleThrottle = 0;
 
 			doProduction(queen, housing, beeListener);
-			World world = housing.getWorldObj();
+			Level world = housing.getWorldObj();
 			List<BlockState> flowers = hasFlowersCache.getFlowers(world);
 			if (flowers.size() < ModuleApiculture.maxFlowersSpawnedPerHive) {
 				queen.plantFlowerRandom(housing, flowers).ifPresent(hasFlowersCache::addFlowerPos);
@@ -349,11 +349,11 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		if (queenStack.isEmpty()) {
 			return false;
 		}
-		CompoundNBT compound = queenStack.getTag();
+		CompoundTag compound = queenStack.getTag();
 		if (compound == null) {
 			return false;
 		}
-		CompoundNBT individualTag = compound.getCompound(OrganismHandler.INDIVIDUAL_KEY);
+		CompoundTag individualTag = compound.getCompound(OrganismHandler.INDIVIDUAL_KEY);
 		if (individualTag.isEmpty()) {
 			return false;
 		}
@@ -442,7 +442,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	 */
 	private static Collection<ItemStack> spawnOffspring(IBee queen, IBeeHousing beeHousing) {
 
-		World world = beeHousing.getWorldObj();
+		Level world = beeHousing.getWorldObj();
 
 		Stack<ItemStack> offspring = new Stack<>();
 		IApiaristTracker breedingTracker = BeeManager.beeRoot.getBreedingTracker(world, beeHousing.getOwner());
@@ -487,7 +487,7 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public void syncToClient() {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		if (world != null && !world.isClientSide) {
 			if (housing instanceof Entity) {
 				Entity housingEntity = (Entity) this.housing;
@@ -499,10 +499,10 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void syncToClient(ServerPlayerEntity player) {
-		World world = housing.getWorldObj();
+	public void syncToClient(ServerPlayer player) {
+		Level world = housing.getWorldObj();
 		if (world != null && !world.isClientSide) {
-			if (housing instanceof TileEntity) {
+			if (housing instanceof BlockEntity) {
 				NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
 			} else if (housing instanceof Entity) {
 				NetworkUtil.sendToPlayer(new PacketBeeLogicActiveEntity(housing, (Entity) housing), player);

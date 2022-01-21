@@ -3,7 +3,7 @@ package genetics.api.root;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.individual.IGenome;
 import genetics.api.individual.IGenomeWrapper;
@@ -19,9 +19,9 @@ public class SimpleIndividualRoot<I extends IIndividual> extends IndividualRoot<
 	}
 
 	@Override
-	public I create(CompoundNBT compound) {
+	public I create(CompoundTag compound) {
 		try {
-			Constructor<? extends I> constructor = individualClass.getConstructor(CompoundNBT.class);
+			Constructor<? extends I> constructor = individualClass.getConstructor(CompoundTag.class);
 			constructor.setAccessible(true);
 			return constructor.newInstance(compound);
 		} catch (NoSuchMethodException e) {

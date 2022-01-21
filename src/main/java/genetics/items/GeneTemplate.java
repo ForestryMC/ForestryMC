@@ -4,8 +4,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -20,7 +20,7 @@ import genetics.ApiInstance;
 import genetics.Genetics;
 import genetics.utils.AlleleUtils;
 
-public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundNBT> {
+public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<CompoundTag> {
 	public static final IGeneTemplate EMPTY = new Empty();
 
 	private static final String NBT_ALLELE = "Allele";
@@ -63,8 +63,8 @@ public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<Comp
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
-		CompoundNBT compound = new CompoundNBT();
+	public CompoundTag serializeNBT() {
+		CompoundTag compound = new CompoundTag();
 		if (allele != null) {
 			compound.putString(NBT_ALLELE, allele.getRegistryName().toString());
 		}
@@ -76,7 +76,7 @@ public class GeneTemplate implements IGeneTemplate, ICapabilitySerializable<Comp
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT compound) {
+	public void deserializeNBT(CompoundTag compound) {
 		if (compound.contains(NBT_TYPE) && compound.contains(NBT_DEFINITION)) {
 			ApiInstance.INSTANCE.getRoot(compound.getString(NBT_DEFINITION)).ifPresent(def -> {
 				this.root = def;

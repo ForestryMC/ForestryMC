@@ -1,7 +1,7 @@
 package forestry.energy;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -32,11 +32,11 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 		final int energy;
 		if (nbt.contains("EnergyManager")) { // legacy
-			CompoundNBT energyManagerNBT = nbt.getCompound("EnergyManager");
-			CompoundNBT energyStorageNBT = energyManagerNBT.getCompound("EnergyStorage");
+			CompoundTag energyManagerNBT = nbt.getCompound("EnergyManager");
+			CompoundTag energyStorageNBT = energyManagerNBT.getCompound("EnergyStorage");
 			energy = energyStorageNBT.getInt("Energy");
 		} else {
 			energy = nbt.getInt("Energy");
@@ -46,7 +46,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundTag write(CompoundTag nbt) {
 		nbt.putInt("Energy", energy);
 		return nbt;
 	}
@@ -122,7 +122,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	public int calculateRedstone() {
-		return MathHelper.floor(((float) energy / (float) capacity) * 14.0F) + (energy > 0 ? 1 : 0);
+		return Mth.floor(((float) energy / (float) capacity) * 14.0F) + (energy > 0 ? 1 : 0);
 	}
 
 }

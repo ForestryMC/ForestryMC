@@ -4,16 +4,18 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Direction;
 
 import forestry.api.genetics.filter.IFilterData;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.genetics.filter.IFilterRuleType;
 
 import genetics.api.alleles.IAllele;
+
+import forestry.api.genetics.filter.IFilterLogic.INetworkHandler;
 
 public final class FakeFilterLogic implements IFilterLogic {
 	public static final FakeFilterLogic INSTANCE = new FakeFilterLogic();
@@ -22,12 +24,12 @@ public final class FakeFilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void writeGuiData(PacketBuffer data) {
+	public void writeGuiData(FriendlyByteBuf data) {
 
 	}
 
 	@Override
-	public void readGuiData(PacketBuffer data) {
+	public void readGuiData(FriendlyByteBuf data) {
 
 	}
 
@@ -89,12 +91,12 @@ public final class FakeFilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundTag write(CompoundTag nbt) {
 		return nbt;
 	}
 }

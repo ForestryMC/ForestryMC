@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -49,12 +49,12 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+	public NonNullList<ItemStack> collect(Level world, IFarmHousing farmHousing) {
 		return collectEntityItems(world, farmHousing, true);
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
+	public Collection<ICrop> harvest(Level world, IFarmHousing farmHousing, FarmDirection direction, int extent, BlockPos pos) {
 		BlockPos position = farmHousing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = harvestBlocks(world, position);
 		farmHousing.increaseExtent(direction, pos, extent);
@@ -62,7 +62,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return crops;
 	}
 
-	private Collection<ICrop> harvestBlocks(World world, BlockPos position) {
+	private Collection<ICrop> harvestBlocks(Level world, BlockPos position) {
 		// Determine what type we want to harvest.
 		IFarmable farmable = getFarmableForBlock(world, position, getFarmables());
 		if (farmable == null) {
@@ -101,7 +101,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Nullable
-	private static IFarmable getFarmableForBlock(World world, BlockPos position, Collection<IFarmable> farmables) {
+	private static IFarmable getFarmableForBlock(Level world, BlockPos position, Collection<IFarmable> farmables) {
 		if (world.isEmptyBlock(position)) {
 			return null;
 		}
@@ -116,7 +116,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 	}
 
 	@Override
-	protected boolean maintainSeedlings(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+	protected boolean maintainSeedlings(Level world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 
@@ -131,7 +131,7 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
 		return false;
 	}
 
-	private boolean plantSapling(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
+	private boolean plantSapling(Level world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
 		Collections.shuffle(getFarmables());
 		for (IFarmable candidate : getFarmables()) {
 			if (farmHousing.plantGermling(candidate, world, position, direction)) {

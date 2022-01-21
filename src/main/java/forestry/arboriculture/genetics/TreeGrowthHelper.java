@@ -4,10 +4,10 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
@@ -17,7 +17,7 @@ import genetics.api.individual.IGenome;
 
 public class TreeGrowthHelper {
 	@Nullable
-	public static BlockPos canGrow(IWorld world, IGenome genome, BlockPos pos, int expectedGirth, int expectedHeight) {
+	public static BlockPos canGrow(LevelAccessor world, IGenome genome, BlockPos pos, int expectedGirth, int expectedHeight) {
 		BlockPos growthPos = hasSufficientSaplingsAroundSapling(genome, world, pos, expectedGirth);
 		if (growthPos == null) {
 			return null;
@@ -30,12 +30,12 @@ public class TreeGrowthHelper {
 		return growthPos;
 	}
 
-	private static boolean hasRoom(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
-		Vector3i area = new Vector3i(expectedGirth, expectedHeight + 1, expectedGirth);
+	private static boolean hasRoom(LevelAccessor world, BlockPos pos, int expectedGirth, int expectedHeight) {
+		Vec3i area = new Vec3i(expectedGirth, expectedHeight + 1, expectedGirth);
 		return checkArea(world, pos.above(), area);
 	}
 
-	private static boolean checkArea(IWorld world, BlockPos start, Vector3i area) {
+	private static boolean checkArea(LevelAccessor world, BlockPos start, Vec3i area) {
 		for (int x = 0; x < area.getX(); x++) {
 			for (int y = 0; y < area.getY(); y++) {
 				for (int z = 0; z < area.getZ(); z++) {
@@ -59,7 +59,7 @@ public class TreeGrowthHelper {
 	 * Uses a knownSaplings cache to avoid checking the same saplings multiple times.
 	 */
 	@Nullable
-	private static BlockPos hasSufficientSaplingsAroundSapling(IGenome genome, IWorld world, BlockPos saplingPos, int expectedGirth) {
+	private static BlockPos hasSufficientSaplingsAroundSapling(IGenome genome, LevelAccessor world, BlockPos saplingPos, int expectedGirth) {
 		final int checkSize = (expectedGirth * 2) - 1;
 		final int offset = expectedGirth - 1;
 		final Map<BlockPos, Boolean> knownSaplings = new HashMap<>(checkSize * checkSize);
@@ -76,7 +76,7 @@ public class TreeGrowthHelper {
 		return null;
 	}
 
-	private static boolean checkForSaplings(IGenome genome, IWorld world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
+	private static boolean checkForSaplings(IGenome genome, LevelAccessor world, BlockPos startPos, int girth, Map<BlockPos, Boolean> knownSaplings) {
 		for (int x = 0; x < girth; x++) {
 			for (int z = 0; z < girth; z++) {
 				BlockPos checkPos = startPos.offset(x, 0, z);
@@ -89,7 +89,7 @@ public class TreeGrowthHelper {
 		return true;
 	}
 
-	private static boolean isSapling(IGenome genome, IWorld world, BlockPos pos) {
+	private static boolean isSapling(IGenome genome, LevelAccessor world, BlockPos pos) {
 		if (!world.hasChunkAt(pos)) {
 			return false;
 		}

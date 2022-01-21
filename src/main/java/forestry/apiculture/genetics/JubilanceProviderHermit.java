@@ -12,7 +12,7 @@ package forestry.apiculture.genetics;
 
 import java.util.List;
 
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.Mob;
 
 import genetics.api.individual.IGenome;
 
@@ -26,7 +26,7 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 public class JubilanceProviderHermit extends JubilanceDefault {
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
-		List<MobEntity> list = AlleleEffect.getEntitiesInRange(genome, housing, MobEntity.class);
+		List<Mob> list = AlleleEffect.getEntitiesInRange(genome, housing, Mob.class);
 		return list.size() <= 0;
 	}
 }

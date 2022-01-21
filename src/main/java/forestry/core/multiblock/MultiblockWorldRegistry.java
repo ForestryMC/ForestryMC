@@ -8,11 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkSource;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
@@ -27,7 +27,7 @@ import forestry.core.utils.Log;
  * @author Erogenous Beef
  */
 public class MultiblockWorldRegistry {
-	private final World world;
+	private final Level world;
 
 	private final Set<IMultiblockControllerInternal> controllers;        // Active controllers
 	private final Set<IMultiblockControllerInternal> dirtyControllers;    // Controllers whose parts lists have changed
@@ -51,7 +51,7 @@ public class MultiblockWorldRegistry {
 	private final Object partsAwaitingChunkLoadMutex;
 	private final Object orphanedPartsMutex;
 
-	public MultiblockWorldRegistry(World world) {
+	public MultiblockWorldRegistry(Level world) {
 		this.world = world;
 
 		this.controllers = new HashSet<>();
@@ -90,7 +90,7 @@ public class MultiblockWorldRegistry {
 	 * Called prior to processing multiblock controllers. Do bookkeeping.
 	 */
 	public void processMultiblockChanges() {
-		AbstractChunkProvider chunkProvider = world.getChunkSource();
+		ChunkSource chunkProvider = world.getChunkSource();
 		BlockPos coord;
 
 		// Merge pools - sets of adjacent machines which should be merged later on in processing
@@ -122,7 +122,7 @@ public class MultiblockWorldRegistry {
 					}
 
 					// This can occur on slow machines.
-					if (orphan instanceof TileEntity && ((TileEntity) orphan).isRemoved()) {
+					if (orphan instanceof BlockEntity && ((BlockEntity) orphan).isRemoved()) {
 						continue;
 					}
 

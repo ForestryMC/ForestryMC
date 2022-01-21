@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
@@ -23,14 +23,14 @@ import forestry.core.gui.slots.SlotOutput;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public static ContainerHabitatLocator fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
+	public static ContainerHabitatLocator fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
+		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		Player player = playerInv.player;
 		ItemInventoryHabitatLocator inv = new ItemInventoryHabitatLocator(player, player.getItemInHand(hand));
 		return new ContainerHabitatLocator(windowId, player, inv);
 	}
 
-	public ContainerHabitatLocator(int windowId, PlayerEntity player, ItemInventoryHabitatLocator inventory) {
+	public ContainerHabitatLocator(int windowId, Player player, ItemInventoryHabitatLocator inventory) {
 		super(windowId, inventory, player.inventory, 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
 
 		// Energy

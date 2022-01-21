@@ -4,12 +4,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -286,9 +286,9 @@ public class FactoryJeiPlugin implements IModPlugin {
 	}
 
 
-	static class ForestryAdvancedGuiHandler<T extends Container> implements IGuiContainerHandler<GuiForestry<?>> {
+	static class ForestryAdvancedGuiHandler<T extends AbstractContainerMenu> implements IGuiContainerHandler<GuiForestry<?>> {
 		@Override
-		public List<Rectangle2d> getGuiExtraAreas(GuiForestry<?> guiContainer) {
+		public List<Rect2i> getGuiExtraAreas(GuiForestry<?> guiContainer) {
 			return guiContainer.getExtraGuiAreas();
 		}
 

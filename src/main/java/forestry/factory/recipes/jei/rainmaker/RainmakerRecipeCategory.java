@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.rainmaker;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
@@ -50,7 +50,7 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainmakerRec
 	}
 
 	@Override
-	public void draw(RainmakerRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(RainmakerRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		super.draw(recipe, matrixStack, mouseX, mouseY);
 		int recipeWidth = this.getBackground().getWidth();
 		int recipeHeight = this.getBackground().getHeight();

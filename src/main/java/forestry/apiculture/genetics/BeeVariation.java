@@ -1,6 +1,6 @@
 package forestry.apiculture.genetics;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.alleles.IAlleleTemplate;
 import genetics.api.individual.IGenome;

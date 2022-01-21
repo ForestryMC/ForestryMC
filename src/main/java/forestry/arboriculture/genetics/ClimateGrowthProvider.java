@@ -2,9 +2,9 @@ package forestry.arboriculture.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import genetics.api.individual.IGenome;
 
@@ -40,7 +40,7 @@ public class ClimateGrowthProvider implements IGrowthProvider {
 	}
 
 	@Override
-	public boolean canSpawn(ITree tree, World world, BlockPos pos) {
+	public boolean canSpawn(ITree tree, Level world, BlockPos pos) {
 		return true;
 	}
 

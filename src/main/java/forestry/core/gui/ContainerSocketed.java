@@ -10,22 +10,22 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.circuits.ISocketable;
 
-public abstract class ContainerSocketed<T extends TileEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
+public abstract class ContainerSocketed<T extends BlockEntity & ISocketable> extends ContainerTile<T> implements IContainerSocketed {
 
 	private final ContainerSocketedHelper<T> helper;
 
-	protected ContainerSocketed(int windowId, ContainerType<?> type, PlayerInventory playerInventory, T tile, int xInv, int yInv) {
+	protected ContainerSocketed(int windowId, MenuType<?> type, Inventory playerInventory, T tile, int xInv, int yInv) {
 		super(windowId, type, playerInventory, tile, xInv, yInv);
 		this.helper = new ContainerSocketedHelper<>(this.tile);
 	}
@@ -37,7 +37,7 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 	}
 
 	@Override
-	public void handleChipsetClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+	public void handleChipsetClickServer(int slot, ServerPlayer player, ItemStack itemstack) {
 		helper.handleChipsetClickServer(slot, player, itemstack);
 	}
 
@@ -48,7 +48,7 @@ public abstract class ContainerSocketed<T extends TileEntity & ISocketable> exte
 	}
 
 	@Override
-	public void handleSolderingIronClickServer(int slot, ServerPlayerEntity player, ItemStack itemstack) {
+	public void handleSolderingIronClickServer(int slot, ServerPlayer player, ItemStack itemstack) {
 		helper.handleSolderingIronClickServer(slot, player, itemstack);
 	}
 }

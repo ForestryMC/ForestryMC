@@ -11,12 +11,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,7 +28,7 @@ import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.layouts.ContainerElement;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class GuiElement extends AbstractGui {
+public abstract class GuiElement extends GuiComponent {
 	public static final int UNKNOWN_HEIGHT = -1;
 	public static final int UNKNOWN_WIDTH = -1;
 	public static final Dimension UNKNOWN_SIZE = new Dimension(-1, -1);
@@ -114,7 +114,7 @@ public abstract class GuiElement extends AbstractGui {
 	}
 
 	@SuppressWarnings("deprecation")
-	public final void draw(MatrixStack transform, int mouseX, int mouseY) {
+	public final void draw(PoseStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
 		}
@@ -124,7 +124,7 @@ public abstract class GuiElement extends AbstractGui {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getInstance();
 			//TODO - resolution stuff again, check gameSettings.guiscale too
-			MainWindow window = mc.getWindow();
+			Window window = mc.getWindow();
 			double scaleWidth = ((double) window.getScreenWidth()) / window.getGuiScaledWidth();
 			double scaleHeight = ((double) window.getScreenHeight()) / window.getGuiScaledHeight();
 			GuiElement cropRelative = cropElement != null ? cropElement : this;
@@ -142,7 +142,7 @@ public abstract class GuiElement extends AbstractGui {
 		RenderSystem.popMatrix();
 	}
 
-	protected void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		//Default-Implementation
 	}
 
@@ -350,17 +350,17 @@ public abstract class GuiElement extends AbstractGui {
 		return toolTip;
 	}
 
-	public GuiElement addTooltip(ITextComponent line) {
+	public GuiElement addTooltip(Component line) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
 		return this;
 	}
 
-	public GuiElement addTooltip(Collection<ITextComponent> lines) {
+	public GuiElement addTooltip(Collection<Component> lines) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
 		return this;
 	}
 
-	public GuiElement addTooltip(Supplier<ITextComponent> line) {
+	public GuiElement addTooltip(Supplier<Component> line) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line.get()));
 		return this;
 	}

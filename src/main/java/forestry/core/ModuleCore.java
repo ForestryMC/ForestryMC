@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
@@ -59,7 +59,7 @@ import forestry.modules.ISidedModuleHandler;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
-	public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
+	public static final LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
 		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -92,11 +92,11 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
-		ScreenManager.register(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
-		ScreenManager.register(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
-		ScreenManager.register(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
-		ScreenManager.register(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
+		MenuScreens.register(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
+		MenuScreens.register(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
+		MenuScreens.register(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
+		MenuScreens.register(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
+		MenuScreens.register(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
 	}
 
 
@@ -109,7 +109,7 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Nullable
 	@Override
-	public LiteralArgumentBuilder<CommandSource> register() {
+	public LiteralArgumentBuilder<CommandSourceStack> register() {
 		return rootCommand;
 	}
 

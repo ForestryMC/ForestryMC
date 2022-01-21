@@ -12,12 +12,12 @@ package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class AIButterflyBase extends Goal {
 
@@ -28,13 +28,13 @@ public abstract class AIButterflyBase extends Goal {
 	}
 
 	@Nullable
-	protected Vector3d getRandomDestination() {
+	protected Vec3 getRandomDestination() {
 		if (entity.isInWater()) {
 			return getRandomDestinationUpwards();
 		}
 
-		Vector3d entityPos = entity.position();
-		Vector3d randomTarget = RandomPositionGenerator.getPosAvoid(entity, 16, 7, entityPos);
+		Vec3 entityPos = entity.position();
+		Vec3 randomTarget = RandomPos.getPosAvoid(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;
@@ -43,9 +43,9 @@ public abstract class AIButterflyBase extends Goal {
 	}
 
 	@Nullable
-	protected Vector3d getRandomDestinationUpwards() {
-		Vector3d entityPos = entity.position();
-		Vector3d destination = entityPos.add(0, entity.getRandom().nextInt(10) + 2, 0);
+	protected Vec3 getRandomDestinationUpwards() {
+		Vec3 entityPos = entity.position();
+		Vec3 destination = entityPos.add(0, entity.getRandom().nextInt(10) + 2, 0);
 		if (validateDestination(destination, true)) {
 			return destination;
 		} else {
@@ -53,7 +53,7 @@ public abstract class AIButterflyBase extends Goal {
 		}
 	}
 
-	private boolean validateDestination(Vector3d dest, boolean allowFluids) {
+	private boolean validateDestination(Vec3 dest, boolean allowFluids) {
 		if (dest.y < 1) {
 			return false;
 		}

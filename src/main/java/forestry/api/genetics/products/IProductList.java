@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.function.Function;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 /**
  * A list of products that a bee or tree produces.

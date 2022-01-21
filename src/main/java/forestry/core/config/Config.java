@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 

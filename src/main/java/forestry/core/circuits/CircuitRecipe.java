@@ -13,12 +13,12 @@ package forestry.core.circuits;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -75,19 +75,19 @@ public class CircuitRecipe implements ISolderRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CircuitRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CircuitRecipe> {
 
 		@Override
 		public CircuitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(JSONUtils.getAsString(json, "layout"));
-			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(JSONUtils.getAsString(json, "circuit"));
-			ItemStack resource = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "resource"));
+			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(GsonHelper.getAsString(json, "layout"));
+			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(GsonHelper.getAsString(json, "circuit"));
+			ItemStack resource = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "resource"));
 
 			return new CircuitRecipe(recipeId, layout, resource, circuit);
 		}
 
 		@Override
-		public CircuitRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public CircuitRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(buffer.readUtf());
 			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(buffer.readUtf());
 			ItemStack resource = buffer.readItem();
@@ -96,7 +96,7 @@ public class CircuitRecipe implements ISolderRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, CircuitRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, CircuitRecipe recipe) {
 			buffer.writeUtf(recipe.layout.getUID());
 			buffer.writeUtf(recipe.circuit.getUID());
 			buffer.writeItem(recipe.resource);

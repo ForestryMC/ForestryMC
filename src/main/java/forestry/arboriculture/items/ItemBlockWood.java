@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
@@ -27,7 +27,7 @@ public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForest
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		IWoodTyped wood = getBlock();
 		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);

@@ -3,12 +3,12 @@ package forestry.cultivation.blocks;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,7 +43,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 		if (blockType == BlockTypePlanter.FARM_ENDER) {
 			for (int i = 0; i < 3; ++i) {
 				ParticleRender.addPortalFx(worldIn, pos, rand);
@@ -52,8 +52,8 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		TileEntity tile = super.createTileEntity(state, world);
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
+		BlockEntity tile = super.createTileEntity(state, world);
 		if (tile instanceof TilePlanter) {
 			TilePlanter planter = (TilePlanter) tile;
 			planter.setManual(getMode());

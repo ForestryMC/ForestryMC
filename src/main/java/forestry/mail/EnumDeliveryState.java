@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.mail.IPostalState;
 
@@ -35,7 +35,7 @@ public enum EnumDeliveryState implements IPostalState {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent(unlocalizedDescription);
+	public Component getDescription() {
+		return new TranslatableComponent(unlocalizedDescription);
 	}
 }

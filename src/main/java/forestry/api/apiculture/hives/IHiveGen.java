@@ -7,9 +7,9 @@ package forestry.api.apiculture.hives;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
 
 public interface IHiveGen {
 
@@ -18,17 +18,17 @@ public interface IHiveGen {
 	 * returns null if the hive can't be placed anywhere.
 	 */
 	@Nullable
-	BlockPos getPosForHive(ISeedReader world, int x, int z);
+	BlockPos getPosForHive(WorldGenLevel world, int x, int z);
 
 	/**
 	 * returns true if the hive can be generated at this location.
 	 * Used for advanced conditions, like checking that the ground below the hive is a certain type.
 	 */
-	boolean isValidLocation(ISeedReader world, BlockPos pos);
+	boolean isValidLocation(WorldGenLevel world, BlockPos pos);
 
 	/**
 	 * returns true if the hive can safely replace the block at this location.
 	 */
-	boolean canReplace(BlockState blockState, ISeedReader world, BlockPos pos);
+	boolean canReplace(BlockState blockState, WorldGenLevel world, BlockPos pos);
 
 }

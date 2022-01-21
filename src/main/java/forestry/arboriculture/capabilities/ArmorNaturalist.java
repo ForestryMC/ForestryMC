@@ -1,7 +1,7 @@
 package forestry.arboriculture.capabilities;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.core.IArmorNaturalist;
 
@@ -13,7 +13,7 @@ public class ArmorNaturalist implements IArmorNaturalist {
 	}
 
 	@Override
-	public boolean canSeePollination(PlayerEntity player, ItemStack armor, boolean doSee) {
+	public boolean canSeePollination(Player player, ItemStack armor, boolean doSee) {
 		return true;
 	}
 }

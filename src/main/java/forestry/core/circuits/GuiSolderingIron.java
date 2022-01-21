@@ -12,13 +12,13 @@ package forestry.core.circuits;
 
 import java.util.Locale;
 
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -37,7 +37,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 
 	private final ItemInventorySolderingIron itemInventory;
 
-	public GuiSolderingIron(ContainerSolderingIron container, PlayerInventory inv, ITextComponent title) {
+	public GuiSolderingIron(ContainerSolderingIron container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/solder.png", container, inv, title);
 
 		this.itemInventory = container.getItemInventory();
@@ -46,7 +46,7 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		ICircuitLayout layout = container.getLayout();
@@ -82,8 +82,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	public void init() {
 		super.init();
 
-		addButton(new Button(leftPos + 12, topPos + 10, 12, 18, new StringTextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-		addButton(new Button(leftPos + 130, topPos + 10, 12, 18, new StringTextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+		addButton(new Button(leftPos + 12, topPos + 10, 12, 18, new TextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
+		addButton(new Button(leftPos + 130, topPos + 10, 12, 18, new TextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
 	}
 
 	@Override

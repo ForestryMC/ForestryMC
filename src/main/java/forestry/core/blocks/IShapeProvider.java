@@ -1,13 +1,13 @@
 package forestry.core.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
 
 @FunctionalInterface
 public interface IShapeProvider {
 
-	VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context);
+	VoxelShape getShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context);
 }

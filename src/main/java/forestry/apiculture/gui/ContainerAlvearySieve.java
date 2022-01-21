@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
@@ -24,12 +24,12 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearySieve extends ContainerTile<TileAlvearySieve> {
 
-	public static ContainerAlvearySieve fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerAlvearySieve fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileAlvearySieve tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlvearySieve.class);
 		return new ContainerAlvearySieve(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerAlvearySieve(int windowId, PlayerInventory player, TileAlvearySieve tile) {
+	public ContainerAlvearySieve(int windowId, Inventory player, TileAlvearySieve tile) {
 		super(windowId, ApicultureContainers.ALVEARY_SIEVE.containerType(), player, tile, 8, 87);
 
 		ISlotPickupWatcher crafter = tile.getCrafter();

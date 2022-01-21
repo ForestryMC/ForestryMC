@@ -13,8 +13,8 @@ package forestry.apiculture.inventory;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -35,7 +35,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	private int primaryIndex = 0;
 	private int secondaryIndex = 0;
 
-	public ItemInventoryImprinter(PlayerEntity player, ItemStack itemStack) {
+	public ItemInventoryImprinter(Player player, ItemStack itemStack) {
 		super(player, 2, itemStack);
 	}
 
@@ -106,7 +106,7 @@ public class ItemInventoryImprinter extends ItemInventory {
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
+	public void onSlotClick(int slotIndex, Player player) {
 		ItemStack specimen = getItem(specimenSlot);
 		if (specimen.isEmpty()) {
 			return;

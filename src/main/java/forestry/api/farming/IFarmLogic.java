@@ -7,10 +7,10 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * The IFarmLogic is used by farm blocks and multi-blocks to cultivate and harvest crops and plants.
@@ -28,7 +28,7 @@ public interface IFarmLogic {
 	 * @param farmHousing The farm that uses this logic.
 	 * @return A collection that contains all items that were collected.
 	 */
-	default NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+	default NonNullList<ItemStack> collect(Level world, IFarmHousing farmHousing) {
 		return NonNullList.create();
 	}
 
@@ -43,7 +43,7 @@ public interface IFarmLogic {
 	 *                    The positions of the next blocks are having a offset in the given direction.
 	 * @return True if the logic has cultivated any block.
 	 */
-	default boolean cultivate(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+	default boolean cultivate(Level world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ public interface IFarmLogic {
 	 * @param pos       The position at that the logic should start to harvest.
 	 * @return True if the logic has cultivated any block.
 	 */
-	Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos);
+	Collection<ICrop> harvest(Level world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos);
 
 	/**
 	 * Returns the {@link IFarmProperties} that created this logic.

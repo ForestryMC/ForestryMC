@@ -2,9 +2,9 @@ package forestry.core.registration;
 
 import java.util.function.Supplier;
 
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -14,11 +14,11 @@ public class ParticleTypeDeferredRegister extends WrappedDeferredRegister<Partic
 		super(modid, ForgeRegistries.PARTICLE_TYPES);
 	}
 
-	public ParticleTypeRegistryObject<BasicParticleType> registerBasicParticle(String name) {
-		return register(name, () -> new BasicParticleType(false));
+	public ParticleTypeRegistryObject<SimpleParticleType> registerBasicParticle(String name) {
+		return register(name, () -> new SimpleParticleType(false));
 	}
 
-	public <PARTICLE extends IParticleData> ParticleTypeRegistryObject<PARTICLE> register(String name, Supplier<ParticleType<PARTICLE>> sup) {
+	public <PARTICLE extends ParticleOptions> ParticleTypeRegistryObject<PARTICLE> register(String name, Supplier<ParticleType<PARTICLE>> sup) {
 		return register(name, sup, ParticleTypeRegistryObject::new);
 	}
 }

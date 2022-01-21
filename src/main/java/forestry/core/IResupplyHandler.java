@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public interface IResupplyHandler {
 
-	void resupply(PlayerEntity player);
+	void resupply(Player player);
 
 }

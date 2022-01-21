@@ -2,24 +2,24 @@ package forestry.core.data;
 
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.FenceGateBlock;
-import net.minecraft.block.FourWayBlock;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.CrossCollisionBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.DoorHingeSide;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.state.properties.Half;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.state.properties.StairsShape;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.block.state.properties.StairsShape;
+import net.minecraft.core.Direction;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -144,33 +144,33 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 		String modelLocation = getLocation(type, WoodBlockKind.STAIRS);
 		BlockState defaultState = feature.defaultState();
 		addVariants(feature.block(), new Builder()
-			.alwaysIgnore(StairsBlock.WATERLOGGED)
+			.alwaysIgnore(StairBlock.WATERLOGGED)
 				.always((variant) -> variant.lock(true))
-				.property(StairsBlock.HALF, Half.TOP, (variant) -> variant.rotationX(180))
-				.property(StairsBlock.SHAPE, StairsShape.INNER_LEFT, (variant) -> variant.model(modelLocation + "_inner"))
-				.property(StairsBlock.SHAPE, StairsShape.INNER_RIGHT, (variant) -> variant.model(modelLocation + "_inner"))
-				.property(StairsBlock.SHAPE, StairsShape.OUTER_LEFT, (variant) -> variant.model(modelLocation + "_outer"))
-				.property(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT, (variant) -> variant.model(modelLocation + "_outer"))
-				.property(StairsBlock.SHAPE, StairsShape.STRAIGHT, (variant) -> variant.model(modelLocation))
-				.property(StairsBlock.FACING, Direction.WEST, (variant) -> variant.rotationY(180))
-				.property(StairsBlock.FACING, Direction.SOUTH, (variant) -> variant.rotationY(90))
-				.property(StairsBlock.FACING, Direction.NORTH, (variant) -> variant.rotationY(270))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.EAST).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(270))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.WEST).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(90))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.SOUTH).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(0))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.NORTH).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(180))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.EAST).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(270))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.WEST).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(90))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.SOUTH).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(0))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.NORTH).setValue(StairsBlock.HALF, Half.BOTTOM).setValue(StairsBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(180))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.EAST).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(90))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.WEST).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(270))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.SOUTH).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(180))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.NORTH).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(0))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.EAST).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(90))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.WEST).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(270))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.SOUTH).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(180))
-				.state(defaultState.setValue(StairsBlock.FACING, Direction.NORTH).setValue(StairsBlock.HALF, Half.TOP).setValue(StairsBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(0))
+				.property(StairBlock.HALF, Half.TOP, (variant) -> variant.rotationX(180))
+				.property(StairBlock.SHAPE, StairsShape.INNER_LEFT, (variant) -> variant.model(modelLocation + "_inner"))
+				.property(StairBlock.SHAPE, StairsShape.INNER_RIGHT, (variant) -> variant.model(modelLocation + "_inner"))
+				.property(StairBlock.SHAPE, StairsShape.OUTER_LEFT, (variant) -> variant.model(modelLocation + "_outer"))
+				.property(StairBlock.SHAPE, StairsShape.OUTER_RIGHT, (variant) -> variant.model(modelLocation + "_outer"))
+				.property(StairBlock.SHAPE, StairsShape.STRAIGHT, (variant) -> variant.model(modelLocation))
+				.property(StairBlock.FACING, Direction.WEST, (variant) -> variant.rotationY(180))
+				.property(StairBlock.FACING, Direction.SOUTH, (variant) -> variant.rotationY(90))
+				.property(StairBlock.FACING, Direction.NORTH, (variant) -> variant.rotationY(270))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(270))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(90))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(0))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.OUTER_LEFT), (variant) -> variant.rotationY(180))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(270))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(90))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(0))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.BOTTOM).setValue(StairBlock.SHAPE, StairsShape.INNER_LEFT), (variant) -> variant.rotationY(180))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(90))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(270))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(180))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.OUTER_RIGHT), (variant) -> variant.rotationY(0))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(90))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(270))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(180))
+				.state(defaultState.setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.SHAPE, StairsShape.INNER_RIGHT), (variant) -> variant.rotationY(0))
 		);
 	}
 
@@ -193,10 +193,10 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 		String modelLocation = getLocation(type, WoodBlockKind.FENCE);
 		addVariants(feature.block(), new MultipartBuilder()
 			.always(variant -> variant.model(modelLocation + (type instanceof EnumVanillaWoodType ? "_post" : "")))
-			.property(variant -> variant.model(modelLocation + "_side").lock(true), FourWayBlock.NORTH, true)
-			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(90), FourWayBlock.EAST, true)
-			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(180), FourWayBlock.SOUTH, true)
-			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(270), FourWayBlock.WEST, true));
+			.property(variant -> variant.model(modelLocation + "_side").lock(true), CrossCollisionBlock.NORTH, true)
+			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(90), CrossCollisionBlock.EAST, true)
+			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(180), CrossCollisionBlock.SOUTH, true)
+			.property(variant -> variant.model(modelLocation + "_side").lock(true).rotationY(270), CrossCollisionBlock.WEST, true));
 	}
 
 	private void addFenceGate(FeatureBlock<? extends Block, BlockItem> feature, IWoodType type) {
@@ -204,9 +204,9 @@ public class WoodBlockStateProvider extends BlockStateProvider {
 		addVariants(feature.block(), new Builder()
 				.always((variant) -> variant.lock(true))
 				.alwaysIgnore(FenceGateBlock.POWERED)
-				.property(HorizontalBlock.FACING, Direction.WEST, (variant) -> variant.rotationY(90))
-				.property(HorizontalBlock.FACING, Direction.EAST, (variant) -> variant.rotationY(270))
-				.property(HorizontalBlock.FACING, Direction.NORTH, (variant) -> variant.rotationY(180))
+				.property(HorizontalDirectionalBlock.FACING, Direction.WEST, (variant) -> variant.rotationY(90))
+				.property(HorizontalDirectionalBlock.FACING, Direction.EAST, (variant) -> variant.rotationY(270))
+				.property(HorizontalDirectionalBlock.FACING, Direction.NORTH, (variant) -> variant.rotationY(180))
 			.property(FenceGateBlock.IN_WALL, false, FenceGateBlock.OPEN, false, (variant) -> variant.model(modelLocation))
 			.property(FenceGateBlock.IN_WALL, false, FenceGateBlock.OPEN, true, (variant) -> variant.model(modelLocation + "_open"))
 			.property(FenceGateBlock.IN_WALL, true, FenceGateBlock.OPEN, false, (variant) -> variant.model(modelLocation + "_wall"))

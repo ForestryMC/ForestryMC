@@ -1,14 +1,14 @@
 package forestry.core.render;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
  * Handler for the rendering of a forestry tile entity and its item.
  *
  * @param <T> The type of the tile entity
  */
-public interface IForestryRenderer<T extends TileEntity> {
+public interface IForestryRenderer<T extends BlockEntity> {
 
 	/**
 	 * Renders the given tile entity.

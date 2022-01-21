@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;

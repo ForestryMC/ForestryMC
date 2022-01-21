@@ -8,8 +8,8 @@ package forestry.api.book;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,7 +71,7 @@ public interface IBookCategory {
 	/**
 	 * @return the localized name of this category.
 	 */
-	ITextComponent getLocalizedName();
+	Component getLocalizedName();
 
 	/**
 	 * Currently unused

@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
@@ -40,7 +40,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	//TODO - dimensionsavedddatamanager? check later
 	@Override
-	public ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName) {
+	public ICircuitLibrary getCircuitLibrary(ServerLevel world, String playerName) {
 		return world.getDataStorage().computeIfAbsent(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
 	}
 
@@ -107,7 +107,7 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	@Override
 	public ICircuitBoard getCircuitBoard(ItemStack itemstack) {
-		CompoundNBT compoundNBT = itemstack.getTag();
+		CompoundTag compoundNBT = itemstack.getTag();
 		if (compoundNBT == null) {
 			return null;
 		}

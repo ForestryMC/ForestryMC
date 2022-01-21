@@ -13,28 +13,28 @@ package forestry.core.fluids;
 import java.awt.Color;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.modules.features.FeatureFluid;
 import forestry.modules.features.FluidProperties;
 
-public class BlockForestryFluid extends FlowingFluidBlock {
+public class BlockForestryFluid extends LiquidBlock {
 
 	private final FeatureFluid feature;
 	private final boolean flammable;
@@ -54,7 +54,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
+	public void randomTick(BlockState blockState, ServerLevel world, BlockPos pos, Random rand) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
@@ -64,7 +64,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 
 			if (i > 0 && i < 8) {
 				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
-					world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.WATER_AMBIENT, SoundCategory.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
+					world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {
 				world.addParticle(ParticleTypes.UNDERWATER, x + rand.nextFloat(), y + rand.nextFloat(), z + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
@@ -77,11 +77,11 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 				double d4 = y + 1;
 				double d6 = z + rand.nextFloat();
 				world.addParticle(ParticleTypes.LAVA, d8, d4, d6, 0.0D, 0.0D, 0.0D);
-				world.playLocalSound(d8, d4, d6, SoundEvents.LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+				world.playLocalSound(d8, d4, d6, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 
 			if (rand.nextInt(200) == 0) {
-				world.playLocalSound(x, y, z, SoundEvents.LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
+				world.playLocalSound(x, y, z, SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F, false);
 			}
 		}
 
@@ -100,28 +100,28 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return flammable ? 30 : 0;
 	}
 
 	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return flammability;
 	}
 
 	@Override
-	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return flammable;
 	}
 
-	private static boolean isFlammable(IBlockReader world, BlockPos pos) {
+	private static boolean isFlammable(BlockGetter world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		Block block = blockState.getBlock();
 		return blockState.isFlammable(world, pos, Direction.UP);
 	}
 
 	@Override
-	public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) {
+	public boolean isFireSource(BlockState state, LevelReader world, BlockPos pos, Direction side) {
 		return flammable && flammability == 0;
 	}
 
@@ -130,7 +130,7 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
 		super.tick(state, world, pos, rand);
 
 		int x = pos.getX();
@@ -179,12 +179,12 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			float explosionSize = 4F * flammability / 300F;
 			if (explosionSize > 1.0 && isNearFire(world, pos.getX(), pos.getY(), pos.getZ())) {
 				world.setBlockAndUpdate(pos, Blocks.FIRE.defaultBlockState());
-				world.explode(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, Explosion.Mode.DESTROY);
+				world.explode(null, pos.getX(), pos.getY(), pos.getZ(), explosionSize, true, Explosion.BlockInteraction.DESTROY);
 			}
 		}
 	}
 
-	private static boolean isNeighborFlammable(World world, int x, int y, int z) {
+	private static boolean isNeighborFlammable(Level world, int x, int y, int z) {
 		return isFlammable(world, new BlockPos(x - 1, y, z)) ||
 			isFlammable(world, new BlockPos(x + 1, y, z)) ||
 			isFlammable(world, new BlockPos(x, y, z - 1)) ||
@@ -193,8 +193,8 @@ public class BlockForestryFluid extends FlowingFluidBlock {
 			isFlammable(world, new BlockPos(x, y + 1, z));
 	}
 
-	private static boolean isNearFire(World world, int x, int y, int z) {
-		AxisAlignedBB boundingBox = new AxisAlignedBB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
+	private static boolean isNearFire(Level world, int x, int y, int z) {
+		AABB boundingBox = new AABB(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
 		// Copied from 'Entity.move', replaces method 'World.isFlammableWithin'
 		return BlockPos.betweenClosedStream(boundingBox.deflate(0.001D)).noneMatch((pos) -> {
 			BlockState state = world.getBlockState(pos);

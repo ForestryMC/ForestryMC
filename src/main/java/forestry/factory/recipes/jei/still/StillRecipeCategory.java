@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.still;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
@@ -64,7 +64,7 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void draw(Object recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(Object recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		progressBar.draw(matrixStack, 50, 3);
 	}
 }

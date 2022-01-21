@@ -1,7 +1,7 @@
 package forestry.core.multiblock;
 
-import net.minecraft.world.IWorld;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.chunk.ChunkAccess;
 
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -21,8 +21,8 @@ import forestry.core.config.Constants;
 public class MultiblockEventHandler {
 	@SubscribeEvent
 	public static void onChunkLoad(ChunkEvent.Load loadEvent) {
-		IChunk chunk = loadEvent.getChunk();
-		IWorld world = loadEvent.getWorld();
+		ChunkAccess chunk = loadEvent.getChunk();
+		LevelAccessor world = loadEvent.getWorld();
 		MultiblockRegistry.onChunkLoaded(world, chunk.getPos().getRegionX(), chunk.getPos().getRegionZ());
 	}
 

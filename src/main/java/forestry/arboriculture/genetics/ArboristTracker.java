@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.TreeManager;
@@ -30,7 +30,7 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 	}
 
 	@Override
-	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+	protected IBreedingTracker getBreedingTracker(Player player) {
 		return TreeManager.treeRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}
 

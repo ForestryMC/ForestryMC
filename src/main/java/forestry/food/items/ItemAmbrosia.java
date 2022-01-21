@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.food.items;
 
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
@@ -25,11 +25,11 @@ public class ItemAmbrosia extends ItemForestryFood {
 	public ItemAmbrosia() {
 		super((new Item.Properties())
 				.tab(ItemGroupForestry.tabForestry)
-			.food(new Food.Builder()
+			.food(new FoodProperties.Builder()
 					.alwaysEat()
 					.nutrition(Constants.FOOD_AMBROSIA_HEAL)
 					.saturationMod(0.6f)
-				.effect(new EffectInstance(Effects.REGENERATION, 40, 0), 1.0F)
+				.effect(new MobEffectInstance(MobEffects.REGENERATION, 40, 0), 1.0F)
 				.build()));
 	}
 

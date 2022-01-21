@@ -13,15 +13,15 @@ package forestry.energy.tiles;
 import java.io.IOException;
 import java.util.Collection;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -41,7 +41,7 @@ import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 
-public class TileEnginePeat extends TileEngine implements ISidedInventory {
+public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 	private ItemStack fuel = ItemStack.EMPTY;
 	private int burnTime;
 	private int totalBurnTime;
@@ -218,12 +218,12 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* AUTO-EJECTING */
-	private IInventory getWasteInventory() {
+	private Container getWasteInventory() {
 		return new InventoryMapper(this, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
 	}
 
 	private void dumpStash() {
-		IInventory wasteInventory = getWasteInventory();
+		Container wasteInventory = getWasteInventory();
 
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
@@ -262,11 +262,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
-			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
+			CompoundTag fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
 			fuel = ItemStack.of(fuelItemNbt);
 		}
 
@@ -279,7 +279,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 
 		if (!fuel.isEmpty()) {
@@ -307,7 +307,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerEnginePeat(windowId, player.inventory, this);
 	}
 }

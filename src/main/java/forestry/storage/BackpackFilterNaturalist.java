@@ -2,7 +2,7 @@ package forestry.storage;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;

@@ -10,12 +10,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.farming.IFarmProperties;
@@ -95,18 +95,18 @@ public class FarmingInfoRecipeWrapper implements IRecipeCategoryExtension {
 	}
 
 	@Override
-	public void drawInfo(int recipeWidth, int recipeHeight, MatrixStack matrixStack, double mouseX, double mouseY) {
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+	public void drawInfo(int recipeWidth, int recipeHeight, PoseStack matrixStack, double mouseX, double mouseY) {
+		Font fontRenderer = Minecraft.getInstance().font;
 		fontRenderer.draw(matrixStack, circuit.getDisplayName(), (float) (recipeWidth - fontRenderer.width(circuit.getDisplayName().getString())) / 2, 3, Color.darkGray.getRGB());
 
-		ITextComponent soilName = new TranslationTextComponent("for.jei.farming.soil");
+		Component soilName = new TranslatableComponent("for.jei.farming.soil");
 		fontRenderer.draw(matrixStack, soilName, 18 - (float) (fontRenderer.width(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
 
-		ITextComponent germlingsName = new TranslationTextComponent("for.jei.farming.germlings");
+		Component germlingsName = new TranslatableComponent("for.jei.farming.germlings");
 		fontRenderer.draw(matrixStack, germlingsName, (float) (recipeWidth - fontRenderer.width(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
 
 		//TODO: draw
-		ITextComponent productsName = new TranslationTextComponent("for.jei.farming.products");
+		Component productsName = new TranslatableComponent("for.jei.farming.products");
 		fontRenderer.draw(matrixStack, productsName, 126 - (float) (fontRenderer.width(productsName.getString())) / 2, 45, Color.darkGray.getRGB());
 	}
 }

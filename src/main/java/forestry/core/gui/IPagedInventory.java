@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IPagedInventory extends IInventory {
+public interface IPagedInventory extends Container {
 
-	void flipPage(ServerPlayerEntity player, short page);
+	void flipPage(ServerPlayer player, short page);
 }

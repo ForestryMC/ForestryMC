@@ -1,9 +1,9 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
@@ -76,7 +76,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 	}
 
 	@Override
-	public void draw(FermenterRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(FermenterRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		progressBar0.draw(matrixStack, 40, 14);
 		progressBar1.draw(matrixStack, 64, 28);
 	}

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * Keeps track of all the IErrorStates for an object.
@@ -38,7 +38,7 @@ public interface IErrorLogic extends IErrorSource {
 	/**
 	 * Network serialization for syncing errors to the client from the server.
 	 */
-	void writeData(PacketBuffer data);
+	void writeData(FriendlyByteBuf data);
 
-	void readData(PacketBuffer data);
+	void readData(FriendlyByteBuf data);
 }

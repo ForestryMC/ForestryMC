@@ -4,15 +4,15 @@ import javax.annotation.Nullable;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -31,7 +31,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		if (!slot.hasItem()) {
 			super.draw(transform, startY, startX);
 		}
@@ -39,9 +39,9 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.disableDepthTest();
 		RenderSystem.enableBlend();
 
-		ITextComponent directionString = getDirectionString();
-		if (directionString == StringTextComponent.EMPTY) {
-			FontRenderer fontRenderer = manager.minecraft.font;
+		Component directionString = getDirectionString();
+		if (directionString == TextComponent.EMPTY) {
+			Font fontRenderer = manager.minecraft.font;
 			fontRenderer.drawShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
@@ -56,15 +56,15 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.enableLighting();
 	}
 
-	private ITextComponent getDirectionString() {
+	private Component getDirectionString() {
 		if (slot.getSlotIndex() >= InventoryPlanter.CONFIG.productionStart
 				|| slot.getSlotIndex() < InventoryPlanter.CONFIG.productionStart + InventoryPlanter.CONFIG.productionCount) {
-			return StringTextComponent.EMPTY;
+			return TextComponent.EMPTY;
 		}
 		int index = slot.getSlotIndex() % 4;
 		FarmDirection direction = FarmDirection.values()[index];
 		String directionString = direction.toString().toLowerCase(Locale.ENGLISH);
-		return new TranslationTextComponent("for.gui.planter." + directionString);
+		return new TranslatableComponent("for.gui.planter." + directionString);
 	}
 
 	@Nullable

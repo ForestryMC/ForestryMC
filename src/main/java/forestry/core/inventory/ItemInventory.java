@@ -15,14 +15,14 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -33,36 +33,36 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 import forestry.core.tiles.IFilterSlotDelegate;
 
-public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, ICapabilityProvider {
+public abstract class ItemInventory implements Container, IFilterSlotDelegate, ICapabilityProvider {
 	private static final String KEY_SLOTS = "Slots";
 	private static final String KEY_UID = "UID";
 	private static final Random rand = new Random();
 
 	private final IItemHandler itemHandler = new InvWrapper(this);
 
-	protected final PlayerEntity player;
+	protected final Player player;
 	private ItemStack parent;    //TODO not final any more. Is this a problem
 	private final NonNullList<ItemStack> inventoryStacks;
 
-	public ItemInventory(PlayerEntity player, int size, ItemStack parent) {
+	public ItemInventory(Player player, int size, ItemStack parent) {
 		Preconditions.checkArgument(!parent.isEmpty(), "Parent cannot be empty.");
 
 		this.player = player;
 		this.parent = parent;
 		this.inventoryStacks = NonNullList.withSize(size, ItemStack.EMPTY);
 
-		CompoundNBT nbt = parent.getTag();
+		CompoundTag nbt = parent.getTag();
 		if (nbt == null) {
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			parent.setTag(nbt);
 		}
 		setUID(nbt); // Set a uid to identify the itemStack on SMP
 
-		CompoundNBT nbtSlots = nbt.getCompound(KEY_SLOTS);
+		CompoundTag nbtSlots = nbt.getCompound(KEY_SLOTS);
 		for (int i = 0; i < inventoryStacks.size(); i++) {
 			String slotKey = getSlotNBTKey(i);
 			if (nbtSlots.contains(slotKey)) {
-				CompoundNBT itemNbt = nbtSlots.getCompound(slotKey);
+				CompoundTag itemNbt = nbtSlots.getCompound(slotKey);
 				ItemStack itemStack = ItemStack.of(itemNbt);
 				inventoryStacks.set(i, itemStack);
 			} else {
@@ -72,16 +72,16 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	public static int getOccupiedSlotCount(ItemStack itemStack) {
-		CompoundNBT nbt = itemStack.getTag();
+		CompoundTag nbt = itemStack.getTag();
 		if (nbt == null) {
 			return 0;
 		}
 
-		CompoundNBT slotNbt = nbt.getCompound(KEY_SLOTS);
+		CompoundTag slotNbt = nbt.getCompound(KEY_SLOTS);
 		return slotNbt.size();
 	}
 
-	private void setUID(CompoundNBT nbt) {
+	private void setUID(CompoundTag nbt) {
 		if (!nbt.contains(KEY_UID)) {
 			nbt.putInt(KEY_UID, rand.nextInt());
 		}
@@ -93,7 +93,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	protected ItemStack getParent() {
-		for (Hand hand : Hand.values()) {
+		for (InteractionHand hand : InteractionHand.values()) {
 			ItemStack held = player.getItemInHand(hand);
 			if (isSameItemInventory(held, parent)) {
 				return held;
@@ -107,8 +107,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Nullable
-	protected Hand getHand() {
-		for (Hand hand : Hand.values()) {
+	protected InteractionHand getHand() {
+		for (InteractionHand hand : InteractionHand.values()) {
 			ItemStack held = player.getItemInHand(hand);
 			if (isSameItemInventory(held, parent)) {
 				return hand;
@@ -126,8 +126,8 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 			return false;
 		}
 
-		CompoundNBT baseTagCompound = base.getTag();
-		CompoundNBT comparisonTagCompound = comparison.getTag();
+		CompoundTag baseTagCompound = base.getTag();
+		CompoundTag comparisonTagCompound = comparison.getTag();
 		if (baseTagCompound == null || comparisonTagCompound == null) {
 			return false;
 		}
@@ -144,18 +144,18 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	private void writeToParentNBT() {
 		ItemStack parent = getParent();
 
-		CompoundNBT nbt = parent.getTag();
+		CompoundTag nbt = parent.getTag();
 		if (nbt == null) {
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			parent.setTag(nbt);
 		}
 
-		CompoundNBT slotsNbt = new CompoundNBT();
+		CompoundTag slotsNbt = new CompoundTag();
 		for (int i = 0; i < getContainerSize(); i++) {
 			ItemStack itemStack = getItem(i);
 			if (!itemStack.isEmpty()) {
 				String slotKey = getSlotNBTKey(i);
-				CompoundNBT itemNbt = new CompoundNBT();
+				CompoundTag itemNbt = new CompoundTag();
 				itemStack.save(itemNbt);
 				slotsNbt.put(slotKey, itemNbt);
 			}
@@ -169,10 +169,10 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		return Integer.toString(i, Character.MAX_RADIX);
 	}
 
-	protected void onWriteNBT(CompoundNBT nbt) {
+	protected void onWriteNBT(CompoundTag nbt) {
 	}
 
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
+	public void onSlotClick(int slotIndex, Player player) {
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
 	@Override
 	public ItemStack removeItem(int index, int count) {
-		ItemStack itemstack = ItemStackHelper.removeItem(this.inventoryStacks, index, count);
+		ItemStack itemstack = ContainerHelper.removeItem(this.inventoryStacks, index, count);
 
 		if (!itemstack.isEmpty()) {
 			this.setChanged();
@@ -204,15 +204,15 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 
 		ItemStack parent = getParent();
 
-		CompoundNBT nbt = parent.getTag();
+		CompoundTag nbt = parent.getTag();
 		if (nbt == null) {
-			nbt = new CompoundNBT();
+			nbt = new CompoundTag();
 			parent.setTag(nbt);
 		}
 
-		CompoundNBT slotNbt;
+		CompoundTag slotNbt;
 		if (!nbt.contains(KEY_SLOTS)) {
-			slotNbt = new CompoundNBT();
+			slotNbt = new CompoundTag();
 			nbt.put(KEY_SLOTS, slotNbt);
 		} else {
 			slotNbt = nbt.getCompound(KEY_SLOTS);
@@ -223,7 +223,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 		if (itemstack.isEmpty()) {
 			slotNbt.remove(slotKey);
 		} else {
-			CompoundNBT itemNbt = new CompoundNBT();
+			CompoundTag itemNbt = new CompoundTag();
 			itemstack.save(itemNbt);
 
 			slotNbt.put(slotKey, itemNbt);
@@ -251,7 +251,7 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
@@ -261,11 +261,11 @@ public abstract class ItemInventory implements IInventory, IFilterSlotDelegate, 
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {
+	public void startOpen(Player player) {
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 	}
 
 	@Override

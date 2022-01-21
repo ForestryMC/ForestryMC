@@ -14,11 +14,11 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
@@ -27,7 +27,7 @@ import forestry.api.mail.PostManager;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 
-public class POBox extends WorldSavedData implements IInventory {
+public class POBox extends SavedData implements Container {
 
 	public static final String SAVE_NAME = "pobox_";
 	public static final short SLOT_SIZE = 84;
@@ -50,7 +50,7 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public void load(CompoundNBT compoundNBT) {
+	public void load(CompoundTag compoundNBT) {
 		if (compoundNBT.contains("address")) {
 			this.address = new MailAddress(compoundNBT.getCompound("address"));
 		}
@@ -58,9 +58,9 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		if (this.address != null) {
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			this.address.write(nbt);
 			compoundNBT.put("address", nbt);
 		}
@@ -75,7 +75,7 @@ public class POBox extends WorldSavedData implements IInventory {
 		// Mark letter as processed
 		letter.setProcessed(true);
 		letter.invalidatePostage();
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		letter.write(compoundNBT);
 		letterstack.setTag(compoundNBT);
 
@@ -91,7 +91,7 @@ public class POBox extends WorldSavedData implements IInventory {
 			if (letters.getItem(i).isEmpty()) {
 				continue;
 			}
-			CompoundNBT tagCompound = letters.getItem(i).getTag();
+			CompoundTag tagCompound = letters.getItem(i).getTag();
 			if (tagCompound != null) {
 				ILetter letter = new Letter(tagCompound);
 				if (letter.getSender().getType() == EnumAddressee.PLAYER) {
@@ -160,16 +160,16 @@ public class POBox extends WorldSavedData implements IInventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity var1) {
+	public boolean stillValid(Player var1) {
 		return letters.stillValid(var1);
 	}
 
 	@Override
-	public void startOpen(PlayerEntity var1) {
+	public void startOpen(Player var1) {
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity var1) {
+	public void stopOpen(Player var1) {
 	}
 
 	@Override

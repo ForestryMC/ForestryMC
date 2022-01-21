@@ -5,15 +5,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Random;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 public class VillagerTrade {
-	public static class GiveItemForEmeralds implements VillagerTrades.ITrade {
+	public static class GiveItemForEmeralds implements VillagerTrades.ItemListing {
 		final int maxUses;
 		final int xp;
 		final Item sellingItem;
@@ -34,7 +34,7 @@ public class VillagerTrade {
 		}
 	}
 
-	public static class GiveEmeraldForItem implements VillagerTrades.ITrade {
+	public static class GiveEmeraldForItem implements VillagerTrades.ItemListing {
 		final int maxUses;
 		final int xp;
 		final Item buyingItem;
@@ -55,7 +55,7 @@ public class VillagerTrade {
 		}
 	}
 
-	public static class GiveItemForItemAndEmerald implements VillagerTrades.ITrade {
+	public static class GiveItemForItemAndEmerald implements VillagerTrades.ItemListing {
 		final int maxUses;
 		final int xp;
 		final Item buyingItem;
@@ -80,7 +80,7 @@ public class VillagerTrade {
 		}
 	}
 
-	public static class GiveItemForLogAndEmerald implements VillagerTrades.ITrade {
+	public static class GiveItemForLogAndEmerald implements VillagerTrades.ItemListing {
 		final int maxUses;
 		final int xp;
 		final PriceInterval buyAmounts;
@@ -111,7 +111,7 @@ public class VillagerTrade {
 		}
 	}
 
-	public static class GiveItemForTwoItems implements VillagerTrades.ITrade {
+	public static class GiveItemForTwoItems implements VillagerTrades.ItemListing {
 		final int maxUses;
 		final int xp;
 		final Item buyingItem;

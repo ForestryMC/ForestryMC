@@ -14,12 +14,12 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.advancements.criterion.ImpossibleTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -43,17 +43,17 @@ public class FabricatorRecipeBuilder {
 	}
 
 	public FabricatorRecipeBuilder recipe(ShapedRecipeBuilder recipe) {
-		Holder<IFinishedRecipe> holder = new Holder<>();
-		recipe.unlockedBy("impossible", new ImpossibleTrigger.Instance()).save(holder::set);
+		Holder<FinishedRecipe> holder = new Holder<>();
+		recipe.unlockedBy("impossible", new ImpossibleTrigger.TriggerInstance()).save(holder::set);
 		this.recipe = (ShapedRecipeBuilder.Result) holder.get();
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, plan, molten, recipe));
 	}
 
-	public static class Result implements IFinishedRecipe {
+	public static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final Ingredient plan;
 		private final FluidStack molten;
@@ -79,7 +79,7 @@ public class FabricatorRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return IFabricatorRecipe.Companion.SERIALIZER;
 		}
 

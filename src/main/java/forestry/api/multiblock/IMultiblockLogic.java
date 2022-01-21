@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.INbtWritable;
 
@@ -34,40 +34,40 @@ public interface IMultiblockLogic extends INbtWritable {
 	/**
 	 * call on Tile.validate()
 	 **/
-	void validate(World world, IMultiblockComponent part);
+	void validate(Level world, IMultiblockComponent part);
 
 	/**
 	 * call on Tile.invalidate()
 	 **/
-	void invalidate(World world, IMultiblockComponent part);
+	void invalidate(Level world, IMultiblockComponent part);
 
 	/**
 	 * call on Tile.onChunkUnload()
 	 **/
-	void onChunkUnload(World world, IMultiblockComponent part);
+	void onChunkUnload(Level world, IMultiblockComponent part);
 
 	/**
 	 * Writes data for client synchronization.
 	 * Use this in Tile.getDescriptionPacket()
 	 */
-	void encodeDescriptionPacket(CompoundNBT packetData);
+	void encodeDescriptionPacket(CompoundTag packetData);
 
 	/**
 	 * Reads data for client synchronization.
 	 * Use this in Tile.onDataPacket()
 	 */
-	void decodeDescriptionPacket(CompoundNBT packetData);
+	void decodeDescriptionPacket(CompoundTag packetData);
 
 	/**
 	 * Read the logic's data from file.
 	 * Use this in Tile.read()
 	 */
-	void readFromNBT(CompoundNBT CompoundNBT);
+	void readFromNBT(CompoundTag CompoundNBT);
 
 	/**
 	 * Write the logic's data to file.
 	 * Use this in Tile.write()
 	 */
 	@Override
-	CompoundNBT write(CompoundNBT CompoundNBT);
+	CompoundTag write(CompoundTag CompoundNBT);
 }

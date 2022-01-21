@@ -2,10 +2,10 @@ package forestry.farming.compat;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
@@ -95,7 +95,7 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	}
 
 	@Override
-	public void draw(FarmingInfoRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(FarmingInfoRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		slotDrawable.draw(matrixStack, 63, 18);
 		for (int x = 0; x < 2; x++) {
 			for (int y = 0; y < 2; y++) {

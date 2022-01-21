@@ -17,13 +17,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -52,7 +52,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world) {
+	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, Container inventory, Level world) {
 		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
 			if (matches(recipe, liquid, item, inventory, world)) {
 				return Optional.of(recipe);
@@ -63,7 +63,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world) {
+	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, Container craftingInventory, Level world) {
 		if (recipe == null) {
 			return false;
 		}
@@ -80,7 +80,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 			return false;
 		}
 
-		ICraftingRecipe internal = recipe.getCraftingGridRecipe();
+		CraftingRecipe internal = recipe.getCraftingGridRecipe();
 		return internal.matches(FakeCraftingInventory.of(craftingInventory), world);
 	}
 

@@ -1,8 +1,8 @@
 package forestry.arboriculture.charcoal.jei;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Constants;
@@ -56,7 +56,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 	}
 
 	@Override
-	public void draw(CharcoalPileWallWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(CharcoalPileWallWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		flame.draw(matrixStack, 52, 0);
 		flameAnimated.draw(matrixStack, 52, 0);
 		arrow.draw(matrixStack, 50, 16);

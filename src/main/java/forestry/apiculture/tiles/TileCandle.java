@@ -10,18 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.apiculture.features.ApicultureTiles;
 
-public class TileCandle extends TileEntity {
+public class TileCandle extends BlockEntity {
 	private int colour;
 	private boolean lit;
 
@@ -30,26 +30,26 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getTag();
+		CompoundTag nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
 		return save(tag);
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(BlockState state, CompoundTag tag) {
 		super.handleUpdateTag(state, tag);
 		load(state, tag);
 	}
@@ -60,14 +60,14 @@ public class TileCandle extends TileEntity {
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT tagRoot) {
+	public void load(BlockState state, CompoundTag tagRoot) {
 		super.load(state, tagRoot);
 		colour = tagRoot.getInt("colour");
 		lit = tagRoot.getBoolean("lit");
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT tagRoot) {
+	public CompoundTag save(CompoundTag tagRoot) {
 		tagRoot = super.save(tagRoot);
 		tagRoot.putInt("colour", this.colour);
 		tagRoot.putBoolean("lit", this.lit);

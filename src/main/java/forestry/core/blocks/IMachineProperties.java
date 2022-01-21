@@ -12,21 +12,21 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.util.StringRepresentable;
 
 import forestry.core.tiles.TileForestry;
 
-public interface IMachineProperties<T extends TileForestry> extends IStringSerializable, IShapeProvider {
-	TileEntityType<? extends T> getTeType();
+public interface IMachineProperties<T extends TileForestry> extends StringRepresentable, IShapeProvider {
+	BlockEntityType<? extends T> getTeType();
 
 	default void clientSetup() {
 	}
 
 	@Nullable
-	TileEntity createTileEntity();
+	BlockEntity createTileEntity();
 
 	void setBlock(Block block);
 

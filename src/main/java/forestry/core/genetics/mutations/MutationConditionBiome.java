@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
@@ -28,16 +28,16 @@ import genetics.api.individual.IGenome;
 
 public class MutationConditionBiome implements IMutationCondition {
 
-	private final List<Biome.Category> validBiomeTypes;
+	private final List<Biome.BiomeCategory> validBiomeTypes;
 
-	public MutationConditionBiome(Biome.Category... types) {
+	public MutationConditionBiome(Biome.BiomeCategory... types) {
 		this.validBiomeTypes = Arrays.asList(types);
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		Biome biome = climate.getBiome();
-		for (Biome.Category category : validBiomeTypes) {
+		for (Biome.BiomeCategory category : validBiomeTypes) {
 			if (biome.getBiomeCategory() == category) {
 				return 1;
 			}
@@ -47,13 +47,13 @@ public class MutationConditionBiome implements IMutationCondition {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
+	public Component getDescription() {
 		if (validBiomeTypes.size() > 1) {
 			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return new TranslationTextComponent("for.mutation.condition.biome.multiple", biomeTypes);
+			return new TranslatableComponent("for.mutation.condition.biome.multiple", biomeTypes);
 		} else {
 			String biomeType = validBiomeTypes.get(0).toString().toLowerCase(Locale.ENGLISH);
-			return new TranslationTextComponent("for.mutation.condition.biome.single", biomeType);
+			return new TranslatableComponent("for.mutation.condition.biome.single", biomeType);
 		}
 	}
 }

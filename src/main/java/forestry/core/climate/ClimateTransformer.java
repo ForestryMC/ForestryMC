@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.ClimateType;
@@ -72,7 +72,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	@Override
 	public void update() {
 		if (!addedToWorld) {
-			World world = housing.getWorldObj();
+			Level world = housing.getWorldObj();
 			BlockPos pos = housing.getCoordinates();
 			defaultState = ClimateRoot.getInstance().getBiomeState(world, pos);
 			if (!targetedState.isPresent()) {
@@ -95,16 +95,16 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 
 	/* Save and Load */
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
-		nbt.put(CURRENT_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), currentState));
-		nbt.put(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), targetedState));
+	public CompoundTag write(CompoundTag nbt) {
+		nbt.put(CURRENT_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundTag(), currentState));
+		nbt.put(TARGETED_STATE_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundTag(), targetedState));
 		nbt.putBoolean(CIRCULAR_KEY, circular);
 		nbt.putInt(RANGE_KEY, range);
 		return nbt;
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 		currentState = ClimateManager.stateHelper.create(nbt.getCompound(CURRENT_STATE_KEY));
 		targetedState = ClimateManager.stateHelper.create(nbt.getCompound(TARGETED_STATE_KEY));
 		circular = nbt.getBoolean(CIRCULAR_KEY);
@@ -197,7 +197,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	public void setRange(int value) {
 		if (value != range) {
 			int oldRange = range;
-			this.range = MathHelper.clamp(value, 1, 16);
+			this.range = Mth.clamp(value, 1, 16);
 			onAreaChange(oldRange, circular);
 			housing.markNetworkUpdate();
 			if (addedToWorld) {
@@ -262,7 +262,7 @@ public class ClimateTransformer implements IClimateTransformer, IStreamable, INb
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return housing.getWorldObj();
 	}
 }

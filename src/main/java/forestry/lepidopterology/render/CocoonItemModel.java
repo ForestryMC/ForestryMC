@@ -9,17 +9,17 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
 
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -39,15 +39,15 @@ import forestry.core.models.AbstractItemModel;
 import forestry.lepidopterology.items.ItemButterflyGE;
 
 public class CocoonItemModel extends AbstractItemModel {
-	private final ImmutableMap<String, ImmutableList<IBakedModel>> bakedModel;
+	private final ImmutableMap<String, ImmutableList<BakedModel>> bakedModel;
 
-	public CocoonItemModel(ImmutableMap<String, ImmutableList<IBakedModel>> bakedModel) {
+	public CocoonItemModel(ImmutableMap<String, ImmutableList<BakedModel>> bakedModel) {
 		this.bakedModel = bakedModel;
 	}
 
 	@Override
-	protected IBakedModel getOverride(IBakedModel model, ItemStack stack) {
-		int age = MathHelper.clamp(stack.getOrCreateTag().getInt(ItemButterflyGE.NBT_AGE), 0, ItemButterflyGE.MAX_AGE);
+	protected BakedModel getOverride(BakedModel model, ItemStack stack) {
+		int age = Mth.clamp(stack.getOrCreateTag().getInt(ItemButterflyGE.NBT_AGE), 0, ItemButterflyGE.MAX_AGE);
 		IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
 		IAlleleButterflyCocoon alleleCocoon = organism.getAllele(ButterflyChromosomes.COCOON, true);
 		return bakedModel.getOrDefault(alleleCocoon.getCocoonName(), ImmutableList.of()).get(age);
@@ -56,10 +56,10 @@ public class CocoonItemModel extends AbstractItemModel {
 	private static class Geometry implements IModelGeometry<CocoonItemModel.Geometry> {
 
 		@Override
-		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-			ImmutableMap.Builder<String, ImmutableList<IBakedModel>> bakedModels = new ImmutableMap.Builder<>();
+		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+			ImmutableMap.Builder<String, ImmutableList<BakedModel>> bakedModels = new ImmutableMap.Builder<>();
 			AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
-				ImmutableList.Builder<IBakedModel> models = new ImmutableList.Builder<>();
+				ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
 				for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {
 					models.add(bakery.getBakedModel(allele.getCocoonItemModel(age), modelTransform, spriteGetter));
 				}
@@ -69,14 +69,14 @@ public class CocoonItemModel extends AbstractItemModel {
 		}
 
 		@Override
-		public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
 
 	public static class Loader implements IModelLoader<Geometry> {
 		@Override
-		public void onResourceManagerReload(IResourceManager resourceManager) {
+		public void onResourceManagerReload(ResourceManager resourceManager) {
 		}
 
 		@Override

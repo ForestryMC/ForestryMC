@@ -1,6 +1,6 @@
 package forestry.api.core;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public interface IFeatureSubtype extends IStringSerializable {
+public interface IFeatureSubtype extends StringRepresentable {
 }

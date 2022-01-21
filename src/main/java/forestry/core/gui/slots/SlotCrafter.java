@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IRecipeHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.inventory.container.CraftingResultSlot;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.tiles.ICrafterWorktable;
@@ -31,13 +31,13 @@ public class SlotCrafter extends Slot {
 	/**
 	 * The player that is using the GUI where this slot resides.
 	 */
-	private final PlayerEntity player;
+	private final Player player;
 	/**
 	 * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
 	 */
 	private int amountCrafted;
 
-	public SlotCrafter(PlayerEntity player, CraftingInventoryForestry craftMatrix, IInventory craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+	public SlotCrafter(Player player, CraftingInventoryForestry craftMatrix, Container craftingDisplay, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
 		super(craftingDisplay, slot, xPos, yPos);
 		this.craftMatrix = craftMatrix;
 		this.crafter = crafter;
@@ -72,8 +72,8 @@ public class SlotCrafter extends Slot {
 			net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerCraftingEvent(this.player, stack, this.craftMatrix);
 		}
 
-		if (this.container instanceof IRecipeHolder) {
-			((IRecipeHolder) this.container).awardUsedRecipes(this.player);
+		if (this.container instanceof RecipeHolder) {
+			((RecipeHolder) this.container).awardUsedRecipes(this.player);
 		}
 
 		this.amountCrafted = 0;
@@ -89,7 +89,7 @@ public class SlotCrafter extends Slot {
 	}
 
 	@Override
-	public boolean mayPickup(PlayerEntity player) {
+	public boolean mayPickup(Player player) {
 		return crafter.canTakeStack(getSlotIndex());
 	}
 
@@ -104,7 +104,7 @@ public class SlotCrafter extends Slot {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public ItemStack onTake(Player player, ItemStack itemStack) {
 		if (crafter.onCraftingStart(player)) {
 			this.checkTakeAchievements(itemStack); // handles crafting achievements, maps, and statistics
 

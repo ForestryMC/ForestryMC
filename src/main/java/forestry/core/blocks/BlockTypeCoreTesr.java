@@ -12,9 +12,9 @@ package forestry.core.blocks;
 
 import java.util.function.Supplier;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import forestry.core.features.CoreTiles;
 import forestry.core.proxy.Proxies;
@@ -33,7 +33,7 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 	private static IMachinePropertiesTesr<? extends TileAnalyzer> createAnalyzerProperties(Supplier<FeatureTileType<? extends TileAnalyzer>> teClass, String name) {
 		MachinePropertiesTesr<? extends TileAnalyzer> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 				.setParticleTexture(name + ".0")
-				.setShape(VoxelShapes::block)
+				.setShape(Shapes::block)
 				.create();
 		Proxies.render.setRendererAnalyzer(machineProperties);
 		return machineProperties;
@@ -49,7 +49,7 @@ public enum BlockTypeCoreTesr implements IBlockTypeTesr {
 
 		MachinePropertiesTesr<? extends TileEscritoire> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 				.setParticleTexture(name + ".0")
-				.setShape(() -> VoxelShapes.or(desk, standLB, standLF, standRB, standRF))
+				.setShape(() -> Shapes.or(desk, standLB, standLF, standRB, standRF))
 				.create();
 		Proxies.render.setRenderEscritoire(machineProperties); //TODO distexecutor
 		return machineProperties;

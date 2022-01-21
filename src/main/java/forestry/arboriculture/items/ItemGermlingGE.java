@@ -13,23 +13,23 @@ package forestry.arboriculture.items;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,12 +76,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return GeneticHelper.createOrganism(stack, type, TreeHelper.getRoot().getDefinition());
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}
@@ -107,12 +107,12 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		BlockRayTraceResult traceResult = (BlockRayTraceResult) getPlayerPOVHitResult(worldIn, playerIn, RayTraceContext.FluidMode.ANY);
-		BlockItemUseContext context = new BlockItemUseContext(new ItemUseContext(playerIn, handIn, traceResult));
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+		BlockHitResult traceResult = (BlockHitResult) getPlayerPOVHitResult(worldIn, playerIn, ClipContext.Fluid.ANY);
+		BlockPlaceContext context = new BlockPlaceContext(new UseOnContext(playerIn, handIn, traceResult));
 
 		ItemStack itemStack = playerIn.getItemInHand(handIn);
-		if (traceResult.getType() == RayTraceResult.Type.BLOCK) {
+		if (traceResult.getType() == HitResult.Type.BLOCK) {
 			BlockPos pos = traceResult.getBlockPos();
 
 			Optional<ITree> treeOptional = TreeManager.treeRoot.create(itemStack);
@@ -126,23 +126,23 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			}
 
 		}
-		return new ActionResult<>(ActionResultType.PASS, itemStack);
+		return new InteractionResultHolder<>(InteractionResult.PASS, itemStack);
 	}
 
 
-	private static ActionResult<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree) {
+	private static InteractionResultHolder<ItemStack> onItemRightClickPollen(ItemStack itemStackIn, Level worldIn, Player player, BlockPos pos, ITree tree) {
 		ICheckPollinatable checkPollinatable = GeneticsUtil.getCheckPollinatable(worldIn, pos);
 		if (checkPollinatable == null || !checkPollinatable.canMateWith(tree)) {
-			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+			return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
 		}
 
 		IPollinatable pollinatable = GeneticsUtil.getOrCreatePollinatable(player.getGameProfile(), worldIn, pos, true);
 		if (pollinatable == null || !pollinatable.canMateWith(tree)) {
-			return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+			return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
 		}
 
 		if (worldIn.isClientSide) {
-			return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+			return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
 		} else {
 			pollinatable.mateWith(tree);
 
@@ -153,17 +153,17 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 			if (!player.isCreative()) {
 				itemStackIn.shrink(1);
 			}
-			return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+			return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
 		}
 	}
 
 
-	private static ActionResult<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, World worldIn, PlayerEntity player, BlockPos pos, ITree tree, BlockItemUseContext context) {
+	private static InteractionResultHolder<ItemStack> onItemRightClickSapling(ItemStack itemStackIn, Level worldIn, Player player, BlockPos pos, ITree tree, BlockPlaceContext context) {
 		// x, y, z are the coordinates of the block "hit", can thus either be the soil or tall grass, etc.
 		BlockState hitBlock = worldIn.getBlockState(pos);
 		if (!hitBlock.canBeReplaced(context)) {
 			if (!worldIn.isEmptyBlock(pos.above())) {
-				return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+				return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
 			}
 			pos = pos.above();
 		}
@@ -173,10 +173,10 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable, ICol
 				if (!player.isCreative()) {
 					itemStackIn.shrink(1);
 				}
-				return new ActionResult<>(ActionResultType.SUCCESS, itemStackIn);
+				return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemStackIn);
 			}
 		}
-		return new ActionResult<>(ActionResultType.FAIL, itemStackIn);
+		return new InteractionResultHolder<>(InteractionResult.FAIL, itemStackIn);
 	}
 
 	@Override

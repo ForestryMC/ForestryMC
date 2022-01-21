@@ -3,12 +3,12 @@ package forestry.farming.multiblock;
 import java.util.Optional;
 import java.util.Stack;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
 
 import forestry.core.config.Preference;
 import net.minecraftforge.fluids.FluidStack;
@@ -49,19 +49,19 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 	/**
 	 * The part of the inventory that contains the resources.
 	 */
-	protected final IInventory resourcesInventory;
+	protected final Container resourcesInventory;
 	/**
 	 * The part of the inventory that contains the germlings.
 	 */
-	protected final IInventory germlingsInventory;
+	protected final Container germlingsInventory;
 	/**
 	 * The part of the inventory that contains the output resources.
 	 */
-	protected final IInventory productInventory;
+	protected final Container productInventory;
 	/**
 	 * The part of the inventory that contains the fertilizer.
 	 */
-	protected final IInventory fertilizerInventory;
+	protected final Container fertilizerInventory;
 
 	/**
 	 * Creates a inventory instance.
@@ -150,22 +150,22 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 	}
 
 	@Override
-	public IInventory getProductInventory() {
+	public Container getProductInventory() {
 		return productInventory;
 	}
 
 	@Override
-	public IInventory getGermlingsInventory() {
+	public Container getGermlingsInventory() {
 		return germlingsInventory;
 	}
 
 	@Override
-	public IInventory getResourcesInventory() {
+	public Container getResourcesInventory() {
 		return resourcesInventory;
 	}
 
 	@Override
-	public IInventory getFertilizerInventory() {
+	public Container getFertilizerInventory() {
 		return fertilizerInventory;
 	}
 
@@ -181,7 +181,7 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 	 * @param pos      The position the germling should be placed on
 	 * @return True if the germling was placed, false otherwise
 	 */
-	public abstract boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos);
+	public abstract boolean plantGermling(IFarmable germling, Player player, BlockPos pos);
 
 	public void stowProducts(Iterable<ItemStack> harvested, Stack<ItemStack> pendingProduce) {
 		for (ItemStack harvest : harvested) {
@@ -194,7 +194,7 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 	}
 
 	public boolean tryAddPendingProduce(Stack<ItemStack> pendingProduce) {
-		IInventory productInventory = getProductInventory();
+		Container productInventory = getProductInventory();
 
 		ItemStack next = pendingProduce.peek();
 		boolean added = InventoryUtil.tryAddStack(productInventory, next, true, true);

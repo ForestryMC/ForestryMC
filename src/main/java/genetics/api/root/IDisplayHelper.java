@@ -1,6 +1,6 @@
 package genetics.api.root;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IChromosomeType;

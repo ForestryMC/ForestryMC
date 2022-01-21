@@ -12,9 +12,9 @@ package forestry.core.gui.slots;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.core.config.Constants;
 import forestry.core.tiles.IFilterSlotDelegate;
@@ -28,7 +28,7 @@ public class SlotFiltered extends SlotWatched implements ISlotTextured {
 	private ResourceLocation backgroundTexture = null;
 	private ResourceLocation blockedTexture = new ResourceLocation(Constants.MOD_ID, "slots/blocked");
 
-	public <T extends IInventory & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
+	public <T extends Container & IFilterSlotDelegate> SlotFiltered(T inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 		this.filterSlotDelegate = inventory;
 	}

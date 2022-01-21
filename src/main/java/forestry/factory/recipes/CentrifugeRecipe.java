@@ -16,17 +16,19 @@ import com.google.gson.JsonObject;
 
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ICentrifugeRecipe;
+
+import forestry.api.recipes.ICentrifugeRecipe.Product;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 
@@ -81,17 +83,17 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CentrifugeRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CentrifugeRecipe> {
 
 		@Override
 		public CentrifugeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			int processingTime = JSONUtils.getAsInt(json, "time");
+			int processingTime = GsonHelper.getAsInt(json, "time");
 			Ingredient input = RecipeSerializers.deserialize(json.get("input"));
 			NonNullList<Product> outputs = NonNullList.create();
 
-			for (JsonElement element : JSONUtils.getAsJsonArray(json, "products")) {
-				float chance = JSONUtils.getAsInt(element.getAsJsonObject(), "chance");
-				ItemStack stack = RecipeSerializers.item(JSONUtils.getAsJsonObject(element.getAsJsonObject(), "item"));
+			for (JsonElement element : GsonHelper.getAsJsonArray(json, "products")) {
+				float chance = GsonHelper.getAsInt(element.getAsJsonObject(), "chance");
+				ItemStack stack = RecipeSerializers.item(GsonHelper.getAsJsonObject(element.getAsJsonObject(), "item"));
 				outputs.add(new Product(chance, stack));
 			}
 
@@ -99,7 +101,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		}
 
 		@Override
-		public CentrifugeRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public CentrifugeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int processingTime = buffer.readVarInt();
 			Ingredient input = Ingredient.fromNetwork(buffer);
 			NonNullList<Product> outputs = RecipeSerializers.read(buffer, b -> {
@@ -112,7 +114,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, CentrifugeRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, CentrifugeRecipe recipe) {
 			buffer.writeVarInt(recipe.processingTime);
 			recipe.input.toNetwork(buffer);
 

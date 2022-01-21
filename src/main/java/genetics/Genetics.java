@@ -2,11 +2,11 @@ package genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.command.CommandSource;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.nbt.Tag;
+import net.minecraft.core.Direction;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -103,21 +103,21 @@ public class Genetics {
 	}
 
 	public void serverStarting(FMLServerStartingEvent event) {
-		CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommands().getDispatcher();
-		LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("genetics");
+		CommandDispatcher<CommandSourceStack> dispatcher = event.getServer().getCommands().getDispatcher();
+		LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("genetics");
 		rootCommand.then(CommandListAlleles.register());
 		dispatcher.register(rootCommand);
 	}
 
 	private static class NullStorage<T> implements Capability.IStorage<T> {
 		@Nullable
-		public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
+		public Tag writeNBT(Capability<T> capability, T instance, Direction side) {
 			/* compiled code */
 			return null;
 		}
 
 		@Override
-		public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
+		public void readNBT(Capability<T> capability, T instance, Direction side, Tag nbt) {
 			/* compiled code */
 		}
 	}

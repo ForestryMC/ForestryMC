@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.apiculture.particles;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class BeeExploreParticle extends SpriteTexturedParticle {
-	private final Vector3d origin;
+public class BeeExploreParticle extends TextureSheetParticle {
+	private final Vec3 origin;
 
-	public BeeExploreParticle(ClientWorld world, double x, double y, double z, BlockPos destination, int color) {
+	public BeeExploreParticle(ClientLevel world, double x, double y, double z, BlockPos destination, int color) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-		this.origin = new Vector3d(x, y, z);
+		this.origin = new Vec3(x, y, z);
 
 		this.xd = (destination.getX() + 0.5 - this.x) * 0.015;
 		this.yd = (destination.getY() + 0.5 - this.y) * 0.015;
@@ -93,8 +93,8 @@ public class BeeExploreParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 	// avoid calculating collisions
@@ -111,15 +111,15 @@ public class BeeExploreParticle extends SpriteTexturedParticle {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static class Factory implements IParticleFactory<BeeParticleData> {
-		private final IAnimatedSprite spriteSet;
+	public static class Factory implements ParticleProvider<BeeParticleData> {
+		private final SpriteSet spriteSet;
 
-		public Factory(IAnimatedSprite sprite) {
+		public Factory(SpriteSet sprite) {
 			this.spriteSet = sprite;
 		}
 
 		@Override
-		public Particle createParticle(BeeParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+		public Particle createParticle(BeeParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			BeeExploreParticle particle = new BeeExploreParticle(worldIn, x, y, z, typeIn.destination, typeIn.color);
 			particle.pickSprite(spriteSet);
 			return particle;

@@ -13,10 +13,10 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -47,8 +47,8 @@ public class PipetteContents {
 		return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
 	}
 
-	public void addTooltip(List<ITextComponent> list) {
-		TextComponent descr = new TranslationTextComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
+	public void addTooltip(List<Component> list) {
+		BaseComponent descr = new TranslatableComponent(contents.getFluid().getAttributes().getTranslationKey(contents));
 		descr.append(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);

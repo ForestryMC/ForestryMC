@@ -1,6 +1,6 @@
 package forestry.core.gui.elements;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.gui.Drawable;
 
@@ -19,7 +19,7 @@ public class DrawableElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		if (bounds == null) {
 			return;
 		}

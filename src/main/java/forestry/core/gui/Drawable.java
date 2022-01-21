@@ -1,11 +1,11 @@
 package forestry.core.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,12 +40,12 @@ public class Drawable {
 		this.textureHeight = textureHeight;
 	}
 
-	public void draw(MatrixStack transform, int yOffset, int xOffset) {
+	public void draw(PoseStack transform, int yOffset, int xOffset) {
 		draw(transform, yOffset, uWidth, vHeight, xOffset);
 	}
 
 	@SuppressWarnings("deprecation")
-	public void draw(MatrixStack transform, int yOffset, int width, int height, int xOffset) {
+	public void draw(PoseStack transform, int yOffset, int width, int height, int xOffset) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(textureLocation);
 
@@ -53,7 +53,7 @@ public class Drawable {
 		RenderSystem.enableAlphaTest();
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		AbstractGui.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
+		GuiComponent.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
 		RenderSystem.disableAlphaTest();
 	}
 }

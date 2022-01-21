@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 
 import forestry.core.ItemGroupForestry;
 
@@ -36,18 +36,18 @@ public class ItemForestryFood extends Item {
 	public ItemForestryFood(int heal, float saturation, Item.Properties properties) {
 		super(properties
 				.tab(ItemGroupForestry.tabForestry)
-			.food((new Food.Builder())
+			.food((new FoodProperties.Builder())
 					.nutrition(heal)
 					.saturationMod(saturation)
 				.build()));
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack itemstack) {
+	public UseAnim getUseAnimation(ItemStack itemstack) {
 		if (isDrink) {
-			return UseAction.DRINK;
+			return UseAnim.DRINK;
 		} else {
-			return UseAction.EAT;
+			return UseAnim.EAT;
 		}
 	}
 

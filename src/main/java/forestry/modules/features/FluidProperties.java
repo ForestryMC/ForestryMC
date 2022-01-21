@@ -5,9 +5,9 @@ import java.awt.Color;
 import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -52,7 +52,7 @@ public class FluidProperties {
 		if (minecraft == null) {
 			return false;
 		}
-		IResourceManager resourceManager = minecraft.getResourceManager();
+		ResourceManager resourceManager = minecraft.getResourceManager();
 		return resourceManager.hasResource(location);
 	}
 }

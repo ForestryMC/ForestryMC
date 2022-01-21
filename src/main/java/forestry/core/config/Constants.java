@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidAttributes;
 

@@ -7,10 +7,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.client.gui.Font;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Style;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IBreedingTracker;
@@ -146,9 +146,9 @@ public class DatabaseElement extends ContainerElement {
 	}
 
 	private ContainerElement addSplitText(int width, String text, Style style) {
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		ContainerElement vertical = GuiElementFactory.vertical(width, 0);
-		for (IReorderingProcessor splitText : fontRenderer.split(new StringTextComponent(text), width)) {
+		for (FormattedCharSequence splitText : fontRenderer.split(new TextComponent(text), width)) {
 			vertical.label(splitText).setStyle(style);
 		}
 		return vertical;

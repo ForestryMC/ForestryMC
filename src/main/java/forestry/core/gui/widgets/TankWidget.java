@@ -13,21 +13,21 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -67,7 +67,7 @@ public class TankWidget extends Widget {
 
 	@Nullable
 	public IFluidTank getTank() {
-		Container container = manager.gui.getMenu();
+		AbstractContainerMenu container = manager.gui.getMenu();
 		if (container instanceof IContainerLiquidTanks) {
 			return ((IContainerLiquidTanks) container).getTank(slot);
 		} else if (container instanceof ContainerFarm) {
@@ -77,7 +77,7 @@ public class TankWidget extends Widget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		RenderSystem.disableBlend();
 		IFluidTank tank = getTank();
 		if (tank == null || tank.getCapacity() <= 0) {
@@ -93,7 +93,7 @@ public class TankWidget extends Widget {
 				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
-					fluidStillSprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStill);
+					fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 				}
 				if (fluidStillSprite == null) {
 					fluidStillSprite = ResourceUtil.getMissingTexture();
@@ -109,7 +109,7 @@ public class TankWidget extends Widget {
 					scaledAmount = height;
 				}
 
-				textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+				textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
 				setGLColorFromInt(fluidColor);
 
 				final int xTileCount = width / 16;
@@ -174,9 +174,9 @@ public class TankWidget extends Widget {
 		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
 		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
@@ -186,14 +186,14 @@ public class TankWidget extends Widget {
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		PlayerEntity player = manager.minecraft.player;
+		Player player = manager.minecraft.player;
 		ItemStack itemstack = player.inventory.getCarried();
 		if (itemstack.isEmpty()) {
 			return;
 		}
 
 		Item held = itemstack.getItem();
-		Container container = manager.gui.getMenu();
+		AbstractContainerMenu container = manager.gui.getMenu();
 		if (held instanceof IToolPipette && container instanceof IContainerLiquidTanks) {
 			((IContainerLiquidTanks) container).handlePipetteClickClient(slot, player);
 		}

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
 
-public class InventoryAdapterTile<T extends TileEntity> extends InventoryAdapterRestricted {
+public class InventoryAdapterTile<T extends BlockEntity> extends InventoryAdapterRestricted {
 
 	protected final T tile;
 

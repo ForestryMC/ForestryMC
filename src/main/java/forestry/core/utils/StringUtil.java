@@ -14,8 +14,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.FormattedText;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -62,12 +62,12 @@ public class StringUtil {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static int getLineHeight(int maxWidth, ITextProperties... strings) {
+	public static int getLineHeight(int maxWidth, FormattedText... strings) {
 		Minecraft minecraft = Minecraft.getInstance();
-		FontRenderer fontRenderer = minecraft.font;
+		Font fontRenderer = minecraft.font;
 
 		int lineCount = 0;
-		for (ITextProperties string : strings) {
+		for (FormattedText string : strings) {
 			lineCount += fontRenderer.split(string, maxWidth).size();
 		}
 

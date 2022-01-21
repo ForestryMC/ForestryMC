@@ -5,21 +5,21 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenterRecipe> {
 
-	IRecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
+	RecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
 
 	class Companion {
 		@ObjectHolder("forestry:fermenter")
-		public static final IRecipeSerializer<IFermenterRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IFermenterRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -49,12 +49,12 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
 	Fluid getOutput();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

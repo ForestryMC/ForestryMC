@@ -33,16 +33,16 @@ import java.util.function.UnaryOperator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.state.Property;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.resources.ResourceLocation;
 
-public abstract class BlockStateProvider implements IDataProvider {
+public abstract class BlockStateProvider implements DataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 	protected final Map<Block, IBuilder> blockToBuilder = Maps.newLinkedHashMap();
@@ -53,7 +53,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 	}
 
 	@Override
-	public void run(DirectoryCache cache) throws IOException {
+	public void run(HashCache cache) throws IOException {
 		this.blockToBuilder.clear();
 		this.registerStates();
 		blockToBuilder.forEach((key, builder) -> {
@@ -183,7 +183,7 @@ public abstract class BlockStateProvider implements IDataProvider {
 				blockStateVariants.get(state).forEach(consumer -> consumer.accept(variant));
 				Map<Property<?>, Comparable<?>> properties = new HashMap<>(state.getValues());
 				alwaysIgnore.forEach(properties::remove);
-				variantsObj.add(BlockModelShapes.statePropertiesToString(properties), variant.serialize());
+				variantsObj.add(BlockModelShaper.statePropertiesToString(properties), variant.serialize());
 			}
 			obj.add("variants", variantsObj);
 			return obj;

@@ -13,11 +13,11 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -62,7 +62,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected final EnergyManager energyManager;
 	private final String hintKey;
 
-	protected TileEngine(TileEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
+	protected TileEngine(BlockEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
 		super(type);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
@@ -125,7 +125,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		// Determine targeted tile
 		BlockState blockState = level.getBlockState(getBlockPos());
 		Direction facing = blockState.getValue(BlockBase.FACING);
-		TileEntity tile = level.getBlockEntity(getBlockPos().relative(facing));
+		BlockEntity tile = level.getBlockEntity(getBlockPos().relative(facing));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -244,7 +244,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT nbt) {
+	public void load(BlockState state, CompoundTag nbt) {
 		super.load(state, nbt);
 		energyManager.read(nbt);
 
@@ -256,7 +256,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbt) {
+	public CompoundTag save(CompoundTag nbt) {
 		nbt = super.save(nbt);
 		energyManager.write(nbt);
 

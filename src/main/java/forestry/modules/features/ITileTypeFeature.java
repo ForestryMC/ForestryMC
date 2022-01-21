@@ -1,7 +1,7 @@
 package forestry.modules.features;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -9,11 +9,11 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.ITileTypeProvider;
 
-public interface ITileTypeFeature<T extends TileEntity> extends IModFeature, ITileTypeProvider<T> {
+public interface ITileTypeFeature<T extends BlockEntity> extends IModFeature, ITileTypeProvider<T> {
 
 	@Override
 	default void create() {
-		TileEntityType<T> tileEntityType = getTileTypeConstructor().build(null);
+		BlockEntityType<T> tileEntityType = getTileTypeConstructor().build(null);
 		tileEntityType.setRegistryName(getModId(), getIdentifier());
 		setTileType(tileEntityType);
 	}
@@ -23,21 +23,21 @@ public interface ITileTypeFeature<T extends TileEntity> extends IModFeature, ITi
 	default <R extends IForgeRegistryEntry<R>> void register(RegistryEvent.Register<R> event) {
 		IForgeRegistry<R> registry = event.getRegistry();
 		Class<R> superType = registry.getRegistrySuperType();
-		if (TileEntityType.class.isAssignableFrom(superType) && hasTileType()) {
+		if (BlockEntityType.class.isAssignableFrom(superType) && hasTileType()) {
 			registry.register((R) tileType());
 		}
 	}
 
 	@Override
-	default TileEntityType<T> tileType() {
-		TileEntityType<T> tileType = getTileType();
+	default BlockEntityType<T> tileType() {
+		BlockEntityType<T> tileType = getTileType();
 		if (tileType == null) {
 			throw new IllegalStateException("Called feature getter method before content creation.");
 		}
 		return tileType;
 	}
 
-	void setTileType(TileEntityType<T> tileType);
+	void setTileType(BlockEntityType<T> tileType);
 
-	TileEntityType.Builder<T> getTileTypeConstructor();
+	BlockEntityType.Builder<T> getTileTypeConstructor();
 }

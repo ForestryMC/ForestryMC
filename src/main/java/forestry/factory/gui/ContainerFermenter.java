@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.SimpleContainerData;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,14 +30,14 @@ import forestry.factory.tiles.TileFermenter;
 
 public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 
-	public static ContainerFermenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerFermenter fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileFermenter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFermenter.class);
 		return new ContainerFermenter(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerFermenter(int windowId, PlayerInventory player, TileFermenter tile) {
+	public ContainerFermenter(int windowId, Inventory player, TileFermenter tile) {
 		super(windowId, FactoryContainers.FERMENTER.containerType(), player, tile, 8, 84);
-		addDataSlots(new IntArray(4));
+		addDataSlots(new SimpleContainerData(4));
 
 		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_RESOURCE, 85, 23));
 		this.addSlot(new SlotFiltered(tile, InventoryFermenter.SLOT_FUEL, 75, 57));
@@ -58,7 +58,7 @@ public class ContainerFermenter extends ContainerLiquidTanks<TileFermenter> {
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		for (IContainerListener crafter : containerListeners) {
+		for (ContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

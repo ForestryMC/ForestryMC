@@ -15,13 +15,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -72,7 +72,7 @@ public class HabitatLocatorLogic {
 		return targetBiomes;
 	}
 
-	public void startBiomeSearch(IBee bee, PlayerEntity player) {
+	public void startBiomeSearch(IBee bee, Player player) {
 		this.targetBiomes = new HashSet<>(bee.getSuitableBiomes());
 		this.searchAngleIteration = 0;
 		this.searchRadiusIteration = 0;
@@ -88,7 +88,7 @@ public class HabitatLocatorLogic {
 		}
 	}
 
-	public void onUpdate(World world, Entity player) {
+	public void onUpdate(Level world, Entity player) {
 		if (world.isClientSide) {
 			return;
 		}
@@ -105,8 +105,8 @@ public class HabitatLocatorLogic {
 		BlockPos target = findNearestBiome(player, targetBiomes);
 
 		// send an update if we find the biome
-		if (target != null && player instanceof ServerPlayerEntity) {
-			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (ServerPlayerEntity) player);
+		if (target != null && player instanceof ServerPlayer) {
+			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (ServerPlayer) player);
 			biomeFound = true;
 		}
 	}
@@ -168,7 +168,7 @@ public class HabitatLocatorLogic {
 	}
 
 	@Nullable
-	private static BlockPos getChunkCoordinates(BlockPos pos, World world, Collection<ResourceLocation> biomesToSearch) {
+	private static BlockPos getChunkCoordinates(BlockPos pos, Level world, Collection<ResourceLocation> biomesToSearch) {
 		Biome biome;
 
 		biome = world.getBiome(pos);
@@ -202,13 +202,13 @@ public class HabitatLocatorLogic {
 	private static void removeInvalidBiomes(Biome currentBiome, Set<ResourceLocation> biomesToSearch) {
 		biomesToSearch.removeAll(waterBiomes);
 
-		if (currentBiome.getBiomeCategory() == Biome.Category.NETHER) {
+		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
 			biomesToSearch.retainAll(netherBiomes);
 		} else {
 			biomesToSearch.removeAll(netherBiomes);
 		}
 
-		if (currentBiome.getBiomeCategory() == Biome.Category.THEEND) {
+		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.THEEND) {
 			biomesToSearch.retainAll(endBiomes);
 		} else {
 			biomesToSearch.removeAll(endBiomes);

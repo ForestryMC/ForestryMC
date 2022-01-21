@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.NetworkUtil;
 
-public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
+public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
 	private final T tile;
 
@@ -43,7 +43,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handlePipetteClickClient(int slot, PlayerEntity player) {
+	public void handlePipetteClickClient(int slot, Player player) {
 		ItemStack itemstack = player.inventory.getCarried();
 		if (itemstack.getItem() instanceof IToolPipette) {
 			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
@@ -51,7 +51,7 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
+	public void handlePipetteClick(int slot, ServerPlayer player) {
 		ItemStack itemstack = player.inventory.getCarried();
 		Item held = itemstack.getItem();
 		if (!(held instanceof IToolPipette)) {

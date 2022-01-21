@@ -16,19 +16,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.ByteNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.EndNBT;
-import net.minecraft.nbt.FloatNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.nbt.ShortNBT;
-import net.minecraft.nbt.StringNBT;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.StringTag;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,36 +45,36 @@ public abstract class NBTUtilForestry {
 
 	public enum EnumNBTType {
 
-		END(EndNBT.class),
-		BYTE(ByteNBT.class),
-		SHORT(ShortNBT.class),
-		INT(IntNBT.class),
-		LONG(LongNBT.class),
-		FLOAT(FloatNBT.class),
-		DOUBLE(DoubleNBT.class),
-		BYTE_ARRAY(ByteArrayNBT.class),
-		STRING(StringNBT.class),
-		LIST(ListNBT.class),
-		COMPOUND(CompoundNBT.class),
-		INT_ARRAY(IntArrayNBT.class);
+		END(EndTag.class),
+		BYTE(ByteTag.class),
+		SHORT(ShortTag.class),
+		INT(IntTag.class),
+		LONG(LongTag.class),
+		FLOAT(FloatTag.class),
+		DOUBLE(DoubleTag.class),
+		BYTE_ARRAY(ByteArrayTag.class),
+		STRING(StringTag.class),
+		LIST(ListTag.class),
+		COMPOUND(CompoundTag.class),
+		INT_ARRAY(IntArrayTag.class);
 		public static final EnumNBTType[] VALUES = values();
-		public final Class<? extends INBT> classObject;
+		public final Class<? extends Tag> classObject;
 
-		EnumNBTType(Class<? extends INBT> c) {
+		EnumNBTType(Class<? extends Tag> c) {
 			this.classObject = c;
 		}
 	}
 
-	public static <T extends INBT> NBTList<T> getNBTList(CompoundNBT nbt, String tag, EnumNBTType type) {
-		ListNBT nbtList = nbt.getList(tag, type.ordinal());
+	public static <T extends Tag> NBTList<T> getNBTList(CompoundTag nbt, String tag, EnumNBTType type) {
+		ListTag nbtList = nbt.getList(tag, type.ordinal());
 		return new NBTList<>(nbtList);
 	}
 
-	public static class NBTList<T extends INBT> extends ForwardingList<T> {
+	public static class NBTList<T extends Tag> extends ForwardingList<T> {
 
 		private final ArrayList<T> backingList;
 
-		public NBTList(ListNBT nbtList) {
+		public NBTList(ListTag nbtList) {
 			//noinspection unchecked
 			backingList = new ArrayList<>((List<T>) nbtList.list);
 		}
@@ -86,7 +86,7 @@ public abstract class NBTUtilForestry {
 
 	}
 
-	public static CompoundNBT writeStreamableToNbt(IStreamable streamable, CompoundNBT nbt) {
+	public static CompoundTag writeStreamableToNbt(IStreamable streamable, CompoundTag nbt) {
 		PacketBufferForestry data = new PacketBufferForestry(Unpooled.buffer());
 		streamable.writeData(data);
 
@@ -97,7 +97,7 @@ public abstract class NBTUtilForestry {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static void readStreamableFromNbt(IStreamable streamable, CompoundNBT nbt) {
+	public static void readStreamableFromNbt(IStreamable streamable, CompoundTag nbt) {
 		if (nbt.contains("dataBytes")) {
 			byte[] bytes = nbt.getByteArray("dataBytes");
 			PacketBufferForestry data = new PacketBufferForestry(Unpooled.wrappedBuffer(bytes));

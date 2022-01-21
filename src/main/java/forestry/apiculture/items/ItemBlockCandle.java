@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,7 +34,7 @@ public class ItemBlockCandle extends ItemBlockWallForestry<BlockCandle, BlockCan
 	public int getColorFromItemStack(ItemStack stack, int pass) {
 		int value = 0xffffff;
 		if (pass == 1 && stack.getTag() != null) {
-			CompoundNBT tag = stack.getTag();
+			CompoundTag tag = stack.getTag();
 			if (tag.contains(BlockCandle.COLOUR_TAG_NAME)) {
 				value = tag.getInt(BlockCandle.COLOUR_TAG_NAME);
 			}

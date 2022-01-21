@@ -1,8 +1,8 @@
 package forestry.apiculture.features;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.Item;
 
 import net.minecraftforge.common.ToolType;
 

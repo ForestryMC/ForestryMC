@@ -1,6 +1,6 @@
 package forestry.arboriculture.genetics;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.arboriculture.ILeafProvider;
 import forestry.api.core.IItemProvider;

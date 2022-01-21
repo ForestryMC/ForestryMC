@@ -12,9 +12,9 @@ package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -36,7 +36,7 @@ public class ProbeButton extends Widget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bind(manager.gui.textureFile);
@@ -46,7 +46,7 @@ public class ProbeButton extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TranslationTextComponent("for.gui.escritoire.probe"));
+		tooltip.add(new TranslatableComponent("for.gui.escritoire.probe"));
 		return tooltip;
 	}
 

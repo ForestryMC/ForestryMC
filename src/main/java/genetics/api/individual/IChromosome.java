@@ -2,7 +2,7 @@ package genetics.api.individual;
 
 import java.util.Random;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.IGeneticFactory;
 import genetics.api.IGeneticSaveHandler;
@@ -40,7 +40,7 @@ public interface IChromosome {
 	 *
 	 * @implNote If possible please use the {@link IGeneticSaveHandler} to write the whole genome instead.
 	 */
-	CompoundNBT writeToNBT(CompoundNBT compound);
+	CompoundTag writeToNBT(CompoundTag compound);
 
 	/**
 	 * Creates a new chromosome out of the alleles of this chromosome and the other chromosome.

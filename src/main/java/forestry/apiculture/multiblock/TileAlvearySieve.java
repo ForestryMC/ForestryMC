@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
@@ -56,7 +56,7 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerAlvearySieve(windowId, inv, this);
 	}
 

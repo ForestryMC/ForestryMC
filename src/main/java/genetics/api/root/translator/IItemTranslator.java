@@ -2,7 +2,7 @@ package genetics.api.root.translator;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 

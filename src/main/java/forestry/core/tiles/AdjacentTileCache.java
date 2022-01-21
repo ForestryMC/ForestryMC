@@ -15,10 +15,10 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * A helper class that caches adjacent tiles for a given tile entity.
@@ -33,9 +33,9 @@ public final class AdjacentTileCache {
 	private static final int DELAY_MAX = 2400;
 	private static final int DELAY_STEP = 2;
 	private final Timer[] timer = new Timer[6];
-	private final TileEntity[] cache = new TileEntity[6];
+	private final BlockEntity[] cache = new BlockEntity[6];
 	private final int[] delay = new int[6];
-	private final TileEntity source;
+	private final BlockEntity source;
 	private final Set<ICacheListener> listeners = new LinkedHashSet<>();
 
 	/**
@@ -55,7 +55,7 @@ public final class AdjacentTileCache {
 
 	}
 
-	public AdjacentTileCache(TileEntity tile) {
+	public AdjacentTileCache(BlockEntity tile) {
 		this.source = tile;
 		Arrays.fill(delay, DELAY_MIN);
 		for (int i = 0; i < timer.length; i++) {
@@ -68,8 +68,8 @@ public final class AdjacentTileCache {
 	}
 
 	@Nullable
-	private TileEntity searchSide(Direction side) {
-		World world = source.getLevel();
+	private BlockEntity searchSide(Direction side) {
+		Level world = source.getLevel();
 		BlockPos pos = source.getBlockPos().relative(side);
 		if (world.hasChunkAt(pos) && !world.isEmptyBlock(pos)) {
 			return TileUtil.getTile(world, pos);
@@ -99,7 +99,7 @@ public final class AdjacentTileCache {
 		Arrays.fill(delay, DELAY_MIN);
 	}
 
-	protected void setTile(int side, @Nullable TileEntity tile) {
+	protected void setTile(int side, @Nullable BlockEntity tile) {
 		if (cache[side] != tile) {
 			cache[side] = tile;
 			changed();
@@ -112,12 +112,12 @@ public final class AdjacentTileCache {
 		}
 	}
 
-	private boolean areCoordinatesOnSide(Direction side, TileEntity target) {
+	private boolean areCoordinatesOnSide(Direction side, BlockEntity target) {
 		return source.getBlockPos().getX() + side.getStepX() == target.getBlockPos().getX() && source.getBlockPos().getY() + side.getStepY() == target.getBlockPos().getY() && source.getBlockPos().getZ() + side.getStepZ() == target.getBlockPos().getZ();
 	}
 
 	@Nullable
-	public TileEntity getTileOnSide(Direction side) {
+	public BlockEntity getTileOnSide(Direction side) {
 		int s = side.ordinal();
 		if (cache[s] != null) {
 			if (cache[s].isRemoved() || !areCoordinatesOnSide(side, cache[s])) {
@@ -146,7 +146,7 @@ public final class AdjacentTileCache {
 		}
 	}
 
-	public TileEntity getSource() {
+	public BlockEntity getSource() {
 		return source;
 	}
 
@@ -154,7 +154,7 @@ public final class AdjacentTileCache {
 
 		private long startTime = Long.MIN_VALUE;
 
-		public boolean hasTriggered(World world, int ticks) {
+		public boolean hasTriggered(Level world, int ticks) {
 			long currentTime = world.getGameTime();
 			if (currentTime >= ticks + startTime || startTime > currentTime) {
 				startTime = currentTime;

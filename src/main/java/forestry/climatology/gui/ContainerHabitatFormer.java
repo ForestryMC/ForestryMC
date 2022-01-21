@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.climatology.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,12 +51,12 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	private final ContainerLiquidTanksHelper<TileHabitatFormer> helper;
 
 	//TODO dedupe
-	public static ContainerHabitatFormer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+	public static ContainerHabitatFormer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf extraData) {
 		TileHabitatFormer tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileHabitatFormer.class);
 		return new ContainerHabitatFormer(windowId, inv, tile);
 	}
 
-	public ContainerHabitatFormer(int windowId, PlayerInventory playerInventory, TileHabitatFormer tile) {
+	public ContainerHabitatFormer(int windowId, Inventory playerInventory, TileHabitatFormer tile) {
 		super(windowId, ClimatologyContainers.HABITAT_FORMER.containerType(), playerInventory, tile, 8, 151);
 
 		this.helper = new ContainerLiquidTanksHelper<>(tile);
@@ -108,7 +108,7 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		IClimateTransformer transformer = tile.getTransformer();
 		switch (primary) {
 			case REQUEST_ID_CIRCLE:
@@ -124,23 +124,23 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handlePipetteClickClient(int slot, PlayerEntity player) {
+	public void handlePipetteClickClient(int slot, Player player) {
 		helper.handlePipetteClickClient(slot, player);
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
+	public void handlePipetteClick(int slot, ServerPlayer player) {
 		helper.handlePipetteClick(slot, player);
 	}
 
 	@Override
-	public void addSlotListener(IContainerListener crafting) {
+	public void addSlotListener(ContainerListener crafting) {
 		super.addSlotListener(crafting);
 		tile.getTankManager().containerAdded(this, crafting);
 	}
 
 	@Override
-	public void removed(PlayerEntity PlayerEntity) {
+	public void removed(Player PlayerEntity) {
 		super.removed(PlayerEntity);
 		tile.getTankManager().containerRemoved(this);
 	}

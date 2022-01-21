@@ -1,6 +1,6 @@
 package genetics.api.individual;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.root.IIndividualRoot;
@@ -25,7 +25,7 @@ public interface IChromosomeType {
 	 */
 	String getName();
 
-	ITextComponent getDisplayName();
+	Component getDisplayName();
 
 	/**
 	 * @return The definition that contains this type in the {@link IKaryotype}.

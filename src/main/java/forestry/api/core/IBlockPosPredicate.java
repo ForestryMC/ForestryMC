@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public interface IBlockPosPredicate {
-	boolean test(World world, BlockPos blockPos);
+	boolean test(Level world, BlockPos blockPos);
 }

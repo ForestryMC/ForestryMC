@@ -13,12 +13,12 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -62,19 +62,19 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MoistenerRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MoistenerRecipe> {
 
 		@Override
 		public MoistenerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			int timePerItem = JSONUtils.getAsInt(json, "time");
+			int timePerItem = GsonHelper.getAsInt(json, "time");
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			ItemStack product = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "product"));
+			ItemStack product = RecipeSerializers.item(GsonHelper.getAsJsonObject(json, "product"));
 
 			return new MoistenerRecipe(recipeId, resource, product, timePerItem);
 		}
 
 		@Override
-		public MoistenerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public MoistenerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int timePerItem = buffer.readVarInt();
 			Ingredient resource = Ingredient.fromNetwork(buffer);
 			ItemStack product = buffer.readItem();
@@ -83,7 +83,7 @@ public class MoistenerRecipe implements IMoistenerRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, MoistenerRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, MoistenerRecipe recipe) {
 			buffer.writeVarInt(recipe.timePerItem);
 			recipe.resource.toNetwork(buffer);
 			buffer.writeItem(recipe.product);

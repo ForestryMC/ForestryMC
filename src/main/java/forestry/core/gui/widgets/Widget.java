@@ -12,7 +12,7 @@ package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,7 +53,7 @@ public abstract class Widget implements IToolTipProvider {
 		return yPos;
 	}
 
-	public abstract void draw(MatrixStack transform, int startY, int startX);
+	public abstract void draw(PoseStack transform, int startY, int startX);
 
 	public void update(int mouseX, int mouseY) {
 

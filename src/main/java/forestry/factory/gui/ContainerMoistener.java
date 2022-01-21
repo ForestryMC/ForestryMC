@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.SimpleContainerData;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,14 +30,14 @@ import forestry.factory.tiles.TileMoistener;
 
 public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> implements ISlotChangeWatcher {
 
-	public static ContainerMoistener fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerMoistener fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileMoistener tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileMoistener.class);
 		return new ContainerMoistener(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerMoistener(int windowId, PlayerInventory player, TileMoistener tile) {
+	public ContainerMoistener(int windowId, Inventory player, TileMoistener tile) {
 		super(windowId, FactoryContainers.MOISTENER.containerType(), player, tile, 8, 84);
-		addDataSlots(new IntArray(4));
+		addDataSlots(new SimpleContainerData(4));
 
 		// Stash
 		for (int l = 0; l < 2; l++) {
@@ -60,7 +60,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	}
 
 	@Override
-	public void onSlotChanged(IInventory inventory, int slot) {
+	public void onSlotChanged(Container inventory, int slot) {
 		tile.setItem(slot, inventory.getItem(slot));
 		tile.checkRecipe();
 	}
@@ -77,7 +77,7 @@ public class ContainerMoistener extends ContainerLiquidTanks<TileMoistener> impl
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		for (IContainerListener crafter : containerListeners) {
+		for (ContainerListener crafter : containerListeners) {
 			tile.sendGUINetworkData(this, crafter);
 		}
 	}

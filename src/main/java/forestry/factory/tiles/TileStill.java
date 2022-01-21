@@ -15,13 +15,13 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,7 +47,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerStill;
 import forestry.factory.inventory.InventoryStill;
 
-public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileStill extends TilePowered implements WorldlyContainer, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
 
 	private final FilteredTank resourceTank;
@@ -73,12 +73,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		if (!bufferedLiquid.isEmpty()) {
-			CompoundNBT buffer = new CompoundNBT();
+			CompoundTag buffer = new CompoundTag();
 			bufferedLiquid.writeToNBT(buffer);
 			compoundNBT.put("Buffer", buffer);
 		}
@@ -86,12 +86,12 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
 		if (compoundNBT.contains("Buffer")) {
-			CompoundNBT buffer = compoundNBT.getCompound("Buffer");
+			CompoundTag buffer = compoundNBT.getCompound("Buffer");
 			bufferedLiquid = FluidStack.loadFluidStackFromNBT(buffer);
 		}
 	}
@@ -207,7 +207,7 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerStill(windowId, player.inventory, this);
 	}
 

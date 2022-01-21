@@ -5,23 +5,23 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -30,6 +30,8 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.core.blocks.IColoredBlock;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 /**
  * Parent class for shared behavior between {@link BlockDefaultLeaves} and {@link BlockForestryLeaves}
@@ -44,10 +46,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Nullable
-	protected abstract ITree getTree(IBlockReader world, BlockPos pos);
+	protected abstract ITree getTree(BlockGetter world, BlockPos pos);
 
 	@Override
-	public final void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> list) {
+	public final void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
 		// creative menu shows BlockDecorativeLeaves instead of these
 	}
 
@@ -58,7 +60,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			return ItemStack.EMPTY;
@@ -69,7 +71,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 
 	@Nonnull
 	@Override
-	public List<ItemStack> onSheared(@Nullable PlayerEntity player, @Nonnull ItemStack item, World world, BlockPos pos, int fortune) {
+	public List<ItemStack> onSheared(@Nullable Player player, @Nonnull ItemStack item, Level world, BlockPos pos, int fortune) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			tree = TreeDefinition.Oak.createIndividual();
@@ -84,10 +86,10 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		ITree tree = getTree(worldIn, pos);
 		if (tree != null && TreeDefinition.Willow.getUID().equals(tree.getIdentifier())) {
-			return VoxelShapes.empty();
+			return Shapes.empty();
 		}
 		return super.getCollisionShape(state, worldIn, pos, context);
 	}
@@ -96,9 +98,9 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	 * Used for walking through willow leaves.
 	 */
 	@Override
-	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
 		super.entityInside(state, worldIn, pos, entityIn);
-		Vector3d motion = entityIn.getDeltaMovement();
+		Vec3 motion = entityIn.getDeltaMovement();
 		entityIn.setDeltaMovement(motion.x() * 0.4D, motion.y(), motion.z() * 0.4D);
 	}
 
@@ -118,17 +120,17 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 
 	/* PROPERTIES */
 	@Override
-	public final int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public final int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return 60;
 	}
 
 	@Override
-	public final boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public final boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return true;
 	}
 
 	@Override
-	public final int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public final int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		if (face == Direction.DOWN) {
 			return 20;
 		} else if (face != Direction.UP) {
@@ -172,5 +174,5 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 		return ret;*/
 	}
 
-	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune, LootContext.Builder builder);
+	protected abstract void getLeafDrop(NonNullList<ItemStack> drops, Level world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune, LootContext.Builder builder);
 }

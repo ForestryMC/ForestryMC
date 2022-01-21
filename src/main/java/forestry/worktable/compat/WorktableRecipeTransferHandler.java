@@ -4,9 +4,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,7 +30,7 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerWorktable container, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerWorktable container, Object recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
 
@@ -47,7 +47,7 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 				}
 			}
 
-			List<ICraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.level);
+			List<CraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.level);
 			if (!matchingRecipes.isEmpty()) {
 				MemorizedRecipe memorizedRecipe = new MemorizedRecipe(inventory, matchingRecipes);
 				container.sendWorktableRecipeRequest(memorizedRecipe);

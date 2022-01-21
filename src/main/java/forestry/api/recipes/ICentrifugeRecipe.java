@@ -7,21 +7,21 @@ package forestry.api.recipes;
 
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
 
-	IRecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");
+	RecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");
 
 	class Companion {
 		@ObjectHolder("forestry:centrifuge")
-		public static final IRecipeSerializer<ICentrifugeRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<ICentrifugeRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -46,12 +46,12 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	NonNullList<Product> getAllProducts();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 

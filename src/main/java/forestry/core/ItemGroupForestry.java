@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -38,7 +38,7 @@ import forestry.modules.features.FeatureProvider;
 
 //Provides no features but needs to be loaded
 @FeatureProvider
-public class ItemGroupForestry extends ItemGroup {
+public class ItemGroupForestry extends CreativeModeTab {
 
 	static {
 		ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
@@ -56,7 +56,7 @@ public class ItemGroupForestry extends ItemGroup {
 		}
 	}
 
-	public static final ItemGroup tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
+	public static final CreativeModeTab tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
 
 	public static void create() {
 		//Needed to load the groups before the feature creation

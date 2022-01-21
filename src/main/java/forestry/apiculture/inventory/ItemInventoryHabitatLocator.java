@@ -15,9 +15,9 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.IBee;
@@ -37,7 +37,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 
 	private final HabitatLocatorLogic locatorLogic;
 
-	public ItemInventoryHabitatLocator(PlayerEntity player, ItemStack itemstack) {
+	public ItemInventoryHabitatLocator(Player player, ItemStack itemstack) {
 		super(player, 3, itemstack);
 		ItemHabitatLocator habitatLocator = (ItemHabitatLocator) itemstack.getItem();
 		this.locatorLogic = habitatLocator.getLocatorLogic();
@@ -48,7 +48,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
+	public void onSlotClick(int slotIndex, Player player) {
 		if (!getItem(SLOT_ANALYZED).isEmpty()) {
 			if (locatorLogic.isBiomeFound()) {
 				return;

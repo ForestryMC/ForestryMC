@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;

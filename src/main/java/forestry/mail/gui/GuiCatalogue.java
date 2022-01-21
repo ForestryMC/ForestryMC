@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ITradeStationInfo;
@@ -41,20 +41,20 @@ import forestry.core.utils.Translator;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
-	private static final String boldUnderline = TextFormatting.BOLD.toString() + TextFormatting.UNDERLINE;
+	private static final String boldUnderline = ChatFormatting.BOLD.toString() + ChatFormatting.UNDERLINE;
 
 	private Button buttonFilter;
 	private Button buttonUse;
 
 	private final List<ItemStackWidget> tradeInfoWidgets = new ArrayList<>();
 
-	public GuiCatalogue(ContainerCatalogue container, PlayerInventory inv, ITextComponent title) {
+	public GuiCatalogue(ContainerCatalogue container, Inventory inv, Component title) {
 		super(new ResourceLocation("textures/gui/book.png"), container, inv, title);
 		this.imageWidth = 192;
 		this.imageHeight = 192;
 
-		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
-		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
+		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
 	}
 
 	@Override
@@ -66,14 +66,14 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 		Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
 
-		addButton(new Button(width / 2 + 44, topPos + 150, 12, 20, new StringTextComponent(">"), b -> actionPerformed(2)));
-		addButton(new Button(width / 2 - 58, topPos + 150, 12, 20, new StringTextComponent("<"), b -> actionPerformed(3)));
+		addButton(new Button(width / 2 + 44, topPos + 150, 12, 20, new TextComponent(">"), b -> actionPerformed(2)));
+		addButton(new Button(width / 2 - 58, topPos + 150, 12, 20, new TextComponent("<"), b -> actionPerformed(3)));
 
 		//TODO but these are set in the constructor??
-		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
+		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
 		addButton(buttonFilter);
 
-		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslationTextComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
+		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
 		addButton(buttonUse);
 	}
 
@@ -84,7 +84,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		Minecraft.getInstance().font.draw(transform, String.format("%s / %s", container.getPageNumber(), container.getPageCount()), leftPos + imageWidth - 72, topPos + 12, ColourProperties.INSTANCE.get("gui.book"));
@@ -101,16 +101,16 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 			buttonUse.visible = false;
 		}
 
-		buttonFilter.setMessage(new TranslationTextComponent("for.gui.mail.filter." + container.getFilterIdent()));
+		buttonFilter.setMessage(new TranslatableComponent("for.gui.mail.filter." + container.getFilterIdent()));
 	}
 
 	private void drawNoTrade(int x, int y) {
-		Minecraft.getInstance().font.drawWordWrap(new TranslationTextComponent("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
+		Minecraft.getInstance().font.drawWordWrap(new TranslatableComponent("for.gui.mail.notrades"), x, y + 18, 119, ColourProperties.INSTANCE.get("gui.book"));
 	}
 
-	private void drawTradePreview(MatrixStack transform, ITradeStationInfo tradeInfo, int x, int y) {
+	private void drawTradePreview(PoseStack transform, ITradeStationInfo tradeInfo, int x, int y) {
 
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		fontRenderer.draw(transform, boldUnderline + tradeInfo.getAddress().getName(), x, y, ColourProperties.INSTANCE.get("gui.book"));
 
 		fontRenderer.draw(transform, String.format(Translator.translateToLocal("for.gui.mail.willtrade"), tradeInfo.getOwner().getName()), x, y + 18, ColourProperties.INSTANCE.get("gui.book"));
@@ -126,9 +126,9 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 		//TODO: Fix later
 		if (tradeInfo.getState().isOk()) {
-			fontRenderer.drawWordWrap(((IFormattableTextComponent) tradeInfo.getState().getDescription()).withStyle(TextFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.drawWordWrap(((MutableComponent) tradeInfo.getState().getDescription()).withStyle(ChatFormatting.DARK_GREEN), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		} else {
-			fontRenderer.drawWordWrap(((IFormattableTextComponent) tradeInfo.getState().getDescription()).withStyle(TextFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
+			fontRenderer.drawWordWrap(((MutableComponent) tradeInfo.getState().getDescription()).withStyle(ChatFormatting.DARK_RED), x, y + 82, 119, ColourProperties.INSTANCE.get("gui.book"));
 		}
 	}
 
@@ -145,7 +145,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	}
 
 	protected void actionPerformed(int id) {
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		switch (id) {
 			case 0:
 				player.closeContainer();

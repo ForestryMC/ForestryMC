@@ -1,8 +1,8 @@
 package forestry.sorting.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.tiles.TileUtil;
@@ -15,18 +15,18 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 	private final IFilterContainer container;
 	private boolean guiNeedsUpdate = true;
 
-	public static ContainerGeneticFilter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerGeneticFilter fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileGeneticFilter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileGeneticFilter.class);
 		return new ContainerGeneticFilter(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerGeneticFilter(int windowId, PlayerInventory playerInventory, IFilterContainer container) {
+	public ContainerGeneticFilter(int windowId, Inventory playerInventory, IFilterContainer container) {
 		super(windowId, SortingContainers.GENETIC_FILTER.containerType(), container.getTileEntity());
 		this.container = container;
 		addInventory(playerInventory, 26, 140);
 	}
 
-	protected void addInventory(PlayerInventory playerInventory, int xInv, int yInv) {
+	protected void addInventory(Inventory playerInventory, int xInv, int yInv) {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
@@ -38,7 +38,7 @@ public class ContainerGeneticFilter extends ContainerTile<TileGeneticFilter> {
 			addSlot(new SlotGeneticFilter(playerInventory, column, xInv + column * 18, yInv + 58));
 		}
 
-		IInventory buffer = container.getBuffer();
+		Container buffer = container.getBuffer();
 		if (buffer != null) {
 			for (int x = 0; x < 6; x++) {
 				addSlot(new SlotFilterFacing(buffer, x, 8, 18 + x * 18));

@@ -1,8 +1,8 @@
 package forestry.database.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -17,13 +17,13 @@ import forestry.database.tiles.TileDatabase;
 
 public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 
-	public static ContainerDatabase fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerDatabase fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		PacketBufferForestry buf = new PacketBufferForestry(data);
 		TileDatabase tile = TileUtil.getTile(inv.player.level, buf.readBlockPos(), TileDatabase.class);
 		return new ContainerDatabase(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerDatabase(int windowId, PlayerInventory playerInventory, TileDatabase tileForestry) {
+	public ContainerDatabase(int windowId, Inventory playerInventory, TileDatabase tileForestry) {
 		super(windowId, DatabaseContainers.DATABASE.containerType(), playerInventory, tileForestry, 29, 120);
 
 		addInventory(this, tileForestry);
@@ -37,7 +37,7 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 	}
 
 	public void sendContainerToListeners() {
-		for (IContainerListener listener : containerListeners) {
+		for (ContainerListener listener : containerListeners) {
 			listener.refreshContainer(this, getItems());
 		}
 	}

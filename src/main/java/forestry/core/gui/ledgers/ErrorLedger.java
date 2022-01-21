@@ -12,11 +12,11 @@ package forestry.core.gui.ledgers;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.IErrorState;
 import forestry.core.utils.StringUtil;
@@ -39,13 +39,13 @@ public class ErrorLedger extends Ledger {
 		this.state = state;
 		if (state != null) {
 			//TODO - textcomponent
-			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslationTextComponent(state.getUnlocalizedHelp()));
+			int lineHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip(), new TranslatableComponent(state.getUnlocalizedHelp()));
 			maxHeight = lineHeight + 20;
 		}
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 		if (state == null) {
 			return;
 		}
@@ -79,11 +79,11 @@ public class ErrorLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
+	public Component getTooltip() {
 		if (state == null) {
-			return new StringTextComponent("");
+			return new TextComponent("");
 		}
-		return new TranslationTextComponent(state.getUnlocalizedDescription());
+		return new TranslatableComponent(state.getUnlocalizedDescription());
 	}
 
 }

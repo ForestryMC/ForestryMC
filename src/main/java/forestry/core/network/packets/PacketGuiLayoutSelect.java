@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,9 +45,9 @@ public class PacketGuiLayoutSelect extends ForestryPacket implements IForestryPa
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, Player player) {
 			String layoutUid = data.readUtf();
-			Container container = player.containerMenu;
+			AbstractContainerMenu container = player.containerMenu;
 			if (!(container instanceof ContainerSolderingIron)) {
 				return;
 			}

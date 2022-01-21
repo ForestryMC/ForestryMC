@@ -4,12 +4,12 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -19,7 +19,7 @@ import forestry.core.climate.ClimateStateHelper;
 
 import io.netty.buffer.ByteBuf;
 
-public class PacketBufferForestry extends PacketBuffer {
+public class PacketBufferForestry extends FriendlyByteBuf {
 	public PacketBufferForestry(ByteBuf wrapped) {
 		super(wrapped);
 	}
@@ -44,7 +44,7 @@ public class PacketBufferForestry extends PacketBuffer {
 		return itemStacks;
 	}
 
-	public void writeInventory(IInventory inventory) {
+	public void writeInventory(Container inventory) {
 		int size = inventory.getContainerSize();
 		writeVarInt(size);
 
@@ -54,7 +54,7 @@ public class PacketBufferForestry extends PacketBuffer {
 		}
 	}
 
-	public void readInventory(IInventory inventory) {
+	public void readInventory(Container inventory) {
 		int size = readVarInt();
 
 		for (int i = 0; i < size; i++) {
@@ -76,7 +76,7 @@ public class PacketBufferForestry extends PacketBuffer {
 	}
 
 	@Nullable
-	public Entity readEntityById(World world) {
+	public Entity readEntityById(Level world) {
 		int entityId = readVarInt();
 		return world.getEntity(entityId);
 	}

@@ -12,17 +12,17 @@ package forestry.core.items;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -36,29 +36,29 @@ public abstract class ItemWithGui extends ItemForestry {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (!worldIn.isClientSide) {
-			ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;    //TODO safe?
+			ServerPlayer sPlayer = (ServerPlayer) playerIn;    //TODO safe?
 			openGui(sPlayer, stack);
 		}
 
-		return ActionResult.success(stack);
+		return InteractionResultHolder.success(stack);
 	}
 
-	protected void openGui(ServerPlayerEntity player, ItemStack stack) {
+	protected void openGui(ServerPlayer player, ItemStack stack) {
 		NetworkHooks.openGui(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
 	}
 
-	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
-		buffer.writeBoolean(player.getUsedItemHand() == Hand.MAIN_HAND);
+	protected void writeContainerData(ServerPlayer player, ItemStack stack, PacketBufferForestry buffer) {
+		buffer.writeBoolean(player.getUsedItemHand() == InteractionHand.MAIN_HAND);
 	}
 
 	@Override
-	public boolean onDroppedByPlayer(ItemStack itemstack, PlayerEntity player) {
+	public boolean onDroppedByPlayer(ItemStack itemstack, Player player) {
 		if (!itemstack.isEmpty() &&
-				player instanceof ServerPlayerEntity &&
+				player instanceof ServerPlayer &&
 				player.containerMenu instanceof ContainerItemInventory) {
 			player.closeContainer();
 		}
@@ -67,9 +67,9 @@ public abstract class ItemWithGui extends ItemForestry {
 	}
 
 	@Nullable
-	public abstract Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem);
+	public abstract AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem);
 
-	public static class ContainerProvider implements INamedContainerProvider {
+	public static class ContainerProvider implements MenuProvider {
 
 		private final ItemStack heldItem;
 
@@ -78,13 +78,13 @@ public abstract class ItemWithGui extends ItemForestry {
 		}
 
 		@Override
-		public ITextComponent getDisplayName() {
+		public Component getDisplayName() {
 			return heldItem.getHoverName();
 		}
 
 		@Nullable
 		@Override
-		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+		public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 			Item item = heldItem.getItem();
 			if (!(item instanceof ItemWithGui)) {
 				return null;

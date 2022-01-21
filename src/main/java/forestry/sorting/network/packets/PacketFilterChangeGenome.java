@@ -2,9 +2,9 @@ package forestry.sorting.network.packets;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -57,7 +57,7 @@ public class PacketFilterChangeGenome extends ForestryPacket implements IForestr
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			Direction facing = Direction.from3DDataValue(data.readShort());
 			short index = data.readShort();

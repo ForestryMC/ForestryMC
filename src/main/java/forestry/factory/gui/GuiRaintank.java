@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -24,14 +24,14 @@ public class GuiRaintank extends GuiForestryTitled<ContainerRaintank> {
 	private final TileRaintank tile;
 
 	//TODO these all store a tile. Make a superclass to automatically do it.
-	public GuiRaintank(ContainerRaintank container, PlayerInventory inventory, ITextComponent title) {
+	public GuiRaintank(ContainerRaintank container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/raintank.png", container, inventory, title);
 		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		if (tile.isFilling()) {

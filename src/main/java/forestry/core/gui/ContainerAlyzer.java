@@ -1,9 +1,9 @@
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
@@ -11,14 +11,14 @@ import forestry.core.inventory.ItemInventoryAlyzer;
 
 public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer> {
 
-	public static ContainerAlyzer fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
+	public static ContainerAlyzer fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
+		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		Player player = playerInv.player;
 		ItemInventoryAlyzer inv = new ItemInventoryAlyzer(player, player.getItemInHand(hand));
 		return new ContainerAlyzer(windowId, inv, player);
 	}
 
-	public ContainerAlyzer(int windowId, ItemInventoryAlyzer inventory, PlayerEntity player) {
+	public ContainerAlyzer(int windowId, ItemInventoryAlyzer inventory, Player player) {
 		super(windowId, inventory, player.inventory, 43, 156, CoreContainers.ALYZER.containerType());
 
 		final int xPosLeftSlots = 223;

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.worktable.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -31,7 +31,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private final TileWorktable tile;
 	private boolean hasRecipeConflict = false;
 
-	public GuiWorktable(ContainerWorktable container, PlayerInventory inv, ITextComponent title) {
+	public GuiWorktable(ContainerWorktable container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", container, inv, title);
 		this.tile = container.getTile();
 

@@ -7,36 +7,36 @@ import com.google.gson.JsonSerializationContext;
 
 import java.util.Set;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.LootParameter;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import forestry.arboriculture.blocks.BlockAsh;
 
-public class CountBlockFunction extends LootFunction {
-	public static LootFunctionType type;
+public class CountBlockFunction extends LootItemConditionalFunction {
+	public static LootItemFunctionType type;
 
-	protected CountBlockFunction(ILootCondition[] conditions) {
+	protected CountBlockFunction(LootItemCondition[] conditions) {
 		super(conditions);
 	}
 
-	public static LootFunction.Builder<?> builder() {
+	public static LootItemConditionalFunction.Builder<?> builder() {
 		return simpleBuilder(CountBlockFunction::new);
 	}
 
 	@Override
-	public LootFunctionType getType() {
+	public LootItemFunctionType getType() {
 		return type;
 	}
 
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext context) {
-		BlockState state = context.getParamOrNull(LootParameters.BLOCK_STATE);
+		BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 		if (state == null || !state.hasProperty(BlockAsh.AMOUNT)) {
 			return stack;
 		}
@@ -46,11 +46,11 @@ public class CountBlockFunction extends LootFunction {
 	}
 
 	@Override
-	public Set<LootParameter<?>> getReferencedContextParams() {
-		return ImmutableSet.of(LootParameters.BLOCK_STATE);
+	public Set<LootContextParam<?>> getReferencedContextParams() {
+		return ImmutableSet.of(LootContextParams.BLOCK_STATE);
 	}
 
-	public static class Serializer extends LootFunction.Serializer<CountBlockFunction> {
+	public static class Serializer extends LootItemConditionalFunction.Serializer<CountBlockFunction> {
 
 		@Override
 		public void serialize(JsonObject object, CountBlockFunction function, JsonSerializationContext context) {
@@ -58,7 +58,7 @@ public class CountBlockFunction extends LootFunction {
 		}
 
 		@Override
-		public CountBlockFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] conditions) {
+		public CountBlockFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, LootItemCondition[] conditions) {
 			return new CountBlockFunction(conditions);
 		}
 	}

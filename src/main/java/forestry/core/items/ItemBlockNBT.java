@@ -13,15 +13,15 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,7 +42,7 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 	}
 
 	@Override
-	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState blockState) {
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level world, @Nullable Player player, ItemStack stack, BlockState blockState) {
 		if (getBlock().hasTileEntity(blockState) && stack.hasTag()) {
 			TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 			if (tile != null) {
@@ -55,11 +55,11 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> info, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> info, TooltipFlag advanced) {
 		super.appendHoverText(itemstack, world, info, advanced);
 
 		if (itemstack.getTag() != null) {
-			info.add(new StringTextComponent("There are still some scribbles on this."));
+			info.add(new TextComponent("There are still some scribbles on this."));
 		}
 	}
 }

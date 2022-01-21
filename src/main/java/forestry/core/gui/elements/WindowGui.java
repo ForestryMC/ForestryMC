@@ -1,8 +1,8 @@
 package forestry.core.gui.elements;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -78,7 +78,7 @@ public class WindowGui<G extends Screen & IGuiSizable> extends Window {
 	}
 
 	@Override
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return getMinecraft().font;
 	}
 }

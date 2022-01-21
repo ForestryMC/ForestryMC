@@ -13,11 +13,11 @@ package forestry.apiculture;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,13 +46,13 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	// / SAVING & LOADING
 	@Override
-	public void read(CompoundNBT CompoundNBT) {
+	public void read(CompoundTag CompoundNBT) {
 		setActive(CompoundNBT.getBoolean("Active"));
 		hasFlowersCache.read(CompoundNBT);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundTag write(CompoundTag CompoundNBT) {
 		CompoundNBT.putBoolean("Active", active);
 		hasFlowersCache.write(CompoundNBT);
 
@@ -60,7 +60,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void writeData(PacketBuffer data) {
+	public void writeData(FriendlyByteBuf data) {
 		data.writeBoolean(active);
 		if (active) {
 			hasFlowersCache.writeData(data);
@@ -68,7 +68,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 	}
 
 	@Override
-	public void readData(PacketBuffer data) {
+	public void readData(FriendlyByteBuf data) {
 		boolean active = data.readBoolean();
 		setActive(active);
 		if (active) {
@@ -95,7 +95,7 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 		if (tickHelper.updateOnInterval(200)) {
 			IBee queen = housing.getContainedBee();
 			hasFlowersCache.update(queen, housing);
-			World world = housing.getWorldObj();
+			Level world = housing.getWorldObj();
 			boolean canWork = (world.isDay() || queen.getGenome().getActiveValue(BeeChromosomes.NEVER_SLEEPS)) &&
 					(!housing.isRaining() || queen.getGenome().getActiveValue(BeeChromosomes.TOLERATES_RAIN));
 			boolean flowerCacheNeedsSync = hasFlowersCache.needsSync();
@@ -124,15 +124,15 @@ public class WorldgenBeekeepingLogic implements IBeekeepingLogic {
 
 	@Override
 	public void syncToClient() {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		if (world != null && !world.isClientSide) {
 			NetworkUtil.sendNetworkPacket(new PacketBeeLogicActive(housing), housing.getCoordinates(), world);
 		}
 	}
 
 	@Override
-	public void syncToClient(ServerPlayerEntity player) {
-		World world = housing.getWorldObj();
+	public void syncToClient(ServerPlayer player) {
+		Level world = housing.getWorldObj();
 		if (world != null && !world.isClientSide) {
 			NetworkUtil.sendToPlayer(new PacketBeeLogicActive(housing), player);
 		}

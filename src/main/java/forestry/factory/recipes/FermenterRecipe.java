@@ -13,12 +13,12 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -99,21 +99,21 @@ public class FermenterRecipe implements IFermenterRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FermenterRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FermenterRecipe> {
 
 		@Override
 		public FermenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			int fermentationValue = JSONUtils.getAsInt(json, "fermentationValue");
-			float modifier = JSONUtils.getAsFloat(json, "modifier");
-			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(JSONUtils.getAsString(json, "output")));
-			FluidStack fluidResource = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "fluidResource"));
+			int fermentationValue = GsonHelper.getAsInt(json, "fermentationValue");
+			float modifier = GsonHelper.getAsFloat(json, "modifier");
+			Fluid output = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(GsonHelper.getAsString(json, "output")));
+			FluidStack fluidResource = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "fluidResource"));
 
 			return new FermenterRecipe(recipeId, resource, fermentationValue, modifier, output, fluidResource);
 		}
 
 		@Override
-		public FermenterRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public FermenterRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			Ingredient resource = Ingredient.fromNetwork(buffer);
 			int fermentationValue = buffer.readVarInt();
 			float modifier = buffer.readFloat();
@@ -124,7 +124,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, FermenterRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, FermenterRecipe recipe) {
 			recipe.resource.toNetwork(buffer);
 			buffer.writeVarInt(recipe.fermentationValue);
 			buffer.writeFloat(recipe.modifier);

@@ -14,9 +14,9 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Optional;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -42,7 +42,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_ANALYZE_4 = 5;
 	public static final int SLOT_ANALYZE_5 = 6;
 
-	public ItemInventoryAlyzer(PlayerEntity player, ItemStack itemstack) {
+	public ItemInventoryAlyzer(Player player, ItemStack itemstack) {
 		super(player, 7, itemstack);
 	}
 
@@ -174,7 +174,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	protected void onWriteNBT(CompoundNBT nbt) {
+	protected void onWriteNBT(CompoundTag nbt) {
 		ItemStack energy = getItem(ItemInventoryAlyzer.SLOT_ENERGY);
 		int amount = 0;
 		if (!energy.isEmpty()) {

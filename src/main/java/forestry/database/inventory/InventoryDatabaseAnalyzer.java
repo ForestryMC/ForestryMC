@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.database.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.inventory.InventoryAdapterTile;

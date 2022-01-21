@@ -12,18 +12,18 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -37,40 +37,40 @@ import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.IFilterSlotDelegate;
 
-public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements ISidedInventory, IFilterSlotDelegate, ILocatable, INamedContainerProvider {
+public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> extends MultiblockTileEntityBase<T> implements WorldlyContainer, IFilterSlotDelegate, ILocatable, MenuProvider {
 	@Nullable
 	private GameProfile owner;
 
-	public MultiblockTileEntityForestry(TileEntityType<?> tileEntityType, T multiblockLogic) {
+	public MultiblockTileEntityForestry(BlockEntityType<?> tileEntityType, T multiblockLogic) {
 		super(tileEntityType, multiblockLogic);
 	}
 
 	/**
 	 * Called by a structure block when it is right clicked by a player.
 	 */
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		NetworkHooks.openGui(player, this, pos);
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
+	public void load(BlockState state, CompoundTag data) {
 		super.load(state, data);
 
 		if (data.contains("owner")) {
-			CompoundNBT ownerNbt = data.getCompound("owner");
-			this.owner = NBTUtil.readGameProfile(ownerNbt);
+			CompoundTag ownerNbt = data.getCompound("owner");
+			this.owner = NbtUtils.readGameProfile(ownerNbt);
 		}
 
 		getInternalInventory().read(data);
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
+	public CompoundTag save(CompoundTag data) {
 		data = super.save(data);
 
 		if (this.owner != null) {
-			CompoundNBT nbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(nbt, owner);
+			CompoundTag nbt = new CompoundTag();
+			NbtUtils.writeGameProfile(nbt, owner);
 			data.put("owner", nbt);
 		}
 
@@ -123,17 +123,17 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public final void startOpen(PlayerEntity player) {
+	public final void startOpen(Player player) {
 		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void stopOpen(PlayerEntity player) {
+	public final void stopOpen(Player player) {
 		getInternalInventory().stopOpen(player);
 	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity player) {
+	public final boolean stillValid(Player player) {
 		return getInternalInventory().stillValid(player);
 	}
 
@@ -173,7 +173,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 
 	/* ILocatable */
 	@Override
-	public final World getWorldObj() {
+	public final Level getWorldObj() {
 		return level;
 	}
 

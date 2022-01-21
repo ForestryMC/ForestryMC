@@ -1,6 +1,6 @@
 package forestry.database;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class DatabaseItem {
 	public final ItemStack itemStack;

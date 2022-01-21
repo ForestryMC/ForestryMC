@@ -2,7 +2,7 @@ package forestry.api.genetics.products;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * A mutable version of the {@link IProductList} this will later be {@link #bake()}d to a {@link IProductList} and can

@@ -12,13 +12,13 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -40,7 +40,7 @@ import forestry.core.fluids.TankManager;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
+public class TileAlvearyHygroregulator extends TileAlveary implements Container, ILiquidTankTile, IAlvearyComponent.Climatiser {
 	private final TankManager tankManager;
 	private final FilteredTank liquidTank;
 	private final IInventoryAdapter inventory;
@@ -103,7 +103,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 
@@ -117,13 +117,13 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		compoundNBT.putInt("TransferTime", transferTime);
 		if (currentRecipe != null) {
-			CompoundNBT subcompound = new CompoundNBT();
+			CompoundTag subcompound = new CompoundTag();
 			currentRecipe.getResource().writeToNBT(subcompound);
 			compoundNBT.put("CurrentLiquid", subcompound);
 		}
@@ -150,7 +150,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerAlvearyHygroregulator(windowId, inv, this);
 	}
 }

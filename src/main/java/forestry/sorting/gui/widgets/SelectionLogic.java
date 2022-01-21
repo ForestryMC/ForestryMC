@@ -9,9 +9,9 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.GuiForestry;
@@ -76,7 +76,7 @@ public class SelectionLogic<S> implements IScrollable {
 		}
 
 		for (S entry : entries) {
-			ITextComponent name = provider.getName(entry);
+			Component name = provider.getName(entry);
 			if (pattern.matcher(name.getString().toLowerCase(Locale.ENGLISH)).find()) {
 				sorted.add(entry);
 			}
@@ -98,7 +98,7 @@ public class SelectionLogic<S> implements IScrollable {
 		return widget.isMouseOver(mouseX, mouseY);
 	}
 
-	public void draw(MatrixStack transform) {
+	public void draw(PoseStack transform) {
 		for (SelectableWidget selectable : visible) {
 			selectable.draw(widget.gui, transform);
 		}
@@ -136,7 +136,7 @@ public class SelectionLogic<S> implements IScrollable {
 			this.yPos = yPos;
 		}
 
-		public void draw(GuiForestry gui, MatrixStack transform) {
+		public void draw(GuiForestry gui, PoseStack transform) {
 			provider.draw(gui, selectable, transform, yPos, xPos);
 		}
 

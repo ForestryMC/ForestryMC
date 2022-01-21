@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmProperties;
@@ -24,7 +24,7 @@ public class FarmLogicMushroom extends FarmLogicArboreal {
 	}
 
 	@Override
-	public NonNullList<ItemStack> collect(World world, IFarmHousing farmHousing) {
+	public NonNullList<ItemStack> collect(Level world, IFarmHousing farmHousing) {
 		return NonNullList.create();//Needed to override Arboreal #collect
 	}
 

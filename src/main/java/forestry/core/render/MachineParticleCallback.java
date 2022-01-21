@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.particle.DiggingParticle;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.particle.TerrainParticle;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,7 +25,7 @@ import forestry.core.blocks.IMachineProperties;
 import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.utils.ResourceUtil;
 
-public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSerializable> extends ParticleHelper.DefaultCallback<BlockBase<?>> {
+public class MachineParticleCallback<P extends Enum<P> & IBlockType & StringRepresentable> extends ParticleHelper.DefaultCallback<BlockBase<?>> {
 
 	private final P blockType;
 
@@ -36,7 +36,7 @@ public class MachineParticleCallback<P extends Enum<P> & IBlockType & IStringSer
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	protected void setTexture(DiggingParticle fx, World world, BlockPos pos, BlockState state) {
+	protected void setTexture(TerrainParticle fx, Level world, BlockPos pos, BlockState state) {
 		IMachineProperties<?> properties = blockType.getMachineProperties();
 		if (properties instanceof IMachinePropertiesTesr) {
 			IMachinePropertiesTesr<?> propertiesTesr = (IMachinePropertiesTesr<?>) properties;

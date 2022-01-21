@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ITagCollection;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagCollection;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.core.utils.ItemStackUtil;
 
@@ -35,8 +35,8 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 			return areEqual(a, new ResourceLocation((String) b));
 		}
 		if (b instanceof ResourceLocation) {
-			ITagCollection<Item> collection = ItemTags.getAllTags();
-			ITag<Item> itemTag = collection.getTag((ResourceLocation) b);
+			TagCollection<Item> collection = ItemTags.getAllTags();
+			Tag<Item> itemTag = collection.getTag((ResourceLocation) b);
 			if (itemTag == null) {
 				return false;
 			}

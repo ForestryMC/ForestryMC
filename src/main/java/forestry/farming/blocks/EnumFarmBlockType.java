@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Locale;
 
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,7 +54,7 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void fillSprites(TextureStitchEvent.Post event) {
-		AtlasTexture map = event.getMap();
+		TextureAtlas map = event.getMap();
 		sprites = ImmutableList.of(
 			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
 			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),

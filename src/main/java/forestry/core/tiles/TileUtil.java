@@ -14,18 +14,18 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.Region;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,9 +36,9 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public abstract class TileUtil {
 
-	public static boolean isUsableByPlayer(PlayerEntity player, TileEntity tile) {
+	public static boolean isUsableByPlayer(Player player, BlockEntity tile) {
 		BlockPos pos = tile.getBlockPos();
-		World world = tile.getLevel();
+		Level world = tile.getLevel();
 
 		return !tile.isRemoved() &&
 				getTile(world, pos) == tile &&
@@ -51,9 +51,9 @@ public abstract class TileUtil {
 	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static TileEntity getTile(IBlockReader world, BlockPos pos) {
-		if (world instanceof Region) {
-			Region chunkCache = (Region) world;
+	public static BlockEntity getTile(BlockGetter world, BlockPos pos) {
+		if (world instanceof PathNavigationRegion) {
+			PathNavigationRegion chunkCache = (PathNavigationRegion) world;
 			return chunkCache.getBlockEntity(pos);
 		} else {
 			return world.getBlockEntity(pos);
@@ -66,8 +66,8 @@ public abstract class TileUtil {
 	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
-	public static <T> T getTile(IBlockReader world, BlockPos pos, Class<T> tileClass) {
-		TileEntity tileEntity = getTile(world, pos);
+	public static <T> T getTile(BlockGetter world, BlockPos pos, Class<T> tileClass) {
+		BlockEntity tileEntity = getTile(world, pos);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
@@ -77,7 +77,7 @@ public abstract class TileUtil {
 
 	@Nullable
 	public static <T> T getTile(LootContext.Builder builder, Class<T> tileClass) {
-		TileEntity tileEntity = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
+		BlockEntity tileEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
@@ -86,7 +86,7 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static <T> T getTile(TileEntity tileEntity, Class<T> tileClass) {
+	public static <T> T getTile(BlockEntity tileEntity, Class<T> tileClass) {
 		if (tileClass.isInstance(tileEntity)) {
 			return tileClass.cast(tileEntity);
 		} else {
@@ -103,7 +103,7 @@ public abstract class TileUtil {
 	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
 	 */
 	@Nullable
-	public static <T, R> R getResultFromTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+	public static <T, R> R getResultFromTile(LevelReader world, BlockPos pos, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
 		T tile = getTile(world, pos, tileClass);
 		if (tile != null) {
 			return tileGetResult.getResult(tile);
@@ -115,7 +115,7 @@ public abstract class TileUtil {
 	 * Performs an {@link ITileGetResult} on a tile if the tile exists.
 	 */
 	@Nullable
-	public static <T, R> R getResultFromTile(TileEntity tileEntity, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
+	public static <T, R> R getResultFromTile(BlockEntity tileEntity, Class<T> tileClass, ITileGetResult<T, R> tileGetResult) {
 		T tile = getTile(tileEntity, tileClass);
 		if (tile != null) {
 			return tileGetResult.getResult(tile);
@@ -131,7 +131,7 @@ public abstract class TileUtil {
 	/**
 	 * Performs an {@link ITileAction} on a tile if the tile exists.
 	 */
-	public static <T> void actOnTile(IWorldReader world, BlockPos pos, Class<T> tileClass, ITileAction<T> tileAction) {
+	public static <T> void actOnTile(LevelReader world, BlockPos pos, Class<T> tileClass, ITileAction<T> tileAction) {
 		T tile = getTile(world, pos, tileClass);
 		if (tile != null) {
 			tileAction.actOnTile(tile);
@@ -139,7 +139,7 @@ public abstract class TileUtil {
 	}
 
 	@Nullable
-	public static IItemHandler getInventoryFromTile(@Nullable TileEntity tile, @Nullable Direction side) {
+	public static IItemHandler getInventoryFromTile(@Nullable BlockEntity tile, @Nullable Direction side) {
 		if (tile == null) {
 			return null;
 		}
@@ -151,19 +151,19 @@ public abstract class TileUtil {
 		}
 
 
-		if (tile instanceof ISidedInventory) {
-			return new SidedInvWrapper((ISidedInventory) tile, side);
+		if (tile instanceof WorldlyContainer) {
+			return new SidedInvWrapper((WorldlyContainer) tile, side);
 		}
 
-		if (tile instanceof IInventory) {
-			return new InvWrapper((IInventory) tile);
+		if (tile instanceof Container) {
+			return new InvWrapper((Container) tile);
 		}
 
 		return null;
 	}
 
-	public static <T> LazyOptional<T> getInterface(World world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
-		TileEntity tileEntity = world.getBlockEntity(pos);
+	public static <T> LazyOptional<T> getInterface(Level world, BlockPos pos, Capability<T> capability, @Nullable Direction facing) {
+		BlockEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity == null) {
 			return LazyOptional.empty();
 		}

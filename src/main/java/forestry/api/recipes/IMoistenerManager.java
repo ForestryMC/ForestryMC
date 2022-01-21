@@ -7,8 +7,8 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 /**
  * Provides an interface to the recipe manager of the moistener.

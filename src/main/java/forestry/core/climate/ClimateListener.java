@@ -2,12 +2,12 @@ package forestry.core.climate;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,7 +36,7 @@ public class ClimateListener implements IClimateListener {
 
 	private final Object locationProvider;
 	@Nullable
-	protected World world;
+	protected Level world;
 	@Nullable
 	protected BlockPos pos;
 	private IClimateState cachedState = AbsentClimateState.INSTANCE;
@@ -63,7 +63,7 @@ public class ClimateListener implements IClimateListener {
 		if (spawnParticles) {
 			tickHelper.onTick();
 			if (cachedState.isPresent() && tickHelper.updateOnInterval(20)) {
-				World worldObj = getWorldObj();
+				Level worldObj = getWorldObj();
 				BlockPos coordinates = getCoordinates();
 				ParticleRender.addTransformParticles(worldObj, coordinates, worldObj.random);
 			}
@@ -101,7 +101,7 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	private IClimateState getState(boolean update, boolean syncToClient) {
-		World worldObj = getWorldObj();
+		Level worldObj = getWorldObj();
 		if (!worldObj.isClientSide && update) {
 			updateState(syncToClient);
 		}
@@ -178,7 +178,7 @@ public class ClimateListener implements IClimateListener {
 	@Override
 	public void syncToClient() {
 		if (!cachedState.equals(cachedClientState)) {
-			World worldObj = getWorldObj();
+			Level worldObj = getWorldObj();
 			if (!worldObj.isClientSide) {
 				BlockPos coordinates = getCoordinates();
 				if (locationProvider instanceof Entity) {
@@ -192,8 +192,8 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public void syncToClient(ServerPlayerEntity player) {
-		World worldObj = getWorldObj();
+	public void syncToClient(ServerPlayer player) {
+		Level worldObj = getWorldObj();
 		if (!worldObj.isClientSide) {
 			IClimateState climateState = getState(true, false);
 			if (locationProvider instanceof Entity) {
@@ -213,7 +213,7 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		if (this.world == null) {
 			initLocation();
 		}
@@ -224,7 +224,7 @@ public class ClimateListener implements IClimateListener {
 	public void markLocatableDirty() {
 		this.world = null;
 		this.pos = null;
-		World worldObj = getWorldObj();
+		Level worldObj = getWorldObj();
 		if (!worldObj.isClientSide) {
 			updateState(true);
 		}
@@ -235,8 +235,8 @@ public class ClimateListener implements IClimateListener {
 			ILocatable provider = (ILocatable) this.locationProvider;
 			this.world = provider.getWorldObj();
 			this.pos = provider.getCoordinates();
-		} else if ((this.locationProvider instanceof TileEntity)) {
-			TileEntity provider = (TileEntity) this.locationProvider;
+		} else if ((this.locationProvider instanceof BlockEntity)) {
+			BlockEntity provider = (BlockEntity) this.locationProvider;
 			this.world = provider.getLevel();
 			this.pos = provider.getBlockPos();
 		} else {

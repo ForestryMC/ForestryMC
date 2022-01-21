@@ -4,10 +4,10 @@ import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.util.StringRepresentable;
 
 import forestry.api.arboriculture.IFruitProvider;
 import forestry.api.arboriculture.TreeManager;
@@ -44,7 +44,7 @@ import forestry.farming.logic.FarmLogicSucculent;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ModuleHelper;
 
-public enum FarmDefinition implements IStringSerializable {
+public enum FarmDefinition implements StringRepresentable {
 	CROPS("crops", EnumElectronTube.BRONZE, FarmLogicCrops::new) {
 		@Override
 		protected void initProperties(IFarmPropertiesBuilder properties) {

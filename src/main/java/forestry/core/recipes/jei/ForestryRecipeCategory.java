@@ -1,6 +1,6 @@
 package forestry.core.recipes.jei;
 
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.ingredients.IIngredients;
@@ -13,7 +13,7 @@ public abstract class ForestryRecipeCategory<T extends IRecipeCategoryExtension>
 
 	public ForestryRecipeCategory(IDrawable background, String unlocalizedName) {
 		this.background = background;
-		this.localizedName = new TranslationTextComponent(unlocalizedName).getString();
+		this.localizedName = new TranslatableComponent(unlocalizedName).getString();
 	}
 
 	@Override

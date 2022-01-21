@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.climatology;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,7 +49,7 @@ public class ModuleClimatology extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
+		MenuScreens.register(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
 	}
 
 	@Override

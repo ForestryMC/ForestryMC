@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotWorking extends SlotForestry {
 
-	public SlotWorking(IInventory iinventory, int i, int j, int k) {
+	public SlotWorking(Container iinventory, int i, int j, int k) {
 		super(iinventory, i, j, k);
 		blockShift();
 	}
@@ -27,12 +27,12 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public ItemStack onTake(Player player, ItemStack itemStack) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public boolean mayPickup(PlayerEntity stack) {
+	public boolean mayPickup(Player stack) {
 		return false;
 	}
 

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.LevelAccessor;
 
 import com.mojang.authlib.GameProfile;
 
@@ -34,7 +34,7 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	}
 
 	@Override
-	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
+	public <T extends IBreedingTracker> T getTracker(String rootUID, LevelAccessor world, @Nullable GameProfile profile) {
 		return getSidedHandler().getTracker(rootUID, world, profile);
 	}
 
@@ -44,6 +44,6 @@ public enum BreedingTrackerManager implements IBreedingTrackerManager {
 	}
 
 	interface SidedHandler {
-		<T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile player);
+		<T extends IBreedingTracker> T getTracker(String rootUID, LevelAccessor world, @Nullable GameProfile player);
 	}
 }

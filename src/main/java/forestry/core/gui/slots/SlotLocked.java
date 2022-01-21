@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotLocked extends SlotForestry {
 
-	public SlotLocked(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	public SlotLocked(Container inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 		setCanAdjustPhantom(false);
 		blockShift();
@@ -24,7 +24,7 @@ public class SlotLocked extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public ItemStack onTake(Player player, ItemStack itemStack) {
 		return ItemStack.EMPTY;
 	}
 

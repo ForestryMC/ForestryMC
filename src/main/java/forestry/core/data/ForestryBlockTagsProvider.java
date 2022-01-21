@@ -5,13 +5,13 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.TagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -113,9 +113,9 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(ITag.INamedTag<Block> tag, ITag.INamedTag<Block>... providers) {
-		TagsProvider.Builder<Block> builder = tag(tag);
-		for (ITag.INamedTag<Block> provider : providers) {
+	protected final void addToTag(Tag.Named<Block> tag, Tag.Named<Block>... providers) {
+		TagsProvider.TagAppender<Block> builder = tag(tag);
+		for (Tag.Named<Block> provider : providers) {
 			builder.addTag(provider);
 		}
 	}

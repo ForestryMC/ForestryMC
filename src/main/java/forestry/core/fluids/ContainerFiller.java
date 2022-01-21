@@ -2,9 +2,9 @@ package forestry.core.fluids;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -18,7 +18,7 @@ import forestry.core.utils.ItemStackUtil;
 public class ContainerFiller {
 	private final FluidTank fluidTank;
 	private final int fillingTime;
-	private final IInventory inventory;
+	private final Container inventory;
 	private final int inputSlot;
 	private final int outputSlot;
 
@@ -26,7 +26,7 @@ public class ContainerFiller {
 	private ItemStack usedInput;
 	private int fillingProgress;
 
-	public ContainerFiller(FluidTank fluidTank, int fillingTime, IInventory inventory, int inputSlot, int outputSlot) {
+	public ContainerFiller(FluidTank fluidTank, int fillingTime, Container inventory, int inputSlot, int outputSlot) {
 		this.fluidTank = fluidTank;
 		this.fillingTime = fillingTime;
 		this.inventory = inventory;

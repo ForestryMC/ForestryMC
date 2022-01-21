@@ -8,15 +8,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -168,7 +168,7 @@ public class ContainerElement extends GuiElement {
 	}
 
 	@Override
-	protected void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	protected void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		doLayout();
 		int mX = mouseX - getX();
 		int mY = mouseY - getY();
@@ -210,28 +210,28 @@ public class ContainerElement extends GuiElement {
 		return GuiConstants.DEFAULT_STYLE;
 	}
 
-	public LabelElement label(ITextComponent component) {
+	public LabelElement label(Component component) {
 		return new LabelElement.Builder(this::add, component).create();
 	}
 
-	public LabelElement label(IReorderingProcessor component) {
+	public LabelElement label(FormattedCharSequence component) {
 		return new LabelElement.Builder(this::add, component).create();
 	}
 
 	public LabelElement translated(String key, Object... args) {
-		return label(new TranslationTextComponent(key, args));
+		return label(new TranslatableComponent(key, args));
 	}
 
-	public LabelElement.Builder labelLine(IFormattableTextComponent component) {
+	public LabelElement.Builder labelLine(MutableComponent component) {
 		return new LabelElement.Builder(this::add, component);
 	}
 
 	public LabelElement.Builder translatedLine(String key, Object... args) {
-		return labelLine(new TranslationTextComponent(key, args));
+		return labelLine(new TranslatableComponent(key, args));
 	}
 
 	public LabelElement.Builder labelLine(String text) {
-		return labelLine(new StringTextComponent(text));
+		return labelLine(new TextComponent(text));
 	}
 
 	public LabelElement label(String text) {

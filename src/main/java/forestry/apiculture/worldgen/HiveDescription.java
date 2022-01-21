@@ -15,12 +15,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
@@ -42,21 +42,21 @@ import genetics.api.individual.IGenome;
 public enum HiveDescription implements IHiveDescription {
 	FOREST(IHiveRegistry.HiveType.FOREST, 3.0f, BeeDefinition.FOREST, HiveManager.genHelper.tree()) {
 		@Override
-		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
 			postGenFlowers(world, rand, pos, flowerStates);
 		}
 	},
 	MEADOWS(IHiveRegistry.HiveType.MEADOWS, 1.0f, BeeDefinition.MEADOWS, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)) {
 		@Override
-		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
 			postGenFlowers(world, rand, pos, flowerStates);
 		}
 	},
 	DESERT(IHiveRegistry.HiveType.DESERT, 1.0f, BeeDefinition.MODEST, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.SANDSTONE)) {
 		@Override
-		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
 			postGenFlowers(world, rand, pos, cactusStates);
 		}
@@ -65,12 +65,12 @@ public enum HiveDescription implements IHiveDescription {
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
-			return biome.getBiomeCategory() == Biome.Category.THEEND;
+			return biome.getBiomeCategory() == Biome.BiomeCategory.THEEND;
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.SNOW, Blocks.GRASS_BLOCK)) {
 		@Override
-		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 			BlockPos posAbove = pos.above();
 			if (world.isEmptyBlock(posAbove)) {
 				world.setBlock(posAbove, Blocks.SNOW.defaultBlockState(), Constants.FLAG_BLOCK_SYNC);
@@ -81,7 +81,7 @@ public enum HiveDescription implements IHiveDescription {
 	},
 	SWAMP(IHiveRegistry.HiveType.SWAMP, 2.0f, BeeDefinition.MARSHY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.GRASS_BLOCK)) {
 		@Override
-		public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+		public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 			super.postGen(world, rand, pos);
 
 			postGenFlowers(world, rand, pos, mushroomStates);
@@ -149,10 +149,10 @@ public enum HiveDescription implements IHiveDescription {
 	}
 
 	@Override
-	public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+	public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 	}
 
-	protected static void postGenFlowers(ISeedReader world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
+	protected static void postGenFlowers(WorldGenLevel world, Random rand, BlockPos hivePos, List<BlockState> flowerStates) {
 		int plantedCount = 0;
 		for (int i = 0; i < 10; i++) {
 			int xOffset = rand.nextInt(8) - 4;

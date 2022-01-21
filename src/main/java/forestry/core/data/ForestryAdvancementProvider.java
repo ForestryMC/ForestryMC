@@ -15,15 +15,15 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.TickTrigger;
-import net.minecraft.command.FunctionObject;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.TickTrigger;
+import net.minecraft.commands.CommandFunction;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.data.HashCache;
+import net.minecraft.data.DataProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.BeeDefinition;
@@ -31,7 +31,7 @@ import forestry.core.config.Constants;
 
 import genetics.api.GeneticHelper;
 
-public class ForestryAdvancementProvider implements IDataProvider {
+public class ForestryAdvancementProvider implements DataProvider {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
@@ -43,7 +43,7 @@ public class ForestryAdvancementProvider implements IDataProvider {
 	}
 
 	@Override
-	public void run(DirectoryCache cache) throws IOException {
+	public void run(HashCache cache) throws IOException {
 		Path outputFolder = this.generator.getOutputFolder();
 		Set<ResourceLocation> set = Sets.newHashSet();
 
@@ -54,7 +54,7 @@ public class ForestryAdvancementProvider implements IDataProvider {
 				Path path = createPath(outputFolder, advancement);
 
 				try {
-					IDataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
+					DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save advancement {}", path, ioexception);
 				}
@@ -67,11 +67,11 @@ public class ForestryAdvancementProvider implements IDataProvider {
 		GeneticHelper.setIndividual(icon, BeeDefinition.INDUSTRIOUS.createIndividual());
 
 		Advancement.Builder.advancement()
-				.display(icon, new TranslationTextComponent("advancements.forestry.root.title"), new TranslationTextComponent("advancements.forestry.root.description"), new ResourceLocation("textures/block/honeycomb_block.png"), FrameType.TASK, false, false, false)
-				.addCriterion("tick", new TickTrigger.Instance(EntityPredicate.AndPredicate.ANY))
+				.display(icon, new TranslatableComponent("advancements.forestry.root.title"), new TranslatableComponent("advancements.forestry.root.description"), new ResourceLocation("textures/block/honeycomb_block.png"), FrameType.TASK, false, false, false)
+				.addCriterion("tick", new TickTrigger.TriggerInstance(EntityPredicate.Composite.ANY))
 				.rewards(new AdvancementRewards(0, new ResourceLocation[]{
 						new ResourceLocation(Constants.MOD_ID, "grant_guide")
-				}, new ResourceLocation[0], FunctionObject.CacheableFunction.NONE))
+				}, new ResourceLocation[0], CommandFunction.CacheableFunction.NONE))
 				.save(consumer, Constants.MOD_ID + ":root");
 	}
 

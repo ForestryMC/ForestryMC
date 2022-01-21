@@ -2,16 +2,16 @@ package forestry.core.models;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class AbstractItemModel extends AbstractBakedModel {
 
 	@Override
-	protected ItemOverrideList createOverrides() {
+	protected ItemOverrides createOverrides() {
 		return new OverrideList();
 	}
 
@@ -22,21 +22,21 @@ public abstract class AbstractItemModel extends AbstractBakedModel {
 		return false;
 	}
 
-	protected abstract IBakedModel getOverride(IBakedModel model, ItemStack stack);
+	protected abstract BakedModel getOverride(BakedModel model, ItemStack stack);
 
-	protected IBakedModel getOverride(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+	protected BakedModel getOverride(BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
 		return getOverride(model, stack);
 	}
 
 
-	private class OverrideList extends ItemOverrideList {
+	private class OverrideList extends ItemOverrides {
 		public OverrideList() {
 			super();
 		}
 
 		@Override
-		public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-			IBakedModel overrideModel = getOverride(model, stack, world, entity);
+		public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
+			BakedModel overrideModel = getOverride(model, stack, world, entity);
 			return complexOverride() ? overrideModel.getOverrides().resolve(overrideModel, stack, world, entity) : overrideModel;
 		}
 	}

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  * Contains methods to create {@link IClimateState}s or to get constant and immutable {@link IClimateState}s like
@@ -64,7 +64,7 @@ public interface IClimateStateHelper {
 	 * @param compound The compound that contains the data.
 	 * @return A state that contains the data that the compound contains.
 	 */
-	IClimateState create(CompoundNBT compound);
+	IClimateState create(CompoundTag compound);
 
 	/**
 	 * Creates a state based on the data that the given compound contains.
@@ -73,7 +73,7 @@ public interface IClimateStateHelper {
 	 * @param mutable  If the copy should be mutable.
 	 * @return A state that contains the data that the compound contains.
 	 */
-	IClimateState create(CompoundNBT compound, boolean mutable);
+	IClimateState create(CompoundTag compound, boolean mutable);
 
 	/**
 	 * Writes the data of the given state to the given compound.
@@ -82,7 +82,7 @@ public interface IClimateStateHelper {
 	 * @param state    The state that contains the data.
 	 * @return The given compound.
 	 */
-	CompoundNBT writeToNBT(CompoundNBT compound, IClimateState state);
+	CompoundTag writeToNBT(CompoundTag compound, IClimateState state);
 
 	/**
 	 * Checks if the given state is valid and returns the absent state if the given state is not valid.

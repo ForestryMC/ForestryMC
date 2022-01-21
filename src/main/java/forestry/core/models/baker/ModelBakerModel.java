@@ -22,18 +22,18 @@ import java.util.Random;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.TransformationMatrix;
+import net.minecraft.core.Direction;
+import com.mojang.math.Transformation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,25 +42,25 @@ import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelBakerModel implements IBakedModel {
+public class ModelBakerModel implements BakedModel {
 
 	private boolean isGui3d;
 	private boolean isAmbientOcclusion;
 	private TextureAtlasSprite particleSprite;
 	@Nullable
-	private IModelTransform modelState;
-	private ImmutableMap<TransformType, TransformationMatrix> transforms = ImmutableMap.of();
+	private ModelState modelState;
+	private ImmutableMap<TransformType, Transformation> transforms = ImmutableMap.of();
 
 	private final Map<Direction, List<BakedQuad>> faceQuads;
 	private final List<BakedQuad> generalQuads;
-	private final List<Pair<BlockState, IBakedModel>> models;
-	private final List<Pair<BlockState, IBakedModel>> modelsPost;
+	private final List<Pair<BlockState, BakedModel>> models;
+	private final List<Pair<BlockState, BakedModel>> modelsPost;
 
 	private float[] rotation = getDefaultRotation();
 	private float[] translation = getDefaultTranslation();
 	private float[] scale = getDefaultScale();
 
-	ModelBakerModel(IModelTransform modelState) {
+	ModelBakerModel(ModelState modelState) {
 		models = new ArrayList<>();
 		modelsPost = new ArrayList<>();
 		faceQuads = new EnumMap<>(Direction.class);
@@ -123,13 +123,13 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public ItemCameraTransforms getTransforms() {
-		return ItemCameraTransforms.NO_TRANSFORMS;
+	public ItemTransforms getTransforms() {
+		return ItemTransforms.NO_TRANSFORMS;
 	}
 
 	@Override
-	public ItemOverrideList getOverrides() {
-		return ItemOverrideList.EMPTY;
+	public ItemOverrides getOverrides() {
+		return ItemOverrides.EMPTY;
 	}
 
 	private static float[] getDefaultRotation() {
@@ -168,7 +168,7 @@ public class ModelBakerModel implements IBakedModel {
 		return scale;
 	}
 
-	public void setModelState(IModelTransform modelState) {
+	public void setModelState(ModelState modelState) {
 		this.modelState = modelState;
 		this.transforms = PerspectiveMapWrapper.getTransforms(modelState);
 	}
@@ -184,7 +184,7 @@ public class ModelBakerModel implements IBakedModel {
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		List<BakedQuad> quads = new ArrayList<>();
-		for (Pair<BlockState, IBakedModel> model : this.models) {
+		for (Pair<BlockState, BakedModel> model : this.models) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
 			if (!modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);
@@ -194,7 +194,7 @@ public class ModelBakerModel implements IBakedModel {
 			quads.addAll(faceQuads.get(side));
 		}
 		quads.addAll(generalQuads);
-		for (Pair<BlockState, IBakedModel> model : this.modelsPost) {
+		for (Pair<BlockState, BakedModel> model : this.modelsPost) {
 			List<BakedQuad> modelQuads = model.getRight().getQuads(model.getLeft(), side, rand);
 			if (!modelQuads.isEmpty()) {
 				quads.addAll(modelQuads);
@@ -208,7 +208,7 @@ public class ModelBakerModel implements IBakedModel {
 	}
 
 	@Override
-	public IBakedModel handlePerspective(TransformType cameraTransformType, MatrixStack mat) {
+	public BakedModel handlePerspective(TransformType cameraTransformType, PoseStack mat) {
 		return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType, mat);
 	}
 

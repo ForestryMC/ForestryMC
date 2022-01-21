@@ -14,13 +14,13 @@ import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Locale;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -34,10 +34,10 @@ import forestry.core.tiles.TileBase;
 
 public class RenderMachine implements IForestryRenderer<TileBase> {
 
-	private final ModelRenderer basefront;
-	private final ModelRenderer baseback;
-	private final ModelRenderer resourceTank;
-	private final ModelRenderer productTank;
+	private final ModelPart basefront;
+	private final ModelPart baseback;
+	private final ModelPart resourceTank;
+	private final ModelPart productTank;
 
 	private final ResourceLocation textureBase;
 	private final ResourceLocation textureResourceTank;
@@ -49,25 +49,25 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		int textureWidth = 64;
 		int textureHeight = 32;
 
-		basefront = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		basefront = new ModelPart(textureWidth, textureHeight, 0, 0);
 		basefront.addBox(-8F, -8F, -8F, 16, 4, 16);
 		basefront.x = 8;
 		basefront.y = 8;
 		basefront.z = 8;
 
-		baseback = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		baseback = new ModelPart(textureWidth, textureHeight, 0, 0);
 		baseback.addBox(-8F, 4F, -8F, 16, 4, 16);
 		baseback.x = 8;
 		baseback.y = 8;
 		baseback.z = 8;
 
-		resourceTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		resourceTank = new ModelPart(textureWidth, textureHeight, 0, 0);
 		resourceTank.addBox(-6F, -8F, -6F, 12, 16, 6);
 		resourceTank.x = 8;
 		resourceTank.y = 8;
 		resourceTank.z = 8;
 
-		productTank = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		productTank = new ModelPart(textureWidth, textureHeight, 0, 0);
 		productTank.addBox(-6F, -8F, 0F, 12, 16, 6);
 		productTank.x = 8;
 		productTank.y = 8;
@@ -89,7 +89,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 	@Override
 	public void renderTile(TileBase tile, RenderHelper helper) {
 		IRenderableTile generator = (IRenderableTile) tile;
-		World worldObj = tile.getWorldObj();
+		Level worldObj = tile.getWorldObj();
 		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
 			Direction facing = blockState.getValue(BlockBase.FACING);
@@ -135,7 +135,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {
+	private void renderTank(ModelPart tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {
 		helper.renderModel(textureBase, tankModel);
 
 		ResourceLocation textureResourceTankLevel = texturesTankLevels.get(renderInfo.getLevel());

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.buttons;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

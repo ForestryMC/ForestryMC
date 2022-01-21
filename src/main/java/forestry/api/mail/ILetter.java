@@ -8,14 +8,14 @@ package forestry.api.mail;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.core.INbtWritable;
 
-public interface ILetter extends IInventory, INbtWritable {
+public interface ILetter extends Container, INbtWritable {
 
 	NonNullList<ItemStack> getPostage();
 
@@ -42,7 +42,7 @@ public interface ILetter extends IInventory, INbtWritable {
 
 	String getText();
 
-	void addTooltip(List<ITextComponent> list);
+	void addTooltip(List<Component> list);
 
 	boolean isPostPaid();
 

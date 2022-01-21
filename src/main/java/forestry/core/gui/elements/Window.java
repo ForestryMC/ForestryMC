@@ -10,13 +10,13 @@ import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -228,12 +228,12 @@ public abstract class Window extends ContainerElement {
 		return widgets;
 	}
 
-	public void drawTooltip(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack transform, int mouseX, int mouseY) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
 			RenderSystem.pushMatrix();
 			//TODO test
-			MainWindow window = Minecraft.getInstance().getWindow();
+			Window window = Minecraft.getInstance().getWindow();
 			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
 			RenderSystem.popMatrix();
 		}
@@ -344,7 +344,7 @@ public abstract class Window extends ContainerElement {
 		return getMinecraft().getTextureManager();
 	}
 
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return getMinecraft().font;
 	}
 }

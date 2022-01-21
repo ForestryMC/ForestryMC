@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,7 +30,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 	private final BlockPos pos;
 	private final IErrorLogic errorLogic;
 
-	public PacketErrorUpdate(TileEntity tile, IErrorLogicSource errorLogicSource) {
+	public PacketErrorUpdate(BlockEntity tile, IErrorLogicSource errorLogicSource) {
 		this.pos = tile.getBlockPos();
 		this.errorLogic = errorLogicSource.getErrorLogic();
 	}
@@ -49,7 +49,7 @@ public class PacketErrorUpdate extends ForestryPacket implements IForestryPacket
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, Player player) {
 			BlockPos pos = data.readBlockPos();
 
 			TileUtil.actOnTile(player.level, pos, IErrorLogicSource.class, errorSourceTile -> {

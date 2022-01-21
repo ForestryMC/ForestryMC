@@ -8,16 +8,16 @@ package forestry.api.mail;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 
 	/* POST OFFICE */
-	IPostOffice getPostOffice(ServerWorld world);
+	IPostOffice getPostOffice(ServerLevel world);
 
 	/* MAIL ADDRESSES */
 	IMailAddress getMailAddress(GameProfile gameProfile);
@@ -49,18 +49,18 @@ public interface IPostRegistry {
 	Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
 
 	/* TRADE STATIONS */
-	void deleteTradeStation(ServerWorld world, IMailAddress address);
+	void deleteTradeStation(ServerLevel world, IMailAddress address);
 
-	ITradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address);
+	ITradeStation getOrCreateTradeStation(ServerLevel world, GameProfile owner, IMailAddress address);
 
 	@Nullable
-	ITradeStation getTradeStation(ServerWorld world, IMailAddress address);
+	ITradeStation getTradeStation(ServerLevel world, IMailAddress address);
 
-	boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address);
+	boolean isAvailableTradeAddress(ServerLevel world, IMailAddress address);
 
-	boolean isValidTradeAddress(World world, IMailAddress address);
+	boolean isValidTradeAddress(Level world, IMailAddress address);
 
 	/* PO BOXES */
-	boolean isValidPOBox(World world, IMailAddress address);
+	boolean isValidPOBox(Level world, IMailAddress address);
 
 }

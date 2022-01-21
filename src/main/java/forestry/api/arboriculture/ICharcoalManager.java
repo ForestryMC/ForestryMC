@@ -8,8 +8,8 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Provides functions that are related to the forestry charcoal pile.

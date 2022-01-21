@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkSource;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ import forestry.core.utils.Translator;
  */
 public abstract class MultiblockControllerBase implements IMultiblockControllerInternal {
 	// Multiblock stuff - do not mess with
-	protected final World world;
+	protected final Level world;
 
 	// Ticks
 	private static final Random rand = new Random();
@@ -84,7 +84,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	@Nullable
 	private MultiblockValidationException lastValidationException;
 
-	protected MultiblockControllerBase(World world) {
+	protected MultiblockControllerBase(Level world) {
 		this.world = world;
 		this.connectedParts = new HashSet<>();
 
@@ -110,7 +110,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 *
 	 * @param part The NBT tag containing this controller's data.
 	 */
-	protected abstract void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundNBT data);
+	protected abstract void onAttachedPartWithMultiblockData(IMultiblockComponent part, CompoundTag data);
 
 	@Override
 	public void attachBlock(IMultiblockComponent part) {
@@ -128,7 +128,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		this.onBlockAdded(part);
 
 		if (logic.hasMultiblockSaveData()) {
-			CompoundNBT savedData = logic.getMultiblockSaveData();
+			CompoundTag savedData = logic.getMultiblockSaveData();
 			onAttachedPartWithMultiblockData(part, savedData);
 			logic.onMultiblockDataAssimilated();
 		}
@@ -446,7 +446,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 				for (int x = minChunkX; x <= maxChunkX; x++) {
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
-						Chunk chunkToSave = this.world.getChunk(x, z);
+						LevelChunk chunkToSave = this.world.getChunk(x, z);
 						chunkToSave.markUnsaved();    //TODO types mean this needs cast or something
 					}
 				}
@@ -488,7 +488,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @param pos   coordinate of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed on the machine's side faces
 	 */
-	protected void isBlockGoodForExteriorLevel(int level, World world, BlockPos pos) throws MultiblockValidationException {
+	protected void isBlockGoodForExteriorLevel(int level, Level world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
 		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
 	}
@@ -500,7 +500,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	 * @param pos   coordinate of the block being tested
 	 * @throws MultiblockValidationException if the tested block is not allowed in the machine's interior
 	 */
-	protected void isBlockGoodForInterior(World world, BlockPos pos) throws MultiblockValidationException {
+	protected void isBlockGoodForInterior(Level world, BlockPos pos) throws MultiblockValidationException {
 		Block block = world.getBlockState(pos).getBlock();
 		throw new MultiblockValidationException(Translator.translateToLocalFormatted("for.multiblock.error.invalid.interior", block.getRegistryName()), pos);
 	}
@@ -702,7 +702,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 			return Collections.emptySet();
 		}
 
-		AbstractChunkProvider chunkProvider = world.getChunkSource();
+		ChunkSource chunkProvider = world.getChunkSource();
 
 		// Invalidate our reference coord, we'll recalculate it shortly
 		referenceCoord = null;
@@ -814,7 +814,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	@Override
 
 	public Set<IMultiblockComponent> detachAllBlocks() {
-		AbstractChunkProvider chunkProvider = world.getChunkSource();
+		ChunkSource chunkProvider = world.getChunkSource();
 		for (IMultiblockComponent part : connectedParts) {
 			BlockPos partCoord = part.getCoordinates();
 			if (chunkProvider.getChunk(partCoord.getX() >> 4, partCoord.getZ() >> 4, true) != null) {
@@ -837,7 +837,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
 	@Nullable
 	private BlockPos selectNewReferenceCoord() {
-		AbstractChunkProvider chunkProvider = world.getChunkSource();
+		ChunkSource chunkProvider = world.getChunkSource();
 		IMultiblockComponent theChosenOne = null;
 		referenceCoord = null;
 
@@ -863,6 +863,6 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 	}
 
 	private static boolean isInvalid(IMultiblockComponent part) {
-		return part instanceof TileEntity && ((TileEntity) part).isRemoved();
+		return part instanceof BlockEntity && ((BlockEntity) part).isRemoved();
 	}
 }

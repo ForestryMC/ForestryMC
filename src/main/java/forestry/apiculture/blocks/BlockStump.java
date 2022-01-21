@@ -12,24 +12,24 @@ package forestry.apiculture.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.block.WallTorchBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.block.WallTorchBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
 
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.tiles.TileCandle;
@@ -45,11 +45,11 @@ public class BlockStump extends TorchBlock {
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
 		return useStump(ApicultureBlocks.CANDLE, state, worldIn, pos, playerIn, hand);
 	}
 
-	public static ActionResultType useStump(FeatureBlock<?, ?> featureBlock, BlockState oldState, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand) {
+	public static InteractionResult useStump(FeatureBlock<?, ?> featureBlock, BlockState oldState, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand) {
 		ItemStack heldItem = playerIn.getItemInHand(hand);
 		if (BlockCandle.lightingItems.contains(heldItem.getItem())) {
 			BlockState activatedState = featureBlock.with(BlockCandle.STATE, BlockCandle.State.ON);
@@ -61,15 +61,15 @@ public class BlockStump extends TorchBlock {
 			candle.setColour(DyeColor.WHITE.getColorValue()); // default to white
 			candle.setLit(true);
 			worldIn.setBlockEntity(pos, candle);
-			worldIn.playSound(playerIn, pos, heldItem.getItem() == Items.FLINT_AND_STEEL ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_AMBIENT, SoundCategory.BLOCKS, 0.75F, worldIn.random.nextFloat() * 0.4F + 0.8F);
-			return ActionResultType.SUCCESS;
+			worldIn.playSound(playerIn, pos, heldItem.getItem() == Items.FLINT_AND_STEEL ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.75F, worldIn.random.nextFloat() * 0.4F + 0.8F);
+			return InteractionResult.SUCCESS;
 		}
 
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
 		// Empty for remove flame particles
 	}
 }

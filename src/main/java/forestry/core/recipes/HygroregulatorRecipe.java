@@ -13,10 +13,10 @@ package forestry.core.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -68,20 +68,20 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<HygroregulatorRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<HygroregulatorRecipe> {
 
 		@Override
 		public HygroregulatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			FluidStack liquid = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid"));
-			int transferTime = JSONUtils.getAsInt(json, "time");
-			float humidChange = JSONUtils.getAsFloat(json, "humidChange");
-			float tempChange = JSONUtils.getAsFloat(json, "tempChange");
+			FluidStack liquid = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "liquid"));
+			int transferTime = GsonHelper.getAsInt(json, "time");
+			float humidChange = GsonHelper.getAsFloat(json, "humidChange");
+			float tempChange = GsonHelper.getAsFloat(json, "tempChange");
 
 			return new HygroregulatorRecipe(recipeId, liquid, transferTime, humidChange, tempChange);
 		}
 
 		@Override
-		public HygroregulatorRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public HygroregulatorRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			FluidStack liquid = FluidStack.readFromPacket(buffer);
 			int transferTime = buffer.readVarInt();
 			float humidChange = buffer.readFloat();
@@ -91,7 +91,7 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, HygroregulatorRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, HygroregulatorRecipe recipe) {
 			recipe.liquid.writeToPacket(buffer);
 			buffer.writeVarInt(recipe.transferTime);
 			buffer.writeFloat(recipe.humidChange);

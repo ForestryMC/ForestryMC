@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 
 public class InventoryAdapterRestricted extends InventoryAdapter {
 	public InventoryAdapterRestricted(int size, String name) {

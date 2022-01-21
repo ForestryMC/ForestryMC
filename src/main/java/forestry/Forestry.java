@@ -116,17 +116,17 @@ import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 
 /**
  * Forestry Minecraft Mod
@@ -277,9 +277,9 @@ public class Forestry {
 			Minecraft minecraft = Minecraft.getInstance();
 			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 			TextureManagerForestry.getInstance().init(spriteUploader);
-			IResourceManager resourceManager = minecraft.getResourceManager();
-			if (resourceManager instanceof IReloadableResourceManager) {
-				IReloadableResourceManager reloadableManager = (IReloadableResourceManager) resourceManager;
+			ResourceManager resourceManager = minecraft.getResourceManager();
+			if (resourceManager instanceof ReloadableResourceManager) {
+				ReloadableResourceManager reloadableManager = (ReloadableResourceManager) resourceManager;
 				reloadableManager.registerReloadListener(ColourProperties.INSTANCE);
 				reloadableManager.registerReloadListener(GuiElementFactory.INSTANCE);
 				reloadableManager.registerReloadListener(spriteUploader);
@@ -315,8 +315,8 @@ public class Forestry {
 		}
 
 		@SubscribeEvent
-		public static void registerRecipeSerialziers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
-			IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+		public static void registerRecipeSerialziers(RegistryEvent.Register<RecipeSerializer<?>> event) {
+			IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
 			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
 			CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
 
@@ -333,7 +333,7 @@ public class Forestry {
 			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
 		}
 
-		private static void register(IForgeRegistry<IRecipeSerializer<?>> registry, IRecipeType<?> type, IRecipeSerializer<?> serializer) {
+		private static void register(IForgeRegistry<RecipeSerializer<?>> registry, RecipeType<?> type, RecipeSerializer<?> serializer) {
 			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
 			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
 		}
@@ -344,15 +344,15 @@ public class Forestry {
 			registry.register(ConditionLootModifier.SERIALIZER);
 			registry.register(GrafterLootModifier.SERIALIZER);
 
-			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootFunctionType(new OrganismFunction.Serializer()));
-			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootFunctionType(new CountBlockFunction.Serializer()));
+			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootItemFunctionType(new OrganismFunction.Serializer()));
+			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootItemFunctionType(new CountBlockFunction.Serializer()));
 		}
 
 
 		@SubscribeEvent
 		@OnlyIn(Dist.CLIENT)
 		public void handleTextureRemap(TextureStitchEvent.Pre event) {
-			if (event.getMap().location() == PlayerContainer.BLOCK_ATLAS) {
+			if (event.getMap().location() == InventoryMenu.BLOCK_ATLAS) {
 				TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
 				ModelBlockCached.clear();
 			}

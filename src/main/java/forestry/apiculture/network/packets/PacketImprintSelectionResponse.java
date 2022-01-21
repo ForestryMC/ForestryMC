@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,8 +46,8 @@ public class PacketImprintSelectionResponse extends ForestryPacket implements IF
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
-			Container container = player.containerMenu;
+		public void onPacketData(PacketBufferForestry data, Player player) {
+			AbstractContainerMenu container = player.containerMenu;
 			if (container instanceof ContainerImprinter) {
 				int primaryIndex = data.readVarInt();
 				int secondaryIndex = data.readVarInt();

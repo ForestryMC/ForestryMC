@@ -13,16 +13,16 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.ItemGroups;
 import forestry.core.gui.ContainerAlyzer;
@@ -37,18 +37,18 @@ public class ItemAlyzer extends ItemWithGui {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
 		super.appendHoverText(stack, world, tooltip, advanced);
 		int charges = 0;
-		CompoundNBT compound = stack.getTag();
+		CompoundTag compound = stack.getTag();
 		if (compound != null) {
 			charges = compound.getInt("Charges");
 		}
-		tooltip.add(new TranslationTextComponent(stack.getDescriptionId() + ".charges", charges).withStyle(TextFormatting.GOLD));
+		tooltip.add(new TranslatableComponent(stack.getDescriptionId() + ".charges", charges).withStyle(ChatFormatting.GOLD));
 	}
 
 	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		return new ContainerAlyzer(windowId, new ItemInventoryAlyzer(player, heldItem), player);
 	}
 }

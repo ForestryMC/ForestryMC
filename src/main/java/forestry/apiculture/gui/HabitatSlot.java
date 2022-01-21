@@ -14,12 +14,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.biome.Biome;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,12 +31,12 @@ import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.render.TextureManagerForestry;
 
 public class HabitatSlot extends Widget {
-	private final Collection<Biome.Category> biomes;
+	private final Collection<Biome.BiomeCategory> biomes;
 	private final String name;
 	private final String iconIndex;
 	public boolean isActive = false;
 
-	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<Biome.Category> biomes) {
+	public HabitatSlot(WidgetManager widgetManager, int xPos, int yPos, String name, Collection<Biome.BiomeCategory> biomes) {
 		super(widgetManager, xPos, yPos);
 		this.biomes = biomes;
 		this.name = name;
@@ -46,7 +46,7 @@ public class HabitatSlot extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(new StringTextComponent(name));
+		tooltip.add(new TextComponent(name));
 		return tooltip;
 	}
 
@@ -55,12 +55,12 @@ public class HabitatSlot extends Widget {
 		return TextureManagerForestry.getInstance().getDefault(iconIndex);
 	}
 
-	public void setActive(Collection<Biome.Category> biomes) {
+	public void setActive(Collection<Biome.BiomeCategory> biomes) {
 		isActive = !Collections.disjoint(this.biomes, biomes);
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		if (!isActive) {
 			RenderSystem.color4f(0.2f, 0.2f, 0.2f, 0.2f);
 		} else {
@@ -68,6 +68,6 @@ public class HabitatSlot extends Widget {
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
-		AbstractGui.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
+		GuiComponent.blit(transform, startX + xPos, startY + yPos, manager.gui.getBlitOffset(), 16, 16, getIcon());
 	}
 }

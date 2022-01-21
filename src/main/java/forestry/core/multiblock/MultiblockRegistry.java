@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.utils.Log;
@@ -20,14 +20,14 @@ import forestry.core.utils.Log;
  */
 public class MultiblockRegistry {
 	// World > WorldRegistry map
-	private static final Map<IWorld, MultiblockWorldRegistry> registries = new HashMap<>();
+	private static final Map<LevelAccessor, MultiblockWorldRegistry> registries = new HashMap<>();
 
 	/**
 	 * Called before Tile Entities are ticked in the world. Do bookkeeping here.
 	 *
 	 * @param world The world being ticked
 	 */
-	public static void tickStart(IWorld world) {
+	public static void tickStart(LevelAccessor world) {
 		if (registries.containsKey(world)) {
 			MultiblockWorldRegistry registry = registries.get(world);
 			registry.processMultiblockChanges();
@@ -42,7 +42,7 @@ public class MultiblockRegistry {
 	 * @param chunkX The X coordinate of the chunk
 	 * @param chunkZ The Z coordinate of the chunk
 	 */
-	public static void onChunkLoaded(IWorld world, int chunkX, int chunkZ) {
+	public static void onChunkLoaded(LevelAccessor world, int chunkX, int chunkZ) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onChunkLoaded(chunkX, chunkZ);
 		}
@@ -54,7 +54,7 @@ public class MultiblockRegistry {
 	 * @param world The world into which this part is loading.
 	 * @param part  The part being loaded.
 	 */
-	public static void onPartAdded(World world, IMultiblockComponent part) {
+	public static void onPartAdded(Level world, IMultiblockComponent part) {
 		MultiblockWorldRegistry registry = getOrCreateRegistry(world);
 		registry.onPartAdded(part);
 	}
@@ -65,7 +65,7 @@ public class MultiblockRegistry {
 	 * @param world The world from which a multiblock part is being removed.
 	 * @param part  The part being removed.
 	 */
-	public static void onPartRemovedFromWorld(World world, IMultiblockComponent part) {
+	public static void onPartRemovedFromWorld(Level world, IMultiblockComponent part) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onPartRemovedFromWorld(part);
 		}
@@ -78,7 +78,7 @@ public class MultiblockRegistry {
 	 *
 	 * @param world The world being unloaded.
 	 */
-	public static void onWorldUnloaded(IWorld world) {
+	public static void onWorldUnloaded(LevelAccessor world) {
 		if (registries.containsKey(world)) {
 			registries.get(world).onWorldUnloaded();
 			registries.remove(world);
@@ -92,7 +92,7 @@ public class MultiblockRegistry {
 	 * @param world      The world containing the multiblock
 	 * @param controller The dirty controller
 	 */
-	public static void addDirtyController(IWorld world, IMultiblockControllerInternal controller) {
+	public static void addDirtyController(LevelAccessor world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDirtyController(controller);
 		} else {
@@ -107,7 +107,7 @@ public class MultiblockRegistry {
 	 * @param world      The world formerly containing the multiblock
 	 * @param controller The dead controller
 	 */
-	public static void addDeadController(IWorld world, IMultiblockControllerInternal controller) {
+	public static void addDeadController(LevelAccessor world, IMultiblockControllerInternal controller) {
 		if (registries.containsKey(world)) {
 			registries.get(world).addDeadController(controller);
 		} else {
@@ -119,7 +119,7 @@ public class MultiblockRegistry {
 	 * @param world The world whose controllers you wish to retrieve.
 	 * @return An unmodifiable set of controllers active in the given world.
 	 */
-	public static Set<IMultiblockControllerInternal> getControllersFromWorld(IWorld world) {
+	public static Set<IMultiblockControllerInternal> getControllersFromWorld(LevelAccessor world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world).getControllers();
 		}
@@ -128,7 +128,7 @@ public class MultiblockRegistry {
 
 	/// *** PRIVATE HELPERS *** ///
 	//TODO refactor to getOrDefault
-	private static MultiblockWorldRegistry getOrCreateRegistry(World world) {
+	private static MultiblockWorldRegistry getOrCreateRegistry(Level world) {
 		if (registries.containsKey(world)) {
 			return registries.get(world);
 		} else {

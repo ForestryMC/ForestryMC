@@ -12,13 +12,13 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -29,76 +29,76 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 
 	//renderers
-	private final ModelRenderer desk;
-	private final ModelRenderer standRB;
-	private final ModelRenderer standRF;
-	private final ModelRenderer standLB;
-	private final ModelRenderer standLF;
-	private final ModelRenderer drawers;
-	private final ModelRenderer standLowLF;
-	private final ModelRenderer standLowRB;
-	private final ModelRenderer standLowRF;
-	private final ModelRenderer standLowLB;
+	private final ModelPart desk;
+	private final ModelPart standRB;
+	private final ModelPart standRF;
+	private final ModelPart standLB;
+	private final ModelPart standLF;
+	private final ModelPart drawers;
+	private final ModelPart standLowLF;
+	private final ModelPart standLowRB;
+	private final ModelPart standLowRF;
+	private final ModelPart standLowLB;
 
 	public RenderEscritoire() {
 		int textureWidth = 64;
 		int textureHeight = 32;
 
-		desk = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		desk = new ModelPart(textureWidth, textureHeight, 0, 0);
 		desk.addBox(-8F, 3F, -7.8F, 16, 2, 15);
 		desk.setPos(0F, 0F, 0F);
 		desk.setTexSize(64, 32);
 		desk.mirror = true;
 		setRotation(desk, 0.0872665f, 0f, 0f);
-		standRB = new ModelRenderer(textureWidth, textureHeight, 38, 18);
+		standRB = new ModelPart(textureWidth, textureHeight, 38, 18);
 		standRB.addBox(5F, 4F, 5F, 2, 6, 2);
 		standRB.setPos(0F, 0F, 0F);
 		standRB.setTexSize(64, 32);
 		standRB.mirror = true;
 		setRotation(standRB, 0F, 0F, 0F);
-		standRF = new ModelRenderer(textureWidth, textureHeight, 38, 18);
+		standRF = new ModelPart(textureWidth, textureHeight, 38, 18);
 		standRF.addBox(5F, 4F, -7F, 2, 6, 2);
 		standRF.setPos(0F, 0F, 0F);
 		standRF.setTexSize(64, 32);
 		standRF.mirror = true;
 		setRotation(standRF, 0F, 0F, 0F);
-		standLB = new ModelRenderer(textureWidth, textureHeight, 38, 18);
+		standLB = new ModelPart(textureWidth, textureHeight, 38, 18);
 		standLB.addBox(-7F, 4F, 5F, 2, 6, 2);
 		standLB.setPos(0F, 0F, 0F);
 		standLB.setTexSize(64, 32);
 		standLB.mirror = true;
 		setRotation(standLB, 0F, 0F, 0F);
-		standLF = new ModelRenderer(textureWidth, textureHeight, 38, 18);
+		standLF = new ModelPart(textureWidth, textureHeight, 38, 18);
 		standLF.addBox(-7F, 4F, -7F, 2, 6, 2);
 		standLF.setPos(0F, 0F, 0F);
 		standLF.setTexSize(64, 32);
 		standLF.mirror = true;
 		setRotation(standLF, 0F, 0F, 0F);
-		drawers = new ModelRenderer(textureWidth, textureHeight, 0, 18);
+		drawers = new ModelPart(textureWidth, textureHeight, 0, 18);
 		drawers.addBox(-7.5F, -2F, 4.5F, 15, 5, 3);
 		drawers.setPos(0F, 0F, 0F);
 		drawers.setTexSize(64, 32);
 		drawers.mirror = true;
 		setRotation(drawers, 0F, 0F, 0F);
-		standLowLF = new ModelRenderer(textureWidth, textureHeight, 0, 26);
+		standLowLF = new ModelPart(textureWidth, textureHeight, 0, 26);
 		standLowLF.addBox(-6.5F, 10F, -6.5F, 1, 4, 1);
 		standLowLF.setPos(0F, 0F, 0F);
 		standLowLF.setTexSize(64, 32);
 		standLowLF.mirror = true;
 		setRotation(standLowLF, 0F, 0F, 0F);
-		standLowRB = new ModelRenderer(textureWidth, textureHeight, 0, 26);
+		standLowRB = new ModelPart(textureWidth, textureHeight, 0, 26);
 		standLowRB.addBox(5.5F, 10F, 5.5F, 1, 4, 1);
 		standLowRB.setPos(0F, 0F, 0F);
 		standLowRB.setTexSize(64, 32);
 		standLowRB.mirror = true;
 		setRotation(standLowRB, 0F, 0F, 0F);
-		standLowRF = new ModelRenderer(textureWidth, textureHeight, 0, 26);
+		standLowRF = new ModelPart(textureWidth, textureHeight, 0, 26);
 		standLowRF.addBox(5.5F, 10F, -6.5F, 1, 4, 1);
 		standLowRF.setPos(0F, 0F, 0F);
 		standLowRF.setTexSize(64, 32);
 		standLowRF.mirror = true;
 		setRotation(standLowRF, 0F, 0F, 0F);
-		standLowLB = new ModelRenderer(textureWidth, textureHeight, 0, 26);
+		standLowLB = new ModelPart(textureWidth, textureHeight, 0, 26);
 		standLowLB.addBox(-6.5F, 10F, 5.5F, 1, 4, 1);
 		standLowLB.setPos(0F, 0F, 0F);
 		standLowLB.setTexSize(64, 32);
@@ -106,7 +106,7 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 		setRotation(standLowLB, 0F, 0F, 0F);
 	}
 
-	private static void setRotation(ModelRenderer model, float x, float y, float z) {
+	private static void setRotation(ModelPart model, float x, float y, float z) {
 		model.xRot = x;
 		model.yRot = y;
 		model.zRot = z;
@@ -114,7 +114,7 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 
 	@Override
 	public void renderTile(TileEscritoire tile, RenderHelper helper) {
-		World world = tile.getWorldObj();
+		Level world = tile.getWorldObj();
 		BlockState blockState = world.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
 			Direction facing = blockState.getValue(BlockBase.FACING);
@@ -127,7 +127,7 @@ public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
 		render(ItemStack.EMPTY, null, Direction.SOUTH, helper);
 	}
 
-	private void render(ItemStack itemstack, @Nullable World world, Direction orientation, RenderHelper helper) {
+	private void render(ItemStack itemstack, @Nullable Level world, Direction orientation, RenderHelper helper) {
 		helper.push();
 		{
 			helper.translate(0.5f, 0.875f, 0.5f);

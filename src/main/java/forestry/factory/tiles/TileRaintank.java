@@ -13,18 +13,18 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,7 +51,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
-public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile {
+public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidTankTile {
 	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
 	private static final FluidStack WATER_PER_UPDATE = new FluidStack(Fluids.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
@@ -78,14 +78,14 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 		tankManager.write(compoundNBT);
 		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 		tankManager.read(compoundNBT);
 	}
@@ -110,7 +110,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 
 			BlockPos pos = getBlockPos();
 			Biome biome = level.getBiome(pos);
-			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.RainType.RAIN), EnumErrorCode.NO_RAIN_BIOME);
+			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.Precipitation.RAIN), EnumErrorCode.NO_RAIN_BIOME);
 
 			BlockPos posAbove = pos.above();
 			boolean hasSky = level.canSeeSkyFromBelowWater(posAbove);
@@ -163,7 +163,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		}
 	}
 
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
 		iCrafting.setContainerData(container, 0, containerFiller.getFillingProgress());
 	}
 
@@ -173,7 +173,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborTileChange(Level world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborTileChange(world, pos, neighbor);
 
 		if (neighbor.equals(pos.below())) {
@@ -195,7 +195,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerRaintank(windowId, inv, this);
 	}
 }

@@ -5,20 +5,20 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IMoistenerRecipe extends IForestryRecipe {
 
-	IRecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
+	RecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
 
 	class Companion {
 		@ObjectHolder("forestry:moistener")
-		public static final IRecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -39,12 +39,12 @@ public interface IMoistenerRecipe extends IForestryRecipe {
 	ItemStack getProduct();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

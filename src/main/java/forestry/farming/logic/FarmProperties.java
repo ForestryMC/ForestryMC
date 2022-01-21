@@ -15,10 +15,10 @@ import java.util.function.ToIntFunction;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.farming.IFarmHousing;
 import forestry.api.farming.IFarmLogic;
@@ -111,9 +111,9 @@ public final class FarmProperties implements IFarmProperties {
 	}
 
 	@Override
-	public ITextComponent getDisplayName(boolean manual) {
+	public Component getDisplayName(boolean manual) {
 		String unformatted = manual ? "for.farm.grammar.manual" : "for.farm.grammar.managed";
-		return new TranslationTextComponent(unformatted, new TranslationTextComponent(translationKey));
+		return new TranslatableComponent(unformatted, new TranslatableComponent(translationKey));
 	}
 
 	@Override

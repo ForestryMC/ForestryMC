@@ -17,8 +17,8 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,6 +34,8 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.ProductListWrapper;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
 
+import forestry.core.genetics.alleles.AlleleForestrySpecies.AbstractBuilder;
+
 public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAlleleButterflySpecies,
 		ISetupListener {
 	private final String texture;
@@ -42,7 +44,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 	private final float flightDistance;
 	private final boolean nocturnal;
 
-	private final Set<Biome.Category> spawnBiomes;
+	private final Set<Biome.BiomeCategory> spawnBiomes;
 
 	private ProductListWrapper butterflyLoot;
 	private ProductListWrapper caterpillarLoot;
@@ -83,7 +85,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 	}
 
 	@Override
-	public Set<Biome.Category> getSpawnBiomes() {
+	public Set<Biome.BiomeCategory> getSpawnBiomes() {
 		return spawnBiomes;
 	}
 
@@ -146,7 +148,7 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 	public static class Builder extends AbstractBuilder<IAlleleButterflySpeciesBuilder>
 			implements IAlleleButterflySpeciesBuilder {
 
-		private final ImmutableSet.Builder<Biome.Category> spawnBiomes = new ImmutableSet.Builder<>();
+		private final ImmutableSet.Builder<Biome.BiomeCategory> spawnBiomes = new ImmutableSet.Builder<>();
 		private final ProductListWrapper butterflyLoot = ProductListWrapper.create();
 		private final ProductListWrapper caterpillarLoot = ProductListWrapper.create();
 
@@ -207,12 +209,12 @@ public class AlleleButterflySpecies extends AlleleForestrySpecies implements IAl
 			return this;
 		}
 
-		public IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<Biome.Category> biomeTags) {
+		public IAlleleButterflySpeciesBuilder addSpawnBiomes(Collection<Biome.BiomeCategory> biomeTags) {
 			spawnBiomes.addAll(biomeTags);
 			return this;
 		}
 
-		public IAlleleButterflySpeciesBuilder addSpawnBiome(Biome.Category biomeTag) {
+		public IAlleleButterflySpeciesBuilder addSpawnBiome(Biome.BiomeCategory biomeTag) {
 			spawnBiomes.add(biomeTag);
 			return this;
 		}

@@ -17,16 +17,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -67,7 +67,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+	public Collection<ICrop> harvest(Level world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		Stack<ICrop> crops = new Stack<>();
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos.above(), direction, i);
@@ -80,7 +80,7 @@ public abstract class FarmLogic implements IFarmLogic {
 	}
 
 	@Nullable
-	protected ICrop getCrop(World world, BlockPos position) {
+	protected ICrop getCrop(Level world, BlockPos position) {
 		if (!world.hasChunkAt(position) || world.isEmptyBlock(position)) {
 			return null;
 		}
@@ -99,7 +99,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		return false;
 	}
 
-	protected final boolean isWaterSourceBlock(World world, BlockPos position) {
+	protected final boolean isWaterSourceBlock(Level world, BlockPos position) {
 		if (!world.hasChunkAt(position)) {
 			return false;
 		}
@@ -108,7 +108,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		return block == Blocks.WATER;
 	}
 
-	protected final boolean isIceBlock(World world, BlockPos position) {
+	protected final boolean isIceBlock(Level world, BlockPos position) {
 		if (!world.hasChunkAt(position)) {
 			return false;
 		}
@@ -121,10 +121,10 @@ public abstract class FarmLogic implements IFarmLogic {
 		return VectUtil.scale(farmDirection.getFacing().getNormal(), step).offset(pos);
 	}
 
-	private static AxisAlignedBB getHarvestBox(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
+	private static AABB getHarvestBox(Level world, IFarmHousing farmHousing, boolean toWorldHeight) {
 		BlockPos coords = farmHousing.getCoords();
-		Vector3i area = farmHousing.getArea();
-		Vector3i offset = farmHousing.getOffset();
+		Vec3i area = farmHousing.getArea();
+		Vec3i offset = farmHousing.getOffset();
 
 		BlockPos min = coords.offset(offset);
 		BlockPos max = min.offset(area);
@@ -134,11 +134,11 @@ public abstract class FarmLogic implements IFarmLogic {
 			maxY = world.getMaxBuildHeight();
 		}
 
-		return new AxisAlignedBB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
+		return new AABB(min.getX(), min.getY(), min.getZ(), max.getX(), maxY, max.getZ());
 	}
 
-	protected NonNullList<ItemStack> collectEntityItems(World world, IFarmHousing farmHousing, boolean toWorldHeight) {
-		AxisAlignedBB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
+	protected NonNullList<ItemStack> collectEntityItems(Level world, IFarmHousing farmHousing, boolean toWorldHeight) {
+		AABB harvestBox = getHarvestBox(world, farmHousing, toWorldHeight);
 
 		List<ItemEntity> entityItems = world.getEntitiesOfClass(ItemEntity.class, harvestBox, entitySelectorFarm);
 		NonNullList<ItemStack> stacks = NonNullList.create();

@@ -1,6 +1,6 @@
 package forestry.api.farming;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 /**
  * Cache that can be used to cache the last extends of {@link IFarmLogic}s. Some {@link IFarmLogic}s that potentially

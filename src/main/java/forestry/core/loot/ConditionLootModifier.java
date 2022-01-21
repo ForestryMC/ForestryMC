@@ -7,12 +7,12 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
@@ -30,20 +30,20 @@ public class ConditionLootModifier extends LootModifier {
 	private final String[] extensions;
 
 	public ConditionLootModifier(ResourceLocation location, String... extensions) {
-		super(new ILootCondition[]{
+		super(new LootItemCondition[]{
 				LootTableIdCondition.builder(location).build()
 		});
 		this.tableLocation = location;
 		this.extensions = extensions;
 	}
 
-	private static ILootCondition[] merge(ILootCondition[] conditions, ILootCondition condition) {
-		ILootCondition[] newArray = Arrays.copyOf(conditions, conditions.length + 1);
+	private static LootItemCondition[] merge(LootItemCondition[] conditions, LootItemCondition condition) {
+		LootItemCondition[] newArray = Arrays.copyOf(conditions, conditions.length + 1);
 		newArray[conditions.length] = condition;
 		return newArray;
 	}
 
-	private ConditionLootModifier(ILootCondition[] conditions, ResourceLocation location, String... extensions) {
+	private ConditionLootModifier(LootItemCondition[] conditions, ResourceLocation location, String... extensions) {
 		super(merge(conditions, LootTableIdCondition.builder(location).build()));
 		this.tableLocation = location;
 		this.extensions = extensions;
@@ -82,9 +82,9 @@ public class ConditionLootModifier extends LootModifier {
 		}
 
 		@Override
-		public ConditionLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
-			String table = JSONUtils.getAsString(object, "table");
-			JsonArray array = JSONUtils.getAsJsonArray(object, "extensions");
+		public ConditionLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
+			String table = GsonHelper.getAsString(object, "table");
+			JsonArray array = GsonHelper.getAsJsonArray(object, "extensions");
 			String[] extensions = new String[array.size()];
 			for (int i = 0; i < array.size(); i++) {
 				extensions[i] = array.get(i).getAsString();

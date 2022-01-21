@@ -2,7 +2,7 @@ package forestry.api.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -12,6 +12,6 @@ public interface IBreedingTrackerHandler {
 
 	IBreedingTracker createTracker(String fileName);
 
-	void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile);
+	void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile);
 
 }

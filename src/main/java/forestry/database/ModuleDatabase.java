@@ -1,6 +1,6 @@
 package forestry.database;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,7 +19,7 @@ public class ModuleDatabase extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(DatabaseContainers.DATABASE.containerType(), GuiDatabase::new);
+		MenuScreens.register(DatabaseContainers.DATABASE.containerType(), GuiDatabase::new);
 	}
 
 	@Override

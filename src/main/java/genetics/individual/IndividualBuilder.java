@@ -1,6 +1,6 @@
 package genetics.individual;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;

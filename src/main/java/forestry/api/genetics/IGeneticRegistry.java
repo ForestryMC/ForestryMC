@@ -7,7 +7,7 @@ package forestry.api.genetics;
 
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import com.mojang.authlib.GameProfile;
 

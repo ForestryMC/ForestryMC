@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.Style;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Style;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

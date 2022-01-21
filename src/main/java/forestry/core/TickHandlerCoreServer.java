@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -41,8 +41,8 @@ import forestry.modules.ModuleManager;
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class TickHandlerCoreServer {
 
-	private static final LinkedListMultimap<RegistryKey<World>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
-	private static final Set<RegistryKey<World>> checkForRetrogen = new HashSet<>();
+	private static final LinkedListMultimap<ResourceKey<Level>, ChunkCoords> chunkRegenList = LinkedListMultimap.create();
+	private static final Set<ResourceKey<Level>> checkForRetrogen = new HashSet<>();
 
 
 	@SubscribeEvent
@@ -52,16 +52,16 @@ public class TickHandlerCoreServer {
 		}
 
 		if (Config.enableBackpackResupply) {
-			for (PlayerEntity obj : event.world.players()) {
+			for (Player obj : event.world.players()) {
 				for (IResupplyHandler handler : ModuleManager.resupplyHandlers) {
 					handler.resupply(obj);
 				}
 			}
 		}
 
-		if (Config.doRetrogen && event.world instanceof ServerWorld) {
-			ServerWorld world = (ServerWorld) event.world;
-			RegistryKey<World> dimId = world.dimension();
+		if (Config.doRetrogen && event.world instanceof ServerLevel) {
+			ServerLevel world = (ServerLevel) event.world;
+			ResourceKey<Level> dimId = world.dimension();
 			if (checkForRetrogen.contains(dimId)) {
 				List<ChunkCoords> chunkList = chunkRegenList.get(dimId);
 				Iterator<ChunkCoords> iterator = chunkList.iterator();
@@ -78,7 +78,7 @@ public class TickHandlerCoreServer {
 		}
 	}
 
-	private static Random getRetrogenRandom(World world, ChunkCoords coords) {
+	private static Random getRetrogenRandom(Level world, ChunkCoords coords) {
 		long worldSeed = WorldUtils.asServer(world).getSeed();
 		Random random = new Random(worldSeed);
 		long xSeed = random.nextLong() >> 2 + 1L;
@@ -87,8 +87,8 @@ public class TickHandlerCoreServer {
 		return random;
 	}
 
-	private static boolean canDecorate(ServerWorld server, ChunkCoords chunkCoords) {
-		ServerChunkProvider chunkProvider = server.getChunkSource();
+	private static boolean canDecorate(ServerLevel server, ChunkCoords chunkCoords) {
+		ServerChunkCache chunkProvider = server.getChunkSource();
 		for (int x = 0; x <= 1; x++) {
 			for (int z = 0; z <= 1; z++) {
 				if (!chunkProvider.hasChunk(chunkCoords.x + x, chunkCoords.z + z)) {
@@ -101,7 +101,7 @@ public class TickHandlerCoreServer {
 
 	@SubscribeEvent
 	public static void chunkSaveEventHandler(ChunkDataEvent.Save event) {
-		CompoundNBT tag = new CompoundNBT();
+		CompoundTag tag = new CompoundTag();
 		if (Config.doRetrogen) {
 			tag.putBoolean("retrogen", true);
 		}
@@ -113,9 +113,9 @@ public class TickHandlerCoreServer {
 	@SubscribeEvent
 	public static void chunkLoadEventHandler(ChunkDataEvent.Load event) {
 		if (Config.doRetrogen) {
-			CompoundNBT eventData = event.getData();
+			CompoundTag eventData = event.getData();
 			if (eventData.contains(Constants.MOD_ID)) {
-				CompoundNBT tag = eventData.getCompound(Constants.MOD_ID);
+				CompoundTag tag = eventData.getCompound(Constants.MOD_ID);
 				if (!tag.contains("retrogen") || Config.forceRetrogen) {
 					ChunkCoords coords = new ChunkCoords(event.getChunk());
 					chunkRegenList.put(coords.dimension, coords);
@@ -126,18 +126,18 @@ public class TickHandlerCoreServer {
 	}
 
 	private static class ChunkCoords {
-		public final RegistryKey<World> dimension;
+		public final ResourceKey<Level> dimension;
 		public final int x;
 		public final int z;
 
-		public ChunkCoords(IChunk chunk) {
-			IWorld world = chunk.getWorldForge();
+		public ChunkCoords(ChunkAccess chunk) {
+			LevelAccessor world = chunk.getWorldForge();
 			if (world == null) {
-				this.dimension = World.OVERWORLD;
+				this.dimension = Level.OVERWORLD;
 				this.x = 0;
 				this.z = 0;
 			} else {
-				this.dimension = ((World) world).dimension();
+				this.dimension = ((Level) world).dimension();
 				this.x = chunk.getPos().x;
 				this.z = chunk.getPos().z;
 			}

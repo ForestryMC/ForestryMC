@@ -14,15 +14,15 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -82,7 +82,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> getFruits(IGenome genome, Level world, BlockPos pos, int ripeningTime) {
 		return NonNullList.create();
 	}
 
@@ -92,12 +92,12 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+	public int getColour(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime) {
 		return 0xffffff;
 	}
 
@@ -107,7 +107,7 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos) {
+	public boolean isFruitLeaf(IGenome genome, LevelAccessor world, BlockPos pos) {
 		return false;
 	}
 
@@ -127,12 +127,12 @@ public class FruitProviderNone implements IFruitProvider {
 	}
 
 	@Override
-	public TextComponent getDescription() {
-		return new TranslationTextComponent(unlocalizedDescription);
+	public BaseComponent getDescription() {
+		return new TranslatableComponent(unlocalizedDescription);
 	}
 
 	@Override
-	public ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime) {
+	public ResourceLocation getSprite(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime) {
 		if (overlay != null) {
 			return overlay.sprite;
 		} else {

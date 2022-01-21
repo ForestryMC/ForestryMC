@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.energy.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
+import net.minecraft.world.level.Level;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -29,10 +29,10 @@ import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
-	private final ModelRenderer boiler;
-	private final ModelRenderer trunk;
-	private final ModelRenderer piston;
-	private final ModelRenderer extension;
+	private final ModelPart boiler;
+	private final ModelPart trunk;
+	private final ModelPart piston;
+	private final ModelPart extension;
 
 	private enum Textures {
 
@@ -54,25 +54,25 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 	public RenderEngine(String baseTexture) {
 		int textureWidth = 64;
 		int textureHeight = 32;
-		boiler = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		boiler = new ModelPart(textureWidth, textureHeight, 0, 0);
 		boiler.addBox(-8F, -8F, -8F, 16, 6, 16);
 		boiler.x = 8;
 		boiler.y = 8;
 		boiler.z = 8;
 
-		trunk = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		trunk = new ModelPart(textureWidth, textureHeight, 0, 0);
 		trunk.addBox(-4F, -4F, -4F, 8, 12, 8);
 		trunk.x = 8F;
 		trunk.y = 8F;
 		trunk.z = 8F;
 
-		piston = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		piston = new ModelPart(textureWidth, textureHeight, 0, 0);
 		piston.addBox(-6F, -2, -6F, 12, 4, 12);
 		piston.x = 8F;
 		piston.y = 8F;
 		piston.z = 8F;
 
-		extension = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		extension = new ModelPart(textureWidth, textureHeight, 0, 0);
 		extension.addBox(-5F, -3, -5F, 10, 2, 10);
 		extension.x = 8F;
 		extension.y = 8F;
@@ -91,7 +91,7 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 
 	@Override
 	public void renderTile(TileEngine tile, RenderHelper helper) {
-		World worldObj = tile.getWorldObj();
+		Level worldObj = tile.getWorldObj();
 		BlockState blockState = worldObj.getBlockState(tile.getBlockPos());
 		if (blockState.getBlock() instanceof BlockBase) {
 			Direction facing = blockState.getValue(BlockBase.FACING);

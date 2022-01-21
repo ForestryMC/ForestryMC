@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotLiquidIn;
@@ -24,12 +24,12 @@ import forestry.energy.tiles.TileEngineBiogas;
 public class ContainerEngineBiogas extends ContainerLiquidTanks<TileEngineBiogas> {
 
 	//TODO dedupe
-	public static ContainerEngineBiogas fromNetwork(int windowId, PlayerInventory inv, PacketBuffer extraData) {
+	public static ContainerEngineBiogas fromNetwork(int windowId, Inventory inv, FriendlyByteBuf extraData) {
 		TileEngineBiogas tile = TileUtil.getTile(inv.player.level, extraData.readBlockPos(), TileEngineBiogas.class);
 		return new ContainerEngineBiogas(windowId, inv, tile);
 	}
 
-	public ContainerEngineBiogas(int windowId, PlayerInventory player, TileEngineBiogas engine) {
+	public ContainerEngineBiogas(int windowId, Inventory player, TileEngineBiogas engine) {
 		super(windowId, EnergyContainers.ENGINE_BIOGAS.containerType(), player, engine, 8, 84);
 
 		this.addSlot(new SlotLiquidIn(engine, InventoryEngineBiogas.SLOT_CAN, 143, 40));

@@ -2,18 +2,18 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MushroomBlock;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MushroomBlock;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.MushroomCow;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -58,10 +58,10 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	private void doBlockEffect(IGenome genome, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		BlockPos housingCoordinates = housing.getCoordinates();
-		Vector3i area = getModifiedArea(genome, housing);
-		Vector3i halfArea = new Vector3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
+		Vec3i area = getModifiedArea(genome, housing);
+		Vec3i halfArea = new Vec3i(area.getX() / 2, area.getY() / 2, area.getZ() / 2);
 
 		for (int attempt = 0; attempt < MAX_BLOCK_FIND_TRIES; ++attempt) {
 			BlockPos pos = VectUtil.getRandomPositionInArea(world.random, area).subtract(halfArea).offset(housingCoordinates);
@@ -70,7 +70,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 				if (convertToMycelium(world, blockState, pos)) {
 					return;
-				} else if (growGiantMushroom((ServerWorld) world, blockState, pos)) {
+				} else if (growGiantMushroom((ServerLevel) world, blockState, pos)) {
 					return;
 				}
 			}
@@ -78,15 +78,15 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 	}
 
 	private static void doEntityEffect(IGenome genome, IBeeHousing housing) {
-		List<CowEntity> cows = getEntitiesInRange(genome, housing, CowEntity.class);
-		for (CowEntity cow : cows) {
+		List<Cow> cows = getEntitiesInRange(genome, housing, Cow.class);
+		for (Cow cow : cows) {
 			if (convertCowToMooshroom(cow)) {
 				return;
 			}
 		}
 	}
 
-	private static boolean convertToMycelium(World world, BlockState blockState, BlockPos pos) {
+	private static boolean convertToMycelium(Level world, BlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
 		if (block == Blocks.GRASS || block == Blocks.DIRT && world.canSeeSkyFromBelowWater(pos)) {
 			world.setBlockAndUpdate(pos, Blocks.MYCELIUM.defaultBlockState());
@@ -95,7 +95,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		return false;
 	}
 
-	private static boolean growGiantMushroom(ServerWorld world, BlockState blockState, BlockPos pos) {
+	private static boolean growGiantMushroom(ServerLevel world, BlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
 		if (block instanceof MushroomBlock) {
 			MushroomBlock mushroom = (MushroomBlock) block;
@@ -105,13 +105,13 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 		return false;
 	}
 
-	private static boolean convertCowToMooshroom(CowEntity cow) {
-		if (cow instanceof MooshroomEntity) {
+	private static boolean convertCowToMooshroom(Cow cow) {
+		if (cow instanceof MushroomCow) {
 			return false;
 		}
-		World world = cow.level;
+		Level world = cow.level;
 		cow.remove();
-		MooshroomEntity mooshroom = new MooshroomEntity(EntityType.MOOSHROOM, world);
+		MushroomCow mooshroom = new MushroomCow(EntityType.MOOSHROOM, world);
 		mooshroom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.yRot, cow.xRot);
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.yBodyRot = cow.yBodyRot;

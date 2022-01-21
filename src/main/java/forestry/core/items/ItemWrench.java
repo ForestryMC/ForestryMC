@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.ToolType;
 
@@ -34,15 +34,15 @@ public class ItemWrench extends ItemForestry {
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
-		World worldIn = context.getLevel();
+	public InteractionResult useOn(UseOnContext context) {
+		Level worldIn = context.getLevel();
 		BlockPos pos = context.getClickedPos();
-		PlayerEntity player = context.getPlayer();
+		Player player = context.getPlayer();
 		if (player == null) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		Direction facing = context.getClickedFace();
-		Hand hand = context.getHand();
+		InteractionHand hand = context.getHand();
 
 		BlockState state = worldIn.getBlockState(pos);
 		Block block = state.getBlock();
@@ -50,9 +50,9 @@ public class ItemWrench extends ItemForestry {
 		if (rotatedState != state) {    //TODO - how to rotate based on a direction, might need helper method
 			player.swing(hand);
 			worldIn.setBlock(pos, rotatedState, 2);
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 
 	//	@Override

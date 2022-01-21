@@ -1,6 +1,6 @@
 package forestry.worktable;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,7 +20,7 @@ public class ModuleWorktable extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
+		MenuScreens.register(WorktableContainers.WORKTABLE.containerType(), GuiWorktable::new);
 	}
 
 	@Override

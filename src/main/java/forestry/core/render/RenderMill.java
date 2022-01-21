@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 
 import forestry.core.tiles.TileMill;
 
@@ -23,40 +23,40 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 
 	private final ResourceLocation[] textures;
 
-	private final ModelRenderer pedestal;
-	private final ModelRenderer column;
-	private final ModelRenderer extension;
-	private final ModelRenderer blade1;
-	private final ModelRenderer blade2;
+	private final ModelPart pedestal;
+	private final ModelPart column;
+	private final ModelPart extension;
+	private final ModelPart blade1;
+	private final ModelPart blade2;
 
 	public RenderMill(String baseTexture) {
 		int textureWidth = 64;
 		int textureHeight = 32;
-		pedestal = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		pedestal = new ModelPart(textureWidth, textureHeight, 0, 0);
 		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
 		pedestal.x = 8;
 		pedestal.y = 8;
 		pedestal.z = 8;
 
-		column = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		column = new ModelPart(textureWidth, textureHeight, 0, 0);
 		column.addBox(-2, -7F, -2, 4, 15, 4);
 		column.x = 8;
 		column.y = 8;
 		column.z = 8;
 
-		extension = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		extension = new ModelPart(textureWidth, textureHeight, 0, 0);
 		extension.addBox(1F, 8F, 7F, 14, 2, 2);
 		extension.x = 0;
 		extension.y = 0;
 		extension.z = 0;
 
-		blade1 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		blade1 = new ModelPart(textureWidth, textureHeight, 0, 0);
 		blade1.addBox(-4F, -5F, -3F, 8, 12, 1);
 		blade1.x = 8;
 		blade1.y = 8;
 		blade1.z = 8;
 
-		blade2 = new ModelRenderer(textureWidth, textureHeight, 0, 0);
+		blade2 = new ModelPart(textureWidth, textureHeight, 0, 0);
 		blade2.addBox(-4F, -5F, 2F, 8, 12, 1);
 		blade2.x = 8;
 		blade2.y = 8;

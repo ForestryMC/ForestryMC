@@ -12,10 +12,10 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +38,7 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
 		for (LivingEntity entity : entities) {
 			int chance = ignitionChance;
@@ -72,11 +72,11 @@ public class AlleleEffectIgnition extends AlleleEffectThrottled {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		ClientWorld world = WorldUtils.asClient(housing.getWorldObj());
+		ClientLevel world = WorldUtils.asClient(housing.getWorldObj());
 		if (world.random.nextInt(2) != 0) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
+			Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
 			ParticleRender.addEntityIgnitionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z);
 		}
 		return storedData;

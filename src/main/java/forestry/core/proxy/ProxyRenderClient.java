@@ -14,10 +14,10 @@ import forestry.core.fluids.ForestryFluids;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.settings.GraphicsFanciness;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.GraphicsStatus;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -50,11 +50,11 @@ import forestry.modules.IClientModuleHandler;
 
 import static net.minecraft.client.renderer.RenderTypeLookup.setRenderLayer;
 
-public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
+public clasnet.minecraft.client.renderer.ItemBlockRenderTypesents IClientModuleHandler {
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().options.graphicsMode == GraphicsFanciness.FANCY;
+		return Minecraft.getInstance().options.graphicsMode == GraphicsStatus.FANCY;
 	}
 
 	@Override

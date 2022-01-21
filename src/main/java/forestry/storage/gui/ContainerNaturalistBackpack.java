@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.ContainerItemInventory;
@@ -25,18 +25,18 @@ import forestry.storage.items.ItemBackpackNaturalist;
 
 public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(int windowId, PlayerInventory inv, ItemInventoryBackpackPaged inventory, int selectedPage) {
+	public ContainerNaturalistBackpack(int windowId, Inventory inv, ItemInventoryBackpackPaged inventory, int selectedPage) {
 		super(windowId, inventory, inv, 18, 120, BackpackContainers.NATURALIST_BACKPACK.containerType());
 
 		ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		inventory.flipPage(player, (short) primary);
 	}
 
-	public static ContainerNaturalistBackpack fromNetwork(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+	public static ContainerNaturalistBackpack fromNetwork(int windowId, Inventory playerInventory, FriendlyByteBuf extraData) {
 		ItemStack parent = extraData.readItem();
 		ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) extraData.readItem().getItem();    //TODO this is b it ugly
 		ItemInventoryBackpackPaged paged = new ItemInventoryBackpackPaged(playerInventory.player, Constants.SLOTS_BACKPACK_APIARIST, parent, backpack);

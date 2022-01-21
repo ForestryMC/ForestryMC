@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 
 public abstract class ElementBuilder<B extends ElementBuilder<B, E>, E extends GuiElement> {
@@ -81,17 +81,17 @@ public abstract class ElementBuilder<B extends ElementBuilder<B, E>, E extends G
 		return visible(true);
 	}
 
-	public B addTooltip(ITextComponent line) {
+	public B addTooltip(Component line) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line));
 		return cast();
 	}
 
-	public B addTooltip(Collection<ITextComponent> lines) {
+	public B addTooltip(Collection<Component> lines) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.addAll(lines));
 		return cast();
 	}
 
-	public B addTooltip(Supplier<ITextComponent> line) {
+	public B addTooltip(Supplier<Component> line) {
 		addTooltip((toolTip, element, mouseX, mouseY) -> toolTip.add(line.get()));
 		return cast();
 	}

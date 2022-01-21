@@ -12,11 +12,11 @@ package forestry.factory.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -51,11 +51,11 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
-			TileEntity tile = TileUtil.getTile(player.level, pos);
+			BlockEntity tile = TileUtil.getTile(player.level, pos);
 			if (tile instanceof TileCarpenter) {
 				TileCarpenter carpenter = (TileCarpenter) tile;
 				int index = 0;

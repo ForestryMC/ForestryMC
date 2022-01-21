@@ -1,8 +1,8 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 
 import forestry.api.recipes.ISqueezerRecipe;
 

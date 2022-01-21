@@ -15,14 +15,14 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,19 +45,19 @@ import genetics.api.alleles.IAllele;
  *
  * @author SirSengir
  */
-public abstract class TileTreeContainer extends TileEntity implements IStreamable, IOwnedTile {
+public abstract class TileTreeContainer extends BlockEntity implements IStreamable, IOwnedTile {
 
 	@Nullable
 	private ITree containedTree;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 
-	public TileTreeContainer(TileEntityType<?> p_i48289_1_) {
+	public TileTreeContainer(BlockEntityType<?> p_i48289_1_) {
 		super(p_i48289_1_);
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("ContainedTree")) {
@@ -67,11 +67,11 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 
 		if (containedTree != null) {
-			CompoundNBT subcompound = new CompoundNBT();
+			CompoundTag subcompound = new CompoundTag();
 			containedTree.write(subcompound);
 			compoundNBT.put("ContainedTree", subcompound);
 		}
@@ -128,30 +128,30 @@ public abstract class TileTreeContainer extends TileEntity implements IStreamabl
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */
-	public abstract void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand);
+	public abstract void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand);
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 0, getUpdateTag());
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
-		CompoundNBT nbt = pkt.getTag();
+		CompoundTag nbt = pkt.getTag();
 		handleUpdateTag(getBlockState(), nbt);
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
 		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	public void handleUpdateTag(BlockState state, CompoundTag tag) {
 		super.handleUpdateTag(state, tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}

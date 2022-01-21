@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
@@ -27,7 +27,7 @@ public class FarmLogicGourd extends FarmLogicWatered {
 	}
 
 	@Override
-	protected boolean maintainCrops(World world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
+	protected boolean maintainCrops(Level world, IFarmHousing farmHousing, BlockPos pos, FarmDirection direction, int extent) {
 		for (int i = 0; i < extent; i++) {
 			BlockPos position = translateWithOffset(pos, direction, i);
 			if (!world.hasChunkAt(position)) {
@@ -49,7 +49,7 @@ public class FarmLogicGourd extends FarmLogicWatered {
 		return false;
 	}
 
-	private boolean trySetCrop(World world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
+	private boolean trySetCrop(Level world, IFarmHousing farmHousing, BlockPos position, FarmDirection direction) {
 		for (IFarmable candidate : getFarmables()) {
 			if (farmHousing.plantGermling(candidate, world, position, direction)) {
 				return true;

@@ -12,9 +12,9 @@ package forestry.arboriculture.worldgen;
 
 import java.util.Random;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
@@ -26,9 +26,9 @@ public class FeatureBalsa extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		BlockPos topPos = startPos.offset(0, height + 1, 0);
-		BlockPos.Mutable leafCenter = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos leafCenter = new BlockPos.MutableBlockPos();
 		float leafRadius = (girth - 1.0f) / 2.0f;
 
 		FeatureHelper.addBlock(world, leafCenter.set(topPos), leaf, FeatureHelper.EnumReplaceMode.AIR, contour);

@@ -21,16 +21,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -104,7 +104,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public ITree create(CompoundNBT compound) {
+	public ITree create(CompoundTag compound) {
 		return new Tree(compound);
 	}
 
@@ -124,7 +124,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public ITree getTree(World world, IGenome genome) {
+	public ITree getTree(Level world, IGenome genome) {
 		return create(genome);
 	}
 
@@ -141,18 +141,18 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	//TODO: Should be transformed into a more generic method
 	@Override
-	public ITree getTree(World world, BlockPos pos) {
+	public ITree getTree(Level world, BlockPos pos) {
 		return TileUtil.getResultFromTile(world, pos, TileSapling.class, TileSapling::getTree);
 	}
 
 	@Nullable
 	@Override
-	public ITree getTree(TileEntity tileEntity) {
+	public ITree getTree(BlockEntity tileEntity) {
 		return TileUtil.getResultFromTile(tileEntity, TileLeaves.class, TileLeaves::getTree);
 	}
 
 	@Override
-	public boolean plantSapling(World world, ITree tree, GameProfile owner, BlockPos pos) {
+	public boolean plantSapling(Level world, ITree tree, GameProfile owner, BlockPos pos) {
 		BlockState state = ArboricultureBlocks.SAPLING_GE.defaultState();
 		boolean placed = world.setBlockAndUpdate(pos, state);
 		if (!placed) {
@@ -181,7 +181,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public boolean setFruitBlock(IWorld world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
+	public boolean setFruitBlock(LevelAccessor world, IGenome genome, IAlleleFruit allele, float yield, BlockPos pos) {
 		IFruitProvider provider = allele.getProvider();
 		Direction facing = BlockUtil.getValidPodFacing(world, pos, provider.getLogTag());
 		if (facing != null && ArboricultureBlocks.PODS.has(allele)) {
@@ -189,7 +189,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 			BlockFruitPod fruitPod = ArboricultureBlocks.PODS.get(allele).getBlock();
 			if (fruitPod != null) {
 
-				BlockState state = fruitPod.defaultBlockState().setValue(HorizontalBlock.FACING, facing);
+				BlockState state = fruitPod.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
 				boolean placed = world.setBlock(pos, state, 18);
 				if (placed) {
 
@@ -214,7 +214,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	/* BREEDING TRACKER */
 	@Override
-	public IArboristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+	public IArboristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player) {
 		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
@@ -229,7 +229,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
 		if (!(tracker instanceof ArboristTracker)) {
 			return;
 		}
@@ -246,13 +246,13 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public ITreekeepingMode getTreekeepingMode(IWorld world) {
+	public ITreekeepingMode getTreekeepingMode(LevelAccessor world) {
 		if (activeTreekeepingMode != null) {
 			return activeTreekeepingMode;
 		}
 
 		//Fallback for world gen
-		if (!(world instanceof World)) {
+		if (!(world instanceof Level)) {
 			return TreekeepingMode.normal;
 		}
 
@@ -273,7 +273,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public void setTreekeepingMode(IWorld world, ITreekeepingMode mode) {
+	public void setTreekeepingMode(LevelAccessor world, ITreekeepingMode mode) {
 		activeTreekeepingMode = mode;
 		getBreedingTracker(world, null).setModeName(mode.getName());
 	}
@@ -322,7 +322,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	@Nullable
-	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, BlockPos pos, IIndividual individual) {
+	public IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, Level world, BlockPos pos, IIndividual individual) {
 		Preconditions.checkArgument(individual instanceof ITree, "pollen must be an instance of ITree");
 		ITree pollen = (ITree) individual;
 		if (pollen.setLeaves(world, owner, pos, world.random)) {

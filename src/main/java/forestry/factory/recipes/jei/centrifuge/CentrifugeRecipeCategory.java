@@ -9,10 +9,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.config.Constants;
@@ -112,7 +112,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<CentrifugeR
 	}
 
 	@Override
-	public void draw(CentrifugeRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(CentrifugeRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		arrow.draw(matrixStack, 32, 18);
 		arrow.draw(matrixStack, 56, 18);
 	}

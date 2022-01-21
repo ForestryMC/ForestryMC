@@ -12,16 +12,16 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,7 +67,7 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 		data.writeBlockPos(pos);
 		data.writeByte(visualFX.ordinal());
 		data.writeByte(soundFX.ordinal());
-		CompoundNBT tag = NBTUtil.writeBlockState(blockState);
+		CompoundTag tag = NbtUtils.writeBlockState(blockState);
 		data.writeNbt(tag);
 	}
 
@@ -79,12 +79,12 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			VisualFXType visualFX = VisualFXType.values()[data.readByte()];
 			SoundFXType soundFX = SoundFXType.values()[data.readByte()];
-			World world = player.level;
-			BlockState blockState = NBTUtil.readBlockState(data.readNbt());
+			Level world = player.level;
+			BlockState blockState = NbtUtils.readBlockState(data.readNbt());
 			Block block = blockState.getBlock();
 
 			if (visualFX == VisualFXType.BLOCK_BREAK) {
@@ -95,9 +95,9 @@ public class PacketFXSignal extends ForestryPacket implements IForestryPacketCli
 				SoundType soundType = block.getSoundType(blockState, world, pos, null);
 
 				if (soundFX == SoundFXType.BLOCK_BREAK) {
-					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getBreakSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				} else if (soundFX == SoundFXType.BLOCK_PLACE) {
-					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+					world.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 				}
 			}
 		}

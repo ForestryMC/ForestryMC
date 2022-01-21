@@ -10,23 +10,23 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import forestry.api.circuits.ICircuitLibrary;
 
-public class CircuitLibrary extends WorldSavedData implements ICircuitLibrary {
+public class CircuitLibrary extends SavedData implements ICircuitLibrary {
 
 	public CircuitLibrary(String par1Str) {
 		super(par1Str);
 	}
 
 	@Override
-	public void load(CompoundNBT nbt) {
+	public void load(CompoundTag nbt) {
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbt) {
+	public CompoundTag save(CompoundTag nbt) {
 		return nbt;
 	}
 

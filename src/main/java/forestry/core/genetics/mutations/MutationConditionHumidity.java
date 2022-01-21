@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -35,7 +35,7 @@ public class MutationConditionHumidity implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		EnumHumidity biomeHumidity = climate.getHumidity();
 
 		if (biomeHumidity.ordinal() < minHumidity.ordinal() || biomeHumidity.ordinal() > maxHumidity.ordinal()) {
@@ -46,15 +46,15 @@ public class MutationConditionHumidity implements IMutationCondition {
 
 	//TODO textcomponent (this will probably crash atm)
 	@Override
-	public ITextComponent getDescription() {
+	public Component getDescription() {
 		String minHumidityString = AlleleManager.climateHelper.toDisplay(minHumidity).getString();
 
 		if (minHumidity != maxHumidity) {
 			String maxHumidityString = AlleleManager.climateHelper.toDisplay(maxHumidity).getString();
 			//TODO: REPLACE
-			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
+			return new TextComponent(Translator.translateToLocal("for.mutation.condition.humidity.range").replace("%LOW", minHumidityString).replace("%HIGH", maxHumidityString));
 		} else {
-			return new TranslationTextComponent("for.mutation.condition.humidity.single", minHumidityString);
+			return new TranslatableComponent("for.mutation.condition.humidity.single", minHumidityString);
 		}
 	}
 }

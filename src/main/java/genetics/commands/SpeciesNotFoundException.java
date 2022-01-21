@@ -10,16 +10,16 @@
  ******************************************************************************/
 package genetics.commands;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
-public class SpeciesNotFoundException extends CommandException {
+public class SpeciesNotFoundException extends CommandRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
 	public SpeciesNotFoundException(ResourceLocation title) {
-		super(new TranslationTextComponent("Could not find species with Name or UID %s", title));
+		super(new TranslatableComponent("Could not find species with Name or UID %s", title));
 	}
 
 }

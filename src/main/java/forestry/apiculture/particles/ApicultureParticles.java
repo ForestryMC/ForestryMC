@@ -1,7 +1,7 @@
 package forestry.apiculture.particles;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.core.particles.ParticleType;
 
 import com.mojang.serialization.Codec;
 

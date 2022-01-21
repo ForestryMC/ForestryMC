@@ -14,14 +14,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,28 +35,28 @@ import genetics.api.individual.IGenome;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
-	private final Effect potion;
+	private final MobEffect potion;
 	private final int potionFXColor;
 	private final int duration;
 	private final float chance;
 
-	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration, int throttle, float chance) {
+	public AlleleEffectPotion(String name, boolean isDominant, MobEffect potion, int duration, int throttle, float chance) {
 		super(name, isDominant, throttle, true, false);
 		this.potion = potion;
 		this.duration = duration;
 		this.chance = chance;
 
-		Collection<EffectInstance> potionEffects = Collections.singleton(new EffectInstance(potion, 1, 0));
+		Collection<MobEffectInstance> potionEffects = Collections.singleton(new MobEffectInstance(potion, 1, 0));
 		this.potionFXColor = PotionUtils.getColor(potionEffects);
 	}
 
-	public AlleleEffectPotion(String name, boolean isDominant, Effect potion, int duration) {
+	public AlleleEffectPotion(String name, boolean isDominant, MobEffect potion, int duration) {
 		this(name, isDominant, potion, duration, 200, 1.0f);
 	}
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		List<LivingEntity> entities = getEntitiesInRange(genome, housing, LivingEntity.class);
 		for (LivingEntity entity : entities) {
 			if (world.random.nextFloat() >= chance) {
@@ -64,7 +64,7 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 			}
 
 			int dur = this.duration;
-			if (potion.getCategory() == EffectType.HARMFUL) {
+			if (potion.getCategory() == MobEffectCategory.HARMFUL) {
 				// Entities are not attacked if they wear a full set of apiarist's armor.
 				int count = BeeManager.armorApiaristHelper.wearsItems(entity, getRegistryName(), true);
 				if (count >= 4) {
@@ -78,12 +78,12 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 				}
 			} else {
 				// don't apply positive effects to mobs
-				if (entity instanceof IMob) {
+				if (entity instanceof Enemy) {
 					continue;
 				}
 			}
 
-			entity.addEffect(new EffectInstance(potion, dur, 0));
+			entity.addEffect(new MobEffectInstance(potion, dur, 0));
 		}
 
 		return storedData;
@@ -92,11 +92,11 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		if (world.random.nextBoolean()) {
 			super.doFX(genome, storedData, housing);
 		} else {
-			Vector3d beeFXCoordinates = housing.getBeeFXCoordinates();
+			Vec3 beeFXCoordinates = housing.getBeeFXCoordinates();
 			ParticleRender.addEntityPotionFX(world, beeFXCoordinates.x, beeFXCoordinates.y + 0.5, beeFXCoordinates.z, potionFXColor);
 		}
 		return storedData;

@@ -3,9 +3,9 @@ package forestry.storage.features;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
@@ -122,7 +122,7 @@ public class CrateItems {
 	private CrateItems() {
 	}
 
-	private static FeatureItem<ItemCrated> register(IItemProvider contained, String identifier) {
+	private static FeatureItem<ItemCrated> register(ItemLike contained, String identifier) {
 		FeatureItem<ItemCrated> item = REGISTRY.item(() -> new ItemCrated(new ItemStack(contained)), identifier);
 		CRATES.add(item);
 		return item;

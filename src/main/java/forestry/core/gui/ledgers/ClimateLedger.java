@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.climate.IClimatised;
 import forestry.api.core.EnumTemperature;
@@ -35,7 +35,7 @@ public class ClimateLedger extends Ledger {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 
 		EnumTemperature temperature = tile.getTemperature();
 
@@ -60,10 +60,10 @@ public class ClimateLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
-		return new StringTextComponent("T: ")
+	public Component getTooltip() {
+		return new TextComponent("T: ")
 			.append(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
-			.append(new StringTextComponent(" / H: "))
+			.append(new TextComponent(" / H: "))
 			.append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
 	}
 

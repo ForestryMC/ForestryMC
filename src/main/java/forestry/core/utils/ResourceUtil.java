@@ -20,17 +20,17 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.model.BlockModel;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,12 +51,12 @@ public class ResourceUtil {
 		return Minecraft.getInstance();
 	}
 
-	public static IResourceManager resourceManager() {
+	public static ResourceManager resourceManager() {
 		return client().getResourceManager();
 	}
 
 	public static TextureAtlasSprite getMissingTexture() {
-		return getSprite(PlayerContainer.BLOCK_ATLAS, MissingTextureSprite.getLocation());
+		return getSprite(InventoryMenu.BLOCK_ATLAS, MissingTextureAtlasSprite.getLocation());
 	}
 
 	public static TextureAtlasSprite getSprite(ResourceLocation atlas, ResourceLocation sprite) {
@@ -64,7 +64,7 @@ public class ResourceUtil {
 	}
 
 	public static TextureAtlasSprite getBlockSprite(ResourceLocation location) {
-		return getSprite(PlayerContainer.BLOCK_ATLAS, location);
+		return getSprite(InventoryMenu.BLOCK_ATLAS, location);
 	}
 
 	public static TextureAtlasSprite getBlockSprite(String location) {
@@ -80,12 +80,12 @@ public class ResourceUtil {
 		}
 	}
 
-	public static BufferedReader createReader(IResource resource) {
+	public static BufferedReader createReader(Resource resource) {
 		return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
 	}
 
 	@Nullable
-	public static IResource getResource(ResourceLocation location) {
+	public static Resource getResource(ResourceLocation location) {
 		try {
 			return resourceManager().getResource(location);
 		} catch (IOException e) {
@@ -93,7 +93,7 @@ public class ResourceUtil {
 		}
 	}
 
-	public static List<IResource> getResources(ResourceLocation location) {
+	public static List<Resource> getResources(ResourceLocation location) {
 		try {
 			return resourceManager().getResources(location);
 		} catch (IOException e) {
@@ -105,7 +105,7 @@ public class ResourceUtil {
 	 * @return The model from the item of the stack.
 	 */
 	@Nullable
-	public static IBakedModel getModel(ItemStack stack) {
+	public static BakedModel getModel(ItemStack stack) {
 		ItemRenderer renderItem = client().getItemRenderer();
 		if (renderItem == null || renderItem.getItemModelShaper() == null) {
 			return null;
@@ -117,19 +117,19 @@ public class ResourceUtil {
 		return new SimpleModelTransform(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
 	}
 
-	private static ItemCameraTransforms loadTransformFromJson(ResourceLocation location) {
+	private static ItemTransforms loadTransformFromJson(ResourceLocation location) {
 		try (Reader reader = getReaderForResource(location)) {
 			return BlockModel.fromStream(reader).getTransforms();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ItemCameraTransforms.NO_TRANSFORMS;
+		return ItemTransforms.NO_TRANSFORMS;
 	}
 
 	private static Reader getReaderForResource(ResourceLocation location) throws IOException {
 		ResourceLocation file = new ResourceLocation(location.getNamespace(),
 				"models/" + location.getPath() + ".json");
-		IResource iresource = resourceManager().getResource(file);
+		Resource iresource = resourceManager().getResource(file);
 		return new BufferedReader(new InputStreamReader(iresource.getInputStream(), StandardCharsets.UTF_8));
 	}
 }

@@ -1,13 +1,13 @@
 package forestry.core.render;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-public class RenderForestryItem extends ItemStackTileEntityRenderer {
+public class RenderForestryItem extends BlockEntityWithoutLevelRenderer {
 
 	private final IForestryRenderer<?> renderer;
 	private final RenderHelper helper = new RenderHelper();
@@ -17,7 +17,7 @@ public class RenderForestryItem extends ItemStackTileEntityRenderer {
 	}
 
 	@Override
-	public void renderByItem(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack transform, IRenderTypeBuffer buffer, int combinedLight, int packetLight) {
+	public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack transform, MultiBufferSource buffer, int combinedLight, int packetLight) {
 		helper.update(0, transform, buffer, combinedLight, packetLight);
 		renderer.renderItem(itemStack, helper);
 	}

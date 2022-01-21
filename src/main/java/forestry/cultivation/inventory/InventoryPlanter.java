@@ -1,8 +1,8 @@
 package forestry.cultivation.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmable;
@@ -25,7 +25,7 @@ public class InventoryPlanter extends InventoryPlantation<TilePlanter> implement
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos) {
+	public boolean plantGermling(IFarmable germling, Player player, BlockPos pos) {
 		for (FarmDirection direction : FarmDirection.values()) {
 			if (plantGermling(germling, player, pos, direction)) {
 				return true;
@@ -34,7 +34,7 @@ public class InventoryPlanter extends InventoryPlantation<TilePlanter> implement
 		return false;
 	}
 
-	public boolean plantGermling(IFarmable germling, PlayerEntity player, BlockPos pos, FarmDirection direction) {
+	public boolean plantGermling(IFarmable germling, Player player, BlockPos pos, FarmDirection direction) {
 		int index = FarmHelper.getReversedLayoutDirection(direction).ordinal();
 		ItemStack germlingStack = germlingsInventory.getItem(index);
 		if (germlingStack.isEmpty() || !germling.isGermling(germlingStack)) {

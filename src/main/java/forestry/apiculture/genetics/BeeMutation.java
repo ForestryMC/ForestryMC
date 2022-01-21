@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -43,7 +43,7 @@ public class BeeMutation extends Mutation implements IBeeMutation, IBeeMutationB
 
 	@Override
 	public float getChance(IBeeHousing housing, IAlleleBeeSpecies allele0, IAlleleBeeSpecies allele1, IGenome genome0, IGenome genome1) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		BlockPos housingPos = housing.getCoordinates();
 
 		float processedChance = super.getChance(world, housingPos, allele0, allele1, genome0, genome1, housing);

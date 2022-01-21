@@ -2,12 +2,12 @@ package forestry.factory.recipes.jei.carpenter;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.fluids.FluidStack;
@@ -96,7 +96,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 		guiItemStacks.set(craftOutputSlot, outputs.get(0));
 
-		ICraftingRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
+		CraftingRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 		int width = 3;
 		int height = 3;
 		if (craftingGridRecipe instanceof IShapedRecipe) {
@@ -114,7 +114,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 	}
 
 	@Override
-	public void draw(CarpenterRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+	public void draw(CarpenterRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 		arrow.draw(matrixStack, 89, 34);
 	}
 }

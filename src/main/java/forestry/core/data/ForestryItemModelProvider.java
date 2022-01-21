@@ -3,11 +3,11 @@ package forestry.core.data;
 import com.google.common.collect.Table;
 import com.google.gson.JsonPrimitive;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BucketItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;

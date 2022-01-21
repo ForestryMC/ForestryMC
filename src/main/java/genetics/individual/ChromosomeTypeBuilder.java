@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
@@ -68,8 +68,8 @@ public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 		}
 
 		@Override
-		public ITextComponent getDisplayName() {
-			return new TranslationTextComponent("for.gui." + name);
+		public Component getDisplayName() {
+			return new TranslatableComponent("for.gui." + name);
 		}
 
 		@Override

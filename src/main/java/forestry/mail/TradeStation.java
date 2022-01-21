@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import com.mojang.authlib.GameProfile;
 
@@ -40,7 +40,7 @@ import forestry.mail.features.MailItems;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 
-public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
+public class TradeStation extends SavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "trade_po_";
 	public static final short SLOT_TRADEGOOD = 0;
 	public static final short SLOT_TRADEGOOD_COUNT = 1;
@@ -83,9 +83,9 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / SAVING & LOADING
 	@Override
-	public void load(CompoundNBT compoundNBT) {
+	public void load(CompoundTag compoundNBT) {
 		if (compoundNBT.contains("owner")) {
-			owner = NBTUtil.readGameProfile(compoundNBT.getCompound("owner"));
+			owner = NbtUtils.readGameProfile(compoundNBT.getCompound("owner"));
 		}
 
 		if (compoundNBT.contains("address")) {
@@ -98,15 +98,15 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		if (owner != null) {
-			CompoundNBT nbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(nbt, owner);
+			CompoundTag nbt = new CompoundTag();
+			NbtUtils.writeGameProfile(nbt, owner);
 			compoundNBT.put("owner", nbt);
 		}
 
 		if (address != null) {
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			address.write(nbt);
 			compoundNBT.put("address", nbt);
 		}
@@ -118,12 +118,12 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundTag write(CompoundTag nbt) {
 		return save(nbt);
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 		load(nbt);
 	}
 
@@ -179,7 +179,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* ILETTERHANDLER */
 	//TODO this method is long. Shorten it.
 	@Override
-	public IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(ServerLevel world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		boolean sendOwnerNotice = doLodge && owner != null;
 
@@ -248,7 +248,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// Send the letter
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		mail.write(compoundNBT);
 
 		ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
@@ -278,7 +278,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// Send confirmation message to seller
 		if (sendOwnerNotice) {
-			compoundNBT = new CompoundNBT();
+			compoundNBT = new CompoundTag();
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
 
@@ -623,16 +623,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {
+	public void startOpen(Player player) {
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 	}
 
 	@Override

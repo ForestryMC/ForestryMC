@@ -12,17 +12,17 @@ package forestry.core.tiles;
 
 import java.io.IOException;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,7 +44,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(TileEntityType type, IForestrySpeciesRoot speciesRoot) {
+	public TileNaturalistChest(BlockEntityType type, IForestrySpeciesRoot speciesRoot) {
 		super(type);
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
@@ -98,11 +98,11 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	private void playLidSound(SoundEvent sound) {
-		this.level.playSound(null, getBlockPos(), sound, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
+		this.level.playSound(null, getBlockPos(), sound, SoundSource.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 0.9F);
 	}
 
 	@Override
-	public void flipPage(ServerPlayerEntity player, short page) {
+	public void flipPage(ServerPlayer player, short page) {
 		NetworkHooks.openGui(player, this, p -> {
 			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(page);
@@ -110,7 +110,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	}
 
 	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		NetworkHooks.openGui(player, this, p -> {
 			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(0);
@@ -133,7 +133,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	//TODO page stuff.
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerNaturalistInventory(windowId, inv, this, 5);
 	}
 

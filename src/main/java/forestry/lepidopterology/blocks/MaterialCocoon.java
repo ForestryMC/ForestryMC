@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 
 public class MaterialCocoon {
 

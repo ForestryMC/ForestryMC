@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
@@ -87,7 +87,7 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default LiteralArgumentBuilder<CommandSource> register() {
+	default LiteralArgumentBuilder<CommandSourceStack> register() {
 		return null;
 	}
 

@@ -1,6 +1,6 @@
 package forestry.core.recipes.jei;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.core.config.Constants;
 import forestry.factory.MachineUIDs;

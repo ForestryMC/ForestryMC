@@ -3,8 +3,8 @@ package forestry.core.patchouli.processor;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;

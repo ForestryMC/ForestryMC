@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.recipes.jei.ForestryRecipeWrapper;

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.multiblock;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -35,7 +35,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	public void updateServer() {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		BlockPos coordinates = housing.getTopCoord();
 		if (world.isRainingAt(coordinates.above())) {
 			if (hydrationDelay > 0) {
@@ -86,7 +86,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		compoundNBT.putInt("HydrationDelay", hydrationDelay);
 		compoundNBT.putInt("TicksSinceRainfall", ticksSinceRainfall);
 		return compoundNBT;
@@ -105,7 +105,7 @@ public class FarmHydrationManager implements IFarmLedgerDelegate, INbtWritable, 
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 		hydrationDelay = nbt.getInt("HydrationDelay");
 		ticksSinceRainfall = nbt.getInt("TicksSinceRainfall");
 	}

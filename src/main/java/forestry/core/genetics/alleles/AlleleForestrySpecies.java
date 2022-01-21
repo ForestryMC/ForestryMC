@@ -14,9 +14,9 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -63,18 +63,18 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleFor
 	}
 
 	@Override
-	public ITextComponent getItemName(IOrganismType type) {
+	public Component getItemName(IOrganismType type) {
 		return GeneticsUtil.getItemName(type, this);
 	}
 
 	@Override
-	public ITextComponent getAlyzerName(IOrganismType type) {
+	public Component getAlyzerName(IOrganismType type) {
 		return GeneticsUtil.getAlyzerName(type, this);
 	}
 
 	@Override
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent(description);
+	public Component getDescription() {
+		return new TranslatableComponent(description);
 	}
 
 	@Override

@@ -3,8 +3,8 @@ package genetics.api.organism;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.individual.IIndividual;
 
@@ -31,7 +31,7 @@ public interface IOrganismHandler<I extends IIndividual> {
 	boolean setIndividual(ItemStack itemStack, I individual);
 
 	@Nullable
-	CompoundNBT getIndividualData(ItemStack itemStack);
+	CompoundTag getIndividualData(ItemStack itemStack);
 
-	void setIndividualData(ItemStack itemStack, CompoundNBT compound);
+	void setIndividualData(ItemStack itemStack, CompoundTag compound);
 }

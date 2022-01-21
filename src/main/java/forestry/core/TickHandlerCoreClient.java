@@ -11,8 +11,8 @@
 package forestry.core;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.world.entity.player.Player;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,13 +35,13 @@ public class TickHandlerCoreClient {
 		if (event.phase == TickEvent.Phase.END) {
 			Minecraft minecraft = Minecraft.getInstance();
 			if (minecraft != null) {
-				PlayerEntity player = minecraft.player;
+				Player player = minecraft.player;
 				if (player != null) {
 					boolean hasNaturalistEye = GeneticsUtil.hasNaturalistEye(player);
 					if (TickHandlerCoreClient.hasNaturalistEye != hasNaturalistEye) {
 						TickHandlerCoreClient.hasNaturalistEye = hasNaturalistEye;
 						//TODO - I think this is the correct field
-						WorldRenderer renderGlobal = minecraft.levelRenderer;
+						LevelRenderer renderGlobal = minecraft.levelRenderer;
 						if (renderGlobal != null) {
 							renderGlobal.setBlocksDirty(
 									(int) player.getX() - 32, (int) player.getY() - 32, (int) player.getZ() - 32,

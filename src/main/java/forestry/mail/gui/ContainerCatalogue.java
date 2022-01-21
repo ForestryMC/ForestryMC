@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.EnumTradeStationState;
@@ -39,9 +39,9 @@ import forestry.core.utils.NetworkUtil;
 import forestry.mail.features.MailContainers;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 
-public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
+public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSelectable, ILetterInfoReceiver {
 
-	private final PlayerEntity player;
+	private final Player player;
 	private final List<ITradeStation> stations = new ArrayList<>();
 
 	@Nullable
@@ -69,11 +69,11 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		FILTERS.add(Collections.unmodifiableSet(offline));
 	}
 
-	public static ContainerCatalogue fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerCatalogue fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		return new ContainerCatalogue(windowId, inv);
 	}
 
-	public ContainerCatalogue(int windowId, PlayerInventory inv) {
+	public ContainerCatalogue(int windowId, Inventory inv) {
 		super(MailContainers.CATALOGUE.containerType(), windowId);
 		this.player = inv.player;
 
@@ -101,7 +101,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 
 		stations.clear();
 
-		IPostOffice postOffice = PostManager.postRegistry.getPostOffice((ServerWorld) player.level);
+		IPostOffice postOffice = PostManager.postRegistry.getPostOffice((ServerLevel) player.level);
 		Map<IMailAddress, ITradeStation> tradeStations = postOffice.getActiveTradeStations(player.level);
 
 		for (ITradeStation station : tradeStations.values()) {
@@ -171,7 +171,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 		super.broadcastChanges();
 
 		if (needsSync) {
-			for (IContainerListener crafter : containerListeners) {
+			for (ContainerListener crafter : containerListeners) {
 				crafter.setContainerData(this, 0, stationIndex);
 				crafter.setContainerData(this, 1, stations.size());
 				crafter.setContainerData(this, 2, currentFilter);
@@ -198,12 +198,12 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity p_75145_1_) {
+	public boolean stillValid(Player p_75145_1_) {
 		return true;
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 
 		switch (primary) {
 			case 0:

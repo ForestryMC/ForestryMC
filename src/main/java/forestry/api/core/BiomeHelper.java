@@ -8,7 +8,7 @@ package forestry.api.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 
 public class BiomeHelper {
 
@@ -26,7 +26,7 @@ public class BiomeHelper {
 			return isBiomeHellishCache.get(biomeGen);
 		}
 
-		boolean isBiomeHellish = Biome.Category.NETHER == biomeGen.getBiomeCategory();
+		boolean isBiomeHellish = Biome.BiomeCategory.NETHER == biomeGen.getBiomeCategory();
 		isBiomeHellishCache.put(biomeGen, isBiomeHellish);
 		return isBiomeHellish;
 	}

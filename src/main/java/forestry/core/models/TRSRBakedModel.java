@@ -19,21 +19,21 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector4f;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Transformation;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -43,28 +43,28 @@ import net.minecraftforge.client.model.pipeline.VertexTransformer;
 import net.minecraftforge.common.model.TransformationHelper;
 
 // for those wondering TRSR stands for Translation Rotation Scale Rotation
-public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
+public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
-	protected final TransformationMatrix transformation;
+	protected final Transformation transformation;
 	private final TRSROverride override;
 	private final int faceOffset;
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float scale) {
+	public TRSRBakedModel(BakedModel original, float x, float y, float z, float scale) {
 		this(original, x, y, z, 0, 0, 0, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
+	public TRSRBakedModel(BakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scale) {
 		this(original, x, y, z, rotX, rotY, rotZ, scale, scale, scale);
 	}
 
-	public TRSRBakedModel(IBakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
-		this(original, new TransformationMatrix(new Vector3f(x, y, z),
+	public TRSRBakedModel(BakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
+		this(original, new Transformation(new Vector3f(x, y, z),
 			null,
 			new Vector3f(scaleX, scaleY, scaleZ),
 			TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)));
 	}
 
-	public TRSRBakedModel(IBakedModel original, TransformationMatrix transform) {
+	public TRSRBakedModel(BakedModel original, Transformation transform) {
 		super(original);
 		this.transformation = transform.blockCenterToCorner();
 		this.override = new TRSROverride(this);
@@ -74,14 +74,14 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 	/**
 	 * Rotates around the Y axis and adjusts culling appropriately. South is default.
 	 */
-	public TRSRBakedModel(IBakedModel original, Direction facing) {
+	public TRSRBakedModel(BakedModel original, Direction facing) {
 		super(original);
 		this.override = new TRSROverride(this);
 
 		this.faceOffset = 4 + Direction.NORTH.get2DDataValue() - facing.get2DDataValue();
 
 		double r = Math.PI * (360 - facing.getOpposite().get2DDataValue() * 90) / 180d;
-		this.transformation = new TransformationMatrix(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
+		this.transformation = new Transformation(null, null, null, TransformationHelper.quatFromXYZ(new float[]{0, (float) r, 0}, false)).blockCenterToCorner();
 	}
 
 	@Nonnull
@@ -114,11 +114,11 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
 	@Nonnull
 	@Override
-	public ItemOverrideList getOverrides() {
+	public ItemOverrides getOverrides() {
 		return this.override;
 	}
 
-	private static class TRSROverride extends ItemOverrideList {
+	private static class TRSROverride extends ItemOverrides {
 
 		private final TRSRBakedModel model;
 
@@ -128,8 +128,8 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 
 		@Nonnull
 		@Override
-		public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
-			IBakedModel baked = this.model.originalModel.getOverrides().resolve(originalModel, stack, world, entity);
+		public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
+			BakedModel baked = this.model.originalModel.getOverrides().resolve(originalModel, stack, world, entity);
 			if (baked == null) {
 				baked = originalModel;
 			}
@@ -142,7 +142,7 @@ public class TRSRBakedModel extends BakedModelWrapper<IBakedModel> {
 		protected Matrix4f transformation;
 		protected Matrix3f normalTransformation;
 
-		public Transformer(TransformationMatrix transformation, TextureAtlasSprite textureAtlasSprite) {
+		public Transformer(Transformation transformation, TextureAtlasSprite textureAtlasSprite) {
 			super(new BakedQuadBuilder(textureAtlasSprite));
 			// position transform
 			this.transformation = transformation.getMatrix();

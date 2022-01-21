@@ -1,8 +1,8 @@
 package forestry.core.multiblock;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.core.tiles.TileUtil;
@@ -12,7 +12,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 
 	private final IMultiblockSizeLimits sizeLimits;
 
-	protected RectangularMultiblockControllerBase(World world, IMultiblockSizeLimits sizeLimits) {
+	protected RectangularMultiblockControllerBase(Level world, IMultiblockSizeLimits sizeLimits) {
 		super(world);
 		this.sizeLimits = sizeLimits;
 	}
@@ -60,7 +60,7 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
 
 		// Now we run a simple check on each block within that volume.
 		// Any block deviating = NO DEAL SIR
-		TileEntity te;
+		BlockEntity te;
 		IMultiblockComponent part;
 		Class<? extends RectangularMultiblockControllerBase> myClass = this.getClass();
 

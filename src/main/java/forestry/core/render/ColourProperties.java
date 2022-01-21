@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.Predicate;
 
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -44,7 +44,7 @@ public class ColourProperties implements ISelectiveResourceReloadListener {
 	}
 
 	@Override    //TODO - actually be selective
-	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
+	public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> pred) {
 		try {
 			InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
 			mappings.load(defaultFontStream);

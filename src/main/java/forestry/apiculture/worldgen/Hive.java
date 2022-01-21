@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveDrop;
@@ -51,7 +51,7 @@ public final class Hive {
 		return hiveDescription.getGenChance();
 	}
 
-	public void postGen(ISeedReader world, Random rand, BlockPos pos) {
+	public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
 		hiveDescription.postGen(world, rand, pos);
 	}
 
@@ -67,7 +67,7 @@ public final class Hive {
 		return hiveDescription.isGoodTemperature(temperature);
 	}
 
-	public boolean isValidLocation(ISeedReader world, BlockPos pos) {
+	public boolean isValidLocation(WorldGenLevel world, BlockPos pos) {
 		if (!HiveConfig.isDimAllowed(world.getLevel().dimension().location())) {
 			return false;
 		}
@@ -75,13 +75,13 @@ public final class Hive {
 		return hiveDescription.getHiveGen().isValidLocation(world, pos);
 	}
 
-	public boolean canReplace(ISeedReader world, BlockPos pos) {
+	public boolean canReplace(WorldGenLevel world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		return hiveDescription.getHiveGen().canReplace(blockState, world, pos);
 	}
 
 	@Nullable
-	public BlockPos getPosForHive(ISeedReader world, int x, int z) {
+	public BlockPos getPosForHive(WorldGenLevel world, int x, int z) {
 		return hiveDescription.getHiveGen().getPosForHive(world, x, z);
 	}
 

@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public interface IHiveGenHelper {
 

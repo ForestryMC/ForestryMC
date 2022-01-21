@@ -8,7 +8,7 @@ package forestry.api.farming;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IFarmRegistry {
 

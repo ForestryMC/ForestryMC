@@ -8,7 +8,7 @@ package forestry.api.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
 

@@ -12,7 +12,7 @@ package forestry.arboriculture.models;
 
 import java.awt.Color;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafSpriteProvider;

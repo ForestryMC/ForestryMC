@@ -19,17 +19,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.shapes.BitSetVoxelShapePart;
-import net.minecraft.util.math.shapes.VoxelShapePart;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.feature.TreeFeature;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
+import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,7 +53,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 	}
 
 	@Override
-	public boolean place(IWorld world, Random rand, BlockPos pos, boolean forced) {
+	public boolean place(LevelAccessor world, Random rand, BlockPos pos, boolean forced) {
 		if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
 			return false;
 		}
@@ -79,8 +79,8 @@ public abstract class FeatureArboriculture extends FeatureBase {
 			generateLeaves(world, rand, leaf, contour, genPos);
 			generateExtras(world, rand, genPos);
 			updateLeaves(world, contour);
-			VoxelShapePart voxelshapepart = this.updateLeaves(world, contour);
-			Template.updateShapeAtEdge(world, 3, voxelshapepart, contour.boundingBox.x0, contour.boundingBox.y0, contour.boundingBox.z0);
+			DiscreteVoxelShape voxelshapepart = this.updateLeaves(world, contour);
+			StructureTemplate.updateShapeAtEdge(world, 3, voxelshapepart, contour.boundingBox.x0, contour.boundingBox.y0, contour.boundingBox.z0);
 			return true;
 		}
 
@@ -88,7 +88,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 	}
 
 	@Nullable
-	private static GameProfile getOwner(IWorld world, BlockPos pos) {
+	private static GameProfile getOwner(LevelAccessor world, BlockPos pos) {
 		TileTreeContainer tile = TileUtil.getTile(world, pos, TileTreeContainer.class);
 		if (tile == null) {
 			return null;
@@ -96,24 +96,24 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		return tile.getOwnerHandler().getOwner();
 	}
 
-	public void preGenerate(IWorld world, Random rand, BlockPos startPos) {
+	public void preGenerate(LevelAccessor world, Random rand, BlockPos startPos) {
 
 	}
 
 	/**
 	 * Copied vanilla logic from TreeFeature#updateLeaves
 	 */
-	private VoxelShapePart updateLeaves(IWorld world, TreeContour.Impl contour) {
-		MutableBoundingBox boundingBox = contour.boundingBox;
+	private DiscreteVoxelShape updateLeaves(LevelAccessor world, TreeContour.Impl contour) {
+		BoundingBox boundingBox = contour.boundingBox;
 		List<Set<BlockPos>> list = Lists.newArrayList();
-		VoxelShapePart voxelshapepart = new BitSetVoxelShapePart(boundingBox.getXSpan(), boundingBox.getYSpan(), boundingBox.getZSpan());
+		DiscreteVoxelShape voxelshapepart = new BitSetDiscreteVoxelShape(boundingBox.getXSpan(), boundingBox.getYSpan(), boundingBox.getZSpan());
 		int i = 6;
 
 		for (int j = 0; j < 6; ++j) {
 			list.add(Sets.newHashSet());
 		}
 
-		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
 
 		/*for(BlockPos blockpos : Lists.newArrayList(decoratedBlocks)) {
 			if (boundingBox.isInside(blockpos)) {
@@ -178,16 +178,16 @@ public abstract class FeatureArboriculture extends FeatureBase {
 	 * Generate the tree's trunk. Returns a list of positions of branch ends for leaves to generate at.
 	 */
 
-	protected abstract Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
+	protected abstract Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
 
-	protected abstract void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos);
+	protected abstract void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos);
 
-	protected abstract void generateExtras(IWorld world, Random rand, BlockPos startPos);
+	protected abstract void generateExtras(LevelAccessor world, Random rand, BlockPos startPos);
 
 	@Nullable
-	public abstract BlockPos getValidGrowthPos(IWorld world, BlockPos pos);
+	public abstract BlockPos getValidGrowthPos(LevelAccessor world, BlockPos pos);
 
-	public void clearSaplings(IWorld world, BlockPos genPos) {
+	public void clearSaplings(LevelAccessor world, BlockPos genPos) {
 		int treeGirth = tree.getGirth();
 		for (int x = 0; x < treeGirth; x++) {
 			for (int z = 0; z < treeGirth; z++) {

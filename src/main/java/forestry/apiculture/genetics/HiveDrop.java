@@ -12,10 +12,10 @@ package forestry.apiculture.genetics;
 
 import java.util.Collections;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import forestry.api.apiculture.genetics.IBee;
 import forestry.api.apiculture.hives.IHiveDrop;
@@ -40,12 +40,12 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public IBee getBeeType(IBlockReader world, BlockPos pos) {
+	public IBee getBeeType(BlockGetter world, BlockPos pos) {
 		return beeTemplate.createIndividual();
 	}
 
 	@Override
-	public NonNullList<ItemStack> getExtraItems(IBlockReader world, BlockPos pos, int fortune) {
+	public NonNullList<ItemStack> getExtraItems(BlockGetter world, BlockPos pos, int fortune) {
 		NonNullList<ItemStack> ret = NonNullList.create();
 		for (ItemStack stack : additional) {
 			ret.add(stack.copy());
@@ -55,12 +55,12 @@ public class HiveDrop implements IHiveDrop {
 	}
 
 	@Override
-	public double getChance(IBlockReader world, BlockPos pos, int fortune) {
+	public double getChance(BlockGetter world, BlockPos pos, int fortune) {
 		return chance;
 	}
 
 	@Override
-	public double getIgnobleChance(IBlockReader world, BlockPos pos, int fortune) {
+	public double getIgnobleChance(BlockGetter world, BlockPos pos, int fortune) {
 		return ignobleShare;
 	}
 }

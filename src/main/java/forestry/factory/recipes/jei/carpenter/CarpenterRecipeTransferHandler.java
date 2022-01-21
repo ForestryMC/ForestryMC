@@ -2,10 +2,10 @@ package forestry.factory.recipes.jei.carpenter;
 
 import java.util.Map.Entry;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,9 +27,9 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 	}
 
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerCarpenter container, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerCarpenter container, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
-			IInventory craftingInventory = container.getCarpenter().getCraftingInventory();
+			Container craftingInventory = container.getCarpenter().getCraftingInventory();
 			NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
 			for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
 				IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();

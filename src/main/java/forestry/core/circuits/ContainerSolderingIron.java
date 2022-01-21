@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,14 +34,14 @@ import forestry.core.utils.NetworkUtil;
 
 public class ContainerSolderingIron extends ContainerItemInventory<ItemInventorySolderingIron> implements IGuiSelectable {
 
-	public static ContainerSolderingIron fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
+	public static ContainerSolderingIron fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
+		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		Player player = playerInv.player;
 		ItemInventorySolderingIron inv = new ItemInventorySolderingIron(player, player.getItemInHand(hand));
 		return new ContainerSolderingIron(windowId, player, inv);
 	}
 
-	public ContainerSolderingIron(int windowId, PlayerEntity player, ItemInventorySolderingIron inventory) {
+	public ContainerSolderingIron(int windowId, Player player, ItemInventorySolderingIron inventory) {
 		super(windowId, inventory, player.inventory, 8, 123, CoreContainers.SOLDERING_IRON.containerType());
 
 		// Input
@@ -78,7 +78,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 
 		if (secondary == 0) {
 			if (primary == 0) {

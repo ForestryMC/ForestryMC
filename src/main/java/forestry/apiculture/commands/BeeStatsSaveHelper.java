@@ -12,7 +12,7 @@ package forestry.apiculture.commands;
 
 import java.util.Collection;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -61,7 +61,7 @@ public class BeeStatsSaveHelper implements IStatsSaveHelper {
 	}
 
 	@Override
-	public IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile) {
+	public IBreedingTracker getBreedingTracker(Level world, GameProfile gameProfile) {
 		//TODO world cast
 		return BeeManager.beeRoot.getBreedingTracker(world, gameProfile);
 	}

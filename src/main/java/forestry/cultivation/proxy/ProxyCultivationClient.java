@@ -11,7 +11,7 @@
 package forestry.cultivation.proxy;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,6 +26,6 @@ public class ProxyCultivationClient extends ProxyCultivation implements IClientM
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		CultivationBlocks.PLANTER.getBlocks().forEach(block -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		CultivationBlocks.PLANTER.getBlocks().forEach(block -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
 	}
 }

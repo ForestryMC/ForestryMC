@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
@@ -20,18 +20,18 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryMapper extends InvWrapperBase implements IInventory {
+public class InventoryMapper extends InvWrapperBase implements Container {
 
-	private final IInventory inv;
+	private final Container inv;
 	private final int start;
 	private final int size;
 	private int stackSizeLimit = -1;
 
-	public InventoryMapper(IInventory inv) {
+	public InventoryMapper(Container inv) {
 		this(inv, 0, inv.getContainerSize(), true);
 	}
 
-	public InventoryMapper(IInventory inv, boolean checkItems) {
+	public InventoryMapper(Container inv, boolean checkItems) {
 		this(inv, 0, inv.getContainerSize(), checkItems);
 	}
 
@@ -43,11 +43,11 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 	 * @param size  The size of the new inventory, take care not to exceed the
 	 *              end of the backing inventory
 	 */
-	public InventoryMapper(IInventory inv, int start, int size) {
+	public InventoryMapper(Container inv, int start, int size) {
 		this(inv, start, size, true);
 	}
 
-	public InventoryMapper(IInventory inv, int start, int size, boolean checkItems) {
+	public InventoryMapper(Container inv, int start, int size, boolean checkItems) {
 		super(inv, checkItems);
 		this.inv = inv;
 		this.start = start;

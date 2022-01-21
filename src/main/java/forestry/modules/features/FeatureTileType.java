@@ -4,18 +4,18 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import forestry.core.config.Constants;
 
-public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T> {
+public class FeatureTileType<T extends BlockEntity> implements ITileTypeFeature<T> {
 	protected final String moduleID;
 	protected final String identifier;
 	private final Supplier<T> constructorTileEntity;
 	@Nullable
-	private TileEntityType<T> tileType;
+	private BlockEntityType<T> tileType;
 	private Supplier<Collection<? extends Block>> validBlocks;
 
 	public FeatureTileType(String moduleID, String identifier, Supplier<T> constructorTileEntity, Supplier<Collection<? extends Block>> validBlocks) {
@@ -33,7 +33,7 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
 
 	@Nullable
 	@Override
-	public TileEntityType<T> getTileType() {
+	public BlockEntityType<T> getTileType() {
 		return tileType;
 	}
 
@@ -58,12 +58,12 @@ public class FeatureTileType<T extends TileEntity> implements ITileTypeFeature<T
 	}
 
 	@Override
-	public void setTileType(TileEntityType<T> tileType) {
+	public void setTileType(BlockEntityType<T> tileType) {
 		this.tileType = tileType;
 	}
 
 	@Override
-	public TileEntityType.Builder<T> getTileTypeConstructor() {
-		return TileEntityType.Builder.of(constructorTileEntity, validBlocks.get().toArray(new Block[0]));
+	public BlockEntityType.Builder<T> getTileTypeConstructor() {
+		return BlockEntityType.Builder.of(constructorTileEntity, validBlocks.get().toArray(new Block[0]));
 	}
 }

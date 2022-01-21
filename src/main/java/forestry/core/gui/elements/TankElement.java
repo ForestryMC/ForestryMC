@@ -3,18 +3,18 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.fluids.FluidAttributes;
@@ -62,7 +62,7 @@ public class TankElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		RenderSystem.disableBlend();
 		RenderSystem.enableAlphaTest();
 		if (background != null) {
@@ -81,7 +81,7 @@ public class TankElement extends GuiElement {
 			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
 				fluidStillSprite = ResourceUtil.getMissingTexture();
@@ -97,7 +97,7 @@ public class TankElement extends GuiElement {
 				scaledAmount = getHeight();
 			}
 
-			textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+			textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
 			final int xTileCount = getWidth() / 16;
@@ -149,9 +149,9 @@ public class TankElement extends GuiElement {
 		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
 		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();

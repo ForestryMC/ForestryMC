@@ -1,8 +1,8 @@
 package forestry.api.genetics.alyzer;
 
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.genetics.alleles.IAlleleForestrySpecies;
 
@@ -22,7 +22,7 @@ import genetics.api.organism.IOrganismType;
  * @see IAlleleDisplayHandler
  */
 public interface IAlyzerHelper {
-	void addWidget(Widget widget);
+	void addWidget(AbstractWidget widget);
 
 	IIndividual getIndividual();
 
@@ -74,7 +74,7 @@ public interface IAlyzerHelper {
 
 	ItemStack getDisplayStack(IAlleleSpecies species);
 
-	void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, ITextComponent primaryName, ITextComponent secondaryName);
+	void drawSpeciesRow(String caption, IChromosomeAllele<? extends IAlleleForestrySpecies> speciesType, Component primaryName, Component secondaryName);
 
 	class Column {
 		public static final int FIRST = 12;

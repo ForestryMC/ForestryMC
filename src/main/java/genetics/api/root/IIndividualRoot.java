@@ -4,9 +4,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosomeType;
@@ -38,7 +38,7 @@ public interface IIndividualRoot<I extends IIndividual> {
 	/**
 	 * Uses the information that the NBT-Data contains to create a {@link IIndividual}.
 	 */
-	I create(CompoundNBT compound);
+	I create(CompoundTag compound);
 
 	/**
 	 * Creates a {@link IIndividual} that contains this genome.

@@ -12,20 +12,20 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class EntityUtil {
 	@Nullable
-	public static <T extends MobEntity> T spawnEntity(World world, EntityType<T> type, double x, double y, double z) {
+	public static <T extends Mob> T spawnEntity(Level world, EntityType<T> type, double x, double y, double z) {
 		T entityLiving = createEntity(world, type);
 		if (entityLiving == null) {
 			return null;
@@ -33,13 +33,13 @@ public abstract class EntityUtil {
 		return spawnEntity(world, entityLiving, x, y, z);
 	}
 
-	public static <T extends MobEntity> T spawnEntity(World world, T living, double x, double y, double z) {
-		living.moveTo(x, y, z, MathHelper.wrapDegrees(world.random.nextFloat() * 360.0f), 0.0f);
+	public static <T extends Mob> T spawnEntity(Level world, T living, double x, double y, double z) {
+		living.moveTo(x, y, z, Mth.wrapDegrees(world.random.nextFloat() * 360.0f), 0.0f);
 		living.yHeadRot = living.yRot;
 		living.yBodyRot = living.yRot;
 		DifficultyInstance diff = world.getCurrentDifficultyAt(new BlockPos(x, y, z));
 		//TODO - check SpawnReason
-		living.finalizeSpawn(WorldUtils.asServer(world), diff, SpawnReason.MOB_SUMMONED, null, null);
+		living.finalizeSpawn(WorldUtils.asServer(world), diff, MobSpawnType.MOB_SUMMONED, null, null);
 		world.addFreshEntity(living);
 		//TODO - right sound?
 		living.playAmbientSound();
@@ -47,7 +47,7 @@ public abstract class EntityUtil {
 	}
 
 	@Nullable
-	private static <T extends MobEntity> T createEntity(World world, EntityType<T> type) {
+	private static <T extends Mob> T createEntity(Level world, EntityType<T> type) {
 		ResourceLocation name = ForgeRegistries.ENTITIES.getKey(type);
 		if (name == null) {
 			return null;

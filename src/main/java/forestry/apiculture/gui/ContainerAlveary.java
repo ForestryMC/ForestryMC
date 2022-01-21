@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -27,19 +27,19 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public static ContainerAlveary fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerAlveary fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileAlveary tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlveary.class);
 		return new ContainerAlveary(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerAlveary(int windowid, PlayerInventory playerInv, TileAlveary tile) {
+	public ContainerAlveary(int windowid, Inventory playerInv, TileAlveary tile) {
 		super(windowid, ApicultureContainers.ALVEARY.containerType(), playerInv, tile, 8, 108);
 		ContainerBeeHelper.addSlots(this, tile, false);
 
 		tile.getBeekeepingLogic().clearCachedValues();
 		LazyOptional<IClimateListener> listener = ClimateRoot.getInstance().getListener(tile.getLevel(), tile.getBlockPos());
-		if (playerInv.player instanceof ServerPlayerEntity) {
-			listener.ifPresent(l -> l.syncToClient((ServerPlayerEntity) playerInv.player));
+		if (playerInv.player instanceof ServerPlayer) {
+			listener.ifPresent(l -> l.syncToClient((ServerPlayer) playerInv.player));
 		}
 	}
 

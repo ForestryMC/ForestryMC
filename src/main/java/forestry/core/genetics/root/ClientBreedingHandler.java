@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -18,8 +18,8 @@ public class ClientBreedingHandler extends ServerBreedingHandler {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends IBreedingTracker> T getTracker(String rootUID, IWorld world, @Nullable GameProfile profile) {
-		if (world instanceof ServerWorld) {
+	public <T extends IBreedingTracker> T getTracker(String rootUID, LevelAccessor world, @Nullable GameProfile profile) {
+		if (world instanceof ServerLevel) {
 			return super.getTracker(rootUID, world, profile);
 		}
 		IBreedingTrackerHandler handler = BreedingTrackerManager.factories.get(rootUID);

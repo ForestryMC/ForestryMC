@@ -3,8 +3,8 @@ package genetics.api.individual;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.root.IIndividualRoot;
@@ -25,7 +25,7 @@ public interface IIndividual {
 	 * @param tooltip
 	 */
 	@Deprecated
-	void addTooltip(List<ITextComponent> tooltip);
+	void addTooltip(List<Component> tooltip);
 
 	/**
 	 * @return The definition that describes this organism.
@@ -82,7 +82,7 @@ public interface IIndividual {
 	/**
 	 * Writes the data of this into NBT-Data.
 	 */
-	CompoundNBT write(CompoundNBT compound);
+	CompoundTag write(CompoundTag compound);
 
 	/**
 	 * Call to mark the IIndividual as analyzed.

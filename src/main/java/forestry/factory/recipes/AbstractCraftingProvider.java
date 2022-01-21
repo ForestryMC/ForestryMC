@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -27,10 +27,10 @@ import forestry.api.recipes.IForestryRecipe;
 
 public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
 
-	private final IRecipeType<T> type;
+	private final RecipeType<T> type;
 	private final Set<T> globalRecipes = new HashSet<>();
 
-	public AbstractCraftingProvider(IRecipeType<T> type) {
+	public AbstractCraftingProvider(RecipeType<T> type) {
 		this.type = type;
 	}
 
@@ -43,7 +43,7 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	public Collection<T> getRecipes(@Nullable RecipeManager recipeManager) {
 		Set<T> recipes = new HashSet<>(globalRecipes);
 
-		for (IRecipe<IInventory> recipe : adjust(recipeManager).byType(type).values()) {
+		for (Recipe<Container> recipe : adjust(recipeManager).byType(type).values()) {
 			//noinspection unchecked
 			recipes.add((T) recipe);
 		}

@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -120,7 +120,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 			return false;
 		}
 
-		CompoundNBT nbt = stack.getTag();
+		CompoundTag nbt = stack.getTag();
 		return nbt != null && nbt.contains("Mate");
 	}
 
@@ -140,12 +140,12 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IBee create(CompoundNBT compound) {
+	public IBee create(CompoundTag compound) {
 		return new Bee(compound);
 	}
 
 	@Override
-	public IBee getBee(World world, IGenome genome, IBee mate) {
+	public IBee getBee(Level world, IGenome genome, IBee mate) {
 		return new Bee(genome, mate);
 	}
 
@@ -161,7 +161,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IBeekeepingMode getBeekeepingMode(World world) {
+	public IBeekeepingMode getBeekeepingMode(Level world) {
 		if (activeBeekeepingMode != null) {
 			return activeBeekeepingMode;
 		}
@@ -184,7 +184,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public void setBeekeepingMode(World world, IBeekeepingMode mode) {
+	public void setBeekeepingMode(Level world, IBeekeepingMode mode) {
 		Preconditions.checkNotNull(world);
 		Preconditions.checkNotNull(mode);
 		activeBeekeepingMode = mode;
@@ -204,7 +204,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player) {
+	public IApiaristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player) {
 		return BreedingTrackerManager.INSTANCE.getTracker(getUID(), world, player);
 	}
 
@@ -219,7 +219,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public void populateTracker(IBreedingTracker tracker, @Nullable World world, @Nullable GameProfile profile) {
+	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
 		if (!(tracker instanceof ApiaristTracker)) {
 			return;
 		}

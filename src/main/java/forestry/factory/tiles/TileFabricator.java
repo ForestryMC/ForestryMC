@@ -14,17 +14,17 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,7 +57,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFabricator;
 import forestry.factory.inventory.InventoryFabricator;
 
-public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, ISidedInventory {
+public class TileFabricator extends TilePowered implements ISlotPickupWatcher, ILiquidTankTile, WorldlyContainer {
 	private static final int MAX_HEAT = 5000;
 
 	private final InventoryAdapterTile craftingInventory;
@@ -80,7 +80,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		compound = super.save(compound);
 
 		compound.putInt("Heat", heat);
@@ -90,7 +90,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 
 		heat = compound.getInt("Heat");
@@ -190,7 +190,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onTake(int slotIndex, PlayerEntity player) {
+	public void onTake(int slotIndex, Player player) {
 		if (slotIndex == InventoryFabricator.SLOT_RESULT) {
 			removeItem(InventoryFabricator.SLOT_RESULT, 1);
 		}
@@ -226,7 +226,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	private boolean removeFromInventory(IFabricatorRecipe recipe, boolean doRemove) {
-		IInventory inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
+		Container inventory = new InventoryMapper(this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.consumeIngredients(inventory, recipe.getCraftingGridRecipe().getIngredients(), null, true, false, doRemove);
 	}
 
@@ -293,7 +293,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 		}
 	}
 
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
 		iCrafting.setContainerData(container, 0, heat);
 		iCrafting.setContainerData(container, 1, getMeltingPoint());
 	}
@@ -319,7 +319,7 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerFabricator(windowId, player.inventory, this);
 	}
 }

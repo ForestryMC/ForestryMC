@@ -13,14 +13,14 @@ package forestry.arboriculture.tiles;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -49,14 +49,14 @@ public class TileSapling extends TileTreeContainer {
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 
 		timesTicked = compoundNBT.getInt("TT");
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 
 		compoundNBT.putInt("TT", timesTicked);
@@ -64,12 +64,12 @@ public class TileSapling extends TileTreeContainer {
 	}
 
 	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
 		timesTicked++;
 		tryGrow(rand, false);
 	}
 
-	private static int getRequiredMaturity(World world, ITree tree) {
+	private static int getRequiredMaturity(Level world, ITree tree) {
 		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
 		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
@@ -117,7 +117,7 @@ public class TileSapling extends TileTreeContainer {
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(level, random, getBlockPos(), false);
 		} else {
-			generated = generator.place((ServerWorld) level, ((ServerChunkProvider) level.getChunkSource()).getGenerator(), random, getBlockPos(), IFeatureConfig.NONE);
+			generated = generator.place((ServerLevel) level, ((ServerChunkCache) level.getChunkSource()).getGenerator(), random, getBlockPos(), FeatureConfiguration.NONE);
 		}
 
 		if (generated) {

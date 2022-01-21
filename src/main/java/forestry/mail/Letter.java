@@ -16,13 +16,13 @@ import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -53,7 +53,7 @@ public class Letter implements ILetter {
 		this.uid = String.valueOf(rand.nextInt());
 	}
 
-	public Letter(CompoundNBT compoundNBT) {
+	public Letter(CompoundTag compoundNBT) {
 		this.isProcessed = compoundNBT.getBoolean("PRC");
 		this.sender = new MailAddress(compoundNBT.getCompound("SDR"));
 		this.recipient = new MailAddress(compoundNBT.getCompound("RC"));
@@ -64,16 +64,16 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 
 		compoundNBT.putBoolean("PRC", isProcessed);
 
-		CompoundNBT subcompound = new CompoundNBT();
+		CompoundTag subcompound = new CompoundTag();
 		this.sender.write(subcompound);
 		compoundNBT.put("SDR", subcompound);
 
 		if (this.recipient != null) {
-			subcompound = new CompoundNBT();
+			subcompound = new CompoundTag();
 			this.recipient.write(subcompound);
 			compoundNBT.put("RC", subcompound);
 		}
@@ -224,16 +224,16 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public void addTooltip(List<ITextComponent> list) {
+	public void addTooltip(List<Component> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(new TranslationTextComponent("for.gui.mail.from")
+			list.add(new TranslatableComponent("for.gui.mail.from")
 					.append(": " + this.sender.getName())
-					.withStyle(TextFormatting.GRAY));
+					.withStyle(ChatFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(new TranslationTextComponent("for.gui.mail.to")
+			list.add(new TranslatableComponent("for.gui.mail.to")
 					.append(": " + this.getRecipientString())
-					.withStyle(TextFormatting.GRAY));
+					.withStyle(ChatFormatting.GRAY));
 		}
 	}
 
@@ -279,17 +279,17 @@ public class Letter implements ILetter {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity var1) {
+	public boolean stillValid(Player var1) {
 		return true;
 	}
 
 	@Override
-	public void startOpen(PlayerEntity var1) {
+	public void startOpen(Player var1) {
 		inventory.startOpen(var1);
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity var1) {
+	public void stopOpen(Player var1) {
 		inventory.stopOpen(var1);
 	}
 

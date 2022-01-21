@@ -11,9 +11,9 @@
 package forestry.mail;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,13 +36,13 @@ public class EventHandlerMailAlert {
 				Minecraft.getInstance().level != null &&
 				GuiMailboxInfo.instance.hasPOBoxInfo()) {
 			//TODO: Test / Find a valid matrix stack
-			GuiMailboxInfo.instance.render(new MatrixStack());
+			GuiMailboxInfo.instance.render(new PoseStack());
 		}
 	}
 
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
 		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.level), address);

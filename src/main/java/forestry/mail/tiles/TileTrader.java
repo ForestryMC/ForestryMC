@@ -14,15 +14,15 @@ import com.google.common.base.Preconditions;
 
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,16 +66,16 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	@Override
 	public void onRemoval() {
 		if (isLinked() && !level.isClientSide) {
-			PostManager.postRegistry.deleteTradeStation((ServerWorld) level, address);
+			PostManager.postRegistry.deleteTradeStation((ServerLevel) level, address);
 		}
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		address.write(nbt);
 		compoundNBT.put("address", nbt);
 
@@ -84,7 +84,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 
 		if (compoundNBT.contains("address")) {
@@ -132,7 +132,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		errorLogic.setCondition(!hasPostageMin(3), EnumErrorCode.NO_STAMPS);
 		errorLogic.setCondition(!hasPaperMin(2), EnumErrorCode.NO_PAPER);
 
-		IInventory inventory = getInternalInventory();
+		Container inventory = getInternalInventory();
 		ItemStack tradeGood = inventory.getItem(TradeStation.SLOT_TRADEGOOD);
 		errorLogic.setCondition(tradeGood.isEmpty(), EnumErrorCode.NO_TRADE);
 
@@ -168,7 +168,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
 		int count = 0;
 
-		IInventory tradeInventory = this.getInternalInventory();
+		Container tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getItem(i);
 			if (itemInSlot.isEmpty()) {
@@ -193,7 +193,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		int count = 0;
 		int total = 0;
 
-		IInventory tradeInventory = this.getInternalInventory();
+		Container tradeInventory = this.getInternalInventory();
 		for (int i = startSlot; i < startSlot + countSlots; i++) {
 			ItemStack itemInSlot = tradeInventory.getItem(i);
 			if (itemInSlot.isEmpty()) {
@@ -230,7 +230,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 
 		int posted = 0;
 
-		IInventory tradeInventory = this.getInternalInventory();
+		Container tradeInventory = this.getInternalInventory();
 		for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
 			ItemStack stamp = tradeInventory.getItem(i);
 			if (!stamp.isEmpty()) {
@@ -277,7 +277,7 @@ public class TileTrader extends TileBase implements IOwnedTile {
 		}
 
 		if (!level.isClientSide) {
-			ServerWorld world = (ServerWorld) this.level;
+			ServerLevel world = (ServerLevel) this.level;
 			IErrorLogic errorLogic = getErrorLogic();
 
 			boolean hasValidTradeAddress = PostManager.postRegistry.isValidTradeAddress(world, address);
@@ -302,11 +302,11 @@ public class TileTrader extends TileBase implements IOwnedTile {
 			return super.getInternalInventory();
 		}
 
-		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerWorld) level, getOwnerHandler().getOwner(), address);
+		return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation((ServerLevel) level, getOwnerHandler().getOwner(), address);
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		if (isLinked()) {    //TODO does this sync over?
 			return new ContainerTrader(windowId, inv, this);
 		} else {

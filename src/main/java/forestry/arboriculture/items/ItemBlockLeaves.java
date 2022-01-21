@@ -11,10 +11,10 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,9 +35,9 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		if (!itemstack.hasTag()) {
-			return new TranslationTextComponent("trees.grammar.leaves.type");
+			return new TranslatableComponent("trees.grammar.leaves.type");
 		}
 
 		TileLeaves tileLeaves = new TileLeaves();
@@ -45,17 +45,17 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 
 		ITree tree = tileLeaves.getTree();
 		if (tree == null) {
-			return new TranslationTextComponent("for.leaves.corrupted");
+			return new TranslatableComponent("for.leaves.corrupted");
 		}
 		return getDisplayName(tree);
 	}
 
-	public static ITextComponent getDisplayName(ITree tree) {
+	public static Component getDisplayName(ITree tree) {
 		IAlleleTreeSpecies primary = (IAlleleTreeSpecies) tree.getGenome().getPrimary();
 		String customTreeKey = "for.trees.custom.leaves." + primary.getSpeciesIdentifier();
 		return Translator.tryTranslate(customTreeKey, () -> {
-			ITextComponent leaves = new TranslationTextComponent("for.trees.grammar.leaves.type");
-			return new TranslationTextComponent("for.trees.grammar.leaves", primary.getDisplayName(), leaves);
+			Component leaves = new TranslatableComponent("for.trees.grammar.leaves.type");
+			return new TranslatableComponent("for.trees.grammar.leaves", primary.getDisplayName(), leaves);
 		});
 	}
 
@@ -72,7 +72,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();
 		} else {
-			PlayerEntity player = Minecraft.getInstance().player;
+			Player player = Minecraft.getInstance().player;
 			return tileLeaves.getFoliageColour(player);
 		}
 	}

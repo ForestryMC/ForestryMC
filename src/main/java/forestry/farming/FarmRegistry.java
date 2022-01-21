@@ -29,8 +29,8 @@ import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 public final class FarmRegistry implements IFarmRegistry {
 

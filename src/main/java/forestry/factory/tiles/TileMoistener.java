@@ -14,17 +14,17 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -56,7 +56,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 
-public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
+public class TileMoistener extends TileBase implements WorldlyContainer, ILiquidTankTile, IRenderableTile {
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	@Nullable
@@ -80,7 +80,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		compoundNBT = super.save(compoundNBT);
 
 		compoundNBT.putInt("BurnTime", burnTime);
@@ -91,12 +91,12 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Write pending product
 		if (pendingProduct != null) {
-			CompoundNBT CompoundNBTP = new CompoundNBT();
+			CompoundTag CompoundNBTP = new CompoundTag();
 			pendingProduct.save(CompoundNBTP);
 			compoundNBT.put("PendingProduct", CompoundNBTP);
 		}
 		if (currentProduct != null) {
-			CompoundNBT CompoundNBTP = new CompoundNBT();
+			CompoundTag CompoundNBTP = new CompoundTag();
 			currentProduct.save(CompoundNBTP);
 			compoundNBT.put("CurrentProduct", CompoundNBTP);
 		}
@@ -104,7 +104,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
+	public void load(BlockState state, CompoundTag compoundNBT) {
 		super.load(state, compoundNBT);
 
 		burnTime = compoundNBT.getInt("BurnTime");
@@ -115,11 +115,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Load pending product
 		if (compoundNBT.contains("PendingProduct")) {
-			CompoundNBT compoundNBTP = compoundNBT.getCompound("PendingProduct");
+			CompoundTag compoundNBTP = compoundNBT.getCompound("PendingProduct");
 			pendingProduct = ItemStack.of(compoundNBTP);
 		}
 		if (compoundNBT.contains("CurrentProduct")) {
-			CompoundNBT compoundNBTP = compoundNBT.getCompound("CurrentProduct");
+			CompoundTag compoundNBTP = compoundNBT.getCompound("CurrentProduct");
 			currentProduct = ItemStack.of(compoundNBTP);
 		}
 
@@ -513,7 +513,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 		}
 	}
 
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
+	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
 		iCrafting.setContainerData(container, 0, burnTime);
 		iCrafting.setContainerData(container, 1, totalTime);
 		iCrafting.setContainerData(container, 2, productionTime);
@@ -521,7 +521,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerMoistener(windowId, inv, this);
 	}
 

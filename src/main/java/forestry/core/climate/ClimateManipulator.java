@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateManipulator;
@@ -146,7 +146,7 @@ public class ClimateManipulator implements IClimateManipulator {
 	}
 
 	private static boolean canRound(float diff) {
-		return BigDecimal.valueOf(MathHelper.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <= ClimateStateHelper.CLIMATE_CHANGE;
+		return BigDecimal.valueOf(Mth.abs(diff)).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() <= ClimateStateHelper.CLIMATE_CHANGE;
 	}
 
 	public static class Builder implements IClimateManipulatorBuilder {

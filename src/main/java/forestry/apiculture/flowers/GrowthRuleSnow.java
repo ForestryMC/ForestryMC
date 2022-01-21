@@ -12,12 +12,12 @@ package forestry.apiculture.flowers;
 
 import java.util.Collection;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.api.genetics.flowers.IFlowerGrowthHelper;
 import forestry.api.genetics.flowers.IFlowerGrowthRule;
@@ -25,12 +25,12 @@ import forestry.api.genetics.flowers.IFlowerGrowthRule;
 public class GrowthRuleSnow implements IFlowerGrowthRule {
 
 	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerWorld world, BlockPos pos, Collection<BlockState> potentialFlowers) {
+	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, ServerLevel world, BlockPos pos, Collection<BlockState> potentialFlowers) {
 		return isValidSpot(world, pos) &&
 			helper.plantRandomFlower(flowerType, world, pos, potentialFlowers);
 	}
 
-	private boolean isValidSpot(World world, BlockPos pos) {
+	private boolean isValidSpot(Level world, BlockPos pos) {
 		if (!world.hasChunkAt(pos) || world.getBlockState(pos).getBlock() != Blocks.SNOW) {
 			return false;
 		}

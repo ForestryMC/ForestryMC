@@ -2,13 +2,13 @@ package forestry.core.items.definitions;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.util.LazyLoadedValue;
 
 import forestry.core.data.ForestryTags;
 
-public enum ToolTier implements IItemTier {
+public enum ToolTier implements Tier {
 	BRONZE(3, 200, 7.0F, 2.5F, 10, () -> {
 		return Ingredient.of(ForestryTags.Items.INGOTS_BRONZE);
 	});
@@ -18,7 +18,7 @@ public enum ToolTier implements IItemTier {
 	private final float speed;
 	private final float damage;
 	private final int enchantmentValue;
-	private final LazyValue<Ingredient> repairIngredient;
+	private final LazyLoadedValue<Ingredient> repairIngredient;
 
 	ToolTier(int level, int uses, float speed, float damage, int enchantmentValue, Supplier<Ingredient> repairIngredient) {
 		this.level = level;
@@ -26,7 +26,7 @@ public enum ToolTier implements IItemTier {
 		this.speed = speed;
 		this.damage = damage;
 		this.enchantmentValue = enchantmentValue;
-		this.repairIngredient = new LazyValue<>(repairIngredient);
+		this.repairIngredient = new LazyLoadedValue<>(repairIngredient);
 	}
 
 	@Override

@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.ToolType;
 
@@ -44,14 +44,14 @@ public class ItemScoop extends ItemForestry implements IToolScoop {
 
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity entity, LivingEntity player) {
-		stack.hurtAndBreak(2, player, (living) -> living.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+		stack.hurtAndBreak(2, player, (living) -> living.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 		return true;
 	}
 
 	@Override
-	public boolean mineBlock(ItemStack stack, World world, BlockState blockState, BlockPos pos, LivingEntity player) {
+	public boolean mineBlock(ItemStack stack, Level world, BlockState blockState, BlockPos pos, LivingEntity player) {
 		if (!world.isClientSide && blockState.getDestroySpeed(world, pos) != 0.0F) {
-			stack.hurtAndBreak(1, player, (living) -> living.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+			stack.hurtAndBreak(1, player, (living) -> living.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 		}
 
 		return true;

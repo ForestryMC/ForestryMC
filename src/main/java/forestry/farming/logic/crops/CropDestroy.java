@@ -14,13 +14,13 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
@@ -35,11 +35,11 @@ public class CropDestroy extends Crop {
 
 	protected final ItemStack germling;
 
-	public CropDestroy(World world, BlockState blockState, BlockPos position, @Nullable BlockState replantState) {
+	public CropDestroy(Level world, BlockState blockState, BlockPos position, @Nullable BlockState replantState) {
 		this(world, blockState, position, replantState, ItemStack.EMPTY);
 	}
 
-	public CropDestroy(World world, BlockState blockState, BlockPos position, @Nullable BlockState replantState, ItemStack germling) {
+	public CropDestroy(Level world, BlockState blockState, BlockPos position, @Nullable BlockState replantState, ItemStack germling) {
 		super(world, position);
 		this.blockState = blockState;
 		this.replantState = replantState;
@@ -47,14 +47,14 @@ public class CropDestroy extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
+	protected boolean isCrop(Level world, BlockPos pos) {
 		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(Level world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		List<ItemStack> harvested = Block.getDrops(blockState, (ServerWorld) world, pos, world.getBlockEntity(pos));    //TODO - method safety
+		List<ItemStack> harvested = Block.getDrops(blockState, (ServerLevel) world, pos, world.getBlockEntity(pos));    //TODO - method safety
 		NonNullList<ItemStack> nnHarvested = NonNullList.of(ItemStack.EMPTY, harvested.toArray(new ItemStack[0]));    //TODO very messy
 		//float chance = ForgeEventFactory.fireBlockHarvesting(nnHarvested, world, pos, blockState, 0, 1.0F, false, null);
 		//TODO: Fix dropping

@@ -14,14 +14,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -30,12 +30,12 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
 
-public class HiveDecorator extends Feature<NoFeatureConfig> {
+public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 	public HiveDecorator() {
-		super(NoFeatureConfig.CODEC);
+		super(NoneFeatureConfiguration.CODEC);
 	}
 
-	private static boolean decorateHivesDebug(ISeedReader world, Random rand, BlockPos pos, List<Hive> hives) {
+	private static boolean decorateHivesDebug(WorldGenLevel world, Random rand, BlockPos pos, List<Hive> hives) {
 		int posX = pos.getX() + rand.nextInt(16);
 		int posZ = pos.getZ() + rand.nextInt(16);
 
@@ -58,7 +58,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 		return false;
 	}
 
-	public static boolean tryGenHive(ISeedReader world, Random rand, int x, int z, Hive hive) {
+	public static boolean tryGenHive(WorldGenLevel world, Random rand, int x, int z, Hive hive) {
 		final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
 		if (hivePos == null) {
@@ -82,7 +82,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 		return setHive(world, rand, hivePos, hive);
 	}
 
-	private static boolean setHive(ISeedReader world, Random rand, BlockPos pos, Hive hive) {
+	private static boolean setHive(WorldGenLevel world, Random rand, BlockPos pos, Hive hive) {
 		BlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
 		boolean placed = world.setBlock(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
@@ -111,7 +111,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean place(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(WorldGenLevel seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {

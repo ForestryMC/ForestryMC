@@ -13,16 +13,16 @@ package forestry.apiculture.multiblock;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -146,7 +146,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
+	public Vec3 getBeeFXCoordinates() {
 		return getMultiblockLogic().getController().getBeeFXCoordinates();
 	}
 
@@ -220,12 +220,12 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerAlveary(windowId, player.inventory, this);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(this.getUnlocalizedTitle());
+	public Component getDisplayName() {
+		return new TranslatableComponent(this.getUnlocalizedTitle());
 	}
 }

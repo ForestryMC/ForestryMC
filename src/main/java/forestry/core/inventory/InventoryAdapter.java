@@ -13,10 +13,10 @@ package forestry.core.inventory;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import forestry.core.config.Constants;
 import forestry.core.network.IStreamable;
@@ -108,7 +108,7 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
@@ -156,12 +156,12 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
 
 	/* SAVING & LOADING */
 	@Override
-	public void read(CompoundNBT compoundNBT) {
+	public void read(CompoundTag compoundNBT) {
 		InventoryUtil.readFromNBT(this, inventory.getName(), compoundNBT);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		InventoryUtil.writeToNBT(this, inventory.getName(), compoundNBT);
 		return compoundNBT;
 	}

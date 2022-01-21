@@ -1,6 +1,6 @@
 package forestry.arboriculture.features;
 
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.item.BlockItem;
 
 import forestry.arboriculture.ModuleCharcoal;
 import forestry.arboriculture.blocks.BlockAsh;

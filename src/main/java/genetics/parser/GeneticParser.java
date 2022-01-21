@@ -20,12 +20,12 @@ import java.util.function.Predicate;
 
 import org.apache.commons.io.IOUtils;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -47,28 +47,28 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 	private static final Deque<ResourceLocation> loadingAlleles = Queues.newArrayDeque();
 
 	@Override
-	public void onResourceManagerReload(IResourceManager manager, Predicate<IResourceType> resourcePredicate) {
+	public void onResourceManagerReload(ResourceManager manager, Predicate<IResourceType> resourcePredicate) {
 		if (!resourcePredicate.test(GeneticsResourceType.MUTATIONS)) {
 			return;
 		}
 
-		Multimap<ResourceLocation, CompoundNBT> alleleData = HashMultimap.create();
+		Multimap<ResourceLocation, CompoundTag> alleleData = HashMultimap.create();
 
 		for (ResourceLocation location : manager.listResources("genetics/alleles", filename -> filename.endsWith(".json"))) {
 			String path = location.getPath();
 			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
-			try (IResource resource = manager.getResource(location)) {
+			try (Resource resource = manager.getResource(location)) {
 				for (ResourceLocation loading : loadingAlleles) {
 					if (location.getClass() == loading.getClass() && location.equals(loading)) {
 						//LOGGER.error("Circular allele dependencies, stack: [" + Joiner.on(", ").join(loadingAlleles) + "]");
 					}
 				}
 				loadingAlleles.addLast(location);
-				JsonObject object = JSONUtils.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+				JsonObject object = GsonHelper.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
 				if (object == null) {
 					//LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
 				} else {
-					alleleData.put(location, JsonToNBT.parseTag(object.toString()));
+					alleleData.put(location, TagParser.parseTag(object.toString()));
 					//AlleleInfo info = new AlleleInfo();
 					//deserialize(location, object, info);
 				}
@@ -86,8 +86,8 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 			}
 		}
 		for (ResourceLocation location : alleleData.keySet()) {
-			CompoundNBT compound = new CompoundNBT();
-			List<CompoundNBT> compounds = new LinkedList<>(alleleData.get(location));
+			CompoundTag compound = new CompoundTag();
+			List<CompoundTag> compounds = new LinkedList<>(alleleData.get(location));
 			if (compounds.size() > 1) {
 				compounds.stream().filter(tag -> tag.getBoolean("replace")).max(Comparator.comparingInt(a -> a.getInt("weight"))).ifPresent(compound::merge);
 			}

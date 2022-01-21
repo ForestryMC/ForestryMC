@@ -13,25 +13,25 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.server.level.ServerLevel;
 
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.tiles.TileUtil;
@@ -40,35 +40,35 @@ import forestry.core.tiles.TileUtil;
 public abstract class BlockUtil {
 
 
-	public static boolean alwaysTrue(BlockState state, IBlockReader reader, BlockPos pos) {
+	public static boolean alwaysTrue(BlockState state, BlockGetter reader, BlockPos pos) {
 		return true;
 	}
 
-	public static boolean alwaysFalse(BlockState state, IBlockReader reader, BlockPos pos) {
+	public static boolean alwaysFalse(BlockState state, BlockGetter reader, BlockPos pos) {
 		return false;
 	}
 
-	public static List<ItemStack> getBlockDrops(IWorld world, BlockPos posBlock) {
+	public static List<ItemStack> getBlockDrops(LevelAccessor world, BlockPos posBlock) {
 		BlockState blockState = world.getBlockState(posBlock);
 
 		//TODO - this call needs sorting
-		return blockState.getBlock().getDrops(blockState, (ServerWorld) world, posBlock, TileUtil.getTile(world, posBlock));
+		return blockState.getBlock().getDrops(blockState, (ServerLevel) world, posBlock, TileUtil.getTile(world, posBlock));
 
 	}
 
-	public static boolean tryPlantCocoaPod(IWorld world, BlockPos pos) {
+	public static boolean tryPlantCocoaPod(LevelAccessor world, BlockPos pos) {
 		Direction facing = getValidPodFacing(world, pos, BlockTags.JUNGLE_LOGS);
 		if (facing == null) {
 			return false;
 		}
 
-		BlockState state = Blocks.COCOA.defaultBlockState().setValue(HorizontalBlock.FACING, facing);
+		BlockState state = Blocks.COCOA.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
 		world.setBlock(pos, state, 18);
 		return true;
 	}
 
 	@Nullable
-	public static Direction getValidPodFacing(IWorld world, BlockPos pos, ITag<Block> logTag) {
+	public static Direction getValidPodFacing(LevelAccessor world, BlockPos pos, Tag<Block> logTag) {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			if (isValidPodLocation(world, pos, facing, logTag)) {
 				return facing;
@@ -77,7 +77,7 @@ public abstract class BlockUtil {
 		return null;
 	}
 
-	public static boolean isValidPodLocation(IWorldReader world, BlockPos pos, Direction direction, ITag<Block> logTag) {
+	public static boolean isValidPodLocation(LevelReader world, BlockPos pos, Direction direction, Tag<Block> logTag) {
 		pos = pos.relative(direction);
 		if (!world.hasChunkAt(pos)) {
 			return false;
@@ -87,22 +87,22 @@ public abstract class BlockUtil {
 		return block.is(logTag);
 	}
 
-	public static boolean isBreakableBlock(World world, BlockPos pos) {
+	public static boolean isBreakableBlock(Level world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		return isBreakableBlock(blockState, world, pos);
 	}
 
-	public static boolean isBreakableBlock(BlockState blockState, World world, BlockPos pos) {
+	public static boolean isBreakableBlock(BlockState blockState, Level world, BlockPos pos) {
 		return blockState.getDestroySpeed(world, pos) >= 0.0F;
 	}
 
-	public static boolean isReplaceableBlock(BlockState blockState, World world, BlockPos pos) {
+	public static boolean isReplaceableBlock(BlockState blockState, Level world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		return world.getBlockState(pos).getMaterial().isReplaceable() && true;//!(block instanceof BlockStaticLiquid);
 	}
 
 	@Nullable
-	public static RayTraceResult collisionRayTrace(BlockPos pos, Vector3d startVec, Vector3d endVec, AxisAlignedBB bounds) {
+	public static HitResult collisionRayTrace(BlockPos pos, Vec3 startVec, Vec3 endVec, AABB bounds) {
 		return collisionRayTrace(pos, startVec, endVec, bounds.minX, bounds.minY, bounds.minZ, bounds.maxX, bounds.maxY, bounds.maxZ);
 	}
 
@@ -111,15 +111,15 @@ public abstract class BlockUtil {
 	 */
 	//TODO - looks pretty copy pasted. Find new version as well? Is this still needed ?
 	@Nullable
-	public static RayTraceResult collisionRayTrace(BlockPos pos, Vector3d startVec, Vector3d endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+	public static HitResult collisionRayTrace(BlockPos pos, Vec3 startVec, Vec3 endVec, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		startVec = startVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
 		endVec = endVec.add(-pos.getX(), -pos.getY(), -pos.getZ());
-		Vector3d vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
-		Vector3d vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
-		Vector3d vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
-		Vector3d vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
-		Vector3d vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
-		Vector3d vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
+		Vec3 vec32 = startVec;//.getIntermediateWithXValue(endVec, minX);
+		Vec3 vec33 = startVec;//.getIntermediateWithXValue(endVec, maxX);
+		Vec3 vec34 = startVec;//.getIntermediateWithYValue(endVec, minY);
+		Vec3 vec35 = startVec;//.getIntermediateWithYValue(endVec, maxY);
+		Vec3 vec36 = startVec;//.getIntermediateWithZValue(endVec, minZ);
+		Vec3 vec37 = startVec;//.getIntermediateWithZValue(endVec, maxZ);
 
 		if (!isVecInsideYZBounds(vec32, minY, minZ, maxY, maxZ)) {
 			vec32 = null;
@@ -145,7 +145,7 @@ public abstract class BlockUtil {
 			vec37 = null;
 		}
 
-		Vector3d minHit = null;
+		Vec3 minHit = null;
 
 		if (vec32 != null) {
 			minHit = vec32;
@@ -200,38 +200,38 @@ public abstract class BlockUtil {
 				sideHit = 3;
 			}
 
-			return new BlockRayTraceResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), Direction.values()[sideHit], pos, true);
+			return new BlockHitResult(minHit.add(pos.getX(), pos.getY(), pos.getZ()), Direction.values()[sideHit], pos, true);
 		}
 	}
 
 	/**
 	 * Checks if a vector is within the Y and Z bounds of the block.
 	 */
-	private static boolean isVecInsideYZBounds(@Nullable Vector3d vec, double minY, double minZ, double maxY, double maxZ) {
+	private static boolean isVecInsideYZBounds(@Nullable Vec3 vec, double minY, double minZ, double maxY, double maxZ) {
 		return vec != null && vec.y >= minY && vec.y <= maxY && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Z bounds of the block.
 	 */
-	private static boolean isVecInsideXZBounds(@Nullable Vector3d vec, double minX, double minZ, double maxX, double maxZ) {
+	private static boolean isVecInsideXZBounds(@Nullable Vec3 vec, double minX, double minZ, double maxX, double maxZ) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.z >= minZ && vec.z <= maxZ;
 	}
 
 	/**
 	 * Checks if a vector is within the X and Y bounds of the block.
 	 */
-	private static boolean isVecInsideXYBounds(@Nullable Vector3d vec, double minX, double minY, double maxX, double maxY) {
+	private static boolean isVecInsideXYBounds(@Nullable Vec3 vec, double minX, double minY, double maxX, double maxY) {
 		return vec != null && vec.x >= minX && vec.x <= maxX && vec.y >= minY && vec.y <= maxY;
 	}
 
 	/* CHUNKS */
 
-	public static boolean canReplace(BlockState blockState, IWorld world, BlockPos pos) {
+	public static boolean canReplace(BlockState blockState, LevelAccessor world, BlockPos pos) {
 		return world.getBlockState(pos).getMaterial().isReplaceable() && !blockState.getMaterial().isLiquid();
 	}
 
-	public static boolean canPlaceTree(BlockState blockState, IWorld world, BlockPos pos) {
+	public static boolean canPlaceTree(BlockState blockState, LevelAccessor world, BlockPos pos) {
 		BlockPos downPos = pos.below();
 		Block block = world.getBlockState(downPos).getBlock();
 		return !(world.getBlockState(pos).getMaterial().isReplaceable() &&
@@ -240,9 +240,9 @@ public abstract class BlockUtil {
 		//			!block.isWood(world, downPos);
 	}
 
-	public static BlockPos getNextReplaceableUpPos(World world, BlockPos pos) {
-		BlockPos topPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, pos);
-		final BlockPos.Mutable newPos = new BlockPos.Mutable();
+	public static BlockPos getNextReplaceableUpPos(Level world, BlockPos pos) {
+		BlockPos topPos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);
+		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos();
 		BlockState blockState = world.getBlockState(newPos.set(pos));
 
 		while (!BlockUtil.canReplace(blockState, world, newPos)) {
@@ -257,8 +257,8 @@ public abstract class BlockUtil {
 	}
 
 	@Nullable
-	public static BlockPos getNextSolidDownPos(World world, BlockPos pos) {
-		final BlockPos.Mutable newPos = new BlockPos.Mutable();
+	public static BlockPos getNextSolidDownPos(Level world, BlockPos pos) {
+		final BlockPos.MutableBlockPos newPos = new BlockPos.MutableBlockPos();
 
 		BlockState blockState = world.getBlockState(newPos.set(pos));
 		while (canReplace(blockState, world, newPos)) {
@@ -272,7 +272,7 @@ public abstract class BlockUtil {
 	}
 
 
-	public static boolean setBlockWithPlaceSound(World world, BlockPos pos, BlockState blockState) {
+	public static boolean setBlockWithPlaceSound(Level world, BlockPos pos, BlockState blockState) {
 		if (world.setBlockAndUpdate(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, blockState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -281,7 +281,7 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean setBlockWithBreakSound(World world, BlockPos pos, BlockState blockState, BlockState oldState) {
+	public static boolean setBlockWithBreakSound(Level world, BlockPos pos, BlockState blockState, BlockState oldState) {
 		if (world.setBlockAndUpdate(pos, blockState)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -290,7 +290,7 @@ public abstract class BlockUtil {
 		return false;
 	}
 
-	public static boolean setBlockToAirWithSound(World world, BlockPos pos, BlockState oldState) {
+	public static boolean setBlockToAirWithSound(Level world, BlockPos pos, BlockState oldState) {
 		if (world.removeBlock(pos, false)) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, oldState);
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
