@@ -1,250 +1,260 @@
 buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-		classpath "gradle.plugin.se.bjurr.gitchangelog:git-changelog-gradle-plugin:1.66"
-    }
+	repositories {
+		maven { url = "https://files.minecraftforge.net/maven" }
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+	}
 }
 
 plugins {
+	id "maven-publish"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'idea'
-apply plugin: 'maven'
-apply plugin: "se.bjurr.gitchangelog.git-changelog-gradle-plugin"
-
-String semver = "${version_major}.${version_minor}.${version_patch}"
-version = "${semver}.${getBuildNumber()}"
-if (project.hasProperty('buildQualifier')) {
-	version = project.version + '-' + project.buildQualifier
-}
-group = "net.sengir.forestry" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "forestry_" + mcversion
-
-ext.dirDest = './build/dist'
-
-// java version
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-compileJava.sourceCompatibility = JavaVersion.VERSION_1_8
-compileJava.targetCompatibility = JavaVersion.VERSION_1_8
-
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
-compileJava {
-	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+	id "com.modrinth.minotaur" version "1.2.1"
 }
 
-minecraft {
-	mappings channel: 'official', version: mcp_mappings
+apply plugin: "net.minecraftforge.gradle"
 
-	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+group = "net.sengir.forestry"
+version = computeVersion()
+archivesBaseName = "forestry-$minecraft_version"
 
-	runs {
-        client {
-            workingDirectory project.file('run')
+String computeVersion() {
+	return "$version_major.$version_minor.${System.getenv("BUILD_NUMBER") ?: "999+local"}"
+}
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+repositories {
+	maven {
+		name "JEI"
+		url "https://dvs1.progwml6.com/files/maven"
+	}
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+	maven {
+		name "Patchouli"
+		url "https://maven.blamejared.com/"
+	}
+}
 
-            mods {
-                forestry {
-                    source sourceSets.main
-                }
-            }
+dependencies {
+	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-        }
+	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
+	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
 
-        server {
-            workingDirectory project.file('run')
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version")
+}
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(8)
+	}
+}
 
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                forestry {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', 'forestry', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                forestry {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
 }
 
 sourceSets {
 	main {
 		resources {
-			srcDirs "src/generated/resources"
-			exclude '.cache'
+			srcDir "src/generated/resources"
 		}
 	}
 }
 
-repositories {
-	/*maven {
-		url = 'http://maven.mcmoddev.com'
-	}*/
-	maven {
-		name 'JEI'
-		url "http://dvs1.progwml6.com/files/maven"
-	}
-	/*maven {
-		name = "ic2"
-		url = "http://maven.ic2.player.to/"
-	}
-	maven {
-		name = "Modmuss50"
-		url = "http://maven.modmuss50.me"
-	}
-	maven {
-		url = 'https://mod-buildcraft.com/maven'
-	}*/
+minecraft {
+	mappings channel: "official", version: minecraft_version
 
-	maven { url 'https://maven.blamejared.com' }
+	accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+
+	runs {
+		def commonRunProperties = {
+			workingDirectory project.file("run")
+
+			property "forge.logging.console.level", "debug"
+			property "fml.earlyprogresswindow", "false"
+
+			// See https://github.com/Vazkii/Patchouli#mixin-troubleshooting
+			property "mixin.env.remapRefMap", "true"
+			property "mixin.env.refMapRemappingFile", "$projectDir/build/createSrgToMcp/output.srg"
+
+			mods {
+				forestry {
+					source sourceSets.main
+				}
+			}
+		}
+
+		client {
+			with commonRunProperties
+		}
+
+		server {
+			with commonRunProperties
+		}
+
+		data {
+			with commonRunProperties
+			forceExit false
+			args "--mod", "forestry", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
+		}
+	}
 }
 
-dependencies {
-	minecraft "net.minecraftforge:forge:${forgeversion}"
+processResources {
+	exclude ".cache"
 
-	/*deobfProvided "net.darkhax.tesla:Tesla-${tesla_mcversion}:${tesla_version}"*/
-	compileOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}:api")
-
-	runtimeOnly fg.deobf("mezz.jei:jei-${jei_mcversion}:${jei_version}")
-
-	compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}:api")
-	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-
-	/*deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
-	deobfProvided "TechReborn:TechReborn-${TR_mcversion}:${TR_version}:api"
-	deobfProvided "com.mod-buildcraft:buildcraft-api:${buildcraft_version}"*/
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-}
-
-configurations {
-	api
-	compile.extendsFrom api
-}
-
-// prevent java 8's strict doclint for javadocs from failing builds
-if (JavaVersion.current().isJava8Compatible()) {
-	tasks.withType(Javadoc) {
-		options.addStringOption('Xdoclint:none', '-quiet')
+	filesMatching("META-INF/mods.toml") {
+		expand "version": project.version
 	}
 }
 
 jar {
+	finalizedBy "reobfJar"
+
 	from sourceSets.main.output.classesDirs
 	from sourceSets.main.output.resourcesDir
 
 	manifest {
 		attributes([
-            "Specification-Title": "Forestry",
-            "Specification-Vendor": "SirSengir",
-            "Specification-Version": "${semver}",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"SirSengir",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-			"FMLAT": 'forestry_at.cfg'
-        ])
+				"Specification-Title"     : "Forestry",
+				"Specification-Vendor"    : "SirSengir",
+				"Specification-Version"   : "${project.version}",
+				"Implementation-Title"    : "${project.name}",
+				"Implementation-Version"  : "${project.version}",
+				"Implementation-Vendor"   : "SirSengir",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		])
 	}
 }
 
+def publicApiIncludePatterns = {
+	include "forestry/api/**"
+}
+
+javadoc {
+	source = sourceSets.main.allJava
+	classpath = sourceSets.main.compileClasspath + sourceSets.main.output
+
+	options.addStringOption("Xdoclint:none", "-quiet")
+	options.encoding = "UTF-8"
+}
+
+javadoc publicApiIncludePatterns
+
+task javadocJar(type: Jar, dependsOn: javadoc, group: "build") {
+	archiveClassifier.set("javadoc")
+	from javadoc.destinationDir
+}
+
 task sourcesJar(type: Jar) {
-	// from zipTree('build/retromapping/retromappedReplacedMain.jar') // Not sure if this is how Abrar designed it, but grab the remapped src
-	classifier = 'sources'
+	archiveClassifier.set("sources")
+	from sourceSets.main.allJava
 }
 
-task apiJar(type: Jar) {
-	// TODO: when FG bug is fixed, remove allSource from the api jar.
-	// https://github.com/MinecraftForge/ForgeGradle/issues/369
-	// Gradle should be able to pull them from the -sources jar.
-	from sourceSets.main.allSource
+task apiJar(type: Jar, group: "build") {
+	archiveClassifier.set("api")
+	// api jar ist just a development aid and serves as both a binary and source jar simultaneously
 	from sourceSets.main.output
-	include 'forestry/api/**'
-	classifier = 'api'
+	from sourceSets.main.allJava
 }
 
-jar.finalizedBy('reobfJar')
+apiJar publicApiIncludePatterns
 
 artifacts {
+	archives javadocJar
 	archives sourcesJar
 	archives apiJar
 }
 
-uploadArchives {
-	repositories {
-		if (project.hasProperty('mavenDir')) {
-			mavenDeployer {
-				repository(url: "file://" + mavenDir)
+publishing {
+	afterEvaluate {
+		publications {
+			mavenJava(MavenPublication) {
+				groupId = project.group
+				artifactId = project.archivesBaseName
+				version = project.version
+
+				// ForgeGradle will generate wild dependency definitions, see https://github.com/MinecraftForge/ForgeGradle/issues/584
+				// Since we don't actually depend on anything, just remove the entire node.
+				pom.withXml {
+					asNode().remove(asNode().dependencies)
+				}
+
+				from components.java
+				artifact sourcesJar
+				artifact javadocJar
+				artifact apiJar
 			}
-		} else {
-			println 'Archives upload disabled, mavenDir in gradle.properties is missing.'
+		}
+	}
+
+	repositories {
+		maven {
+			def releasesRepoUrl = uri("$buildDir/repos/releases")
+			def snapshotsRepoUrl = uri("$buildDir/repos/snapshots")
+
+			name = "Project"
+			url = version.toString().endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+		}
+
+		maven {
+			credentials {
+				username System.getenv("MODMAVEN_USER")
+				password System.getenv("MODMAVEN_PASSWORD")
+			}
+
+			name = "Modmaven"
+			url = "https://modmaven.dev/artifactory/local-releases/"
 		}
 	}
 }
 
-def getBuildNumber() {
-	return "$System.env.BUILD_NUMBER" != "null" ? "$System.env.BUILD_NUMBER" : "0"
-}
+def theChangelog = System.getenv("CHANGELOG")
 
-task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
-	file = new File("changelog.html")
-	untaggedName = "Current release ${project.version}"
-	fromCommit = "5a3850c2642e535656d090d1473054d5fa8d3331"
-	toRef = "HEAD"
-	templateContent = file('changelog.mustache').getText('UTF-8')
-}
+////////////////
+// Curse Forge
+if (System.getenv("CURSEFORGE")) {
+	curseforge {
+		apiKey = System.getenv("CURSEFORGE")
 
-idea {
-	module {
-		for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
-			File excludeDir = new File(projectDir, excludeDirName)
-			excludeDirs.add(excludeDir)
+		project {
+			id = project.curseforge_project
+			changelogType = "markdown"
+			changelog = theChangelog
+			releaseType = theChangelog.contains("[beta]") ? "beta" : "alpha"
+			addGameVersion project.minecraft_version
+			addGameVersion "Forge"
+
+			mainArtifact(jar.archiveFile) {
+				displayName = "${project.version}"
+			}
 		}
 	}
 }
 
-curseforge {
-	apiKey = project.hasProperty('curseforge_apikey') ? project.curseforge_apikey : '0'
-	project {
-		id = curse_project_id
-		changelog = file('changelog.html')
-		changelogType = 'html'
-		releaseType = 'beta'
+////////////////
+// Modrinth
+import com.modrinth.minotaur.TaskModrinthUpload
+import com.modrinth.minotaur.request.VersionType
+
+task publishModrinth(type: TaskModrinthUpload) {
+	onlyIf {
+		System.getenv("MODRINTH")
 	}
+
+	token = System.getenv("MODRINTH")
+	changelog = theChangelog
+	projectId = project.modrinth_project
+	versionName = project.version
+	versionNumber = project.version
+	versionType = theChangelog?.contains("[beta]") ? VersionType.BETA : VersionType.ALPHA
+	uploadFile = jar
+	addGameVersion(project.minecraft_version)
+	addLoader("forge")
 }
 
-afterEvaluate {
-	tasks.curseforge59751.dependsOn.add(makeChangelog)
-}
+publishModrinth.dependsOn jar

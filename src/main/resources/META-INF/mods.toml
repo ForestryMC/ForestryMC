@@ -6,7 +6,7 @@ license="GNU Lesser Public License v3"
 
 [[mods]]
 	modId="forestry"
-	version="${file.jarVersion}"
+	version="${version}"
 	displayName="Forestry"
 	# TODO - old has http://minecraft.curseforge.com/projects/forestry. Does this work?
 	#updateJSONURL="http://myurl.me/"
@@ -45,3 +45,5 @@ license="GNU Lesser Public License v3"
 	modId="patchouli"
 	mandatory=true
 	versionRange="[1.16.4-53,)"
+	ordering="NONE"
+	side="BOTH"
