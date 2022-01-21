@@ -8,8 +8,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.DecoratorConfiguration;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -21,7 +19,7 @@ import forestry.core.config.Constants;
 public class ArboricultureFeatures {
 	public static final Feature<NoneFeatureConfiguration> TREE_DECORATOR = new TreeDecorator();
 
-	public static final ConfiguredFeature<?, ?> TREE_DECORATOR_CONF = TREE_DECORATOR.configured(FeatureConfiguration.NONE).decorated(FeatureDecorator.NOPE.configured(DecoratorConfiguration.NONE));
+	public static final ConfiguredFeature<?, ?> TREE_DECORATOR_CONF = TREE_DECORATOR.configured(FeatureConfiguration.NONE);
 
 	public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
 		IForgeRegistry<Feature<?>> registry = event.getRegistry();
@@ -32,6 +30,6 @@ public class ArboricultureFeatures {
 	}
 
 	public static void onBiomeLoad(BiomeLoadingEvent event) {
-		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TREE_DECORATOR_CONF);
+		event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, TREE_DECORATOR_CONF.placed());
 	}
 }

@@ -29,6 +29,8 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -117,6 +119,16 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return getDefinition().createTileEntity(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return level.isClientSide() ? null : (level1, pos, state1, t) -> {
+			if (t instanceof TileForestry tileForestry) {
+				tileForestry.tick();
+			}
+		};
 	}
 
 	private IMachineProperties<?> getDefinition() {

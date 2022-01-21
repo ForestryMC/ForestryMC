@@ -76,7 +76,7 @@ import forestry.core.utils.TickHelper;
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IGenome;
 
-public class TileHive extends BlockEntity implements TickableBlockEntity, IHiveTile, IActivatable, IBeeHousing {
+public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IBeeHousing {
 	private static final DamageSource damageSourceBeeHive = new DamageSourceForestry("bee.hive");
 
 	private final InventoryAdapter contained = new InventoryAdapter(2, "Contained");
