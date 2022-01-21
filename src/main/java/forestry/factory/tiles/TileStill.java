@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -58,8 +59,8 @@ public class TileStill extends TilePowered implements WorldlyContainer, ILiquidT
 	private IStillRecipe currentRecipe;
 	private FluidStack bufferedLiquid;
 
-	public TileStill() {
-		super(FactoryTiles.STILL.tileType(), 1100, 8000);
+	public TileStill(BlockPos pos, BlockState state) {
+		super(FactoryTiles.STILL.tileType(), pos, state, 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
 		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidInputs(level.getRecipeManager()));

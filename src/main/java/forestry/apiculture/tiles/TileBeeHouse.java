@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.network.NetworkHooks;
 
@@ -37,8 +38,8 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	private final IBeeListener beeListener;
 	private final InventoryBeeHousing beeInventory;
 
-	public TileBeeHouse() {
-		super(ApicultureTiles.BEE_HOUSE.tileType(), "bee.house");
+	public TileBeeHouse(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.BEE_HOUSE.tileType(), pos, state, "bee.house");
 		this.beeListener = new DefaultBeeListener();
 
 		beeInventory = new InventoryBeeHousing(12);

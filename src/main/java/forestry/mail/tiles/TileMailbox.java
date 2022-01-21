@@ -20,6 +20,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.authlib.GameProfile;
 
@@ -37,8 +38,8 @@ import forestry.mail.gui.ContainerMailbox;
 
 public class TileMailbox extends TileBase {
 
-	public TileMailbox() {
-		super(MailTiles.MAILBOX.tileType());
+	public TileMailbox(BlockPos pos, BlockState state) {
+		super(MailTiles.MAILBOX.tileType(), pos, state);
 		setInternalInventory(new InventoryAdapter(POBox.SLOT_SIZE, "Letters").disableAutomation());
 	}
 

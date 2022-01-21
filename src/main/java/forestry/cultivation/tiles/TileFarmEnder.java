@@ -1,16 +1,18 @@
 package forestry.cultivation.tiles;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmEnder extends TilePlanter {
-	public TileFarmEnder() {
-		super(CultivationTiles.ENDER.tileType(), ForestryFarmIdentifier.ENDER);
+	public TileFarmEnder(BlockPos pos, BlockState state) {
+		super(CultivationTiles.ENDER.tileType(), pos, state, ForestryFarmIdentifier.ENDER);
 	}
 
 	@Override

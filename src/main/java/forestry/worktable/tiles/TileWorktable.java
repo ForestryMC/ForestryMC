@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -54,8 +55,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	@Nullable
 	private MemorizedRecipe currentRecipe;
 
-	public TileWorktable() {
-		super(WorktableTiles.WORKTABLE.tileType());
+	public TileWorktable(BlockPos pos, BlockState state) {
+		super(WorktableTiles.WORKTABLE.tileType(), pos, state);
 		setInternalInventory(new InventoryWorktable(this));
 
 		craftingDisplay = new InventoryGhostCrafting<>(this, 10);

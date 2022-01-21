@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -31,8 +32,8 @@ public class TileMillRainmaker extends TileMill {
 	private int duration;
 	private boolean reverse;
 
-	public TileMillRainmaker() {
-		super(FactoryTiles.RAINMAKER.tileType());
+	public TileMillRainmaker(BlockPos pos, BlockState state) {
+		super(FactoryTiles.RAINMAKER.tileType(), pos, state);
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}

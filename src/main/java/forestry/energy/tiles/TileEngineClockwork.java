@@ -42,8 +42,8 @@ public class TileEngineClockwork extends TileEngine {
 	private float tension = 0.0f;
 	private short delay = 0;
 
-	public TileEngineClockwork() {
-		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+	public TileEngineClockwork(BlockPos pos, BlockState state) {
+		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), pos, state, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	@Override

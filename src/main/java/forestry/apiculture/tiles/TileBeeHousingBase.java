@@ -12,6 +12,7 @@ package forestry.apiculture.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -53,8 +54,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// CLIENT
 	private int breedingProgressPercent = 0;
 
-	protected TileBeeHousingBase(BlockEntityType<?> type, String hintKey) {
-		super(type);
+	protected TileBeeHousingBase(BlockEntityType<?> type, BlockPos pos, BlockState state, String hintKey) {
+		super(type, pos, state);
 		this.hintKey = hintKey;
 		this.beeLogic = BeeManager.beeRoot.createBeekeepingLogic(this);
 

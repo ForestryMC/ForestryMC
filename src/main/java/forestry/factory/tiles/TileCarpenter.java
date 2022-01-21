@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -72,8 +73,8 @@ public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiq
 		return getInternalInventory().getItem(InventoryCarpenter.SLOT_BOX);
 	}
 
-	public TileCarpenter() {
-		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
+	public TileCarpenter(BlockPos pos, BlockState state) {
+		super(FactoryTiles.CARPENTER.tileType(), pos, state, 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getLevel().getRecipeManager()));
 
@@ -268,6 +269,6 @@ public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiq
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerCarpenter(windowId, player.inventory, this);
+		return new ContainerCarpenter(windowId, player.getInventory(), this);
 	}
 }

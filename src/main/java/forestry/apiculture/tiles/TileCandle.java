@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.tiles;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -25,8 +26,8 @@ public class TileCandle extends BlockEntity {
 	private int colour;
 	private boolean lit;
 
-	public TileCandle() {
-		super(ApicultureTiles.CANDLE.tileType());
+	public TileCandle(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.CANDLE.tileType(), pos, state);
 	}
 
 	@Override

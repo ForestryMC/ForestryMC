@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import java.io.IOException;
 import java.util.Optional;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -50,8 +51,8 @@ public class TileEscritoire extends TileBase implements WorldlyContainer, ISlotP
 	private final EscritoireGame game = new EscritoireGame();
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
-	public TileEscritoire() {
-		super(CoreTiles.ESCRITOIRE.tileType());
+	public TileEscritoire(BlockPos pos, BlockState state) {
+		super(CoreTiles.ESCRITOIRE.tileType(), pos, state);
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 

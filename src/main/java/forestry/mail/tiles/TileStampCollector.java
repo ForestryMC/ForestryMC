@@ -10,12 +10,14 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
@@ -27,8 +29,8 @@ import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
 
 public class TileStampCollector extends TileBase implements Container {
-	public TileStampCollector() {
-		super(MailTiles.STAMP_COLLECTOR.tileType());
+	public TileStampCollector(BlockPos pos, BlockState state) {
+		super(MailTiles.STAMP_COLLECTOR.tileType(), pos, state);
 		setInternalInventory(new InventoryStampCollector(this));
 	}
 

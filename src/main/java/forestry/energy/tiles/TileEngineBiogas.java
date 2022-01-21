@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,8 +56,8 @@ public class TileEngineBiogas extends TileEngine implements WorldlyContainer, IL
 
 	private boolean shutdown; // true if the engine is too cold and needs to warm itself up.
 
-	public TileEngineBiogas() {
-		super(EnergyTiles.BIOGAS_ENGINE.tileType(), "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
+	public TileEngineBiogas(BlockPos pos, BlockState state) {
+		super(EnergyTiles.BIOGAS_ENGINE.tileType(), pos, state, "engine.bronze", Constants.ENGINE_BRONZE_HEAT_MAX, 300000);
 
 		setInternalInventory(new InventoryEngineBiogas(this));
 

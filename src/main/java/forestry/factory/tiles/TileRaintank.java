@@ -66,8 +66,8 @@ public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidT
 	// client
 	private int fillingProgress;
 
-	public TileRaintank() {
-		super(FactoryTiles.RAIN_TANK.tileType());
+	public TileRaintank(BlockPos pos, BlockState state) {
+		super(FactoryTiles.RAIN_TANK.tileType(), pos, state);
 		setInternalInventory(new InventoryRaintank(this));
 
 		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY).setFilters(Fluids.WATER);

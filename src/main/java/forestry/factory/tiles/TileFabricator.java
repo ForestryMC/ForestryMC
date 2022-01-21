@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -66,8 +67,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	private int heat = 0;
 	private int meltingPoint = 0;
 
-	public TileFabricator() {
-		super(FactoryTiles.FABRICATOR.tileType(), 1100, 3300);
+	public TileFabricator(BlockPos pos, BlockState state) {
+		super(FactoryTiles.FABRICATOR.tileType(), pos, state, 1100, 3300);
 		setEnergyPerWorkCycle(200);
 		craftingInventory = new InventoryGhostCrafting<>(this, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 		setInternalInventory(new InventoryFabricator(this));

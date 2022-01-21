@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import java.io.IOException;
 import java.util.Collection;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -49,8 +50,8 @@ public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 	private final int ashForItem;
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
-	public TileEnginePeat() {
-		super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+	public TileEnginePeat(BlockPos pos, BlockState state) {
+		super(EnergyTiles.PEAT_ENGINE.tileType(), pos, state, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));

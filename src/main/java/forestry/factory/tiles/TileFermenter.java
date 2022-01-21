@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -65,8 +66,8 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 	private int fuelTotalTime = 0;
 	private int fuelCurrentFerment = 0;
 
-	public TileFermenter() {
-		super(FactoryTiles.FERMENTER.tileType(), 2000, 8000);
+	public TileFermenter(BlockPos pos, BlockState state) {
+		super(FactoryTiles.FERMENTER.tileType(), pos, state, 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 

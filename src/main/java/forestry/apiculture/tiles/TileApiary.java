@@ -22,6 +22,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.network.NetworkHooks;
 
@@ -44,8 +45,8 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	private final InventoryApiary inventory = new InventoryApiary();
 
-	public TileApiary() {
-		super(ApicultureTiles.APIARY.tileType(), "apiary");
+	public TileApiary(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.APIARY.tileType(), pos, state, "apiary");
 		setInternalInventory(inventory);
 	}
 

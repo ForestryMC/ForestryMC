@@ -79,8 +79,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 		logic = properties.getLogic(this.mode == BlockPlanter.Mode.MANUAL);
 	}
 
-	protected TilePlanter(BlockEntityType type, String identifier) {
-		super(type, 150, 1500);
+	protected TilePlanter(BlockEntityType type, BlockPos pos, BlockState state, String identifier) {
+		super(type, pos, state, 150, 1500);
 		this.properties = Preconditions.checkNotNull(FarmRegistry.getInstance().getProperties(identifier));
 		mode = BlockPlanter.Mode.MANAGED;
 		setInternalInventory(inventory = new InventoryPlanter(this));

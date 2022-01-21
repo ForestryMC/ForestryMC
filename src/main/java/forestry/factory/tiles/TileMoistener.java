@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -71,8 +72,8 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 	@Nullable
 	private ItemStack pendingProduct;
 
-	public TileMoistener() {
-		super(FactoryTiles.MOISTENER.tileType());
+	public TileMoistener(BlockPos pos, BlockState state) {
+		super(FactoryTiles.MOISTENER.tileType(), pos, state);
 		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 		tankManager = new TankManager(this, resourceTank);

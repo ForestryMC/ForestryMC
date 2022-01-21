@@ -14,6 +14,7 @@ import com.google.common.base.Preconditions;
 
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,8 +53,8 @@ public class TileTrader extends TileBase implements IOwnedTile {
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 	private IMailAddress address;
 
-	public TileTrader() {
-		super(MailTiles.TRADER.tileType());
+	public TileTrader(BlockPos pos, BlockState state) {
+		super(MailTiles.TRADER.tileType(), pos, state);
 		address = new MailAddress();
 		setInternalInventory(new InventoryTradeStation());
 	}

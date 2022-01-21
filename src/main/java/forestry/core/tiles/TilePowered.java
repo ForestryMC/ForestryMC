@@ -13,6 +13,7 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -53,8 +54,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(BlockEntityType<?> type, int maxTransfer, int capacity) {
-		super(type);
+	protected TilePowered(BlockEntityType<?> type, BlockPos pos, BlockState state, int maxTransfer, int capacity) {
+		super(type, pos, state);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 

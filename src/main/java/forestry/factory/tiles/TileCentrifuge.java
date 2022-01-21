@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Stack;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -61,8 +62,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyC
 
 	private final Stack<ItemStack> pendingProducts = new Stack<>();
 
-	public TileCentrifuge() {
-		super(FactoryTiles.CENTRIFUGE.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
+	public TileCentrifuge(BlockPos pos, BlockState state) {
+		super(FactoryTiles.CENTRIFUGE.tileType(), pos, state, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryCentrifuge(this));
 		craftPreviewInventory = new ResultContainer();
 	}

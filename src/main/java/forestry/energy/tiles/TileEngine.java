@@ -13,6 +13,7 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -62,8 +63,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected final EnergyManager energyManager;
 	private final String hintKey;
 
-	protected TileEngine(BlockEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
-		super(type);
+	protected TileEngine(BlockEntityType<?> type, BlockPos pos, BlockState state, String hintKey, int maxHeat, int maxEnergy) {
+		super(type, pos, state);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);

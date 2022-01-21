@@ -13,6 +13,7 @@ package forestry.climatology.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -64,8 +65,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 
-	public TileHabitatFormer() {
-		super(ClimatologyTiles.HABITAT_FORMER.tileType(), 1200, 10000);
+	public TileHabitatFormer(BlockPos pos, BlockState state) {
+		super(ClimatologyTiles.HABITAT_FORMER.tileType(), pos, state, 1200, 10000);
 		this.transformer = new ClimateTransformer(this);
 		setInternalInventory(new InventoryHabitatFormer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.hygroregulatorManager.getRecipeFluids(level.getRecipeManager()));

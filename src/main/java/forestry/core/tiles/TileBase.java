@@ -26,8 +26,8 @@ import forestry.core.blocks.IBlockType;
 
 public abstract class TileBase extends TileForestry {
 
-	public TileBase(BlockEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileBase(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+		super(tileEntityTypeIn, pos, state);
 	}
 
 	public void openGui(ServerPlayer player, BlockPos pos) {

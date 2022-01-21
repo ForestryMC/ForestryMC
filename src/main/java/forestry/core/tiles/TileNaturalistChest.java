@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,8 +45,8 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 	public float prevLidAngle;
 	private int numPlayersUsing;
 
-	public TileNaturalistChest(BlockEntityType type, IForestrySpeciesRoot speciesRoot) {
-		super(type);
+	public TileNaturalistChest(BlockEntityType type, BlockPos pos, BlockState state, IForestrySpeciesRoot speciesRoot) {
+		super(type, pos, state);
 		this.speciesRoot = speciesRoot;
 		setInternalInventory(new InventoryNaturalistChest(this, speciesRoot));
 	}

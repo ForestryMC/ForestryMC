@@ -13,6 +13,7 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -69,8 +70,8 @@ public class TileSqueezer extends TilePowered implements ISocketable, WorldlyCon
 	@Nullable
 	private ISqueezerRecipe currentRecipe;
 
-	public TileSqueezer() {
-		super(FactoryTiles.SQUEEZER.tileType(), 1100, Constants.MACHINE_MAX_ENERGY);
+	public TileSqueezer(BlockPos pos, BlockState state) {
+		super(FactoryTiles.SQUEEZER.tileType(), pos, state, 1100, Constants.MACHINE_MAX_ENERGY);
 		this.inventory = new InventorySqueezer(this);
 		setInternalInventory(this.inventory);
 		this.productTank = new StandardTank(Constants.PROCESSOR_TANK_CAPACITY, false, true);

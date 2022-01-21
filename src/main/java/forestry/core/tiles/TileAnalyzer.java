@@ -71,8 +71,8 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	/* CONSTRUCTOR */
-	public TileAnalyzer() {
-		super(CoreTiles.ANALYZER.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
+	public TileAnalyzer(BlockPos pos, BlockState state) {
+		super(CoreTiles.ANALYZER.tileType(), pos, state, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
