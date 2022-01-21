@@ -42,7 +42,7 @@ public class ContainerSolderingIron extends ContainerItemInventory<ItemInventory
 	}
 
 	public ContainerSolderingIron(int windowId, Player player, ItemInventorySolderingIron inventory) {
-		super(windowId, inventory, player.inventory, 8, 123, CoreContainers.SOLDERING_IRON.containerType());
+		super(windowId, inventory, player.getInventory(), 8, 123, CoreContainers.SOLDERING_IRON.containerType());
 
 		// Input
 		this.addSlot(new SlotFiltered(inventory, 0, 152, 12));

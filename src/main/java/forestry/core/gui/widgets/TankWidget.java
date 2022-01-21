@@ -187,7 +187,7 @@ public class TankWidget extends Widget {
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
 		Player player = manager.minecraft.player;
-		ItemStack itemstack = player.inventory.getCarried();
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		if (itemstack.isEmpty()) {
 			return;
 		}

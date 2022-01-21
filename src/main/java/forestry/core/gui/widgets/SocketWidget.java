@@ -71,8 +71,8 @@ public class SocketWidget extends Widget {
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		ItemStack itemstack = manager.minecraft.player.inventoryMenu.getCarried();
 
-		ItemStack itemstack = manager.minecraft.player.inventory.getCarried();
 		if (itemstack.isEmpty()) {
 			return;
 		}

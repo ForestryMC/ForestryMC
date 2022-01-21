@@ -3,18 +3,15 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 import java.awt.Insets;
 import java.util.Map;
-import java.util.function.Predicate;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
-
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
@@ -36,7 +33,7 @@ import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
 
-public class GuiElementFactory implements ISelectiveResourceReloadListener {
+public class GuiElementFactory implements ResourceManagerReloadListener {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
@@ -61,7 +58,7 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	}
 
 	@Override
-	public void onResourceManagerReload(ResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+	public void onResourceManagerReload(ResourceManager resourceManager) {
 		dominantStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
 		recessiveStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
 		guiStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
@@ -280,8 +277,8 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 			element.label("+")
 					.setStyle(GuiConstants.DEFAULT_STYLE)
 					.setAlign(Alignment.TOP_LEFT)
-				.setSize(10, 10)
-				.setLocation(x + 9, y + 1);
+					.setSize(10, 10)
+					.setLocation(x + 9, y + 1);
 		}
 	}
 

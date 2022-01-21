@@ -38,9 +38,7 @@ public abstract class SlotUtil {
 		if (mouseButton == 2) {
 			fillPhantomSlot(slot, ItemStack.EMPTY, mouseButton);
 		} else if (mouseButton == 0 || mouseButton == 1) {
-			Inventory playerInv = player.inventory;
-
-			ItemStack stackHeld = playerInv.getCarried();
+			ItemStack stackHeld = player.inventoryMenu.getCarried();
 
 			if (stackSlot.isEmpty()) {
 				if (!stackHeld.isEmpty() && slot.mayPlace(stackHeld)) {
@@ -56,8 +54,7 @@ public abstract class SlotUtil {
 				}
 			}
 		} else if (mouseButton == 5) {
-			Inventory playerInv = player.inventory;
-			ItemStack stackHeld = playerInv.getCarried();
+			ItemStack stackHeld = player.inventoryMenu.getCarried();
 			if (!slot.hasItem()) {
 				fillPhantomSlot(slot, stackHeld, mouseButton);
 			}

@@ -272,6 +272,6 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerAnalyzer(windowId, player.inventory, this);
+		return new ContainerAnalyzer(windowId, player.getInventory(), this);
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -58,9 +59,9 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	protected void drawTooltips(PoseStack transform, int mouseY, int mouseX) {
-		Inventory playerInv = minecraft.player.inventory;
+		ItemStack carried = minecraft.player.inventoryMenu.getCarried();
 
-		if (playerInv.getCarried().isEmpty()) {
+		if (carried.isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);
 			RenderSystem.pushMatrix();
 			RenderSystem.translatef(guiLeft, guiTop, 0.0F);

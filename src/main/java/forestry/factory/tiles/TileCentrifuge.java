@@ -256,7 +256,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyC
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerCentrifuge(windowId, player.inventory, this);
+		return new ContainerCentrifuge(windowId, player.getInventory(), this);
 	}
 
 	public Container getCraftPreviewInventory() {

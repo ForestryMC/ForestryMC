@@ -83,7 +83,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerBeeHousing(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
+		return new ContainerBeeHousing(windowId, player.getInventory(), this, true, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override

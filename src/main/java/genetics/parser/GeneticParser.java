@@ -16,21 +16,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 
 import org.apache.commons.io.IOUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import genetics.api.GeneticsResourceType;
 import genetics.api.alleles.AlleleInfo;
@@ -39,7 +36,7 @@ import genetics.api.alleles.IAlleleType;
 import genetics.utils.NBTUtils;
 import io.netty.util.internal.StringUtil;
 
-public class GeneticParser implements ISelectiveResourceReloadListener {
+public class GeneticParser implements ResourceManagerReloadListener {
 	public final Map<ResourceLocation, IAlleleType> types = new HashMap<>();
 	public static final int PATH_PREFIX_LENGTH = "genetics/alleles/".length();
 	public static final int PATH_SUFFIX_LENGTH = ".json".length();
@@ -47,7 +44,7 @@ public class GeneticParser implements ISelectiveResourceReloadListener {
 	private static final Deque<ResourceLocation> loadingAlleles = Queues.newArrayDeque();
 
 	@Override
-	public void onResourceManagerReload(ResourceManager manager, Predicate<IResourceType> resourcePredicate) {
+	public void onResourceManagerReload(ResourceManager manager) {
 		if (!resourcePredicate.test(GeneticsResourceType.MUTATIONS)) {
 			return;
 		}

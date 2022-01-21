@@ -48,7 +48,7 @@ public class ResupplyHandler implements IResupplyHandler {
 			return;
 		}
 
-		for (ItemStack backpack : getBackpacks(player.inventory)) {
+		for (ItemStack backpack : getBackpacks(player.getInventory())) {
 			if (ItemBackpack.getMode(backpack) == BackpackMode.RESUPPLY) {
 				// Load their inventory
 				ItemBackpack backpackItem = (ItemBackpack) backpack.getItem();
@@ -76,7 +76,7 @@ public class ResupplyHandler implements IResupplyHandler {
 		if (itemstack.isEmpty()) {
 			return false;
 		}
-		Inventory playerInventory = player.inventory;
+		Inventory playerInventory = player.getInventory();
 		List<ItemStack> inventory = new LinkedList<>();
 		inventory.addAll(playerInventory.items);
 		inventory.addAll(playerInventory.offhand);

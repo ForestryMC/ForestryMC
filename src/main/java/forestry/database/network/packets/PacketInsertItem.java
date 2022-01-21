@@ -44,7 +44,7 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 			if (itemHandler == null) {
 				return;
 			}
-			ItemStack playerStack = player.inventory.getCarried();
+			ItemStack playerStack = player.inventoryMenu.getCarried();
 			ItemStack itemStack = playerStack.copy();
 
 			if (single) {
@@ -54,10 +54,10 @@ public class PacketInsertItem extends ForestryPacket implements IForestryPacketS
 			if (single && remaining.isEmpty()) {
 				playerStack.shrink(1);
 				if (playerStack.isEmpty()) {
-					player.inventory.setCarried(ItemStack.EMPTY);
+					player.inventoryMenu.setCarried(ItemStack.EMPTY);
 				}
 			} else {
-				player.inventory.setCarried(remaining);
+				player.inventoryMenu.setCarried(remaining);
 			}
 
 			if (container instanceof ContainerDatabase) {

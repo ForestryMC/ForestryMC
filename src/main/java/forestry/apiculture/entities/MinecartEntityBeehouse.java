@@ -92,7 +92,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerMinecartBeehouse(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
+		return new ContainerMinecartBeehouse(windowId, player.getInventory(), this, false, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
 	@Override

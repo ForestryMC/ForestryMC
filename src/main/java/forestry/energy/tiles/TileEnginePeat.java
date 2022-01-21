@@ -309,6 +309,6 @@ public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerEnginePeat(windowId, player.inventory, this);
+		return new ContainerEnginePeat(windowId, player.getInventory(), this);
 	}
 }

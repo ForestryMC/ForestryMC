@@ -27,6 +27,6 @@ public class ItemImprinter extends ItemWithGui {
 
 	@Override
 	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
-		return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
+		return new ContainerImprinter(windowId, player.getInventory(), new ItemInventoryImprinter(player, heldItem));
 	}
 }

@@ -30,6 +30,6 @@ public class ItemCatalogue extends ItemWithGui {
 	@Nullable
 	@Override
 	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
-		return new ContainerCatalogue(windowId, player.inventory);
+		return new ContainerCatalogue(windowId, player.getInventory());
 	}
 }

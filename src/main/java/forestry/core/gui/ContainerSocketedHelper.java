@@ -64,7 +64,7 @@ public class ContainerSocketedHelper<T extends BlockEntity & ISocketable> implem
 		toSocket.setCount(1);
 		tile.setSocket(slot, toSocket);
 
-		ItemStack stack = player.inventory.getCarried();
+		ItemStack stack = player.inventoryMenu.getCarried();
 		stack.shrink(1);
 		player.broadcastCarriedItem();
 
@@ -86,12 +86,12 @@ public class ContainerSocketedHelper<T extends BlockEntity & ISocketable> implem
 		}
 
 		// Not sufficient space in player's inventory. failed to stow.
-		if (!InventoryUtil.stowInInventory(socket, player.inventory, false)) {
+		if (!InventoryUtil.stowInInventory(socket, player.getInventory(), false)) {
 			return;
 		}
 
 		tile.setSocket(slot, ItemStack.EMPTY);
-		InventoryUtil.stowInInventory(socket, player.inventory, true);
+		InventoryUtil.stowInInventory(socket, player.getInventory(), true);
 		itemstack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(p.getUsedItemHand()));    //TODO onBreak
 		player.broadcastCarriedItem();
 

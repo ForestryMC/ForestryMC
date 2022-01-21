@@ -57,7 +57,7 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 	@Override
 	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
-		return new ContainerNaturalistBackpack(windowId, player.inventory, inventory, 0);    //TODO init on first page? Or is this server desync?
+		return new ContainerNaturalistBackpack(windowId, player.getInventory(), inventory, 0);    //TODO init on first page? Or is this server desync?
 	}
 
 	//TODO see if this can be deduped. Given we pass in the held item etc.

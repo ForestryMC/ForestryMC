@@ -19,7 +19,7 @@ public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer>
 	}
 
 	public ContainerAlyzer(int windowId, ItemInventoryAlyzer inventory, Player player) {
-		super(windowId, inventory, player.inventory, 43, 156, CoreContainers.ALYZER.containerType());
+		super(windowId, inventory, player.getInventory(), 43, 156, CoreContainers.ALYZER.containerType());
 
 		final int xPosLeftSlots = 223;
 

@@ -127,7 +127,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		ItemStack stack = gui.getMinecraft().player.inventory.getCarried();
+		ItemStack stack = gui.getMinecraft().player.inventoryMenu.getCarried();
 		if (!stack.isEmpty()) {
 			Optional<IIndividual> optional = RootUtils.getIndividual(stack);
 			if (optional.isPresent()) {

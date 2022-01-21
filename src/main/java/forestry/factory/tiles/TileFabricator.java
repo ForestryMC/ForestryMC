@@ -321,6 +321,6 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerFabricator(windowId, player.inventory, this);
+		return new ContainerFabricator(windowId, player.getInventory(), this);
 	}
 }

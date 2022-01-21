@@ -103,7 +103,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventory.getCarried().isEmpty()) {
+		if (mouseButton != 0 && mouseButton != 1 && mouseButton != 2 || !manager.minecraft.player.inventoryMenu.getCarried().isEmpty()) {
 			return;
 		}
 		GuiDatabase gui = (GuiDatabase) manager.gui;
@@ -135,7 +135,7 @@ public class WidgetDatabaseSlot extends Widget {
 		if (!isMouseOver(mouseX, mouseY)
 				|| ignoreMouseUp
 				|| eventType != 0 && eventType != 1
-				|| manager.minecraft.player.inventory.getCarried().isEmpty()) {
+				|| manager.minecraft.player.inventoryMenu.getCarried().isEmpty()) {
 			ignoreMouseUp = false;
 			return false;
 		}

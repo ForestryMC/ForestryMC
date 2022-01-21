@@ -46,7 +46,7 @@ public class SpeciesSelectionElement extends GuiElement {
 		this.transformer = transformer;
 		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			PlayerEntity player = Minecraft.getInstance().player;
-			ItemStack itemstack = player.inventory.getCarried();
+			ItemStack itemstack = player.inventoryMenu.getCarried();
 			if (itemstack.isEmpty()) {
 				return;
 			}
@@ -100,7 +100,7 @@ public class SpeciesSelectionElement extends GuiElement {
 	@Override
 	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
 		Player player = Minecraft.getInstance().player;
-		ItemStack itemstack = player.inventory.getCarried();
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		if (itemstack.isEmpty()) {
 			return false;
 		}

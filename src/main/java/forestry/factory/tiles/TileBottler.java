@@ -359,6 +359,6 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerBottler(windowId, player.inventory, this);
+		return new ContainerBottler(windowId, player.getInventory(), this);
 	}
 }

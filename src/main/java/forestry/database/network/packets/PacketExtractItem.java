@@ -46,7 +46,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 			int invIndex = data.readInt();
 			byte flags = data.readByte();
 
-			if (!player.inventory.getCarried().isEmpty()) {
+			if (!player.inventoryMenu.getCarried().isEmpty()) {
 				return;
 			}
 
@@ -75,7 +75,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 				//Clone the item with the maximal count
 				ItemStack extracted = itemStack.copy();
 				extracted.setCount(maxItemCount);
-				player.inventory.setCarried(extracted);
+				player.inventoryMenu.setCarried(extracted);
 
 				if (container instanceof ContainerDatabase) {
 					((ContainerDatabase) container).sendContainerToListeners();
@@ -108,7 +108,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 					//Extract the item
 					extracted = itemHandler.extractItem(invIndex, count, false);
 
-					player.inventory.setCarried(extracted);
+					player.inventoryMenu.setCarried(extracted);
 
 					player.broadcastCarriedItem();
 				}

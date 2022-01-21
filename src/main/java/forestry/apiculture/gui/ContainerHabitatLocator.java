@@ -31,7 +31,7 @@ public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventor
 	}
 
 	public ContainerHabitatLocator(int windowId, Player player, ItemInventoryHabitatLocator inventory) {
-		super(windowId, inventory, player.inventory, 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
+		super(windowId, inventory, player.getInventory(), 8, 102, ApicultureContainers.HABITAT_LOCATOR.containerType());
 
 		// Energy
 		this.addSlot(new SlotFiltered(inventory, 2, 152, 8));

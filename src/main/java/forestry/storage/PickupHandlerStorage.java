@@ -38,7 +38,7 @@ public class PickupHandlerStorage implements IPickupHandler {
 		// Make sure to top off manually placed itemstacks in player inventory first
 		topOffPlayerInventory(player, itemstack);
 
-		for (ItemStack pack : player.inventory.items) {
+		for (ItemStack pack : player.getInventory().items) {
 			if (itemstack.isEmpty()) {
 				break;
 			}
@@ -65,8 +65,8 @@ public class PickupHandlerStorage implements IPickupHandler {
 
 		// Add to player inventory first, if there is an incomplete stack in
 		// there.
-		for (int i = 0; i < player.inventory.getContainerSize(); i++) {
-			ItemStack inventoryStack = player.inventory.getItem(i);
+		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+			ItemStack inventoryStack = player.getInventory().getItem(i);
 			// We only add to existing stacks.
 			if (inventoryStack.isEmpty()) {
 				continue;

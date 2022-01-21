@@ -34,7 +34,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	}
 
 	public ContainerEscritoire(int id, Player player, TileEscritoire tile) {
-		super(id, CoreContainers.ESCRITOIRE.containerType(), player.inventory, tile, 34, 153);
+		super(id, CoreContainers.ESCRITOIRE.containerType(), player.getInventory(), tile, 34, 153);
 
 		// Analyze slot
 		addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));

@@ -44,7 +44,7 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void handlePipetteClickClient(int slot, Player player) {
-		ItemStack itemstack = player.inventory.getCarried();
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		if (itemstack.getItem() instanceof IToolPipette) {
 			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
 		}
@@ -52,7 +52,7 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 
 	@Override
 	public void handlePipetteClick(int slot, ServerPlayer player) {
-		ItemStack itemstack = player.inventory.getCarried();
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		Item held = itemstack.getItem();
 		if (!(held instanceof IToolPipette)) {
 			return;
@@ -69,13 +69,13 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setCarried(fluidHandlerItem.getContainer());
+					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
 					player.broadcastCarriedItem();
 				} else {//TODO: Test if this works
 					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setCarried(fluidHandlerItem.getContainer());
+					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
 					player.broadcastCarriedItem();
 				}
 			} else {
@@ -84,7 +84,7 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 					if (tank instanceof FluidTank) {
 						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
 						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
-						player.inventory.setCarried(fluidHandlerItem.getContainer());
+						player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
 						player.broadcastCarriedItem();
 					}
 				}

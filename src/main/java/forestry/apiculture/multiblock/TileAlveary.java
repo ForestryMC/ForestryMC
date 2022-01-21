@@ -222,7 +222,7 @@ public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlv
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerAlveary(windowId, player.inventory, this);
+		return new ContainerAlveary(windowId, player.getInventory(), this);
 	}
 
 	@Override

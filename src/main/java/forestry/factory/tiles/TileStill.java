@@ -209,7 +209,7 @@ public class TileStill extends TilePowered implements WorldlyContainer, ILiquidT
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerStill(windowId, player.inventory, this);
+		return new ContainerStill(windowId, player.getInventory(), this);
 	}
 
 }

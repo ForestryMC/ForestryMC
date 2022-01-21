@@ -32,7 +32,7 @@ public class ContainerImprinter extends ContainerItemInventory<ItemInventoryImpr
 		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 		Player player = playerInv.player;
 		ItemInventoryImprinter inv = new ItemInventoryImprinter(player, player.getItemInHand(hand));
-		return new ContainerImprinter(windowId, player.inventory, inv);
+		return new ContainerImprinter(windowId, player.getInventory(), inv);
 	}
 
 	public ContainerImprinter(int windowId, Inventory inventoryplayer, ItemInventoryImprinter inventory) {
