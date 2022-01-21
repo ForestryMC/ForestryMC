@@ -5,15 +5,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
-import net.minecraftforge.common.ToolType;
-
 public class BlockCharcoal extends Block {
 
 	public BlockCharcoal() {
 		super(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
 				.strength(5.0f, 10.0f)
-				.sound(SoundType.STONE)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(1));
+				.sound(SoundType.STONE));
 	}
 }

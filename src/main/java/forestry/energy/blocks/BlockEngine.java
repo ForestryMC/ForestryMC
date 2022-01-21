@@ -13,35 +13,30 @@ package forestry.energy.blocks;
 import javax.annotation.Nullable;
 import java.util.EnumMap;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-import forestry.core.config.Preference;
-import net.minecraftforge.common.ToolType;
-
-import forestry.api.core.ForestryAPI;
 import forestry.core.blocks.BlockBase;
+import forestry.core.config.Preference;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
 import forestry.energy.tiles.TileEngine;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	private static final EnumMap<Direction, VoxelShape> SHAPE_FOR_DIRECTIONS = new EnumMap<>(Direction.class);
@@ -56,7 +51,7 @@ public class BlockEngine extends BlockBase<BlockTypeEngine> {
 	}
 
 	public BlockEngine(BlockTypeEngine blockType) {
-		super(blockType, Properties.of(Material.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(0));
+		super(blockType, Properties.of(Material.METAL));
 	}
 
 	@Override

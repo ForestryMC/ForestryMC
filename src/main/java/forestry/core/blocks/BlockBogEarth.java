@@ -12,21 +12,20 @@ package forestry.core.blocks;
 
 import java.util.Random;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
 
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.ToolType;
 
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
@@ -42,9 +41,7 @@ public class BlockBogEarth extends Block {
 		super(Block.Properties.of(Material.DIRT)
 				.randomTicks()
 				.strength(0.5f)
-				.sound(SoundType.GRAVEL)
-				.harvestTool(ToolType.SHOVEL)
-				.harvestLevel(0));
+				.sound(SoundType.GRAVEL));
 
 		registerDefaultState(this.getStateDefinition().any().setValue(MATURITY, 0));
 	}

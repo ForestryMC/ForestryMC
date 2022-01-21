@@ -13,21 +13,19 @@ package forestry.farming.blocks;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockStructure;
 import forestry.farming.tiles.TileFarmControl;
@@ -53,10 +51,7 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-		super(Block.Properties.of(Material.STONE)
-				.strength(1.0f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+		super(Block.Properties.of(Material.STONE).strength(1.0f));
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 		registerDefaultState(this.getStateDefinition().any().setValue(STATE, State.PLAIN));

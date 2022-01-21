@@ -2,8 +2,6 @@ package forestry.core.features;
 
 import net.minecraft.world.item.Item;
 
-import net.minecraftforge.common.ToolType;
-
 import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
 import forestry.core.circuits.EnumCircuitBoardType;
@@ -64,8 +62,8 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> CARTON = REGISTRY.item(ItemForestry::new, "carton");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_PICKAXE = REGISTRY.item(ItemForestry::new, "broken_bronze_pickaxe");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_SHOVEL = REGISTRY.item(ItemForestry::new, "broken_bronze_shovel");
-	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), 1f, -2.8f, (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
-	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), 1.5f, -3.0f, (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
+	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), 1f, -2.8f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
+	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), 1.5f, -3.0f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_SHOVEL = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_SHOVEL.stack()), "kit_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_PICKAXE = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_PICKAXE.stack()), "kit_pickaxe");
 

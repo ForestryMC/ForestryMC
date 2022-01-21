@@ -13,14 +13,10 @@ package forestry.mail.blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 
-import net.minecraftforge.common.ToolType;
-
 import forestry.core.blocks.BlockBase;
 
 public class BlockMail extends BlockBase<BlockTypeMail> {
 	public BlockMail(BlockTypeMail blockType) {
-		super(blockType, Block.Properties.of(Material.METAL)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+		super(blockType, Block.Properties.of(Material.METAL));
 	}
 }

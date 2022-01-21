@@ -12,14 +12,10 @@ package forestry.arboriculture.blocks;
 
 import net.minecraft.world.level.material.Material;
 
-import net.minecraftforge.common.ToolType;
-
 import forestry.core.blocks.BlockBase;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockArboriculture extends BlockBase<BlockTypeArboricultureTesr> {
 	public BlockArboriculture(BlockTypeArboricultureTesr type) {
-		super(type, Properties.of(Material.WOOD).harvestLevel(0).harvestTool(ToolType.AXE));
+		super(type, Properties.of(Material.WOOD));
 	}
 }

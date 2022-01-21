@@ -1,10 +1,8 @@
 package forestry.apiculture.features;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.Item;
-
-import net.minecraftforge.common.ToolType;
 
 import forestry.api.apiculture.hives.IHiveRegistry;
 import forestry.api.core.ItemGroups;
@@ -39,7 +37,7 @@ public class ApicultureBlocks {
 
 	public static final FeatureBlockGroup<BlockApiculture, BlockTypeApiculture> BASE = REGISTRY.blockGroup(BlockApiculture::new, BlockTypeApiculture.values()).item((block) -> new ItemBlockForestry<>(block, new Item.Properties().tab(ItemGroups.tabApiculture))).create();
 
-	public static final FeatureBlock<BlockBase<BlockTypeApicultureTesr>, ItemBlockBase> BEE_CHEST = REGISTRY.block(() -> new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Block.Properties.of(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0)), (block) -> new ItemBlockBase<>(block, new Item.Properties().tab(ItemGroups.tabApiculture), BlockTypeApicultureTesr.APIARIST_CHEST), "bee_chest");
+	public static final FeatureBlock<BlockBase<BlockTypeApicultureTesr>, ItemBlockBase> BEE_CHEST = REGISTRY.block(() -> new BlockBase<>(BlockTypeApicultureTesr.APIARIST_CHEST, Block.Properties.of(Material.WOOD)), (block) -> new ItemBlockBase<>(block, new Item.Properties().tab(ItemGroups.tabApiculture), BlockTypeApicultureTesr.APIARIST_CHEST), "bee_chest");
 
 	public static final FeatureBlockGroup<BlockBeeHive, IHiveRegistry.HiveType> BEEHIVE = REGISTRY.blockGroup(BlockBeeHive::new, IHiveRegistry.HiveType.VALUES).itemWithType((block, type) -> new ItemBlockForestry<>(block, new Item.Properties().tab(type == IHiveRegistry.HiveType.SWARM ? null : ItemGroups.tabApiculture))).identifier("beehive").create();
 

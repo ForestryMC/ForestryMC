@@ -1,29 +1,23 @@
 package forestry.arboriculture.blocks;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.arboriculture.IWoodTyped;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockForestryPlank extends Block implements IWoodTyped {
 
 	public static Properties createWoodProperties(IWoodType woodType) {
 		return Block.Properties.of(Material.WOOD)
 				.strength(woodType.getHardness(), woodType.getHardness() * 1.5F)
-				.sound(SoundType.WOOD)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(0);
+				.sound(SoundType.WOOD);
 	}
 
 	private final boolean fireproof;

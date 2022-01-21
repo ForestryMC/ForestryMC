@@ -13,10 +13,8 @@ package forestry.core.blocks;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
 
-import net.minecraftforge.common.ToolType;
-
 public class BlockCore extends BlockBase<BlockTypeCoreTesr> {
 	public BlockCore(BlockTypeCoreTesr blockType) {
-		super(blockType, Block.Properties.of(Material.WOOD).harvestTool(ToolType.AXE).harvestLevel(0));
+		super(blockType, Block.Properties.of(Material.WOOD));
 	}
 }

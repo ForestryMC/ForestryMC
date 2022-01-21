@@ -12,24 +12,19 @@ package forestry.core.blocks;
 
 import java.util.Random;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.Level;
-
-import net.minecraftforge.common.ToolType;
 
 public class BlockResourceOre extends Block {
 	private final EnumResourceType type;
 
 	public BlockResourceOre(EnumResourceType type) {
-		super(Block.Properties.of(Material.STONE)
-				.strength(3f, 5f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(1));
+		super(Block.Properties.of(Material.STONE).strength(3f, 5f));
 		this.type = type;
 	}
 

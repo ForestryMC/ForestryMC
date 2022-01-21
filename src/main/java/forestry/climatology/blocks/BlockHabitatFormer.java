@@ -13,16 +13,15 @@ package forestry.climatology.blocks;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 
 import forestry.api.core.EnumTemperature;
 import forestry.climatology.tiles.TileHabitatFormer;
@@ -33,7 +32,7 @@ import forestry.core.tiles.TileUtil;
 
 public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implements IColoredBlock {
 	public BlockHabitatFormer() {
-		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.of(Material.METAL).strength(1.0f).harvestTool(ToolType.AXE).harvestLevel(0));
+		super(BlockTypeClimatology.HABITAT_FORMER, Block.Properties.of(Material.METAL).strength(1.0f));
 	}
 
 	@OnlyIn(Dist.CLIENT)
