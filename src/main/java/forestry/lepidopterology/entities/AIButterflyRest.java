@@ -108,7 +108,7 @@ public class AIButterflyRest extends AIButterflyBase {
 
 		BlockState blockStateBelow = entity.level.getBlockState(pos.below());
 		Block blockBelow = blockStateBelow.getBlock();
-		return isRest(blockBelow) || blockBelow.is(BlockTags.LEAVES);
+		return isRest(blockBelow) || blockStateBelow.is(BlockTags.LEAVES);
 	}
 
 	private static boolean isRest(Block block) {

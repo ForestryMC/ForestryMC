@@ -153,8 +153,7 @@ public class BlockAlveary extends BlockStructure {
 				state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 			} else {
 				BlockState blockStateAbove = world.getBlockState(pos.above());
-				Block blockAbove = blockStateAbove.getBlock();
-				if (blockAbove.is(BlockTags.WOODEN_SLABS)) {
+				if (blockStateAbove.is(BlockTags.WOODEN_SLABS)) {
 					List<Direction> blocksTouching = getBlocksTouching(world, pos);
 					switch (blocksTouching.size()) {
 						case 3:

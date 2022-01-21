@@ -66,7 +66,7 @@ public class BlockHumus extends Block {
 				BlockPos blockPos = pos.offset(i, 1, j);
 				BlockState state = world.getBlockState(blockPos);
 				Block block = state.getBlock();
-				if (block.is(BlockTags.LOGS) || block instanceof BonemealableBlock) {
+				if (state.is(BlockTags.LOGS) || block instanceof BonemealableBlock) {
 					return true;
 				}
 			}

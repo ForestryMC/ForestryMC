@@ -2,14 +2,15 @@ package forestry.factory.recipes.jei.carpenter;
 
 import java.util.Map.Entry;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.utils.NetworkUtil;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.network.packets.PacketRecipeTransferRequest;
@@ -18,16 +19,23 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredient;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<ContainerCarpenter> {
+public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<ContainerCarpenter, ICarpenterRecipe> {
 	@Override
 	public Class<ContainerCarpenter> getContainerClass() {
 		return ContainerCarpenter.class;
 	}
 
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerCarpenter container, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
+	public Class<ICarpenterRecipe> getRecipeClass() {
+		return ICarpenterRecipe.class;
+	}
+
+	@Nullable
+	@Override
+	public IRecipeTransferError transferRecipe(ContainerCarpenter container, ICarpenterRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			Container craftingInventory = container.getCarpenter().getCraftingInventory();
 			NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);

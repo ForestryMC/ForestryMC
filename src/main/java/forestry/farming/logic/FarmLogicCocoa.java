@@ -193,10 +193,9 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
 		// Determine what type we want to harvest.
 		BlockState blockState = world.getBlockState(position);
-		Block block = blockState.getBlock();
 
 		ICrop crop = null;
-		if (!block.is(BlockTags.LOGS)) {
+		if (!blockState.is(BlockTags.LOGS)) {
 			crop = cocoa.getCropAt(world, position, blockState);
 			if (crop == null) {
 				return crops;
@@ -255,7 +254,7 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 						crops.push(crop);
 						candidates.add(candidate);
 						seen.add(candidate);
-					} else if (blockState.getBlock().is(BlockTags.LOGS)) {
+					} else if (blockState.is(BlockTags.LOGS)) {
 						candidates.add(candidate);
 						seen.add(candidate);
 					}

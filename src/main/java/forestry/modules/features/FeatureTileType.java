@@ -13,12 +13,12 @@ import forestry.core.config.Constants;
 public class FeatureTileType<T extends BlockEntity> implements ITileTypeFeature<T> {
 	protected final String moduleID;
 	protected final String identifier;
-	private final Supplier<T> constructorTileEntity;
+	private final BlockEntityType.BlockEntitySupplier<T> constructorTileEntity;
 	@Nullable
 	private BlockEntityType<T> tileType;
 	private Supplier<Collection<? extends Block>> validBlocks;
 
-	public FeatureTileType(String moduleID, String identifier, Supplier<T> constructorTileEntity, Supplier<Collection<? extends Block>> validBlocks) {
+	public FeatureTileType(String moduleID, String identifier, BlockEntityType.BlockEntitySupplier<T> constructorTileEntity, Supplier<Collection<? extends Block>> validBlocks) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.constructorTileEntity = constructorTileEntity;

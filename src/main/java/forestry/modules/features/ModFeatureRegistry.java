@@ -29,6 +29,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import forestry.api.storage.IBackpackDefinition;
 import forestry.storage.ModuleBackpacks;
@@ -222,7 +223,7 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public <T extends BlockEntity> FeatureTileType<T> tile(Supplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+		public <T extends BlockEntity> FeatureTileType<T> tile(BlockEntityType.BlockEntitySupplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
 			return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
 		}
 

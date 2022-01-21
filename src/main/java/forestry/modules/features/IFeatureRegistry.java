@@ -18,6 +18,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import forestry.api.storage.IBackpackDefinition;
 import net.minecraftforge.event.RegistryEvent;
@@ -55,7 +56,7 @@ public interface IFeatureRegistry {
 
 	<B extends Block, R extends IBlockSubtype, C extends IBlockSubtype> FeatureBlockTable.Builder<B, R, C> blockTable(BiFunction<R, C, B> constructor, R[] rowTypes, C[] columnTypes);
 
-	<T extends BlockEntity> FeatureTileType<T> tile(Supplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
+	<T extends BlockEntity> FeatureTileType<T> tile(BlockEntityType.BlockEntitySupplier<T> constuctor, String identifier, Supplier<Collection<? extends Block>> validBlocks);
 
 	<C extends AbstractContainerMenu> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier);
 

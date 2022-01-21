@@ -5,6 +5,6 @@ package forestry.apiculture.flowers;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import forestry.core.utils.FieldsAreNonnullByDefault;

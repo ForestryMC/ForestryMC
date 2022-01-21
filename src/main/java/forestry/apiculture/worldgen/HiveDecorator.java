@@ -21,6 +21,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import forestry.api.core.EnumHumidity;
@@ -111,18 +112,22 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	public boolean place(WorldGenLevel seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		WorldGenLevel level = context.level();
+		Random rand = context.random();
+		BlockPos pos = context.origin();
+
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
-			decorateHivesDebug(seedReader, rand, pos, hives);
+			decorateHivesDebug(level, rand, pos, hives);
 			return false;
 		}
 
 		Collections.shuffle(hives, rand);
 
 		for (int tries = 0; tries < hives.size() / 2; tries++) {
-			Biome biome = seedReader.getBiome(pos);
+			Biome biome = level.getBiome(pos);
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 			for (Hive hive : hives) {
@@ -131,7 +136,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 						int x = pos.getX() + rand.nextInt(16);
 						int z = pos.getZ() + rand.nextInt(16);
 
-						if (tryGenHive(seedReader, rand, x, z, hive)) {
+						if (tryGenHive(level, rand, x, z, hive)) {
 							return true;
 						}
 					}

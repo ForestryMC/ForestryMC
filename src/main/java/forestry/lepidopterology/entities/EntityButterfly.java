@@ -292,7 +292,7 @@ public class EntityButterfly extends PathfinderMob implements IEntityButterfly {
 			BlockPos posBelow = pos.below();
 			BlockState blockStateBelow = level.getBlockState(posBelow);
 			Block blockBelow = blockStateBelow.getBlock();
-			if (blockBelow.is(BlockTags.LEAVES)) {
+			if (blockStateBelow.is(BlockTags.LEAVES)) {
 				weight += 2.5f;
 			} else if (blockBelow instanceof FenceBlock) {
 				weight += 1.0f;

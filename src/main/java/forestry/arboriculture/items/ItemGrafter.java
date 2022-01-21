@@ -63,7 +63,7 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 		Block block = state.getBlock();
 		return block instanceof LeavesBlock ||
 				state.getMaterial() == Material.LEAVES ||
-				block.is(BlockTags.LEAVES) ||
+				state.is(BlockTags.LEAVES) ||
 				super.isCorrectToolForDrops(state);
 	}
 
@@ -77,7 +77,7 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 
 	@Override
 	public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entity) {
-		if (!world.isClientSide && !state.getBlock().is(BlockTags.FIRE)) {
+		if (!world.isClientSide && !state.is(BlockTags.FIRE)) {
 			stack.hurtAndBreak(1, entity, (p_220036_0_) -> {
 				p_220036_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 			});

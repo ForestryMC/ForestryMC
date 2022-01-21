@@ -69,8 +69,7 @@ public class FarmableSapling implements IFarmable {
 
 	@Override
 	public ICrop getCropAt(Level world, BlockPos pos, BlockState blockState) {
-		Block block = blockState.getBlock();
-		if (!block.is(BlockTags.LOGS)) {
+		if (!blockState.is(BlockTags.LOGS)) {
 			return null;
 		}
 

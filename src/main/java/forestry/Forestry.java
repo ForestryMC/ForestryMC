@@ -99,6 +99,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -109,9 +110,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -278,8 +279,7 @@ public class Forestry {
 			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 			TextureManagerForestry.getInstance().init(spriteUploader);
 			ResourceManager resourceManager = minecraft.getResourceManager();
-			if (resourceManager instanceof ReloadableResourceManager) {
-				ReloadableResourceManager reloadableManager = (ReloadableResourceManager) resourceManager;
+			if (resourceManager instanceof ReloadableResourceManager reloadableManager) {
 				reloadableManager.registerReloadListener(ColourProperties.INSTANCE);
 				reloadableManager.registerReloadListener(GuiElementFactory.INSTANCE);
 				reloadableManager.registerReloadListener(spriteUploader);
@@ -352,7 +352,7 @@ public class Forestry {
 		@SubscribeEvent
 		@OnlyIn(Dist.CLIENT)
 		public void handleTextureRemap(TextureStitchEvent.Pre event) {
-			if (event.getMap().location() == InventoryMenu.BLOCK_ATLAS) {
+			if (event.getAtlas().location() == InventoryMenu.BLOCK_ATLAS) {
 				TextureManagerForestry.getInstance().registerSprites(ISpriteRegistry.fromEvent(event));
 				ModelBlockCached.clear();
 			}
@@ -360,8 +360,8 @@ public class Forestry {
 	}
 
 	@SubscribeEvent
-	public void serverStarting(FMLServerStartingEvent event) {
-		ModuleManager.serverStarting(event.getServer());
+	public void registerCommands(RegisterCommandsEvent event) {
+		ModuleManager.registerCommands(event.getDispatcher());
 	}
 
 	@Nullable

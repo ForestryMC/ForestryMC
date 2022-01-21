@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -238,9 +237,7 @@ public class ModuleManager implements IModuleManager {
 		return moduleHandler;
 	}
 
-	public static void serverStarting(MinecraftServer server) {
-		CommandDispatcher<CommandSourceStack> dispatcher = server.getCommands().getDispatcher();
-
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
 		loadedModules.stream()
 				.map(IForestryModule::register)
 				.filter(Objects::nonNull)

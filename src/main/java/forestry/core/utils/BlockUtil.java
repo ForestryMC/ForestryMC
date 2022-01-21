@@ -83,8 +83,7 @@ public abstract class BlockUtil {
 			return false;
 		}
 		BlockState state = world.getBlockState(pos);
-		Block block = state.getBlock();
-		return block.is(logTag);
+		return state.is(logTag);
 	}
 
 	public static boolean isBreakableBlock(Level world, BlockPos pos) {

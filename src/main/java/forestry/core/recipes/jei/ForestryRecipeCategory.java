@@ -1,5 +1,6 @@
 package forestry.core.recipes.jei;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -17,8 +18,8 @@ public abstract class ForestryRecipeCategory<T extends IRecipeCategoryExtension>
 	}
 
 	@Override
-	public String getTitle() {
-		return localizedName;
+	public Component getTitle() {
+		return new TranslatableComponent(localizedName);
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class GrafterLootModifier extends LootModifier {
 			return generatedLoot;
 		}
 		Player player = (Player) entity;
-		if (generatedLoot.stream().noneMatch((stack) -> stack.getItem().is(ItemTags.SAPLINGS))) {
+		if (generatedLoot.stream().noneMatch((stack) -> stack.is(ItemTags.SAPLINGS))) {
 			handleLoot(generatedLoot, player, harvestingTool, state, context);
 		}
 		harvestingTool.hurt(1, context.getRandom(), (ServerPlayer) player);
