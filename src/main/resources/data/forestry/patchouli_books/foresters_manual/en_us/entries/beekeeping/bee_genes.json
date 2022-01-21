@@ -1,0 +1,37 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.genes",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:bee_larvae_ge{Genome:{Chromosomes:[{UID1:\"forestry.speciesDiligent\",UID0:\"forestry.speciesDiligent\",Slot:0b}]}}",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes1",
+      "anchor": 1
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes2",
+      "anchor": 2
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes3",
+      "anchor": 3
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes4",
+      "anchor": 4
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes5",
+      "anchor": 5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.genes6",
+      "anchor": 6
+    }
+  ]
+}

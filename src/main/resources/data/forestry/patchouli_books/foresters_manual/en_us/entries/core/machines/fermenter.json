@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:fermenter",
+  "name": "for.gui.book.patchouli.entry.core.machine.fermenter",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:fermenter",
+      "text": "for.gui.book.patchouli.entry.core.machine.fermenter1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.machine.fermenter2"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.swarmer",
+  "category": "forestry:alveary",
+  "icon": "forestry:alveary_swarmer",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:alveary_swarmer",
+      "text": ""
+    },
+    {
+      "type": "patchouli:text",
+      "text": ""
+    }
+  ]
+}

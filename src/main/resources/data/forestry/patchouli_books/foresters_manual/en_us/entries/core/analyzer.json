@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:analyzer",
+  "name": "for.gui.book.patchouli.entry.core.analyzer",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:analyzer",
+      "text": "for.gui.book.patchouli.entry.core.analyzer1"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:raintank",
+  "name": "for.gui.book.patchouli.entry.core.machine.raintank",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe":  "forestry:raintank",
+      "text": "for.gui.book.patchouli.entry.core.machine.raintank"
+    }
+  ]
+}

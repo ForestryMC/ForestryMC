@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:habitat_screen",
+  "name": "for.gui.book.patchouli.entry.habitat_former.habitat_screen",
+  "category": "forestry:habitat_former",
+  "pages": [
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:habitat_screen",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_screen1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_screen2"
+    }
+  ]
+}

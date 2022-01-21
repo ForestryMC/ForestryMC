@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:carpenter",
+  "name": "for.gui.book.patchouli.entry.core.machine.carpenter",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:carpenter",
+      "text": "for.gui.book.patchouli.entry.core.machine.carpenter1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.machine.carpenter2"
+    }
+  ]
+}

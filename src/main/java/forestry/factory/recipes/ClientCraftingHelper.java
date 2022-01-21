@@ -8,7 +8,7 @@ import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ClientCraftingHelper {
+class ClientCraftingHelper {
 	@OnlyIn(Dist.CLIENT)
 	private static final RecipeManager DUMMY = new RecipeManager();
 

@@ -1,0 +1,19 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.bees",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:bee_comb_honey",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.bees3"
+    }
+  ]
+}

@@ -40,6 +40,7 @@ import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
+import forestry.core.data.ForestryAdvancementProvider;
 import forestry.core.data.ForestryBackpackTagProvider;
 import forestry.core.data.ForestryBlockModelProvider;
 import forestry.core.data.ForestryBlockStateProvider;
@@ -254,6 +255,7 @@ public class Forestry {
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
 			generator.addProvider(blockTagsProvider);
+			generator.addProvider(new ForestryAdvancementProvider(generator));
 			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
 			generator.addProvider(new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
 			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));

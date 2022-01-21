@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.heater",
+  "category": "forestry:alveary",
+  "icon": "forestry:alveary_heater",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:alveary_heater",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.heater1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.heater2"
+    }
+  ]
+}

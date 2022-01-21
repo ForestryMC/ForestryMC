@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:rainmaker",
+  "name": "for.gui.book.patchouli.entry.core.machine.rainmaker",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:rainmaker",
+      "text": "for.gui.book.patchouli.entry.core.machine.rainmaker1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.machine.rainmaker2"
+    }
+  ]
+}

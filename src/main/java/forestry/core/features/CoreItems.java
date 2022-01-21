@@ -9,6 +9,7 @@ import forestry.core.ModuleCore;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
+import forestry.core.items.ForestersManualItem;
 import forestry.core.items.ItemAlyzer;
 import forestry.core.items.ItemArmorNaturalist;
 import forestry.core.items.ItemAssemblyKit;
@@ -33,6 +34,9 @@ import forestry.modules.features.ModFeatureRegistry;
 @FeatureProvider
 public class CoreItems {
 	private static final IFeatureRegistry REGISTRY = ModFeatureRegistry.get(ModuleCore.class);
+
+	/* Foresters' Manual */
+	public static final FeatureItem<ForestersManualItem> FORESTERS_MANUAL = REGISTRY.item(ForestersManualItem::new, "foresters_manual");
 
 	/* Fertilizer */
 	public static final FeatureItem<ItemForestry> COMPOST = REGISTRY.item(ItemForestry::new, "fertilizer_bio");

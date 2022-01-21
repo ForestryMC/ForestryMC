@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:squeezer",
+  "name": "for.gui.book.patchouli.entry.core.machine.squeezer",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:squeezer",
+      "text": "for.gui.book.patchouli.entry.core.machine.squeezer1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.machine.squeezer2"
+    }
+  ]
+}

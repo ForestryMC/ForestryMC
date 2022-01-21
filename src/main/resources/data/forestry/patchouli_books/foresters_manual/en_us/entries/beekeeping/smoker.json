@@ -1,0 +1,12 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.smoker",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:smoker",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:smoker",
+      "text": "for.gui.book.patchouli.entry.beekeeping.smoker1"
+    }
+  ]
+}

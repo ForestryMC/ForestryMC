@@ -40,3 +40,10 @@ license="GNU Lesser Public License v3"
     versionRange="[34.0.0,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.forestry]]
+	modId="patchouli"
+	mandatory=true
+	versionRange="[1.16.4-53,)"
+	ordering="NONE"
+	side="BOTH"

@@ -1,0 +1,26 @@
+{
+  "icon": "forestry:resource_ore_tin",
+  "name": "for.gui.book.patchouli.entry.core.ores",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.ores1"
+    },
+    {
+      "type": "spotlight",
+      "item": "forestry:resource_ore_apatite",
+      "text": "for.gui.book.patchouli.entry.core.ores2"
+    },
+    {
+      "type": "spotlight",
+      "item": "forestry:resource_ore_copper",
+      "text": "for.gui.book.patchouli.entry.core.ores3"
+    },
+    {
+      "type": "spotlight",
+      "item": "forestry:resource_ore_tin",
+      "text": "for.gui.book.patchouli.entry.core.ores4"
+    }
+  ]
+}

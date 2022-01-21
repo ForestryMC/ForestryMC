@@ -1,0 +1,16 @@
+{
+	"name": "for.gui.book.patchouli.entry.core.machine.still",
+	"icon": "forestry:still",
+	"category": "forestry:machines",
+	"pages": [
+		{
+			"type": "crafting",
+			"recipe": "forestry:still",
+			"text": "for.gui.book.patchouli.entry.core.machine.still1"
+		},
+		{
+			"type": "text",
+			"text": "for.gui.book.patchouli.entry.core.machine.still2"
+		}
+	]
+}

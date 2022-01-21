@@ -1,0 +1,11 @@
+{
+  "icon": "minecraft:redstone",
+  "name": "for.gui.book.patchouli.entry.habitat_former.climate_particles",
+  "category": "forestry:habitat_former",
+  "pages": [
+      {
+        "type": "text",
+        "text": "for.gui.book.patchouli.entry.habitat_former.climate_particles1"
+      }
+  ]
+}

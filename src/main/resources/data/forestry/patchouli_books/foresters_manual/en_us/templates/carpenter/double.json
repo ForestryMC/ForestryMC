@@ -1,0 +1,32 @@
+{
+  "include": [
+    {
+      "template": "forestry:carpenter/base",
+      "as": "recipe",
+      "using": {
+        "item": "#item"
+      },
+      "x": 0,
+      "y": 4
+    },
+    {
+      "template": "forestry:carpenter/base",
+      "as": "recipe2",
+      "using": {
+        "item": "#item2"
+      },
+      "x": 0,
+      "y": 84,
+      "guard": "#item2->iexists"
+    }
+  ],
+  "components": [
+    {
+      "type": "text",
+      "text": "#text",
+      "x": 0,
+      "y": 128,
+      "guard": "!#item2->iexists"
+    }
+  ]
+}

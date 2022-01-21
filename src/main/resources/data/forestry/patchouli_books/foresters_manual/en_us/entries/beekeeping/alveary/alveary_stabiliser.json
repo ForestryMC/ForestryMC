@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.stabiliser",
+  "category": "forestry:alveary",
+  "icon": "forestry:alveary_stabiliser",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:alveary_stabiliser",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.stabiliser1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.stabiliser2"
+    }
+  ]
+}

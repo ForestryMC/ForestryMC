@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve",
+  "category": "forestry:alveary",
+  "icon": "forestry:alveary_sieve",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:alveary_sieve",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.sieve2"
+    }
+  ]
+}

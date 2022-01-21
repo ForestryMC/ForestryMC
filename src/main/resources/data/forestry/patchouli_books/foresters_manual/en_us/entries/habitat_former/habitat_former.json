@@ -1,0 +1,24 @@
+{
+  "icon": "forestry:habitat_former",
+  "name": "for.gui.book.patchouli.entry.habitat_former.habitat_former",
+  "category": "forestry:habitat_former",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:habitat_former",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former2"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former3"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.habitat_former.habitat_former4"
+    }
+  ]
+}

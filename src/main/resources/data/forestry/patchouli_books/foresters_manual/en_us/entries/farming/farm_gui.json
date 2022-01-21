@@ -1,0 +1,31 @@
+{
+  "icon": "minecraft:glass",
+  "name": "for.gui.book.patchouli.entry.farming.farm_gui",
+  "category": "forestry:farming",
+  "pages": [
+    {
+      "type": "forestry:farm_gui",
+      "text": "for.gui.book.patchouli.entry.farming.farm_gui1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_gui2",
+      "anchor": 2
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_gui3",
+      "anchor": 3
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_gui4",
+      "anchor": 4
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_gui5",
+      "anchor": 5
+    }
+  ]
+}

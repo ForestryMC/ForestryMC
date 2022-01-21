@@ -30,6 +30,11 @@ repositories {
 		name "JEI"
 		url "https://dvs1.progwml6.com/files/maven"
 	}
+
+	maven {
+		name "Patchouli"
+		url "https://maven.blamejared.com/"
+	}
 }
 
 dependencies {
@@ -37,6 +42,9 @@ dependencies {
 
 	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
 	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
+
+	compileOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version:api")
+	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version")
 }
 
 java {
@@ -243,7 +251,7 @@ task publishModrinth(type: TaskModrinthUpload) {
 	projectId = project.modrinth_project
 	versionName = project.version
 	versionNumber = project.version
-	versionType = theChangelog.contains("[beta]") ? VersionType.BETA : VersionType.ALPHA
+	versionType = theChangelog?.contains("[beta]") ? VersionType.BETA : VersionType.ALPHA
 	uploadFile = jar
 	addGameVersion(project.minecraft_version)
 	addLoader("forge")

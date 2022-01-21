@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:fertilizer_compound",
+  "name": "for.gui.book.patchouli.entry.core.fertilizer_compound",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:fertilizer_ash",
+      "recipe2": "forestry:fertilizer_apatite"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.fertilizer_compound"
+    }
+  ]
+}

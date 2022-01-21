@@ -1,0 +1,20 @@
+{
+  "icon": "forestry:mailbox",
+  "name": "for.gui.book.patchouli.entry.mail.mailbox",
+  "category": "forestry:mail",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:mailbox",
+      "text": "for.gui.book.patchouli.entry.mail.mailbox1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.mail.mailbox2"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.mail.mailbox3"
+    }
+  ]
+}

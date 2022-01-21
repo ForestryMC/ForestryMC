@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:fertilizer_bio",
+  "name": "for.gui.book.patchouli.entry.core.compost",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:compost_wheat",
+      "recipe2": "forestry:compost_ash"
+    }
+  ]
+}
