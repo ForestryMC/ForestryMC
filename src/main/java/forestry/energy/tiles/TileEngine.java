@@ -245,8 +245,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag nbt) {
-		super.load(state, nbt);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
 		energyManager.read(nbt);
 
 		heat = nbt.getInt("EngineHeat");
@@ -257,14 +257,13 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public CompoundTag save(CompoundTag nbt) {
-		nbt = super.save(nbt);
+	public void saveAdditional(CompoundTag nbt) {
+		super.saveAdditional(nbt);
 		energyManager.write(nbt);
 
 		nbt.putInt("EngineHeat", heat);
 		nbt.putFloat("EngineProgress", progress);
 		nbt.putBoolean("ForceCooldown", forceCooldown);
-		return nbt;
 	}
 
 	/* NETWORK */

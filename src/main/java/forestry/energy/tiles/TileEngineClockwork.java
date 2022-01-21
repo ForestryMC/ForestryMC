@@ -71,17 +71,16 @@ public class TileEngineClockwork extends TileEngine {
 
 	/* LOADING & SAVING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tension = compoundNBT.getFloat("Wound");
 	}
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		compoundNBT.putFloat("Wound", tension);
-		return compoundNBT;
 	}
 
 	@Override

@@ -263,8 +263,8 @@ public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 
 	// / LOADING AND SAVING
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
 			CompoundTag fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
@@ -280,8 +280,8 @@ public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		if (!fuel.isEmpty()) {
 			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
@@ -290,7 +290,6 @@ public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 		compoundNBT.putInt("EngineBurnTime", burnTime);
 		compoundNBT.putInt("EngineTotalTime", totalBurnTime);
 		compoundNBT.putInt("AshProduction", ashProduction);
-		return compoundNBT;
 	}
 
 	@Override

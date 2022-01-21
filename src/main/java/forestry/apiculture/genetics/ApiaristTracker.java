@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IApiaristTracker;
@@ -32,8 +32,16 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	/**
 	 * Required for creation from map storage
 	 */
-	public ApiaristTracker(String s) {
-		super(s, ModuleApiculture.beekeepingMode);
+	public ApiaristTracker() {
+		super(ModuleApiculture.beekeepingMode);
+	}
+
+	public ApiaristTracker(CompoundTag tag) {
+		super(ModuleApiculture.beekeepingMode, tag);
+
+		queensTotal = tag.getInt("QueensTotal");
+		princessesTotal = tag.getInt("PrincessesTotal");
+		dronesTotal = tag.getInt("DronesTotal");
 	}
 
 	private int queensTotal = 0;
@@ -41,19 +49,7 @@ public class ApiaristTracker extends BreedingTracker implements IApiaristTracker
 	private int princessesTotal = 0;
 
 	@Override
-	public void load(CompoundTag compoundNBT) {
-
-		queensTotal = compoundNBT.getInt("QueensTotal");
-		princessesTotal = compoundNBT.getInt("PrincessesTotal");
-		dronesTotal = compoundNBT.getInt("DronesTotal");
-
-		super.load(compoundNBT);
-
-	}
-
-	@Override
 	public CompoundTag save(CompoundTag compoundnbt) {
-
 		compoundnbt.putInt("QueensTotal", queensTotal);
 		compoundnbt.putInt("PrincessesTotal", princessesTotal);
 		compoundnbt.putInt("DronesTotal", dronesTotal);

@@ -22,7 +22,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
@@ -52,7 +51,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-public abstract class TileForestry extends BlockEntity implements IStreamable, IErrorLogicSource, WorldlyContainer, IFilterSlotDelegate, ITitled, ILocatable, TickableBlockEntity, MenuProvider {
+public abstract class TileForestry extends BlockEntity implements IStreamable, IErrorLogicSource, WorldlyContainer, IFilterSlotDelegate, ITitled, ILocatable, MenuProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -86,7 +85,6 @@ public abstract class TileForestry extends BlockEntity implements IStreamable, I
 	}
 
 	// / UPDATING
-	@Override
 	public final void tick() {
 		tickHelper.onTick();
 
@@ -115,17 +113,15 @@ public abstract class TileForestry extends BlockEntity implements IStreamable, I
 
 	// / SAVING & LOADING
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 		inventory.read(data);
 	}
 
-
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 		inventory.write(data);
-		return data;
 	}
 
 	@Nullable

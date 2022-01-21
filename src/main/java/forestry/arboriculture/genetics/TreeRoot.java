@@ -21,16 +21,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.authlib.GameProfile;
 
@@ -97,7 +97,7 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	public int getSpeciesCount() {
 		if (treeSpeciesCount < 0) {
 			treeSpeciesCount = (int) AlleleUtils.filteredStream(TreeChromosomes.SPECIES)
-				.filter(IAlleleTreeSpecies::isCounted).count();
+					.filter(IAlleleTreeSpecies::isCounted).count();
 		}
 
 		return treeSpeciesCount;
@@ -224,8 +224,13 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 	}
 
 	@Override
-	public IBreedingTracker createTracker(String fileName) {
-		return new ArboristTracker(fileName);
+	public IBreedingTracker createTracker() {
+		return new ArboristTracker();
+	}
+
+	@Override
+	public IBreedingTracker createTracker(CompoundTag tag) {
+		return new ArboristTracker(tag);
 	}
 
 	@Override

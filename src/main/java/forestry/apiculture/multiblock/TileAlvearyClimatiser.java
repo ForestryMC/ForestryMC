@@ -78,19 +78,18 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		energyManager.read(compoundNBT);
 		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		energyManager.write(compoundNBT);
 		compoundNBT.putInt("Heating", workingTime);
-		return compoundNBT;
 	}
 
 	/* Network */

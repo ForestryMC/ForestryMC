@@ -66,17 +66,16 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		craftingDisplay.write(compoundNBT);
 		recipeMemory.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		craftingDisplay.read(compoundNBT);
 		recipeMemory = new RecipeMemory(compoundNBT);

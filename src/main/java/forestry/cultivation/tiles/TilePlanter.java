@@ -117,17 +117,16 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 		manager.write(data);
 		ownerHandler.write(data);
 		data.putInt("mode", mode.ordinal());
-		return data;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 		manager.read(data);
 		ownerHandler.read(data);
 		setManual(BlockPlanter.Mode.values()[data.getInt("mode")]);

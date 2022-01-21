@@ -58,17 +58,16 @@ public class TileEscritoire extends TileBase implements WorldlyContainer, ISlotP
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		game.read(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		game.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	/* GAME */

@@ -81,8 +81,8 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("BurnTime", burnTime);
 		compoundNBT.putInt("TotalTime", totalTime);
@@ -101,12 +101,11 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 			currentProduct.save(CompoundNBTP);
 			compoundNBT.put("CurrentProduct", CompoundNBTP);
 		}
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		burnTime = compoundNBT.getInt("BurnTime");
 		totalTime = compoundNBT.getInt("TotalTime");

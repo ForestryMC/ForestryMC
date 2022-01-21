@@ -10,14 +10,16 @@
  ******************************************************************************/
 package forestry.mail;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import com.mojang.authlib.GameProfile;
@@ -56,24 +58,36 @@ public class TradeStation extends SavedData implements ITradeStation, IInventory
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
 	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
+	@Nullable
 	private GameProfile owner;
+
+	@Nullable
 	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryTradeStation();
 
-	public TradeStation(GameProfile owner, IMailAddress address) {
-		super(SAVE_NAME + address);
+	public TradeStation(@Nullable GameProfile owner, IMailAddress address) {
 		if (address.getType() != EnumAddressee.TRADER) {
 			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}
+
 		this.owner = owner;
 		this.address = address;
 	}
 
-	@SuppressWarnings("unused") // required for WorldSavedData
-	public TradeStation(String savename) {
-		super(savename);
+	public TradeStation(CompoundTag tag) {
+		if (tag.contains("owner")) {
+			owner = NbtUtils.readGameProfile(tag.getCompound("owner"));
+		}
+
+		if (tag.contains("address")) {
+			address = new MailAddress(tag.getCompound("address"));
+		}
+
+		this.isVirtual = tag.getBoolean("VRT");
+		this.isInvalid = tag.getBoolean("IVL");
+		inventory.read(tag);
 	}
 
 	@Override
@@ -82,21 +96,6 @@ public class TradeStation extends SavedData implements ITradeStation, IInventory
 	}
 
 	// / SAVING & LOADING
-	@Override
-	public void load(CompoundTag compoundNBT) {
-		if (compoundNBT.contains("owner")) {
-			owner = NbtUtils.readGameProfile(compoundNBT.getCompound("owner"));
-		}
-
-		if (compoundNBT.contains("address")) {
-			address = new MailAddress(compoundNBT.getCompound("address"));
-		}
-
-		this.isVirtual = compoundNBT.getBoolean("VRT");
-		this.isInvalid = compoundNBT.getBoolean("IVL");
-		inventory.read(compoundNBT);
-	}
-
 	@Override
 	public CompoundTag save(CompoundTag compoundNBT) {
 		if (owner != null) {

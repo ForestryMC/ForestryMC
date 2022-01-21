@@ -70,8 +70,8 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		Optional<IAllele> optionalAllele = AlleleUtils.getAllele(compoundNBT.getString("UID"));
 		if (!optionalAllele.isPresent()) {
@@ -90,12 +90,11 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		compoundNBT.putString("UID", allele.getRegistryName().toString());
 		compoundNBT.putShort("MT", maturity);
 		compoundNBT.putFloat("SP", yield);
-		return compoundNBT;
 	}
 
 	/* UPDATING */

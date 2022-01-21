@@ -54,8 +54,8 @@ public class TileMillRainmaker extends TileMill {
 	//	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		charge = compoundNBT.getInt("Charge");
 		progress = compoundNBT.getFloat("Progress");
@@ -66,15 +66,14 @@ public class TileMillRainmaker extends TileMill {
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("Charge", charge);
 		compoundNBT.putFloat("Progress", progress);
 		compoundNBT.putInt("Stage", stage);
 		compoundNBT.putInt("Duration", duration);
 		compoundNBT.putBoolean("Reverse", reverse);
-		return compoundNBT;
 	}
 
 	public void addCharge(RainSubstrate substrate) {

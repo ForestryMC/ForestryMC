@@ -82,15 +82,14 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		compound = super.save(compound);
+	public void saveAdditional(CompoundTag compound) {
+		super.saveAdditional(compound);
 		tankManager.write(compound);
-		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
+	public void load(CompoundTag compound) {
+		super.load(compound);
 		tankManager.read(compound);
 		checkEmptyRecipe();
 		checkFillRecipe();

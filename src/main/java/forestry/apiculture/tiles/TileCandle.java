@@ -61,18 +61,17 @@ public class TileCandle extends BlockEntity {
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag tagRoot) {
-		super.load(state, tagRoot);
+	public void load(CompoundTag tagRoot) {
+		super.load(tagRoot);
 		colour = tagRoot.getInt("colour");
 		lit = tagRoot.getBoolean("lit");
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag tagRoot) {
-		tagRoot = super.save(tagRoot);
+	public void saveAdditional(CompoundTag tagRoot) {
+		super.saveAdditional(tagRoot);
 		tagRoot.putInt("colour", this.colour);
 		tagRoot.putBoolean("lit", this.lit);
-		return tagRoot;
 	}
 
 	public boolean isLit() {

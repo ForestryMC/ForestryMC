@@ -65,8 +65,8 @@ public class FluidContainerModel extends AbstractItemModel {
 		@Override
 		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 			return new FluidContainerModel(
-				bakery.getBakedModel(empty, modelTransform, spriteGetter),
-				bakery.getBakedModel(filled, modelTransform, spriteGetter)
+				bakery.bake(empty, modelTransform, spriteGetter),
+				bakery.bake(filled, modelTransform, spriteGetter)
 			);
 		}
 

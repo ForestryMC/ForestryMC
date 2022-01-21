@@ -59,11 +59,11 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> itemModels = new ImmutableMap.Builder<>();
 		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> blockModels = new ImmutableMap.Builder<>();
 		for (Map.Entry<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> entry : modelsBySpecies.entrySet()) {
-			BakedModel blockModel = bakery.getBakedModel(entry.getValue().getFirst(), BlockModelRotation.X0_Y0, spriteGetter);
+			BakedModel blockModel = bakery.bake(entry.getValue().getFirst(), BlockModelRotation.X0_Y0, spriteGetter);
 			if (blockModel != null) {
 				blockModels.put(entry.getKey(), blockModel);
 			}
-			BakedModel itemModel = bakery.getBakedModel(entry.getValue().getSecond(), BlockModelRotation.X0_Y0, spriteGetter);
+			BakedModel itemModel = bakery.bake(entry.getValue().getSecond(), BlockModelRotation.X0_Y0, spriteGetter);
 			if (itemModel != null) {
 				itemModels.put(entry.getKey(), itemModel);
 			}

@@ -105,8 +105,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		ripeningTime = compoundNBT.getShort(NBT_RIPENING);
 		damage = compoundNBT.getInt(NBT_DAMAGE);
@@ -125,8 +125,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt(NBT_RIPENING, getRipeningTime());
 		compoundNBT.putInt(NBT_DAMAGE, damage);
@@ -139,7 +139,6 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 			caterpillar.write(caterpillarNbt);
 			compoundNBT.put(NBT_CATERPILLAR, caterpillarNbt);
 		}
-		return compoundNBT;
 	}
 
 	@Override

@@ -63,9 +63,20 @@ public abstract class BreedingTracker extends SavedData implements IBreedingTrac
 	@Nullable
 	private Level world;
 
-	protected BreedingTracker(String s, String defaultModeName) {
-		super(s);
+	protected BreedingTracker(String defaultModeName) {
 		this.modeName = defaultModeName;
+	}
+
+	protected BreedingTracker(String defaultModeName, CompoundTag tag) {
+		this(defaultModeName);
+
+		if (tag.contains(MODE_NAME_KEY)) {
+			modeName = tag.getString(MODE_NAME_KEY);
+		}
+
+		readValuesFromNBT(tag, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
+		readValuesFromNBT(tag, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
+		readValuesFromNBT(tag, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
 	}
 
 	public void setUsername(@Nullable GameProfile username) {
@@ -140,19 +151,6 @@ public abstract class BreedingTracker extends SavedData implements IBreedingTrac
 	public void encodeToNBT(CompoundTag compound) {
 		save(compound);
 	}
-
-	@Override
-	public void load(CompoundTag CompoundNBT) {
-
-		if (CompoundNBT.contains(MODE_NAME_KEY)) {
-			modeName = CompoundNBT.getString(MODE_NAME_KEY);
-		}
-
-		readValuesFromNBT(CompoundNBT, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
-		readValuesFromNBT(CompoundNBT, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
-		readValuesFromNBT(CompoundNBT, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
-	}
-
 
 	@Override
 	public CompoundTag save(CompoundTag CompoundNBT) {

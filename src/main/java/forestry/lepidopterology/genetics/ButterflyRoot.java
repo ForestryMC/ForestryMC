@@ -204,8 +204,13 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 	}
 
 	@Override
-	public IBreedingTracker createTracker(String fileName) {
-		return new LepidopteristTracker(fileName);
+	public IBreedingTracker createTracker() {
+		return new LepidopteristTracker();
+	}
+
+	@Override
+	public IBreedingTracker createTracker(CompoundTag tag) {
+		return new LepidopteristTracker(tag);
 	}
 
 	@Override

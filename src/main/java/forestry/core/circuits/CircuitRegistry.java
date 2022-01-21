@@ -14,15 +14,13 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.circuits.ICircuitLibrary;
 import forestry.api.circuits.ICircuitRegistry;
 import forestry.core.features.CoreItems;
 
@@ -36,12 +34,6 @@ public class CircuitRegistry implements ICircuitRegistry {
 
 	static {
 		DUMMY_MAP.put("dummy", DUMMY_LAYOUT);
-	}
-
-	//TODO - dimensionsavedddatamanager? check later
-	@Override
-	public ICircuitLibrary getCircuitLibrary(ServerLevel world, String playerName) {
-		return world.getDataStorage().computeIfAbsent(() -> new CircuitLibrary(playerName), "CircuitLibrary_" + playerName);
 	}
 
 	/* CIRCUIT LAYOUTS */

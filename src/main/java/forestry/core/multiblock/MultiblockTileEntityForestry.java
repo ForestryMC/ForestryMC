@@ -12,18 +12,18 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,8 +53,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 
 		if (data.contains("owner")) {
 			CompoundTag ownerNbt = data.getCompound("owner");
@@ -65,8 +65,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 
 		if (this.owner != null) {
 			CompoundTag nbt = new CompoundTag();
@@ -75,7 +75,6 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 		}
 
 		getInternalInventory().write(data);
-		return data;
 	}
 
 	/* INVENTORY */

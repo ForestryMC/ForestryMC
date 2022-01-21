@@ -61,17 +61,15 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 
 		data.put("Logic", logic.write(new CompoundTag()));
-
-		return data;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 
 		logic.read(data.getCompound("Logic"));
 	}

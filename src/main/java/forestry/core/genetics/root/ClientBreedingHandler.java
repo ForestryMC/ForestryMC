@@ -23,8 +23,7 @@ public class ClientBreedingHandler extends ServerBreedingHandler {
 			return super.getTracker(rootUID, world, profile);
 		}
 		IBreedingTrackerHandler handler = BreedingTrackerManager.factories.get(rootUID);
-		String filename = handler.getFileName(profile);
-		T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker(filename));
+		T tracker = (T) trackerByUID.computeIfAbsent(rootUID, (key) -> handler.createTracker());
 		handler.populateTracker(tracker, Minecraft.getInstance().level, profile);
 		return tracker;
 	}

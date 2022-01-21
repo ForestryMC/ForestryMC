@@ -44,8 +44,8 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		energyManager.read(compoundNBT);
 
 		activationDelay = compoundNBT.getInt("ActivationDelay");
@@ -54,13 +54,12 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		energyManager.write(compoundNBT);
 
 		compoundNBT.putInt("ActivationDelay", activationDelay);
 		compoundNBT.putInt("PrevDelays", previousDelays);
-		return compoundNBT;
 	}
 
 	@Override

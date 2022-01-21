@@ -81,16 +81,15 @@ public class TileSqueezer extends TilePowered implements ISocketable, WorldlyCon
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		tankManager.write(compoundNBT);
 		sockets.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tankManager.read(compoundNBT);
 		sockets.read(compoundNBT);
 

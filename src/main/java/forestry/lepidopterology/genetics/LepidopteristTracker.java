@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 
 import forestry.api.genetics.IBreedingTracker;
@@ -25,8 +26,12 @@ public class LepidopteristTracker extends BreedingTracker implements ILepidopter
 	/**
 	 * Required for creation from map storage
 	 */
-	public LepidopteristTracker(String s) {
-		super(s, "NORMAL");
+	public LepidopteristTracker() {
+		super("NORMAL");
+	}
+
+	public LepidopteristTracker(CompoundTag tag) {
+		super("NORMAL", tag);
 	}
 
 	@Override

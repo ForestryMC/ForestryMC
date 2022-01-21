@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import net.minecraftforge.common.util.LazyOptional;
@@ -65,7 +65,11 @@ public class ClimateRoot implements IClimateRoot {
 	public IWorldClimateHolder getWorldClimate(Level world) {
 		//TODO - need to make sure this is only called server side...
 		DimensionDataStorage storage = ((ServerLevel) world).getDataStorage();
-		WorldClimateHolder holder = storage.computeIfAbsent(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
+		WorldClimateHolder holder = storage.computeIfAbsent(tag -> {
+			WorldClimateHolder h = new WorldClimateHolder(WorldClimateHolder.NAME);
+			h.load(tag);
+			return h;
+		}, () -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}

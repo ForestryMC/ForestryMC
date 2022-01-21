@@ -104,8 +104,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tankManager.read(compoundNBT);
 
 		transferTime = compoundNBT.getInt("TransferTime");
@@ -118,8 +118,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		compoundNBT.putInt("TransferTime", transferTime);
@@ -128,7 +128,6 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 			currentRecipe.getResource().writeToNBT(subcompound);
 			compoundNBT.put("CurrentLiquid", subcompound);
 		}
-		return compoundNBT;
 	}
 
 	/* ILIQUIDTANKCONTAINER */

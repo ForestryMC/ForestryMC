@@ -61,7 +61,7 @@ public class CocoonItemModel extends AbstractItemModel {
 			AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
 				ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
 				for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {
-					models.add(bakery.getBakedModel(allele.getCocoonItemModel(age), modelTransform, spriteGetter));
+					models.add(bakery.bake(allele.getCocoonItemModel(age), modelTransform, spriteGetter));
 				}
 				bakedModels.put(allele.getCocoonName(), models.build());
 			});

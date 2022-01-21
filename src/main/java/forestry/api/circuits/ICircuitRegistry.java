@@ -23,8 +23,6 @@ public interface ICircuitRegistry {
 	@Nullable
 	ICircuit getCircuit(String uid);
 
-	ICircuitLibrary getCircuitLibrary(ServerLevel world, String playerName);
-
 	/* LAYOUTS */
 	Map<String, ICircuitLayout> getRegisteredLayouts();
 

@@ -12,11 +12,11 @@ package forestry.mail;
 
 import java.util.LinkedHashMap;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.level.Level;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import forestry.api.mail.EnumPostage;
@@ -40,25 +40,18 @@ public class PostOffice extends SavedData implements IPostOffice {
 
 	// CONSTRUCTORS
 	public PostOffice() {
-		super(SAVE_NAME);
 	}
 
-	@SuppressWarnings("unused")
-	public PostOffice(String s) {
-		super(s);
+	public PostOffice(CompoundTag tag) {
+		for (int i = 0; i < collectedPostage.length; i++) {
+			if (tag.contains("CPS" + i)) {
+				collectedPostage[i] = tag.getInt("CPS" + i);
+			}
+		}
 	}
 
 	public void setWorld(ServerLevel world) {
 		refreshActiveTradeStations(world);
-	}
-
-	@Override
-	public void load(CompoundTag compoundNBT) {
-		for (int i = 0; i < collectedPostage.length; i++) {
-			if (compoundNBT.contains("CPS" + i)) {
-				collectedPostage[i] = compoundNBT.getInt("CPS" + i);
-			}
-		}
 	}
 
 	@Override

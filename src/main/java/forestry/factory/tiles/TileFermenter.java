@@ -81,8 +81,8 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("FermentationTime", fermentationTime);
 		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
@@ -91,12 +91,11 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 		compoundNBT.putInt("FuelCurrentFerment", fuelCurrentFerment);
 
 		tankManager.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		fermentationTime = compoundNBT.getInt("FermentationTime");
 		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");

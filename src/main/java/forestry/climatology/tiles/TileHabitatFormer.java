@@ -261,19 +261,17 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	/* Methods - SAVING & LOADING */
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 
 		tankManager.write(data);
 
 		data.put(TRANSFORMER_KEY, transformer.write(new CompoundTag()));
-
-		return data;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 
 		tankManager.read(data);
 

@@ -15,11 +15,11 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -57,16 +57,13 @@ public class PostRegistry implements IPostRegistry {
 
 	@Nullable
 	public static POBox getPOBox(ServerLevel world, IMailAddress address) {
-
 		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
 		}
 
 		//TODO  needs getOrCreate
-		POBox pobox = world.getDataStorage().get(() -> new POBox(address), POBox.SAVE_NAME + address);
-		if (pobox != null) {
-			cachedPOBoxes.put(address, pobox);
-		}
+		POBox pobox = world.getDataStorage().computeIfAbsent(POBox::new, () -> new POBox(address), POBox.SAVE_NAME + address);
+		cachedPOBoxes.put(address, pobox);
 		return pobox;
 	}
 
@@ -74,7 +71,8 @@ public class PostRegistry implements IPostRegistry {
 		POBox pobox = getPOBox(world, add);
 
 		if (pobox == null) {
-			pobox = world.getDataStorage().computeIfAbsent(() -> new POBox(add), POBox.SAVE_NAME + add);
+			pobox = world.getDataStorage().computeIfAbsent(POBox::new, () -> new POBox(add), POBox.SAVE_NAME + add);
+
 			pobox.setDirty();
 			cachedPOBoxes.put(add, pobox);
 
@@ -114,10 +112,10 @@ public class PostRegistry implements IPostRegistry {
 		}
 
 		//TODO again this should be altered to use getOrCreate. At the moment this may supply bad trade stations with no owner. Not sure how this code will handle that
-		TradeStation trade = world.getDataStorage().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
+		TradeStation trade = world.getDataStorage().computeIfAbsent(TradeStation::new, () -> new TradeStation(null, address), TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
-		if (trade != null && trade.isValid()) {
+		if (trade.isValid()) {
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
 			return trade;
@@ -131,7 +129,7 @@ public class PostRegistry implements IPostRegistry {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = world.getDataStorage().computeIfAbsent(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
+			trade = world.getDataStorage().computeIfAbsent(TradeStation::new, () -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
 			trade.setDirty();
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
@@ -164,7 +162,7 @@ public class PostRegistry implements IPostRegistry {
 			return cachedPostOffice;
 		}
 
-		PostOffice office = world.getDataStorage().computeIfAbsent(PostOffice::new, PostOffice.SAVE_NAME);
+		PostOffice office = world.getDataStorage().computeIfAbsent(PostOffice::new, PostOffice::new, PostOffice.SAVE_NAME);
 
 		office.setWorld(world);
 

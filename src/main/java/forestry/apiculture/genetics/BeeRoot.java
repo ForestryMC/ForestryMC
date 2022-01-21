@@ -18,24 +18,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import genetics.api.individual.IGenome;
-import genetics.api.individual.IGenomeWrapper;
-import genetics.api.individual.IIndividual;
-import genetics.api.organism.IOrganismType;
-import genetics.api.root.IRootContext;
-import genetics.api.root.IndividualRoot;
-
-import genetics.utils.AlleleUtils;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.apiculture.IBeeHousing;
@@ -57,6 +48,14 @@ import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.genetics.root.BreedingTrackerManager;
 import forestry.core.utils.Log;
+
+import genetics.api.individual.IGenome;
+import genetics.api.individual.IGenomeWrapper;
+import genetics.api.individual.IIndividual;
+import genetics.api.organism.IOrganismType;
+import genetics.api.root.IRootContext;
+import genetics.api.root.IndividualRoot;
+import genetics.utils.AlleleUtils;
 
 public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreedingTrackerHandler {
 
@@ -82,7 +81,7 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	public int getSpeciesCount() {
 		if (beeSpeciesCount < 0) {
 			beeSpeciesCount = (int) AlleleUtils.filteredStream(BeeChromosomes.SPECIES)
-				.filter(IAlleleBeeSpecies::isCounted).count();
+					.filter(IAlleleBeeSpecies::isCounted).count();
 		}
 
 		return beeSpeciesCount;
@@ -214,8 +213,13 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 	}
 
 	@Override
-	public IBreedingTracker createTracker(String fileName) {
-		return new ApiaristTracker(fileName);
+	public IBreedingTracker createTracker() {
+		return new ApiaristTracker();
+	}
+
+	@Override
+	public IBreedingTracker createTracker(CompoundTag tag) {
+		return new ApiaristTracker(tag);
 	}
 
 	@Override

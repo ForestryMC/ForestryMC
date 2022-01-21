@@ -244,8 +244,8 @@ public class TileEngineBiogas extends TileEngine implements WorldlyContainer, IL
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag nbt) {
-		super.load(state, nbt);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
 
 		if (nbt.contains("shutdown")) {
 			shutdown = nbt.getBoolean("shutdown");
@@ -254,11 +254,10 @@ public class TileEngineBiogas extends TileEngine implements WorldlyContainer, IL
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag nbt) {
-		nbt = super.save(nbt);
+	public void saveAdditional(CompoundTag nbt) {
+		super.saveAdditional(nbt);
 		nbt.putBoolean("shutdown", shutdown);
 		tankManager.write(nbt);
-		return nbt;
 	}
 
 	/* NETWORK */

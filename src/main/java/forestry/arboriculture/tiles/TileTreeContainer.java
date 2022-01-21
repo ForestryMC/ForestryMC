@@ -57,8 +57,8 @@ public abstract class TileTreeContainer extends BlockEntity implements IStreamab
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		if (compoundNBT.contains("ContainedTree")) {
 			containedTree = new Tree(compoundNBT.getCompound("ContainedTree"));
@@ -67,8 +67,8 @@ public abstract class TileTreeContainer extends BlockEntity implements IStreamab
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		if (containedTree != null) {
 			CompoundTag subcompound = new CompoundTag();
@@ -76,8 +76,6 @@ public abstract class TileTreeContainer extends BlockEntity implements IStreamab
 			compoundNBT.put("ContainedTree", subcompound);
 		}
 		ownerHandler.write(compoundNBT);
-
-		return compoundNBT;
 	}
 
 	@Override

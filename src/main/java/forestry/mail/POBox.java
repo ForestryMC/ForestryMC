@@ -14,10 +14,10 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import forestry.api.mail.EnumAddressee;
@@ -37,24 +37,19 @@ public class POBox extends SavedData implements Container {
 	private final InventoryAdapter letters = new InventoryAdapter(SLOT_SIZE, "Letters").disableAutomation();
 
 	public POBox(IMailAddress address) {
-		super(SAVE_NAME + address);
 		if (address.getType() != EnumAddressee.PLAYER) {
 			throw new IllegalArgumentException("POBox address must be a player");
 		}
+
 		this.address = address;
 	}
 
-	@SuppressWarnings("unused")
-	public POBox(String savename) {
-		super(savename);
-	}
-
-	@Override
-	public void load(CompoundTag compoundNBT) {
-		if (compoundNBT.contains("address")) {
-			this.address = new MailAddress(compoundNBT.getCompound("address"));
+	public POBox(CompoundTag tag) {
+		if (tag.contains("address")) {
+			this.address = new MailAddress(tag.getCompound("address"));
 		}
-		letters.read(compoundNBT);
+
+		letters.read(tag);
 	}
 
 	@Override

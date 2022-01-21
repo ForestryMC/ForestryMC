@@ -71,8 +71,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyC
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		compound = super.save(compound);
+	public void saveAdditional(CompoundTag compound) {
+		super.saveAdditional(compound);
 
 		sockets.write(compound);
 
@@ -87,12 +87,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyC
 			}
 		}
 		compound.put("PendingProducts", nbttaglist);
-		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
+	public void load(CompoundTag compound) {
+		super.load(compound);
 
 		ListTag nbttaglist = compound.getList("PendingProducts", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {

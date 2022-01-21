@@ -54,7 +54,7 @@ public class BackpackItemModel extends AbstractItemModel {
 				for (EnumBackpackType backpackType : EnumBackpackType.values()) {
 					ImmutableMap.Builder<BackpackMode, BakedModel> modeModels = new ImmutableMap.Builder<>();
 					for (BackpackMode mode : BackpackMode.values()) {
-						modeModels.put(mode, bakery.getBakedModel(backpackType.getLocation(mode)
+						modeModels.put(mode, bakery.bake(backpackType.getLocation(mode)
 							, modelTransform
 							, spriteGetter)
 						);

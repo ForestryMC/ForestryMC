@@ -46,16 +46,15 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void load(BlockState state, CompoundTag data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 		multiblockLogic.readFromNBT(data);
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 		multiblockLogic.write(data);
-		return data;
 	}
 
 	@Override

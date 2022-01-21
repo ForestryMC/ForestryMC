@@ -72,8 +72,8 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundTag compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		if (compoundNBT.contains("Caterpillar")) {
 			caterpillar = new Butterfly(compoundNBT.getCompound("Caterpillar"));
@@ -85,8 +85,8 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		CompoundTag subcompound = new CompoundTag();
 		caterpillar.write(subcompound);
@@ -97,7 +97,6 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 		compoundNBT.putInt("Age", age);
 		compoundNBT.putInt("CATMAT", maturationTime);
 		compoundNBT.putBoolean("isSolid", isSolid);
-		return compoundNBT;
 	}
 
 	@Override
