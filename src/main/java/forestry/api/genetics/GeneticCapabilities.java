@@ -6,7 +6,8 @@
 package forestry.api.genetics;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 import forestry.api.genetics.filter.IFilterLogic;
 
@@ -14,6 +15,5 @@ public class GeneticCapabilities {
 	/**
 	 * Capability for {@link IFilterLogic}.
 	 */
-	@CapabilityInject(IFilterLogic.class)
-	public static Capability<IFilterLogic> FILTER_LOGIC;
+	public static Capability<IFilterLogic> FILTER_LOGIC = CapabilityManager.get(new CapabilityToken<>() {});
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.blocks.BlockForestry;
 import forestry.core.tiles.TileUtil;

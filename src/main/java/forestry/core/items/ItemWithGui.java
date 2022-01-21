@@ -24,7 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.network.PacketBufferForestry;

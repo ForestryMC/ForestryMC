@@ -4,11 +4,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.util.LazyOptional;
 
 import genetics.api.alleles.Allele;
@@ -32,8 +33,7 @@ import genetics.api.root.IRootDefinition;
  */
 public class GeneticHelper {
 
-	@CapabilityInject(IOrganism.class)
-	public static Capability<IOrganism> ORGANISM;
+	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {});
 	public static final IOrganism<?> EMPTY = EmptyOrganism.INSTANCE;
 
 	private GeneticHelper() {

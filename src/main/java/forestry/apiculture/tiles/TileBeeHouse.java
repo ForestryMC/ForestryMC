@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.core.BlockPos;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;

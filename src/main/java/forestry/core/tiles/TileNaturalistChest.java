@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.core.gui.ContainerNaturalistInventory;

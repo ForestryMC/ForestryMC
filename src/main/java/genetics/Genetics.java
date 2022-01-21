@@ -2,19 +2,19 @@ package genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.nbt.Tag;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -45,10 +45,8 @@ public class Genetics {
 	/**
 	 * Capability for {@link IOrganism}.
 	 */
-	@CapabilityInject(IOrganism.class)
-	public static Capability<IOrganism> ORGANISM;
-	@CapabilityInject(IGeneTemplate.class)
-	public static Capability<IGeneTemplate> GENE_TEMPLATE;
+	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {});
+	public static Capability<IGeneTemplate> GENE_TEMPLATE = CapabilityManager.get(new CapabilityToken<>() {});
 
 	public Genetics() {
 		GeneticsAPI.apiInstance = ApiInstance.INSTANCE;

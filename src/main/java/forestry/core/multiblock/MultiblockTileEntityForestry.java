@@ -27,7 +27,7 @@ import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.core.ILocatable;
 import forestry.api.multiblock.IMultiblockLogic;

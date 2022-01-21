@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;

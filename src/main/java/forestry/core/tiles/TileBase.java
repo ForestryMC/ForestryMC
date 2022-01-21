@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;

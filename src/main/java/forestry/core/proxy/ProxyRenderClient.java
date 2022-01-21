@@ -50,7 +50,7 @@ import forestry.modules.IClientModuleHandler;
 
 import static net.minecraft.client.renderer.RenderTypeLookup.setRenderLayer;
 
-public clasnet.minecraft.client.renderer.ItemBlockRenderTypesents IClientModuleHandler {
+public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
 
 	@Override
 	public boolean fancyGraphicsEnabled() {

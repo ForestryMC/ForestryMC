@@ -26,7 +26,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.PlayerUtil;
