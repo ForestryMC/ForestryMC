@@ -46,6 +46,8 @@ import forestry.core.tiles.TileUtil;
 
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
+import org.jetbrains.annotations.Nullable;
+
 public class BlockBeeHive extends BaseEntityBlock {
 
 	private final HiveType type;
@@ -59,9 +61,10 @@ public class BlockBeeHive extends BaseEntityBlock {
 		this.type = type;
 	}
 
+	@Nullable
 	@Override
-	public BlockEntity newBlockEntity(BlockGetter world) {
-		return new TileHive();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileHive(pos, state);
 	}
 
 	@Override

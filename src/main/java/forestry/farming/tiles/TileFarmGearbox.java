@@ -12,6 +12,7 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
@@ -36,8 +37,8 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	private int previousDelays = 0;
 	private int workCounter;
 
-	public TileFarmGearbox() {
-		super(FarmingTiles.GEARBOX.tileType());
+	public TileFarmGearbox(BlockPos pos, BlockState state) {
+		super(FarmingTiles.GEARBOX.tileType(), pos, state);
 		energyManager = new EnergyManager(200, 10000);
 	}
 

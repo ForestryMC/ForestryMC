@@ -65,7 +65,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -273,11 +273,11 @@ public class FactoryJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		ISubtypeInterpreter subtypeInterpreter = itemStack -> {
+		IIngredientSubtypeInterpreter<ItemStack> subtypeInterpreter = (itemStack, context) -> {
 			LazyOptional<IFluidHandlerItem> fluidHandler = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
 			return fluidHandler.map(handler -> handler.getFluidInTank(0))
 					.map(fluid -> fluid.getFluid().getRegistryName().toString())
-					.orElse(ISubtypeInterpreter.NONE);
+					.orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
 		for (Item container : FluidsItems.CONTAINERS.itemArray()) {

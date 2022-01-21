@@ -3,6 +3,7 @@ package forestry.sorting.blocks;
 import javax.annotation.Nullable;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +27,7 @@ import forestry.core.blocks.BlockForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.TileGeneticFilter;
 
-public class BlockGeneticFilter extends BlockForestry {
+public class BlockGeneticFilter extends BlockForestry implements EntityBlock {
 	public static final BooleanProperty NORTH = BooleanProperty.create("north");
 	public static final BooleanProperty EAST = BooleanProperty.create("east");
 	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
@@ -148,7 +149,7 @@ public class BlockGeneticFilter extends BlockForestry {
 
 	@Override
 	@Nullable
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return new TileGeneticFilter();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileGeneticFilter(pos, state);
 	}
 }

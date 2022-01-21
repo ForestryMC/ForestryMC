@@ -41,8 +41,8 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	@Nullable
 	private GameProfile owner;
 
-	public MultiblockTileEntityForestry(BlockEntityType<?> tileEntityType, T multiblockLogic) {
-		super(tileEntityType, multiblockLogic);
+	public MultiblockTileEntityForestry(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, T multiblockLogic) {
+		super(tileEntityType, pos, state, multiblockLogic);
 	}
 
 	/**

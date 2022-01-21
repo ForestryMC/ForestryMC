@@ -3,12 +3,11 @@ package forestry.cultivation.blocks;
 import java.util.Locale;
 import java.util.Random;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -52,12 +51,13 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 	}
 
 	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		BlockEntity tile = super.createTileEntity(state, world);
-		if (tile instanceof TilePlanter) {
-			TilePlanter planter = (TilePlanter) tile;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		BlockEntity tile = super.newBlockEntity(pos, state);
+
+		if (tile instanceof TilePlanter planter) {
 			planter.setManual(getMode());
 		}
+
 		return tile;
 	}
 }

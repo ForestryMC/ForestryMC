@@ -12,29 +12,30 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -54,7 +55,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
+public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister, EntityBlock {
 	/**
 	 * use this instead of {@link net.minecraft.world.level.block.HorizontalDirectionalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
@@ -114,15 +115,9 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return getDefinition().createTileEntity(pos, state);
 	}
-
-	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return getDefinition().createTileEntity();
-	}
-
 
 	private IMachineProperties<?> getDefinition() {
 		return blockType.getMachineProperties();

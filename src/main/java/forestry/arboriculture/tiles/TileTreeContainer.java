@@ -51,8 +51,8 @@ public abstract class TileTreeContainer extends BlockEntity implements IStreamab
 	private ITree containedTree;
 	private final OwnerHandler ownerHandler = new OwnerHandler();
 
-	public TileTreeContainer(BlockEntityType<?> p_i48289_1_) {
-		super(p_i48289_1_);
+	public TileTreeContainer(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 	}
 
 	/* SAVING & LOADING */

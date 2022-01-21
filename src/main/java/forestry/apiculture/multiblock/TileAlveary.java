@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -61,8 +62,8 @@ import forestry.core.utils.RenderUtil;
 public class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing, IAlvearyComponent, IOwnedTile, IStreamableGui, ITitled, IClimatised {
 	private final String unlocalizedTitle;
 
-	public TileAlveary(BlockAlvearyType type) {
-		super(type.getTileType().tileType(), new MultiblockLogicAlveary());
+	public TileAlveary(BlockAlvearyType type, BlockPos pos, BlockState state) {
+		super(type.getTileType().tileType(), pos, state, new MultiblockLogicAlveary());
 		this.unlocalizedTitle = ApicultureBlocks.ALVEARY.get(type).getTranslationKey();
 	}
 

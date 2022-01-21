@@ -27,8 +27,8 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 
 	private final IFarmListener farmListener;
 
-	public TileFarmControl() {
-		super(FarmingTiles.CONTROL.tileType());
+	public TileFarmControl(BlockPos pos, BlockState state) {
+		super(FarmingTiles.CONTROL.tileType(), pos, state);
 		this.farmListener = new ControlFarmListener(this);
 	}
 

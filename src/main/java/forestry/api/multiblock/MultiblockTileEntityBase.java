@@ -24,8 +24,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> extends BlockEntity implements IMultiblockComponent {
 	private final T multiblockLogic;
 
-	public MultiblockTileEntityBase(BlockEntityType<?> tileEntityType, T multiblockLogic) {
-		super(tileEntityType);
+	public MultiblockTileEntityBase(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, T multiblockLogic) {
+		super(tileEntityType, pos, state);
 		this.multiblockLogic = multiblockLogic;
 	}
 

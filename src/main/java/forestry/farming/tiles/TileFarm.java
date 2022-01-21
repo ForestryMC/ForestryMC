@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,8 +43,8 @@ import forestry.farming.multiblock.MultiblockLogicFarm;
 
 public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent, ISocketable, IStreamableGui, IErrorLogicSource, IOwnedTile, ITitled {
 
-	protected TileFarm(BlockEntityType<?> tileEntityType) {
-		super(tileEntityType, new MultiblockLogicFarm());
+	protected TileFarm(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state) {
+		super(tileEntityType, pos, state, new MultiblockLogicFarm());
 	}
 
 	//TODO don't know

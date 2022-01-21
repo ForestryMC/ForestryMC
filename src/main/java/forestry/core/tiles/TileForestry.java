@@ -61,8 +61,8 @@ public abstract class TileForestry extends BlockEntity implements IStreamable, I
 	private final TickHelper tickHelper = new TickHelper();
 	private boolean needsNetworkUpdate = false;
 
-	public TileForestry(BlockEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileForestry(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+		super(tileEntityTypeIn, pos, state);
 	}
 
 	protected AdjacentTileCache getTileCache() {

@@ -11,6 +11,7 @@
 package forestry.lepidopterology.blocks;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -35,7 +36,9 @@ import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockSolidCocoon extends Block {
+import org.jetbrains.annotations.Nullable;
+
+public class BlockSolidCocoon extends Block implements EntityBlock {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
@@ -104,13 +107,8 @@ public class BlockSolidCocoon extends Block {
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return new TileCocoon(true);
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileCocoon(pos, state, true);
 	}
 
 	@Override

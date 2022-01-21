@@ -52,7 +52,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.client.model.SimpleModelTransform;
+import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -90,7 +90,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn) {
+		public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int p_173469_) {
 			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
 			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
 			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
@@ -103,7 +103,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 			float scale = 1F / 16F;
 			float sizeValue = size.getValue();
 			String identifier = species.getRegistryName().getPath();
-			ModelState transform = new SimpleModelTransform(getTransformations(sizeValue));//-0.03125F, 0.25F - sizeValue * 0.37F, -0.03125F + sizeValue * scale, sizeValue * 1.4F
+			ModelState transform = new SimpleModelState(getTransformations(sizeValue));//-0.03125F, 0.25F - sizeValue * 0.37F, -0.03125F + sizeValue * scale, sizeValue * 1.4F
 			bakedModel = new PerspectiveMapWrapper(new TRSRBakedModel(subModels.get(identifier), 0, 0, 0, 1), transform);
 			cache.put(Pair.of(identifier, sizeValue), bakedModel);
 			return bakedModel;

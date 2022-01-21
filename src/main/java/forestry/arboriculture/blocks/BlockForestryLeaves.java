@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -53,7 +54,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 
-public class BlockForestryLeaves extends BlockAbstractLeaves implements BonemealableBlock {
+public class BlockForestryLeaves extends BlockAbstractLeaves implements BonemealableBlock, EntityBlock {
 
 	public BlockForestryLeaves() {
 		super(Block.Properties.of(Material.LEAVES)
@@ -88,13 +89,8 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements Bonemeal
 
 	/* TILE ENTITY */
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return new TileLeaves();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileLeaves(pos, state);
 	}
 
 	@Override

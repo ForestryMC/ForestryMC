@@ -10,12 +10,15 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyPlain extends TileAlveary {
 
-	public TileAlvearyPlain() {
-		super(BlockAlvearyType.PLAIN);
+	public TileAlvearyPlain(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.PLAIN, pos, state);
 	}
 
 	@Override

@@ -99,8 +99,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private IEffectData[] effectData = new IEffectData[2];
 
-	public TileLeaves() {
-		super(ArboricultureTiles.LEAVES.tileType());
+	public TileLeaves(BlockPos pos, BlockState state) {
+		super(ArboricultureTiles.LEAVES.tileType(), pos, state);
 	}
 
 	/* SAVING & LOADING */

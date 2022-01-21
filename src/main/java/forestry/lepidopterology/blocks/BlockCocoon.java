@@ -13,6 +13,7 @@ package forestry.lepidopterology.blocks;
 import java.util.Random;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -38,7 +39,9 @@ import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.items.ItemButterflyGE;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockCocoon extends Block {
+import org.jetbrains.annotations.Nullable;
+
+public class BlockCocoon extends Block implements EntityBlock {
 	public static final VoxelShape BOUNDING_BOX = Block.box(0.3125F, 0.3125F, 0.3125F, 0.6875F, 1F, 0.6875F);
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;//TODO: Convert to ModelProperty and add Cocoon model
 
@@ -94,13 +97,8 @@ public class BlockCocoon extends Block {
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return new TileCocoon(false);
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileCocoon(pos, state, false);
 	}
 
 	@Override

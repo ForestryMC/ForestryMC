@@ -28,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntitySelector;
@@ -93,8 +92,8 @@ public class TileHive extends BlockEntity implements TickableBlockEntity, IHiveT
 	private boolean angry = false;
 	private int calmTime;
 
-	public TileHive() {
-		super(ApicultureTiles.HIVE.tileType());
+	public TileHive(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.HIVE.tileType(), pos, state);
 		inventory = new HiveBeeHousingInventory(this);
 		beeLogic = new WorldgenBeekeepingLogic(this);
 		errorLogic = ForestryAPI.errorStateRegistry.createErrorLogic();

@@ -20,22 +20,22 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.block.model.BlockModel;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.client.model.SimpleModelTransform;
+import net.minecraftforge.client.model.SimpleModelState;
 
 /**
  * Util methods used at the installation of the game or at the reloading or baking of resources like models or
@@ -113,8 +113,8 @@ public class ResourceUtil {
 		return renderItem.getItemModelShaper().getItemModel(stack);
 	}
 
-	public static SimpleModelTransform loadTransform(ResourceLocation location) {
-		return new SimpleModelTransform(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
+	public static SimpleModelState loadTransform(ResourceLocation location) {
+		return new SimpleModelState(PerspectiveMapWrapper.getTransforms(loadTransformFromJson(location)));
 	}
 
 	private static ItemTransforms loadTransformFromJson(ResourceLocation location) {

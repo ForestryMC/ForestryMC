@@ -21,6 +21,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -34,7 +35,7 @@ import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 
-public class BlockFarm extends BlockStructure {
+public class BlockFarm extends BlockStructure implements EntityBlock {
 
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
@@ -77,24 +78,14 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		switch (type) {
-			case GEARBOX:
-				return new TileFarmGearbox();
-			case HATCH:
-				return new TileFarmHatch();
-			case VALVE:
-				return new TileFarmValve();
-			case CONTROL:
-				return new TileFarmControl();
-			default:
-				return new TileFarmPlain();
-		}
-	}
-
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return switch (type) {
+			case GEARBOX -> new TileFarmGearbox(pos, state);
+			case HATCH -> new TileFarmHatch(pos, state);
+			case VALVE -> new TileFarmValve(pos, state);
+			case CONTROL -> new TileFarmControl(pos, state);
+			default -> new TileFarmPlain(pos, state);
+		};
 	}
 
 	@Override

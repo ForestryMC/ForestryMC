@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,8 +53,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	private final FilterLogic logic;
 	private final AdjacentInventoryCache inventoryCache;
 
-	public TileGeneticFilter() {
-		super(SortingTiles.GENETIC_FILTER.tileType());
+	public TileGeneticFilter(BlockPos pos, BlockState state) {
+		super(SortingTiles.GENETIC_FILTER.tileType(), pos, state);
 		this.inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 		this.logic = new FilterLogic(this, (logic1, server, player) -> sendToPlayers(server, player));
 		setInternalInventory(new InventoryFilter(this));
@@ -185,7 +186,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerGeneticFilter(windowId, player.inventory, this);
+		return new ContainerGeneticFilter(windowId, player.getInventory(), this);
 	}
 
 	@Override

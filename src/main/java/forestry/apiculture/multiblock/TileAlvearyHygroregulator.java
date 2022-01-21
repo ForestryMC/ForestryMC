@@ -12,6 +12,7 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -49,8 +50,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 	private IHygroregulatorRecipe currentRecipe;
 	private int transferTime;
 
-	public TileAlvearyHygroregulator() {
-		super(BlockAlvearyType.HYGRO);
+	public TileAlvearyHygroregulator(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.HYGRO, pos, state);
 
 		this.inventory = new InventoryHygroregulator(this);
 

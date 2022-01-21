@@ -12,9 +12,11 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,8 +38,8 @@ public class TileFarmHatch extends TileFarm implements WorldlyContainer, IFarmCo
 	private final AdjacentTileCache tileCache;
 	private final AdjacentInventoryCache inventoryCache;
 
-	public TileFarmHatch() {
-		super(FarmingTiles.HATCH.tileType());
+	public TileFarmHatch(BlockPos pos, BlockState state) {
+		super(FarmingTiles.HATCH.tileType(), pos, state);
 		this.tileCache = new AdjacentTileCache(this);
 		this.inventoryCache = new AdjacentInventoryCache(this, tileCache, tile -> !(tile instanceof TileFarm) && tile.getBlockPos().getY() < getBlockPos().getY());
 	}

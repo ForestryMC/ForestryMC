@@ -27,6 +27,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,7 +54,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 
-public class BlockAlveary extends BlockStructure {
+public class BlockAlveary extends BlockStructure implements EntityBlock {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
 
@@ -109,29 +110,16 @@ public class BlockAlveary extends BlockStructure {
 
 	@Nullable
 	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		switch (type) {
-			case SWARMER:
-				return new TileAlvearySwarmer();
-			case FAN:
-				return new TileAlvearyFan();
-			case HEATER:
-				return new TileAlvearyHeater();
-			case HYGRO:
-				return new TileAlvearyHygroregulator();
-			case STABILISER:
-				return new TileAlvearyStabiliser();
-			case SIEVE:
-				return new TileAlvearySieve();
-			case PLAIN:
-			default:
-				return new TileAlvearyPlain();
-		}
-	}
-
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return switch (type) {
+			case SWARMER -> new TileAlvearySwarmer(pos, state);
+			case FAN -> new TileAlvearyFan(pos, state);
+			case HEATER -> new TileAlvearyHeater(pos, state);
+			case HYGRO -> new TileAlvearyHygroregulator(pos, state);
+			case STABILISER -> new TileAlvearyStabiliser(pos, state);
+			case SIEVE -> new TileAlvearySieve(pos, state);
+			default -> new TileAlvearyPlain(pos, state);
+		};
 	}
 
 	public BlockState getNewState(TileAlveary tile) {

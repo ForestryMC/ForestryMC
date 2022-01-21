@@ -52,8 +52,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	// CLIENT
 	private boolean active;
 
-	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, IClimitiserDefinition definition) {
-		super(alvearyType);
+	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, BlockPos pos, BlockState state, IClimitiserDefinition definition) {
+		super(alvearyType, pos, state);
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 2000);

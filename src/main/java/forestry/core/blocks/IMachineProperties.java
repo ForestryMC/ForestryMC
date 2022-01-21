@@ -12,10 +12,12 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.core.tiles.TileForestry;
 
@@ -26,7 +28,7 @@ public interface IMachineProperties<T extends TileForestry> extends StringRepres
 	}
 
 	@Nullable
-	BlockEntity createTileEntity();
+	BlockEntity createTileEntity(BlockPos pos, BlockState state);
 
 	void setBlock(Block block);
 

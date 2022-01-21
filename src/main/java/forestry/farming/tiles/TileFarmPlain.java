@@ -21,8 +21,8 @@ import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingTiles;
 
 public class TileFarmPlain extends TileFarm {
-	public TileFarmPlain() {
-		super(FarmingTiles.PLAIN.tileType());
+	public TileFarmPlain(BlockPos pos, BlockState state) {
+		super(FarmingTiles.PLAIN.tileType(), pos, state);
 	}
 
 	@Override

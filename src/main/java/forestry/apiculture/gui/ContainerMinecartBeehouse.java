@@ -41,7 +41,7 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 		Player player = playerInv.player;
 		boolean hasFrames = buf.readBoolean();
 		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
-		return new ContainerMinecartBeehouse(windowId, player.inventory, e, hasFrames, icon);
+		return new ContainerMinecartBeehouse(windowId, player.getInventory(), e, hasFrames, icon);
 	}
 
 	public ContainerMinecartBeehouse(int windowId, Inventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {

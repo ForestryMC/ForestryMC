@@ -10,10 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;
@@ -35,8 +37,8 @@ public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.B
 	private final IBeeListener beeListener;
 	private final InventoryAlvearySieve inventory;
 
-	public TileAlvearySieve() {
-		super(BlockAlvearyType.SIEVE);
+	public TileAlvearySieve(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.SIEVE, pos, state);
 		this.inventory = new InventoryAlvearySieve(this);
 		this.beeListener = new AlvearySieveBeeListener(inventory);
 	}

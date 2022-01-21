@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Stack;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -47,8 +48,8 @@ public class TileAlvearySwarmer extends TileAlveary implements WorldlyContainer,
 	private final Stack<ItemStack> pendingSpawns = new Stack<>();
 	private boolean active;
 
-	public TileAlvearySwarmer() {
-		super(BlockAlvearyType.SWARMER);
+	public TileAlvearySwarmer(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.SWARMER, pos, state);
 		this.inventory = new InventorySwarmer(this);
 	}
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CocoaBlock;
@@ -38,8 +39,10 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 
+import org.jetbrains.annotations.Nullable;
+
 //eg    public static final Block COCOA = register("cocoa", new CocoaBlock(Block.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2F, 3.0F).sound(SoundType.WOOD)));
-public class BlockFruitPod extends CocoaBlock {
+public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 
 	public static List<BlockFruitPod> create() {
 		List<BlockFruitPod> blocks = new ArrayList<>();
@@ -117,13 +120,8 @@ public class BlockFruitPod extends CocoaBlock {
 	//	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
-		return new TileFruitPod();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileFruitPod(pos, state);
 	}
 
 	/* IGrowable */

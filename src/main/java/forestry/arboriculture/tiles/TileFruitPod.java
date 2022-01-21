@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.CocoaBlock;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.CocoaBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,8 +57,8 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 	private short maturity;
 	private float yield;
 
-	public TileFruitPod() {
-		super(ArboricultureTiles.PODS.tileType());
+	public TileFruitPod(BlockPos pos, BlockState state) {
+		super(ArboricultureTiles.PODS.tileType(), pos, state);
 	}
 
 	public void setProperties(IGenome genome, IAlleleFruit allele, float yield) {

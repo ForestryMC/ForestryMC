@@ -14,18 +14,18 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -58,12 +58,12 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 	private IButterfly caterpillar = ButterflyDefinition.CabbageWhite.createIndividual();
 	private boolean isSolid;
 
-	public TileCocoon() {
-		super(LepidopterologyTiles.COCOON.tileType());
+	public TileCocoon(BlockPos pos, BlockState state) {
+		super(LepidopterologyTiles.COCOON.tileType(), pos, state);
 	}
 
-	public TileCocoon(boolean isSolid) {
-		super(isSolid ? LepidopterologyTiles.SOLID_COCOON.tileType() : LepidopterologyTiles.COCOON.tileType());
+	public TileCocoon(BlockPos pos, BlockState state, boolean isSolid) {
+		super(isSolid ? LepidopterologyTiles.SOLID_COCOON.tileType() : LepidopterologyTiles.COCOON.tileType(), pos, state);
 		this.isSolid = isSolid;
 		if (isSolid) {
 			this.age = 2;
@@ -171,7 +171,7 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 
 		IGenome caterpillarGenome = caterpillar.getGenome();
 		int caterpillarMatureTime = Math
-			.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
+				.round((float) caterpillarGenome.getActiveValue(ButterflyChromosomes.LIFESPAN) / (caterpillarGenome.getActiveValue(ButterflyChromosomes.FERTILITY) * 2));
 
 		if (maturationTime >= caterpillarMatureTime) {
 			if (age < 2) {
@@ -204,9 +204,9 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 
 	private static void attemptButterflySpawn(Level world, IButterfly butterfly, BlockPos pos) {
 		Mob entityLiving = ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(),
-			pos.getX(), pos.getY() + 0.1f, pos.getZ());
+				pos.getX(), pos.getY() + 0.1f, pos.getZ());
 		Log.trace("A caterpillar '%s' hatched at %s/%s/%s.", butterfly.getDisplayName(), pos.getX(), pos.getY(),
-			pos.getZ());
+				pos.getZ());
 	}
 
 	@Override

@@ -43,8 +43,8 @@ public class TileSapling extends TileTreeContainer {
 
 	private int timesTicked = 0;
 
-	public TileSapling() {
-		super(ArboricultureTiles.SAPLING.tileType());
+	public TileSapling(BlockPos pos, BlockState state) {
+		super(ArboricultureTiles.SAPLING.tileType(), pos, state);
 	}
 
 	/* SAVING & LOADING */
