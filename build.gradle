@@ -205,6 +205,8 @@ publishing {
 	}
 }
 
+def theChangelog = System.getenv("CHANGELOG")
+
 ////////////////
 // Curse Forge
 if (System.getenv("CURSEFORGE")) {
@@ -214,8 +216,8 @@ if (System.getenv("CURSEFORGE")) {
 		project {
 			id = project.curseforge_project
 			changelogType = "markdown"
-			changelog = System.getenv("CHANGELOG")
-			releaseType = "release"
+			changelog = theChangelog
+			releaseType = theChangelog.contains("[beta]") ? "beta" : "alpha"
 			addGameVersion project.minecraft_version
 			addGameVersion "Forge"
 
@@ -237,11 +239,11 @@ task publishModrinth(type: TaskModrinthUpload) {
 	}
 
 	token = System.getenv("MODRINTH")
-	changelog = System.getenv("CHANGELOG")
+	changelog = theChangelog
 	projectId = project.modrinth_project
 	versionName = project.version
 	versionNumber = project.version
-	versionType = VersionType.RELEASE
+	versionType = theChangelog.contains("[beta]") ? VersionType.BETA : VersionType.ALPHA
 	uploadFile = jar
 	addGameVersion(project.minecraft_version)
 	addLoader("forge")
