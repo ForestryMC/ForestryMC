@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.HorizontalBlock;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -57,7 +56,7 @@ import forestry.core.utils.InventoryUtil;
 
 public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
 	/**
-	 * use this instead of {@link HorizontalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
+	 * use this instead of {@link net.minecraft.world.level.block.HorizontalDirectionalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
 	public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
 

@@ -13,7 +13,7 @@ import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.client.ClientRegistry;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.Item;

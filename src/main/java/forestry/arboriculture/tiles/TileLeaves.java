@@ -13,15 +13,16 @@ package forestry.arboriculture.tiles;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,7 +30,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.util.Constants;
 
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.IFruitProvider;
@@ -111,7 +111,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		ripeningTime = compoundNBT.getShort(NBT_RIPENING);
 		damage = compoundNBT.getInt(NBT_DAMAGE);
 		isFruitLeaf = compoundNBT.getBoolean(NBT_FRUIT_LEAF);
-		checkFruit = !compoundNBT.contains(NBT_FRUIT_LEAF, Constants.NBT.TAG_ANY_NUMERIC);
+		checkFruit = !compoundNBT.contains(NBT_FRUIT_LEAF, Tag.TAG_ANY_NUMERIC);
 
 		if (compoundNBT.contains(NBT_CATERPILLAR)) {
 			maturationTime = compoundNBT.getInt(NBT_MATURATION);

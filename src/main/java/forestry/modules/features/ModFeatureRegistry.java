@@ -38,7 +38,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;

@@ -21,8 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import forestry.api.storage.IBackpackDefinition;
 import net.minecraftforge.event.RegistryEvent;
-
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;

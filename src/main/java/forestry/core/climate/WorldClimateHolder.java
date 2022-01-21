@@ -10,12 +10,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-
-import net.minecraftforge.common.util.Constants;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
@@ -60,13 +59,13 @@ public class WorldClimateHolder extends SavedData implements IWorldClimateHolder
 	@Override
 	public void load(CompoundTag nbt) {
 		transformers.clear();
-		ListTag transformerData = nbt.getList(TRANSFORMERS_KEY, Constants.NBT.TAG_COMPOUND);
+		ListTag transformerData = nbt.getList(TRANSFORMERS_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < transformerData.size(); i++) {
 			CompoundTag tagCompound = transformerData.getCompound(i);
 			TransformerData data = new TransformerData(tagCompound);
 			transformers.put(data.position, data);
 		}
-		ListTag chunkData = nbt.getList(CHUNK_KEY, Constants.NBT.TAG_COMPOUND);
+		ListTag chunkData = nbt.getList(CHUNK_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < chunkData.size(); i++) {
 			CompoundTag tagCompound = chunkData.getCompound(i);
 			long pos = tagCompound.getLong(POS_KEY);

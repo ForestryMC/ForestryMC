@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ParticleTypeRegistryObject<PARTICLE extends ParticleOptions> extends WrappedRegistryObject<ParticleType<PARTICLE>> {
 

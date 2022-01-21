@@ -21,9 +21,9 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.fml.network.ICustomPacket;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.ICustomPacket;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import forestry.core.config.Constants;
 

@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
 
 import forestry.core.config.Constants;
 

@@ -6,22 +6,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
@@ -30,12 +28,9 @@ import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
-import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
-import forestry.core.registration.RegisterVillagerPointOfInterest;
-import forestry.core.registration.RegisterVillagerProfession;
 import forestry.core.registration.VillagerTrade;
 
 import genetics.api.alleles.IAllele;

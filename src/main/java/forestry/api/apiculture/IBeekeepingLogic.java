@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,7 +49,7 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	/* CLIENT */
 
 	/**
-	 * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
+	 * Sync to client by using {@link #write(net.minecraft.nbt.CompoundTag)} in your {@link net.minecraft.world.level.block.entity.BlockEntity#getUpdateTag()}
 	 */
 	void syncToClient();
 

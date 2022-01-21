@@ -8,16 +8,15 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.player.Player;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.network.ICustomPacket;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.ICustomPacket;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class PacketHandlerClient {

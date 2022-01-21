@@ -1,7 +1,6 @@
 package forestry.api.genetics.alyzer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -16,7 +15,7 @@ public interface IAlyzerDisplayProvider<I extends IIndividual> {
 	}
 
 	/**
-	 * Called at {@link ContainerScreen#init(Minecraft, int, int)} in the alyzer gui. Can be used to add custom widgets
+	 * Called at {@link net.minecraft.client.gui.screens.inventory.ContainerScreen#init(Minecraft, int, int)} in the alyzer gui. Can be used to add custom widgets
 	 * to the gui.
 	 */
 	default void initAlyzer(IAlyzerHelper helper) {

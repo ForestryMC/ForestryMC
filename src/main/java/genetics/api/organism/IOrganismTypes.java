@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -19,7 +18,7 @@ import genetics.api.root.components.IRootComponent;
 /**
  * The IGeneticTypes offers several functions to retrieving genetic information from an {@link ItemStack}.
  * For every item that should contain genetic information you have to provide a {@link IOrganism} that can be
- * retrieved with {@link ItemStack#getCapability(Capability, Direction)} and you have to register a {@link IOrganismType}
+ * retrieved with {@link ItemStack#getCapability(Capability, net.minecraft.core.Direction)} and you have to register a {@link IOrganismType}
  * and a {@link IOrganismHandler} for this type at the {@link IIndividualRootBuilder} that handles the individual.
  *
  * @param <I> The type of {@link IIndividual} that all items are containing.

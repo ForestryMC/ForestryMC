@@ -8,13 +8,11 @@ package forestry.api.storage;
 
 import java.util.function.Predicate;
 
-import forestry.api.genetics.IForestrySpeciesRoot;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import forestry.api.genetics.IForestrySpeciesRoot;
 
 /**
  * The Backpack Interface allows you to add items to Forestry backpacks or create your own backpacks.
@@ -26,8 +24,8 @@ import net.minecraft.world.item.ItemStack;
  * <p>
  * After you've created your backpack definition, create the item with
  * {@link #createBackpack(IBackpackDefinition, EnumBackpackType)}
- * or {@link #createNaturalistBackpack(IBackpackDefinition, String, ItemGroup)}
- * and then register the returned item with {@link GameRegistry#register(IForgeRegistryEntry)} like any other item.
+ * or {@link #createNaturalistBackpack(IBackpackDefinition, String, CreativeModeTab)}
+ * and then register the returned item like any other item.
  */
 public interface IBackpackInterface {
 
@@ -56,7 +54,7 @@ public interface IBackpackInterface {
 	 *
 	 * @param speciesRootUid The species root's unique ID. See {@link IForestrySpeciesRoot#getUID()}.
 	 * @return a new backpack filter for the specified species root
-	 * @see #createNaturalistBackpack(IBackpackDefinition, String, ItemGroup)
+	 * @see #createNaturalistBackpack(IBackpackDefinition, String, CreativeModeTab)
 	 */
 	Predicate<ItemStack> createNaturalistBackpackFilter(String speciesRootUid);
 }

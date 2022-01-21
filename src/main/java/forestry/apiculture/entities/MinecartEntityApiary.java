@@ -25,7 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -114,7 +114,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
-		return new ContainerMinecartBeehouse(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
+		return new ContainerMinecartBeehouse(windowId, player.getInventory(), this, true, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override

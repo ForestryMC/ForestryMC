@@ -3,10 +3,8 @@ package forestry.modules;
 import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fml.InterModComms;
