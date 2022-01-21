@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
-import net.minecraft.world.gen.feature.structure.*;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class VillagerJigsaw {
 	 * @author abigailfails / abnormals
 	 */
 	public static void addToJigsawPattern(ResourceLocation toAdd, StructurePoolElement newPiece, int weight) {
-		StructureTemplatePool oldPool = (StructureTemplatePool)BuiltinRegistries.TEMPLATE_POOL.get(toAdd);
+		StructureTemplatePool oldPool = BuiltinRegistries.TEMPLATE_POOL.get(toAdd);
 		if (oldPool != null) {
 			oldPool.rawTemplates.add(Pair.of(newPiece, weight));
 			List<StructurePoolElement> jigsawPieces = oldPool.templates;

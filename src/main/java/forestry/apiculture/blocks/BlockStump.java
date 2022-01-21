@@ -57,10 +57,10 @@ public class BlockStump extends TorchBlock {
 				activatedState = activatedState.setValue(WallTorchBlock.FACING, oldState.getValue(WallTorchBlock.FACING));
 			}
 			worldIn.setBlock(pos, activatedState, Constants.FLAG_BLOCK_SYNC);
-			TileCandle candle = new TileCandle();
-			candle.setColour(DyeColor.WHITE.getColorValue()); // default to white
+			TileCandle candle = new TileCandle(pos, activatedState);
+			candle.setColour(DyeColor.WHITE.getTextColor()); // default to white
 			candle.setLit(true);
-			worldIn.setBlockEntity(pos, candle);
+			worldIn.setBlockEntity(candle);
 			worldIn.playSound(playerIn, pos, heldItem.getItem() == Items.FLINT_AND_STEEL ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_AMBIENT, SoundSource.BLOCKS, 0.75F, worldIn.random.nextFloat() * 0.4F + 0.8F);
 			return InteractionResult.SUCCESS;
 		}

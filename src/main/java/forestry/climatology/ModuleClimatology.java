@@ -26,7 +26,6 @@ import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
 import forestry.climatology.proxy.ProxyClimatologyClient;
-import forestry.core.capabilities.NullStorage;
 import forestry.core.climate.FakeClimateListener;
 import forestry.core.climate.FakeClimateTransformer;
 import forestry.core.config.Constants;

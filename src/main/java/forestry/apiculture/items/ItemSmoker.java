@@ -1,28 +1,19 @@
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-
-import forestry.api.apiculture.ApicultureCapabilities;
 import forestry.api.apiculture.hives.IHiveTile;
 import forestry.api.core.ItemGroups;
 import forestry.core.items.ItemForestry;
@@ -107,19 +98,5 @@ public class ItemSmoker extends ItemForestry {
 	@Override
 	public int getUseDuration(ItemStack stack) {
 		return 32;
-	}
-
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new ICapabilityProvider() {
-
-			@Override
-			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				}
-				return LazyOptional.empty();
-			}
-		};
 	}
 }

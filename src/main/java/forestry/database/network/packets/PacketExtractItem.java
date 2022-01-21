@@ -110,7 +110,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 
 					player.inventoryMenu.setCarried(extracted);
 
-					player.broadcastCarriedItem();
+					player.inventoryMenu.broadcastChanges();
 				}
 
 				if (container instanceof ContainerDatabase) {

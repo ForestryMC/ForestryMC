@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
@@ -19,17 +19,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Constants;
@@ -94,24 +84,5 @@ public class ItemArmorApiarist extends ArmorItem {
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
-	}
-
-	@Override
-	@Nullable
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new ICapabilityProvider() {
-
-			//TODO - null issues
-			@Override
-			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-					slot == EquipmentSlot.HEAD) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				}
-				return LazyOptional.empty();
-			}
-		};
 	}
 }

@@ -66,7 +66,7 @@ public class ContainerSocketedHelper<T extends BlockEntity & ISocketable> implem
 
 		ItemStack stack = player.inventoryMenu.getCarried();
 		stack.shrink(1);
-		player.broadcastCarriedItem();
+		player.inventoryMenu.broadcastChanges();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 		NetworkUtil.sendToPlayer(packet, player);
@@ -93,7 +93,7 @@ public class ContainerSocketedHelper<T extends BlockEntity & ISocketable> implem
 		tile.setSocket(slot, ItemStack.EMPTY);
 		InventoryUtil.stowInInventory(socket, player.getInventory(), true);
 		itemstack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(p.getUsedItemHand()));    //TODO onBreak
-		player.broadcastCarriedItem();
+		player.inventoryMenu.broadcastChanges();
 
 		PacketSocketUpdate packet = new PacketSocketUpdate(tile);
 		NetworkUtil.sendToPlayer(packet, player);

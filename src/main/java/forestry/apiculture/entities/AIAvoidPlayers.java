@@ -56,7 +56,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		if (!mob.getSensing().canSee(player)) {
+		if (!mob.getSensing().hasLineOfSight(player)) {
 			return false;
 		}
 

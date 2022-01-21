@@ -137,11 +137,11 @@ public class BlockWoodPile extends Block {
 	}
 
 	@Override
-	public int getLightValue(BlockState state, BlockGetter world, BlockPos pos) {
+	public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
 		if (state.getValue(IS_ACTIVE)) {
 			return 10;
 		}
-		return super.getLightValue(state, world, pos);
+		return super.getLightEmission(state, world, pos);
 	}
 
 	@OnlyIn(Dist.CLIENT)

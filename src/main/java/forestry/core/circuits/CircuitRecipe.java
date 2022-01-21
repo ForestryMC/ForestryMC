@@ -81,7 +81,7 @@ public class CircuitRecipe implements ISolderRecipe {
 		public CircuitRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout(GsonHelper.getAsString(json, "layout"));
 			ICircuit circuit = ChipsetManager.circuitRegistry.getCircuit(GsonHelper.getAsString(json, "circuit"));
-			ItemStack resource = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "resource"));
+			ItemStack resource = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "resource"));
 
 			return new CircuitRecipe(recipeId, layout, resource, circuit);
 		}

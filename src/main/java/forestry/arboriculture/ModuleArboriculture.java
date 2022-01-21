@@ -44,7 +44,6 @@ import forestry.arboriculture.proxy.ProxyArboriculture;
 import forestry.arboriculture.proxy.ProxyArboricultureClient;
 import forestry.arboriculture.villagers.RegisterVillager;
 import forestry.core.ModuleCore;
-import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;

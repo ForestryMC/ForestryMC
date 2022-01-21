@@ -13,10 +13,9 @@ package forestry.core.worldgen;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 public abstract class FeatureBase extends Feature<NoneFeatureConfiguration> {
@@ -26,8 +25,8 @@ public abstract class FeatureBase extends Feature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	public boolean place(WorldGenLevel world, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
-		return place(world, rand, pos, false);
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		return place(context.level(), context.random(), context.origin(), false);
 	}
 
 	public abstract boolean place(LevelAccessor world, Random rand, BlockPos pos, boolean forced);

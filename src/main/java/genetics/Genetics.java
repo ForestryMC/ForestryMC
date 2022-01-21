@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -54,7 +55,7 @@ public class Genetics {
 		modBus.addListener(this::setupCommon);
 		modBus.addListener(this::loadComplete);
 		modBus.register(this);
-		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+		MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -100,23 +101,10 @@ public class Genetics {
 		GeneticSaveHandler.setWriteFormat(SaveFormat.BINARY);
 	}
 
-	public void serverStarting(FMLServerStartingEvent event) {
-		CommandDispatcher<CommandSourceStack> dispatcher = event.getServer().getCommands().getDispatcher();
+	public void registerCommands(RegisterCommandsEvent event) {
+		CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 		LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("genetics");
 		rootCommand.then(CommandListAlleles.register());
 		dispatcher.register(rootCommand);
-	}
-
-	private static class NullStorage<T> implements Capability.IStorage<T> {
-		@Nullable
-		public Tag writeNBT(Capability<T> capability, T instance, Direction side) {
-			/* compiled code */
-			return null;
-		}
-
-		@Override
-		public void readNBT(Capability<T> capability, T instance, Direction side, Tag nbt) {
-			/* compiled code */
-		}
 	}
 }

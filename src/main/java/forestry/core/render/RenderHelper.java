@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -48,7 +49,7 @@ public class RenderHelper {
 
 	private ItemEntity dummyItem(Level world) {
 		if (dummyEntityItem == null) {
-			dummyEntityItem = new ItemEntity(world, 0, 0, 0);
+			dummyEntityItem = new ItemEntity(EntityType.ITEM, world);
 		} else {
 			dummyEntityItem.level = world;
 		}

@@ -1,20 +1,19 @@
 package forestry.core.render;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class RenderForestryTile<T extends BlockEntity> extends BlockEntityRenderer<T> {
+public class RenderForestryTile<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
 	private final IForestryRenderer<T> renderer;
 	private final RenderHelper helper = new RenderHelper();
 
 	public RenderForestryTile(BlockEntityRenderDispatcher dispatcher, IForestryRenderer<T> renderer) {
-		super(dispatcher);
 		this.renderer = renderer;
 	}
 

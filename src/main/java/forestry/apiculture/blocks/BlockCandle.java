@@ -127,8 +127,8 @@ public class BlockCandle extends TorchBlock implements IColoredBlock, EntityBloc
 	}
 
 	@Override
-	public BlockEntity newBlockEntity(BlockGetter world) {
-		return new TileCandle();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileCandle(pos, state);
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock, EntityBloc
 	}
 
 	@Override
-	public int getLightValue(BlockState state, BlockGetter world, BlockPos pos) {
+	public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
 		TileCandle candle = TileUtil.getTile(world, pos, TileCandle.class);
 		if (candle != null && candle.isLit()) {
 			return 14;
@@ -238,7 +238,7 @@ public class BlockCandle extends TorchBlock implements IColoredBlock, EntityBloc
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		return getCandleDrop(world, pos);
 	}
 

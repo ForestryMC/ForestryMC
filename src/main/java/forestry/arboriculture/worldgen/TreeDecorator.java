@@ -19,17 +19,17 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import net.minecraftforge.common.IPlantable;
@@ -119,39 +119,43 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	public boolean place(WorldGenLevel seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		WorldGenLevel level = context.level();
+		Random rand = context.random();
+		BlockPos pos = context.origin();
+
 		float globalRarity = TreeConfig.getSpawnRarity(null);
-		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, seedReader.getLevel().dimension())) {
+		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, level.getLevel().dimension())) {
 			return false;
 		}
 
 		if (biomeCache.isEmpty()) {
-			generateBiomeCache(seedReader, rand);
+			generateBiomeCache(level, rand);
 		}
 
 		for (int tries = 0; tries < 4 + rand.nextInt(2); tries++) {
 			int x = pos.getX() + rand.nextInt(16);
 			int z = pos.getZ() + rand.nextInt(16);
 
-			Biome biome = seedReader.getBiome(pos);
-			ResourceLocation biomeName = seedReader.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
+			Biome biome = level.getBiome(pos);
+			ResourceLocation biomeName = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
 			Set<ITree> trees = biomeCache.computeIfAbsent(biomeName, k -> new HashSet<>());
 
 			for (ITree tree : trees) {
 				ResourceLocation treeUID = tree.getGenome().getPrimary().getRegistryName();
-				if (!TreeConfig.isValidDimension(treeUID, seedReader.getLevel().dimension())) {
+				if (!TreeConfig.isValidDimension(treeUID, level.getLevel().dimension())) {
 					continue;
 				}
 
 				IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
 				if (TreeConfig.getSpawnRarity(species.getRegistryName()) * globalRarity >= rand.nextFloat()) {
-					BlockPos validPos = getValidPos(seedReader, x, z, tree);
+					BlockPos validPos = getValidPos(level, x, z, tree);
 					if (validPos == null) {
 						continue;
 					}
 
-					if (species.getGrowthProvider().canSpawn(tree, seedReader.getLevel(), validPos)) {
-						if (TreeGenHelper.generateTree(tree, seedReader, validPos)) {
+					if (species.getGrowthProvider().canSpawn(tree, level.getLevel(), validPos)) {
+						if (TreeGenHelper.generateTree(tree, level, validPos)) {
 							if (Config.logTreePlacement) {
 								Log.info("Placed {} at {}", treeUID.toString(), pos.toString());
 							}

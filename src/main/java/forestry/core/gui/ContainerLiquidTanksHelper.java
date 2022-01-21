@@ -70,13 +70,13 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
-					player.broadcastCarriedItem();
+					player.inventoryMenu.broadcastChanges();
 				} else {//TODO: Test if this works
 					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
-					player.broadcastCarriedItem();
+					player.inventoryMenu.broadcastChanges();
 				}
 			} else {
 				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
@@ -85,7 +85,7 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
 						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
 						player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
-						player.broadcastCarriedItem();
+						player.inventoryMenu.broadcastChanges();
 					}
 				}
 			}

@@ -13,6 +13,7 @@ package forestry.arboriculture.models;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.models.ModelBlockCached;
@@ -65,7 +67,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 	@Override
 	protected Key getInventoryKey(ItemStack itemStack) {
-		TileLeaves leaves = new TileLeaves();
+		TileLeaves leaves = new TileLeaves(BlockPos.ZERO, ArboricultureBlocks.LEAVES.defaultState());
 		if (itemStack.getTag() != null) {
 			leaves.load(leaves.getBlockState(), itemStack.getTag());
 		} else {

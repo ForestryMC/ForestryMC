@@ -110,7 +110,7 @@ public class BlockCocoon extends Block implements EntityBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		TileCocoon tile = TileUtil.getTile(world, pos, TileCocoon.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;

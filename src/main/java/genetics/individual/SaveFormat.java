@@ -4,15 +4,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-
-import net.minecraftforge.common.util.Constants;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IKaryotype;
-
 import genetics.utils.SimpleByteBuf;
 
 public enum SaveFormat {
@@ -36,7 +34,7 @@ public enum SaveFormat {
 		@Override
 		IChromosome[] readTag(IKaryotype karyotype, CompoundTag tagCompound) {
 			IChromosomeType[] geneTypes = karyotype.getChromosomeTypes();
-			ListTag chromosomesNBT = tagCompound.getList(CHROMOSOMES_TAG, Constants.NBT.TAG_COMPOUND);
+			ListTag chromosomesNBT = tagCompound.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
 			IChromosome[] chromosomes = new IChromosome[geneTypes.length];
 			ResourceLocation primaryTemplateIdentifier = null;
 			ResourceLocation secondaryTemplateIdentifier = null;
@@ -62,7 +60,7 @@ public enum SaveFormat {
 		@Nullable
 		@Override
 		IAllele getAlleleDirectly(CompoundTag genomeNBT, IChromosomeType geneType, boolean active) {
-			ListTag tagList = genomeNBT.getList(CHROMOSOMES_TAG, Constants.NBT.TAG_COMPOUND);
+			ListTag tagList = genomeNBT.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
 			if (tagList.isEmpty()) {
 				return null;
 			}
@@ -95,7 +93,7 @@ public enum SaveFormat {
 		@Override
 		IChromosome[] readTag(IKaryotype karyotype, CompoundTag tagCompound) {
 			IChromosomeType[] geneTypes = karyotype.getChromosomeTypes();
-			ListTag chromosomesNBT = tagCompound.getList(CHROMOSOMES_TAG, Constants.NBT.TAG_COMPOUND);
+			ListTag chromosomesNBT = tagCompound.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
 			IChromosome[] chromosomes = new IChromosome[geneTypes.length];
 			ResourceLocation primaryTemplateIdentifier = null;
 			ResourceLocation secondaryTemplateIdentifier = null;
@@ -121,7 +119,7 @@ public enum SaveFormat {
 		@Nullable
 		@Override
 		IAllele getAlleleDirectly(CompoundTag genomeNBT, IChromosomeType geneType, boolean active) {
-			ListTag tagList = genomeNBT.getList(CHROMOSOMES_TAG, Constants.NBT.TAG_COMPOUND);
+			ListTag tagList = genomeNBT.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
 			if (tagList.isEmpty()) {
 				return null;
 			}

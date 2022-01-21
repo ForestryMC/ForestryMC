@@ -2,6 +2,7 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -110,9 +111,9 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 			return false;
 		}
 		Level world = cow.level;
-		cow.remove();
+		cow.discard();
 		MushroomCow mooshroom = new MushroomCow(EntityType.MOOSHROOM, world);
-		mooshroom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.yRot, cow.xRot);
+		mooshroom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.getYRot(), cow.getXRot());
 		mooshroom.setHealth(cow.getHealth());
 		mooshroom.yBodyRot = cow.yBodyRot;
 		world.addFreshEntity(mooshroom);

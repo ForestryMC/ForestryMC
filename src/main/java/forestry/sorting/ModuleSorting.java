@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.modules.ForestryModule;
-import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;

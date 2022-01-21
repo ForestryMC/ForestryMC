@@ -60,7 +60,7 @@ public abstract class BlockAbstractLeaves extends LeavesBlock implements IColore
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		ITree tree = getTree(world, pos);
 		if (tree == null) {
 			return ItemStack.EMPTY;

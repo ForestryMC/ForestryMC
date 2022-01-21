@@ -8,25 +8,25 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
@@ -76,7 +76,7 @@ public class ForestryBlockLootTables extends BlockLoot {
 					.withPool(LootPool.lootPool().add(LootItem.lootTableItem(CoreItems.ASH)).apply(SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(2, 1.0f / 3.0f))))
 					.withPool(LootPool.lootPool().add(LootItem.lootTableItem(Items.COAL)).apply(CountBlockFunction.builder()).apply(ApplyBonusCount.addBonusBinomialDistributionCount(Enchantments.BLOCK_FORTUNE, 23.0f / 40, 2))));
 		}
-		registerLootTable(CoreBlocks.PEAT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(LootItem.lootTableItem(Blocks.DIRT))).withPool(LootPool.lootPool().apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(2))).add(LootItem.lootTableItem(CoreItems.PEAT.item()))));
+		registerLootTable(CoreBlocks.PEAT, (block) -> LootTable.lootTable().withPool(LootPool.lootPool().add(LootItem.lootTableItem(Blocks.DIRT))).withPool(LootPool.lootPool().apply(SetItemCountFunction.setCount(ConstantValue.exactly(2))).add(LootItem.lootTableItem(CoreItems.PEAT.item()))));
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
 		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
@@ -92,7 +92,7 @@ public class ForestryBlockLootTables extends BlockLoot {
 		registerEmptyTables(ArboricultureBlocks.LEAVES);  // Handled by internal logic
 		registerEmptyTables(LepidopterologyBlocks.COCOON);
 		registerEmptyTables(LepidopterologyBlocks.COCOON_SOLID);
-		registerLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE), (p_218548_0_) -> createSilkTouchDispatchTable(p_218548_0_, applyExplosionDecay(p_218548_0_, LootItem.lootTableItem(CoreItems.APATITE.item()).apply(SetItemCountFunction.setCount(RandomValueBounds.between(2.0F, 7.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2)))));
+		registerLootTable(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE), (p_218548_0_) -> createSilkTouchDispatchTable(p_218548_0_, applyExplosionDecay(p_218548_0_, LootItem.lootTableItem(CoreItems.APATITE.item()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 7.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2)))));
 		//TODO: Hives
 
 		Set<ResourceLocation> visited = Sets.newHashSet();

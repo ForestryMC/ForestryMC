@@ -68,7 +68,7 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;

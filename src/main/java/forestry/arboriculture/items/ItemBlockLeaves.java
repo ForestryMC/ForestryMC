@@ -11,6 +11,7 @@
 package forestry.arboriculture.items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
@@ -40,7 +41,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 			return new TranslatableComponent("trees.grammar.leaves.type");
 		}
 
-		TileLeaves tileLeaves = new TileLeaves();
+		TileLeaves tileLeaves = new TileLeaves(BlockPos.ZERO, getBlock().defaultBlockState());
 		tileLeaves.load(tileLeaves.getBlockState(), itemstack.getTag());
 
 		ITree tree = tileLeaves.getTree();
@@ -66,7 +67,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 			return ModuleArboriculture.proxy.getFoliageColorDefault();
 		}
 
-		TileLeaves tileLeaves = new TileLeaves();
+		TileLeaves tileLeaves = new TileLeaves(BlockPos.ZERO, getBlock().defaultBlockState());
 		tileLeaves.load(tileLeaves.getBlockState(), itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {

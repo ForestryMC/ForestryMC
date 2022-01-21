@@ -63,7 +63,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			if (world.hasChunkAt(posBlock)) {
 				BlockState state = world.getBlockState(posBlock);
 				Block block = state.getBlock();
-				if (!state.isAir(world, posBlock) && block != Blocks.SNOW || !Blocks.SNOW.defaultBlockState().canSurvive(world, posBlock)) {
+				if (!state.isAir() && block != Blocks.SNOW || !Blocks.SNOW.defaultBlockState().canSurvive(world, posBlock)) {
 					continue;
 				}
 

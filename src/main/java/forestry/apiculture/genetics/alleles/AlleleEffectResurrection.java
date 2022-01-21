@@ -118,7 +118,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 					contained.shrink(1);
 
 					if (contained.getCount() <= 0) {
-						entity.remove();
+						entity.discard();
 					}
 				}
 
