@@ -18,7 +18,6 @@ import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.apiculture.network.packets.PacketBeeLogicActive;
 import forestry.apiculture.network.packets.PacketBeeLogicActiveEntity;
 import forestry.apiculture.network.packets.PacketBeeLogicEntityRequest;
-import forestry.apiculture.network.packets.PacketCandleUpdate;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.network.IPacketRegistry;
@@ -38,7 +37,6 @@ public class PacketRegistryApiculture implements IPacketRegistry {
 		PacketIdClient.BEE_LOGIC_ACTIVE.setPacketHandler(new PacketBeeLogicActive.Handler());
 		PacketIdClient.BEE_LOGIC_ACTIVE_ENTITY.setPacketHandler(new PacketBeeLogicActiveEntity.Handler());
 		PacketIdClient.HABITAT_BIOME_POINTER.setPacketHandler(new PacketHabitatBiomePointer.Handler());
-		PacketIdClient.CANDLE_UPDATE.setPacketHandler(new PacketCandleUpdate.Handler());
 		PacketIdClient.ALVERAY_CONTROLLER_CHANGE.setPacketHandler(new PacketAlvearyChange.Handler());
 	}
 }

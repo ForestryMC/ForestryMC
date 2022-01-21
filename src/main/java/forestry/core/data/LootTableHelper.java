@@ -5,22 +5,21 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
-import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.arboriculture.features.ArboricultureItems;
@@ -204,7 +203,6 @@ public class LootTableHelper {
 				LootTable.lootTable().withPool(LootPool.lootPool()
 						.name("forestry_apiculture_items")
 						.setRolls(ConstantValue.exactly(4))
-						.add(LootItem.lootTableItem(ApicultureBlocks.CANDLE.block()).apply(SetItemCountFunction.setCount(UniformGenerator.between(7, 12))).setWeight(10))
 						.add(TagEntry.expandTag(ForestryTags.Items.BEE_COMBS).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(ApicultureItems.SCOOP.item()).setWeight(5))
 						.add(LootItem.lootTableItem(ApicultureItems.SMOKER))

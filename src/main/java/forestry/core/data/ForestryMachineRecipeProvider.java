@@ -12,20 +12,20 @@ package forestry.core.data;
 
 import java.util.function.Consumer;
 
+import net.minecraft.Util;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -37,7 +37,6 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.WoodBlockKind;
 import forestry.api.circuits.ICircuit;
-import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumHoneyDrop;
@@ -86,7 +85,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 		registerCarpenter(consumer);
 		registerCentrifuge(consumer);
 		registerFabricator(consumer);
@@ -243,26 +242,6 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.define('W', CoreItems.BEESWAX)
 						.define('P', ApicultureItems.POLLEN_CLUSTER.get(EnumPollenCluster.NORMAL)))
 				.build(consumer, id("carpenter", "scented_paneling"));
-		new CarpenterRecipeBuilder()
-				.setPackagingTime(30)
-				.setLiquid(new FluidStack(Fluids.WATER, 600))
-				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.CANDLE, 24)
-						.pattern(" X ")
-						.pattern("###")
-						.pattern("###")
-						.define('#', CoreItems.BEESWAX)
-						.define('X', Items.STRING))
-				.build(consumer, id("carpenter", "candle_string"));
-		new CarpenterRecipeBuilder()
-				.setPackagingTime(10)
-				.setLiquid(new FluidStack(Fluids.WATER, 200))
-				.setBox(Ingredient.EMPTY)
-				.recipe(ShapedRecipeBuilder.shaped(ApicultureBlocks.CANDLE, 6)
-						.pattern("#X#")
-						.define('#', CoreItems.BEESWAX)
-						.define('X', CoreItems.CRAFTING_MATERIALS.get(EnumCraftingMaterial.SILK_WISP)))
-				.build(consumer, id("carpenter", "candle_silk_wisp"));
 		new CarpenterRecipeBuilder()
 				.setPackagingTime(100)
 				.setLiquid(new FluidStack(Fluids.WATER, 2000))

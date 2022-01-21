@@ -28,7 +28,6 @@ import net.minecraft.world.level.storage.loot.providers.number.BinomialDistribut
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
-import forestry.apiculture.features.ApicultureBlocks;
 import forestry.arboriculture.blocks.BlockDecorativeLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeaves;
 import forestry.arboriculture.blocks.BlockDefaultLeavesFruit;
@@ -81,11 +80,6 @@ public class ForestryBlockLootTables extends BlockLoot {
 
 		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
 		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
-
-		//Apiculture
-		registerEmptyTables(ApicultureBlocks.CANDLE); // Handled by internal logic
-		registerEmptyTables(ApicultureBlocks.CANDLE_WALL); // Handled by internal logic
-		registerDropping(ApicultureBlocks.STUMP_WALL, ApicultureBlocks.STUMP);
 
 		registerEmptyTables(ArboricultureBlocks.PODS); // Handled by internal logic
 		registerEmptyTables(ArboricultureBlocks.SAPLING_GE); // Handled by internal logic

@@ -36,15 +36,11 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
 		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
 		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()));
-		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.CANDLE.block(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.CANDLE_WALL.block(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.STUMP.block(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(ApicultureBlocks.STUMP_WALL.block(), RenderType.cutout());
 	}
 
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
-		TextureAtlas map = event.getMap();
+		TextureAtlas map = event.getAtlas();
 		if (!map.location().equals(TextureAtlas.LOCATION_PARTICLES)) {
 			return;
 		}
