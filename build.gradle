@@ -133,6 +133,7 @@ jar {
 
 def publicApiIncludePatterns = {
 	include "forestry/api/**"
+	include "genetics/api/**"
 }
 
 javadoc {
