@@ -61,8 +61,8 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
-		ItemStack stack = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
+		// ItemStack stack = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (!player.level.isClientSide && mailInventory != null) {
@@ -71,6 +71,6 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 			}
 		}
 
-		return stack;
+		// return stack;
 	}
 }

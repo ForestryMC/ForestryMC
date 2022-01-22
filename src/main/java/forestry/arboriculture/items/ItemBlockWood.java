@@ -10,16 +10,19 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.world.level.block.Block;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Block;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {
@@ -34,7 +37,7 @@ public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForest
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
 		B block = getBlock();
 		if (block.isFireproof()) {
 			return 0;

@@ -229,7 +229,7 @@ public abstract class Window extends ContainerElement {
 			transform.pushPose();
 			//TODO test
 			com.mojang.blaze3d.platform.Window window = Minecraft.getInstance().getWindow();
-			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
+			// GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
 			transform.popPose();
 		}
 	}

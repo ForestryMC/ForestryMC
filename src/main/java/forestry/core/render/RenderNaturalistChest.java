@@ -10,38 +10,20 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Vector3f;
 
 import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
 
-	private final ModelPart lid;
-	private final ModelPart base;
-	private final ModelPart lock;
-	private final ResourceLocation texture;
-
 	public RenderNaturalistChest(String textureName) {
-		this.base = new ModelPart(64, 64, 0, 19);
-		this.base.addBox(1.0F, 0.0F, 1.0F, 14.0F, 10.0F, 14.0F, 0.0F);
-		this.lid = new ModelPart(64, 64, 0, 0);
-		this.lid.addBox(1.0F, 0.0F, 0.0F, 14.0F, 5.0F, 14.0F, 0.0F);
-		this.lid.y = 9.0F;
-		this.lid.z = 1.0F;
-		this.lock = new ModelPart(64, 64, 0, 0);
-		this.lock.addBox(7.0F, -1.0F, 15.0F, 2.0F, 4.0F, 1.0F, 0.0F);
-		this.lock.y = 8.0F;
-		texture = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/" + textureName + ".png");
 	}
 
 	@Override
@@ -71,8 +53,6 @@ public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistCh
 		angle = 1.0F - angle;
 		angle = 1.0F - angle * angle * angle;
 		float rotation = -(angle * (float) Math.PI / 2.0F);
-		helper.renderModel(texture, new Vector3f(rotation, 0.0F, 0.0F), lid, lock);
-		helper.renderModel(texture, base);
 
 		helper.pop();
 	}

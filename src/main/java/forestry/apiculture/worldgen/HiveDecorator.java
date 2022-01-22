@@ -71,7 +71,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		}
 
 		Biome biome = world.getBiome(hivePos);
-		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getTemperature(hivePos));
+		EnumTemperature temperature = EnumTemperature.NONE; // EnumTemperature.getFromValue(biome.getTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}

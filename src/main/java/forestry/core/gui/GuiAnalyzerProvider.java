@@ -158,7 +158,7 @@ public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> exten
 	@Override
 	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
-		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+		// RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 		if (analyzer.isVisible()) {
 			int selectedSlot = analyzer.getSelected();
 			if (selectedSlot >= 0) {

@@ -71,9 +71,9 @@ public class GameTokenWidget extends Widget {
 
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();
-		RenderSystem.color3f(colorR, colorG, colorB);
+		// RenderSystem.color3f(colorR, colorG, colorB);
 		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
-		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+		// RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {

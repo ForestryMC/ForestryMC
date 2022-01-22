@@ -37,7 +37,6 @@ import forestry.core.models.ClientManager;
 import forestry.core.models.FluidContainerModel;
 import forestry.core.render.RenderAnalyzer;
 import forestry.core.render.RenderEscritoire;
-import forestry.core.render.RenderForestryItem;
 import forestry.core.render.RenderMachine;
 import forestry.core.render.RenderMill;
 import forestry.core.render.RenderNaturalistChest;
@@ -121,6 +120,6 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 		if (machinePropertiesTesr.getRenderer() == null) {
 			return;
 		}
-		properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+		// properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
 	}
 }

@@ -38,8 +38,8 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 
 	@Override
 	public void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
-		event.registerEntityRenderer(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
+		// event.registerEntityRenderer(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
+		// event.registerEntityRenderer(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
 	}
 
 	@Override

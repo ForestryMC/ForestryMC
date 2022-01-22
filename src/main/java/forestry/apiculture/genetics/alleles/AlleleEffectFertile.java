@@ -68,7 +68,7 @@ public class AlleleEffectFertile extends AlleleEffectThrottled {
 			BlockState state = world.getBlockState(new BlockPos(x, y, z));
 			Block block = state.getBlock();
 			if (block.isRandomlyTicking(state) && (block instanceof BonemealableBlock || block instanceof IPlantable)) {
-				world.getBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
+				// world.getBlockTicks().scheduleTick(new BlockPos(x, y, z), block, 5);
 				return true;
 			}
 		}

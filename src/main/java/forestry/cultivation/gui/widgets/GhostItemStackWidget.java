@@ -35,7 +35,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		if (!slot.hasItem()) {
 			super.draw(transform, startY, startX);
 		}
-		RenderSystem.disableLighting();
+		// RenderSystem.disableLighting();
 		RenderSystem.disableDepthTest();
 		RenderSystem.enableBlend();
 
@@ -53,7 +53,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 
 		RenderSystem.disableBlend();
 		RenderSystem.enableDepthTest();
-		RenderSystem.enableLighting();
+		// RenderSystem.enableLighting();
 	}
 
 	private Component getDirectionString() {

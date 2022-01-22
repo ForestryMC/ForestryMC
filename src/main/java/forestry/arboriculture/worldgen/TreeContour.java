@@ -30,13 +30,13 @@ public interface TreeContour {
 		public Impl(List<BlockPos> branchEnds) {
 			this.leavePositions = new HashSet<>();
 			this.branchEnds = branchEnds;
-			this.boundingBox = BoundingBox.getUnknownBox();
+			this.boundingBox = BoundingBox.infinite(); // BoundingBox.getUnknownBox();
 		}
 
 		@Override
 		public void addLeaf(BlockPos pos) {
 			leavePositions.add(pos.immutable());
-			boundingBox.expand(new BoundingBox(pos, pos));
+			// boundingBox.expand(new BoundingBox(pos, pos));
 		}
 
 		@Override

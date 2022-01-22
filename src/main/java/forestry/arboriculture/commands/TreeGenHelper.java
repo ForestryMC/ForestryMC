@@ -76,7 +76,7 @@ public final class TreeGenHelper {
 			if (gen instanceof FeatureBase) {
 				return ((FeatureBase) gen).place(world, world.getRandom(), pos, true);
 			} else {
-				return gen.place((ServerLevel) world, ((ServerChunkCache) world.getChunkSource()).getGenerator(), world.getRandom(), pos, FeatureConfiguration.NONE);
+				return gen.place(new FeaturePlaceContext<>(Optional.empty(), world, ((ServerChunkCache) world.getChunkSource()).getGenerator(), world.getRandom(), pos, FeatureConfiguration.NONE));
 			}
 		}
 		return false;

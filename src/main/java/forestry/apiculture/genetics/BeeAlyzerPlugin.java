@@ -74,7 +74,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -107,7 +107,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			guiAlyzer.drawChromosomeRow(transform, Translator.translateToLocal("for.gui.effect"), bee, BeeChromosomes.EFFECT);
 			textLayout.newLine();
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
@@ -134,7 +134,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -226,7 +226,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 				textLayout.drawCenteredLine(transform, displayText, 8, 208, guiAlyzer.getFontColor().get("gui.beealyzer.binomial"));
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
@@ -244,7 +244,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 			WidgetManager widgetManager = guiAlyzer.getWidgetManager();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.produce") + ":", GuiAlyzer.COLUMN_0);
 
@@ -280,7 +280,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 				}
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 

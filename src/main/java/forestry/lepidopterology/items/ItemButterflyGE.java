@@ -13,6 +13,7 @@ package forestry.lepidopterology.items;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -159,7 +160,7 @@ public class ItemButterflyGE extends ItemGE implements ISpriteRegister, IColored
 		if (!entityItem.getItem().isEmpty()) {
 			entityItem.getItem().shrink(1);
 		} else {
-			entityItem.remove();
+			entityItem.remove(Entity.RemovalReason.DISCARDED);
 		}
 		return true;
 	}

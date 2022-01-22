@@ -17,6 +17,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
 
+import com.mojang.math.Vector3f;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -43,7 +45,7 @@ import genetics.api.individual.IGenome;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleRender {
-	private static final DustParticleOptions HONEY_DUST = new DustParticleOptions(0.9F, 0.75F, 0.0F, 1.0F);
+	private static final DustParticleOptions HONEY_DUST = new DustParticleOptions(new Vector3f(0.9F, 0.75F, 0.0F), 1.0F);
 
 	public static boolean shouldSpawnParticle(Level world) {
 		if (!Config.enableParticleFX) {

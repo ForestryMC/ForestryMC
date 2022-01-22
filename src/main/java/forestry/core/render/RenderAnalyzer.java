@@ -12,52 +12,19 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
+import com.mojang.math.Vector3f;
 
 import forestry.core.blocks.BlockBase;
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
-	private final ModelPart pedestal;
-	private final ModelPart cover;
-	private final ModelPart tower1;
-	private final ModelPart tower2;
-
-	private final ResourceLocation[] textures;
-
 	public RenderAnalyzer() {
-		int textureWidth = 64;
-		int textureHeight = 32;
-
-		textures = new ResourceLocation[]{
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_pedestal.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower1.png"),
-				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/analyzer_tower2.png"),
-		};
-
-		pedestal = new ModelPart(textureWidth, textureHeight, 0, 0);
-		pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
-		pedestal.setPos(8, 8, 8);
-
-		cover = new ModelPart(textureWidth, textureHeight, 0, 0);
-		cover.addBox(-8F, -8F, -8F, 16, 1, 16);
-		cover.setPos(8, 8, 8);
-
-		tower1 = new ModelPart(textureWidth, textureHeight, 0, 0);
-		tower1.addBox(-8, -7, -7, 2, 14, 14);
-		tower1.setPos(8, 8, 8);
-
-		tower2 = new ModelPart(textureWidth, textureHeight, 0, 0);
-		tower2.addBox(6, -7, -7, 2, 14, 14);
-		tower2.setPos(8, 8, 8);
 	}
 
 	@Override
@@ -94,12 +61,6 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 		helper.setRotation(rotation);
 		helper.push();
 
-		helper.renderModel(textures[0], pedestal);
-		helper.renderModel(textures[0], new Vector3f(0, 0, (float) Math.PI), cover);
-
-		helper.renderModel(textures[1], tower1);
-
-		helper.renderModel(textures[2], tower2);
 		helper.pop();
 		if (itemstack.isEmpty() || world == null) {
 			return;

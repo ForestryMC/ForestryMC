@@ -81,7 +81,7 @@ public class WidgetDatabaseSlot extends Widget {
 			textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
-			Lighting.turnOff();
+			// Lighting.turnOff();
 		}
 		if (mouseOver) {
 			drawMouseOver();

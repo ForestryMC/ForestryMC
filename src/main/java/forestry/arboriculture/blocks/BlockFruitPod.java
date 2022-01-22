@@ -92,7 +92,7 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 		tile.onBlockTick(world, pos, state, rand);
 	}
 
-	@Override
+	// @Override
 	public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 		if (!world.isClientSide) {
 			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
@@ -103,7 +103,7 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 			}
 		}
 
-		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+		return false; // super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
 	}
 
 	@Override

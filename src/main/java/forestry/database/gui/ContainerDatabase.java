@@ -38,7 +38,7 @@ public class ContainerDatabase extends ContainerAnalyzerProvider<TileDatabase> {
 
 	public void sendContainerToListeners() {
 		for (ContainerListener listener : containerListeners) {
-			listener.refreshContainer(this, getItems());
+			// listener.refreshContainer(this, getItems());
 		}
 	}
 

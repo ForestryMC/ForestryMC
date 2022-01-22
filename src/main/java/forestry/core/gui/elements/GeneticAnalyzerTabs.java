@@ -127,9 +127,9 @@ public class GeneticAnalyzerTabs extends ContainerElement {
 			background.draw(transform, 0, x);
 			if (!displayStack.isEmpty()) {
 				//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-				GlStateManager._enableRescaleNormal();
+				// GlStateManager._enableRescaleNormal();
 				GuiUtil.drawItemStack(Minecraft.getInstance().font, displayStack, x + 9, 5);
-				Lighting.turnOff();
+				// Lighting.turnOff();
 			}
 		}
 	}

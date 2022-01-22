@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -26,11 +27,11 @@ public class CoreFeatures {
 	private static final ArrayList<ConfiguredFeature<?, ?>> overworldOres = new ArrayList<ConfiguredFeature<?, ?>>();
 
 	public static void registerOres() {
-		overworldOres.add(register("apatite_ore", Feature.ORE.configured(new OreConfiguration(OreConfiguration.Predicates.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36)).range(4).squared().count((56))));
+		overworldOres.add(register("apatite_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36))));
 
-		overworldOres.add(register("copper_ore", Feature.ORE.configured(new OreConfiguration(OreConfiguration.Predicates.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6)).range(20).squared().count(32)));
+		overworldOres.add(register("copper_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6))));
 
-		overworldOres.add(register("tin_ore", Feature.ORE.configured(new OreConfiguration(OreConfiguration.Predicates.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6)).range(20).squared().count(16)));
+		overworldOres.add(register("tin_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6))));
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

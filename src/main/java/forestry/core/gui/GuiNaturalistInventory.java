@@ -84,7 +84,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
 		if (individual != null) {
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-			textLayout.startPage();
+			textLayout.startPage(transform);
 
 			IGenome genome = individual.getGenome();
 			IChromosomeType speciesType = individual.getRoot().getKaryotype().getSpeciesType();
@@ -95,7 +95,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 				displaySpeciesInformation(transform, individual.isAnalyzed(), genome.getSecondary(), iconStacks.get(genome.getSecondary().getRegistryName().toString()), 10, 10);
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 
 	private void displayBreedingStatistics(PoseStack transform, int x) {
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 
 		textLayout.drawLine(transform, Translator.translateToLocal("for.gui.speciescount") + ": " + breedingTracker.getSpeciesBred() + "/" + speciesRoot.getSpeciesCount(), x);
 		textLayout.newLine();
@@ -161,7 +161,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 			textLayout.newLine();
 		}
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	private void displaySpeciesInformation(PoseStack transform, boolean analyzed, IAlleleSpecies species, ItemStack iconStack, int x, int maxMutationCount) {

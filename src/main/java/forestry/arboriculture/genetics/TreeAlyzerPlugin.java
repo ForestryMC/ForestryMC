@@ -88,7 +88,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -121,7 +121,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			guiAlyzer.drawChromosomeRow(transform, Translator.translateToLocal("for.gui.effect"), tree, TreeChromosomes.EFFECT);
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			int speciesDominance0 = guiAlyzer.getColorCoding(primary.isDominant());
 			int speciesDominance1 = guiAlyzer.getColorCoding(genome.getSecondary().isDominant());
@@ -223,7 +223,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				textLayout.drawLine(transform, secondaryFamily.getName(), GuiAlyzer.COLUMN_2, fruitDominance1);
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
@@ -241,7 +241,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 			WidgetManager widgetManager = guiAlyzer.getWidgetManager();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.produce") + ":", GuiAlyzer.COLUMN_0);
 			textLayout.newLine();
@@ -274,7 +274,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				}
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 

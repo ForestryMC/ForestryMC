@@ -105,7 +105,7 @@ public class BlockSapling extends BlockTreeContainer implements BonemealableBloc
 		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
-	@Override
+	// @Override
 	public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 		if (!world.isClientSide && canHarvestBlock(state, world, pos, player)) {
 			if (!player.isCreative()) {
@@ -113,8 +113,8 @@ public class BlockSapling extends BlockTreeContainer implements BonemealableBloc
 			}
 		}
 
-		getBlock().playerWillDestroy(world, pos, state, player);
-		return world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
+		// getBlock().playerWillDestroy(world, pos, state, player);
+		return false; // world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
 	}
 
 	private static void dropAsSapling(Level world, BlockPos pos) {

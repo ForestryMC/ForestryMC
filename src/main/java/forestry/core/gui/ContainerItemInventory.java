@@ -53,12 +53,12 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
-		ItemStack result = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
+		// ItemStack result = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 		if (slotId > 0) {
 			inventory.onSlotClick(slots.get(slotId).getSlotIndex(), player);
 		}
-		return result;
+		// return result;
 	}
 
 	public I getItemInventory() {

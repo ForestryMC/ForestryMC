@@ -123,7 +123,7 @@ public class TradeStation extends SavedData implements ITradeStation, IInventory
 
 	@Override
 	public void read(CompoundTag nbt) {
-		load(nbt);
+		// load(nbt);
 	}
 
 	/* INVALIDATING */

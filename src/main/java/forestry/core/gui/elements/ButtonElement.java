@@ -41,12 +41,12 @@ public class ButtonElement extends GuiElement {
 	@Override
 	@SuppressWarnings("deprecation")
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getTextureIndex(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(transform, 0, 0);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	@Override

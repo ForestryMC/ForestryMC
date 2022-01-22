@@ -17,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
@@ -90,7 +89,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 			GuiUtil.drawItemStack(this, LEVEL_ITEM, leftPos + 170 + i * 8, topPos + 7);
 		}
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 		{
 			transform.scale(0.5F, 0.5F, 0.5F);
 			transform.translate(leftPos + 170, topPos + 10, 0.0);
@@ -105,7 +104,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 			String escritoireText = textSource.getText(tile.getGame());
 			textLayout.drawSplitLine(escritoireText, 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		}
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	@Override

@@ -41,8 +41,8 @@ public class GuiBottler extends GuiForestryTitled<ContainerBottler> {
 		blit(transform, x, y, 0, 0, imageWidth, imageHeight);
 
 		//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-		RenderSystem.disableLighting();
-		RenderSystem.enableRescaleNormal();
+		// RenderSystem.disableLighting();
+		// RenderSystem.enableRescaleNormal();
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		transform.pushPose();
 		{

@@ -131,7 +131,6 @@ public class BlockAlveary extends BlockStructure implements EntityBlock {
 		return level.isClientSide() || type != getType().getTileType().getTileType() ? null : (level1, pos, state1, t) -> {
 			((TileForestry) t).tick();
 		};
-		return null;
 	}
 
 	public BlockState getNewState(TileAlveary tile) {

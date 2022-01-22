@@ -65,7 +65,7 @@ public class BlockWoodPile extends Block {
 			}
 		}
 
-		world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));
+		// world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class BlockWoodPile extends Block {
 	private void activatePile(BlockState state, Level world, BlockPos pos, boolean scheduleUpdate) {
 		world.setBlock(pos, state.setValue(IS_ACTIVE, true), 2);
 		if (scheduleUpdate) {
-			world.getBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.random.nextInt(RANDOM_TICK)) / 4);
+			// world.getBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.random.nextInt(RANDOM_TICK)) / 4);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class BlockWoodPile extends Block {
 					world.setBlock(pos, ashState, 2);
 				}
 			}
-			world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));
+			// world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));
 		}
 	}
 

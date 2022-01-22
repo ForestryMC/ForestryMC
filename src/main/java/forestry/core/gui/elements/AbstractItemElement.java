@@ -36,9 +36,9 @@ public abstract class AbstractItemElement extends GuiElement {
 		ItemStack itemStack = getStack();
 		if (!itemStack.isEmpty()) {
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
-			GlStateManager._enableRescaleNormal();
+			// GlStateManager._enableRescaleNormal();
 			GuiUtil.drawItemStack(Minecraft.getInstance().font, itemStack, 0, 0);
-			Lighting.turnOff();
+			// Lighting.turnOff();
 		}
 	}
 

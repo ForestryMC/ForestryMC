@@ -49,7 +49,7 @@ public class ItemForestryTool extends DiggerItem {
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			int i = this.getTier().getLevel();
 			if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
-				return i >= state.getHarvestLevel();
+				return i >= 0; //state.getHarvestLevel();
 			}
 			Material material = state.getMaterial();
 			return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
@@ -61,11 +61,11 @@ public class ItemForestryTool extends DiggerItem {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
-		for (ToolType type : getToolTypes(itemstack)) {
-			if (state.getBlock().isToolEffective(state, type)) {
-				return speed;
-			}
-		}
+		// for (ToolType type : getToolTypes(itemstack)) {
+		// 	if (state.getBlock().isToolEffective(state, type)) {
+		// 		return speed;
+		// 	}
+		// }
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
 			return material != Material.METAL && material != Material.HEAVY_METAL && material != Material.STONE ? super.getDestroySpeed(itemstack, state) : speed;

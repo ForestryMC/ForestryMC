@@ -50,10 +50,10 @@ public class Drawable {
 		textureManager.bindForSetup(textureLocation);
 
 		// Enable correct lighting.
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GuiComponent.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 }

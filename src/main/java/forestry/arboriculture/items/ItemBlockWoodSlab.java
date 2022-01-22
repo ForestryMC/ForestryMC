@@ -4,11 +4,14 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.BlockForestrySlab;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockWoodSlab extends BlockItem {
 
@@ -24,8 +27,9 @@ public class ItemBlockWoodSlab extends BlockItem {
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
 		BlockForestrySlab forestrySlab = (BlockForestrySlab) getBlock();
+
 		if (forestrySlab.isFireproof()) {
 			return 0;
 		} else {

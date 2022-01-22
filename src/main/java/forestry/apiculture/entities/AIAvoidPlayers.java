@@ -14,14 +14,11 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.phys.Vec3;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AIAvoidPlayers extends Goal {
 
@@ -60,8 +57,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		Vec3 randomTarget = RandomPos.getPosAvoid(mob, 16, 7,
-				player.position());
+		Vec3 randomTarget = null; // RandomPos.getPosAvoid(mob, 16, 7, player.position());
 
 		if (randomTarget == null) {
 			return false;

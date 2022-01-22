@@ -15,7 +15,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,21 +38,17 @@ public class TextLayoutHelper {
 		this.defaultFontColor = fontColour.get("gui.screen");
 	}
 
-	public void startPage() {
+	public void startPage(PoseStack matrices) {
 		line = LINE_HEIGHT;
-		RenderSystem.pushMatrix();
+		matrices.pushPose();
 	}
 
-	public void startPage(int column0, int column1) {
-		startPage(column0, column1, 0);
-	}
-
-	public void startPage(int column0, int column1, int column2) {
+	public void startPage(PoseStack matrices, int column0, int column1, int column2) {
 		this.column0 = column0;
 		this.column1 = column1;
 		this.column2 = column2;
 
-		startPage();
+		startPage(matrices);
 	}
 
 	public int getLineY() {
@@ -72,8 +67,8 @@ public class TextLayoutHelper {
 		line += lineHeight;
 	}
 
-	public void endPage() {
-		RenderSystem.popMatrix();
+	public void endPage(PoseStack matrices) {
+		matrices.popPose();
 	}
 
 	public void drawRow(PoseStack transform, String text0, String text1, String text2, int colour0, int colour1, int colour2) {

@@ -87,7 +87,7 @@ public class BlockSolidCocoon extends Block implements EntityBlock {
 	//		return false;
 	//	}
 
-	@Override
+	// @Override
 	public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 		if (canHarvestBlock(state, world, pos, player)) {
 			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {

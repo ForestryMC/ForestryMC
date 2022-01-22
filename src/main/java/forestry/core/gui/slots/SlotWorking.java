@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class SlotWorking extends SlotForestry {
@@ -27,8 +27,7 @@ public class SlotWorking extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
-		return ItemStack.EMPTY;
+	public void onTake(Player player, ItemStack itemStack) {
 	}
 
 	@Override

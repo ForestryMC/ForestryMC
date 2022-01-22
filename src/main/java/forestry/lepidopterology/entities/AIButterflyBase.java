@@ -34,7 +34,7 @@ public abstract class AIButterflyBase extends Goal {
 		}
 
 		Vec3 entityPos = entity.position();
-		Vec3 randomTarget = RandomPos.getPosAvoid(entity, 16, 7, entityPos);
+		Vec3 randomTarget = null; // RandomPos.getPosAvoid(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;

@@ -259,7 +259,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 		if (searchField != null) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			RenderSystem.disableLighting();
+			// RenderSystem.disableLighting();
 			this.searchField.render(transform, mouseX, mouseY, partialTicks);
 		}
 	}

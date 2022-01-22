@@ -314,7 +314,7 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getCoordinates();
-		return level.getBiome(coords).getTemperature(coords);
+		return 0; // level.getBiome(coords).getTemperature(coords);
 	}
 
 	@Override

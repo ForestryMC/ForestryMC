@@ -132,7 +132,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 					BlockState blockstate = world.getBlockState(blockpos$mutable);
 					if (blockstate.hasProperty(BlockStateProperties.DISTANCE)) {
 						list.get(0).add(blockpos$mutable.immutable());
-						TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate.setValue(BlockStateProperties.DISTANCE, 1));
+						// TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate.setValue(BlockStateProperties.DISTANCE, 1));
 						if (boundingBox.isInside(blockpos$mutable)) {
 							voxelshapepart.fill(blockpos$mutable.getX() - boundingBox.minX(), blockpos$mutable.getY() - boundingBox.minY(), blockpos$mutable.getZ() - boundingBox.minZ());
 						}
@@ -158,7 +158,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 							int k = blockstate1.getValue(BlockStateProperties.DISTANCE);
 							if (k > l + 1) {
 								BlockState blockstate2 = blockstate1.setValue(BlockStateProperties.DISTANCE, Integer.valueOf(l + 1));
-								TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate2);
+								// TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate2);
 								if (boundingBox.isInside(blockpos$mutable)) {
 									voxelshapepart.fill(blockpos$mutable.getX() - boundingBox.minX(), blockpos$mutable.getY() - boundingBox.minY(), blockpos$mutable.getZ() - boundingBox.minZ());
 								}

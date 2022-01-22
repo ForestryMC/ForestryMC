@@ -80,10 +80,10 @@ public class GuiTradeName extends GuiForestry<ContainerTradeName> {
 		super.renderBg(transform, partialTicks, var3, var2);
 
 		String prompt = Translator.translateToLocal("for.gui.mail.nametrader");
-		textLayout.startPage();
+		textLayout.startPage(transform);
 		textLayout.newLine();
 		textLayout.drawCenteredLine(transform, prompt, 0, ColourProperties.INSTANCE.get("gui.mail.text"));
-		textLayout.endPage();
+		textLayout.endPage(transform);
 		addressNameField.render(transform, var2, var3, partialTicks);    //TODO correct?
 	}
 

@@ -121,7 +121,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	protected void openGui(ServerPlayer player) {
 		NetworkHooks.openGui(player, this, p -> {
 			PacketBufferForestry fP = new PacketBufferForestry(p);
-			fP.writeEntityById(getEntity());
+			fP.writeEntityById(this);
 			fP.writeBoolean(true);
 			fP.writeEnum(GuiBeeHousing.Icon.APIARY, GuiBeeHousing.Icon.values());
 		});

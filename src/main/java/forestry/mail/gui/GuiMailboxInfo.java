@@ -75,7 +75,7 @@ public class GuiMailboxInfo extends GuiComponent {
 		}
 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.disableLighting();
+		// RenderSystem.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindForSetup(textureAlert);
 

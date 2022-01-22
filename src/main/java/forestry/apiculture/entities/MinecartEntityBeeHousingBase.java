@@ -12,14 +12,14 @@ package forestry.apiculture.entities;
 
 import java.util.Optional;
 
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.phys.Vec3;
 
 import com.mojang.authlib.GameProfile;
 
@@ -111,7 +111,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().getTemperature(blockPosition());
+		return 0; // getBiome().getTemperature(blockPosition());
 	}
 
 	@Override

@@ -23,23 +23,23 @@ public class FluidFogEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onFogColorRender(EntityViewRenderEvent.FogColors event) {
-		if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
-			if (isForestryFluid(event.getCamera().getFluidInCamera())) {
-				Color color = getForestryFluid(event.getCamera().getFluidInCamera()).getParticleColor();
-				event.setRed(color.getRed() / 255f);
-				event.setGreen(color.getGreen() / 255f);
-				event.setBlue(color.getBlue() / 255f);
-			}
-		}
+		// if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
+		// 	if (isForestryFluid(event.getCamera().getFluidInCamera())) {
+		// 		Color color = getForestryFluid(event.getCamera().getFluidInCamera()).getParticleColor();
+		// 		event.setRed(color.getRed() / 255f);
+		// 		event.setGreen(color.getGreen() / 255f);
+		// 		event.setBlue(color.getBlue() / 255f);
+		// 	}
+		// }
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onFogDenseRender(EntityViewRenderEvent.FogDensity event) {
-		if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
-			if (isForestryFluid(event.getCamera().getFluidInCamera())) {
-				event.setDensity(80);
-			}
-		}
+		// if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
+		// 	if (isForestryFluid(event.getCamera().getFluidInCamera())) {
+		// 		event.setDensity(80);
+		// 	}
+		// }
 	}
 
 	public static boolean isForestryFluid(FluidState fluid) {

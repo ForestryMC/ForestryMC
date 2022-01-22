@@ -434,7 +434,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 		if (world.isClientSide()) {
 			updateClient(tickCount);
 		} else if (updateServer(tickCount)) {
-			// If this returns true, the server has changed its internal data. 
+			// If this returns true, the server has changed its internal data.
 			// If our chunks are loaded (they should be), we must mark our chunks as dirty.
 			if (minimumCoord != null && maximumCoord != null &&
 					world.hasChunksAt(minimumCoord, maximumCoord)) {
@@ -447,7 +447,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 					for (int z = minChunkZ; z <= maxChunkZ; z++) {
 						// Ensure that we save our data, even if the our save delegate is in has no TEs.
 						LevelChunk chunkToSave = this.world.getChunk(x, z);
-						chunkToSave.markUnsaved();    //TODO types mean this needs cast or something
+						// chunkToSave.markUnsaved();    //TODO types mean this needs cast or something
 					}
 				}
 			}

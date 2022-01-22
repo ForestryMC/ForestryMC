@@ -65,7 +65,7 @@ public class TankElement extends GuiElement {
 	@Override
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		RenderSystem.disableBlend();
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		if (background != null) {
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(transform, 0, 0);
@@ -131,7 +131,7 @@ public class TankElement extends GuiElement {
 		}
 
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	private static void setGLColorFromInt(int color) {

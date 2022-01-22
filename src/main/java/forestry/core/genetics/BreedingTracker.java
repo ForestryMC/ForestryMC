@@ -144,7 +144,7 @@ public abstract class BreedingTracker extends SavedData implements IBreedingTrac
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
 	@Override
 	public void decodeFromNBT(CompoundTag compound) {
-		load(compound);
+		// load(compound);
 	}
 
 	@Override

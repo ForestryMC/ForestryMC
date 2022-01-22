@@ -99,7 +99,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	protected void openGui(ServerPlayer player) {
 		NetworkHooks.openGui(player, this, p -> {
 			PacketBufferForestry fP = new PacketBufferForestry(p);
-			fP.writeEntityById(getEntity());
+			fP.writeEntityById(this);
 			fP.writeBoolean(false);
 			fP.writeEnum(GuiBeeHousing.Icon.BEE_HOUSE, GuiBeeHousing.Icon.values());
 		});

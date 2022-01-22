@@ -156,9 +156,9 @@ public class SpeciesSelectionElement extends GuiElement {
 		super.drawElement(transform, mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		blit(transform, 0, 0, 224, 46, 22, 22);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	@Override

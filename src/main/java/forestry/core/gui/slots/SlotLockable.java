@@ -30,11 +30,10 @@ public class SlotLockable extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(Player player, ItemStack itemStack) {
+	public void onTake(Player player, ItemStack itemStack) {
 		if (!locked) {
-			return super.onTake(player, itemStack);
+			super.onTake(player, itemStack);
 		}
-		return ItemStack.EMPTY;
 	}
 
 	@Override

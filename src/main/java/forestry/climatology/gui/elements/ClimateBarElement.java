@@ -101,7 +101,7 @@ public class ClimateBarElement extends GuiElement {
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		handleMouse(mouseY - getX(), mouseX - getY());
 
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindForSetup(gui.textureFile);
@@ -114,7 +114,7 @@ public class ClimateBarElement extends GuiElement {
 		blit(transform, 1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
 		blit(transform, 1 + getPointerPosition(), 1, 229, 69, 1, 10);
 		blit(transform, 1, 1, 177, 80, 50, 10);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	private int getProgressScaled() {

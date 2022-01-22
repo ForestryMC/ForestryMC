@@ -221,7 +221,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	public void drawAnalyticsOverview(PoseStack transform) {
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 
 		textLayout.newLine();
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase(Locale.ENGLISH);
@@ -244,12 +244,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.newLine();
 		textLayout.drawLine(transform, "IV : " + Translator.translateToLocal("for.gui.evolution"), COLUMN_0 + 4);
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	public final void drawAnalyticsPageClassification(PoseStack transform, IIndividual individual) {
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 
 		textLayout.drawLine(transform, Translator.translateToLocal("for.gui.alyzer.classification") + ":", 12);
 		textLayout.newLine();
@@ -311,12 +311,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			}
 		}
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	@SuppressWarnings("unchecked")
 	public void drawAnalyticsPageMutations(PoseStack transform, IIndividual individual) {
-		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
+		textLayout.startPage(transform, COLUMN_0, COLUMN_1, COLUMN_2);
 		textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.mutations") + ":", COLUMN_0);
 		textLayout.newLine();
 
@@ -353,7 +353,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			}
 		}
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	public void drawMutationInfo(PoseStack transform, IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {

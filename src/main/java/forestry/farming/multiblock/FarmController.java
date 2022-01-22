@@ -322,7 +322,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	@Override
 	public float getExactTemperature() {
 		BlockPos coords = getReferenceCoord();
-		return getBiome().getTemperature(coords);
+		return 0; // getBiome().getTemperature(coords);
 	}
 
 	@Override

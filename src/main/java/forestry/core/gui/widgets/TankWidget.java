@@ -138,12 +138,12 @@ public class TankWidget extends Widget {
 		}
 
 		if (drawOverlay) {
-			RenderSystem.enableAlphaTest();
+			// RenderSystem.enableAlphaTest();
 			RenderSystem.disableDepthTest();
 			textureManager.bindForSetup(manager.gui.textureFile);
 			manager.gui.blit(transform, startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			RenderSystem.enableDepthTest();
-			RenderSystem.disableAlphaTest();
+			// RenderSystem.disableAlphaTest();
 		}
 
 		RenderSystem.setShaderColor(1, 1, 1, 1);

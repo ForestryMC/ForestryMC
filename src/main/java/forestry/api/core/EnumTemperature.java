@@ -75,7 +75,7 @@ public enum EnumTemperature {
 		if (BiomeHelper.isBiomeHellish(biome)) {
 			return HELLISH;
 		}
-		float temperature = biome.getTemperature(pos);
+		float temperature = 0; // biome.getTemperature(pos);
 		return getFromValue(temperature);
 	}
 }

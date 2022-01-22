@@ -66,7 +66,7 @@ public class NetworkUtil {
 
 	public static void inventoryChangeNotify(Player player, AbstractContainerMenu container) {
 		if (player instanceof ServerPlayer) {
-			((ServerPlayer) player).refreshContainer(container);
+			// ((ServerPlayer) player).refreshContainer(container);
 		}
 	}
 
