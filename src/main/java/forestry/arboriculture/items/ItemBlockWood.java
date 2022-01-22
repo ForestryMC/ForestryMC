@@ -10,6 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +23,6 @@ import forestry.api.core.ItemGroups;
 import forestry.arboriculture.IWoodTyped;
 import forestry.arboriculture.WoodHelper;
 import forestry.core.items.ItemBlockForestry;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForestry<B> {
 	public ItemBlockWood(B block) {

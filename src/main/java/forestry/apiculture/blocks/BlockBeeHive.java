@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -45,8 +46,6 @@ import forestry.apiculture.ModuleApiculture;
 import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
-
-import org.jetbrains.annotations.Nullable;
 
 public class BlockBeeHive extends BaseEntityBlock {
 

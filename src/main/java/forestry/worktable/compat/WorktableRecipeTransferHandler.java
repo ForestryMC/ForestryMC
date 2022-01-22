@@ -1,5 +1,6 @@
 package forestry.worktable.compat;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,6 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ingredient.IGuiIngredient;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable, CraftingRecipe> {

@@ -1,5 +1,7 @@
 package forestry.arboriculture.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,8 +12,6 @@ import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
 import forestry.arboriculture.WoodHelper;
 import forestry.arboriculture.blocks.BlockForestrySlab;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockWoodSlab extends BlockItem {
 

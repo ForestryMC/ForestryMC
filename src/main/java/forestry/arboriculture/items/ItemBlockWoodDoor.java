@@ -1,5 +1,7 @@
 package forestry.arboriculture.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -7,8 +9,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.arboriculture.blocks.BlockForestryDoor;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ItemBlockWoodDoor extends ItemBlockWood<BlockForestryDoor> {
 
