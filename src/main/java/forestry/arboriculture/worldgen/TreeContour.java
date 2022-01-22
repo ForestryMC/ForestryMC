@@ -1,5 +1,6 @@
 package forestry.arboriculture.worldgen;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,18 +26,25 @@ public interface TreeContour {
 	class Impl implements TreeContour {
 		public final Set<BlockPos> leavePositions;
 		public final List<BlockPos> branchEnds;
-		public final BoundingBox boundingBox;
+
+		@Nullable
+		public BoundingBox boundingBox;
 
 		public Impl(List<BlockPos> branchEnds) {
 			this.leavePositions = new HashSet<>();
 			this.branchEnds = branchEnds;
-			this.boundingBox = BoundingBox.infinite(); // BoundingBox.getUnknownBox();
+			this.boundingBox = null;
 		}
 
 		@Override
 		public void addLeaf(BlockPos pos) {
 			leavePositions.add(pos.immutable());
-			// boundingBox.expand(new BoundingBox(pos, pos));
+
+			if (boundingBox == null) {
+				boundingBox = new BoundingBox(pos);
+			} else {
+				boundingBox.encapsulate(pos);
+			}
 		}
 
 		@Override
