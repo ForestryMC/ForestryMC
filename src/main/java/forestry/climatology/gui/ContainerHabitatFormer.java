@@ -111,14 +111,10 @@ public class ContainerHabitatFormer extends ContainerTile<TileHabitatFormer> imp
 	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		IClimateTransformer transformer = tile.getTransformer();
 		switch (primary) {
-			case REQUEST_ID_CIRCLE:
-				transformer.setCircular(secondary == 1);
-				break;
-			case REQUEST_ID_RANGE:
-				transformer.setRange(secondary);
-				break;
-			default:
-				break;
+			case REQUEST_ID_CIRCLE -> transformer.setCircular(secondary == 1);
+			case REQUEST_ID_RANGE -> transformer.setRange(secondary);
+			default -> {
+			}
 		}
 	}
 

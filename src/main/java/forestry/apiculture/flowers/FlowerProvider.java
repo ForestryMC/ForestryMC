@@ -45,14 +45,11 @@ public class FlowerProvider implements IFlowerProvider {
 
 		PlantType plantType = pollinatable.getPlantType();
 
-		switch (flowerType) {
-			case FlowerManager.FlowerTypeNether:
-				return plantType == PlantType.NETHER;
-			case FlowerManager.FlowerTypeCacti:
-				return plantType == PlantType.DESERT;
-			default:
-				return plantType != PlantType.NETHER;
-		}
+		return switch (flowerType) {
+			case FlowerManager.FlowerTypeNether -> plantType == PlantType.NETHER;
+			case FlowerManager.FlowerTypeCacti -> plantType == PlantType.DESERT;
+			default -> plantType != PlantType.NETHER;
+		};
 	}
 
 	@Override

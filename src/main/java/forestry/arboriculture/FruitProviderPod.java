@@ -123,13 +123,10 @@ public class FruitProviderPod extends FruitProviderNone {
 
 	@Override
 	public Tag<Block> getLogTag() {
-		switch (type) {
-			case DATES:
-				return ForestryTags.Blocks.PALM_LOGS;
-			case PAPAYA:
-				return ForestryTags.Blocks.PAPAYA_LOGS;
-			default:
-				return BlockTags.JUNGLE_LOGS;
-		}
+		return switch (type) {
+			case DATES -> ForestryTags.Blocks.PALM_LOGS;
+			case PAPAYA -> ForestryTags.Blocks.PAPAYA_LOGS;
+			default -> BlockTags.JUNGLE_LOGS;
+		};
 	}
 }

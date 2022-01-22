@@ -81,16 +81,8 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		float[] translate = {orientation.getStepX(), orientation.getStepY(), orientation.getStepZ()};
 
 		switch (orientation) {
-			case EAST:
-			case WEST:
-			case DOWN:
-				rotation.setZ(angleMap[orientation.ordinal()]);
-				break;
-			case SOUTH:
-			case NORTH:
-			default:
-				rotation.setX(angleMap[orientation.ordinal()]);
-				break;
+			case EAST, WEST, DOWN -> rotation.setZ(angleMap[orientation.ordinal()]);
+			case SOUTH, NORTH, default -> rotation.setX(angleMap[orientation.ordinal()]);
 		}
 
 		helper.setRotation(rotation);

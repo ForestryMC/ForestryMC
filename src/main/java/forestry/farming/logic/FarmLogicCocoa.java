@@ -113,20 +113,12 @@ public class FarmLogicCocoa extends FarmLogicSoil {
 
 	protected int getDistanceValue(Direction facing, BlockPos posA, BlockPos posB) {
 		BlockPos delta = posA.subtract(posB);
-		int value;
-		switch (facing.getAxis()) {
-			case X:
-				value = delta.getX();
-				break;
-			case Y:
-				value = delta.getY();
-				break;
-			case Z:
-				value = delta.getZ();
-				break;
-			default:
-				value = 0;
-		}
+		int value = switch (facing.getAxis()) {
+			case X -> delta.getX();
+			case Y -> delta.getY();
+			case Z -> delta.getZ();
+			default -> 0;
+		};
 		return Math.abs(value);
 	}
 

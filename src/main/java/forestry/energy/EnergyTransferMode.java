@@ -4,22 +4,16 @@ public enum EnergyTransferMode {
 	EXTRACT, RECEIVE, BOTH, NONE;
 
 	public boolean canExtract() {
-		switch (this) {
-			case EXTRACT:
-			case BOTH:
-				return true;
-			default:
-				return false;
-		}
+		return switch (this) {
+			case EXTRACT, BOTH -> true;
+			default -> false;
+		};
 	}
 
 	public boolean canReceive() {
-		switch (this) {
-			case RECEIVE:
-			case BOTH:
-				return true;
-			default:
-				return false;
-		}
+		return switch (this) {
+			case RECEIVE, BOTH -> true;
+			default -> false;
+		};
 	}
 }

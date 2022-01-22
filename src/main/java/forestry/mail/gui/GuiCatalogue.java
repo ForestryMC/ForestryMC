@@ -146,26 +146,21 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	protected void actionPerformed(int id) {
 		LocalPlayer player = Minecraft.getInstance().player;
 		switch (id) {
-			case 0:
-				player.closeContainer();
-				break;
-			case 2: // next page
-				NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
-				break;
-			case 3: // previous page
-				NetworkUtil.sendToServer(new PacketGuiSelectRequest(1, 0));
-				break;
-			case 4: // cycle filter
-				NetworkUtil.sendToServer(new PacketGuiSelectRequest(2, 0));
-				break;
-			case 5:
+			case 0 -> player.closeContainer();
+			case 2 -> // next page
+					NetworkUtil.sendToServer(new PacketGuiSelectRequest(0, 0));
+			case 3 -> // previous page
+					NetworkUtil.sendToServer(new PacketGuiSelectRequest(1, 0));
+			case 4 -> // cycle filter
+					NetworkUtil.sendToServer(new PacketGuiSelectRequest(2, 0));
+			case 5 -> {
 				ITradeStationInfo info = container.getTradeInfo();
 				if (info != null) {
 					SessionVars.setStringVar("mail.letter.recipient", info.getAddress().getName());
 					SessionVars.setStringVar("mail.letter.addressee", EnumAddressee.TRADER.toString());
 				}
 				player.closeContainer();
-				break;
+			}
 		}
 	}
 

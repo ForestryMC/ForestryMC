@@ -34,22 +34,14 @@ public enum BlockAlvearyType implements IBlockSubtype {
 	}
 
 	public FeatureTileType<?> getTileType() {
-		switch (this) {
-			default:
-			case PLAIN:
-				return ApicultureTiles.ALVEARY_PLAIN;
-			case SWARMER:
-				return ApicultureTiles.ALVEARY_SWARMER;
-			case FAN:
-				return ApicultureTiles.ALVEARY_FAN;
-			case HEATER:
-				return ApicultureTiles.ALVEARY_HEATER;
-			case HYGRO:
-				return ApicultureTiles.ALVEARY_HYGROREGULATOR;
-			case STABILISER:
-				return ApicultureTiles.ALVEARY_STABILISER;
-			case SIEVE:
-				return ApicultureTiles.ALVEARY_SIEVE;
-		}
+		return switch (this) {
+			case PLAIN -> ApicultureTiles.ALVEARY_PLAIN;
+			case SWARMER -> ApicultureTiles.ALVEARY_SWARMER;
+			case FAN -> ApicultureTiles.ALVEARY_FAN;
+			case HEATER -> ApicultureTiles.ALVEARY_HEATER;
+			case HYGRO -> ApicultureTiles.ALVEARY_HYGROREGULATOR;
+			case STABILISER -> ApicultureTiles.ALVEARY_STABILISER;
+			case SIEVE -> ApicultureTiles.ALVEARY_SIEVE;
+		};
 	}
 }

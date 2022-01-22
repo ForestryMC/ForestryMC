@@ -185,15 +185,9 @@ public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSel
 	@Override
 	public void setData(int i, int j) {
 		switch (i) {
-			case 0:
-				stationIndex = j;
-				break;
-			case 1:
-				stationCount = j;
-				break;
-			case 2:
-				currentFilter = j;
-				break;
+			case 0 -> stationIndex = j;
+			case 1 -> stationCount = j;
+			case 2 -> currentFilter = j;
 		}
 	}
 
@@ -206,15 +200,9 @@ public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSel
 	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 
 		switch (primary) {
-			case 0:
-				nextPage();
-				break;
-			case 1:
-				previousPage();
-				break;
-			case 2:
-				cycleFilter();
-				break;
+			case 0 -> nextPage();
+			case 1 -> previousPage();
+			case 2 -> cycleFilter();
 		}
 
 		needsSync = true;

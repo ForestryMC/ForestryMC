@@ -128,31 +128,31 @@ public final class VectUtil {
 					y--;
 				} else {
 					switch (direction) {
-						case 0:
+						case 0 -> {
 							++x;
 							if (x == center.getX() + spiralLayer) {
 								++direction;
 							}
-							break;
-						case 1:
+						}
+						case 1 -> {
 							++z;
 							if (z == center.getZ() + spiralLayer) {
 								++direction;
 							}
-							break;
-						case 2:
+						}
+						case 2 -> {
 							--x;
 							if (x == center.getX() - spiralLayer) {
 								++direction;
 							}
-							break;
-						case 3:
+						}
+						case 3 -> {
 							--z;
 							if (z == center.getZ() - spiralLayer) {
 								direction = 0;
 								++spiralLayer;
 							}
-							break;
+						}
 					}
 
 					this.theBlockPos.set(x, y, z);

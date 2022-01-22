@@ -43,17 +43,9 @@ public class HabitatLocatorLogic {
 	@SubscribeEvent
 	static void onBiomeLoaded(BiomeLoadingEvent event) {
 		switch (event.getCategory()) {
-			case BEACH:
-			case RIVER:
-			case OCEAN:
-				waterBiomes.add(event.getName());
-				break;
-			case NETHER:
-				netherBiomes.add(event.getName());
-				break;
-			case THEEND:
-				endBiomes.add(event.getName());
-				break;
+			case BEACH, RIVER, OCEAN -> waterBiomes.add(event.getName());
+			case NETHER -> netherBiomes.add(event.getName());
+			case THEEND -> endBiomes.add(event.getName());
 		}
 	}
 

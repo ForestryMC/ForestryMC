@@ -156,9 +156,7 @@ public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidT
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				fillingProgress = j;
-				break;
+			case 0 -> fillingProgress = j;
 		}
 	}
 

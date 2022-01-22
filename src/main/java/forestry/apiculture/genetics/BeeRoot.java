@@ -95,15 +95,12 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 
 	@Override
 	public IOrganismType getTypeForMutation(int position) {
-		switch (position) {
-			case 0:
-				return EnumBeeType.PRINCESS;
-			case 1:
-				return EnumBeeType.DRONE;
-			case 2:
-				return EnumBeeType.QUEEN;
-		}
-		return getIconType();
+		return switch (position) {
+			case 0 -> EnumBeeType.PRINCESS;
+			case 1 -> EnumBeeType.DRONE;
+			case 2 -> EnumBeeType.QUEEN;
+			default -> getIconType();
+		};
 	}
 
 	@Override

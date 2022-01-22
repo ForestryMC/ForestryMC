@@ -55,31 +55,21 @@ public class FarmHelper {
 	}
 
 	public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
-		switch (farmSide) {
-			case NORTH:
-				return FarmDirection.WEST;
-			case WEST:
-				return FarmDirection.SOUTH;
-			case SOUTH:
-				return FarmDirection.EAST;
-			case EAST:
-				return FarmDirection.NORTH;
-		}
-		return null;
+		return switch (farmSide) {
+			case NORTH -> FarmDirection.WEST;
+			case WEST -> FarmDirection.SOUTH;
+			case SOUTH -> FarmDirection.EAST;
+			case EAST -> FarmDirection.NORTH;
+		};
 	}
 
 	public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
-		switch (farmSide) {
-			case NORTH:
-				return FarmDirection.EAST;
-			case WEST:
-				return FarmDirection.NORTH;
-			case SOUTH:
-				return FarmDirection.WEST;
-			case EAST:
-				return FarmDirection.SOUTH;
-		}
-		return null;
+		return switch (farmSide) {
+			case NORTH -> FarmDirection.EAST;
+			case WEST -> FarmDirection.NORTH;
+			case SOUTH -> FarmDirection.WEST;
+			case EAST -> FarmDirection.SOUTH;
+		};
 	}
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
@@ -108,18 +98,17 @@ public class FarmHelper {
 	 * @return the edge of the farm for the given starting point and direction.
 	 */
 	private static BlockPos getFarmMultiblockEdge(BlockPos start, FarmDirection direction, BlockPos maxFarmCoord, BlockPos minFarmCoord) {
-		switch (direction) {
-			case NORTH: // -z
-				return new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
-			case EAST: // +x
-				return new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
-			case SOUTH: // +z
-				return new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
-			case WEST: // -x
-				return new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
-			default:
-				throw new IllegalArgumentException("Invalid farm direction: " + direction);
-		}
+		return switch (direction) {
+			case NORTH -> // -z
+					new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
+			case EAST -> // +x
+					new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
+			case SOUTH -> // +z
+					new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
+			case WEST -> // -x
+					new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
+			default -> throw new IllegalArgumentException("Invalid farm direction: " + direction);
+		};
 	}
 
 	public static void createTargets(Level world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest, BlockPos minFarmCoord, BlockPos maxFarmCoord) {

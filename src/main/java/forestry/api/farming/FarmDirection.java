@@ -24,17 +24,12 @@ public enum FarmDirection {
 	}
 
 	public static FarmDirection getFarmDirection(Direction forgeDirection) {
-		switch (forgeDirection) {
-			case NORTH:
-				return NORTH;
-			case EAST:
-				return EAST;
-			case SOUTH:
-				return SOUTH;
-			case WEST:
-				return WEST;
-			default:
-				throw new IllegalArgumentException("Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
-		}
+		return switch (forgeDirection) {
+			case NORTH -> NORTH;
+			case EAST -> EAST;
+			case SOUTH -> SOUTH;
+			case WEST -> WEST;
+			default -> throw new IllegalArgumentException("Farm directions can only be NORTH, EAST, SOUTH, or WEST. Got: " + forgeDirection);
+		};
 	}
 }

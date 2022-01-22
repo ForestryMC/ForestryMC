@@ -235,27 +235,19 @@ public class LootTableHelper {
 	}
 
 	private Item saplingItem(EnumGermlingType type) {
-		switch (type) {
-			case POLLEN:
-				return ArboricultureItems.POLLEN_FERTILE.item();
-			default:
-			case SAPLING:
-				return ArboricultureItems.SAPLING.item();
-		}
+		return switch (type) {
+			case POLLEN -> ArboricultureItems.POLLEN_FERTILE.item();
+			case SAPLING -> ArboricultureItems.SAPLING.item();
+		};
 	}
 
 	private Item beeItem(EnumBeeType type) {
-		switch (type) {
-			case QUEEN:
-				return ApicultureItems.BEE_QUEEN.item();
-			case LARVAE:
-				return ApicultureItems.BEE_LARVAE.item();
-			case PRINCESS:
-				return ApicultureItems.BEE_PRINCESS.item();
-			default:
-			case DRONE:
-				return ApicultureItems.BEE_DRONE.item();
-		}
+		return switch (type) {
+			case QUEEN -> ApicultureItems.BEE_QUEEN.item();
+			case LARVAE -> ApicultureItems.BEE_LARVAE.item();
+			case PRINCESS -> ApicultureItems.BEE_PRINCESS.item();
+			case DRONE -> ApicultureItems.BEE_DRONE.item();
+		};
 	}
 
 	protected void add(ResourceLocation location, String extension, LootTable.Builder builder) {

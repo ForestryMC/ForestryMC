@@ -57,14 +57,11 @@ public enum EnumFarmMaterial implements IBlockSubtype {
 
 	private static Function<Direction, String> pillarTexture(String side, String bottom, String top) {
 		return direction -> {
-			switch (direction) {
-				case UP:
-					return top;
-				case DOWN:
-					return bottom;
-				default:
-					return side;
-			}
+			return switch (direction) {
+				case UP -> top;
+				case DOWN -> bottom;
+				default -> side;
+			};
 		};
 	}
 

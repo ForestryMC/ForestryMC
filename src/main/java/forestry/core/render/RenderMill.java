@@ -54,35 +54,32 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 		float tfactor = step / 16;
 
 		switch (orientation) {
-			case EAST:
+			case EAST -> {
 				// angle [2] = (float) Math.PI / 2;
 				rotation.setZ((float) Math.PI);
 				rotation.setY((float) -Math.PI / 2);
 				translate[0] = 1;
-				break;
-			case WEST:
+			}
+			case WEST -> {
 				// 2, -PI/2
 				rotation.setY((float) Math.PI / 2);
 				translate[0] = -1;
-				break;
-			case UP:
-				translate[1] = 1;
-				break;
-			case DOWN:
+			}
+			case UP -> translate[1] = 1;
+			case DOWN -> {
 				rotation.setY((float) Math.PI);
 				translate[1] = -1;
-				break;
-			case SOUTH:
+			}
+			case SOUTH -> {
 				rotation.setX((float) Math.PI / 2);
 				rotation.setY((float) Math.PI / 2);
 				translate[2] = 1;
-				break;
-			case NORTH:
-			default:
+			}
+			case NORTH, default -> {
 				rotation.setX((float) -Math.PI / 2);
 				rotation.setY((float) Math.PI / 2);
 				translate[2] = -1;
-				break;
+			}
 		}
 
 		helper.setRotation(rotation);

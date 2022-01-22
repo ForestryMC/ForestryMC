@@ -852,24 +852,16 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	private EnumElectronTube getElectronTube(BlockTypePlanter planter) {
-		switch (planter) {
-			case ARBORETUM:
-				return EnumElectronTube.GOLD;
-			case FARM_CROPS:
-				return EnumElectronTube.BRONZE;
-			case PEAT_POG:
-				return EnumElectronTube.OBSIDIAN;
-			case FARM_MUSHROOM:
-				return EnumElectronTube.APATITE;
-			case FARM_GOURD:
-				return EnumElectronTube.LAPIS;
-			case FARM_NETHER:
-				return EnumElectronTube.BLAZE;
-			case FARM_ENDER:
-				return EnumElectronTube.ENDER;
-			default:
-				return null;
-		}
+		return switch (planter) {
+			case ARBORETUM -> EnumElectronTube.GOLD;
+			case FARM_CROPS -> EnumElectronTube.BRONZE;
+			case PEAT_POG -> EnumElectronTube.OBSIDIAN;
+			case FARM_MUSHROOM -> EnumElectronTube.APATITE;
+			case FARM_GOURD -> EnumElectronTube.LAPIS;
+			case FARM_NETHER -> EnumElectronTube.BLAZE;
+			case FARM_ENDER -> EnumElectronTube.ENDER;
+			default -> null;
+		};
 	}
 
 	private void registerCultivationRecipes(RecipeDataHelper helper) {

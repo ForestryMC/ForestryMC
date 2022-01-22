@@ -229,15 +229,11 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	private static int getSlotsForType(EnumBackpackType type) {
-		switch (type) {
-			case NATURALIST:
-				return Constants.SLOTS_BACKPACK_APIARIST;
-			case WOVEN:
-				return Constants.SLOTS_BACKPACK_WOVEN;
-			case NORMAL:
-			default:
-				return Constants.SLOTS_BACKPACK_DEFAULT;
-		}
+		return switch (type) {
+			case NATURALIST -> Constants.SLOTS_BACKPACK_APIARIST;
+			case WOVEN -> Constants.SLOTS_BACKPACK_WOVEN;
+			case NORMAL, default -> Constants.SLOTS_BACKPACK_DEFAULT;
+		};
 	}
 
 	public static BackpackMode getMode(ItemStack backpack) {
@@ -275,13 +271,10 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		if (!(item instanceof ItemBackpack backpack)) {
 			return null;
 		}
-		switch (backpack.type) {
-			case NORMAL:
-				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
-			case WOVEN:
-				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
-			default:
-				return null;
-		}
+		return switch (backpack.type) {
+			case NORMAL -> new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
+			case WOVEN -> new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
+			default -> null;
+		};
 	}
 }

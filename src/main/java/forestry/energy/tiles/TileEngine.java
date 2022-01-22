@@ -225,22 +225,15 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	protected float getPistonSpeed() {
-		switch (getTemperatureState()) {
-			case COOL:
-				return 0.03f;
-			case WARMED_UP:
-				return 0.04f;
-			case OPERATING_TEMPERATURE:
-				return 0.05f;
-			case RUNNING_HOT:
-				return 0.06f;
-			case OVERHEATING:
-				return 0.07f;
-			case MELTING:
-				return Constants.ENGINE_PISTON_SPEED_MAX;
-			default:
-				return 0;
-		}
+		return switch (getTemperatureState()) {
+			case COOL -> 0.03f;
+			case WARMED_UP -> 0.04f;
+			case OPERATING_TEMPERATURE -> 0.05f;
+			case RUNNING_HOT -> 0.06f;
+			case OVERHEATING -> 0.07f;
+			case MELTING -> Constants.ENGINE_PISTON_SPEED_MAX;
+			default -> 0;
+		};
 	}
 
 	/* SAVING & LOADING */

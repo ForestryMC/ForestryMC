@@ -106,11 +106,6 @@ public class BlockAlveary extends BlockStructure implements EntityBlock {
 		return type;
 	}
 
-	/*@Override
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-		return true;
-	}*/
-
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -138,12 +133,8 @@ public class BlockAlveary extends BlockStructure implements EntityBlock {
 		Level world = tile.getLevel();
 		BlockPos pos = tile.getBlockPos();
 
-		if (tile instanceof IActivatable) {
-			if (((IActivatable) tile).isActive()) {
-				state = state.setValue(STATE, State.ON);
-			} else {
-				state = state.setValue(STATE, State.OFF);
-			}
+		if (tile instanceof IActivatable activatable) {
+			state = state.setValue(STATE, activatable.isActive() ? State.ON : State.OFF);
 		} else if (getType() == BlockAlvearyType.PLAIN) {
 			if (!tile.getMultiblockLogic().getController().isAssembled()) {
 				state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);

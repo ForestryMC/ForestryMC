@@ -145,14 +145,11 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	public String[] getOverlayIcons() {
-		switch (state) {
-			case FAILED:
-				return OVERLAY_FAILED;
-			case SELECTED:
-				return OVERLAY_SELECTED;
-			default:
-				return OVERLAY_NONE;
-		}
+		return switch (state) {
+			case FAILED -> OVERLAY_FAILED;
+			case SELECTED -> OVERLAY_SELECTED;
+			default -> OVERLAY_NONE;
+		};
 	}
 
 	public boolean matches(EscritoireGameToken other) {

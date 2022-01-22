@@ -148,31 +148,13 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 
 		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 2);
 		switch (tolerance) {
-			case BOTH_1:
-			case BOTH_2:
-			case BOTH_3:
-			case BOTH_4:
-			case BOTH_5:
-				layout.add(createBothSymbol(0, -1));
-				break;
-			case DOWN_1:
-			case DOWN_2:
-			case DOWN_3:
-			case DOWN_4:
-			case DOWN_5:
-				layout.add(createDownSymbol(0, -1));
-				break;
-			case UP_1:
-			case UP_2:
-			case UP_3:
-			case UP_4:
-			case UP_5:
-				layout.add(createUpSymbol(0, -1));
-				break;
-			default:
+			case BOTH_1, BOTH_2, BOTH_3, BOTH_4, BOTH_5 -> layout.add(createBothSymbol(0, -1));
+			case DOWN_1, DOWN_2, DOWN_3, DOWN_4, DOWN_5 -> layout.add(createDownSymbol(0, -1));
+			case UP_1, UP_2, UP_3, UP_4, UP_5 -> layout.add(createUpSymbol(0, -1));
+			default -> {
 				layout.add(createNoneSymbol(0, -1));
 				component = new TextComponent("(0)");
-				break;
+			}
 		}
 		if (component == null) {
 			component = new TextComponent("(")
@@ -247,26 +229,14 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 		int line = 247;
 		int column = 100;
 		switch (EnumMutateChance.rateChance(chance)) {
-			case HIGHEST:
-				column = 100;
-				break;
-			case HIGHER:
-				column = 100 + 15;
-				break;
-			case HIGH:
-				column = 100 + 15 * 2;
-				break;
-			case NORMAL:
-				column = 100 + 15 * 3;
-				break;
-			case LOW:
-				column = 100 + 15 * 4;
-				break;
-			case LOWEST:
-				column = 100 + 15 * 5;
-				break;
-			default:
-				break;
+			case HIGHEST -> column = 100;
+			case HIGHER -> column = 100 + 15;
+			case HIGH -> column = 100 + 15 * 2;
+			case NORMAL -> column = 100 + 15 * 3;
+			case LOW -> column = 100 + 15 * 4;
+			case LOWEST -> column = 100 + 15 * 5;
+			default -> {
+			}
 		}
 
 		// Probability arrow
@@ -287,26 +257,14 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 		int line = 247;
 		int column = 190;
 		switch (EnumMutateChance.rateChance(chance)) {
-			case HIGHEST:
-				column = 190;
-				break;
-			case HIGHER:
-				column = 190 + 9;
-				break;
-			case HIGH:
-				column = 190 + 9 * 2;
-				break;
-			case NORMAL:
-				column = 190 + 9 * 3;
-				break;
-			case LOW:
-				column = 190 + 9 * 4;
-				break;
-			case LOWEST:
-				column = 190 + 9 * 5;
-				break;
-			default:
-				break;
+			case HIGHEST -> column = 190;
+			case HIGHER -> column = 190 + 9;
+			case HIGH -> column = 190 + 9 * 2;
+			case NORMAL -> column = 190 + 9 * 3;
+			case LOW -> column = 190 + 9 * 4;
+			case LOWEST -> column = 190 + 9 * 5;
+			default -> {
+			}
 		}
 
 		// Probability add

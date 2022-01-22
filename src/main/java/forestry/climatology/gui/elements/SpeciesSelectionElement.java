@@ -114,39 +114,19 @@ public class SpeciesSelectionElement extends GuiElement {
 		EnumHumidity humidity = primary.getHumidity();
 		float temp;
 		float humid;
-		switch (temperature) {
-			case HELLISH:
-				temp = 2.0F;
-				break;
-			case HOT:
-				temp = 1.25F;
-				break;
-			case WARM:
-				temp = 0.9F;
-				break;
-			case COLD:
-				temp = 0.15F;
-				break;
-			case ICY:
-				temp = 0.0F;
-				break;
-			case NORMAL:
-			default:
-				temp = 0.79F;
-				break;
-		}
-		switch (humidity) {
-			case DAMP:
-				humid = 0.9F;
-				break;
-			case ARID:
-				humid = 0.2F;
-				break;
-			case NORMAL:
-			default:
-				humid = 0.4F;
-				break;
-		}
+		temp = switch (temperature) {
+			case HELLISH -> 2.0F;
+			case HOT -> 1.25F;
+			case WARM -> 0.9F;
+			case COLD -> 0.15F;
+			case ICY -> 0.0F;
+			case NORMAL, default -> 0.79F;
+		};
+		humid = switch (humidity) {
+			case DAMP -> 0.9F;
+			case ARID -> 0.2F;
+			case NORMAL, default -> 0.4F;
+		};
 		transformer.setTarget(ClimateStateHelper.INSTANCE.create(temp, humid));
 		return true;
 	}

@@ -137,30 +137,30 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
 	@Override
 	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		switch (primary) {
-			case -1: { // clicked clear button
+			case -1 -> { // clicked clear button
 				tile.clearCraftMatrix();
 				updateCraftMatrix();
 				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
-			case 0: { // clicked a memorized recipe
+			case 0 -> { // clicked a memorized recipe
 				tile.chooseRecipeMemory(secondary);
 				updateCraftMatrix();
 				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
-			case 1: { // right clicked a memorized recipe
+			case 1 -> { // right clicked a memorized recipe
 				long time = player.level.getGameTime();
 				RecipeMemory memory = tile.getMemory();
 				memory.toggleLock(time, secondary);
 				break;
 			}
-			case 100: { // clicked previous recipe conflict button
+			case 100 -> { // clicked previous recipe conflict button
 				tile.choosePreviousConflictRecipe();
 				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;
 			}
-			case 101: { // clicked next recipe conflict button
+			case 101 -> { // clicked next recipe conflict button
 				tile.chooseNextConflictRecipe();
 				sendPacketToListeners(new PacketWorktableRecipeUpdate(tile));
 				break;

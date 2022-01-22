@@ -498,18 +498,10 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				burnTime = j;
-				break;
-			case 1:
-				totalTime = j;
-				break;
-			case 2:
-				productionTime = j;
-				break;
-			case 3:
-				timePerItem = j;
-				break;
+			case 0 -> burnTime = j;
+			case 1 -> totalTime = j;
+			case 2 -> productionTime = j;
+			case 3 -> timePerItem = j;
 		}
 	}
 

@@ -280,18 +280,10 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				fuelBurnTime = j;
-				break;
-			case 1:
-				fuelTotalTime = j;
-				break;
-			case 2:
-				fermentationTime = j;
-				break;
-			case 3:
-				fermentationTotalTime = j;
-				break;
+			case 0 -> fuelBurnTime = j;
+			case 1 -> fuelTotalTime = j;
+			case 2 -> fermentationTime = j;
+			case 3 -> fermentationTotalTime = j;
 		}
 	}
 

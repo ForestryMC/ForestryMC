@@ -170,28 +170,27 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 		switch (specimenSlot) {
-			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_1 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage1(transform, this, stackInSlot);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_2: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_2 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage2(transform, this, stackInSlot);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_3: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_3 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage3(transform, stackInSlot, this);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_4: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_4 -> {
 				speciesRoot.create(stackInSlot).ifPresent((value) -> drawAnalyticsPageMutations(transform, value));
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_5: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_5 -> {
 				speciesRoot.create(stackInSlot).ifPresent((value) -> drawAnalyticsPageClassification(transform, value));
 				break;
 			}
-			default:
-				drawAnalyticsOverview(transform);
+			default -> drawAnalyticsOverview(transform);
 		}
 
 	}
@@ -429,34 +428,22 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
-			case BOTH_1:
-			case BOTH_2:
-			case BOTH_3:
-			case BOTH_4:
-			case BOTH_5:
+			case BOTH_1, BOTH_2, BOTH_3, BOTH_4, BOTH_5 -> {
 				drawBothSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			case DOWN_1:
-			case DOWN_2:
-			case DOWN_3:
-			case DOWN_4:
-			case DOWN_5:
+			}
+			case DOWN_1, DOWN_2, DOWN_3, DOWN_4, DOWN_5 -> {
 				drawDownSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			case UP_1:
-			case UP_2:
-			case UP_3:
-			case UP_4:
-			case UP_5:
+			}
+			case UP_1, UP_2, UP_3, UP_4, UP_5 -> {
 				drawUpSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			default:
+			}
+			default -> {
 				drawNoneSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, "(0)", x + 14, textColor);
-				break;
+			}
 		}
 	}
 
