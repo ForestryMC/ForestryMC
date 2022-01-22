@@ -10,27 +10,26 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.ToolActions;
 
 import forestry.core.features.CoreItems;
 import forestry.core.items.definitions.ToolTier;
@@ -41,7 +40,7 @@ public class ItemForestryTool extends DiggerItem {
 	private final ItemStack remnants;
 
 	public ItemForestryTool(ItemStack remnants, float damageBonus, float speedModifier, Item.Properties properties) {
-		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? PickaxeItem.DIGGABLES : ShovelItem.DIGGABLES, properties);
+		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL, properties);
 		this.remnants = remnants;
 	}
 
@@ -49,7 +48,7 @@ public class ItemForestryTool extends DiggerItem {
 	public boolean isCorrectToolForDrops(BlockState state) {
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			int i = this.getTier().getLevel();
-			if (state.getHarvestTool() == ToolType.PICKAXE) {
+			if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
 				return i >= state.getHarvestLevel();
 			}
 			Material material = state.getMaterial();
@@ -87,7 +86,7 @@ public class ItemForestryTool extends DiggerItem {
 			if (facing == Direction.DOWN) {
 				return InteractionResult.PASS;
 			} else {
-				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolType.SHOVEL);
+				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolActions.SHOVEL_FLATTEN);
 				BlockState usedState = null;
 				if (modifiedState != null && world.isEmptyBlock(pos.above())) {
 					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -97,7 +96,7 @@ public class ItemForestryTool extends DiggerItem {
 						world.levelEvent(null, 1009, pos, 0);
 					}
 
-					CampfireBlock.dowse(world, pos, state);
+					CampfireBlock.dowse(player, world, pos, state);
 					usedState = state.setValue(CampfireBlock.LIT, Boolean.FALSE);
 				}
 

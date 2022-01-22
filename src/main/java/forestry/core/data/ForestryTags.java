@@ -1,15 +1,18 @@
 package forestry.core.data;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.item.Item;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import forestry.core.config.Constants;
 
 public class ForestryTags {
 	public static class Blocks {
+
+		public static final Tag.Named<Block> MINEABLE_SCOOP = tag("scoop");
+		public static final Tag.Named<Block> MINEABLE_GRAFTER = tag("grafter");
 
 		public static final Tag.Named<Block> CHARCOAL = forgeTag("charcoal");
 

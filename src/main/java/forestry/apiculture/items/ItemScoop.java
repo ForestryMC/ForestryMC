@@ -10,36 +10,34 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.core.IToolScoop;
 import forestry.api.core.ItemGroups;
+import forestry.core.data.ForestryTags;
 import forestry.core.items.ItemForestry;
 
 public class ItemScoop extends ItemForestry implements IToolScoop {
-	public static ToolType SCOOP = ToolType.get("scoop");
 
 	public ItemScoop() {
 		super(new Item.Properties()
 				.durability(10)
-				.tab(ItemGroups.tabApiculture)
-				.addToolType(SCOOP, 3));
+				.tab(ItemGroups.tabApiculture));
 	}
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
-		if (state.getBlock().isToolEffective(state, SCOOP)) {
+		if (state.is(ForestryTags.Blocks.MINEABLE_SCOOP)) {
 			return 2.0F;
+		} else {
+			return 1.0F;
 		}
-		return 1.0F;
 	}
 
 	@Override

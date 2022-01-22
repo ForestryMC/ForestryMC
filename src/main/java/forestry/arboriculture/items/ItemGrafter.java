@@ -13,40 +13,37 @@ package forestry.arboriculture.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 
 import forestry.api.arboriculture.IToolGrafter;
 import forestry.api.core.ItemGroups;
+import forestry.core.data.ForestryTags;
 import forestry.core.items.ItemForestry;
 
 public class ItemGrafter extends ItemForestry implements IToolGrafter {
 
-	public static final ToolType GRAFTER = ToolType.get("grafter");
-
 	public ItemGrafter(int maxDamage) {
 		super(new Item.Properties()
 				.durability(maxDamage)
-				.tab(ItemGroups.tabArboriculture)
-				.addToolType(GRAFTER, 3));
+				.tab(ItemGroups.tabArboriculture));
 	}
 
 	@Override
@@ -69,10 +66,11 @@ public class ItemGrafter extends ItemForestry implements IToolGrafter {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
-		if (state.getBlock().isToolEffective(state, GRAFTER)) {
+		if (state.is(ForestryTags.Blocks.MINEABLE_GRAFTER)) {
 			return 4.0F;
+		} else {
+			return 1.0F;
 		}
-		return 1.0F;
 	}
 
 	@Override
