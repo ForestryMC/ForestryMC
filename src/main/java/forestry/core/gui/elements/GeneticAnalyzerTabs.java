@@ -56,9 +56,8 @@ public class GeneticAnalyzerTabs extends ContainerElement {
 			IDatabaseTab<?>[] tabs = getTabs();
 			for (int i = 0; i < elements.size(); i++) {
 				GuiElement element = elements.get(i);
-				if (element instanceof Tab) {
+				if (element instanceof Tab tabElement) {
 					IDatabaseTab<?> tab = tabs.length > i ? tabs[i] : null;
-					Tab tabElement = (Tab) element;
 					tabElement.setTab(tab);
 				}
 			}

@@ -47,8 +47,7 @@ public class ContainerAnalyzerProviderHelper {
 			analyzerIndex = i;
 			alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
 			Slot slot = container.getSlot(i < 9 ? i + 27 : i - 9);
-			if (slot instanceof SlotLockable) {
-				SlotLockable lockable = (SlotLockable) slot;
+			if (slot instanceof SlotLockable lockable) {
 				lockable.lock();
 			}
 			break;

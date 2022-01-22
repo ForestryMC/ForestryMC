@@ -57,10 +57,9 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 
 		@Override
 		public boolean equals(Object other) {
-			if (other == null || !(other instanceof ModelDecorativeLeaves.Key)) {
+			if (other == null || !(other instanceof Key otherKey)) {
 				return false;
 			} else {
-				ModelDecorativeLeaves.Key otherKey = (ModelDecorativeLeaves.Key) other;
 				return otherKey.definition == definition && otherKey.fancy == fancy;
 			}
 		}

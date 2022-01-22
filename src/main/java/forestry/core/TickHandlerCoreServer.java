@@ -59,8 +59,7 @@ public class TickHandlerCoreServer {
 			}
 		}
 
-		if (Config.doRetrogen && event.world instanceof ServerLevel) {
-			ServerLevel world = (ServerLevel) event.world;
+		if (Config.doRetrogen && event.world instanceof ServerLevel world) {
 			ResourceKey<Level> dimId = world.dimension();
 			if (checkForRetrogen.contains(dimId)) {
 				List<ChunkCoords> chunkList = chunkRegenList.get(dimId);

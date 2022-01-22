@@ -272,10 +272,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	@Nullable
 	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		Item item = heldItem.getItem();
-		if (!(item instanceof ItemBackpack)) {
+		if (!(item instanceof ItemBackpack backpack)) {
 			return null;
 		}
-		ItemBackpack backpack = (ItemBackpack) item;
 		switch (backpack.type) {
 			case NORMAL:
 				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);

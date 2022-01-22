@@ -44,8 +44,7 @@ public class GrowthRuleFertilize implements IFlowerGrowthRule {
 		BlockState state = world.getBlockState(pos);
 		Block ground = state.getBlock();
 		for (Block b : this.allowedItems) {
-			if (b == ground && b instanceof BonemealableBlock) {
-				BonemealableBlock growable = (BonemealableBlock) b;
+			if (b == ground && b instanceof BonemealableBlock growable) {
 				if (growable.isValidBonemealTarget(world, pos, state, false)) {//TODO what to put for isClient
 					for (int i = 0; i < world.random.nextInt(2) + 1; i++) {
 						growable.performBonemeal(world, world.random, pos, state);

@@ -224,10 +224,9 @@ public class BeeRoot extends IndividualRoot<IBee> implements IBeeRoot, IBreeding
 
 	@Override
 	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
-		if (!(tracker instanceof ApiaristTracker)) {
+		if (!(tracker instanceof ApiaristTracker apiaristTracker)) {
 			return;
 		}
-		ApiaristTracker apiaristTracker = (ApiaristTracker) tracker;
 		apiaristTracker.setWorld(world);
 		apiaristTracker.setUsername(profile);
 	}

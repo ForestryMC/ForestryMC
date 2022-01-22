@@ -31,11 +31,9 @@ public final class Flower {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Flower)) {
+		if (!(obj instanceof Flower flower)) {
 			return false;
 		}
-
-		Flower flower = (Flower) obj;
 
 		return this.blockState == flower.getBlockState();
 	}

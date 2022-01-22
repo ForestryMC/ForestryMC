@@ -43,11 +43,10 @@ public class PickupHandlerStorage implements IPickupHandler {
 				break;
 			}
 
-			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack)) {
+			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack backpack)) {
 				continue;
 			}
 
-			ItemBackpack backpack = (ItemBackpack) pack.getItem();
 			IBackpackDefinition backpackDefinition = backpack.getDefinition();
 			if (backpackDefinition.getFilter().test(itemstack)) {
 				ItemBackpack.tryStowing(player, pack, itemstack);

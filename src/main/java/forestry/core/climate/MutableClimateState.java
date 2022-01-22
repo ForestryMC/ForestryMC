@@ -126,10 +126,9 @@ class MutableClimateState implements IClimateState {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof IClimateState)) {
+		if (!(obj instanceof IClimateState otherState)) {
 			return false;
 		}
-		IClimateState otherState = (IClimateState) obj;
 		return otherState.getTemperature() == temperature && otherState.getHumidity() == humidity;
 	}
 

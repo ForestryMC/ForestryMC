@@ -59,15 +59,13 @@ public class PacketRecipeTransferUpdate extends ForestryPacket implements IFores
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 
 			BlockEntity tile = TileUtil.getTile(player.level, pos);
-			if (tile instanceof TileCarpenter) {
-				TileCarpenter carpenter = (TileCarpenter) tile;
+			if (tile instanceof TileCarpenter carpenter) {
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
 					carpenter.getCraftingInventory().setItem(index, stack);
 					index++;
 				}
-			} else if (tile instanceof TileFabricator) {
-				TileFabricator fabricator = (TileFabricator) tile;
+			} else if (tile instanceof TileFabricator fabricator) {
 				int index = 0;
 				for (ItemStack stack : craftingInventory) {
 					fabricator.getCraftingInventory().setItem(index, stack);

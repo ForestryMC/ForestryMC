@@ -131,8 +131,7 @@ public class ApiaristAI extends MoveToBlockGoal {
 	protected boolean isValidTarget(LevelReader world, BlockPos pos) {
 		pos = pos.north().above();
 		Block block = world.getBlockState(pos).getBlock();
-		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse) {
-			TileBeeHouse beeHouse = (TileBeeHouse) TileUtil.getTile(world, pos);
+		if (block instanceof BlockApiculture && TileUtil.getTile(world, pos) instanceof TileBeeHouse beeHouse) {
 			InventoryBeeHousing inventory = (InventoryBeeHousing) beeHouse.getBeeInventory();
 			if (inventory.isEmpty()) {
 				return false;

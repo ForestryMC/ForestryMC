@@ -153,8 +153,7 @@ public class GeneticsUtil {
 			if (optionalPollen.isPresent()) {
 				final IIndividual pollen = optionalPollen.get();
 				IIndividualRoot root = pollen.getRoot();
-				if (root instanceof ISpeciesRootPollinatable) {
-					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
+				if (root instanceof ISpeciesRootPollinatable rootPollinatable) {
 					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
 				}
 			}
@@ -169,8 +168,7 @@ public class GeneticsUtil {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
 			if (optionalPollen.isPresent()) {
 				IIndividual pollen = optionalPollen.get();
-				if (pollen instanceof ITree) {
-					ITree treeLeave = (ITree) pollen;
+				if (pollen instanceof ITree treeLeave) {
 					if (treeLeave.setLeaves(world, gameProfile, pos, world.getRandom())) {
 						nursery = getNursery(world, pos);
 					}

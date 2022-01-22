@@ -200,8 +200,7 @@ public abstract class Window extends ContainerElement {
 
 	private Collection<GuiElement> getQueuedElements(final GuiElement element) {
 		List<GuiElement> widgets = new ArrayList<>();
-		if (element instanceof ContainerElement) {
-			ContainerElement group = (ContainerElement) element;
+		if (element instanceof ContainerElement group) {
 			boolean addChildren = true;
 			if (element.isCropped()) {
 				int mouseX = getRelativeMouseX(element);

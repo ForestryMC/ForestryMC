@@ -263,8 +263,7 @@ public abstract class SlotUtil {
 			if (mergeOnly && slot.getItem().isEmpty()) {
 				continue;
 			}
-			if (slot instanceof SlotForestry) {
-				SlotForestry slotForestry = (SlotForestry) slot;
+			if (slot instanceof SlotForestry slotForestry) {
 				if (!slotForestry.canShift() || slotForestry.isPhantom()) {
 					continue;
 				}

@@ -132,10 +132,9 @@ public class ChromosomeTypeBuilder implements IChromosomeTypeBuilder {
 
 		@Override
 		public boolean isValid(IAllele allele) {
-			if (!(allele instanceof IAlleleValue)) {
+			if (!(allele instanceof IAlleleValue alleleValue)) {
 				return false;
 			}
-			IAlleleValue alleleValue = (IAlleleValue) allele;
 			return valueClass.isInstance(alleleValue.getValue());
 		}
 	}

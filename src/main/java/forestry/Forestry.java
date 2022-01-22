@@ -212,8 +212,7 @@ public class Forestry {
 	//TODO: Move to somewhere else
 	private void callSetupListeners(boolean start) {
 		for (IAllele allele : AlleleUtils.getAlleles()) {
-			if (allele instanceof ISetupListener) {
-				ISetupListener listener = (ISetupListener) allele;
+			if (allele instanceof ISetupListener listener) {
 				if (start) {
 					listener.onStartSetup();
 				} else {

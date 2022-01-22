@@ -72,8 +72,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage1(PoseStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -128,8 +127,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage2(PoseStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -230,8 +228,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void drawAnalyticsPage3(PoseStack transform, ItemStack itemStack, Screen gui) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;

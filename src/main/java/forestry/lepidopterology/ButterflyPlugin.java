@@ -81,10 +81,9 @@ public class ButterflyPlugin implements IGeneticPlugin {
 				component.addPlugin(new IResearchPlugin() {
 					@Override
 					public float getResearchSuitability(IAlleleSpecies species, ItemStack itemstack) {
-						if (itemstack.isEmpty() || !(species instanceof IAlleleButterflySpecies)) {
+						if (itemstack.isEmpty() || !(species instanceof IAlleleButterflySpecies butterflySpecies)) {
 							return -1;
 						}
-						IAlleleButterflySpecies butterflySpecies = (IAlleleButterflySpecies) species;
 
 						if (itemstack.getItem() == Items.GLASS_BOTTLE) {
 							return 0.9f;

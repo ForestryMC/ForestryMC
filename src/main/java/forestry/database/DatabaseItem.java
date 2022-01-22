@@ -13,10 +13,9 @@ public class DatabaseItem {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof DatabaseItem)) {
+		if (!(obj instanceof DatabaseItem other)) {
 			return false;
 		}
-		DatabaseItem other = (DatabaseItem) obj;
 		return other.invIndex == invIndex && other.itemStack.isEmpty() == itemStack.isEmpty();
 	}
 }

@@ -113,10 +113,9 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	@Override
 	public void setRenderer(Item.Properties properties, IBlockType type) {
 		IMachineProperties<?> machineProperties = type.getMachineProperties();
-		if (!(machineProperties instanceof IMachinePropertiesTesr)) {
+		if (!(machineProperties instanceof IMachinePropertiesTesr<?> machinePropertiesTesr)) {
 			return;
 		}
-		IMachinePropertiesTesr<?> machinePropertiesTesr = (IMachinePropertiesTesr<?>) machineProperties;
 		if (machinePropertiesTesr.getRenderer() == null) {
 			return;
 		}

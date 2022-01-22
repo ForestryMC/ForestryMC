@@ -99,10 +99,9 @@ public class TreePlugin implements IGeneticPlugin {
 			.addListener(ForestryComponentKeys.RESEARCH, (IResearchHandler<ITree> builder) -> {
 				builder.setResearchSuitability(new ItemStack(Blocks.OAK_SAPLING), 1.0f);
 				builder.addPlugin((species, itemstack) -> {
-					if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies)) {
+					if (itemstack.isEmpty() || !(species instanceof IAlleleTreeSpecies treeSpecies)) {
 						return -1F;
 					}
-					IAlleleTreeSpecies treeSpecies = (IAlleleTreeSpecies) species;
 
 					Collection<IFruitFamily> suitableFruit = treeSpecies.getSuitableFruit();
 					for (IFruitFamily fruitFamily : suitableFruit) {

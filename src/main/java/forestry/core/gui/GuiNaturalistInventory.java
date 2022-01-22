@@ -149,8 +149,7 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 		textLayout.newLine();
 		textLayout.newLine();
 
-		if (breedingTracker instanceof IApiaristTracker) {
-			IApiaristTracker tracker = (IApiaristTracker) breedingTracker;
+		if (breedingTracker instanceof IApiaristTracker tracker) {
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.queens") + ": " + tracker.getQueenCount(), x);
 			textLayout.newLine();
 

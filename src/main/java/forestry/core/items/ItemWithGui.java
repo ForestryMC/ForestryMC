@@ -86,10 +86,9 @@ public abstract class ItemWithGui extends ItemForestry {
 		@Override
 		public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 			Item item = heldItem.getItem();
-			if (!(item instanceof ItemWithGui)) {
+			if (!(item instanceof ItemWithGui itemWithGui)) {
 				return null;
 			}
-			ItemWithGui itemWithGui = (ItemWithGui) item;
 			return itemWithGui.getContainer(windowId, playerEntity, heldItem);
 		}
 	}

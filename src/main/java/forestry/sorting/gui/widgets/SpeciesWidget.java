@@ -53,15 +53,13 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		this.gui = gui;
 		ImmutableSet.Builder<IAlleleSpecies> entries = ImmutableSet.builder();
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
+			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot root)) {
 				continue;
 			}
-			IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
 			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.level, manager.minecraft.player.getGameProfile());
 			for (String uid : tracker.getDiscoveredSpecies()) {
 				IAllele allele = AlleleUtils.getAllele(uid).orElse(null);
-				if (allele instanceof IAlleleSpecies) {
-					IAlleleSpecies species = (IAlleleSpecies) allele;
+				if (allele instanceof IAlleleSpecies species) {
 					entries.add(species);
 				}
 			}

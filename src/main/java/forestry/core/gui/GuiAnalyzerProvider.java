@@ -71,8 +71,7 @@ public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> exten
 		updateVisibility();
 
 		SlotAnalyzer analyzerSlot = null;
-		if (container instanceof IContainerAnalyzerProvider) {
-			IContainerAnalyzerProvider containerAnalyzer = (IContainerAnalyzerProvider) container;
+		if (container instanceof IContainerAnalyzerProvider containerAnalyzer) {
 			Slot slot = containerAnalyzer.getAnalyzerSlot();
 			if (slot instanceof SlotAnalyzer) {
 				((SlotAnalyzer) slot).setVisibleCallback(analyzer::isVisible);

@@ -59,8 +59,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 			TileUtil.actOnTile(player.level, pos, TileWorktable.class, worktable -> {
 				worktable.setCurrentRecipe(recipe);
 
-				if (player.containerMenu instanceof ContainerWorktable) {
-					ContainerWorktable containerWorktable = (ContainerWorktable) player.containerMenu;
+				if (player.containerMenu instanceof ContainerWorktable containerWorktable) {
 					containerWorktable.updateCraftMatrix();
 				}
 

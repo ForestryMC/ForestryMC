@@ -93,10 +93,9 @@ public class FallbackIngredient extends Ingredient {
 				JsonArray arr = GsonHelper.getAsJsonArray(json, "primary");
 				List<Ingredient> ingredientList = new ArrayList<>();
 				for (JsonElement element : arr) {
-					if (!(element instanceof JsonObject)) {
+					if (!(element instanceof JsonObject obj)) {
 						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
 					}
-					JsonObject obj = (JsonObject) element;
 					ingredientList.add(CraftingHelper.getIngredient(obj));
 				}
 				ret = Ingredient.merge(ingredientList);
@@ -107,10 +106,9 @@ public class FallbackIngredient extends Ingredient {
 				JsonArray fallbackArr = GsonHelper.getAsJsonArray(json, "fallback");
 				List<Ingredient> ingredients = new ArrayList<>();
 				for (JsonElement element : fallbackArr) {
-					if (!(element instanceof JsonObject)) {
+					if (!(element instanceof JsonObject obj)) {
 						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
 					}
-					JsonObject obj = (JsonObject) element;
 					ingredients.add(CraftingHelper.getIngredient(obj));
 				}
 				ret = Ingredient.merge(ingredients);

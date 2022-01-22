@@ -43,22 +43,18 @@ public class ProductsTab extends DatabaseTab {
 	}
 
 	private Collection<ItemStack> getSpecialties(IIndividual individual) {
-		if (individual instanceof IBee) {
-			IBee bee = (IBee) individual;
+		if (individual instanceof IBee bee) {
 			return bee.getSpecialtyList();
-		} else if (individual instanceof ITree) {
-			ITree tree = (ITree) individual;
+		} else if (individual instanceof ITree tree) {
 			return tree.getSpecialties().getPossibleStacks();
 		}
 		return Collections.emptyList();
 	}
 
 	private Collection<ItemStack> getProducts(IIndividual individual) {
-		if (individual instanceof IBee) {
-			IBee bee = (IBee) individual;
+		if (individual instanceof IBee bee) {
 			return bee.getProduceList();
-		} else if (individual instanceof ITree) {
-			ITree tree = (ITree) individual;
+		} else if (individual instanceof ITree tree) {
 			return tree.getProducts().getPossibleStacks();
 		}
 		return Collections.emptyList();

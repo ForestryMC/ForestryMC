@@ -44,8 +44,7 @@ public class GuiBeeHousing<C extends ContainerForestry & IContainerBeeHousing> e
 
 		for (int i = 0; i < 2; i++) {
 			Slot queenSlot = container.getForestrySlot(1 + i);
-			if (queenSlot instanceof SlotWatched) {
-				SlotWatched watched = (SlotWatched) queenSlot;
+			if (queenSlot instanceof SlotWatched watched) {
 				watched.setChangeWatcher(this);
 			}
 		}

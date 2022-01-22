@@ -61,8 +61,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		Iterator<Slot> slotIterator = container.slots.listIterator(ContainerForestry.PLAYER_INV_SLOTS);
 		while (slotIterator.hasNext()) {
 			Slot slot = slotIterator.next();
-			if (slot instanceof SlotFilteredInventory) {
-				SlotFilteredInventory slotDatabase = (SlotFilteredInventory) slot;
+			if (slot instanceof SlotFilteredInventory slotDatabase) {
 				slotDatabase.setChangeWatcher(this);
 			}
 		}

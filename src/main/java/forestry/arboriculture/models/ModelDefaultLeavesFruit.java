@@ -57,10 +57,9 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 
 		@Override
 		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
+			if (!(other instanceof Key otherKey)) {
 				return false;
 			} else {
-				Key otherKey = (Key) other;
 				return otherKey.definition == definition && otherKey.fancy == fancy;
 			}
 		}

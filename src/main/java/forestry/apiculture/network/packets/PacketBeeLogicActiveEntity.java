@@ -52,8 +52,7 @@ public class PacketBeeLogicActiveEntity extends ForestryPacket implements IFores
 		@Override
 		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IBeeHousing) {
-				IBeeHousing beeHousing = (IBeeHousing) entity;
+			if (entity instanceof IBeeHousing beeHousing) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				if (beekeepingLogic instanceof BeekeepingLogic) {
 					beekeepingLogic.readData(data);

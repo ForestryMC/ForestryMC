@@ -42,8 +42,7 @@ public class PacketBeeLogicEntityRequest extends ForestryPacket implements IFore
 		@Override
 		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IBeeHousing) {
-				IBeeHousing beeHousing = (IBeeHousing) entity;
+			if (entity instanceof IBeeHousing beeHousing) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				beekeepingLogic.syncToClient(player);
 			}

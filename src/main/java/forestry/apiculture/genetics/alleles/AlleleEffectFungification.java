@@ -98,8 +98,7 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
 
 	private static boolean growGiantMushroom(ServerLevel world, BlockState blockState, BlockPos pos) {
 		Block block = blockState.getBlock();
-		if (block instanceof MushroomBlock) {
-			MushroomBlock mushroom = (MushroomBlock) block;
+		if (block instanceof MushroomBlock mushroom) {
 			mushroom.growMushroom(world, pos, blockState, world.random);
 			return true;
 		}

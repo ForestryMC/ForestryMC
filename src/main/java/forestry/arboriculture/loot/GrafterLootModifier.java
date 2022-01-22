@@ -62,10 +62,9 @@ public class GrafterLootModifier extends LootModifier {
 			return generatedLoot;
 		}
 		Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
-		if (!(entity instanceof Player)) {
+		if (!(entity instanceof Player player)) {
 			return generatedLoot;
 		}
-		Player player = (Player) entity;
 		if (generatedLoot.stream().noneMatch((stack) -> stack.is(ItemTags.SAPLINGS))) {
 			handleLoot(generatedLoot, player, harvestingTool, state, context);
 		}
@@ -99,8 +98,7 @@ public class GrafterLootModifier extends LootModifier {
 				generatedLoot.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
-		if (tileEntity instanceof IFruitBearer) {
-			IFruitBearer bearer = (IFruitBearer) tileEntity;
+		if (tileEntity instanceof IFruitBearer bearer) {
 			generatedLoot.addAll(bearer.pickFruit(harvestingTool));
 		}
 		if (state.getBlock() instanceof BlockDefaultLeavesFruit) {

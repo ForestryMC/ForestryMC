@@ -124,8 +124,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	protected void onBlockAdded(IMultiblockComponent newPart) {
-		if (newPart instanceof IFarmComponent.Listener) {
-			IFarmComponent.Listener listenerPart = (IFarmComponent.Listener) newPart;
+		if (newPart instanceof IFarmComponent.Listener listenerPart) {
 			manager.addListener(listenerPart.getFarmListener());
 		}
 
@@ -136,8 +135,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 
 	@Override
 	protected void onBlockRemoved(IMultiblockComponent oldPart) {
-		if (oldPart instanceof IFarmComponent.Listener) {
-			IFarmComponent.Listener listenerPart = (IFarmComponent.Listener) oldPart;
+		if (oldPart instanceof IFarmComponent.Listener listenerPart) {
 			manager.removeListener(listenerPart.getFarmListener());
 		}
 

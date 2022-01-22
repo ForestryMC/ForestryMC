@@ -152,10 +152,9 @@ public class TankWidget extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		IFluidTank tank = getTank();
-		if (!(tank instanceof StandardTank)) {
+		if (!(tank instanceof StandardTank standardTank)) {
 			return null;
 		}
-		StandardTank standardTank = (StandardTank) tank;
 		return standardTank.getToolTip();
 	}
 

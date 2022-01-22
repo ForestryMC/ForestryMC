@@ -41,8 +41,7 @@ public class ContainerTradeName extends ContainerTile<TileTrader> {
 
 		if (tile.isLinked()) {
 			for (Object crafter : containerListeners) {
-				if (crafter instanceof ServerPlayer) {
-					ServerPlayer player = (ServerPlayer) crafter;
+				if (crafter instanceof ServerPlayer player) {
 					tile.openGui(player, tile.getBlockPos());    //TODO correct pos?
 				}
 			}

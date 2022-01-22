@@ -34,19 +34,17 @@ import forestry.core.network.PacketHandlerServer;
 
 public class NetworkUtil {
 	public static <P extends IForestryPacketClient> void sendNetworkPacket(P packet, BlockPos pos, Level world) {
-		if (!(world instanceof ServerLevel)) {
+		if (!(world instanceof ServerLevel worldServer)) {
 			return;
 		}
 
-		ServerLevel worldServer = (ServerLevel) world;
 		//		PlayerChunkMap playerManager = worldServer.getPlayerChunkMap();
 
 		//		int chunkX = pos.getX() >> 4;
 		//		int chunkZ = pos.getZ() >> 4;
 
 		for (Player playerObj : world.players()) {
-			if (playerObj instanceof ServerPlayer) {
-				ServerPlayer player = (ServerPlayer) playerObj;
+			if (playerObj instanceof ServerPlayer player) {
 
 				if (true) {//TODO packet spam - playerManager.isPlayerWatchingChunk(player, chunkX, chunkZ)) {
 					sendToPlayer(packet, player);
@@ -56,11 +54,10 @@ public class NetworkUtil {
 	}
 
 	public static void sendToPlayer(IForestryPacketClient packet, Player PlayerEntity) {
-		if (!(PlayerEntity instanceof ServerPlayer) || PlayerEntity instanceof FakePlayer) {
+		if (!(PlayerEntity instanceof ServerPlayer player) || PlayerEntity instanceof FakePlayer) {
 			return;
 		}
 
-		ServerPlayer player = (ServerPlayer) PlayerEntity;
 		PacketHandlerServer.sendPacket(packet, player);
 	}
 

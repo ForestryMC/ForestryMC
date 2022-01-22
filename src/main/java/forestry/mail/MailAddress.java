@@ -107,11 +107,10 @@ public class MailAddress implements INbtWritable, IMailAddress {
 
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof MailAddress)) {
+		if (!(o instanceof MailAddress address)) {
 			return false;
 		}
 
-		MailAddress address = (MailAddress) o;
 		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
 	}
 

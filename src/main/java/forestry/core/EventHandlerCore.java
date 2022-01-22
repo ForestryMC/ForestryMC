@@ -77,10 +77,9 @@ public class EventHandlerCore {
 				continue;
 			}
 			IIndividualRoot root = definition.get();
-			if (!(root instanceof IForestrySpeciesRoot)) {
+			if (!(root instanceof IForestrySpeciesRoot speciesRoot)) {
 				continue;
 			}
-			IForestrySpeciesRoot speciesRoot = (IForestrySpeciesRoot) root;
 			IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.getCommandSenderWorld(), player.getGameProfile());
 			breedingTracker.synchToPlayer(player);
 		}
@@ -139,8 +138,7 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
-		if ((entity instanceof Villager)) {
-			Villager villager = (Villager) entity;
+		if ((entity instanceof Villager villager)) {
 			VillagerProfession prof = ForgeRegistries.PROFESSIONS.getValue(EntityType.getKey(villager.getType()));
 			if (prof.getRegistryName().equals(RegisterVillager.BEEKEEPER)) {
 				villager.goalSelector.addGoal(6, new ApiaristAI(villager, 0.6));

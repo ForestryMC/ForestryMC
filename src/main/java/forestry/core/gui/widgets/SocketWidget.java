@@ -80,11 +80,9 @@ public class SocketWidget extends Widget {
 		Item held = itemstack.getItem();
 
 		AbstractContainerMenu container = manager.gui.getMenu();
-		if (!(container instanceof IContainerSocketed)) {
+		if (!(container instanceof IContainerSocketed containerSocketed)) {
 			return;
 		}
-
-		IContainerSocketed containerSocketed = (IContainerSocketed) container;
 
 		// Insert chipsets
 		if (held instanceof ItemCircuitBoard) {

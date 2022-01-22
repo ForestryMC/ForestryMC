@@ -99,8 +99,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<CarpenterRec
 		CraftingRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 		int width = 3;
 		int height = 3;
-		if (craftingGridRecipe instanceof IShapedRecipe) {
-			IShapedRecipe<?> shapedRecipe = (IShapedRecipe<?>) craftingGridRecipe;
+		if (craftingGridRecipe instanceof IShapedRecipe<?> shapedRecipe) {
 			width = shapedRecipe.getRecipeWidth();
 			height = shapedRecipe.getRecipeHeight();
 		}

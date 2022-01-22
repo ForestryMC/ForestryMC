@@ -235,10 +235,9 @@ public class TreeRoot extends IndividualRoot<ITree> implements ITreeRoot, IBreed
 
 	@Override
 	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
-		if (!(tracker instanceof ArboristTracker)) {
+		if (!(tracker instanceof ArboristTracker arboristTracker)) {
 			return;
 		}
-		ArboristTracker arboristTracker = (ArboristTracker) tracker;
 		arboristTracker.setWorld(world);
 		arboristTracker.setUsername(profile);
 	}

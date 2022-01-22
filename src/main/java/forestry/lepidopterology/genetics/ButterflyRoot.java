@@ -215,10 +215,9 @@ public class ButterflyRoot extends IndividualRoot<IButterfly> implements IButter
 
 	@Override
 	public void populateTracker(IBreedingTracker tracker, @Nullable Level world, @Nullable GameProfile profile) {
-		if (!(tracker instanceof LepidopteristTracker)) {
+		if (!(tracker instanceof LepidopteristTracker arboristTracker)) {
 			return;
 		}
-		LepidopteristTracker arboristTracker = (LepidopteristTracker) tracker;
 		arboristTracker.setWorld(world);
 		arboristTracker.setUsername(profile);
 	}

@@ -54,10 +54,9 @@ public abstract class TileBase extends TileForestry {
 	public <T extends IBlockType> T getBlockType(T fallbackType) {
 		BlockState blockState = getBlockState();
 		Block block = blockState.getBlock();
-		if (!(block instanceof BlockBase)) {
+		if (!(block instanceof BlockBase blockBase)) {
 			return fallbackType;
 		}
-		BlockBase blockBase = (BlockBase) block;
 		return (T) blockBase.blockType;
 	}
 

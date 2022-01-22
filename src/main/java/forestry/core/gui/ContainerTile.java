@@ -66,8 +66,7 @@ public abstract class ContainerTile<T extends BlockEntity> extends ContainerFore
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		if (tile instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
+		if (tile instanceof IErrorLogicSource errorLogicSource) {
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
 			if (!errorStates.equals(previousErrorStates)) {
@@ -89,10 +88,8 @@ public abstract class ContainerTile<T extends BlockEntity> extends ContainerFore
 			}
 		}
 
-		if (tile instanceof TilePowered) {
+		if (tile instanceof TilePowered tilePowered) {
 			boolean guiNeedsUpdate = false;
-
-			TilePowered tilePowered = (TilePowered) tile;
 
 			int workCounter = tilePowered.getWorkCounter();
 			if (workCounter != previousWorkCounter) {

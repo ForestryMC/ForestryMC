@@ -17,8 +17,7 @@ public class FarmingInfoRecipeMaker {
 		List<FarmingInfoRecipeWrapper> recipes = new ArrayList<>();
 		for (ISolderRecipe circuitRecipe : ChipsetManager.solderManager.getRecipes(manager)) {
 			ICircuit circuit = circuitRecipe.getCircuit();
-			if (circuit instanceof IFarmCircuit) {
-				IFarmCircuit farmCircuit = (IFarmCircuit) circuit;
+			if (circuit instanceof IFarmCircuit farmCircuit) {
 				IFarmLogic logic = farmCircuit.getFarmLogic();
 				if (logic.isManual()) {
 					IFarmProperties properties = logic.getProperties();

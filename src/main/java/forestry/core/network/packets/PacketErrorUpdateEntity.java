@@ -49,8 +49,7 @@ public class PacketErrorUpdateEntity extends ForestryPacket implements IForestry
 		@Override
 		public void onPacketData(PacketBufferForestry data, Player player) {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IErrorLogicSource) {
-				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
+			if (entity instanceof IErrorLogicSource errorSourceTile) {
 				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
 				errorLogic.readData(data);
 			}

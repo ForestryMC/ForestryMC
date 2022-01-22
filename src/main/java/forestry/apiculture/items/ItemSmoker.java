@@ -43,8 +43,7 @@ public class ItemSmoker extends ItemForestry {
 	}
 
 	private static HumanoidArm getHandSide(ItemStack stack, Entity entity) {
-		if (entity instanceof LivingEntity) {
-			LivingEntity LivingEntity = (LivingEntity) entity;
+		if (entity instanceof LivingEntity LivingEntity) {
 			InteractionHand activeHand = LivingEntity.getUsedItemHand();
 			HumanoidArm handSide = LivingEntity.getMainArm();
 			if (activeHand == InteractionHand.OFF_HAND) {

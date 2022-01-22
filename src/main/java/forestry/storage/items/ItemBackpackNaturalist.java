@@ -78,10 +78,9 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 		@Override
 		public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 			Item item = heldItem.getItem();
-			if (!(item instanceof ItemBackpackNaturalist)) {
+			if (!(item instanceof ItemBackpackNaturalist backpack)) {
 				return null;
 			}
-			ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) item;
 			return backpack.getContainer(windowId, playerEntity, heldItem);
 		}
 	}

@@ -139,11 +139,10 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		@Override
 		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
 			UnbakedModel modelButterfly = bakery.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
-			if (!(modelButterfly instanceof BlockModel)) {
+			if (!(modelButterfly instanceof BlockModel modelBlock)) {
 				return null;
 			}
 			ImmutableMap.Builder<String, BakedModel> subModelBuilder = new ImmutableMap.Builder<>();
-			BlockModel modelBlock = (BlockModel) modelButterfly;
 			for (Map.Entry<String, String> subModel : this.subModels.entrySet()) {
 				String identifier = subModel.getKey();
 				String texture = subModel.getValue();

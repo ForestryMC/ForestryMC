@@ -70,8 +70,7 @@ public class EnergyHelper {
 			return 0;
 		}
 
-		if (tile instanceof TileEngine) { // engine chaining
-			TileEngine receptor = (TileEngine) tile;
+		if (tile instanceof TileEngine receptor) { // engine chaining
 			return receptor.getEnergyManager().receiveEnergy(extractable, simulate);
 		}
 

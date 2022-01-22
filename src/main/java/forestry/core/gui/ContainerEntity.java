@@ -53,8 +53,7 @@ public class ContainerEntity<T extends Entity & Container> extends ContainerFore
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		if (entity instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
+		if (entity instanceof IErrorLogicSource errorLogicSource) {
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
 			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {

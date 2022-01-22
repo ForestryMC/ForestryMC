@@ -244,8 +244,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 	@Nullable
 	public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
 		for (Widget widget : widgetManager.getWidgets()) {
-			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - leftPos, mouseY - topPos)) {
-				TankWidget tankWidget = (TankWidget) widget;
+			if (widget instanceof TankWidget tankWidget && widget.isMouseOver(mouseX - leftPos, mouseY - topPos)) {
 				IFluidTank tank = tankWidget.getTank();
 				if (tank != null) {
 					return tank.getFluid();
@@ -279,8 +278,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 
 	@Override
 	public void renderSlot(PoseStack transform, Slot slot) {
-		if (slot instanceof ISlotTextured) {
-			ISlotTextured textured = (ISlotTextured) slot;
+		if (slot instanceof ISlotTextured textured) {
 			ItemStack stack = slot.getItem();
 			if (stack.isEmpty() && slot.isActive()) {
 				ResourceLocation location = textured.getBackgroundTexture();

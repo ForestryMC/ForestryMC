@@ -54,11 +54,10 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 	public void handlePipetteClick(int slot, ServerPlayer player) {
 		ItemStack itemstack = player.inventoryMenu.getCarried();
 		Item held = itemstack.getItem();
-		if (!(held instanceof IToolPipette)) {
+		if (!(held instanceof IToolPipette pipette)) {
 			return;
 		}
 
-		IToolPipette pipette = (IToolPipette) held;
 		IFluidTank tank = tile.getTankManager().getTank(slot);
 		int liquidAmount = tank.getFluidAmount();
 

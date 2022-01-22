@@ -89,8 +89,7 @@ public class TileSapling extends TileTreeContainer {
 		}
 
 		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), true);
-		if (generator instanceof FeatureArboriculture) {
-			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
+		if (generator instanceof FeatureArboriculture arboricultureGenerator) {
 			arboricultureGenerator.preGenerate(level, rand, getBlockPos());
 			return arboricultureGenerator.getValidGrowthPos(level, getBlockPos()) != null;
 		} else {

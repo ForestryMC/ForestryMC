@@ -126,10 +126,9 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 		public IModelGeometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
 			ResourceLocation registryName = new ResourceLocation(Constants.MOD_ID, GsonHelper.getAsString(modelContents, "variant"));
 			Item item = ForgeRegistries.ITEMS.getValue(registryName);
-			if (!(item instanceof ItemCrated)) {
+			if (!(item instanceof ItemCrated crated)) {
 				return ModelLoaderRegistry.getModel(new ModelResourceLocation(new ResourceLocation(Constants.MOD_ID, CrateItems.CRATE.getIdentifier()), "inventory"), deserializationContext, modelContents);
 			}
-			ItemCrated crated = (ItemCrated) item;
 			return new CrateModel(crated);
 		}
 	}

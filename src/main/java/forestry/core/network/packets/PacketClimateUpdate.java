@@ -56,8 +56,7 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 				return;
 			}
 			IClimateTransformer transformer = housing.getTransformer();
-			if (transformer instanceof IStreamable) {
-				IStreamable streamable = (IStreamable) transformer;
+			if (transformer instanceof IStreamable streamable) {
 				streamable.readData(data);
 			}
 			//housing.onUpdateClimate();

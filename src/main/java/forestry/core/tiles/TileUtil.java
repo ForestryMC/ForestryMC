@@ -49,8 +49,7 @@ public abstract class TileUtil {
 	 */
 	@Nullable
 	public static BlockEntity getTile(BlockGetter world, BlockPos pos) {
-		if (world instanceof PathNavigationRegion) {
-			PathNavigationRegion chunkCache = (PathNavigationRegion) world;
+		if (world instanceof PathNavigationRegion chunkCache) {
 			return chunkCache.getBlockEntity(pos);
 		} else {
 			return world.getBlockEntity(pos);

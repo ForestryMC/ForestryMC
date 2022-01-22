@@ -118,14 +118,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	protected void onBlockAdded(IMultiblockComponent newPart) {
 		if (newPart instanceof IAlvearyComponent) {
-			if (newPart instanceof IAlvearyComponent.BeeModifier) {
-				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) newPart;
+			if (newPart instanceof IAlvearyComponent.BeeModifier alvearyBeeModifier) {
 				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
 				beeModifiers.add(beeModifier);
 			}
 
-			if (newPart instanceof IAlvearyComponent.BeeListener) {
-				IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) newPart;
+			if (newPart instanceof IAlvearyComponent.BeeListener beeListenerSource) {
 				IBeeListener beeListener = beeListenerSource.getBeeListener();
 				beeListeners.add(beeListener);
 			}
@@ -143,14 +141,12 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	protected void onBlockRemoved(IMultiblockComponent oldPart) {
 		if (oldPart instanceof IAlvearyComponent) {
-			if (oldPart instanceof IAlvearyComponent.BeeModifier) {
-				IAlvearyComponent.BeeModifier alvearyBeeModifier = (IAlvearyComponent.BeeModifier) oldPart;
+			if (oldPart instanceof IAlvearyComponent.BeeModifier alvearyBeeModifier) {
 				IBeeModifier beeModifier = alvearyBeeModifier.getBeeModifier();
 				beeModifiers.remove(beeModifier);
 			}
 
-			if (oldPart instanceof IAlvearyComponent.BeeListener) {
-				IAlvearyComponent.BeeListener beeListenerSource = (IAlvearyComponent.BeeListener) oldPart;
+			if (oldPart instanceof IAlvearyComponent.BeeListener beeListenerSource) {
 				IBeeListener beeListener = beeListenerSource.getBeeListener();
 				beeListeners.remove(beeListener);
 			}

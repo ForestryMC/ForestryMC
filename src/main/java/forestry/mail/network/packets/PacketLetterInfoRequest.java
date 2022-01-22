@@ -47,8 +47,7 @@ public class PacketLetterInfoRequest extends ForestryPacket implements IForestry
 			String recipientName = data.readUtf();
 			EnumAddressee addressType = data.readEnum(EnumAddressee.values());
 
-			if (player.containerMenu instanceof ContainerLetter) {
-				ContainerLetter containerLetter = (ContainerLetter) player.containerMenu;
+			if (player.containerMenu instanceof ContainerLetter containerLetter) {
 				containerLetter.handleRequestLetterInfo(player, recipientName, addressType);
 			}
 		}

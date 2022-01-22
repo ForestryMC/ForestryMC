@@ -28,7 +28,7 @@ public interface IDynamicProductList extends IProductList {
 	 * @param stacks   All products of the provider that are produced in this cycle.
 	 * @param modifier A function that is used by the provider to modify the chance of the product.
 	 * @param rand     The instance of {@link Random} that should be used. In the most cases this is
-	 *                 {@link net.minecraft.world.World#rand}.
+	 *                 {@link net.minecraft.world.level.Level#random}.
 	 */
 	default void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
 		addProducts(stacks, modifier, rand);

@@ -34,8 +34,7 @@ public class CircuitSpeedUpgrade extends Circuit {
 		if (!isCircuitable(tile)) {
 			return;
 		}
-		if (tile instanceof ISpeedUpgradable) {
-			ISpeedUpgradable machine = (ISpeedUpgradable) tile;
+		if (tile instanceof ISpeedUpgradable machine) {
 			machine.applySpeedUpgrade(speedBoost, powerDraw);
 		}
 	}
@@ -50,8 +49,7 @@ public class CircuitSpeedUpgrade extends Circuit {
 		if (!isCircuitable(tile)) {
 			return;
 		}
-		if (tile instanceof ISpeedUpgradable) {
-			ISpeedUpgradable machine = (ISpeedUpgradable) tile;
+		if (tile instanceof ISpeedUpgradable machine) {
 			machine.applySpeedUpgrade(-speedBoost, -powerDraw);
 		}
 	}

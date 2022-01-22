@@ -123,11 +123,9 @@ public class ClientManager {
 		} else if (feature instanceof FeatureTable) {
 			FeatureTable<?, ?, ?, ?> group = (FeatureTable) feature;
 			group.getFeatures().forEach(f -> registerModel(model, f));
-		} else if (feature instanceof FeatureBlock) {
-			FeatureBlock block = (FeatureBlock) feature;
+		} else if (feature instanceof FeatureBlock block) {
 			registerModel(model, block.block(), block.getItem());
-		} else if (feature instanceof FeatureItem) {
-			FeatureItem item = (FeatureItem) feature;
+		} else if (feature instanceof FeatureItem item) {
 			registerModel(model, item.item());
 		}
 	}

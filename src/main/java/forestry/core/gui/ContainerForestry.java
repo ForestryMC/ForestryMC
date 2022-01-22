@@ -85,8 +85,7 @@ public abstract class ContainerForestry extends AbstractContainerMenu {
 		}
 
 		Slot slot = slotId < 0 ? null : getSlot(slotId);
-		if (slot instanceof SlotForestry) {
-			SlotForestry slotForestry = (SlotForestry) slot;
+		if (slot instanceof SlotForestry slotForestry) {
 			if (slotForestry.isPhantom()) {
 				// return SlotUtil.slotClickPhantom(slotForestry, dragType_or_button, clickTypeIn, player);
 			}

@@ -77,8 +77,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			return;
 		}
 		IAllele allele = optionalAllele.get();
-		if (allele instanceof IAlleleForestrySpecies) {
-			IAlleleForestrySpecies species = (IAlleleForestrySpecies) allele;
+		if (allele instanceof IAlleleForestrySpecies species) {
 			IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
 			IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 			this.tokenIndividual = root.templateAsIndividual(template);

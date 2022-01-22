@@ -49,13 +49,11 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
-		} else if (o instanceof Vec3i) {
-			Vec3i position = (Vec3i) o;
+		} else if (o instanceof Vec3i position) {
 			return this.getX() == position.getX() && this.getZ() == position.getZ();
-		} else if (!(o instanceof Position2D)) {
+		} else if (!(o instanceof Position2D position)) {
 			return false;
 		} else {
-			Position2D position = (Position2D) o;
 			return this.getX() == position.getX() && this.getZ() == position.getZ();
 		}
 	}

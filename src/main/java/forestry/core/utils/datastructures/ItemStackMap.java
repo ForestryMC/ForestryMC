@@ -24,8 +24,7 @@ public class ItemStackMap<T> extends StackMap<ItemStack, T> {
 
 	@Override
 	protected boolean areEqual(ItemStack a, Object b) {
-		if (b instanceof ItemStack) {
-			ItemStack b2 = (ItemStack) b;
+		if (b instanceof ItemStack b2) {
 			return ItemStackUtil.isCraftingEquivalent(b2, a);
 		}
 		if (b instanceof Item) {

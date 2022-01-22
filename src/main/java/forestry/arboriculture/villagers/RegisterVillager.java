@@ -153,8 +153,7 @@ public class RegisterVillager {
 			Collection<IAllele> registeredSpecies = AlleleUtils.getAllelesByType(treeSpeciesType);
 			List<IAlleleSpecies> potentialSpecies = new ArrayList<>();
 			for (IAllele allele : registeredSpecies) {
-				if (allele instanceof AlleleForestrySpecies) {
-					AlleleForestrySpecies species = (AlleleForestrySpecies) allele;
+				if (allele instanceof AlleleForestrySpecies species) {
 					if (species.getComplexity() <= maxComplexity) {
 						potentialSpecies.add(species);
 					}

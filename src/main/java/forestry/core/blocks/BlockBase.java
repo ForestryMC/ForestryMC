@@ -173,8 +173,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		}
 
 		BlockEntity tile = TileUtil.getTile(world, pos);
-		if (tile instanceof Container) {
-			Container inventory = (Container) tile;
+		if (tile instanceof Container inventory) {
 			InventoryUtil.dropInventory(inventory, world, pos);
 		}
 		if (tile instanceof TileForestry) {

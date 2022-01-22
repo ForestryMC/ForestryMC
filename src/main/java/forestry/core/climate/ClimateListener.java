@@ -231,12 +231,10 @@ public class ClimateListener implements IClimateListener {
 	}
 
 	private void initLocation() {
-		if ((this.locationProvider instanceof ILocatable)) {
-			ILocatable provider = (ILocatable) this.locationProvider;
+		if ((this.locationProvider instanceof ILocatable provider)) {
 			this.world = provider.getWorldObj();
 			this.pos = provider.getCoordinates();
-		} else if ((this.locationProvider instanceof BlockEntity)) {
-			BlockEntity provider = (BlockEntity) this.locationProvider;
+		} else if ((this.locationProvider instanceof BlockEntity provider)) {
 			this.world = provider.getLevel();
 			this.pos = provider.getBlockPos();
 		} else {

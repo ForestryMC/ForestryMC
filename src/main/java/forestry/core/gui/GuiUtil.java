@@ -56,10 +56,9 @@ public class GuiUtil {
 
 	public static void drawToolTips(PoseStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
-			if (!(obj instanceof IToolTipProvider)) {
+			if (!(obj instanceof IToolTipProvider provider)) {
 				continue;
 			}
-			IToolTipProvider provider = (IToolTipProvider) obj;
 			if (!provider.isToolTipVisible()) {
 				continue;
 			}

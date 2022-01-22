@@ -91,8 +91,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 		}
 
 		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
+			if (allele instanceof IAlleleTreeSpecies alleleTreeSpecies) {
 				if (TreeConfig.getSpawnRarity() > 0) {
 					SPECIES.add(alleleTreeSpecies);
 				}

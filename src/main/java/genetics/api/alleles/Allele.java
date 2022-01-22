@@ -51,10 +51,9 @@ public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof IAllele)) {
+		if (!(obj instanceof IAllele otherAllele)) {
 			return false;
 		}
-		IAllele otherAllele = (IAllele) obj;
 		return getRegistryName() != null ?
 			getRegistryName().equals(((IAllele) obj).getRegistryName()) :
 			dominant == otherAllele.isDominant();

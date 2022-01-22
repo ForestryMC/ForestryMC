@@ -104,11 +104,9 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		}
 
 		Item item = inputCircuitBoard.getItem();
-		if (!(item instanceof ItemCircuitBoard)) {
+		if (!(item instanceof ItemCircuitBoard circuitBoard)) {
 			return;
 		}
-
-		ItemCircuitBoard circuitBoard = ((ItemCircuitBoard) item);
 
 		EnumCircuitBoardType type = circuitBoard.getType();
 		if (getCircuitCount() != type.getSockets()) {
