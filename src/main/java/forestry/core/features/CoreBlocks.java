@@ -31,7 +31,7 @@ public class CoreBlocks {
 			.sound(SoundType.GRAVEL)), "peat");
 	public static final FeatureBlock<BlockHumus, ItemBlockForestry> HUMUS = REGISTRY.block(BlockHumus::new, ItemBlockForestry::new, "humus");
 	public static final FeatureBlockGroup<BlockResourceStorage, EnumResourceType> RESOURCE_STORAGE = REGISTRY.blockGroup(BlockResourceStorage::new, EnumResourceType.VALUES).item(ItemBlockForestry::new).identifier("resource_storage").create();
-	public static final FeatureBlockGroup<BlockResourceOre, EnumResourceType> RESOURCE_ORE = REGISTRY.blockGroup(BlockResourceOre::new, new EnumResourceType[]{EnumResourceType.APATITE, EnumResourceType.COPPER, EnumResourceType.TIN}).item(ItemBlockForestry::new).identifier("resource_ore").create();
+	public static final FeatureBlockGroup<BlockResourceOre, EnumResourceType> RESOURCE_ORE = REGISTRY.blockGroup(BlockResourceOre::new, new EnumResourceType[]{EnumResourceType.APATITE, EnumResourceType.TIN}).item(ItemBlockForestry::new).identifier("resource_ore").create();
 
 	private CoreBlocks() {
 	}

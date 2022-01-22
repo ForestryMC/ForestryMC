@@ -54,15 +54,13 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		addToTag(Tags.Items.INGOTS, ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_COPPER, ForestryTags.Items.INGOTS_TIN);
 		tag(ForestryTags.Items.INGOTS_BRONZE).add(CoreItems.INGOT_BRONZE.item());
 		tag(ForestryTags.Items.INGOTS_TIN).add(CoreItems.INGOT_TIN.item());
-		tag(ForestryTags.Items.INGOTS_COPPER).add(CoreItems.INGOT_COPPER.item());
 
 		tag(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
 		tag(ForestryTags.Items.GEMS_APATITE).add(CoreItems.APATITE.item());
 
-		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_TIN);
+		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_TIN);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_TIN, ForestryTags.Items.STORAGE_BLOCKS_TIN);
-		copy(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_COPPER);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE);
 
 		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
@@ -73,8 +71,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tag(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
 		tag(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROPS.itemArray());
 
-		addToTag(Tags.Items.ORES, ForestryTags.Items.ORES_COPPER, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
-		copy(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Items.ORES_COPPER);
+		addToTag(Tags.Items.ORES, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
 		copy(ForestryTags.Blocks.ORES_TIN, ForestryTags.Items.ORES_TIN);
 		copy(ForestryTags.Blocks.ORES_APATITE, ForestryTags.Items.ORES_APATITE);
 

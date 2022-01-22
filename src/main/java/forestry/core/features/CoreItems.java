@@ -50,7 +50,6 @@ public class CoreItems {
 	public static final FeatureItem<ItemAlyzer> PORTABLE_ALYZER = REGISTRY.item(ItemAlyzer::new, "portable_alyzer");
 
 	/* Ingots */
-	public static final FeatureItem<ItemForestry> INGOT_COPPER = REGISTRY.item(ItemForestry::new, "ingot_copper");
 	public static final FeatureItem<ItemForestry> INGOT_TIN = REGISTRY.item(ItemForestry::new, "ingot_tin");
 	public static final FeatureItem<ItemForestry> INGOT_BRONZE = REGISTRY.item(ItemForestry::new, "ingot_bronze");
 

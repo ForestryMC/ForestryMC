@@ -29,8 +29,6 @@ public class CoreFeatures {
 	public static void registerOres() {
 		overworldOres.add(register("apatite_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36))));
 
-		overworldOres.add(register("copper_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6))));
-
 		overworldOres.add(register("tin_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6))));
 	}
 

@@ -18,10 +18,8 @@ public class ForestryTags {
 
 		public static final Tag.Named<Block> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
 		public static final Tag.Named<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
-		public static final Tag.Named<Block> STORAGE_BLOCKS_COPPER = forgeTag("storage_blocks/copper");
 		public static final Tag.Named<Block> STORAGE_BLOCKS_BRONZE = forgeTag("storage_blocks/bronze");
 
-		public static final Tag.Named<Block> ORES_COPPER = forgeTag("ores/copper");
 		public static final Tag.Named<Block> ORES_TIN = forgeTag("ores/tin");
 		public static final Tag.Named<Block> ORES_APATITE = forgeTag("ores/apatite");
 		public static final Tag.Named<Block> PALM_LOGS = tag("palm_logs");
@@ -69,10 +67,8 @@ public class ForestryTags {
 
 		public static final Tag.Named<Item> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
 		public static final Tag.Named<Item> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
-		public static final Tag.Named<Item> STORAGE_BLOCKS_COPPER = forgeTag("storage_blocks/copper");
 		public static final Tag.Named<Item> STORAGE_BLOCKS_BRONZE = forgeTag("storage_blocks/bronze");
 
-		public static final Tag.Named<Item> ORES_COPPER = forgeTag("ores/copper");
 		public static final Tag.Named<Item> ORES_TIN = forgeTag("ores/tin");
 		public static final Tag.Named<Item> ORES_APATITE = forgeTag("ores/apatite");
 

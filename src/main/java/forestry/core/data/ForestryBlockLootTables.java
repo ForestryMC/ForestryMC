@@ -79,7 +79,6 @@ public class ForestryBlockLootTables extends BlockLoot {
 		registerDropping(CoreBlocks.HUMUS, Blocks.DIRT);
 
 		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
-		dropSelf(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).block());
 
 		registerEmptyTables(ArboricultureBlocks.PODS); // Handled by internal logic
 		registerEmptyTables(ArboricultureBlocks.SAPLING_GE); // Handled by internal logic

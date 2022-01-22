@@ -9,22 +9,22 @@ import java.util.function.Consumer;
 
 import org.apache.logging.log4j.util.TriConsumer;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
@@ -602,31 +602,24 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		Consumer<FinishedRecipe> consumer = helper.getConsumer();
 
 		SimpleCookingRecipeBuilder.smelting(
-				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)),
-				CoreItems.APATITE,
-				0.5F,
-				200)
+						Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)),
+						CoreItems.APATITE,
+						0.5F,
+						200)
 				.unlockedBy("has_apatite_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE)))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_blasting"));
 		SimpleCookingRecipeBuilder.smelting(
-				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)),
-				CoreItems.INGOT_TIN,
-				0.5F,
-				200)
+						Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)),
+						CoreItems.INGOT_TIN,
+						0.5F,
+						200)
 				.unlockedBy("has_tin_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN)))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_blasting"));
 		SimpleCookingRecipeBuilder.smelting(
-				Ingredient.of(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)),
-				CoreItems.INGOT_COPPER,
-				0.5F,
-				200)
-				.unlockedBy("has_copper_ore", has(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER)))
-				.save(consumer, new ResourceLocation(Constants.MOD_ID, "copper_ingot_from_blasting"));
-		SimpleCookingRecipeBuilder.smelting(
-				Ingredient.of(CoreItems.PEAT),
-				CoreItems.ASH.item(),
-				0.0F,
-				200)
+						Ingredient.of(CoreItems.PEAT),
+						CoreItems.ASH.item(),
+						0.0F,
+						200)
 				.unlockedBy("has_peat", has(CoreItems.PEAT))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "ash_from_peat_blasting"));
 
@@ -646,10 +639,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.define('#', ForestryTags.Items.INGOTS_BRONZE)
 				.pattern("###").pattern("###").pattern("###")
 				.unlockedBy("has_bronze", has(ForestryTags.Items.INGOTS_BRONZE)).save(consumer);
-		ShapedRecipeBuilder.shaped(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.COPPER).block())
-				.define('#', ForestryTags.Items.INGOTS_COPPER)
-				.pattern("###").pattern("###").pattern("###")
-				.unlockedBy("has_copper", has(ForestryTags.Items.INGOTS_COPPER)).save(consumer);
 		ShapedRecipeBuilder.shaped(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.TIN).block())
 				.define('#', ForestryTags.Items.INGOTS_TIN)
 				.pattern("###").pattern("###").pattern("###")
@@ -680,7 +669,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						.define('X', ForestryTags.Items.INGOTS_COPPER)
 						.pattern(" # ").pattern("#X#").pattern(" # ")
 						.unlockedBy("has_bronze", has(ForestryTags.Items.INGOTS_BRONZE))::save)
-			.build(helper.getConsumer(), new ResourceLocation(Constants.MOD_ID, "gear_bronze"));
+				.build(helper.getConsumer(), new ResourceLocation(Constants.MOD_ID, "gear_bronze"));
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
@@ -695,7 +684,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						.define('X', ForestryTags.Items.INGOTS_COPPER)
 						.pattern(" # ").pattern("#X#").pattern(" # ")
 						.unlockedBy("has_copper", has(ForestryTags.Items.INGOTS_COPPER))::save)
-			.build(helper.getConsumer(), new ResourceLocation(Constants.MOD_ID, "gear_copper"));
+				.build(helper.getConsumer(), new ResourceLocation(Constants.MOD_ID, "gear_copper"));
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
@@ -726,9 +715,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		ShapelessRecipeBuilder.shapeless(CoreItems.INGOT_BRONZE.item(), 9)
 				.requires(ForestryTags.Items.STORAGE_BLOCKS_BRONZE)
 				.unlockedBy("has_block", has(ForestryTags.Items.STORAGE_BLOCKS_BRONZE)).save(consumer);
-		ShapelessRecipeBuilder.shapeless(CoreItems.INGOT_COPPER.item(), 9)
-				.requires(ForestryTags.Items.STORAGE_BLOCKS_COPPER)
-				.unlockedBy("has_block", has(ForestryTags.Items.STORAGE_BLOCKS_COPPER)).save(consumer);
 		ShapelessRecipeBuilder.shapeless(CoreItems.INGOT_TIN.item(), 9)
 				.requires(ForestryTags.Items.STORAGE_BLOCKS_TIN)
 				.unlockedBy("has_block", has(ForestryTags.Items.STORAGE_BLOCKS_TIN)).save(consumer);

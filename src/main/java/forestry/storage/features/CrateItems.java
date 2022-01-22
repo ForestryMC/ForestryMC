@@ -38,7 +38,7 @@ public class CrateItems {
 	public static final FeatureItem<ItemCrated> CRATED_PHOSPHOR = register(CoreItems.PHOSPHOR, "crated_phosphor");
 	public static final FeatureItem<ItemCrated> CRATED_ASH = register(CoreItems.ASH, "crated_ash");
 	public static final FeatureItem<ItemCrated> CRATED_TIN = register(CoreItems.INGOT_TIN, "crated_tin");
-	public static final FeatureItem<ItemCrated> CRATED_COPPER = register(CoreItems.INGOT_COPPER, "crated_copper");
+	public static final FeatureItem<ItemCrated> CRATED_COPPER = register(Items.COPPER_INGOT, "crated_copper");
 	public static final FeatureItem<ItemCrated> CRATED_BRONZE = register(CoreItems.INGOT_BRONZE, "crated_bronze");
 
 	public static final FeatureItem<ItemCrated> CRATED_HUMUS = register(CoreBlocks.HUMUS, "crated_humus");
