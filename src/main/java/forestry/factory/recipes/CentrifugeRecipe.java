@@ -92,7 +92,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 			NonNullList<Product> outputs = NonNullList.create();
 
 			for (JsonElement element : GsonHelper.getAsJsonArray(json, "products")) {
-				float chance = GsonHelper.getAsInt(element.getAsJsonObject(), "chance");
+				float chance = GsonHelper.getAsFloat(element.getAsJsonObject(), "chance");
 				ItemStack stack = RecipeSerializers.item(GsonHelper.getAsJsonObject(element.getAsJsonObject(), "item"));
 				outputs.add(new Product(chance, stack));
 			}
