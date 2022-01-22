@@ -7,8 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
 import forestry.api.apiculture.genetics.IBee;
@@ -18,9 +16,7 @@ import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.alleles.IAlleleFlowers;
 import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
-import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.core.genetics.GenericRatings;
-import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Translator;
 
 import genetics.api.alleles.IAllele;
@@ -29,7 +25,6 @@ import genetics.api.individual.IChromosomeAllele;
 import genetics.api.individual.IChromosomeType;
 import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IGenome;
-import genetics.api.organism.IOrganismType;
 
 public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 	GENERATIONS(-1) {
@@ -51,14 +46,6 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 			}
 		}
 	}, SPECIES(BeeChromosomes.SPECIES, 0) {
-		@Override
-		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, PoseStack transform) {
-			IOrganismType organismType = helper.getOrganismType();
-			Component primaryName = GeneticsUtil.getAlyzerName(organismType, getActiveAllele(genome));
-			Component secondaryName = GeneticsUtil.getAlyzerName(organismType, getActiveAllele(genome));
-
-			helper.drawSpeciesRow(Translator.translateToLocal("for.gui.species"), BeeChromosomes.SPECIES, primaryName, secondaryName);
-		}
 	},
 	SPEED(BeeChromosomes.SPEED, 2, 1) {
 		@Override
@@ -93,16 +80,6 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		}
 	},
 	FERTILITY(BeeChromosomes.FERTILITY, 5, "fertility") {
-		@Override
-		public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, PoseStack transform) {
-			super.drawAlyzer(helper, genome, mouseX, mouseY, transform);
-			IAlleleValue<Integer> primaryFertility = getActiveValue(genome);
-			IAlleleValue<Integer> secondaryFertility = getInactiveValue(genome);
-			helper.nextColumn();
-			helper.drawFertilityInfo(primaryFertility);
-			helper.nextColumn();
-			helper.drawFertilityInfo(secondaryFertility);
-		}
 	},
 	TEMPERATURE_TOLERANCE(BeeChromosomes.TEMPERATURE_TOLERANCE, -1, 2) {
 		@Override
@@ -209,13 +186,6 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 	@Override
 	public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 		//Default Implementation
-	}
-
-	@Override
-	public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, PoseStack transform) {
-		if (alyzerCaption != null) {
-			helper.drawChromosomeRow("for.gui." + alyzerCaption, type, true);
-		}
 	}
 
 	<V> IAlleleValue<V> getActive(IGenome genome) {

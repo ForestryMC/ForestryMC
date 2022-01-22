@@ -77,7 +77,7 @@ public class GuiMailboxInfo extends GuiComponent {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
-		textureManager.bind(textureAlert);
+		textureManager.bindForSetup(textureAlert);
 
 		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 

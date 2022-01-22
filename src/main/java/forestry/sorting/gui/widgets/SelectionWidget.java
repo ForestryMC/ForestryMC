@@ -55,7 +55,7 @@ public class SelectionWidget extends Widget {
 			return;
 		}
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(TEXTURE);
+		textureManager.bindForSetup(TEXTURE);
 		manager.gui.blit(transform, startX + xPos, startY + yPos, 0, 0, width, height);
 		logic.draw(transform);
 

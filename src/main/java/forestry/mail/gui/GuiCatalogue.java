@@ -66,15 +66,15 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 
 		Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
 
-		addButton(new Button(width / 2 + 44, topPos + 150, 12, 20, new TextComponent(">"), b -> actionPerformed(2)));
-		addButton(new Button(width / 2 - 58, topPos + 150, 12, 20, new TextComponent("<"), b -> actionPerformed(3)));
+		addRenderableWidget(new Button(width / 2 + 44, topPos + 150, 12, 20, new TextComponent(">"), b -> actionPerformed(2)));
+		addRenderableWidget(new Button(width / 2 - 58, topPos + 150, 12, 20, new TextComponent("<"), b -> actionPerformed(3)));
 
 		//TODO but these are set in the constructor??
 		buttonFilter = new Button(width / 2 - 44, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.filter.all"), b -> actionPerformed(4));
-		addButton(buttonFilter);
+		addRenderableWidget(buttonFilter);
 
 		buttonUse = new Button(width / 2, topPos + 150, 42, 20, new TranslatableComponent("for.gui.mail.address.copy"), b -> actionPerformed(5));
-		addButton(buttonUse);
+		addRenderableWidget(buttonUse);
 	}
 
 	@Override

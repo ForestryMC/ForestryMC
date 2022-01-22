@@ -68,7 +68,7 @@ public class WidgetDatabaseSlot extends Widget {
 	@Override
 	public void draw(PoseStack transform, int startY, int startX) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		manager.minecraft.textureManager.bind(TEXTURE_LOCATION);
+		manager.minecraft.textureManager.bindForSetup(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {
 			texture = SLOT_SELECTED;
@@ -78,7 +78,7 @@ public class WidgetDatabaseSlot extends Widget {
 		if (!itemStack.isEmpty()) {
 			Minecraft minecraft = Minecraft.getInstance();
 			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
+			textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
 			//RenderHelper.enableGUIStandardItemLighting(); TODO Gui Light
 			GuiUtil.drawItemStack(manager.gui, itemStack, startX + xPos, startY + yPos);
 			Lighting.turnOff();

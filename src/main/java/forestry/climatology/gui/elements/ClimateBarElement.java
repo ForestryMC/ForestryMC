@@ -104,7 +104,7 @@ public class ClimateBarElement extends GuiElement {
 		RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(gui.textureFile);
+		textureManager.bindForSetup(gui.textureFile);
 
 		setGLColorFromInt(type == ClimateType.TEMPERATURE ? 0xFFD700 : 0x7ff4f4);
 		int progressScaled = getProgressScaled();

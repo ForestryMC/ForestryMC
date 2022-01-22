@@ -38,8 +38,8 @@ public class PluginUtil {
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotations = scanData.getAnnotations();
 			for (ModFileScanData.AnnotationData a : annotations) {
-				if (Objects.equals(a.getAnnotationType(), annotationType)) {
-					String memberName = a.getMemberName();
+				if (Objects.equals(a.annotationType(), annotationType)) {
+					String memberName = a.memberName();
 					pluginClassNames.add(memberName);
 				}
 			}

@@ -6,15 +6,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.api.core.tooltips.ITextInstance;
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
-import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.apiculture.genetics.IGeneticTooltipProvider;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
@@ -150,10 +147,6 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 					.create();
 			//toolTip.translated("%1$s %2$s", first.formattingText, second.formattingText)
 		}
-	}
-
-	@Override
-	public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, PoseStack transform) {
 	}
 
 	<V> IAlleleValue<V> getActive(IGenome genome) {

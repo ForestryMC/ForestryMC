@@ -68,11 +68,11 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	}
 
 	private void addButtons() {
-		addButton(new GuiBetterButton(leftPos + 76, topPos + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 76, topPos + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(100, 0));
 			SoundUtil.playButtonClick();
 		}));
-		addButton(new GuiBetterButton(leftPos + 85, topPos + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 85, topPos + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(101, 0));
 			SoundUtil.playButtonClick();
 		}));

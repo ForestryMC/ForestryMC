@@ -210,7 +210,7 @@ public abstract class Ledger {
 
 		RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
 
-		Minecraft.getInstance().getTextureManager().bind(texture);
+		Minecraft.getInstance().getTextureManager().bindForSetup(texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -230,7 +230,7 @@ public abstract class Ledger {
 
 	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
-		Minecraft.getInstance().getTextureManager().bind(textureMap);
+		Minecraft.getInstance().getTextureManager().bindForSetup(textureMap);
 		GuiComponent.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}
 

@@ -109,7 +109,7 @@ public class TankWidget extends Widget {
 					scaledAmount = height;
 				}
 
-				textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
+				textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
 				setGLColorFromInt(fluidColor);
 
 				final int xTileCount = width / 16;
@@ -139,7 +139,7 @@ public class TankWidget extends Widget {
 		if (drawOverlay) {
 			RenderSystem.enableAlphaTest();
 			RenderSystem.disableDepthTest();
-			textureManager.bind(manager.gui.textureFile);
+			textureManager.bindForSetup(manager.gui.textureFile);
 			manager.gui.blit(transform, startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			RenderSystem.enableDepthTest();
 			RenderSystem.disableAlphaTest();

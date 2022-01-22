@@ -103,12 +103,12 @@ public class GuiNaturalistInventory extends GuiForestry<ContainerNaturalistInven
 	public void init() {
 		super.init();
 
-		addButton(new GuiBetterButton(leftPos + 99, topPos + 7, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 99, topPos + 7, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
 			if (pageCurrent > 0) {
 				flipPage(pageCurrent - 1);
 			}
 		}));
-		addButton(new GuiBetterButton(leftPos + 180, topPos + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 180, topPos + 7, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
 			if (pageCurrent < pageMax - 1) {
 				flipPage(pageCurrent + 1);
 			}

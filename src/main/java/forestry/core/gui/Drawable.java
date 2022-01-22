@@ -47,7 +47,7 @@ public class Drawable {
 	@SuppressWarnings("deprecation")
 	public void draw(PoseStack transform, int yOffset, int width, int height, int xOffset) {
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(textureLocation);
+		textureManager.bindForSetup(textureLocation);
 
 		// Enable correct lighting.
 		RenderSystem.enableAlphaTest();

@@ -48,7 +48,7 @@ public class FluidComponent implements ICustomComponent {
 		ResourceLocation fluidStill = fluidAttributes.getStillTexture(fluidStack);
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 		ResourceLocation spriteLocation = sprite.getName();
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
+		Minecraft.getInstance().getTextureManager().bindForSetup(new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
 		setGLColorFromInt(fluidAttributes.getColor(fluidStack));
 
 		// MatrixStack transform, int x, int y, float u, float v, int width, int height, int ?, int ?

@@ -67,7 +67,7 @@ public class GameTokenWidget extends Widget {
 		float colorB = (tokenColour & 255) / 255.0F;
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(manager.gui.textureFile);
+		textureManager.bindForSetup(manager.gui.textureFile);
 
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();

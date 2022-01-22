@@ -104,7 +104,7 @@ public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> exten
 		}
 		window.init(leftPos, topPos + (imageHeight - 166) / 2);
 
-		addButton(new GuiToggleButton(leftPos + buttonX, topPos + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
+		addRenderableWidget(new GuiToggleButton(leftPos + buttonX, topPos + buttonY, 18, 20, TOGGLE_BUTTON, new Handler())).visible = ((IContainerAnalyzerProvider) container).getAnalyzerSlot() != null;
 		dirty = true;
 
 		slotDirty = true;

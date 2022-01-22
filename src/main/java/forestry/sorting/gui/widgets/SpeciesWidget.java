@@ -80,7 +80,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		}
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bind(SelectionWidget.TEXTURE);
+			textureManager.bindForSetup(SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}

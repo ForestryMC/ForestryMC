@@ -286,7 +286,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 				ResourceLocation location = textured.getBackgroundTexture();
 				if (location != null) {
 					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-					this.minecraft.getTextureManager().bind(sprite.atlas().location());
+					this.minecraft.getTextureManager().bindForSetup(sprite.atlas().location());
 					blit(transform, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
 				}
 			}
@@ -345,7 +345,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 	protected void bindTexture(ResourceLocation texturePath) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(texturePath);
+		textureManager.bindForSetup(texturePath);
 	}
 
 	@Override

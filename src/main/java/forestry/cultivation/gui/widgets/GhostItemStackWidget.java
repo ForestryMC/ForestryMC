@@ -48,7 +48,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(manager.gui.textureFile);
+		textureManager.bindForSetup(manager.gui.textureFile);
 		manager.gui.blit(transform, xPos + startX, yPos + startY, 206, 0, 16, 16);
 
 		RenderSystem.disableBlend();

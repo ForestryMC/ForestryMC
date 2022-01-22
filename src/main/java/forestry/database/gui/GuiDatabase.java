@@ -206,7 +206,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		this.searchField.setTextColor(16777215);
 		children.add(searchField);
 
-		addButton(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
+		addRenderableWidget(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
 		updateViewedItems();
 	}

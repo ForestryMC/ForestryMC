@@ -39,7 +39,7 @@ public class ProbeButton extends Widget {
 	public void draw(PoseStack transform, int startY, int startX) {
 		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(manager.gui.textureFile);
+		textureManager.bindForSetup(manager.gui.textureFile);
 		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, pressed ? 47 : 22, width, height);
 	}
 

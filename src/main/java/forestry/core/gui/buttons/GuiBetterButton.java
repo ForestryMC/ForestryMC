@@ -103,7 +103,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		if (!visible) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bind(TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();

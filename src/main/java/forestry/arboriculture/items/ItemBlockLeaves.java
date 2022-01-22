@@ -42,7 +42,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves(BlockPos.ZERO, getBlock().defaultBlockState());
-		tileLeaves.load(tileLeaves.getBlockState(), itemstack.getTag());
+		tileLeaves.load(itemstack.getTag());
 
 		ITree tree = tileLeaves.getTree();
 		if (tree == null) {
@@ -68,7 +68,7 @@ public class ItemBlockLeaves extends ItemBlockForestry<BlockAbstractLeaves> impl
 		}
 
 		TileLeaves tileLeaves = new TileLeaves(BlockPos.ZERO, getBlock().defaultBlockState());
-		tileLeaves.load(tileLeaves.getBlockState(), itemStack.getTag());
+		tileLeaves.load(itemStack.getTag());
 
 		if (renderPass == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 			return tileLeaves.getFruitColour();

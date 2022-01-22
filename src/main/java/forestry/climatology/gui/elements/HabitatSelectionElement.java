@@ -68,7 +68,7 @@ public class HabitatSelectionElement extends ContainerElement {
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+		textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
 		if (!optional.isPresent()) {
 			return;
@@ -131,7 +131,7 @@ public class HabitatSelectionElement extends ContainerElement {
 		public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-			textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+			textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 			blit(transform, 0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			blit(transform, 2, 2, getBlitOffset(), 16, 16, climate.getSprite());

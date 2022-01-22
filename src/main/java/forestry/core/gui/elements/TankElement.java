@@ -97,7 +97,7 @@ public class TankElement extends GuiElement {
 				scaledAmount = getHeight();
 			}
 
-			textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
+			textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
 			final int xTileCount = getWidth() / 16;

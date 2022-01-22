@@ -11,16 +11,18 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -111,12 +113,13 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), bonemealed);
+		Feature<NoneFeatureConfiguration> generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(level, random, getBlockPos(), false);
 		} else {
-			generated = generator.place((ServerLevel) level, ((ServerChunkCache) level.getChunkSource()).getGenerator(), random, getBlockPos(), FeatureConfiguration.NONE);
+			ServerLevel level = (ServerLevel) this.level;
+			generated = generator.place(new FeaturePlaceContext<>(Optional.empty(), level, level.getChunkSource().getGenerator(), random, getBlockPos(), FeatureConfiguration.NONE));
 		}
 
 		if (generated) {

@@ -10,7 +10,6 @@ import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,8 +20,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.layouts.ContainerElement;
