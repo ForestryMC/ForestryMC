@@ -10,20 +10,12 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
@@ -36,21 +28,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.products.Product;
 import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
-import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.modules.ForestryModule;
 import forestry.core.ModuleCore;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
-import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ForgeUtils;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import forestry.lepidopterology.commands.CommandButterfly;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.features.LepidopterologyFeatures;
@@ -66,17 +49,12 @@ import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
 
-import genetics.api.alleles.IAllele;
-import genetics.utils.AlleleUtils;
-
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
 
 	@SuppressWarnings("NullableProblems")
 	public static ProxyLepidopterology proxy;
 	private static final String CONFIG_CATEGORY = "lepidopterology";
-	public static int spawnConstraint = 100;
-	public static int entityConstraint = 1000;
 	public static int maxDistance = 64;
 	private static boolean allowPollination = true;
 	public static final Map<String, Float> spawnRaritys = Maps.newHashMap();
@@ -149,98 +127,6 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 	@Override
 	public void postInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-		loadConfig(configFile);
-	}
-
-	private static void loadConfig(File configFile) {
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.1.0");
-
-		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
-		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
-		maxDistance = config.getIntLocalized("butterfly.entities", "maxDistance", maxDistance, 0, 256);
-		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
-		spawnButterflysFromLeaves = config.getBooleanLocalized("butterfly.entities", "spawn.leaves",
-			spawnButterflysFromLeaves);
-
-		generateCocoons = config.getBooleanLocalized("butterfly.cocoons", "generate", generateCocoons);
-		generateCocoonsAmount = config.getFloatLocalized("butterfly.cocoons", "generate.amount", generateCocoonsAmount,
-			0.0f, 10.0f);
-
-		serumChance = config.getFloatLocalized("butterfly.cocoons", "serum", serumChance, 0.0f, 100.0f);
-		secondSerumChance = config.getFloatLocalized("butterfly.cocoons", "second.serum", secondSerumChance, 0.0f,
-			100.0f);
-
-		parseRarity(config);
-		parseCooconLoots(config);
-
-		config.save();
-	}
-
-	private static void parseRarity(LocalizedConfiguration config) {
-		List<String> butterflyRarity = Lists.newArrayList();
-		AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (species) -> {
-			String identifier = species.getRegistryName().toString().replace(':', '_');
-			butterflyRarity.add(identifier + ":" + species.getRarity());
-		});
-		Collections.sort(butterflyRarity);
-		String[] defaultRaritys = butterflyRarity.toArray(new String[0]);
-
-		Property rarityConf = config.get("butterfly.alleles", "rarity", defaultRaritys);
-		rarityConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.rarity"));
-
-		String[] configRaritys = rarityConf.getStringList();
-		for (String rarity : configRaritys) {
-			if (rarity.contains(":") && rarity.length() > 3) {
-				String[] raritys = rarity.split(":");
-				try {
-					spawnRaritys.put(raritys[0], Float.parseFloat(raritys[1]));
-				} catch (Exception e) {
-					Log.error("Failed to parse spawn rarity for butterfly. {}", rarity, e);
-				}
-			}
-		}
-	}
-
-	private static void parseCooconLoots(LocalizedConfiguration config) {
-		for (IAllele allele : AlleleUtils.filteredAlleles(ButterflyChromosomes.COCOON)) {
-			if (allele instanceof IAlleleButterflyCocoon) {
-				parseCooconLoot(config, (IAlleleButterflyCocoon) allele);
-			}
-		}
-	}
-
-	private static void parseCooconLoot(LocalizedConfiguration config, IAlleleButterflyCocoon cocoon) {
-		Map<ItemStack, Float> cooconLoot = new HashMap<>();
-		List<String> lootList = new ArrayList<>();
-		for (Product product : cocoon.getCocoonLoot().getPossibleProducts()) {
-			lootList.add(product.getItem().getRegistryName() + ";" + product.getChance());
-		}
-		Collections.sort(lootList);
-		String[] defaultLoot = lootList.toArray(new String[0]);
-
-		Property lootConf = config.get("butterfly.cocoons.alleles.loot", cocoon.getRegistryName().toString(), defaultLoot);
-		lootConf.setComment(Translator.translateToLocal("for.config.butterfly.alleles.loot"));
-
-		String[] configLoot = lootConf.getStringList();
-		for (String loot : configLoot) {
-			if (loot.contains(";") && loot.length() > 3) {
-				String[] loots = loot.split(";");
-				try {
-					ItemStack itemStack = null; //TODO tags, flatten ItemStackUtil.parseItemStackString(loots[0], OreDictionary.WILDCARD_VALUE);
-					if (itemStack != null) {
-						cooconLoot.put(itemStack, Float.parseFloat(loots[1]));
-					}
-				} catch (Exception e) {
-					Log.error("Failed to parse cocoon loot. {}", loot, e);
-				}
-			}
-		}
-		cocoon.clearLoot();
-		for (Entry<ItemStack, Float> entry : cooconLoot.entrySet()) {
-			cocoon.addLoot(entry.getKey(), entry.getValue());
-		}
-		cocoon.bakeLoot();
 	}
 
 	@Override

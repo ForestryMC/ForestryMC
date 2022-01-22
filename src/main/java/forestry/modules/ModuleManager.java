@@ -44,7 +44,6 @@ import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
 
 public class ModuleManager implements IModuleManager {
@@ -115,11 +114,7 @@ public class ModuleManager implements IModuleManager {
 		for (IModuleContainer container : moduleContainers.values()) {
 			String containerID = container.getID();
 			List<IForestryModule> containerModules = modules.get(containerID);
-			Configuration config = container.getModulesConfig();
 
-			config.load();
-			config.addCustomCategoryComment(CONFIG_CATEGORY, "Disabling these modules can greatly change how the mod functions.\n"
-				+ "Your mileage may vary, please report any issues.");
 			IForestryModule coreModule = getModuleCore(containerModules);
 			if (coreModule != null) {
 				containerModules.remove(coreModule);
@@ -191,27 +186,20 @@ public class ModuleManager implements IModuleManager {
 			}
 		} while (changed);
 
-		for (IModuleContainer container : moduleContainers.values()) {
-			Configuration config = container.getModulesConfig();
-			if (config.hasChanged()) {
-				config.save();
-			}
-		}
-
 		loadedModules.addAll(sortedModules.values());
 		unloadedModules.addAll(allModules);
 		unloadedModules.removeAll(sortedModules.values());
 
 		for (IModuleContainer container : moduleContainers.values()) {
 			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
-					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-					return info.containerID().equals(container.getID());
-				}
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
 			).collect(Collectors.toList());
 			Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
-					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-					return info.containerID().equals(container.getID());
-				}
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
 			).collect(Collectors.toList());
 			container.onConfiguredModules(loadedModules, unloadedModules);
 		}

@@ -11,15 +11,13 @@
 package forestry.farming;
 
 
-import java.io.File;
-
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.DistExecutor;
 
-import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -35,9 +32,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
@@ -54,8 +49,6 @@ import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
 import forestry.modules.ModuleHelper;
-
-//import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -152,13 +145,6 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-
-		//Load config
-		File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-		FarmRegistry.getInstance().loadConfig(config);
-		config.save();
-
 		FarmDefinition.init();
 	}
 

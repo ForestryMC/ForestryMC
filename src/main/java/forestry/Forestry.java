@@ -14,10 +14,6 @@ package forestry;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.io.File;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
@@ -46,7 +42,6 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -78,7 +73,6 @@ import forestry.core.circuits.CircuitRecipe;
 import forestry.core.climate.ClimateFactory;
 import forestry.core.climate.ClimateRoot;
 import forestry.core.climate.ClimateStateHelper;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.data.ForestryAdvancementProvider;
 import forestry.core.data.ForestryBackpackTagProvider;
@@ -138,31 +132,11 @@ import genetics.utils.AlleleUtils;
  *
  * @author SirSengir
  */
-//@Mod(
-//	modid = Constants.MOD_ID,
-//	name = Constants.MOD_NAME,
-//	version = Constants.VERSION,
-//	guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-//	acceptedMinecraftVersions = "[1.12.2,1.13.0)",
-//	dependencies = "required-after:forge@[14.23.4.2749,);"
-//		+ "after:jei@[4.12.0.0,);"
-//		+ "after:" + PluginIC2.MOD_ID + ";"
-//		+ "after:" + PluginNatura.MOD_ID + ";"
-//		+ "after:toughasnails;"
-//		+ "after:" + PluginTechReborn.MOD_ID + ";"
-//		+ "after:" + PluginBuildCraftFuels.MOD_ID + ";"
-//		+ "before:binniecore@[2.5.1.184,)"
-//the big TODO - things have to be properly sided now, can't keep just using OnlyIn I think
 @Mod("forestry")
 public class Forestry {
 
 	@SuppressWarnings("NullableProblems")
 	public static Forestry instance;
-
-	private static final Logger LOGGER = LogManager.getLogger();
-
-	@Nullable
-	private File configFolder;
 
 	public Forestry() {
 		instance = this;
@@ -174,11 +148,9 @@ public class Forestry {
 		ClimateManager.stateHelper = ClimateStateHelper.INSTANCE;
 		EnumErrorCode.init();
 
-		//TODO not sure where this is enabled any more
-		//		FluidRegistry.enableUniversalBucket();
 		ModuleManager moduleManager = ModuleManager.getInstance();
 		ForestryAPI.moduleManager = moduleManager;
-		moduleManager.registerContainers(new ForestryModules());//TODO compat, new ForestryCompatPlugins());
+		moduleManager.registerContainers(new ForestryModules());
 		ModuleManager.runSetup();
 		NetworkHandler networkHandler = new NetworkHandler();
 		//				DistExecutor.runForDist(()->()-> networkHandler.clientPacketHandler(), ()->()-> networkHandler.serverPacketHandler());
@@ -223,12 +195,6 @@ public class Forestry {
 		packetHandler = new PacketHandlerServer();
 
 		// Register event handler
-		configFolder = new File("./config/forestry"); //new File(event.getModConfigurationDirectory(), Constants.MOD_ID);
-		//TODO - config
-		Config.load(Dist.DEDICATED_SERVER);
-		String gameMode = Config.gameMode;
-		Preconditions.checkNotNull(gameMode);
-
 		//TODO - DistExecutor
 		callSetupListeners(true);
 		ModuleManager.getModuleHandler().runPreInit();
@@ -370,11 +336,6 @@ public class Forestry {
 	@SubscribeEvent
 	public void registerCommands(RegisterCommandsEvent event) {
 		ModuleManager.registerCommands(event.getDispatcher());
-	}
-
-	@Nullable
-	public File getConfigFolder() {
-		return configFolder;
 	}
 
 	public void processIMCMessages(InterModProcessEvent event) {

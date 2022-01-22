@@ -131,7 +131,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 			for (Hive hive : hives) {
-				if (hive.genChance() * Config.getBeehivesAmount() * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
+				if (hive.genChance() * Config.generateBeehivesAmount * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
 					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
 						int x = pos.getX() + rand.nextInt(16);
 						int z = pos.getZ() + rand.nextInt(16);

@@ -13,10 +13,7 @@ package forestry.apiculture;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -45,11 +42,9 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import forestry.Forestry;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
 import forestry.api.apiculture.IArmorApiarist;
-import forestry.api.apiculture.IBeekeepingMode;
 import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.genetics.flowers.IFlowerAcceptableRule;
@@ -88,7 +83,6 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.IMCUtil;
@@ -102,8 +96,6 @@ import genetics.api.GeneticsAPI;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.APICULTURE, name = "Apiculture", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.apiculture.description", lootTable = "apiculture")
 public class ModuleApiculture extends BlankForestryModule {
-	private static final String CONFIG_CATEGORY = "apiculture";
-	private static float secondPrincessChance = 0;
 
 	@Nullable
 	private static HiveRegistry hiveRegistry;
@@ -145,7 +137,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		if (Config.getBeehivesAmount() > 0.0) {
+		if (Config.generateBeehivesAmount > 0.0) {
 			modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
 			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 		}
@@ -200,47 +192,7 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "3.0.0");
-		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
-			boolean deleted = configFile.delete();
-			if (deleted) {
-				config = new LocalizedConfiguration(configFile, "3.0.0");
-			}
-		}
-
 		initFlowerRegistry();
-
-		List<IBeekeepingMode> beekeepingModes = BeeManager.beeRoot.getBeekeepingModes();
-		String[] validBeekeepingModeNames = new String[beekeepingModes.size()];
-		for (int i = 0; i < beekeepingModes.size(); i++) {
-			validBeekeepingModeNames[i] = beekeepingModes.get(i).getName();
-		}
-
-		beekeepingMode = config.getStringLocalized("beekeeping", "mode", "NORMAL", validBeekeepingModeNames);
-		Log.debug("Beekeeping mode read from config: " + beekeepingMode);
-
-		secondPrincessChance = config.getFloatLocalized("beekeeping", "second.princess", secondPrincessChance, 0.0f, 100.0f);
-
-		maxFlowersSpawnedPerHive = config.getIntLocalized("beekeeping", "flowers.spawn", 20, 0, 1000);
-
-		String[] blacklist = config.getStringListLocalized("species", "blacklist", Constants.EMPTY_STRINGS);
-		parseBeeBlacklist(blacklist);
-
-		ticksPerBeeWorkCycle = config.getIntLocalized("beekeeping", "ticks.work", 550, 250, 850);
-
-		hivesDamageOnPeaceful = config.getBooleanLocalized("beekeeping.hivedamage", "peaceful", hivesDamageOnPeaceful);
-
-		hivesDamageUnderwater = config.getBooleanLocalized("beekeeping.hivedamage", "underwater", hivesDamageUnderwater);
-
-		hivesDamageOnlyPlayers = config.getBooleanLocalized("beekeeping.hivedamage", "onlyPlayers", hivesDamageOnlyPlayers);
-
-		hiveDamageOnAttack = config.getBooleanLocalized("beekeeping.hivedamage", "onlyAfterAttack", hiveDamageOnAttack);
-
-		doSelfPollination = config.getBooleanLocalized("beekeeping", "self.pollination", false);
-
-		config.save();
 
 		// Genetics
 		BeeDefinition.initBees();
@@ -459,6 +411,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	public static double getSecondPrincessChance() {
+		float secondPrincessChance = 0;
 		return secondPrincessChance;
 	}
 

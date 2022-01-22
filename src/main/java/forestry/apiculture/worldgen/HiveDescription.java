@@ -15,12 +15,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.hives.HiveManager;
@@ -32,7 +32,6 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.alleles.AlleleManager;
-import forestry.apiculture.HiveConfig;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.core.config.Constants;
@@ -126,7 +125,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodBiome(Biome biome) {
-		return !BiomeHelper.isBiomeHellish(biome) && !HiveConfig.isBlacklisted(hiveType, biome);
+		return !BiomeHelper.isBiomeHellish(biome);
 	}
 
 	@Override

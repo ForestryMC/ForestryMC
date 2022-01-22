@@ -35,7 +35,6 @@ import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandModules;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreFeatures;
@@ -133,13 +132,6 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public boolean processIMCMessage(InterModComms.IMCMessage message) {
-		if (message.getMethod().equals("blacklist-ores-dimension")) {
-			ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier().get();    //TODO - how does IMC work
-			for (ResourceLocation dim : dims) {
-				Config.blacklistOreDim(dim);
-			}
-			return true;
-		}
 		return false;
 	}
 

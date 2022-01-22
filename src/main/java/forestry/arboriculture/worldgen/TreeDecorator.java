@@ -93,7 +93,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
 			if (allele instanceof IAlleleTreeSpecies) {
 				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
-				if (TreeConfig.getSpawnRarity(alleleTreeSpecies.getRegistryName()) > 0) {
+				if (TreeConfig.getSpawnRarity() > 0) {
 					SPECIES.add(alleleTreeSpecies);
 				}
 			}
@@ -111,7 +111,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 			IGrowthProvider growthProvider = species.getGrowthProvider();
 			for (Biome biome : ForgeRegistries.BIOMES) {
 				Set<ITree> trees = biomeCache.computeIfAbsent(BuiltinRegistries.BIOME.getKey(biome), k -> new HashSet<>());
-				if (growthProvider.isBiomeValid(tree, biome) && TreeConfig.isValidBiome(treeUID, biome)) {
+				if (growthProvider.isBiomeValid(tree, biome)) {
 					trees.add(tree);
 				}
 			}
@@ -124,8 +124,8 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 		Random rand = context.random();
 		BlockPos pos = context.origin();
 
-		float globalRarity = TreeConfig.getSpawnRarity(null);
-		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, level.getLevel().dimension())) {
+		float globalRarity = TreeConfig.getSpawnRarity();
+		if (globalRarity <= 0.0F) {
 			return false;
 		}
 
@@ -143,12 +143,9 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 
 			for (ITree tree : trees) {
 				ResourceLocation treeUID = tree.getGenome().getPrimary().getRegistryName();
-				if (!TreeConfig.isValidDimension(treeUID, level.getLevel().dimension())) {
-					continue;
-				}
 
 				IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-				if (TreeConfig.getSpawnRarity(species.getRegistryName()) * globalRarity >= rand.nextFloat()) {
+				if (TreeConfig.getSpawnRarity() * globalRarity >= rand.nextFloat()) {
 					BlockPos validPos = getValidPos(level, x, z, tree);
 					if (validPos == null) {
 						continue;

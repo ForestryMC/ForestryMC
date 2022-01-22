@@ -7,8 +7,6 @@ package forestry.api.modules;
 
 import java.util.Collection;
 
-import forestry.core.config.forge_old.Configuration;
-
 public interface IModuleContainer {
 	/**
 	 * @return Unique identifier for the module container, no spaces!
@@ -16,8 +14,6 @@ public interface IModuleContainer {
 	String getID();
 
 	boolean isAvailable();
-
-	Configuration getModulesConfig();
 
 	/**
 	 * @return true if the module is enabled in the config file of this container.

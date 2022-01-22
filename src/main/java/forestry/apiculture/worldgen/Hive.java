@@ -15,16 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveDrop;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
-import forestry.apiculture.HiveConfig;
 
 public final class Hive {
 
@@ -68,10 +67,6 @@ public final class Hive {
 	}
 
 	public boolean isValidLocation(WorldGenLevel world, BlockPos pos) {
-		if (!HiveConfig.isDimAllowed(world.getLevel().dimension().location())) {
-			return false;
-		}
-
 		return hiveDescription.getHiveGen().isValidLocation(world, pos);
 	}
 

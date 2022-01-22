@@ -10,15 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +22,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
@@ -45,7 +37,6 @@ import forestry.arboriculture.villagers.RegisterVillager;
 import forestry.core.ModuleCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
@@ -56,17 +47,10 @@ import forestry.modules.ModuleHelper;
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
 
-	private static final String CONFIG_CATEGORY = "arboriculture";
-
 	@SuppressWarnings("NullableProblems")
 	//@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
 	public static ProxyArboriculture proxy;
 	public static String treekeepingMode = "NORMAL";
-
-	public static final List<Block> validFences = new ArrayList<>();
-
-	@Nullable
-	public static VillagerProfession villagerArborist;
 
 	public ModuleArboriculture() {
 		proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
@@ -78,7 +62,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
+		if (TreeConfig.getSpawnRarity() > 0.0F) {
 			IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 			modEventBus.addGenericListener(Feature.class, ArboricultureFeatures::registerFeatures);
 			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
@@ -103,7 +87,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		//TODO: World Gen
-		if (TreeConfig.getSpawnRarity(null) > 0.0F) {
+		if (TreeConfig.getSpawnRarity() > 0.0F) {
 			//MinecraftForge.TERRAIN_GEN_BUS.register(new TreeDecorator());
 		}
 
@@ -151,18 +135,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 			//				new VillagerArboristTrades.GivePollenForEmeralds(new VillagerEntity.PriceInfo(5, 20), new VillagerEntity.PriceInfo(1, 1), EnumGermlingType.SAPLING, 10)
 			//			);
 		}
-
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-		if (!Objects.equals(config.getLoadedConfigVersion(), config.getDefinedConfigVersion())) {
-			boolean deleted = configFile.delete();
-			if (deleted) {
-				config = new LocalizedConfiguration(configFile, "1.0.0");
-			}
-		}
-		TreeConfig.parse(config);
-		config.save();
 	}
 
 	@Override

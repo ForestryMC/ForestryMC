@@ -1,36 +1,27 @@
 package forestry.farming;
 
-import java.util.ArrayList;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.item.ItemStack;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Multimap;
 import forestry.api.farming.IFarmProperties;
 import forestry.api.farming.IFarmPropertiesBuilder;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.farming.IFarmable;
 import forestry.api.farming.IFarmableInfo;
-import forestry.core.config.LocalizedConfiguration;
-import forestry.core.config.forge_old.Property;
 import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.core.utils.Translator;
 import forestry.farming.logic.FarmProperties;
 import forestry.farming.logic.farmables.FarmableInfo;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 
 public final class FarmRegistry implements IFarmRegistry {
 
@@ -99,70 +90,6 @@ public final class FarmRegistry implements IFarmRegistry {
 	@Nullable
 	public IFarmProperties getProperties(String identifier) {
 		return farmInstances.get(identifier);
-	}
-
-	void loadConfig(LocalizedConfiguration config) {
-		Map<String, String> defaultEntries = getItemStrings();
-		List<String> defaultFertilizers = new ArrayList<>(defaultEntries.values());
-		Collections.sort(defaultFertilizers);
-		String[] defaultSortedFertilizers = defaultFertilizers.toArray(new String[0]);
-		Property property = config.get("fertilizers", "items", defaultSortedFertilizers, Translator.translateToLocal("for.config.farm.fertilizers.items"));
-
-		ImmutableMap<ItemStack, Integer> fertilizerMap = checkConfig(property, defaultEntries);
-		fertilizer = new FertilizerConfig(fertilizerMap);
-	}
-
-	private ImmutableMap<ItemStack, Integer> checkConfig(Property property, Map<String, String> defaultEntries) {
-		String[] fertilizerList = property.getStringList();
-		ImmutableMap.Builder<ItemStack, Integer> fertilizerMap = new ImmutableMap.Builder<>();
-		Map<String, String> configEntries = parseConfig(fertilizerList, fertilizerMap);
-
-		List<String> newEntries = new ArrayList<>(Arrays.asList(fertilizerList));
-		for (Entry<String, String> defaultEntry : defaultEntries.entrySet()) {
-			if (!configEntries.containsKey(defaultEntry.getKey())) {
-				newEntries.add(defaultEntry.getValue());
-			}
-		}
-
-		if (newEntries.size() > fertilizerList.length) {
-			Collections.sort(newEntries);
-			property.set(newEntries.toArray(new String[0]));
-			return checkConfig(property, defaultEntries);
-		}
-
-		return fertilizerMap.build();
-	}
-
-	private Map<String, String> parseConfig(String[] fertilizerList, ImmutableMap.Builder<ItemStack, Integer> fertilizerMap) {
-		Map<String, String> configEntries = new HashMap<>();
-		for (String entry : fertilizerList) {
-			String[] spited = entry.split(";");
-			if (spited.length < 2) {
-				Log.error("Forestry failed to parse a entry of the fertilizer config.");
-				continue;
-			}
-
-			String itemName = spited[0];
-			ItemStack fertilizerItem = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)));
-			String value = spited[1];
-			int fertilizerValue = Integer.parseInt(value);
-
-			if (fertilizerValue > 0) {
-				fertilizerMap.put(fertilizerItem, fertilizerValue);
-			}
-
-			configEntries.put(itemName, value);
-		}
-		return configEntries;
-	}
-
-	private Map<String, String> getItemStrings() {
-		Map<String, String> itemStrings = new HashMap<>(fertilizers.size());
-		for (Entry<ItemStack, Integer> itemStack : fertilizers.entrySet()) {
-			String itemString = String.valueOf(itemStack.getKey().getItem().getRegistryName());
-			itemStrings.put(itemString, itemString + ";" + itemStack.getValue());
-		}
-		return itemStrings;
 	}
 
 	private static class FertilizerConfig {
