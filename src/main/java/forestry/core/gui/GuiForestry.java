@@ -346,6 +346,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindForSetup(texturePath);
+		RenderSystem.setShaderTexture(0, texturePath);
 	}
 
 	@Override
