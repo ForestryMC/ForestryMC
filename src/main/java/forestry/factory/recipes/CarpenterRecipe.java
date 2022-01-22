@@ -15,15 +15,15 @@ import com.google.gson.JsonObject;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -118,7 +118,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 			}
 
 			recipe.box.toNetwork(buffer);
-			ClientboundUpdateRecipesPacket.toNetwork(recipe.recipe, buffer);
+			ClientboundUpdateRecipesPacket.toNetwork(buffer, recipe.recipe);
 			buffer.writeItem(recipe.result);
 		}
 	}

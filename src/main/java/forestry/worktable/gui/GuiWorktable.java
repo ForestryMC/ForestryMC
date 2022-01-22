@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.worktable.gui;
 
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -53,16 +53,15 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 
 		if (hasRecipeConflict != tile.hasRecipeConflict()) {
 			hasRecipeConflict = tile.hasRecipeConflict();
 			if (hasRecipeConflict) {
 				addButtons();
 			} else {
-				buttons.clear();
-				children.clear();
+				renderables.clear();
 			}
 		}
 	}

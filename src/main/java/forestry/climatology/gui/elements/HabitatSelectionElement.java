@@ -129,7 +129,7 @@ public class HabitatSelectionElement extends ContainerElement {
 
 		@Override
 		public void drawElement(PoseStack transform, int mouseX, int mouseY) {
-			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
 			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 			textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 			blit(transform, 0, 0, 204, 46, 20, 20);

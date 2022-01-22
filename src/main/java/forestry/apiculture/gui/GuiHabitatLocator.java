@@ -112,7 +112,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(transform, startY, startX);
 		}
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 	}
 
 	@Override

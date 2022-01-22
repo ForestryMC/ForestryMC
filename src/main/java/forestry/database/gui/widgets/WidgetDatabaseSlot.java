@@ -67,7 +67,7 @@ public class WidgetDatabaseSlot extends Widget {
 
 	@Override
 	public void draw(PoseStack transform, int startY, int startX) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		manager.minecraft.textureManager.bindForSetup(TEXTURE_LOCATION);
 		Drawable texture = SLOT;
 		if (isSelected()) {

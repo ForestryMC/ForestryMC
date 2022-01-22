@@ -416,7 +416,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
 			getFontRenderer().draw(transform, "+", x + 9, y + 1, 0);
-			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
@@ -426,7 +426,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		String text = "(" + toleranceAllele.getDisplayName().getString() + ")";
 
 		// Enable correct lighting.
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
 			case BOTH_1:
@@ -482,7 +482,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	public void drawFertilityInfo(PoseStack transform, int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = fertility + " x";
 

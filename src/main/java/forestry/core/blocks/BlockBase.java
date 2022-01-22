@@ -43,6 +43,7 @@ import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.core.ISpriteRegister;
@@ -50,8 +51,6 @@ import forestry.api.core.ISpriteRegistry;
 import forestry.core.circuits.ISocketable;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
@@ -65,8 +64,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 	private final boolean hasTESR;
 	public final P blockType;
-
-	private final ParticleHelper.Callback particleCallback;
 
 	private static Block.Properties createProperties(IBlockType type, Block.Properties properties) {
 		if (type instanceof IBlockTypeTesr || type instanceof IBlockTypeCustom) {
@@ -83,8 +80,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		blockType.getMachineProperties().setBlock(this);
 
 		this.hasTESR = blockType instanceof IBlockTypeTesr;
-
-		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}
 
 	public BlockBase(P blockType, Material material) {
@@ -206,8 +201,8 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		}
 	}
 
-	public void clientSetup() {
-		blockType.getMachineProperties().clientSetup();
+	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		blockType.getMachineProperties().clientSetupRenderers(event);
 	}
 
 	@Override

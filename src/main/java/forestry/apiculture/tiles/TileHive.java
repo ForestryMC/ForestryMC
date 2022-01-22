@@ -100,7 +100,6 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 		beeTargetPredicate = new BeeTargetPredicate(this);
 	}
 
-	@Override
 	public void tick() {
 		if (Config.generateBeehivesDebug) {
 			return;
@@ -264,7 +263,7 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 	@Nullable
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(worldPosition, 0, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 
@@ -277,8 +276,8 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundTag tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		setActive(tag.getBoolean("active"));
 		beeLogic.read(tag);
 	}
@@ -288,7 +287,7 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundTag nbt = pkt.getTag();
-		handleUpdateTag(getBlockState(), nbt);
+		handleUpdateTag(nbt);
 	}
 
 	@Override

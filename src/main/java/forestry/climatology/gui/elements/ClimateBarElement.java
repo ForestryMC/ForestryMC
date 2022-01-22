@@ -110,7 +110,7 @@ public class ClimateBarElement extends GuiElement {
 		int progressScaled = getProgressScaled();
 		blit(transform, 1, 1, 177, 69, progressScaled, 10);
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		blit(transform, 1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
 		blit(transform, 1 + getPointerPosition(), 1, 229, 69, 1, 10);
 		blit(transform, 1, 1, 177, 80, 50, 10);
@@ -137,7 +137,7 @@ public class ClimateBarElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 
 	private boolean handleMouse(int mouseX, int mouseY) {

@@ -132,7 +132,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 		renderTank(resourceTank, textureResourceTank, resourceTankInfo, helper);
 		renderTank(productTank, textureProductTank, productTankInfo, helper);
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	private void renderTank(ModelPart tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, RenderHelper helper) {

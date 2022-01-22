@@ -1,10 +1,11 @@
 package forestry.sorting;
 
+import java.util.function.Consumer;
+
 import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterLogic;
@@ -43,9 +44,12 @@ public class ModuleSorting extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
-
 		DefaultFilterRuleType.init();
+	}
+
+	@Override
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		consumer.accept(IFilterLogic.class);
 	}
 
 	@Override

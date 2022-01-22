@@ -19,16 +19,17 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Transformation;
@@ -59,9 +60,9 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
 	public TRSRBakedModel(BakedModel original, float x, float y, float z, float rotX, float rotY, float rotZ, float scaleX, float scaleY, float scaleZ) {
 		this(original, new Transformation(new Vector3f(x, y, z),
-			null,
-			new Vector3f(scaleX, scaleY, scaleZ),
-			TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)));
+				null,
+				new Vector3f(scaleX, scaleY, scaleZ),
+				TransformationHelper.quatFromXYZ(new float[]{rotX, rotY, rotZ}, false)));
 	}
 
 	public TRSRBakedModel(BakedModel original, Transformation transform) {
@@ -128,8 +129,8 @@ public class TRSRBakedModel extends BakedModelWrapper<BakedModel> {
 
 		@Nonnull
 		@Override
-		public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) {
-			BakedModel baked = this.model.originalModel.getOverrides().resolve(originalModel, stack, world, entity);
+		public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_) {
+			BakedModel baked = this.model.originalModel.getOverrides().resolve(originalModel, stack, world, entity, p_173469_);
 			if (baked == null) {
 				baked = originalModel;
 			}

@@ -102,8 +102,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		IClimateState target = transformer.getTarget();
 		if (!window.isFocused(humidityEdit)) {
 			humidityEdit.setValue(Integer.toString((int) (Mth.clamp(target.getHumidity(), 0.0F, 2.0F) * 100)));

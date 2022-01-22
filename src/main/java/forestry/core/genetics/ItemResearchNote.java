@@ -318,7 +318,7 @@ public class ItemResearchNote extends ItemForestry {
 
 		ResearchNote note = new ResearchNote(heldItem.getTag());
 		if (note.registerResults(worldIn, playerIn)) {
-			playerIn.inventory.removeItem(playerIn.inventory.selected, 1);
+			playerIn.getInventory().removeItem(playerIn.getInventory().selected, 1);
 			// Notify player that his inventory has changed.
 			NetworkUtil.inventoryChangeNotify(playerIn, playerIn.containerMenu);    //TODO not sure this is right
 		}

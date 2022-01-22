@@ -108,7 +108,7 @@ public class BlockSolidCocoon extends Block implements EntityBlock {
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
+		if (facing != Direction.UP || !facingState.isAir()) {
 			return state;
 		}
 		return Blocks.AIR.defaultBlockState();

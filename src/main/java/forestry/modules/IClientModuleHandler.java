@@ -1,5 +1,6 @@
 package forestry.modules;
 
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -21,5 +22,11 @@ public interface IClientModuleHandler extends ISidedModuleHandler {
 	}
 
 	default void setupClient(FMLClientSetupEvent event) {
+	}
+
+	default void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+	}
+
+	default void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 	}
 }

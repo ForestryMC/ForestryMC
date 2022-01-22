@@ -102,7 +102,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager).stream()
-				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.map(recipe -> recipe.getOutput().getRegistryName())
 				.collect(Collectors.toSet());
 	}
 }

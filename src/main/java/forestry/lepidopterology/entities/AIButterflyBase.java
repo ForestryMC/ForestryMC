@@ -62,12 +62,11 @@ public abstract class AIButterflyBase extends Goal {
 			return false;
 		}
 		BlockState blockState = entity.level.getBlockState(pos);
-		Block block = blockState.getBlock();
 		if (!allowFluids && blockState.getMaterial().isLiquid()) {
 			return false;
 		}
 		//		if (!block.isPassable(entity.world, pos)) {
-		if (!block.isAir(blockState, entity.level, pos)) {    //TODO
+		if (!blockState.isAir()) {    //TODO
 			return false;
 		}
 		return entity.getButterfly().isAcceptedEnvironment(entity.level, dest.x, dest.y, dest.z);

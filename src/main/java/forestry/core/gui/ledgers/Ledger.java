@@ -208,7 +208,7 @@ public abstract class Ledger {
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
+		RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
 
 		Minecraft.getInstance().getTextureManager().bindForSetup(texture);
 
@@ -221,7 +221,7 @@ public abstract class Ledger {
 
 		manager.gui.blit(transform, x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y) {
@@ -229,7 +229,7 @@ public abstract class Ledger {
 	}
 
 	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
 		Minecraft.getInstance().getTextureManager().bindForSetup(textureMap);
 		GuiComponent.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}

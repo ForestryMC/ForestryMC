@@ -180,7 +180,7 @@ public class ScrollBarElement extends ContainerElement {
 		Window window = getWindow();
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		super.drawElement(transform, mouseX, mouseY);
 	}
 

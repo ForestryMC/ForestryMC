@@ -43,7 +43,7 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().location() != InventoryMenu.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.gatherSprites(event);
@@ -51,7 +51,7 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
-		if (event.getMap().location() != InventoryMenu.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.fillSprites(event);

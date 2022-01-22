@@ -102,7 +102,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void buildShapelessRecipes(Consumer<FinishedRecipe> consumer) {
+	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
 		RecipeDataHelper helper = new RecipeDataHelper(consumer);
 		registerArboricultureRecipes(helper);
 		registerApicultureRecipes(helper);

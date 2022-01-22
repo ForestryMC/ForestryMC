@@ -3,10 +3,11 @@ package forestry.core.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.level.block.Block;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 
 import forestry.modules.features.FeatureItem;
 
@@ -25,7 +26,7 @@ public class JeiUtil {
 			itemStacks.add(item.stack());
 		}
 
-		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, DESCRIPTION_KEY + itemKey);
+		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static void addDescription(IRecipeRegistration registry, String itemKey, Item... items) {
@@ -34,7 +35,7 @@ public class JeiUtil {
 			itemStacks.add(new ItemStack(item));
 		}
 
-		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, DESCRIPTION_KEY + itemKey);
+		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static void addDescription(IRecipeRegistration registry, Block... blocks) {
@@ -67,6 +68,6 @@ public class JeiUtil {
 
 	public static void addDescription(IRecipeRegistration registry, Item item, String itemKey) {
 		ItemStack itemStack = new ItemStack(item);
-		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, DESCRIPTION_KEY + itemKey);
+		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 }

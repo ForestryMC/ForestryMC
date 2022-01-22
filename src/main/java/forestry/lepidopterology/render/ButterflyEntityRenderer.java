@@ -11,7 +11,7 @@
 package forestry.lepidopterology.render;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
@@ -21,10 +21,9 @@ import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
 
-	public ButterflyEntityRenderer(EntityRenderDispatcher manager) {
-		super(manager, new ButterflyModel(), 0.25f);
+	public ButterflyEntityRenderer(EntityRendererProvider.Context context) {
+		super(context, new ButterflyModel(), 0.25f);
 	}
-
 
 	@Override
 	public void render(EntityButterfly entity, float entityYaw, float partialTickTime, PoseStack transform, MultiBufferSource buffer, int packedLight) {
@@ -45,5 +44,4 @@ public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, Butter
 	protected float getBob(EntityButterfly entity, float partialTickTime) {
 		return entity.getWingFlap(partialTickTime);
 	}
-
 }

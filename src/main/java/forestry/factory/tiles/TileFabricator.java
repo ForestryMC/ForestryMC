@@ -294,8 +294,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 	}
 
 	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, heat);
-		iCrafting.setContainerData(container, 1, getMeltingPoint());
+		iCrafting.dataChanged(container, 0, heat);
+		iCrafting.dataChanged(container, 1, getMeltingPoint());
 	}
 
 	/**

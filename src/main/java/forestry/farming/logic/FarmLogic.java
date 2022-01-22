@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -145,7 +146,7 @@ public abstract class FarmLogic implements IFarmLogic {
 		for (ItemEntity entity : entityItems) {
 			ItemStack contained = entity.getItem();
 			stacks.add(contained.copy());
-			entity.remove();
+			entity.remove(Entity.RemovalReason.DISCARDED);
 		}
 		return stacks;
 	}

@@ -317,10 +317,9 @@ public class EntityButterfly extends PathfinderMob implements IEntityButterfly {
 		for (int y = chunk.getHighestSectionPosition() + 15; y > 0; --y) {
 			//TODO could be a mutable blockpos if this shows as a hotspot
 			BlockState blockState = chunk.getBlockState(new BlockPos(xx, y, zz));
-			Block block = blockState.getBlock();
 			if (blockState.getMaterial().isLiquid()) {
 				depth++;
-			} else if (!block.isAir(blockState, level, pos)) {
+			} else if (!blockState.isAir()) {
 				break;
 			}
 		}
@@ -552,7 +551,7 @@ public class EntityButterfly extends PathfinderMob implements IEntityButterfly {
 			setDeltaMovement(newX, newY, newZ);
 
 			float horizontal = (float) (Math.atan2(newZ, newX) * 180d / Math.PI) - 90f;
-			yRot += Mth.wrapDegrees(horizontal - yRot);
+			setYRot(getYRot() + Mth.wrapDegrees(horizontal - getYRot()));
 
 			setZza(contained.getGenome().getActiveValue(ButterflyChromosomes.SPEED));
 		}

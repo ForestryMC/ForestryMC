@@ -45,9 +45,9 @@ public class GeneticParser implements ResourceManagerReloadListener {
 
 	@Override
 	public void onResourceManagerReload(ResourceManager manager) {
-		if (!resourcePredicate.test(GeneticsResourceType.MUTATIONS)) {
-			return;
-		}
+		// if (!resourcePredicate.test(GeneticsResourceType.MUTATIONS)) {
+		// 	return;
+		// }
 
 		Multimap<ResourceLocation, CompoundTag> alleleData = HashMultimap.create();
 

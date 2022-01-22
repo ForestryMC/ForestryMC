@@ -12,20 +12,18 @@ package forestry.core.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowerPotBlock;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.PathNavigationRegion;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -48,7 +46,6 @@ public abstract class TileUtil {
 	/**
 	 * Returns the tile at the specified position, returns null if it is the wrong type or does not exist.
 	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
 	public static BlockEntity getTile(BlockGetter world, BlockPos pos) {
@@ -63,7 +60,6 @@ public abstract class TileUtil {
 	/**
 	 * Returns the tile of the specified class, returns null if it is the wrong type or does not exist.
 	 * Avoids creating new tile entities when using a ChunkCache (off the main thread).
-	 * see {@link FlowerPotBlock#getActualState(BlockState, IWorldReader, BlockPos)}
 	 */
 	@Nullable
 	public static <T> T getTile(BlockGetter world, BlockPos pos, Class<T> tileClass) {

@@ -35,6 +35,7 @@ import forestry.api.storage.IBackpackDefinition;
 import forestry.storage.ModuleBackpacks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -125,9 +126,9 @@ public class ModFeatureRegistry {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void clientSetup() {
+	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		for (ModuleFeatures features : modules.values()) {
-			features.clientSetup();
+			features.clientSetupRenderers(event);
 		}
 	}
 
@@ -286,9 +287,9 @@ public class ModFeatureRegistry {
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		public void clientSetup() {
+		public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 			for (IModFeature feature : featureByType.values()) {
-				feature.clientSetup();
+				feature.clientSetupRenderers(event);
 			}
 		}
 

@@ -97,8 +97,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 		BlockState blockState = entity.level.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (!block.isAir(blockState, entity.level, pos)) {    //TODO
+		if (!blockState.isAir()) {    //TODO
 			//			if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}

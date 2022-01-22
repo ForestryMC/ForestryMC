@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +44,7 @@ public class ItemBlockNBT extends ItemBlockForestry<Block> {
 
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level world, @Nullable Player player, ItemStack stack, BlockState blockState) {
-		if (getBlock().hasTileEntity(blockState) && stack.hasTag()) {
+		if (getBlock() instanceof EntityBlock && stack.hasTag()) {
 			TileForestry tile = TileUtil.getTile(world, pos, TileForestry.class);
 			if (tile != null) {
 				tile.load(stack.getTag());

@@ -5,13 +5,13 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -109,7 +109,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		tag(ForestryTags.Blocks.PALM_LOGS).add(ArboricultureBlocks.LOGS.get(EnumForestryWoodType.PALM).block());
 		tag(ForestryTags.Blocks.PAPAYA_LOGS).add(ArboricultureBlocks.LOGS.get(EnumForestryWoodType.PAPAYA).block());
 
-		tag(Tags.Blocks.DIRT).add(CoreBlocks.HUMUS.block());
+		tag(BlockTags.DIRT).add(CoreBlocks.HUMUS.block());
 	}
 
 	@SafeVarargs

@@ -19,17 +19,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.levelgen.feature.TreeFeature;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import com.mojang.authlib.GameProfile;
 
@@ -80,7 +80,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 			generateExtras(world, rand, genPos);
 			updateLeaves(world, contour);
 			DiscreteVoxelShape voxelshapepart = this.updateLeaves(world, contour);
-			StructureTemplate.updateShapeAtEdge(world, 3, voxelshapepart, contour.boundingBox.x0, contour.boundingBox.y0, contour.boundingBox.z0);
+			StructureTemplate.updateShapeAtEdge(world, 3, voxelshapepart, contour.boundingBox.minX(), contour.boundingBox.minY(), contour.boundingBox.minZ());
 			return true;
 		}
 
@@ -123,7 +123,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 
 		for (BlockPos blockpos1 : Lists.newArrayList(contour.leavePositions)) {
 			if (boundingBox.isInside(blockpos1)) {
-				voxelshapepart.setFull(blockpos1.getX() - boundingBox.x0, blockpos1.getY() - boundingBox.y0, blockpos1.getZ() - boundingBox.z0, true, true);
+				voxelshapepart.fill(blockpos1.getX() - boundingBox.minX(), blockpos1.getY() - boundingBox.minY(), blockpos1.getZ() - boundingBox.minZ());
 			}
 
 			for (Direction direction : Direction.values()) {
@@ -132,9 +132,9 @@ public abstract class FeatureArboriculture extends FeatureBase {
 					BlockState blockstate = world.getBlockState(blockpos$mutable);
 					if (blockstate.hasProperty(BlockStateProperties.DISTANCE)) {
 						list.get(0).add(blockpos$mutable.immutable());
-						TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate.setValue(BlockStateProperties.DISTANCE, Integer.valueOf(1)));
+						TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate.setValue(BlockStateProperties.DISTANCE, 1));
 						if (boundingBox.isInside(blockpos$mutable)) {
-							voxelshapepart.setFull(blockpos$mutable.getX() - boundingBox.x0, blockpos$mutable.getY() - boundingBox.y0, blockpos$mutable.getZ() - boundingBox.z0, true, true);
+							voxelshapepart.fill(blockpos$mutable.getX() - boundingBox.minX(), blockpos$mutable.getY() - boundingBox.minY(), blockpos$mutable.getZ() - boundingBox.minZ());
 						}
 					}
 				}
@@ -147,7 +147,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 
 			for (BlockPos blockpos2 : set) {
 				if (boundingBox.isInside(blockpos2)) {
-					voxelshapepart.setFull(blockpos2.getX() - boundingBox.x0, blockpos2.getY() - boundingBox.y0, blockpos2.getZ() - boundingBox.z0, true, true);
+					voxelshapepart.fill(blockpos2.getX() - boundingBox.minX(), blockpos2.getY() - boundingBox.minY(), blockpos2.getZ() - boundingBox.minZ());
 				}
 
 				for (Direction direction1 : Direction.values()) {
@@ -160,7 +160,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 								BlockState blockstate2 = blockstate1.setValue(BlockStateProperties.DISTANCE, Integer.valueOf(l + 1));
 								TreeFeature.setBlockKnownShape(world, blockpos$mutable, blockstate2);
 								if (boundingBox.isInside(blockpos$mutable)) {
-									voxelshapepart.setFull(blockpos$mutable.getX() - boundingBox.x0, blockpos$mutable.getY() - boundingBox.y0, blockpos$mutable.getZ() - boundingBox.z0, true, true);
+									voxelshapepart.fill(blockpos$mutable.getX() - boundingBox.minX(), blockpos$mutable.getY() - boundingBox.minY(), blockpos$mutable.getZ() - boundingBox.minZ());
 								}
 
 								set1.add(blockpos$mutable.immutable());

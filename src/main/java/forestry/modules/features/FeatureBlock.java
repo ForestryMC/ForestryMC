@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -112,10 +113,10 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void clientSetup() {
+	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		//TODO: Hacky, should find a better way
-		if (block instanceof BlockBase) {
-			((BlockBase) block).clientSetup();
+		if (block instanceof BlockBase b) {
+			b.clientSetupRenderers(event);
 		}
 	}
 }

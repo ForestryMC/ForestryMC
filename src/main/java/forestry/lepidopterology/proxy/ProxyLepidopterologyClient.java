@@ -17,11 +17,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -41,13 +41,17 @@ public class ProxyLepidopterologyClient extends ProxyLepidopterology implements 
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(LepidopterologyEntities.BUTTERFLY.entityType(), ButterflyEntityRenderer::new);
 		AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
 			ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
 			for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {
-				ModelLoader.addSpecialModel(allele.getCocoonItemModel(age));
+				ForgeModelBakery.addSpecialModel(allele.getCocoonItemModel(age));
 			}
 		});
+	}
+
+	@Override
+	public void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(LepidopterologyEntities.BUTTERFLY.entityType(), ButterflyEntityRenderer::new);
 	}
 
 	@Override

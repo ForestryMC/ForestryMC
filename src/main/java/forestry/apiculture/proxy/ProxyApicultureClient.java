@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.proxy;
 
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import forestry.apiculture.entities.ParticleSnow;
@@ -33,9 +33,13 @@ public class ProxyApicultureClient extends ProxyApiculture implements IClientMod
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
-		RenderingRegistry.registerEntityRenderingHandler(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
 		ApicultureBlocks.BEE_COMB.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutout()));
+	}
+
+	@Override
+	public void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(ApicultureEntities.APIARY_MINECART.entityType(), MinecartRenderer::new);
+		event.registerEntityRenderer(ApicultureEntities.BEE_HOUSE_MINECART.entityType(), MinecartRenderer::new);
 	}
 
 	@Override

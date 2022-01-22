@@ -514,10 +514,10 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 	}
 
 	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, burnTime);
-		iCrafting.setContainerData(container, 1, totalTime);
-		iCrafting.setContainerData(container, 2, productionTime);
-		iCrafting.setContainerData(container, 3, timePerItem);
+		iCrafting.dataChanged(container, 0, burnTime);
+		iCrafting.dataChanged(container, 1, totalTime);
+		iCrafting.dataChanged(container, 2, productionTime);
+		iCrafting.dataChanged(container, 3, timePerItem);
 	}
 
 	@Override

@@ -62,9 +62,9 @@ public class HabitatSlot extends Widget {
 	@Override
 	public void draw(PoseStack transform, int startY, int startX) {
 		if (!isActive) {
-			RenderSystem.color4f(0.2f, 0.2f, 0.2f, 0.2f);
+			RenderSystem.setShaderColor(0.2f, 0.2f, 0.2f, 0.2f);
 		} else {
-			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		TextureManagerForestry.getInstance().bindGuiTextureMap();

@@ -136,7 +136,7 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 	@Nullable
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 0, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
@@ -147,8 +147,8 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundTag tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
@@ -157,7 +157,7 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundTag nbt = pkt.getTag();
-		handleUpdateTag(getBlockState(), nbt);
+		handleUpdateTag(nbt);
 	}
 
 	/* IFRUITBEARER */

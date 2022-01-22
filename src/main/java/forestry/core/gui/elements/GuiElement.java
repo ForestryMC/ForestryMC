@@ -11,13 +11,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -118,13 +116,13 @@ public abstract class GuiElement extends GuiComponent {
 		if (!isVisible()) {
 			return;
 		}
-		RenderSystem.pushMatrix();
-		RenderSystem.translatef(getX(), getY(), 0.0F);
+		transform.pushPose();
+		transform.translate(getX(), getY(), 0.0F);
 		if (isCropped()) {
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			Minecraft mc = Minecraft.getInstance();
 			//TODO - resolution stuff again, check gameSettings.guiscale too
-			Window window = mc.getWindow();
+			com.mojang.blaze3d.platform.Window window = mc.getWindow();
 			double scaleWidth = ((double) window.getScreenWidth()) / window.getGuiScaledWidth();
 			double scaleHeight = ((double) window.getScreenHeight()) / window.getGuiScaledHeight();
 			GuiElement cropRelative = cropElement != null ? cropElement : this;
@@ -139,7 +137,7 @@ public abstract class GuiElement extends GuiComponent {
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
 
-		RenderSystem.popMatrix();
+		transform.popPose();
 	}
 
 	protected void drawElement(PoseStack transform, int mouseX, int mouseY) {

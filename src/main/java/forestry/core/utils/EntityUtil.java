@@ -35,8 +35,8 @@ public abstract class EntityUtil {
 
 	public static <T extends Mob> T spawnEntity(Level world, T living, double x, double y, double z) {
 		living.moveTo(x, y, z, Mth.wrapDegrees(world.random.nextFloat() * 360.0f), 0.0f);
-		living.yHeadRot = living.yRot;
-		living.yBodyRot = living.yRot;
+		living.yHeadRot = living.getYRot();
+		living.yBodyRot = living.getYRot();
 		DifficultyInstance diff = world.getCurrentDifficultyAt(new BlockPos(x, y, z));
 		//TODO - check SpawnReason
 		living.finalizeSpawn(WorldUtils.asServer(world), diff, MobSpawnType.MOB_SUMMONED, null, null);

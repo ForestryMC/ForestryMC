@@ -42,7 +42,7 @@ public class CoreFeatures {
 		BiomeGenerationSettingsBuilder generation = event.getGeneration();
 		for (ConfiguredFeature<?, ?> ore : overworldOres) {
 			if (ore != null) {
-				generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ore);
+				generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ore.placed());
 			}
 		}
 	}

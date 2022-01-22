@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.FoliageColor;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -70,7 +70,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().location() != InventoryMenu.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		TextureLeaves.registerAllSprites(event);
@@ -90,8 +90,8 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()));
 
 		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
-			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
-			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
+			ForgeModelBakery.addSpecialModel(treeSpecies.getBlockModel());
+			ForgeModelBakery.addSpecialModel(treeSpecies.getItemModel());
 		});
 	}
 

@@ -13,7 +13,7 @@ public class RenderForestryTile<T extends BlockEntity> implements BlockEntityRen
 	private final IForestryRenderer<T> renderer;
 	private final RenderHelper helper = new RenderHelper();
 
-	public RenderForestryTile(BlockEntityRenderDispatcher dispatcher, IForestryRenderer<T> renderer) {
+	public RenderForestryTile(IForestryRenderer<T> renderer) {
 		this.renderer = renderer;
 	}
 

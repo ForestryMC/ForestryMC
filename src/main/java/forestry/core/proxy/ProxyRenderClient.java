@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import forestry.core.fluids.ForestryFluids;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.GraphicsStatus;
-import net.minecraft.world.item.Item;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -32,6 +31,7 @@ import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
+import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.models.ClientManager;
 import forestry.core.models.FluidContainerModel;
@@ -48,8 +48,6 @@ import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
 import forestry.modules.IClientModuleHandler;
 
-import static net.minecraft.client.renderer.RenderTypeLookup.setRenderLayer;
-
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
 
 	@Override
@@ -60,13 +58,15 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
 		for (EnumContainerType type : EnumContainerType.values()) {
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
-			ModelLoader.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
+			ForgeModelBakery.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_empty", "inventory"));
+			ForgeModelBakery.addSpecialModel(new ModelResourceLocation("forestry:" + type.getSerializedName() + "_filled", "inventory"));
 		}
-		CoreBlocks.BASE.getBlocks().forEach((block) -> setRenderLayer(block, RenderType.cutoutMipped()));
-		for (ForestryFluids fluid : ForestryFluids.values()){
-			setRenderLayer(fluid.getFluid(), RenderType.translucent());
-			setRenderLayer(fluid.getFlowing(), RenderType.translucent());
+
+		CoreBlocks.BASE.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
+
+		for (ForestryFluids fluid : ForestryFluids.values()) {
+			ItemBlockRenderTypes.setRenderLayer(fluid.getFluid(), RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(fluid.getFlowing(), RenderType.translucent());
 		}
 	}
 

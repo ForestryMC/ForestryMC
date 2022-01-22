@@ -136,7 +136,7 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 	@Nullable
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.getBlockPos(), 0, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
@@ -147,9 +147,9 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundTag tag) {
+	public void handleUpdateTag(CompoundTag tag) {
 		int oldAge = age;
-		super.handleUpdateTag(state, tag);
+		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 		if (oldAge != age) {
 			Minecraft.getInstance().levelRenderer.setSectionDirty(worldPosition.getX(), worldPosition.getY(), worldPosition.getZ());
@@ -162,7 +162,7 @@ public class TileCocoon extends BlockEntity implements IStreamable, IOwnedTile, 
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		super.onDataPacket(net, pkt);
 		CompoundTag nbt = pkt.getTag();
-		handleUpdateTag(getBlockState(), nbt);
+		handleUpdateTag(nbt);
 	}
 
 	public void onBlockTick() {

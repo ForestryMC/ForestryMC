@@ -46,8 +46,8 @@ public class ForestryPluginUtil {
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
 			for (ModFileScanData.AnnotationData data : annotationData) {
-				if (Objects.equals(data.getAnnotationType(), annotationType)) {
-					pluginClassNames.add(data.getMemberName());
+				if (Objects.equals(data.annotationType(), annotationType)) {
+					pluginClassNames.add(data.memberName());
 				}
 			}
 		}
@@ -93,8 +93,8 @@ public class ForestryPluginUtil {
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
 			for (ModFileScanData.AnnotationData data : annotationData) {
-				if (Objects.equals(data.getAnnotationType(), annotationType)) {
-					pluginClassNames.add(data.getMemberName());
+				if (Objects.equals(data.annotationType(), annotationType)) {
+					pluginClassNames.add(data.memberName());
 				}
 			}
 		}

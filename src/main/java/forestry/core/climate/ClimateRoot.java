@@ -65,11 +65,7 @@ public class ClimateRoot implements IClimateRoot {
 	public IWorldClimateHolder getWorldClimate(Level world) {
 		//TODO - need to make sure this is only called server side...
 		DimensionDataStorage storage = ((ServerLevel) world).getDataStorage();
-		WorldClimateHolder holder = storage.computeIfAbsent(tag -> {
-			WorldClimateHolder h = new WorldClimateHolder(WorldClimateHolder.NAME);
-			h.load(tag);
-			return h;
-		}, () -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
+		WorldClimateHolder holder = storage.computeIfAbsent(WorldClimateHolder::new, WorldClimateHolder::new, WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}

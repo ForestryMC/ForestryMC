@@ -172,9 +172,9 @@ public class ContainerCatalogue extends AbstractContainerMenu implements IGuiSel
 
 		if (needsSync) {
 			for (ContainerListener crafter : containerListeners) {
-				crafter.setContainerData(this, 0, stationIndex);
-				crafter.setContainerData(this, 1, stations.size());
-				crafter.setContainerData(this, 2, currentFilter);
+				crafter.dataChanged(this, 0, stationIndex);
+				crafter.dataChanged(this, 1, stations.size());
+				crafter.dataChanged(this, 2, currentFilter);
 			}
 
 			NetworkUtil.sendToPlayer(new PacketLetterInfoResponse(EnumAddressee.TRADER, currentTrade, null), player);

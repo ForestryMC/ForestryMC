@@ -12,19 +12,19 @@ package forestry.core.entities;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.common.util.ITeleporter;
 
@@ -61,11 +61,12 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	}
 
 	@Override
-	public void remove() {
-		if (dropContentsWhenDead && !level.isClientSide) {
+	public void remove(RemovalReason reason) {
+		if (reason == RemovalReason.KILLED && dropContentsWhenDead && !level.isClientSide) {
 			InventoryUtil.dropInventory(getInternalInventory(), level, getX(), getY(), getZ());
 		}
-		super.remove();
+
+		super.remove(reason);
 	}
 
 	//TODO tbh super() method looks pretty good too

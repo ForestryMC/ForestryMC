@@ -17,27 +17,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -54,7 +54,6 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
-import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.features.ApicultureFeatures;
@@ -183,9 +182,6 @@ public class ModuleApiculture extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IArmorApiarist.class, new NullStorage<>(), () -> ArmorApiarist.INSTANCE);
-
 		MinecraftForge.EVENT_BUS.register(this);
 
 		// Commands
@@ -195,6 +191,11 @@ public class ModuleApiculture extends BlankForestryModule {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
+	}
+
+	@Override
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		consumer.accept(IArmorApiarist.class);
 	}
 
 	@Override

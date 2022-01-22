@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -124,6 +125,12 @@ public class CommonModuleHandler {
 			registerHandlers(module);
 			module.preInit();
 			Log.debug("Pre-Init Complete: {}", module);
+		}
+	}
+
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		for (BlankForestryModule module : modules) {
+			module.registerCapabilities(consumer);
 		}
 	}
 

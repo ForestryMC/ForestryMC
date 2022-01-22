@@ -111,7 +111,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		if (searchField != null) {
 			this.searchField.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?

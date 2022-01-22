@@ -119,7 +119,7 @@ public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> exten
 			dirtyAnalyzer = true;
 		}
 		if (dirtyAnalyzer) {
-			buttons.clear();
+			renderables.clear();
 			init();
 			dirtyAnalyzer = false;
 		}

@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,7 +67,7 @@ public class TankElement extends GuiElement {
 		RenderSystem.disableBlend();
 		RenderSystem.enableAlphaTest();
 		if (background != null) {
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(transform, 0, 0);
 		}
 		if (contents.isEmpty() || capacity <= 0) {
@@ -129,7 +130,7 @@ public class TankElement extends GuiElement {
 			RenderSystem.enableDepthTest();
 		}
 
-		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableAlphaTest();
 	}
 
@@ -138,7 +139,7 @@ public class TankElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
@@ -151,7 +152,7 @@ public class TankElement extends GuiElement {
 
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormat.POSITION_TEX);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();

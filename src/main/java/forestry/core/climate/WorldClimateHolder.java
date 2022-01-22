@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongArrayTag;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
@@ -48,30 +48,27 @@ public class WorldClimateHolder extends SavedData implements IWorldClimateHolder
 	@Nullable
 	private Level world;
 
-	public WorldClimateHolder(String name) {
-		super(name);
+	public WorldClimateHolder() {
 	}
 
-	public void setWorld(@Nullable Level world) {
-		this.world = world;
-	}
-
-	@Override
-	public void load(CompoundTag nbt) {
-		transformers.clear();
-		ListTag transformerData = nbt.getList(TRANSFORMERS_KEY, Tag.TAG_COMPOUND);
+	public WorldClimateHolder(CompoundTag tag) {
+		ListTag transformerData = tag.getList(TRANSFORMERS_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < transformerData.size(); i++) {
 			CompoundTag tagCompound = transformerData.getCompound(i);
 			TransformerData data = new TransformerData(tagCompound);
 			transformers.put(data.position, data);
 		}
-		ListTag chunkData = nbt.getList(CHUNK_KEY, Tag.TAG_COMPOUND);
+		ListTag chunkData = tag.getList(CHUNK_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < chunkData.size(); i++) {
 			CompoundTag tagCompound = chunkData.getCompound(i);
 			long pos = tagCompound.getLong(POS_KEY);
 			long[] chunkTransformers = tagCompound.getLongArray(TRANSFORMERS_DATA_KEY);
 			transformersByChunk.put(pos, chunkTransformers);
 		}
+	}
+
+	public void setWorld(@Nullable Level world) {
+		this.world = world;
 	}
 
 	@Override

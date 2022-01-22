@@ -16,14 +16,12 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.layouts.ContainerElement;
-
 
 /**
  * This element is the top parent.
@@ -228,11 +226,11 @@ public abstract class Window extends ContainerElement {
 	public void drawTooltip(PoseStack transform, int mouseX, int mouseY) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
-			RenderSystem.pushMatrix();
+			transform.pushPose();
 			//TODO test
-			Window window = Minecraft.getInstance().getWindow();
+			com.mojang.blaze3d.platform.Window window = Minecraft.getInstance().getWindow();
 			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
-			RenderSystem.popMatrix();
+			transform.popPose();
 		}
 	}
 

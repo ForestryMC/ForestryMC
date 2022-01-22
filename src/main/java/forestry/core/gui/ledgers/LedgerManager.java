@@ -142,7 +142,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw(transform);
 			yPos += ledger.getHeight();
@@ -165,11 +165,11 @@ public class LedgerManager {
 				continue;
 			}
 
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(transform, yPos, -errorLedger.getWidth());
 			yPos += errorLedger.getHeight();
 		}
-		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 	}
 
 	public void drawTooltips(PoseStack transform, int mouseX, int mouseY) {

@@ -19,12 +19,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraftforge.client.event.EntityRenderersEvent;
+
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties<T extends TileForestry> extends StringRepresentable, IShapeProvider {
 	BlockEntityType<? extends T> getTeType();
 
-	default void clientSetup() {
+	default void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 	}
 
 	@Nullable

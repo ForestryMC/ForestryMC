@@ -61,8 +61,7 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue> {
 	public void init() {
 		super.init();
 
-		buttons.clear();
-		children.clear();
+		renderables.clear();
 
 		Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
 

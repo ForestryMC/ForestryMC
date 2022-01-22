@@ -104,13 +104,13 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 			return;
 		}
 		Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();
 		int h = texture.getHeight();
 		int w = texture.getWidth();
 		isHovered = isMouseOverButton(mouseX, mouseY);
-		int hoverState = getYImage(isHovered());
+		int hoverState = getYImage(isHovered);
 		if (useTexWidth) {
 			blit(transform, x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {

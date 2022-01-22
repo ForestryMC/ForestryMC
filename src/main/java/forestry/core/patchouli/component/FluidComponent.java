@@ -88,6 +88,6 @@ public class FluidComponent implements ICustomComponent {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 }

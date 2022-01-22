@@ -79,7 +79,7 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(getBlockPos(), 0, getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
@@ -100,8 +100,8 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundTag tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		multiblockLogic.decodeDescriptionPacket(tag);
 		this.decodeDescriptionPacket(tag);
 	}

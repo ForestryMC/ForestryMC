@@ -20,6 +20,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.server.level.ServerChunkCache;
@@ -61,7 +62,7 @@ public final class TreeGenHelper {
 			if (feature instanceof FeatureBase) {
 				return ((FeatureBase) feature).place(world, world.random, pos, true);
 			} else {
-				return feature.place((ServerLevel) world, generator, world.random, pos, config);
+				return feature.place(new FeaturePlaceContext<>(Optional.empty(), (ServerLevel) world, generator, world.random, pos, config));
 			}
 		}
 		return false;

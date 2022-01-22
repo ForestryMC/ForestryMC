@@ -15,13 +15,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 
@@ -33,7 +33,6 @@ import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
-import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
 import forestry.arboriculture.features.ArboricultureFeatures;
 import forestry.arboriculture.genetics.TreeDefinition;
@@ -101,9 +100,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 
 	@Override
 	public void preInit() {
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IArmorNaturalist.class, new NullStorage<>(), () -> ArmorNaturalist.INSTANCE);
-
 		MinecraftForge.EVENT_BUS.register(this);
 
 		//TODO: World Gen
@@ -120,6 +116,11 @@ public class ModuleArboriculture extends BlankForestryModule {
 		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
 			ArboricultureFilterRuleType.init();
 		}
+	}
+
+	@Override
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		consumer.accept(IArmorNaturalist.class);
 	}
 
 	@Override
@@ -220,10 +221,10 @@ public class ModuleArboriculture extends BlankForestryModule {
 	//					if (event.getDrops().isEmpty()) {
 	//						World world = event.getWorld();
 	//						Item itemDropped = block.getItemDropped(state, world.rand, 3);
-		//						if (itemDropped != Items.AIR) {
-		//							event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
-		//						}
-		//					}
+	//						if (itemDropped != Items.AIR) {
+	//							event.getDrops().add(new ItemStack(itemDropped, 1, block.damageDropped(state)));
+	//						}
+	//					}
 	//
 	//					harvestingTool.damageItem(1, player, (entity) -> {
 	//						entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);

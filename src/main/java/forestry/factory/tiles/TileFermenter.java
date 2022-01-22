@@ -296,10 +296,10 @@ public class TileFermenter extends TilePowered implements WorldlyContainer, ILiq
 	}
 
 	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, fuelBurnTime);
-		iCrafting.setContainerData(container, 1, fuelTotalTime);
-		iCrafting.setContainerData(container, 2, fermentationTime);
-		iCrafting.setContainerData(container, 3, fermentationTotalTime);
+		iCrafting.dataChanged(container, 0, fuelBurnTime);
+		iCrafting.dataChanged(container, 1, fuelTotalTime);
+		iCrafting.dataChanged(container, 2, fermentationTime);
+		iCrafting.dataChanged(container, 3, fermentationTotalTime);
 	}
 
 

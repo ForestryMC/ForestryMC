@@ -8,6 +8,7 @@ package forestry.api.modules;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
@@ -68,6 +69,9 @@ public interface IForestryModule {
 	 * Must be called by the mod that registers the container.
 	 */
 	default void preInit() {
+	}
+
+	default void registerCapabilities(Consumer<Class<?>> consumer) {
 	}
 
 	default void registerObjects() {

@@ -97,8 +97,8 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundTag tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		beeLogic.read(tag);
 		ownerHandler.read(tag);
 	}

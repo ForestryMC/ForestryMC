@@ -74,7 +74,7 @@ public class GuiMailboxInfo extends GuiComponent {
 			y = win.getGuiScaledHeight() - HEIGHT;
 		}
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableLighting();
 		TextureManager textureManager = minecraft.getTextureManager();
 		textureManager.bindForSetup(textureAlert);

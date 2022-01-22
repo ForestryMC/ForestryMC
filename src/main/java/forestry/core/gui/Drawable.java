@@ -51,7 +51,7 @@ public class Drawable {
 
 		// Enable correct lighting.
 		RenderSystem.enableAlphaTest();
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GuiComponent.blit(transform, xOffset, yOffset, width, height, u, v, uWidth, vHeight, textureWidth, textureHeight);
 		RenderSystem.disableAlphaTest();

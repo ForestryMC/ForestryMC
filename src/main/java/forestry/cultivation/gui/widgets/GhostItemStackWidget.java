@@ -45,7 +45,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 			fontRenderer.drawShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindForSetup(manager.gui.textureFile);

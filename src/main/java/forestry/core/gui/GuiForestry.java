@@ -21,15 +21,15 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -96,14 +96,14 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 	}
 
 	@Override
-	public void init(Minecraft mc, int width, int height) {
+	public void resize(Minecraft mc, int width, int height) {
 		window.setSize(width, height);
-		super.init(mc, width, height);
+		super.resize(mc, width, height);
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		window.updateClient();
 	}
 
@@ -299,9 +299,9 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 	protected void renderLabels(PoseStack transform, int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(transform, mouseX, mouseY);
 
-		if (this.inventory.getCarried().isEmpty()) {
+		if (this.menu.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
-			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, this.renderables, mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, container.slots, mouseX, mouseY);
 			window.drawTooltip(transform, mouseX, mouseY);
 		}
@@ -316,13 +316,13 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 		//RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
 		RenderSystem.disableLighting();
 		RenderSystem.enableRescaleNormal();
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.pushMatrix();
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		transform.pushPose();
 		{
-			RenderSystem.translatef(leftPos, topPos, 0.0F);
+			transform.translate(leftPos, topPos, 0.0F);
 			drawWidgets(transform);
 		}
-		RenderSystem.popMatrix();
+		transform.popPose();
 
 		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 
@@ -343,7 +343,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		textureManager.bindForSetup(texturePath);
 	}

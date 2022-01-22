@@ -191,8 +191,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement Screen */
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		this.searchField.tick();
 	}
 
@@ -204,7 +204,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		this.searchField.setMaxLength(50);
 		this.searchField.setBordered(false);
 		this.searchField.setTextColor(16777215);
-		children.add(searchField);
+		this.renderables.add(searchField);
 
 		addRenderableWidget(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
@@ -258,7 +258,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		if (searchField != null) {
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderSystem.disableLighting();
 			this.searchField.render(transform, mouseX, mouseY, partialTicks);
 		}

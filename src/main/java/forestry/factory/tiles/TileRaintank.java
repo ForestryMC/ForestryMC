@@ -163,7 +163,7 @@ public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidT
 	}
 
 	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, containerFiller.getFillingProgress());
+		iCrafting.dataChanged(container, 0, containerFiller.getFillingProgress());
 	}
 
 	@Override

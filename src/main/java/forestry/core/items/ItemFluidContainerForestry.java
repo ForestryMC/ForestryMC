@@ -126,9 +126,8 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
 		DrinkProperties drinkProperties = getDrinkProperties(stack);
 		if (drinkProperties != null) {
-			if (entityLiving instanceof Player && !((Player) entityLiving).isCreative()) {
-				Player player = (Player) entityLiving;
-				if (!player.abilities.instabuild) {
+			if (entityLiving instanceof Player player && !player.isCreative()) {
+				if (!player.getAbilities().instabuild) {
 					stack.shrink(1);
 				}
 

@@ -54,7 +54,7 @@ public enum EnumFarmBlockType implements IBlockSubtype {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void fillSprites(TextureStitchEvent.Post event) {
-		TextureAtlas map = event.getMap();
+		TextureAtlas map = event.getAtlas();
 		sprites = ImmutableList.of(
 			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/plain")),
 			map.getSprite(new ResourceLocation(Constants.MOD_ID, "block/farm/reverse")),

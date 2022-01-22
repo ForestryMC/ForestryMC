@@ -13,15 +13,13 @@ package forestry.mail.gui;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-
-import com.mojang.authlib.GameProfile;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -155,20 +153,10 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
 	@Nullable
 	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
-		switch (type) {
-			case PLAYER: {
-				GameProfile gameProfile = minecraftServer.getProfileCache().get(recipientName);
-				if (gameProfile == null) {
-					return null;
-				}
-				return PostManager.postRegistry.getMailAddress(gameProfile);
-			}
-			case TRADER: {
-				return PostManager.postRegistry.getMailAddress(recipientName);
-			}
-			default:
-				return null;
-		}
+		return switch (type) {
+			case PLAYER -> minecraftServer.getProfileCache().get(recipientName).map(PostManager.postRegistry::getMailAddress).orElse(null);
+			case TRADER -> PostManager.postRegistry.getMailAddress(recipientName);
+		};
 	}
 
 	@Nullable

@@ -58,18 +58,6 @@ public class GuiWindow extends Screen implements IGuiSizable {
 		window.draw(transform, mouseX, mouseY);
 	}
 
-	protected void drawTooltips(PoseStack transform, int mouseY, int mouseX) {
-		ItemStack carried = minecraft.player.inventoryMenu.getCarried();
-
-		if (carried.isEmpty()) {
-			GuiUtil.drawToolTips(transform, this, children, mouseX, mouseY);
-			RenderSystem.pushMatrix();
-			RenderSystem.translatef(guiLeft, guiTop, 0.0F);
-			window.drawTooltip(transform, mouseX, mouseY);
-			RenderSystem.popMatrix();
-		}
-	}
-
 	//TODO check right method
 	@Override
 	public void init() {
@@ -80,9 +68,9 @@ public class GuiWindow extends Screen implements IGuiSizable {
 	}
 
 	@Override
-	public void init(Minecraft mc, int width, int height) {
+	public void resize(Minecraft mc, int width, int height) {
 		window.setSize(width, height);
-		super.init(mc, width, height);
+		super.resize(mc, width, height);
 	}
 
 	@Override

@@ -15,16 +15,16 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.material.Material;
 
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -150,13 +150,14 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 	}
 
 	@Override
-	public boolean place(WorldGenLevel seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoneFeatureConfiguration config) {
-		ArrayList<IButterfly> butterflys = new ArrayList<IButterfly>(ButterflyManager.butterflyRoot
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		ArrayList<IButterfly> butterflys = new ArrayList<>(ButterflyManager.butterflyRoot
 				.getIndividualTemplates());
 
-		Collections.shuffle(butterflys, rand);
+		Collections.shuffle(butterflys, context.random());
+
 		for (IButterfly butterfly : butterflys) {
-			if (genCocoon(seedReader, rand, pos, butterfly)) {
+			if (genCocoon(context.level(), context.random(), context.origin(), butterfly)) {
 				return true;
 			}
 		}

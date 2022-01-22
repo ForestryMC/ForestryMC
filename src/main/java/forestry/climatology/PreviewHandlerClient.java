@@ -15,20 +15,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
@@ -77,7 +79,7 @@ public class PreviewHandlerClient {
 				return;
 			}
 			transformer.ifPresent(t ->
-				renderer.updatePreview(currentPos, t.getRange(), t.isCircular())
+					renderer.updatePreview(currentPos, t.getRange(), t.isCircular())
 			);
 		}
 	}
@@ -148,17 +150,21 @@ public class PreviewHandlerClient {
 		}
 
 		@SubscribeEvent
-		public void onWorldRenderLast(RenderWorldLastEvent event) {
+		public void onWorldRenderLast(RenderLevelLastEvent event) {
 			if (previewPositions.isEmpty()) {
 				return;
 			}
-			float partialTicks = event.getPartialTicks();
+
+			PoseStack pose = event.getPoseStack();
+			float partialTicks = event.getPartialTick();
 			Player player = Minecraft.getInstance().player;
-			double playerX = player.xOld + (player.getX() - player.xOld) * partialTicks;
-			double playerY = player.yOld + (player.getY() - player.yOld) * partialTicks;
-			double playerZ = player.zOld + (player.getZ() - player.zOld) * partialTicks;
-			RenderSystem.pushMatrix();
-			RenderSystem.translated(-playerX, -playerY, -playerZ);
+
+			double playerX = Mth.lerp(partialTicks, player.xOld, player.getX());
+			double playerY = Mth.lerp(partialTicks, player.yOld, player.getY());
+			double playerZ = Mth.lerp(partialTicks, player.zOld, player.getZ());
+
+			pose.pushPose();
+			pose.translate(-playerX, -playerY, -playerZ);
 			RenderSystem.enableBlend();
 			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			RenderSystem.lineWidth(6.0F);
@@ -171,8 +177,7 @@ public class PreviewHandlerClient {
 			}
 			RenderSystem.enableDepthTest();
 			RenderSystem.disableBlend();
-			RenderSystem.popMatrix();
-
+			pose.popPose();
 		}
 	}
 }

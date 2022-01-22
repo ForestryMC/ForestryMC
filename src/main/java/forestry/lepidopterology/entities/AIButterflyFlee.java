@@ -35,7 +35,7 @@ public class AIButterflyFlee extends AIButterflyMovement {
 			return false;
 		}
 
-		if (!entity.getSensing().canSee(player)) {
+		if (!entity.getSensing().hasLineOfSight(player)) {
 			return false;
 		}
 
