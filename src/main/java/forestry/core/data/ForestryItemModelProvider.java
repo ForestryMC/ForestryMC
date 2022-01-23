@@ -75,5 +75,6 @@ public class ForestryItemModelProvider extends ModelProvider {
 		registerModel(CoreBlocks.DEEPSLATE_APATITE_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/deepslate_apatite_ore")));
 		registerModel(CoreBlocks.TIN_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/tin_ore")));
 		registerModel(CoreBlocks.DEEPSLATE_TIN_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/deepslate_tin_ore")));
+		registerModel(CoreBlocks.RAW_TIN_BLOCK.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/raw_tin_block")));
 	}
 }

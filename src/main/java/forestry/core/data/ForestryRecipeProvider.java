@@ -607,21 +607,42 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						0.5F,
 						200)
 				.unlockedBy("has_apatite_ore", has(ForestryTags.Items.ORES_APATITE))
-				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_blasting"));
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_smelting_apatite_ore"));
+		SimpleCookingRecipeBuilder.blasting(
+						Ingredient.of(ForestryTags.Items.ORES_APATITE),
+						CoreItems.APATITE,
+						0.5F,
+						100)
+				.unlockedBy("has_apatite_ore", has(ForestryTags.Items.ORES_APATITE))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "apatite_from_blasting_apatite_ore"));
 		SimpleCookingRecipeBuilder.smelting(
 						Ingredient.of(ForestryTags.Items.ORES_TIN),
 						CoreItems.INGOT_TIN,
 						0.5F,
 						200)
 				.unlockedBy("has_tin_ore", has(ForestryTags.Items.ORES_TIN))
-				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_ore_blasting"));
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_smelting_tin_ore"));
+		SimpleCookingRecipeBuilder.blasting(
+						Ingredient.of(ForestryTags.Items.ORES_TIN),
+						CoreItems.INGOT_TIN,
+						0.5F,
+						100)
+				.unlockedBy("has_tin_ore", has(ForestryTags.Items.ORES_TIN))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_blasting_tin_ore"));
 		SimpleCookingRecipeBuilder.smelting(
-						Ingredient.of(ForestryTags.Items.RAW_TIN),
+						Ingredient.of(ForestryTags.Items.RAW_MATERIALS_TIN),
 						CoreItems.INGOT_TIN,
 						0.5F,
 						200)
-				.unlockedBy("has_raw_tin", has(ForestryTags.Items.RAW_TIN))
-				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_raw_blasting"));
+				.unlockedBy("has_raw_tin", has(ForestryTags.Items.RAW_MATERIALS_TIN))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_smelting_raw_tin"));
+		SimpleCookingRecipeBuilder.blasting(
+						Ingredient.of(ForestryTags.Items.RAW_MATERIALS_TIN),
+						CoreItems.INGOT_TIN,
+						0.5F,
+						100)
+				.unlockedBy("has_raw_tin", has(ForestryTags.Items.RAW_MATERIALS_TIN))
+				.save(consumer, new ResourceLocation(Constants.MOD_ID, "tin_ingot_from_blasting_raw_tin"));
 		SimpleCookingRecipeBuilder.smelting(
 						Ingredient.of(CoreItems.PEAT),
 						CoreItems.ASH.item(),
@@ -629,6 +650,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						200)
 				.unlockedBy("has_peat", has(CoreItems.PEAT))
 				.save(consumer, new ResourceLocation(Constants.MOD_ID, "ash_from_peat_blasting"));
+		nineBlockStorageRecipes(consumer, CoreItems.RAW_TIN.item(), CoreBlocks.RAW_TIN_BLOCK.item());
 
 		//don't need conditions here generally since core is always enabled
 		ShapedRecipeBuilder.shaped(CoreBlocks.BASE.get(BlockTypeCoreTesr.ANALYZER).block())

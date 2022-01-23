@@ -22,6 +22,9 @@ public class ForestryTags {
 
 		public static final Tag.Named<Block> ORES_TIN = forgeTag("ores/tin");
 		public static final Tag.Named<Block> ORES_APATITE = forgeTag("ores/apatite");
+
+		public static final Tag.Named<Block> STORAGE_BLOCKS_RAW_TIN = forgeTag("storage_blocks/raw_tin");
+
 		public static final Tag.Named<Block> PALM_LOGS = tag("palm_logs");
 		public static final Tag.Named<Block> PAPAYA_LOGS = tag("papaya_logs");
 
@@ -31,10 +34,6 @@ public class ForestryTags {
 
 		private static Tag.Named<Block> forgeTag(String name) {
 			return BlockTags.bind("forge:" + name);
-		}
-
-		private static Tag.Named<Block> vanillaTag(String name) {
-			return BlockTags.bind(name);
 		}
 
 		private Blocks() {
@@ -70,8 +69,10 @@ public class ForestryTags {
 		public static final Tag.Named<Item> STORAGE_BLOCKS_BRONZE = forgeTag("storage_blocks/bronze");
 
 		public static final Tag.Named<Item> ORES_TIN = forgeTag("ores/tin");
-		public static final Tag.Named<Item> RAW_TIN = forgeTag("raw_materials/tin");
+		public static final Tag.Named<Item> RAW_MATERIALS_TIN = forgeTag("raw_materials/tin");
 		public static final Tag.Named<Item> ORES_APATITE = forgeTag("ores/apatite");
+
+		public static final Tag.Named<Item> STORAGE_BLOCKS_RAW_TIN = forgeTag("storage_blocks/raw_tin");
 
 		public static final Tag.Named<Item> STAMPS = tag("stamps");
 
@@ -101,10 +102,6 @@ public class ForestryTags {
 
 		private static Tag.Named<Item> forgeTag(String name) {
 			return ItemTags.bind("forge:" + name);
-		}
-
-		private static Tag.Named<Item> vanillaTag(String name) {
-			return ItemTags.bind(name);
 		}
 
 		private Items() {

@@ -24,6 +24,7 @@ public class ForestryBlockModelProvider extends ModelProvider {
 		registerCubeAll("deepslate_apatite_ore");
 		registerCubeAll("tin_ore");
 		registerCubeAll("deepslate_tin_ore");
+		registerCubeAll("raw_tin_block");
 	}
 
 	private void registerCubeAll(String path) {

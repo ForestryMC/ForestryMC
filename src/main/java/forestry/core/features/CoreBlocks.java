@@ -39,6 +39,7 @@ public class CoreBlocks {
 	public static final FeatureBlock<OreBlock, BlockItem> DEEPSLATE_APATITE_ORE = REGISTRY.block(() -> new OreBlock(BlockBehaviour.Properties.copy(APATITE_ORE.block()), UniformInt.of(0, 4)), ItemBlockForestry::new, "deepslate_apatite_ore");
 	public static final FeatureBlock<OreBlock, BlockItem> TIN_ORE = REGISTRY.block(() -> new OreBlock(BlockBehaviour.Properties.copy(Blocks.COPPER_ORE)), ItemBlockForestry::new, "tin_ore");
 	public static final FeatureBlock<OreBlock, BlockItem> DEEPSLATE_TIN_ORE = REGISTRY.block(() -> new OreBlock(BlockBehaviour.Properties.copy(TIN_ORE.block())), ItemBlockForestry::new, "deepslate_tin_ore");
+	public static final FeatureBlock<OreBlock, BlockItem> RAW_TIN_BLOCK = REGISTRY.block(() -> new OreBlock(BlockBehaviour.Properties.copy(Blocks.RAW_COPPER_BLOCK)), ItemBlockForestry::new, "raw_tin_block");
 
 	private CoreBlocks() {
 	}

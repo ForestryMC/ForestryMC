@@ -83,6 +83,7 @@ public class ForestryBlockLootTables extends BlockLoot {
 		registerLootTable(CoreBlocks.TIN_ORE, block -> createOreDrop(block, CoreItems.RAW_TIN.item()));
 		registerLootTable(CoreBlocks.DEEPSLATE_TIN_ORE, block -> createOreDrop(block, CoreItems.RAW_TIN.item()));
 
+		dropSelf(CoreBlocks.RAW_TIN_BLOCK.block());
 		//TODO: Hives
 
 		Set<ResourceLocation> visited = Sets.newHashSet();
