@@ -1,7 +1,7 @@
 package forestry.worktable.compat;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,10 +39,6 @@ public class WorktableJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		if (!true) {
-			return;
-		}
-
 		registration.addRecipeCatalyst(new ItemStack(WorktableBlocks.WORKTABLE), VanillaRecipeCategoryUid.CRAFTING);
 	}
 }

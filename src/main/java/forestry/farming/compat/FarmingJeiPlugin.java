@@ -1,8 +1,8 @@
 package forestry.farming.compat;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,10 +30,6 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
-		if (!true) {
-			return;
-		}
-
 		//        BlockRegistryFarming blocks = ModuleFarming.getBlocks();
 		//        Item farmBlock = Item.getItemFromBlock(blocks.farm);
 		//        registration.registerSubtypeInterpreter(farmBlock, itemStack -> {
@@ -45,20 +41,12 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
-		if (!true) {
-			return;
-		}
-
 		IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 		registration.addRecipeCategories(new FarmingInfoRecipeCategory(guiHelper));
 	}
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!true) {
-			return;
-		}
-
 		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
 		registration.addRecipes(FarmingInfoRecipeMaker.getRecipes(recipeManager), FarmingInfoRecipeCategory.UID);

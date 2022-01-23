@@ -28,10 +28,6 @@ public class LepidopterologyJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		if (!true) {
-			return;
-		}
-
 		IIngredientSubtypeInterpreter<ItemStack> butterflySubtypeInterpreter = (itemStack, context) -> {
 			Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
 			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
