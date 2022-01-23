@@ -231,6 +231,10 @@ if (System.getenv("CURSEFORGE")) {
 
 			mainArtifact(jar.archiveFile) {
 				displayName = "${project.version}"
+				relations {
+					optionalDependency 'jei'
+					optionalDependency 'patchouli'
+				}
 			}
 		}
 	}
