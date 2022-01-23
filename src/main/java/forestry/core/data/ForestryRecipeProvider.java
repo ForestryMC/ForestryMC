@@ -450,10 +450,10 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		ShapelessRecipeBuilder.shapeless(CharcoalBlocks.WOOD_PILE_DECORATIVE.block())
 				.requires(CharcoalBlocks.WOOD_PILE.block())
 				.unlockedBy("was_wood_pile", has(CharcoalBlocks.WOOD_PILE.block())).save(helper);
-		new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative");
 		ShapelessRecipeBuilder.shapeless(CharcoalBlocks.WOOD_PILE.block())
 				.requires(CharcoalBlocks.WOOD_PILE_DECORATIVE.block())
-				.unlockedBy("has_decorative", has(CharcoalBlocks.WOOD_PILE_DECORATIVE.block())).save(helper);
+				.unlockedBy("has_decorative", has(CharcoalBlocks.WOOD_PILE_DECORATIVE.block()))
+				.save(helper, new ResourceLocation(Constants.MOD_ID, "wood_pile_from_decorative"));
 	}
 
 	private void registerClimatologyRecipes(Consumer<FinishedRecipe> helper) {
@@ -734,21 +734,21 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerBookRecipes(Consumer<FinishedRecipe> helper) {
-		new ResourceLocation(Constants.MOD_ID, "foresters_manual_honeydrop");
 		ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 				.requires(Items.BOOK)
 				.requires(ApicultureItems.HONEY_DROPS.get(EnumHoneyDrop.HONEY).item())
-				.unlockedBy("has_book", has(Items.BOOK)).save(helper);
-		new ResourceLocation(Constants.MOD_ID, "foresters_manual_sapling");
+				.unlockedBy("has_book", has(Items.BOOK))
+				.save(helper, new ResourceLocation(Constants.MOD_ID, "foresters_manual_honeydrop"));
 		ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 				.requires(Items.BOOK)
 				.requires(ItemTags.SAPLINGS)
-				.unlockedBy("has_book", has(Items.BOOK)).save(helper);
-		new ResourceLocation(Constants.MOD_ID, "foresters_manual_butterfly");
+				.unlockedBy("has_book", has(Items.BOOK))
+				.save(helper, new ResourceLocation(Constants.MOD_ID, "foresters_manual_sapling"));
 		ShapelessRecipeBuilder.shapeless(CoreItems.FORESTERS_MANUAL)
 				.requires(Items.BOOK)
 				.requires(LepidopterologyItems.BUTTERFLY_GE.item())
-				.unlockedBy("has_book", has(Items.BOOK)).save(helper);
+				.unlockedBy("has_book", has(Items.BOOK))
+				.save(helper, new ResourceLocation(Constants.MOD_ID, "foresters_manual_butterfly"));
 	}
 
 	private EnumElectronTube getElectronTube(BlockTypePlanter planter) {
@@ -778,11 +778,12 @@ public class ForestryRecipeProvider extends RecipeProvider {
 
 			ShapelessRecipeBuilder.shapeless(manual)
 					.requires(managed)
-					.unlockedBy("has_managed", has(managed)).save(helper);
-			new ResourceLocation(Constants.MOD_ID, managed.getRegistryName().getPath() + "_from_manual");
+					.unlockedBy("has_managed", has(managed))
+					.save(helper);
 			ShapelessRecipeBuilder.shapeless(managed)
 					.requires(manual)
-					.unlockedBy("has_manual", has(manual)).save(helper);
+					.unlockedBy("has_manual", has(manual))
+					.save(helper, new ResourceLocation(Constants.MOD_ID, managed.getRegistryName().getPath() + "_from_manual"));
 		}
 	}
 
@@ -797,7 +798,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 					continue;
 				}
 
-				new ResourceLocation(Constants.MOD_ID, "database_" + featureBlock1.getIdentifier() + "_" + featureBlock2.getIdentifier());
 				ShapedRecipeBuilder.shaped(DatabaseBlocks.DATABASE.block())
 						.define('#', CoreItems.PORTABLE_ALYZER.item())
 						.define('C', possibleSpecial)
@@ -807,7 +807,8 @@ public class ForestryRecipeProvider extends RecipeProvider {
 						.define('I', ForestryTags.Items.INGOTS_BRONZE)
 						.define('Y', CoreItems.STURDY_CASING.item())
 						.pattern("I#I").pattern("FYS").pattern("WCW")
-						.unlockedBy("has_casing", has(CoreItems.STURDY_CASING.item())).save(helper);
+						.unlockedBy("has_casing", has(CoreItems.STURDY_CASING.item()))
+						.save(helper, new ResourceLocation(Constants.MOD_ID, "database_" + featureBlock1.getIdentifier() + "_" + featureBlock2.getIdentifier()));
 			}
 		}
 	}
@@ -944,14 +945,14 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				continue;
 			}*/
 			ItemStack filled = FluidsItems.getContainer(containerType, milk);
-			new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getSerializedName());
 			ShapedRecipeBuilder.shaped(Items.CAKE)
 					.define('A', new ComplexIngredient(filled))
 					.define('B', Items.SUGAR)
 					.define('C', Items.WHEAT)
 					.define('E', Items.EGG)
 					.pattern("AAA").pattern("BEB").pattern("CCC")
-					.unlockedBy("has_wheat", has(Items.WHEAT)).save(helper);
+					.unlockedBy("has_wheat", has(Items.WHEAT))
+					.save(helper, new ResourceLocation(Constants.MOD_ID, "cake_" + containerType.getSerializedName()));
 		}
 	}
 
