@@ -57,6 +57,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 
 		tag(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
 		tag(ForestryTags.Items.GEMS_APATITE).add(CoreItems.APATITE.item());
+		tag(ForestryTags.Items.RAW_TIN).add(CoreItems.RAW_TIN.item());
 
 		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_TIN);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);

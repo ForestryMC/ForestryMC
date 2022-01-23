@@ -70,6 +70,7 @@ public class ForestryTags {
 		public static final Tag.Named<Item> STORAGE_BLOCKS_BRONZE = forgeTag("storage_blocks/bronze");
 
 		public static final Tag.Named<Item> ORES_TIN = forgeTag("ores/tin");
+		public static final Tag.Named<Item> RAW_TIN = forgeTag("raw_materials/tin");
 		public static final Tag.Named<Item> ORES_APATITE = forgeTag("ores/apatite");
 
 		public static final Tag.Named<Item> STAMPS = tag("stamps");

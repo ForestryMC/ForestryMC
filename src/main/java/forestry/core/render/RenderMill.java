@@ -75,7 +75,7 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 				rotation.setY((float) Math.PI / 2);
 				translate[2] = 1;
 			}
-			case NORTH, default -> {
+			case NORTH -> {
 				rotation.setX((float) -Math.PI / 2);
 				rotation.setY((float) Math.PI / 2);
 				translate[2] = -1;

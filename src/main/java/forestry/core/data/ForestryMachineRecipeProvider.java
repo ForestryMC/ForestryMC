@@ -388,7 +388,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 				.build(consumer, id("carpenter", "crates", "empty"));
 
 		crate(consumer, CrateItems.CRATED_PEAT.get(), Ingredient.of(CoreItems.PEAT));
-		crate(consumer, CrateItems.CRATED_APATITE.get(), Ingredient.of(CoreItems.APATITE));
+		crate(consumer, CrateItems.CRATED_APATITE.get(), Ingredient.of(ForestryTags.Items.GEMS_APATITE));
 		crate(consumer, CrateItems.CRATED_FERTILIZER_COMPOUND.get(), Ingredient.of(CoreItems.FERTILIZER_COMPOUND));
 		crate(consumer, CrateItems.CRATED_MULCH.get(), Ingredient.of(CoreItems.MULCH));
 		crate(consumer, CrateItems.CRATED_PHOSPHOR.get(), Ingredient.of(CoreItems.PHOSPHOR));

@@ -16,6 +16,7 @@ import java.util.EnumSet;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
@@ -57,7 +58,7 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		Vec3 randomTarget = null; // RandomPos.getPosAvoid(mob, 16, 7, player.position());
+		Vec3 randomTarget = DefaultRandomPos.getPosAway(mob, 16, 7, player.position());
 
 		if (randomTarget == null) {
 			return false;

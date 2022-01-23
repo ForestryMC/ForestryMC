@@ -120,12 +120,12 @@ public class SpeciesSelectionElement extends GuiElement {
 			case WARM -> 0.9F;
 			case COLD -> 0.15F;
 			case ICY -> 0.0F;
-			case NORMAL, default -> 0.79F;
+			default -> 0.79F;
 		};
 		humid = switch (humidity) {
 			case DAMP -> 0.9F;
 			case ARID -> 0.2F;
-			case NORMAL, default -> 0.4F;
+			case NORMAL -> 0.4F;
 		};
 		transformer.setTarget(ClimateStateHelper.INSTANCE.create(temp, humid));
 		return true;

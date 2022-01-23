@@ -12,11 +12,10 @@ package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.ai.util.RandomPos;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public abstract class AIButterflyBase extends Goal {
@@ -34,7 +33,7 @@ public abstract class AIButterflyBase extends Goal {
 		}
 
 		Vec3 entityPos = entity.position();
-		Vec3 randomTarget = null; // RandomPos.getPosAvoid(entity, 16, 7, entityPos);
+		Vec3 randomTarget = DefaultRandomPos.getPosAway(entity, 16, 7, entityPos);
 
 		if (randomTarget != null && validateDestination(randomTarget, false)) {
 			return randomTarget;

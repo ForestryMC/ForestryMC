@@ -1,9 +1,10 @@
 package forestry.core.data;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 
+import forestry.core.config.Constants;
 import forestry.core.fluids.ForestryFluids;
 
 public class ForestryBlockModelProvider extends ModelProvider {
@@ -18,5 +19,14 @@ public class ForestryBlockModelProvider extends ModelProvider {
 			Block block = fluid.getFeature().fluidBlock().block();
 			registerModel(block, new ModelBuilder().particle(fluid.getFeature().properties().resources[0]));
 		}
+
+		registerCubeAll("apatite_ore");
+		registerCubeAll("deepslate_apatite_ore");
+		registerCubeAll("tin_ore");
+		registerCubeAll("deepslate_tin_ore");
+	}
+
+	private void registerCubeAll(String path) {
+		registerModel(path, new ModelBuilder().parent("block/cube_all").texture("all", new ResourceLocation(Constants.MOD_ID, "block/" + path)));
 	}
 }

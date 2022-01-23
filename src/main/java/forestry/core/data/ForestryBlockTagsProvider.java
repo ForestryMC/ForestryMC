@@ -40,6 +40,10 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	protected void addTags() {
 		//super.registerTags();
 		filter = new HashSet<>(this.builders.keySet());
+
+		tag(ForestryTags.Blocks.MINEABLE_SCOOP);
+		tag(ForestryTags.Blocks.MINEABLE_GRAFTER);
+
 		if (ModuleHelper.isEnabled(ForestryModuleUids.CHARCOAL)) {
 			tag(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
 		}
@@ -96,8 +100,8 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		}
 
 		addToTag(Tags.Blocks.ORES, ForestryTags.Blocks.ORES_TIN, ForestryTags.Blocks.ORES_APATITE);
-		tag(ForestryTags.Blocks.ORES_TIN).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).block());
-		tag(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).block());
+		tag(ForestryTags.Blocks.ORES_TIN).add(CoreBlocks.TIN_ORE.block(), CoreBlocks.DEEPSLATE_TIN_ORE.block());
+		tag(ForestryTags.Blocks.ORES_APATITE).add(CoreBlocks.APATITE_ORE.block(), CoreBlocks.DEEPSLATE_APATITE_ORE.block());
 
 		addToTag(Tags.Blocks.STORAGE_BLOCKS, ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Blocks.STORAGE_BLOCKS_TIN);
 		tag(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE).add(CoreBlocks.RESOURCE_STORAGE.get(EnumResourceType.APATITE).block());

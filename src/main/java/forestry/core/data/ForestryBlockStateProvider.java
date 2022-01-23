@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
 
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
 import forestry.core.fluids.ForestryFluids;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
@@ -44,6 +45,11 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 		for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
 			addCultivationBlock(cell.getValue(), cell.getRowKey());
 		}
+
+		addVariants(CoreBlocks.APATITE_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/apatite_ore")));
+		addVariants(CoreBlocks.DEEPSLATE_APATITE_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_apatite_ore")));
+		addVariants(CoreBlocks.TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/tin_ore")));
+		addVariants(CoreBlocks.DEEPSLATE_TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_tin_ore")));
 	}
 
 	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {

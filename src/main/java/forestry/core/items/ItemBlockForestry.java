@@ -34,8 +34,9 @@ public class ItemBlockForestry<B extends Block> extends BlockItem {
 
 	public ItemBlockForestry(B block, Item.Properties builder) {
 		super(block, builder);
-		if (builder instanceof ItemProperties) {
-			this.burnTime = ((ItemProperties) builder).burnTime;
+
+		if (builder instanceof ItemProperties properties) {
+			this.burnTime = properties.burnTime;
 		} else {
 			burnTime = -1;
 		}
