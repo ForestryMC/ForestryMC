@@ -42,7 +42,6 @@ import forestry.farming.logic.FarmLogicPeat;
 import forestry.farming.logic.FarmLogicReeds;
 import forestry.farming.logic.FarmLogicSucculent;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 public enum FarmDefinition implements StringRepresentable {
 	CROPS("crops", EnumElectronTube.BRONZE, FarmLogicCrops::new) {
@@ -133,16 +132,14 @@ public enum FarmDefinition implements StringRepresentable {
 			properties.setFertilizer(10)
 				.setWater(hydrationModifier -> (int) (40 * hydrationModifier))
 				.setIcon(() -> CoreItems.FRUITS.stack(ItemFruit.EnumFruit.CHERRY));
-			if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-				ITreeRoot treeRoot = TreeManager.treeRoot;
-				if (treeRoot != null) {
-					for (ITree tree : treeRoot.getIndividualTemplates()) {
-						IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
-						if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
-							properties.addSeedlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING))
-								.addProducts(fruitProvider.getProducts().getPossibleStacks())
-								.addProducts(fruitProvider.getSpecialty().getPossibleStacks());
-						}
+			ITreeRoot treeRoot = TreeManager.treeRoot;
+			if (treeRoot != null) {
+				for (ITree tree : treeRoot.getIndividualTemplates()) {
+					IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
+					if (fruitProvider != AlleleFruits.fruitNone.getProvider()) {
+						properties.addSeedlings(treeRoot.getTypes().createStack(tree, EnumGermlingType.SAPLING))
+							.addProducts(fruitProvider.getProducts().getPossibleStacks())
+							.addProducts(fruitProvider.getSpecialty().getPossibleStacks());
 					}
 				}
 			}

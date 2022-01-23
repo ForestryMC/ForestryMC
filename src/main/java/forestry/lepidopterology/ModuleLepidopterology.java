@@ -47,7 +47,6 @@ import forestry.lepidopterology.proxy.ProxyLepidopterologyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.LEPIDOPTEROLOGY, name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.lepidopterology.description")
 public class ModuleLepidopterology extends BlankForestryModule {
@@ -94,10 +93,8 @@ public class ModuleLepidopterology extends BlankForestryModule {
 
 		proxy.preInitializeRendering();
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-			LepidopterologyFilterRule.init();
-			LepidopterologyFilterRuleType.init();
-		}
+		LepidopterologyFilterRule.init();
+		LepidopterologyFilterRuleType.init();
 	}
 
 	@Override

@@ -68,7 +68,6 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
@@ -222,19 +221,17 @@ public class ModuleFactory extends BlankForestryModule {
 		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
 		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
-				for (int i = 0; i < 16; i++) {
-					//TODO - needs tag loop or tag match in recipe
-					//					RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassBucket, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
-					//						"#", "X",
-					//						'#', dyes[i],
-					//						'X', beeItems.propolis.getWildcard()});
-				}
-				//				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
-				//					"X",
-				//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
+		if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
+			for (int i = 0; i < 16; i++) {
+				//TODO - needs tag loop or tag match in recipe
+				//					RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassBucket, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
+				//						"#", "X",
+				//						'#', dyes[i],
+				//						'X', beeItems.propolis.getWildcard()});
 			}
+			//				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
+			//					"X",
+			//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");

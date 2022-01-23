@@ -90,7 +90,6 @@ import forestry.core.utils.Log;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticsAPI;
 
@@ -137,10 +136,8 @@ public class ModuleApiculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		if (Config.generateBeehivesAmount > 0.0) {
-			modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
-		}
+		modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 	}
 
 	@Override
@@ -179,10 +176,8 @@ public class ModuleApiculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.then(CommandBee.register());
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-			ApicultureFilterRuleType.init();
-			ApicultureFilterRule.init();
-		}
+		ApicultureFilterRuleType.init();
+		ApicultureFilterRule.init();
 	}
 
 	@Override

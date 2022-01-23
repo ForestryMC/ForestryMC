@@ -12,7 +12,6 @@ import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")
 public class ModuleCharcoal extends BlankForestryModule {
@@ -36,6 +35,6 @@ public class ModuleCharcoal extends BlankForestryModule {
 	}
 
 	public static CreativeModeTab getGroup() {
-		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
+		return true ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
 	}
 }

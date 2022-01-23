@@ -15,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.database.tiles.TileDatabase;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase> {
 	public static final int SLOT_ENERGY = 0;
@@ -30,11 +28,7 @@ public class InventoryDatabaseAnalyzer extends InventoryAdapterTile<TileDatabase
 			return false;
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-		}
-
-		return false;
+		return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
 	}
 
 	@Override

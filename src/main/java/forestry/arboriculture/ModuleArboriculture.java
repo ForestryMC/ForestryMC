@@ -42,7 +42,6 @@ import forestry.core.utils.ForgeUtils;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ARBORICULTURE, name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.arboriculture.description", lootTable = "arboriculture")
 public class ModuleArboriculture extends BlankForestryModule {
@@ -97,9 +96,7 @@ public class ModuleArboriculture extends BlankForestryModule {
 		// Commands
 		ModuleCore.rootCommand.then(CommandTree.register());
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.SORTING)) {
-			ArboricultureFilterRuleType.init();
-		}
+		ArboricultureFilterRuleType.init();
 	}
 
 	@Override

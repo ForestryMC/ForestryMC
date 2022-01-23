@@ -25,8 +25,6 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.GeneticsUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -51,11 +49,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			return false;
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-		}
+		return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
 
-		return false;
 	}
 
 	@Override
@@ -116,12 +111,10 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (!individual.isAnalyzed()) {
-				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-				if (requiresEnergy) {
-					// Requires energy
-					if (!isAlyzingFuel(getItem(SLOT_ENERGY))) {
-						return;
-					}
+				final boolean requiresEnergy = true;
+				// Requires energy
+				if (!isAlyzingFuel(getItem(SLOT_ENERGY))) {
+					return;
 				}
 
 				if (individual.analyze()) {
@@ -131,10 +124,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 					GeneticHelper.setIndividual(specimen, individual);
 
-					if (requiresEnergy) {
-						// Decrease energy
-						removeItem(SLOT_ENERGY, 1);
-					}
+					// Decrease energy
+					removeItem(SLOT_ENERGY, 1);
 				}
 			}
 		}

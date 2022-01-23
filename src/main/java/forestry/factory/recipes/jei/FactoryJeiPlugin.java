@@ -57,7 +57,6 @@ import forestry.factory.recipes.jei.squeezer.SqueezerRecipeMaker;
 import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.factory.recipes.jei.still.StillRecipeMaker;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -83,7 +82,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
+		if (!true) {
 			return;
 		}
 
@@ -134,7 +133,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
+		if (!true) {
 			return;
 		}
 

@@ -20,7 +20,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.GeneratorFuel;
 import forestry.api.modules.ForestryModule;
@@ -33,11 +32,6 @@ import forestry.modules.ForestryModuleUids;
 //TODO: Move the fluid and block creation to the new feature system if the fluid system is more final (Do we really need a source and a flowing fluid ?)
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FLUIDS, name = "Fluids", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.module.fluids.description")
 public class ModuleFluids extends BlankForestryModule {
-
-	@Override
-	public boolean canBeDisabled() {
-		return false;
-	}
 
 	@Override
 	public void preInit() {

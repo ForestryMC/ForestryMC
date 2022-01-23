@@ -48,8 +48,7 @@ import forestry.core.utils.Log;
 
 public class ModuleManager implements IModuleManager {
 
-	private static final String CONFIG_CATEGORY = "modules";
-	private static ModuleManager ourInstance = new ModuleManager();
+	private static final ModuleManager ourInstance = new ModuleManager();
 
 	public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final List<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
@@ -67,11 +66,6 @@ public class ModuleManager implements IModuleManager {
 
 	public static ModuleManager getInstance() {
 		return ourInstance;
-	}
-
-	@Override
-	public boolean isModuleEnabled(ResourceLocation id) {
-		return sortedModules.get(id) != null;
 	}
 
 	@Override
@@ -123,27 +117,7 @@ public class ModuleManager implements IModuleManager {
 				Log.debug("Could not find core module for the module container: {}", containerID);
 			}
 
-			Iterator<IForestryModule> iterator = containerModules.iterator();
-			while (iterator.hasNext()) {
-				IForestryModule module = iterator.next();
-				if (!container.isAvailable()) {
-					iterator.remove();
-					Log.info("Module disabled: {}", module);
-					continue;
-				}
-				if (module.canBeDisabled()) {
-					if (!container.isModuleEnabled(module)) {
-						configDisabledModules.add(module);
-						iterator.remove();
-						Log.info("Module disabled: {}", module);
-						continue;
-					}
-					if (!module.isAvailable()) {
-						iterator.remove();
-						Log.info("Module {} failed to load: {}", module, module.getFailMessage());
-						continue;
-					}
-				}
+			for (IForestryModule module : containerModules) {
 				ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 				toLoad.add(new ResourceLocation(containerID, info.moduleID()));
 				modulesToLoad.add(module);

@@ -11,8 +11,6 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.core.utils.ClientUtils;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -32,7 +30,7 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
+		if (!true) {
 			return;
 		}
 
@@ -47,7 +45,7 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
+		if (!true) {
 			return;
 		}
 
@@ -57,7 +55,7 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
+		if (!true) {
 			return;
 		}
 

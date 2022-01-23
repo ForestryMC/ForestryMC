@@ -11,8 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -32,7 +30,7 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (!true) {
 			return;
 		}
 
@@ -47,7 +45,7 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
+		if (!true) {
 			return;
 		}
 

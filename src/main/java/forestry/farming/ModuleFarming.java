@@ -48,7 +48,6 @@ import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -105,9 +104,7 @@ public class ModuleFarming extends BlankForestryModule {
 				new ItemStack(Blocks.ACACIA_SAPLING),
 				new ItemStack[]{new ItemStack(Items.STICK)}
 		));
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
-		}
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
 				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropBlock.AGE, 7, 0),

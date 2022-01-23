@@ -28,14 +28,6 @@ public interface IForestryModule {
 		return true;
 	}
 
-	default boolean canBeDisabled() {
-		return true;
-	}
-
-	default String getFailMessage() {
-		return "";
-	}
-
 	/**
 	 * The ForestryModule.moduleID()s of any other modules this module depends on.
 	 */

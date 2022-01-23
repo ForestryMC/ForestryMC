@@ -16,8 +16,6 @@ import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.database.inventory.InventoryDatabaseAnalyzer;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -103,7 +101,7 @@ public class ContainerAnalyzerProviderHelper {
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (!individual.isAnalyzed()) {
-				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
+				final boolean requiresEnergy = true;
 				ItemStack energyStack = alyzerInventory.getItem(InventoryDatabaseAnalyzer.SLOT_ENERGY);
 				if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
 					return;

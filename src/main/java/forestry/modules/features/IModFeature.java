@@ -32,10 +32,6 @@ public interface IModFeature {
 	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
 	}
 
-	default boolean isEnabled() {
-		return ModFeatureRegistry.get(getModId()).isEnabled(this);
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	default void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 	}

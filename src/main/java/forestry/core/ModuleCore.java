@@ -65,11 +65,6 @@ public class ModuleCore extends BlankForestryModule {
 	}
 
 	@Override
-	public boolean canBeDisabled() {
-		return false;
-	}
-
-	@Override
 	public Set<ResourceLocation> getDependencyUids() {
 		return Collections.emptySet();
 	}

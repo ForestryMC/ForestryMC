@@ -13,18 +13,9 @@ public interface IModuleContainer {
 	 */
 	String getID();
 
-	boolean isAvailable();
-
-	/**
-	 * @return true if the module is enabled in the config file of this container.
-	 */
-	boolean isModuleEnabled(IForestryModule module);
-
 	/**
 	 * Called after configured the modules.
 	 */
 	default void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
 	}
-
-
 }

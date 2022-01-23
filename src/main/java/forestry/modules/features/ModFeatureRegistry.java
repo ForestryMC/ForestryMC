@@ -18,37 +18,35 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import forestry.api.storage.IBackpackDefinition;
-import forestry.storage.ModuleBackpacks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraftforge.network.IContainerFactory;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
 import forestry.api.modules.ForestryModule;
 import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
+import forestry.storage.ModuleBackpacks;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -90,10 +88,6 @@ public class ModFeatureRegistry {
 		modules.computeIfAbsent(feature.getModuleId(), ModuleFeatures::new).register(feature);
 	}
 
-	public boolean isEnabled(IModFeature feature) {
-		return ForestryAPI.moduleManager.isModuleEnabled(modId, feature.getModuleId());
-	}
-
 	public void createObjects(BiPredicate<FeatureType, String> filter) {
 		for (FeatureType type : FeatureType.values()) {
 			modules.values().forEach(features -> {
@@ -107,16 +101,16 @@ public class ModFeatureRegistry {
 
 	public Collection<IModFeature> getFeatures(FeatureType type) {
 		return modules.values().stream()
-			.flatMap((module) -> module.getFeatures(type).stream())
-			.collect(Collectors.toSet());
+				.flatMap((module) -> module.getFeatures(type).stream())
+				.collect(Collectors.toSet());
 	}
 
 	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
 		return Stream.of(FeatureType.values())
-			.filter(filter)
-			.flatMap((type) -> modules.values().stream()
-				.flatMap((module) -> module.getFeatures(type).stream()))
-			.collect(Collectors.toSet());
+				.filter(filter)
+				.flatMap((type) -> modules.values().stream()
+						.flatMap((module) -> module.getFeatures(type).stream()))
+				.collect(Collectors.toSet());
 	}
 
 	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
@@ -269,9 +263,6 @@ public class ModFeatureRegistry {
 		}
 
 		private void createObject(IModFeature feature) {
-			if (!feature.isEnabled()) {
-				return;
-			}
 			feature.create();
 		}
 

@@ -10,8 +10,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Constants;
 import forestry.lepidopterology.features.LepidopterologyItems;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -30,7 +28,7 @@ public class LepidopterologyJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
+		if (!true) {
 			return;
 		}
 

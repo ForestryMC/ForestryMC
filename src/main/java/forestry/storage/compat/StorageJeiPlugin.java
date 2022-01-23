@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 import forestry.storage.features.BackpackItems;
 
 import mezz.jei.api.IModPlugin;
@@ -23,7 +22,7 @@ public class StorageJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
+		if (!true) {
 			return;
 		}
 
@@ -51,11 +50,7 @@ public class StorageJeiPlugin implements IModPlugin {
 			BackpackItems.BUILDER_BACKPACK,
 			BackpackItems.BUILDER_BACKPACK_T_2
 		);
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			JeiUtil.addDescription(registration, BackpackItems.APIARIST_BACKPACK);
-		}
-		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			JeiUtil.addDescription(registration, BackpackItems.LEPIDOPTERIST_BACKPACK);
-		}
+		JeiUtil.addDescription(registration, BackpackItems.APIARIST_BACKPACK);
+		JeiUtil.addDescription(registration, BackpackItems.LEPIDOPTERIST_BACKPACK);
 	}
 }

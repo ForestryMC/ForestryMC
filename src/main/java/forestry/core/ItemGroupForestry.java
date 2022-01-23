@@ -32,8 +32,6 @@ import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.lepidopterology.genetics.Butterfly;
 import forestry.lepidopterology.genetics.ButterflyDefinition;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 import forestry.modules.features.FeatureProvider;
 
 //Provides no features but needs to be loaded
@@ -43,17 +41,11 @@ public class ItemGroupForestry extends CreativeModeTab {
 	static {
 		ItemGroups.tabStorage = new ItemGroupForestry(1, "storage");
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
-		}
+		ItemGroups.tabApiculture = new ItemGroupForestry(2, "apiculture");
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
-		}
+		ItemGroups.tabArboriculture = new ItemGroupForestry(3, "arboriculture");
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.LEPIDOPTEROLOGY)) {
-			ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
-		}
+		ItemGroups.tabLepidopterology = new ItemGroupForestry(4, "lepidopterology");
 	}
 
 	public static final CreativeModeTab tabForestry = new ItemGroupForestry(0, Constants.MOD_ID);
@@ -74,11 +66,7 @@ public class ItemGroupForestry extends CreativeModeTab {
 		Item iconItem;
 		switch (icon) {
 			case 1:
-				if (ModuleHelper.isEnabled(ForestryModuleUids.BACKPACKS)) {
-					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
-				} else {
-					iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "crate"));
-				}
+				iconItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MOD_ID, "miner_bag"));
 				break;
 			case 2:
 				return BeeManager.beeRoot.getTypes().createStack(new Bee(BeeDefinition.FOREST.getGenome()), EnumBeeType.DRONE);

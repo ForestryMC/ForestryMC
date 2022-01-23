@@ -14,16 +14,6 @@ public class ForestryModules implements IModuleContainer {
 	}
 
 	@Override
-	public boolean isAvailable() {
-		return true;
-	}
-
-	@Override
-	public boolean isModuleEnabled(IForestryModule module) {
-		return true;
-	}
-
-	@Override
 	public void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
 		ModuleManager.getModuleHandler().addModules(activeModules, unloadedModules);
 	}

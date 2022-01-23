@@ -8,8 +8,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 import forestry.worktable.features.WorktableBlocks;
 
 import mezz.jei.api.IModPlugin;
@@ -41,7 +39,7 @@ public class WorktableJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.WORKTABLE)) {
+		if (!true) {
 			return;
 		}
 

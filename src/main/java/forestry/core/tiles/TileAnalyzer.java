@@ -50,8 +50,6 @@ import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -222,7 +220,7 @@ public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiqu
 			return;
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
+		if (true && !TreeManager.treeRoot.isMember(inputStack)) {
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
