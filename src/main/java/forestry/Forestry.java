@@ -34,7 +34,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -102,9 +101,7 @@ import forestry.core.proxy.ProxyClient;
 import forestry.core.proxy.ProxyCommon;
 import forestry.core.proxy.ProxyRender;
 import forestry.core.proxy.ProxyRenderClient;
-import forestry.core.recipes.FallbackIngredient;
 import forestry.core.recipes.HygroregulatorRecipe;
-import forestry.core.recipes.ModuleEnabledCondition;
 import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestrySpriteUploader;
 import forestry.core.render.TextureManagerForestry;
@@ -290,8 +287,6 @@ public class Forestry {
 		@SubscribeEvent
 		public static void registerRecipeSerialziers(RegistryEvent.Register<RecipeSerializer<?>> event) {
 			IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
-			CraftingHelper.register(ModuleEnabledCondition.Serializer.INSTANCE);
-			CraftingHelper.register(new ResourceLocation(Constants.MOD_ID, "fallback"), FallbackIngredient.Serializer.INSTANCE);
 
 			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
 			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());

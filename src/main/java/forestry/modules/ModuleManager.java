@@ -36,7 +36,6 @@ import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraftforge.fml.DistExecutor;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IModuleContainer;
@@ -176,12 +175,6 @@ public class ModuleManager implements IModuleManager {
 					}
 			).collect(Collectors.toList());
 			container.onConfiguredModules(loadedModules, unloadedModules);
-		}
-
-		ForestryAPI.enabledModules = new HashSet<>();
-		for (IForestryModule module : sortedModules.values()) {
-			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
 		}
 
 		Locale.setDefault(locale);

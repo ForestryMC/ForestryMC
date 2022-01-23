@@ -30,8 +30,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -52,7 +50,6 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.network.packets.PacketAlvearyChange;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.tiles.IActivatable;
-import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
@@ -117,14 +114,6 @@ public class BlockAlveary extends BlockStructure implements EntityBlock {
 			case STABILISER -> new TileAlvearyStabiliser(pos, state);
 			case SIEVE -> new TileAlvearySieve(pos, state);
 			default -> new TileAlvearyPlain(pos, state);
-		};
-	}
-
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		return level.isClientSide() || type != getType().getTileType().getTileType() ? null : (level1, pos, state1, t) -> {
-			((TileForestry) t).tick();
 		};
 	}
 
