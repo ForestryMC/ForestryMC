@@ -25,15 +25,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.event.ForgeEventFactory;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.blocks.BlockSapling;
@@ -54,10 +51,6 @@ public abstract class FeatureArboriculture extends FeatureBase {
 
 	@Override
 	public boolean place(LevelAccessor world, Random rand, BlockPos pos, boolean forced) {
-		if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-			return false;
-		}
-
 		GameProfile owner = getOwner(world, pos);
 		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
 		TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
