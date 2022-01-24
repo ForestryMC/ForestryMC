@@ -233,7 +233,7 @@ if (System.getenv("CURSEFORGE")) {
 				displayName = "${project.version}"
 				relations {
 					optionalDependency 'jei'
-					optionalDependency 'patchouli'
+					requiredDependency 'patchouli'
 				}
 			}
 		}

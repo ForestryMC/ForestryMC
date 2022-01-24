@@ -33,8 +33,6 @@ import net.minecraft.world.gen.feature.template.Template;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraftforge.event.ForgeEventFactory;
-
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileTreeContainer;
@@ -54,10 +52,6 @@ public abstract class FeatureArboriculture extends FeatureBase {
 
 	@Override
 	public boolean place(IWorld world, Random rand, BlockPos pos, boolean forced) {
-		if (!ForgeEventFactory.saplingGrowTree(world, rand, pos)) {
-			return false;
-		}
-
 		GameProfile owner = getOwner(world, pos);
 		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
 		TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
