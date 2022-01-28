@@ -32,6 +32,8 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import net.minecraftforge.fml.ModList;
+
 import forestry.api.genetics.IBreedingTracker;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
@@ -134,7 +136,7 @@ public final class CommandSaveStats implements Command<CommandSourceStack> {
 			FileOutputStream fileout = new FileOutputStream(file);
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileout, StandardCharsets.UTF_8));
 
-			writer.write("# " + Constants.MOD_ID + newLine + "# " + Constants.VERSION + newLine);
+			writer.write("# " + Constants.MOD_ID + newLine + "# " + ModList.get().getModContainerById(Constants.MOD_ID).get().getModInfo().getVersion() + newLine);
 
 			for (String line : statistics) {
 				writer.write(line + newLine);

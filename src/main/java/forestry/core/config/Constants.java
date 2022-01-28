@@ -20,14 +20,7 @@ public class Constants implements IForestryConstants {
 	// System
 	public static final String MOD_NAME = "Forestry";
 	public static final String MOD_ID = "forestry";
-	public static final String URL = "http://forestry.sengir.net/";
-
-	public static final String VERSION = "@VERSION@";
-	public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
-
-	public static final String RF_MOD_ID = "CoFHAPI|energy";
-	public static final String TESLA_MOD_ID = "tesla";
-	public static final String BCLIB_MOD_ID = "buildcraftlib";
+	public static final String URL = "https://forestry.sengir.net/";
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;

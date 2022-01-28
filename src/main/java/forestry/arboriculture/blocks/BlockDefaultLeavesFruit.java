@@ -3,20 +3,21 @@ package forestry.arboriculture.blocks;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.BlockHitResult;
 
 import com.mojang.authlib.GameProfile;
 
@@ -32,6 +33,7 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
@@ -66,7 +68,9 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
-			world.setBlock(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState(), 2);
+			world.setBlock(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState()
+					.setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT))
+					.setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE)), Constants.FLAG_BLOCK_SYNC);
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}
