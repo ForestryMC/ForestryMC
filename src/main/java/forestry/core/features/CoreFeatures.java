@@ -36,9 +36,9 @@ public class CoreFeatures {
 		var tin = OrePlacements.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)));
 
 		OVERWORLD_ORES.add(register("apatite_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.APATITE_ORE.defaultState(), 3)), apatite));
-		OVERWORLD_ORES.add(register("deepslate_apatite_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState(), 3)), apatite));
+		OVERWORLD_ORES.add(register("deepslate_apatite_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState(), 3)), apatite));
 
-		OVERWORLD_ORES.add(register("tin_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState(), 9)), tin));
+		OVERWORLD_ORES.add(register("tin_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState(), 9)), tin));
 		OVERWORLD_ORES.add(register("deepslate_tin_ore", Feature.ORE.configured(new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_TIN_ORE.defaultState(), 9)), tin));
 	}
 
