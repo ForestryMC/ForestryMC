@@ -104,7 +104,7 @@ public final class FarmRegistry implements IFarmRegistry {
 		private int getFertilizeValue(ItemStack itemStack) {
 			for (Entry<ItemStack, Integer> fertilizer : fertilizers.entrySet()) {
 				ItemStack fertilizerStack = fertilizer.getKey();
-				if (ItemStackUtil.isIdenticalItem(fertilizerStack, itemStack)) {
+				if (ItemStackUtil.areItemStacksEqualIgnoreCount(fertilizerStack, itemStack)) {
 					return fertilizer.getValue();
 				}
 			}
