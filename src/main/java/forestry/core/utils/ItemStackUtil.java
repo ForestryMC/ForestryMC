@@ -266,10 +266,9 @@ public abstract class ItemStackUtil {
 	 * Checks if two items are exactly the same, ignoring counts
 	 */
 	public static boolean areItemStacksEqualIgnoreCount(ItemStack a, ItemStack b) {
-		int countA = a.getCount();
 		int countB = b.getCount();
+		b.setCount(a.getCount());
 		boolean equals = a.equals(b, false);
-		a.setCount(countA);
 		b.setCount(countB);
 		return equals;
 	}
