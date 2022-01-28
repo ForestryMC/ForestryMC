@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,6 +33,7 @@ import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeDefinition;
+import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.utils.NetworkUtil;
 
@@ -66,7 +68,9 @@ public class BlockDefaultLeavesFruit extends BlockAbstractLeaves {
 			}
 			IFruitProvider fruitProvider = tree.getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 			NonNullList<ItemStack> products = tree.produceStacks(world, pos, fruitProvider.getRipeningPeriod());
-			world.setBlock(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState(), 2);
+			world.setBlock(pos, ArboricultureBlocks.LEAVES_DEFAULT.get(definition).defaultState()
+							.setValue(LeavesBlock.PERSISTENT, state.getValue(LeavesBlock.PERSISTENT))
+							.setValue(LeavesBlock.DISTANCE, state.getValue(LeavesBlock.DISTANCE)), Constants.FLAG_BLOCK_SYNC);
 			for (ItemStack fruit : products) {
 				ItemHandlerHelper.giveItemToPlayer(player, fruit);
 			}

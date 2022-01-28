@@ -1,5 +1,0 @@
-{
-  "parent": "forestry:item/crate-filled",
-  "loader": "forestry:crate-filled",
-  "variant": "crated_bee_comb_stringy"
-}
