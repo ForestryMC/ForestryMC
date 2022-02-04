@@ -18,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -117,7 +118,7 @@ public abstract class BlockStructure extends BlockForestry {
 			// drop inventory if we're the last part remaining
 			if (MultiblockUtil.getNeighboringParts(world, tile).isEmpty()) {
 				if (tile instanceof IInventory) {
-					InventoryUtil.dropInventory((IInventory) tile, world, pos);
+					InventoryHelper.dropContents(world, pos, (IInventory) tile);
 				}
 				if (tile instanceof ISocketable) {
 					InventoryUtil.dropSockets((ISocketable) tile, world, pos);
