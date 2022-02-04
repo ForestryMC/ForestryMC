@@ -12,6 +12,7 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
@@ -117,7 +118,7 @@ public abstract class BlockStructure extends BlockForestry {
 			// drop inventory if we're the last part remaining
 			if (MultiblockUtil.getNeighboringParts(world, tile).isEmpty()) {
 				if (tile instanceof Container) {
-					InventoryUtil.dropInventory((Container) tile, world, pos);
+					Containers.dropContents(world, pos, (Container) tile);
 				}
 				if (tile instanceof ISocketable) {
 					InventoryUtil.dropSockets((ISocketable) tile, world, pos);

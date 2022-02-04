@@ -12,16 +12,16 @@ package forestry.core.utils;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.ForgeHooks;
@@ -456,52 +456,16 @@ public abstract class InventoryUtil {
 		}
 	}
 
-	public static void dropInventory(Container inventory, Level world, double x, double y, double z) {
-		// Release inventory
-		for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
-			ItemStack itemstack = inventory.getItem(slot);
-			dropItemStackFromInventory(itemstack, world, x, y, z);
-			inventory.setItem(slot, ItemStack.EMPTY);
-		}
-	}
-
-	public static void dropInventory(Container inventory, Level world, BlockPos pos) {
-		dropInventory(inventory, world, pos.getX(), pos.getY(), pos.getZ());
-	}
-
 	public static void dropSockets(ISocketable socketable, Level world, double x, double y, double z) {
 		for (int slot = 0; slot < socketable.getSocketCount(); slot++) {
 			ItemStack itemstack = socketable.getSocket(slot);
-			dropItemStackFromInventory(itemstack, world, x, y, z);
+			Containers.dropItemStack(world, x, y, z, itemstack);
 			socketable.setSocket(slot, ItemStack.EMPTY);
 		}
 	}
 
 	public static void dropSockets(ISocketable socketable, Level world, BlockPos pos) {
 		dropSockets(socketable, world, pos.getX(), pos.getY(), pos.getZ());
-	}
-
-	public static void dropItemStackFromInventory(ItemStack itemStack, Level world, double x, double y, double z) {
-		if (itemStack.isEmpty()) {
-			return;
-		}
-
-		float f = world.random.nextFloat() * 0.8F + 0.1F;
-		float f1 = world.random.nextFloat() * 0.8F + 0.1F;
-		float f2 = world.random.nextFloat() * 0.8F + 0.1F;
-
-		while (!itemStack.isEmpty()) {
-			int stackPartial = world.random.nextInt(21) + 10;
-			if (stackPartial > itemStack.getCount()) {
-				stackPartial = itemStack.getCount();
-			}
-			ItemStack drop = itemStack.split(stackPartial);
-			ItemEntity entityitem = new ItemEntity(world, x + f, y + f1, z + f2, drop);
-			double accel = 0.05D;
-			//TODO - hopefully correct I think
-			entityitem.lerpMotion(world.random.nextGaussian() * accel, world.random.nextGaussian() * accel + 0.2F, world.random.nextGaussian() * accel);
-			world.addFreshEntity(entityitem);
-		}
 	}
 
 	/* NBT */

@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.Entity;
@@ -63,7 +64,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	@Override
 	public void remove(RemovalReason reason) {
 		if (reason == RemovalReason.KILLED && dropContentsWhenDead && !level.isClientSide) {
-			InventoryUtil.dropInventory(getInternalInventory(), level, getX(), getY(), getZ());
+			Containers.dropContents(level, this, getInternalInventory());
 		}
 
 		super.remove(reason);

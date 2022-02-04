@@ -16,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -174,7 +175,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 
 		BlockEntity tile = TileUtil.getTile(world, pos);
 		if (tile instanceof Container inventory) {
-			InventoryUtil.dropInventory(inventory, world, pos);
+			Containers.dropContents(world, pos, inventory);
 		}
 		if (tile instanceof TileForestry) {
 			((TileForestry) tile).onRemoval();
