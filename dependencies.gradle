@@ -1,14 +1,14 @@
 // Add your dependencies here
 
 dependencies {
-    compile("com.github.GTNewHorizons:CodeChickenLib:1.1.5.1:dev")
-    compile("com.github.GTNewHorizons:NotEnoughItems:2.1.22-GTNH:dev")
-    compile("com.github.GTNewHorizons:inventory-tweaks:1.5.13:api")
+    compile('com.github.GTNewHorizons:CodeChickenLib:1.1.5.3:dev')
+    compile('com.github.GTNewHorizons:NotEnoughItems:2.2.6-GTNH:dev')
+    compile('com.github.GTNewHorizons:inventory-tweaks:1.5.13:api')
+    compile('com.github.GTNewHorizons:BuildCraft:7.1.26:dev')
 
-    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
-    compile("com.mod-buildcraft:buildcraft:7.1.23:dev")
+    compile('net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev')
 
-    // buildcraft shades cofh-core
-    //compileOnly("curse.maven:cofh-core-69162:2388751")
-    compileOnly("curse.maven:craftguide-75557:2459320")
+    compile('curse.maven:cofh-core-69162:2388751')
+    runtime('curse.maven:cofh-lib-220333:2388748')
+    compileOnly('curse.maven:craftguide-75557:2459320')
 }
