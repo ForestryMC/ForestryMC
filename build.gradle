@@ -1,10 +1,10 @@
-//version: 1644278435
+//version: 1644349045
 /*
 DO NOT CHANGE THIS FILE!
 
 Also, you may replace this file at any time if there is an update available.
 Please check https://github.com/GTNewHorizons/ExampleMod1.7.10/blob/main/build.gradle for updates.
- */
+*/
 
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
@@ -40,12 +40,12 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'scala'
+    id 'maven-publish'
     id('org.jetbrains.kotlin.jvm') version ('1.6.10') apply false
     id('org.ajoberstar.grgit') version('4.1.1')
     id('com.github.johnrengelman.shadow') version('4.0.4')
     id('com.palantir.git-version') version('0.13.0') apply false
     id('de.undercouch.download') version('5.0.1')
-    id('maven-publish')
 }
 
 if (project.file('.git/HEAD').isFile()) {
@@ -411,7 +411,7 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
-        // replace version and mcversion
+        // replace modVersion and minecraftVersion
         expand "minecraftVersion": project.minecraft.version,
             "modVersion": modVersion,
             "modId": modId,
@@ -422,7 +422,7 @@ processResources
         from refMap
     }
 
-    // copy everything else, thats not the mcmod.info
+    // copy everything else that's not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
@@ -539,8 +539,6 @@ tasks.withType(GenerateModuleMetadata) {
     enabled = false
 }
 
-
-// publishing
 publishing {
     publications {
         maven(MavenPublication) {
@@ -561,13 +559,16 @@ publishing {
             // Using the identified version, not project.version as it has the prepended 1.7.10
             version = System.getenv("RELEASE_VERSION") ?: identifiedVersion
             
-            // Remove all non GTNH deps here.
-            // Original intention was to remove an invalid forgeBin being generated without a groupId (mandatory), but
-            // it also removes all of the MC deps
+            // remove extra garbage from who knows where
             pom.withXml {
+                def badPomGroup = ['net.minecraft', 'com.google.code.findbugs', 'org.ow2.asm', 'com.typesafe.akka', 'com.typesafe', 'org.scala-lang',
+                                   'org.scala-lang.plugins', 'net.sf.jopt-simple', 'lzma', 'com.mojang', 'org.apache.commons', 'org.apache.httpcomponents',
+                                   'commons-logging', 'java3d', 'net.sf.trove4j', 'com.ibm.icu', 'com.paulscode', 'io.netty', 'com.google.guava', 
+                                   'commons-io', 'commons-codec', 'net.java.jinput', 'net.java.jutils', 'com.google.code.gson', 'org.apache.logging.log4j', 
+                                   'org.lwjgl.lwjgl', 'tv.twitch', '']
                 Node pomNode = asNode()
                 pomNode.dependencies.'*'.findAll() {
-                    it.groupId.text() != 'com.github.GTNewHorizons'
+                    badPomGroup.contains(it.groupId.text()) 
                 }.each() {
                     it.parent().remove(it)
                 }
