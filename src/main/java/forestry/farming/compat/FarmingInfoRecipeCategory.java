@@ -114,10 +114,10 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		float textX = (float) (recipeWidth - fontRenderer.width(circuit.getDisplayName().getString())) / 2;
 		fontRenderer.draw(stack, circuit.getDisplayName(), textX, 3, Color.darkGray.getRGB());
 
-		net.minecraft.network.chat.Component soilName = new TranslatableComponent("for.jei.farming.soil");
+		Component soilName = new TranslatableComponent("for.jei.farming.soil");
 		fontRenderer.draw(stack, soilName, 18 - (float) (fontRenderer.width(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
 
-		net.minecraft.network.chat.Component germlingsName = new TranslatableComponent("for.jei.farming.germlings");
+		Component germlingsName = new TranslatableComponent("for.jei.farming.germlings");
 		fontRenderer.draw(stack, germlingsName, (float) (recipeWidth - fontRenderer.width(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
 
 		//TODO: draw
