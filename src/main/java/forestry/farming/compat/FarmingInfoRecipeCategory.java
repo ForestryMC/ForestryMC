@@ -93,14 +93,14 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		}
 
 		{
-			List<ItemStack> productions = farmableInfo.stream()
+			List<ItemStack> products = farmableInfo.stream()
 					.map(IFarmableInfo::getProducts)
 					.flatMap(Collection::stream)
 					.toList();
 
-			List<IRecipeSlotBuilder> outputSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.OUTPUT, 2, 2, 109, 55, 18);
-			outputSlots.forEach(slot -> slot.setBackground(slotDrawable, -1, -1));
-			distributeItems(outputSlots, productions);
+			List<IRecipeSlotBuilder> productSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.OUTPUT, 2, 2, 109, 55, 18);
+			productSlots.forEach(slot -> slot.setBackground(slotDrawable, -1, -1));
+			distributeItems(productSlots, products);
 		}
 	}
 
