@@ -100,15 +100,15 @@ public class JeiUtil {
 		return craftingSlots;
 	}
 
-    public static void setCraftingItems(List<IRecipeSlotBuilder> craftingSlots, CraftingRecipe craftingGridRecipe, ICraftingGridHelper craftingGridHelper) {
-        int width = 0;
-        int height = 0;
-        if (craftingGridRecipe instanceof IShapedRecipe<?> shapedRecipe) {
+	public static void setCraftingItems(List<IRecipeSlotBuilder> craftingSlots, CraftingRecipe craftingGridRecipe, ICraftingGridHelper craftingGridHelper) {
+		int width = 0;
+		int height = 0;
+		if (craftingGridRecipe instanceof IShapedRecipe<?> shapedRecipe) {
 			width = shapedRecipe.getRecipeWidth();
 			height = shapedRecipe.getRecipeHeight();
 		}
 		setCraftingItems(craftingSlots, craftingGridRecipe.getIngredients(), width, height, craftingGridHelper);
-    }
+	}
 
 	public static void setCraftingItems(
 			List<IRecipeSlotBuilder> craftingSlots,
