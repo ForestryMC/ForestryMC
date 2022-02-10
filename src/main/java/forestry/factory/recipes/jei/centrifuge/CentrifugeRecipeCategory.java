@@ -6,10 +6,12 @@ import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ChanceTooltipCallback;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -58,23 +60,16 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<ICentrifuge
 		builder.addSlot(RecipeIngredientRole.INPUT, 5, 19)
 			.addIngredients(recipe.getInput());
 
+		List<IRecipeSlotBuilder> outputSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.OUTPUT, 3, 3, 101, 1, 18);
+
 		List<ICentrifugeRecipe.Product> sortedProducts = recipe.getAllProducts().stream()
 				.sorted(Comparator.comparing(ICentrifugeRecipe.Product::getProbability).reversed())
 				.toList();
-
-		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				int index = x + (y * 3);
-				if (index >= sortedProducts.size()) {
-					break;
-				}
-				ICentrifugeRecipe.Product product = sortedProducts.get(index);
-				int xPos = 101 + x * 18;
-				int yPos = 1 + y * 18;
-				builder.addSlot(RecipeIngredientRole.OUTPUT, xPos, yPos)
-						.addItemStack(product.getStack())
-						.addTooltipCallback(new ChanceTooltipCallback(product.getProbability()));
-			}
+		for (int i = 0; i < sortedProducts.size() && i < outputSlots.size(); i++) {
+			ICentrifugeRecipe.Product product = sortedProducts.get(i);
+			outputSlots.get(i)
+					.addItemStack(product.getStack())
+					.addTooltipCallback(new ChanceTooltipCallback(product.getProbability()));
 		}
 	}
 

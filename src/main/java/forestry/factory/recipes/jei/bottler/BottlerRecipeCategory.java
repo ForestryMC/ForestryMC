@@ -56,14 +56,17 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, BottlerRecipe recipe, List<? extends IFocus<?>> focuses) {
-		IRecipeSlotBuilder fillInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 45, 1);
-		IRecipeSlotBuilder fillOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 45, 43);
-		IRecipeSlotBuilder drainInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 1, 1);
-		IRecipeSlotBuilder drainOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 1, 43);
+		IRecipeSlotBuilder fillInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 45, 1)
+				.setBackground(slot, -1, -1);
 
-		for (IRecipeSlotBuilder recipeSlot : List.of(fillInputSlot, fillOutputSlot, drainInputSlot, drainOutputSlot)) {
-			recipeSlot.setBackground(slot, -1, -1);
-		}
+		IRecipeSlotBuilder fillOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 45, 43)
+				.setBackground(slot, -1, -1);
+
+		IRecipeSlotBuilder drainInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
+				.setBackground(slot, -1, -1);
+
+		IRecipeSlotBuilder drainOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 1, 43)
+				.setBackground(slot, -1, -1);
 
 		RecipeIngredientRole tankSlotRole;
 
