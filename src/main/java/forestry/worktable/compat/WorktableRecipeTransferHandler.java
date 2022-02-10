@@ -1,25 +1,22 @@
 package forestry.worktable.compat;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
+import forestry.core.utils.JeiUtil;
 import forestry.core.utils.RecipeUtils;
 import forestry.worktable.gui.ContainerWorktable;
 import forestry.worktable.inventory.CraftingInventoryForestry;
 import forestry.worktable.recipes.MemorizedRecipe;
-
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredient;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 class WorktableRecipeTransferHandler implements IRecipeTransferHandler<ContainerWorktable, CraftingRecipe> {
@@ -35,21 +32,14 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerWorktable container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerWorktable container, CraftingRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
-			Map<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredients = recipeLayout.getItemStacks().getGuiIngredients();
-
 			CraftingInventoryForestry inventory = new CraftingInventoryForestry(container);
 
-			for (Map.Entry<Integer, ? extends IGuiIngredient<ItemStack>> entry : guiIngredients.entrySet()) {
-				int recipeSlot = entry.getKey();
-				List<ItemStack> allIngredients = entry.getValue().getAllIngredients();
-				if (!allIngredients.isEmpty()) {
-					if (recipeSlot != 0) { // skip the output slot
-						ItemStack firstIngredient = allIngredients.get(0);
-						inventory.setItem(recipeSlot - 1, firstIngredient);
-					}
-				}
+			NonNullList<ItemStack> firstItemStacks = JeiUtil.getFirstItemStacks(recipeSlots);
+			for (int i = 0; i < firstItemStacks.size(); i++) {
+				ItemStack firstItemStack = firstItemStacks.get(i);
+				inventory.setItem(i, firstItemStack);
 			}
 
 			List<CraftingRecipe> matchingRecipes = RecipeUtils.findMatchingRecipes(inventory, player.level);
@@ -58,7 +48,6 @@ class WorktableRecipeTransferHandler implements IRecipeTransferHandler<Container
 				container.sendWorktableRecipeRequest(memorizedRecipe);
 			}
 		}
-
 		return null;
 	}
 }

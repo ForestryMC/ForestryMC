@@ -2,12 +2,12 @@ package forestry.factory.recipes.jei.bottler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -18,12 +18,14 @@ import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.runtime.IIngredientManager;
 
 public class BottlerRecipeMaker {
-	public static List<BottlerRecipeWrapper> getBottlerRecipes(IIngredientManager ingredientRegistry) {
-		List<BottlerRecipeWrapper> recipes = new ArrayList<>();
-		for (ItemStack stack : ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {
-			LazyOptional<IFluidHandlerItem> lazyDrainFluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-			if (lazyDrainFluidHandler.isPresent()) {
-				addDrainRecipes(recipes, lazyDrainFluidHandler.orElse(null), stack);
+	public static List<BottlerRecipe> getBottlerRecipes(IIngredientManager ingredientManager) {
+		List<BottlerRecipe> recipes = new ArrayList<>();
+		for (ItemStack stack : ingredientManager.getAllIngredients(VanillaTypes.ITEM)) {
+			Optional<IFluidHandlerItem> drainFluidHandler = stack.copy()
+					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+					.resolve();
+			if (drainFluidHandler.isPresent()) {
+				addDrainRecipes(recipes, drainFluidHandler.get(), stack);
 				addFillRecipes(recipes, stack);
 			}
 		}
@@ -31,7 +33,7 @@ public class BottlerRecipeMaker {
 		return recipes;
 	}
 
-	private static void addDrainRecipes(List<BottlerRecipeWrapper> recipes, IFluidHandlerItem fluidHandler, ItemStack stack) {
+	private static void addDrainRecipes(List<BottlerRecipe> recipes, IFluidHandlerItem fluidHandler, ItemStack stack) {
 		if (Items.BUCKET.equals(stack.getItem())) {
 			return;
 		}
@@ -39,7 +41,10 @@ public class BottlerRecipeMaker {
 		FluidStack drainedFluid = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
 		if (drainedFluid.isEmpty()) {
 			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
-				IFluidHandlerItem currentFluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).orElse(null);
+				IFluidHandlerItem currentFluidHandler = stack.copy()
+						.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+						.resolve()
+						.orElseThrow();
 
 				int simulateFill = currentFluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE);
 				if (simulateFill > 0) {
@@ -52,7 +57,7 @@ public class BottlerRecipeMaker {
 		}
 	}
 
-	private static void addDrainRecipe(List<BottlerRecipeWrapper> recipes, IFluidHandlerItem fluidHandler, ItemStack stack) {
+	private static void addDrainRecipe(List<BottlerRecipe> recipes, IFluidHandlerItem fluidHandler, ItemStack stack) {
 		FluidStack drainedFluid = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
 		if (!drainedFluid.isEmpty() && drainedFluid.getAmount() > 0) {
 			ItemStack drained = fluidHandler.getContainer();
@@ -60,13 +65,16 @@ public class BottlerRecipeMaker {
 				drained = null;
 			}
 
-			recipes.add(new BottlerRecipeWrapper(stack, drainedFluid, drained, false));
+			recipes.add(new BottlerRecipe(stack, drainedFluid, drained, false));
 		}
 	}
 
-	private static void addFillRecipes(List<BottlerRecipeWrapper> recipes, ItemStack stack) {
+	private static void addFillRecipes(List<BottlerRecipe> recipes, ItemStack stack) {
 		for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
-			IFluidHandlerItem currentFluidHandler = stack.copy().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).orElse(null);
+			IFluidHandlerItem currentFluidHandler = stack.copy()
+					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+					.resolve()
+					.orElseThrow();
 
 			//try to reduce itemstack copies
 			int simulateFill = currentFluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE);
@@ -78,7 +86,7 @@ public class BottlerRecipeMaker {
 					filled = null;
 				}
 
-				recipes.add(new BottlerRecipeWrapper(stack, filledFluid, filled, true));
+				recipes.add(new BottlerRecipe(stack, filledFluid, filled, true));
 			}
 		}
 	}

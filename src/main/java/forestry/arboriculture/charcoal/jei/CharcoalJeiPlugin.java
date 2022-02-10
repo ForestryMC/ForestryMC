@@ -1,22 +1,17 @@
 package forestry.arboriculture.charcoal.jei;
 
-import java.util.stream.Collectors;
-
-import net.minecraft.resources.ResourceLocation;
-
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.ForestryAPI;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
-
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.resources.ResourceLocation;
 
 @JeiPlugin
 public class CharcoalJeiPlugin implements IModPlugin {
@@ -41,8 +36,7 @@ public class CharcoalJeiPlugin implements IModPlugin {
 			return;
 		}
 
-		//registration.handleRecipes(CharcoalPileWall.class, CharcoalPileWallWrapper::new, RECIPE_UID);
-		registration.addRecipes(charcoalManager.getWalls().stream().map(CharcoalPileWallWrapper::new).collect(Collectors.toList()), RECIPE_UID);
+		registration.addRecipes(charcoalManager.getWalls(), RECIPE_UID);
 	}
 
 	@Override

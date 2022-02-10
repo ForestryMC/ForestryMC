@@ -1,25 +1,35 @@
 package forestry.farming.compat;
 
-import java.util.List;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import forestry.api.circuits.ICircuit;
+import forestry.api.farming.IFarmProperties;
+import forestry.api.farming.IFarmableInfo;
+import forestry.api.farming.Soil;
 import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-
+import forestry.core.utils.JeiUtil;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInfoRecipeWrapper> {
+import java.awt.*;
+import java.util.Collection;
+import java.util.List;
+
+public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInfoRecipe> {
 	public static final ResourceLocation UID = new ResourceLocation(Constants.MOD_ID, "farming");
 	private final IDrawable slotDrawable;
 	private final IDrawable addition;
@@ -32,7 +42,8 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		ResourceLocation resourceLocation = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/jei/recipes.png");
 		addition = guiHelper.createDrawable(resourceLocation, 44, 0, 15, 15);
 		arrow = guiHelper.createDrawable(resourceLocation, 59, 0, 15, 15);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)));
+		ItemStack intricateCircuitboard = new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE));
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, intricateCircuitboard);
 	}
 
 	@Override
@@ -41,8 +52,8 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	}
 
 	@Override
-	public Class<? extends FarmingInfoRecipeWrapper> getRecipeClass() {
-		return FarmingInfoRecipeWrapper.class;
+	public Class<? extends FarmingInfoRecipe> getRecipeClass() {
+		return FarmingInfoRecipe.class;
 	}
 
 	@Override
@@ -51,76 +62,74 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, FarmingInfoRecipeWrapper recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
-		List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-		guiItemStacks.init(0, true, 63, 18);
-		if (inputs.size() > 0) {
-			guiItemStacks.set(0, inputs.get(0));
+	public void setRecipe(IRecipeLayoutBuilder builder, FarmingInfoRecipe recipe, List<? extends IFocus<?>> focuses) {
+		builder.addSlot(RecipeIngredientRole.INPUT, 64, 19)
+				.setBackground(slotDrawable, -1, -1)
+				.addItemStack(recipe.tube());
+
+		IFarmProperties properties = recipe.properties();
+		Collection<IFarmableInfo> farmableInfo = properties.getFarmableInfo();
+
+		{
+			List<ItemStack> soils = properties.getSoils().stream()
+					.map(Soil::getResource)
+					.toList();
+
+			List<IRecipeSlotBuilder> soilSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.INPUT, 2, 2, 1, 55, 18);
+			soilSlots.forEach(slot -> slot.setBackground(slotDrawable, -1, -1));
+			distributeItems(soilSlots, soils);
 		}
 
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				int index = 1 + x + y * 2;
-				guiItemStacks.init(index, true, x * 18, 54 + y * 18);
-				if (inputs.size() > index) {
-					List<ItemStack> stack = inputs.get(index);
-					guiItemStacks.set(index, stack);
-				}
-			}
+
+		{
+			List<ItemStack> germlings = farmableInfo.stream()
+					.map(IFarmableInfo::getSeedlings)
+					.flatMap(Collection::stream)
+					.toList();
+
+			List<IRecipeSlotBuilder> germlingSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.INPUT, 2, 2, 55, 55, 18);
+			germlingSlots.forEach(slot -> slot.setBackground(slotDrawable, -1, -1));
+			distributeItems(germlingSlots, germlings);
 		}
 
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				int index = 5 + x + y * 2;
-				guiItemStacks.init(index, true, 54 + x * 18, 54 + y * 18);
-				if (inputs.size() > index) {
-					List<ItemStack> stack = inputs.get(index);
-					guiItemStacks.set(index, stack);
-				}
-			}
-		}
+		{
+			List<ItemStack> productions = farmableInfo.stream()
+					.map(IFarmableInfo::getProducts)
+					.flatMap(Collection::stream)
+					.toList();
 
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				int index = 9 + x + y * 2;
-				guiItemStacks.init(index, false, 108 + x * 18, 54 + y * 18);
-				if (outputs.size() > x + y * 2) {
-					List<ItemStack> stack = outputs.get(x + y * 2);
-					guiItemStacks.set(index, stack);
-				}
-			}
+			List<IRecipeSlotBuilder> outputSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.OUTPUT, 2, 2, 109, 55, 18);
+			outputSlots.forEach(slot -> slot.setBackground(slotDrawable, -1, -1));
+			distributeItems(outputSlots, productions);
 		}
 	}
 
 	@Override
-	public void draw(FarmingInfoRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
-		slotDrawable.draw(matrixStack, 63, 18);
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				slotDrawable.draw(matrixStack, x * 18, 54 + y * 18);
-			}
-		}
-
-		addition.draw(matrixStack, 37, 64);
-
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				slotDrawable.draw(matrixStack, 54 + x * 18, 54 + y * 18);
-			}
-		}
-
-		arrow.draw(matrixStack, 91, 64);
-
-		for (int x = 0; x < 2; x++) {
-			for (int y = 0; y < 2; y++) {
-				slotDrawable.draw(matrixStack, 108 + x * 18, 54 + y * 18);
-			}
-		}
-
+	public void draw(FarmingInfoRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		addition.draw(stack, 37, 64);
+		arrow.draw(stack, 91, 64);
 		int recipeWidth = this.getBackground().getWidth();
-		int recipeHeight = this.getBackground().getHeight();
-		recipe.drawInfo(recipeWidth, recipeHeight, matrixStack, mouseX, mouseY);
+		Font fontRenderer = Minecraft.getInstance().font;
+		ICircuit circuit = recipe.circuit();
+		float textX = (float) (recipeWidth - fontRenderer.width(circuit.getDisplayName().getString())) / 2;
+		fontRenderer.draw(stack, circuit.getDisplayName(), textX, 3, Color.darkGray.getRGB());
+
+		net.minecraft.network.chat.Component soilName = new TranslatableComponent("for.jei.farming.soil");
+		fontRenderer.draw(stack, soilName, 18 - (float) (fontRenderer.width(soilName.getString())) / 2, 45, Color.darkGray.getRGB());
+
+		net.minecraft.network.chat.Component germlingsName = new TranslatableComponent("for.jei.farming.germlings");
+		fontRenderer.draw(stack, germlingsName, (float) (recipeWidth - fontRenderer.width(germlingsName.getString())) / 2, 45, Color.darkGray.getRGB());
+
+		//TODO: draw
+		Component productsName = new TranslatableComponent("for.jei.farming.products");
+		fontRenderer.draw(stack, productsName, 126 - (float) (fontRenderer.width(productsName.getString())) / 2, 45, Color.darkGray.getRGB());
+	}
+
+	private static void distributeItems(List<IRecipeSlotBuilder> recipeSlots, List<ItemStack> items) {
+		for (int i = 0; i < items.size(); i++) {
+			ItemStack itemStack = items.get(i);
+			IRecipeSlotBuilder recipeSlot = recipeSlots.get(i % recipeSlots.size());
+			recipeSlot.addItemStack(itemStack);
+		}
 	}
 }

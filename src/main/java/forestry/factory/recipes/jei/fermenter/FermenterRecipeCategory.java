@@ -1,32 +1,32 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
-
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.Collection;
+import java.util.List;
 
 public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
-	private static final int resourceSlot = 0;
-	private static final int fuelSlot = 1;
-
-	private static final int inputTank = 0;
-	private static final int outputTank = 1;
-
 	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/fermenter.png");
 
 	private final IDrawableAnimated progressBar0;
@@ -42,7 +42,8 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 		IDrawableStatic progressBarDrawable1 = guiHelper.createDrawable(guiTexture, 176, 78, 4, 18);
 		this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block()));
+		ItemStack fermenter = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block());
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, fermenter);
 	}
 
 	@Override
@@ -61,23 +62,38 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, FermenterRecipeWrapper fermenterRecipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
+	public void setRecipe(IRecipeLayoutBuilder builder, FermenterRecipeWrapper recipeWrapper, List<? extends IFocus<?>> focuses) {
+		ItemStack fermentable = recipeWrapper.fermentable();
+		builder.addSlot(RecipeIngredientRole.INPUT, 51, 5)
+				.addItemStack(fermentable);
 
-		guiItemStacks.init(resourceSlot, true, 50, 4);
-		guiItemStacks.init(fuelSlot, true, 40, 38);
+		Collection<FermenterFuel> fuels = FuelManager.fermenterFuel.values();
+		List<ItemStack> fuelInputs = fuels.stream().map(FermenterFuel::getItem).toList();
+		builder.addSlot(RecipeIngredientRole.INPUT, 41, 39)
+				.addItemStacks(fuelInputs);
 
-		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 3000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 3000, false, tankOverlay);
+		IFermenterRecipe recipe = recipeWrapper.recipe();
+		FluidStack fluidInput = recipe.getFluidResource().copy();
+		fluidInput.setAmount(recipe.getFermentationValue());
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
+				.setFluidRenderer(3000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, fluidInput);
 
-		guiItemStacks.set(ingredients);
-		guiFluidStacks.set(ingredients);
+		int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
+		if (fermentable.getItem() instanceof IVariableFermentable) {
+			amount *= ((IVariableFermentable) fermentable.getItem()).getFermentationModifier(fermentable);
+		}
+		FluidStack fluidOutput = new FluidStack(recipe.getOutput(), amount);
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 91, 1)
+				.setFluidRenderer(3000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, fluidOutput);
 	}
 
 	@Override
-	public void draw(FermenterRecipeWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
-		progressBar0.draw(matrixStack, 40, 14);
-		progressBar1.draw(matrixStack, 64, 28);
+	public void draw(FermenterRecipeWrapper recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		progressBar0.draw(stack, 40, 14);
+		progressBar1.draw(stack, 64, 28);
 	}
 }
