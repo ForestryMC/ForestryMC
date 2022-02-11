@@ -1,25 +1,21 @@
 package forestry.factory.recipes.jei.carpenter;
 
-import javax.annotation.Nullable;
-import java.util.Map.Entry;
-
+import forestry.api.recipes.ICarpenterRecipe;
+import forestry.core.utils.JeiUtil;
+import forestry.core.utils.NetworkUtil;
+import forestry.factory.gui.ContainerCarpenter;
+import forestry.factory.network.packets.PacketRecipeTransferRequest;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.transfer.IRecipeTransferError;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.utils.NetworkUtil;
-import forestry.factory.gui.ContainerCarpenter;
-import forestry.factory.network.packets.PacketRecipeTransferRequest;
-
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ingredient.IGuiIngredient;
-import mezz.jei.api.recipe.transfer.IRecipeTransferError;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
+import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<ContainerCarpenter, ICarpenterRecipe> {
@@ -35,22 +31,13 @@ public class CarpenterRecipeTransferHandler implements IRecipeTransferHandler<Co
 
 	@Nullable
 	@Override
-	public IRecipeTransferError transferRecipe(ContainerCarpenter container, ICarpenterRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerCarpenter container, ICarpenterRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer) {
 		if (doTransfer) {
 			Container craftingInventory = container.getCarpenter().getCraftingInventory();
-			NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
-			for (Entry<Integer, ? extends IGuiIngredient<ItemStack>> guiIngredientEntry : recipeLayout.getItemStacks().getGuiIngredients().entrySet()) {
-				IGuiIngredient<ItemStack> guiIngredient = guiIngredientEntry.getValue();
-				if (guiIngredient != null && guiIngredient.getDisplayedIngredient() != null) {
-					int index = guiIngredientEntry.getKey();
-					if (index >= 2) {
-						ItemStack ingredient = guiIngredient.getDisplayedIngredient().copy();
-						craftingInventory.setItem(index - 2, ingredient);
-						items.set(index - 2, ingredient);
-					}
-				}
+			NonNullList<ItemStack> items = JeiUtil.getFirstItemStacks(recipeSlots);
+			for (int i = 0; i < items.size(); i++) {
+				craftingInventory.setItem(i, items.get(i));
 			}
-
 			NetworkUtil.sendToServer(new PacketRecipeTransferRequest(container.getCarpenter(), items));
 		}
 

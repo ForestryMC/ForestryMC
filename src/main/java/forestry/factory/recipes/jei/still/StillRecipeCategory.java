@@ -1,28 +1,27 @@
 package forestry.factory.recipes.jei.still;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import forestry.api.recipes.IStillRecipe;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
 import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
-
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-public class StillRecipeCategory extends ForestryRecipeCategory {
-	private static final int inputTank = 0;
-	private static final int outputTank = 1;
+import java.util.List;
 
+public class StillRecipeCategory extends ForestryRecipeCategory<IStillRecipe> {
 	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/still.png");
 
 	private final IDrawable tankOverlay;
@@ -35,7 +34,8 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
 		this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block()));
+		ItemStack still = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block());
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, still);
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public Class<? extends StillRecipeWrapper> getRecipeClass() {
-		return StillRecipeWrapper.class;
+	public Class<? extends IStillRecipe> getRecipeClass() {
+		return IStillRecipe.class;
 	}
 
 	@Override
@@ -54,17 +54,20 @@ public class StillRecipeCategory extends ForestryRecipeCategory {
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, Object o, IIngredients ingredients) {
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
+	public void setRecipe(IRecipeLayoutBuilder builder, IStillRecipe recipe, List<? extends IFocus<?>> focuses) {
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
+				.setFluidRenderer(10000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, recipe.getInput());
 
-		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 10000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 10000, false, tankOverlay);
-
-		guiFluidStacks.set(ingredients);
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 91, 1)
+				.setFluidRenderer(10000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, recipe.getOutput());
 	}
 
 	@Override
-	public void draw(Object recipe, PoseStack matrixStack, double mouseX, double mouseY) {
-		progressBar.draw(matrixStack, 50, 3);
+	public void draw(IStillRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		progressBar.draw(stack, 50, 3);
 	}
 }

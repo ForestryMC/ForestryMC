@@ -28,22 +28,29 @@ license="GNU Lesser Public License v3"
 	'''
 
 [[dependencies.forestry]]
-    modId="geneticsapi"
-    mandatory=true
-    versionRange="1.0.0"
-    ordering="BEFORE"
-    side="BOTH"
+	modId="geneticsapi"
+	mandatory=true
+	versionRange="1.0.0"
+	ordering="BEFORE"
+	side="BOTH"
 
 [[dependencies.forestry]]
 	modId="forge"
-    mandatory=true
-    versionRange="[34.0.0,)"
-    ordering="NONE"
-    side="BOTH"
+	mandatory=true
+	versionRange="${forge_version_range}"
+	ordering="NONE"
+	side="BOTH"
 
 [[dependencies.forestry]]
 	modId="patchouli"
 	mandatory=true
-	versionRange="[1.16.4-53,)"
+	versionRange="${patchouli_version_range}"
 	ordering="NONE"
 	side="BOTH"
+
+[[dependencies.forestry]]
+	modId="jei"
+	mandatory=false
+	versionRange="${jei_version_range}"
+	ordering="NONE"
+	side="CLIENT"

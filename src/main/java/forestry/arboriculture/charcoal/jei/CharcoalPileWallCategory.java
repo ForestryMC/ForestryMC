@@ -1,25 +1,28 @@
 package forestry.arboriculture.charcoal.jei;
 
-import net.minecraft.resources.ResourceLocation;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryTooltipCallback;
-
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableAnimated.StartDirection;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPileWallWrapper> {
+import java.util.List;
+
+public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPileWall> {
 	private final IDrawableStatic slot;
 	private final IDrawableStatic arrow;
 	private final IDrawableAnimated arrowAnimated;
@@ -37,7 +40,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 		IDrawableStatic flameAnimated = helper.createDrawable(resourceLocation, 14, 0, 14, 14);
 		this.flameAnimated = helper.createAnimatedDrawable(flameAnimated, 260, StartDirection.TOP, true);
 		this.slot = helper.getSlotDrawable();
-		this.icon = helper.createDrawableIngredient(CharcoalBlocks.WOOD_PILE.stack());
+		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, CharcoalBlocks.WOOD_PILE.stack());
 	}
 
 	@Override
@@ -51,38 +54,38 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<CharcoalPil
 	}
 
 	@Override
-	public Class<? extends CharcoalPileWallWrapper> getRecipeClass() {
-		return CharcoalPileWallWrapper.class;
+	public Class<? extends ICharcoalPileWall> getRecipeClass() {
+		return ICharcoalPileWall.class;
 	}
 
 	@Override
-	public void draw(CharcoalPileWallWrapper recipe, PoseStack matrixStack, double mouseX, double mouseY) {
-		flame.draw(matrixStack, 52, 0);
-		flameAnimated.draw(matrixStack, 52, 0);
-		arrow.draw(matrixStack, 50, 16);
-		arrowAnimated.draw(matrixStack, 50, 16);
-		slot.draw(matrixStack, 0, 16);
-		slot.draw(matrixStack, 20, 16);
-		slot.draw(matrixStack, 84, 16);
-		slot.draw(matrixStack, 104, 16);
+	public void draw(ICharcoalPileWall recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		flame.draw(stack, 52, 0);
+		flameAnimated.draw(stack, 52, 0);
+		arrow.draw(stack, 50, 16);
+		arrowAnimated.draw(stack, 50, 16);
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, CharcoalPileWallWrapper recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
-		itemStackGroup.init(0, true, 0, 16);
-		itemStackGroup.init(1, true, 20, 16);
-		itemStackGroup.init(2, false, 84, 16);
-		itemStackGroup.init(3, false, 104, 16);
+	public void setRecipe(IRecipeLayoutBuilder builder, ICharcoalPileWall recipe, List<? extends IFocus<?>> focuses) {
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 17)
+				.setBackground(slot, -1, -1)
+				.addItemStacks(recipe.getDisplayItems());
 
-		itemStackGroup.set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
-		itemStackGroup.set(1, CharcoalBlocks.WOOD_PILE.stack());
-		itemStackGroup.set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-		itemStackGroup.set(3, ingredients.getOutputs(VanillaTypes.ITEM).get(1));
+		builder.addSlot(RecipeIngredientRole.INPUT, 21, 17)
+				.setBackground(slot, -1, -1)
+				.addItemStack(CharcoalBlocks.WOOD_PILE.stack());
 
-		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-		tooltip.addFortuneTooltip(2);
-		tooltip.addFortuneTooltip(3);
-		itemStackGroup.addTooltipCallback(tooltip);
+		int amount = 9 + recipe.getCharcoalAmount();
+
+		ItemStack coal = new ItemStack(Items.COAL, amount);
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 17)
+				.setBackground(slot, -1, -1)
+				.addItemStack(coal);
+
+		ItemStack ash = CoreItems.ASH.stack(amount / 4);
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 105, 17)
+				.setBackground(slot, -1, -1)
+				.addItemStack(ash);
 	}
 }

@@ -20,6 +20,8 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 
+import java.util.List;
+
 @JeiPlugin
 @OnlyIn(Dist.CLIENT)
 public class FarmingJeiPlugin implements IModPlugin {
@@ -49,7 +51,8 @@ public class FarmingJeiPlugin implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
-		registration.addRecipes(FarmingInfoRecipeMaker.getRecipes(recipeManager), FarmingInfoRecipeCategory.UID);
+		List<FarmingInfoRecipe> recipes = FarmingInfoRecipeMaker.getRecipes(recipeManager);
+		registration.addRecipes(recipes, FarmingInfoRecipeCategory.UID);
 	}
 
 	@Override

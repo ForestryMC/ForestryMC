@@ -9,13 +9,14 @@ import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
 import forestry.api.recipes.IMoistenerRecipe;
 import forestry.api.recipes.RecipeManagers;
+import org.jetbrains.annotations.Nullable;
 
 public class MoistenerRecipeMaker {
-	public static List<MoistenerRecipeWrapper> getMoistenerRecipes(RecipeManager manager) {
-		List<MoistenerRecipeWrapper> recipes = new ArrayList<>();
+	public static List<MoistenerRecipe> getMoistenerRecipes(@Nullable RecipeManager manager) {
+		List<MoistenerRecipe> recipes = new ArrayList<>();
 		for (IMoistenerRecipe recipe : RecipeManagers.moistenerManager.getRecipes(manager)) {
 			for (MoistenerFuel fuel : FuelManager.moistenerResource.values()) {
-				recipes.add(new MoistenerRecipeWrapper(recipe, fuel));
+				recipes.add(new MoistenerRecipe(recipe, fuel));
 			}
 		}
 

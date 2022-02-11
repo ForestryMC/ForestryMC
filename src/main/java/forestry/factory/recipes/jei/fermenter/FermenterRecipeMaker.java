@@ -1,35 +1,23 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeManager;
-
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.RecipeManagers;
-import forestry.core.utils.Log;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import org.jetbrains.annotations.Nullable;
 
-import mezz.jei.api.helpers.IStackHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FermenterRecipeMaker {
-	public static List<FermenterRecipeWrapper> getFermenterRecipes(RecipeManager manager, IStackHelper stackHelper) {
+	public static List<FermenterRecipeWrapper> getFermenterRecipes(@Nullable RecipeManager manager) {
 		List<FermenterRecipeWrapper> recipes = new ArrayList<>();
 		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.getRecipes(manager)) {
-			if (recipe.getResource() != null) {
-				addWrapperToList(stackHelper, recipe, recipe.getResource(), recipes);
-			} else {
-				Log.error("Empty resource for recipe");
+			for (ItemStack stack : recipe.getResource().getItems()) {
+				recipes.add(new FermenterRecipeWrapper(recipe, stack));
 			}
 		}
 		return recipes;
 	}
 
-	private static void addWrapperToList(IStackHelper stackHelper, IFermenterRecipe recipe, Ingredient resource, List<FermenterRecipeWrapper> recipes) {
-		Stream<ItemStack> itemStacks = Arrays.stream(resource.getItems());
-		itemStacks.forEach(stack -> recipes.add(new FermenterRecipeWrapper(recipe, stack)));
-	}
 }
