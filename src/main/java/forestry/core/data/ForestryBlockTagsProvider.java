@@ -2,6 +2,7 @@ package forestry.core.data;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,10 +21,19 @@ import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.apiculture.features.ApicultureBlocks;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.CharcoalBlocks;
+import forestry.climatology.features.ClimatologyBlocks;
 import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
+import forestry.database.features.DatabaseBlocks;
+import forestry.energy.features.EnergyBlocks;
+import forestry.factory.features.FactoryBlocks;
+import forestry.farming.blocks.BlockFarm;
+import forestry.farming.features.FarmingBlocks;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
+import forestry.mail.features.MailBlocks;
+import forestry.modules.features.FeatureBlockGroup;
+import forestry.worktable.features.WorktableBlocks;
 
 //TODO: Split up ?
 public final class ForestryBlockTagsProvider extends BlockTagsProvider {
@@ -41,6 +51,47 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 
 		tag(ForestryTags.Blocks.MINEABLE_SCOOP);
 		tag(ForestryTags.Blocks.MINEABLE_GRAFTER);
+
+		{
+			tag(BlockTags.MINEABLE_WITH_AXE).add(ApicultureBlocks.BEE_CHEST.block());
+			tag(BlockTags.MINEABLE_WITH_AXE).add(LepidopterologyBlocks.BUTTERFLY_CHEST.block());
+
+			tag(BlockTags.MINEABLE_WITH_AXE).add(ArboricultureBlocks.TREE_CHEST.block());
+			tag(BlockTags.MINEABLE_WITH_AXE).add(CharcoalBlocks.WOOD_PILE.block());
+			tag(BlockTags.MINEABLE_WITH_AXE).add(ClimatologyBlocks.HABITATFORMER.block());
+
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CoreBlocks.APATITE_ORE.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CoreBlocks.DEEPSLATE_APATITE_ORE.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CoreBlocks.TIN_ORE.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CoreBlocks.DEEPSLATE_TIN_ORE.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CoreBlocks.RAW_TIN_BLOCK.block());
+
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CharcoalBlocks.CHARCOAL.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(DatabaseBlocks.DATABASE.block());
+			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(WorktableBlocks.WORKTABLE.block());
+
+			for (BlockFarm block : FarmingBlocks.FARM.getBlocks()) {
+				tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
+			}
+
+			for (Block block : union(CoreBlocks.RESOURCE_STORAGE, EnergyBlocks.ENGINES, FactoryBlocks.PLAIN, FactoryBlocks.TESR, MailBlocks.BASE)) {
+				tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
+			}
+
+			tag(BlockTags.MINEABLE_WITH_SHOVEL).add(CoreBlocks.HUMUS.block());
+			tag(BlockTags.MINEABLE_WITH_SHOVEL).add(CoreBlocks.BOG_EARTH.block());
+			tag(BlockTags.MINEABLE_WITH_SHOVEL).add(CoreBlocks.PEAT.block());
+
+			for (Block block : union(
+					CoreBlocks.BASE,
+					ApicultureBlocks.ALVEARY, ApicultureBlocks.BASE,
+					ArboricultureBlocks.DOORS,
+					ArboricultureBlocks.PLANKS, ArboricultureBlocks.PLANKS_FIREPROOF, ArboricultureBlocks.PLANKS_VANILLA_FIREPROOF,
+					ArboricultureBlocks.LOGS, ArboricultureBlocks.LOGS_FIREPROOF, ArboricultureBlocks.LOGS_VANILLA_FIREPROOF,
+					ArboricultureBlocks.FENCES, ArboricultureBlocks.FENCES_FIREPROOF, ArboricultureBlocks.FENCES_VANILLA_FIREPROOF)) {
+				tag(BlockTags.MINEABLE_WITH_AXE).add(block);
+			}
+		}
 
 		tag(BlockTags.MINEABLE_WITH_PICKAXE).addTag(ForestryTags.Blocks.ORES_TIN).addTag(ForestryTags.Blocks.ORES_APATITE).addTag(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN);
 		tag(BlockTags.NEEDS_STONE_TOOL).addTag(ForestryTags.Blocks.ORES_TIN).addTag(ForestryTags.Blocks.ORES_APATITE).addTag(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN);
@@ -125,5 +176,15 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	@Override
 	public String getName() {
 		return "Forestry Block Tags";
+	}
+
+	private static Collection<Block> union(FeatureBlockGroup<?, ?>... features) {
+		Set<Block> set = new HashSet<>();
+
+		for (FeatureBlockGroup<?, ?> feature : features) {
+			set.addAll(feature.getBlocks());
+		}
+
+		return set;
 	}
 }
