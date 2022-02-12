@@ -66,7 +66,9 @@ public class GuiForestryBookPages extends GuiForesterBook {
 		if (page % 2 == 1) {
 			page -= 1;
 		}
-		this.nextPage = page;
+		if (this.pageIndex != page) {
+			this.nextPage = page;
+		}
 	}
 
 	@Override
