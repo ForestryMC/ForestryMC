@@ -69,7 +69,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
-		if (liquid != null && !liquid.isEmpty()) {
+		if (!liquid.isEmpty()) {
 			if (resource.isEmpty() || !resource.containsFluid(liquid)) {
 				return false;
 			}
@@ -118,7 +118,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager).stream()
 				.map(ICarpenterRecipe::getFluidResource)
-				.filter(fluidStack -> fluidStack != null && !fluidStack.isEmpty())
+				.filter(fluidStack -> !fluidStack.isEmpty())
 				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}

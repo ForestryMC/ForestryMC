@@ -3,7 +3,7 @@ package forestry.factory.recipes.jei.bottler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -12,12 +12,11 @@ import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.List;
 
 public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe> {
 	private final static ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/bottler.png");
@@ -39,14 +38,21 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, bottler);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.BOTTLER;
+		return ForestryRecipeType.BOTTLER.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends BottlerRecipe> getRecipeClass() {
+		return ForestryRecipeType.BOTTLER.getRecipeClass();
 	}
 
 	@Override
-	public Class<? extends BottlerRecipe> getRecipeClass() {
-		return BottlerRecipe.class;
+	public RecipeType<BottlerRecipe> getRecipeType() {
+		return ForestryRecipeType.BOTTLER;
 	}
 
 	@Override
@@ -55,7 +61,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, BottlerRecipe recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, BottlerRecipe recipe, IFocusGroup focuses) {
 		IRecipeSlotBuilder fillInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 45, 1)
 				.setBackground(slot, -1, -1);
 

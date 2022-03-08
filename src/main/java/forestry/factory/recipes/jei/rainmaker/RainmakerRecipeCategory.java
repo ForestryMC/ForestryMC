@@ -3,7 +3,7 @@ package forestry.factory.recipes.jei.rainmaker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -11,8 +11,9 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -20,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.awt.*;
-import java.util.List;
 
 public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrate> {
 	private final IDrawable slot;
@@ -33,14 +33,21 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrat
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, rainmaker);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.RAINMAKER;
+		return ForestryRecipeType.RAINMAKER.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends RainSubstrate> getRecipeClass() {
+		return ForestryRecipeType.RAINMAKER.getRecipeClass();
 	}
 
 	@Override
-	public Class<? extends RainSubstrate> getRecipeClass() {
-		return RainSubstrate.class;
+	public RecipeType<RainSubstrate> getRecipeType() {
+		return ForestryRecipeType.RAINMAKER;
 	}
 
 	@Override
@@ -49,7 +56,7 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrat
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, RainSubstrate recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, RainSubstrate recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
 				.setBackground(slot, -1, -1)
 				.addItemStack(recipe.getItem());

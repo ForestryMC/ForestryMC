@@ -433,7 +433,7 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 			}
 			if (FuelManager.moistenerResource.containsKey(inventory.getItem(i))) {
 				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getItem(i));
-				if (res.getResource().test(inventory.getItem(i))) {
+				if (ItemStack.isSame(res.getResource(), inventory.getItem(i))) {
 					max += 64;
 					avail += inventory.getItem(i).getCount();
 				}

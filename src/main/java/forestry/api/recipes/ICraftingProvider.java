@@ -6,9 +6,10 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.world.item.crafting.RecipeManager;
+import org.jetbrains.annotations.Unmodifiable;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
 
@@ -26,5 +27,6 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 	 * @param recipeManager The recipe manager to use
 	 * @return A collection of recipes
 	 */
-	Collection<T> getRecipes(@Nullable RecipeManager recipeManager);
+	@Unmodifiable
+	List<T> getRecipes(@Nullable RecipeManager recipeManager);
 }

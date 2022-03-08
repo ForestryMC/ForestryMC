@@ -43,10 +43,23 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registry) {
-		JeiUtil.addDescription(registry, "frames", ApicultureItems.FRAME_IMPREGNATED.getItem(), ApicultureItems.FRAME_PROVEN.getItem(), ApicultureItems.FRAME_UNTREATED.getItem());
+		JeiUtil.addDescription(registry, "frames",
+				ApicultureItems.FRAME_IMPREGNATED,
+				ApicultureItems.FRAME_PROVEN,
+				ApicultureItems.FRAME_UNTREATED
+		);
 
-		JeiUtil.addDescription(registry, "apiarist.suit", ApicultureItems.APIARIST_BOOTS.getItem(), ApicultureItems.APIARIST_CHEST.getItem(), ApicultureItems.APIARIST_HELMET.getItem(), ApicultureItems.APIARIST_LEGS.getItem());
+		JeiUtil.addDescription(registry, "apiarist.suit",
+				ApicultureItems.APIARIST_BOOTS,
+				ApicultureItems.APIARIST_CHEST,
+				ApicultureItems.APIARIST_HELMET,
+				ApicultureItems.APIARIST_LEGS
+		);
 
-		JeiUtil.addDescription(registry, ApicultureItems.HABITAT_LOCATOR.getItem(), ApicultureItems.SCOOP.getItem(), ApicultureItems.IMPRINTER.getItem());
+		JeiUtil.addDescription(registry,
+				ApicultureItems.HABITAT_LOCATOR,
+				ApicultureItems.SCOOP,
+				ApicultureItems.IMPRINTER
+		);
 	}
 }

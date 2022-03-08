@@ -10,25 +10,22 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import net.minecraft.world.Container;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.RecipeManager;
-
-import net.minecraftforge.fml.DistExecutor;
-
 import forestry.api.recipes.ICraftingProvider;
 import forestry.api.recipes.IForestryRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.fml.DistExecutor;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
 
 	private final RecipeType<T> type;
-	private final Set<T> globalRecipes = new HashSet<>();
+	private final List<T> globalRecipes = new ArrayList<>();
 
 	public AbstractCraftingProvider(RecipeType<T> type) {
 		this.type = type;
@@ -40,15 +37,12 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	}
 
 	@Override
-	public Collection<T> getRecipes(@Nullable RecipeManager recipeManager) {
-		Set<T> recipes = new HashSet<>(globalRecipes);
-
-		for (Recipe<Container> recipe : adjust(recipeManager).byType(type).values()) {
-			//noinspection unchecked
-			recipes.add((T) recipe);
-		}
-
-		return recipes;
+	public List<T> getRecipes(@Nullable RecipeManager recipeManager) {
+		recipeManager = adjust(recipeManager);
+		Collection<T> values = recipeManager.getAllRecipesFor(type);
+		return Stream.concat(globalRecipes.stream(), values.stream())
+				.distinct()
+				.toList();
 	}
 
 	/**

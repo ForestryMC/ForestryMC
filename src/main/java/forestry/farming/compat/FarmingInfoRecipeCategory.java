@@ -16,8 +16,9 @@ import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -30,7 +31,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInfoRecipe> {
-	public static final ResourceLocation UID = new ResourceLocation(Constants.MOD_ID, "farming");
+	public static final RecipeType<FarmingInfoRecipe> TYPE = RecipeType.create(Constants.MOD_ID, "farming", FarmingInfoRecipe.class);
 	private final IDrawable slotDrawable;
 	private final IDrawable addition;
 	private final IDrawable arrow;
@@ -46,14 +47,21 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, intricateCircuitboard);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return UID;
+		return TYPE.getUid();
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends FarmingInfoRecipe> getRecipeClass() {
 		return FarmingInfoRecipe.class;
+	}
+
+	@Override
+	public RecipeType<FarmingInfoRecipe> getRecipeType() {
+		return TYPE;
 	}
 
 	@Override
@@ -62,7 +70,7 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, FarmingInfoRecipe recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, FarmingInfoRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 64, 19)
 				.setBackground(slotDrawable, -1, -1)
 				.addItemStack(recipe.tube());
