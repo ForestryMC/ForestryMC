@@ -14,6 +14,8 @@ import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Optional;
+
 /**
  * Provides an interface to the recipe manager of the suqeezer.
  * <p>
@@ -66,8 +68,7 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
 	 */
 	void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid);
 
-	@Nullable
-	ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items);
+	Optional<ISqueezerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items);
 
 	boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack);
 }

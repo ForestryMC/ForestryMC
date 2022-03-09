@@ -11,6 +11,7 @@
 package forestry.core.circuits;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -56,11 +57,11 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 		for (int i = 0; i < 4; i++) {
 			String description;
 			ItemStack tube = itemInventory.getItem(i + 2);
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(ClientUtils.getRecipeManager(), layout, tube);
-			if (recipe == null) {
+			Optional<ISolderRecipe> recipe = ChipsetManager.solderManager.getMatchingRecipe(ClientUtils.getRecipeManager(), layout, tube);
+			if (recipe.isEmpty()) {
 				description = "(" + Translator.translateToLocal("for.gui.noeffect") + ")";
 			} else {
-				description = recipe.getCircuit().getDisplayName().getString();
+				description = recipe.get().getCircuit().getDisplayName().getString();
 			}
 
 			int row = i * 20;

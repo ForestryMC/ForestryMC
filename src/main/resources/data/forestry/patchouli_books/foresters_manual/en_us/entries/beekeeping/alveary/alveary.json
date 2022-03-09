@@ -21,7 +21,7 @@
     {
       "type": "patchouli:multiblock",
       "name": "for.gui.book.patchouli.entry.beekeeping.alveary",
-      // TODO: Implement multiblock in code
+      "__COMMENT__": "TODO: Implement multiblock in code",
       "multiblock": {
         "pattern": [
           [ "sss", "sss", "sss" ],

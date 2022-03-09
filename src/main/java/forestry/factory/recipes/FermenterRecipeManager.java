@@ -11,6 +11,7 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,27 +60,18 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 			return false;
 		}
 
-		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
-			if (recipe.getResource().test(resource)) {
-				return true;
-			}
-		}
-
-		return false;
+		return getRecipes(recipeManager)
+				.anyMatch(recipe -> recipe.getResource().test(resource));
 	}
 
 	@Override
-	@Nullable
-	public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
+	public Optional<IFermenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
 		if (res.isEmpty()) {
-			return null;
+			return Optional.empty();
 		}
-		for (IFermenterRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, res, liqu)) {
-				return recipe;
-			}
-		}
-		return null;
+		return getRecipes(recipeManager)
+				.filter(recipe -> matches(recipe, res, liqu))
+				.findFirst();
 	}
 
 	public boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
@@ -94,14 +86,14 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(recipe -> recipe.getFluidResource().getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(recipe -> recipe.getOutput().getRegistryName())
 				.collect(Collectors.toSet());
 	}

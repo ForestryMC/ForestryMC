@@ -11,8 +11,6 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,7 +27,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 
@@ -53,13 +50,9 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 
 	@Override
 	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, Container inventory, Level world) {
-		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, liquid, item, inventory, world)) {
-				return Optional.of(recipe);
-			}
-		}
-
-		return Optional.empty();
+		return getRecipes(recipeManager)
+				.filter(recipe -> matches(recipe, liquid, item, inventory, world))
+				.findFirst();
 	}
 
 	@Override
@@ -90,33 +83,16 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 			return false;
 		}
 
-		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			Ingredient box = recipe.getBox();
-			if (box.test(resource)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
-		if (output.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		return getRecipes(recipeManager).stream()
-				.filter(recipe -> {
-					ItemStack o = recipe.getResult();
-					return ItemStackUtil.isIdenticalItem(o, output);
-				})
-				.collect(Collectors.toList());
+		return getRecipes(recipeManager)
+				.anyMatch(recipe -> {
+					Ingredient box = recipe.getBox();
+					return box.test(resource);
+				});
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(ICarpenterRecipe::getFluidResource)
 				.filter(fluidStack -> !fluidStack.isEmpty())
 				.map(fluidStack -> fluidStack.getFluid().getRegistryName())

@@ -55,14 +55,15 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs(@Nullable RecipeManager manager) {
 		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(manager)) {
-			Fluid fluid = smelting.getProduct().getFluid();
-			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<>());
-			}
+		RecipeManagers.fabricatorSmeltingManager.getRecipes(manager)
+				.forEach(smelting -> {
+					Fluid fluid = smelting.getProduct().getFluid();
+					if (!smeltingInputs.containsKey(fluid)) {
+						smeltingInputs.put(fluid, new ArrayList<>());
+					}
 
-			smeltingInputs.get(fluid).add(smelting);
-		}
+					smeltingInputs.get(fluid).add(smelting);
+				});
 
 		return smeltingInputs;
 	}
