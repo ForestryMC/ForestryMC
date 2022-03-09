@@ -333,7 +333,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 		if (coords == null) {
 			return Objects.requireNonNull(ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName()));
 		}
-		return world.getBiome(coords);
+		return world.getBiome(coords).value();
 	}
 
 	@Override

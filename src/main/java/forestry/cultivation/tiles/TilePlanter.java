@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -320,7 +321,8 @@ public abstract class TilePlanter extends TilePowered implements IFarmHousingInt
 	@Override
 	public float getExactHumidity() {
 		BlockPos coords = getCoordinates();
-		return level.getBiome(coords).getDownfall();
+		Level level = Objects.requireNonNull(this.level);
+		return level.getBiome(coords).value().getDownfall();
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class HabitatLocatorLogic {
 		this.biomeFound = false;
 		this.searchCenter = player.blockPosition();
 
-		Biome currentBiome = player.level.getBiome(searchCenter);
+		Biome currentBiome = player.level.getBiome(searchCenter).value();
 		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
@@ -163,27 +163,27 @@ public class HabitatLocatorLogic {
 	private static BlockPos getChunkCoordinates(BlockPos pos, Level world, Collection<ResourceLocation> biomesToSearch) {
 		Biome biome;
 
-		biome = world.getBiome(pos);
+		biome = world.getBiome(pos).value();
 		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0));
+		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0)).value();
 		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0));
+		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0)).value();
 		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius));
+		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius)).value();
 		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}
 
-		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius));
+		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius)).value();
 		if (!biomesToSearch.contains(biome.getRegistryName())) {
 			return null;
 		}

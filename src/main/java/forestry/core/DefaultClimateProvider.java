@@ -29,7 +29,7 @@ public class DefaultClimateProvider implements IClimateProvider {
 
 	@Override
 	public Biome getBiome() {
-		return world.getBiome(pos);
+		return world.getBiome(pos).value();
 	}
 
 	@Override

@@ -47,9 +47,8 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	Ingredient getBox();
 
 	/**
-	 * @return the fluid required for this recipe. return null if there is no required fluid.
+	 * @return the fluid required for this recipe. return {@link FluidStack#EMPTY} if there is no required fluid.
 	 */
-	@Nullable
 	FluidStack getFluidResource();
 
 	@Override

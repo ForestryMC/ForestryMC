@@ -15,6 +15,8 @@ import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
+import java.util.Objects;
+
 public class FakeClimateListener implements IClimateListener {
 
 	public static final FakeClimateListener INSTANCE = new FakeClimateListener();
@@ -40,7 +42,8 @@ public class FakeClimateListener implements IClimateListener {
 
 	@Override
 	public Biome getBiome() {
-		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+		Biome value = ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+		return Objects.requireNonNull(value);
 	}
 
 	@Override

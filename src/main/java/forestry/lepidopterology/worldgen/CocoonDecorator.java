@@ -49,7 +49,7 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 			return false;
 		}
 
-		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ()));
+		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ())).value();
 
 		Set<Biome.BiomeCategory> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
 				.getSpawnBiomes();

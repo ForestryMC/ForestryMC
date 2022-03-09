@@ -106,7 +106,7 @@ public class PreviewHandlerClient {
 					BlockPos position = centerPosition.offset(x, 0, y);
 					boolean valid;
 					if (circular) {
-						double distance = Math.round(Math.sqrt(center.distSqr(x, 0, y, true)));
+						double distance = Math.round(Math.sqrt(center.distToCenterSqr(x, 0, y)));
 						valid = distance <= range && distance > (range - 1);
 					} else {
 						valid = !(!(x == -range || x == range) && !(y == -range || y == range));

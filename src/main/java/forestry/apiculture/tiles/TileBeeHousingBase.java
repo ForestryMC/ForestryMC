@@ -192,7 +192,7 @@ public abstract class TileBeeHousingBase extends TileBase implements IBeeHousing
 	// / IBEEHOUSING
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(getBlockPos());
+		return level.getBiome(getBlockPos()).value();
 	}
 
 	//TODO check this call

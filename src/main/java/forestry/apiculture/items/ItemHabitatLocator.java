@@ -79,7 +79,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 		if (world != null && minecraft.player != null) {
 			LocalPlayer player = minecraft.player;
-			Biome currentBiome = player.level.getBiome(player.blockPosition());
+			Biome currentBiome = player.level.getBiome(player.blockPosition()).value();
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());

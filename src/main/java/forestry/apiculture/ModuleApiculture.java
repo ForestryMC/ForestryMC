@@ -502,7 +502,7 @@ public class ModuleApiculture extends BlankForestryModule {
 	private static class EndFlowerAcceptableRule implements IFlowerAcceptableRule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, Level world, BlockPos pos, String flowerType) {
-			Biome biomeGenForCoords = world.getBiome(pos);
+			Biome biomeGenForCoords = world.getBiome(pos).value();
 			return Biome.BiomeCategory.THEEND == biomeGenForCoords.getBiomeCategory();
 		}
 	}

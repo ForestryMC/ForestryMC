@@ -15,6 +15,8 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.nbt.TagType;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -122,7 +124,7 @@ public class FruitProviderPod extends FruitProviderNone {
 	}
 
 	@Override
-	public Tag<Block> getLogTag() {
+	public TagKey<Block> getLogTag() {
 		return switch (type) {
 			case DATES -> ForestryTags.Blocks.PALM_LOGS;
 			case PAPAYA -> ForestryTags.Blocks.PAPAYA_LOGS;

@@ -3,9 +3,6 @@ package forestry.core.worldgen;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
-
 import java.util.List;
 
 import net.minecraft.data.worldgen.DesertVillagePools;
@@ -13,6 +10,8 @@ import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.data.worldgen.SavannaVillagePools;
 import net.minecraft.data.worldgen.SnowyVillagePools;
 import net.minecraft.data.worldgen.TaigaVillagePools;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 public class VillagerJigsaw {
 	public static void init()
@@ -35,10 +34,10 @@ public class VillagerJigsaw {
 	}
 
 	/**
-	 * Adds a new {@link JigsawPiece} to a pre-existing {@link JigsawPattern}.
+	 * Adds a new {@link StructurePoolElement} to a pre-existing {@link StructureTemplatePool}.
 	 *
 	 * @param toAdd The {@link ResourceLocation} of the pattern to insert the new piece into.
-	 * @param newPiece The {@link JigsawPiece} to insert into {@code toAdd}.
+	 * @param newPiece The {@link StructurePoolElement} to insert into {@code toAdd}.
 	 * @param weight The probability weight of {@code newPiece}.
 	 *
 	 * @author abigailfails / abnormals

@@ -13,6 +13,7 @@ package forestry.core.utils;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -68,7 +69,7 @@ public abstract class BlockUtil {
 	}
 
 	@Nullable
-	public static Direction getValidPodFacing(LevelAccessor world, BlockPos pos, Tag<Block> logTag) {
+	public static Direction getValidPodFacing(LevelAccessor world, BlockPos pos, TagKey<Block> logTag) {
 		for (Direction facing : Direction.Plane.HORIZONTAL) {
 			if (isValidPodLocation(world, pos, facing, logTag)) {
 				return facing;
@@ -77,7 +78,7 @@ public abstract class BlockUtil {
 		return null;
 	}
 
-	public static boolean isValidPodLocation(LevelReader world, BlockPos pos, Direction direction, Tag<Block> logTag) {
+	public static boolean isValidPodLocation(LevelReader world, BlockPos pos, Direction direction, TagKey<Block> logTag) {
 		pos = pos.relative(direction);
 		if (!world.hasChunkAt(pos)) {
 			return false;

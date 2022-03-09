@@ -7,6 +7,7 @@ package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,5 +59,5 @@ public interface ICharcoalManager {
 	/**
 	 * @return A collection with all registered charcoal pile walls.
 	 */
-	Collection<ICharcoalPileWall> getWalls();
+	List<ICharcoalPileWall> getWalls();
 }
