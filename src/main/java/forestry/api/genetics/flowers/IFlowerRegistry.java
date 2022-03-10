@@ -8,6 +8,7 @@ package forestry.api.genetics.flowers;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.tags.Tag;
@@ -46,7 +47,7 @@ public interface IFlowerRegistry {
 	/**
 	 * Registers an accepted flower with a particular tag.
 	 */
-	void registerAcceptableFlower(Tag<Block> block, String... flowerTypes);
+	void registerAcceptableFlower(TagKey<Block> block, String... flowerTypes);
 
 	/**
 	 * Registers custom logic for accepted flowers.

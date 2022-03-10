@@ -28,6 +28,8 @@ import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
 
+import java.util.Optional;
+
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
 	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
@@ -70,8 +72,9 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getItem(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
-				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), ingredient);
-				if (recipe != null) {
+				Optional<ISolderRecipe> optionalRecipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), ingredient);
+				if (optionalRecipe.isPresent()) {
+					ISolderRecipe recipe = optionalRecipe.get();
 					if (doConsume) {
 						removeItem(ingredientSlot1 + i, recipe.getResource().getCount());
 					}
@@ -181,8 +184,8 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), itemStack);
-			return recipe != null;
+			Optional<ISolderRecipe> recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), itemStack);
+			return recipe.isPresent();
 		}
 		return false;
 	}

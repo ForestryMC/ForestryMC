@@ -21,9 +21,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import forestry.core.utils.TagUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -55,7 +61,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	private final HashMultimap<String, IFlowerAcceptableRule> registeredRules;
 	private final HashMultimap<String, Block> acceptableBlocks;
 	private final Map<String, BlockStateSet> acceptableBlockStates;
-	private final HashMultimap<String, Tag<Block>> acceptableBlockTags;
+	private final HashMultimap<String, HolderSet<Block>> acceptableBlockTags;
 	private final HashMultimap<String, Flower> plantableFlowers;
 
 	private final ArrayListMultimap<String, IFlowerGrowthRule> growthRules;
@@ -85,13 +91,17 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Override
-	public void registerAcceptableFlower(Tag<Block> block, String... flowerTypes) {
+	public void registerAcceptableFlower(TagKey<Block> block, String... flowerTypes) {
 		for (String flowerType : flowerTypes) {
 			if (flowerType == null) {
 				throw new NullPointerException("Tried to register flower with null type. " + block);
 			}
 
-			this.acceptableBlockTags.get(flowerType).add(block);
+			Optional<HolderSet.Named<Block>> tag = Registry.BLOCK.getTag(block);
+			if (tag.isEmpty()) {
+				throw new IllegalArgumentException("Tried to register flower with unregistered type. " + block);
+			}
+			this.acceptableBlockTags.get(flowerType).add(tag.get());
 		}
 	}
 
@@ -169,14 +179,19 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		Set<IFlowerAcceptableRule> acceptableRules = this.registeredRules.get(flowerType);
 		Set<BlockState> acceptedBlockStates = this.getAcceptedBlockStates(flowerType);
 		Set<Block> acceptedBlocks = this.acceptableBlocks.get(flowerType);
-		Set<Tag<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
+		Set<HolderSet<Block>> acceptedBlockTags = this.acceptableBlockTags.get(flowerType);
 
 		return new AcceptedFlowerPredicate(flowerType, acceptableRules, acceptedBlocks, acceptedBlockStates, acceptedBlockTags);
 	}
 
-	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
+	private static boolean isAcceptedFlower(BlockState blockState, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Collection<HolderSet<Block>> acceptedBlockTags) {
 		Block block = blockState.getBlock();
-		return acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState) || acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(block));
+		if (acceptedBlocks.contains(block) || acceptedBlockStates.contains(blockState)) {
+			return true;
+		}
+		return TagUtil.getHolder(blockState)
+				.map(holder -> acceptedBlockTags.stream().anyMatch(blockTag -> blockTag.contains(holder)))
+				.orElse(false);
 	}
 
 	@Override
@@ -255,9 +270,9 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 		private final Set<IFlowerAcceptableRule> acceptableRules;
 		private final Set<Block> acceptedBlocks;
 		private final Set<BlockState> acceptedBlockStates;
-		private final Set<Tag<Block>> acceptedBlockTags;
+		private final Collection<HolderSet<Block>> acceptedBlockTags;
 
-		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Set<Tag<Block>> acceptedBlockTags) {
+		public AcceptedFlowerPredicate(String flowerType, Set<IFlowerAcceptableRule> acceptableRules, Set<Block> acceptedBlocks, Set<BlockState> acceptedBlockStates, Collection<HolderSet<Block>> acceptedBlockTags) {
 			this.flowerType = flowerType;
 			this.acceptableRules = acceptableRules;
 			this.acceptedBlocks = acceptedBlocks;

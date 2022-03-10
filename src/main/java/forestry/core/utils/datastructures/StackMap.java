@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Map for fluids and items. Can add things like ore dictionary strings etc.
+ * Map for fluids and items.
  *
  * @param <T> The thing this map maps onto
  * @param <P> The stack class (i.e. ItemStack, FluidStack) used for lookups
@@ -70,7 +70,7 @@ public abstract class StackMap<P, T> extends HashMap<P, T> {
 	 * @param b
 	 * @return
 	 */
-	protected abstract boolean areEqual(P a, Object b);
+	protected abstract boolean areEqual(P a, P b);
 
 	/**
 	 * Can this key be added to the map

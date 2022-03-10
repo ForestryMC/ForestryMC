@@ -142,7 +142,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			return;
 		}
 
-		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), smeltResource);
+		IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), smeltResource)
+				.orElse(null);
 		if (smelt == null || smelt.getMeltingPoint() > heat) {
 			return;
 		}
@@ -245,8 +246,8 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 			FluidStack drained = moltenTank.drainInternal(toDrain, IFluidHandler.FluidAction.SIMULATE);
 			hasLiquidResources = !drained.isEmpty() && drained.isFluidStackIdentical(toDrain);
 		} else {
-			IFabricatorSmeltingRecipe smelting = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(level.getRecipeManager(), getItem(InventoryFabricator.SLOT_METAL));
-			hasRecipe = smelting != null;
+			hasRecipe = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(level.getRecipeManager(), getItem(InventoryFabricator.SLOT_METAL))
+					.isPresent();
 		}
 
 		IErrorLogic errorLogic = getErrorLogic();
@@ -263,10 +264,9 @@ public class TileFabricator extends TilePowered implements ISlotPickupWatcher, I
 
 	private int getMeltingPoint() {
 		if (!this.getItem(InventoryFabricator.SLOT_METAL).isEmpty()) {
-			IFabricatorSmeltingRecipe smelt = RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), this.getItem(InventoryFabricator.SLOT_METAL));
-			if (smelt != null) {
-				return smelt.getMeltingPoint();
-			}
+			return RecipeManagers.fabricatorSmeltingManager.findMatchingSmelting(getLevel().getRecipeManager(), this.getItem(InventoryFabricator.SLOT_METAL))
+					.map(IFabricatorSmeltingRecipe::getMeltingPoint)
+					.orElse(0);
 		} else if (moltenTank.getFluidAmount() > 0) {
 			return meltingPoint;
 		}

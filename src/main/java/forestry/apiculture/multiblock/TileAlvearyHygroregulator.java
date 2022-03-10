@@ -76,7 +76,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 		if (transferTime <= 0) {
 			FluidStack fluid = liquidTank.getFluid();
 			if (!fluid.isEmpty()) {
-				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), fluid);
+				currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), fluid)
+						.orElse(null);
 
 				if (currentRecipe != null) {
 					liquidTank.drainInternal(currentRecipe.getResource().getAmount(), IFluidHandler.FluidAction.EXECUTE);
@@ -112,7 +113,8 @@ public class TileAlvearyHygroregulator extends TileAlveary implements Container,
 
 		if (compoundNBT.contains("CurrentLiquid")) {
 			FluidStack liquid = FluidStack.loadFluidStackFromNBT(compoundNBT.getCompound("CurrentLiquid"));
-			currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), liquid);
+			currentRecipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(level.getRecipeManager(), liquid)
+					.orElse(null);
 		}
 	}
 

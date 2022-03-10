@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -40,7 +39,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		int posX = pos.getX() + rand.nextInt(16);
 		int posZ = pos.getZ() + rand.nextInt(16);
 
-		Biome biome = world.getBiome(new BlockPos(posX, 0, posZ));
+		Biome biome = world.getBiome(new BlockPos(posX, 0, posZ)).value();
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 		for (int x = 0; x < 16; x++) {
@@ -70,8 +69,8 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 			return false;
 		}
 
-		Biome biome = world.getBiome(hivePos);
-		EnumTemperature temperature = EnumTemperature.NONE; // EnumTemperature.getFromValue(biome.getTemperature(hivePos));
+		Biome biome = world.getBiome(hivePos).value();
+		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
 		}
@@ -127,7 +126,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		Collections.shuffle(hives, rand);
 
 		for (int tries = 0; tries < hives.size() / 2; tries++) {
-			Biome biome = level.getBiome(pos);
+			Biome biome = level.getBiome(pos).value();
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 			for (Hive hive : hives) {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -43,11 +44,11 @@ public class FallbackIngredient extends Ingredient {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
-	public static Ingredient fromTag(Tag<Item> primary, ItemStack fallback) {
+	public static Ingredient fromTag(TagKey<Item> primary, ItemStack fallback) {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
-	public static Ingredient fromTag(Tag<Item> primary, Tag<Item> fallback) {
+	public static Ingredient fromTag(TagKey<Item> primary, TagKey<Item> fallback) {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 

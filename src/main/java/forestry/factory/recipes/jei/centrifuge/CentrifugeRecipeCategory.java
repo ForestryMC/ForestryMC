@@ -5,7 +5,7 @@ import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ChanceTooltipCallback;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
@@ -17,8 +17,9 @@ import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -40,14 +41,21 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<ICentrifuge
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, centrifuge);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.CENTRIFUGE;
+		return ForestryRecipeType.CENTRIFUGE.getUid();
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends ICentrifugeRecipe> getRecipeClass() {
 		return ICentrifugeRecipe.class;
+	}
+
+	@Override
+	public RecipeType<ICentrifugeRecipe> getRecipeType() {
+		return ForestryRecipeType.CENTRIFUGE;
 	}
 
 	@Override
@@ -56,7 +64,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<ICentrifuge
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, ICentrifugeRecipe recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, ICentrifugeRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 5, 19)
 			.addIngredients(recipe.getInput());
 

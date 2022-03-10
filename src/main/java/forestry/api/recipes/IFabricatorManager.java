@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +24,4 @@ public interface IFabricatorManager extends ICraftingProvider<IFabricatorRecipe>
 	Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, Level world, FluidStack fluidStack, ItemStack plan, Container resources);
 
 	boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan);
-
-	Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
 }

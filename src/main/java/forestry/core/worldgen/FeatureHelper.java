@@ -65,7 +65,7 @@ public class FeatureHelper {
 				for (int z = 0; z < radius * 2 + 1; z++) {
 					BlockPos position = start.offset(x, y, z);
 					Vec3i treeCenter = new Vec3i(center.getX(), position.getY(), center.getZ());
-					if (position.distSqr(treeCenter.getX(), treeCenter.getY(), treeCenter.getZ(), false) <= radius * radius + 0.01) {
+					if (position.distSqr(treeCenter) <= radius * radius + 0.01) {
 						Direction direction = VectUtil.direction(position, treeCenter);
 						block.setDirection(direction);
 						if (addBlock(world, position, block, replace)) {
@@ -94,7 +94,7 @@ public class FeatureHelper {
 						continue;
 					}
 
-					double distance = mutablePos.set(x, y, z).distSqr(center.getX(), y, center.getZ(), false);
+					double distance = mutablePos.set(x, y, z).distToLowCornerSqr(center.getX(), y, center.getZ());
 					if ((radius - width - 0.01) * (radius - width - 0.01) < distance && distance <= (radius + 0.01) * (radius + 0.01)) {
 						if (addBlock(world, mutablePos, block, replace)) {
 							contour.addLeaf(mutablePos);

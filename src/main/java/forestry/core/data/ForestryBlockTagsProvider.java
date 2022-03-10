@@ -11,7 +11,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 import net.minecraftforge.common.Tags;
@@ -160,9 +160,9 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(Tag.Named<Block> tag, Tag.Named<Block>... providers) {
+	protected final void addToTag(TagKey<Block> tag, TagKey<Block>... providers) {
 		TagsProvider.TagAppender<Block> builder = tag(tag);
-		for (Tag.Named<Block> provider : providers) {
+		for (TagKey<Block> provider : providers) {
 			builder.addTag(provider);
 		}
 	}

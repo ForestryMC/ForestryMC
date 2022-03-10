@@ -63,7 +63,7 @@ public class CharcoalManager implements ICharcoalManager {
 	}
 
 	@Override
-	public Collection<ICharcoalPileWall> getWalls() {
+	public List<ICharcoalPileWall> getWalls() {
 		return walls;
 	}
 }

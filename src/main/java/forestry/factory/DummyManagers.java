@@ -11,11 +11,11 @@
 package forestry.factory;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -57,8 +57,8 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Collection<T> getRecipes(@Nullable RecipeManager recipeManager) {
-			return Collections.emptySet();
+		public Stream<T> getRecipes(@Nullable RecipeManager recipeManager) {
+			return Stream.of();
 		}
 	}
 
@@ -95,11 +95,6 @@ public class DummyManagers {
 		}
 
 		@Override
-		public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
-			return Collections.emptySet();
-		}
-
-		@Override
 		public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 			return Collections.emptySet();
 		}
@@ -112,10 +107,9 @@ public class DummyManagers {
 
 		}
 
-		@Nullable
 		@Override
-		public ICentrifugeRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
-			return null;
+		public Optional<ICentrifugeRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
+			return Optional.empty();
 		}
 	}
 
@@ -136,19 +130,13 @@ public class DummyManagers {
 			return false;
 		}
 
-		@Override
-		public Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
-			return Collections.emptySet();
-		}
-
 	}
 
 	public static class DummyFabricatorSmeltingManager extends DummyCraftingProvider<IFabricatorSmeltingRecipe> implements IFabricatorSmeltingManager {
 
-		@Nullable
 		@Override
-		public IFabricatorSmeltingRecipe findMatchingSmelting(@Nullable RecipeManager recipeManager, ItemStack resource) {
-			return null;
+		public Optional<IFabricatorSmeltingRecipe> findMatchingSmelting(@Nullable RecipeManager recipeManager, ItemStack resource) {
+			return Optional.empty();
 		}
 
 		@Override
@@ -189,10 +177,9 @@ public class DummyManagers {
 			return false;
 		}
 
-		@Nullable
 		@Override
-		public IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
-			return null;
+		public Optional<IFermenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu) {
+			return Optional.empty();
 		}
 
 		@Override
@@ -218,10 +205,9 @@ public class DummyManagers {
 			return false;
 		}
 
-		@Nullable
 		@Override
-		public IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
-			return null;
+		public Optional<IMoistenerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
+			return Optional.empty();
 		}
 	}
 
@@ -243,10 +229,9 @@ public class DummyManagers {
 		public void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid) {
 		}
 
-		@Nullable
 		@Override
-		public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
-			return null;
+		public Optional<ISqueezerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
+			return Optional.empty();
 		}
 
 		@Override
@@ -262,10 +247,9 @@ public class DummyManagers {
 
 		}
 
-		@Nullable
 		@Override
-		public ISqueezerContainerRecipe findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer) {
-			return null;
+		public Optional<ISqueezerContainerRecipe> findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer) {
+			return Optional.empty();
 		}
 	}
 
@@ -277,12 +261,12 @@ public class DummyManagers {
 		}
 
 		@Override
-		public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item) {
-			return null;
+		public Optional<IStillRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack item) {
+			return Optional.empty();
 		}
 
 		@Override
-		public boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
+		public boolean matches(@Nullable IStillRecipe recipe, FluidStack item) {
 			return false;
 		}
 

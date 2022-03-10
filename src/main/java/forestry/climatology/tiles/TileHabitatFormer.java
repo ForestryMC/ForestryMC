@@ -12,8 +12,11 @@ package forestry.climatology.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
+import forestry.api.recipes.IHygroregulatorManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -174,14 +177,9 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	private int getFluidCost(IClimateState state) {
 		FluidStack fluid = resourceTank.getFluid();
-		if (fluid == null) {
-			return 0;
-		}
-		IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
-		if (recipe == null) {
-			return 0;
-		}
-		return Math.round((1.0F + Mth.abs(state.getHumidity())) * transformer.getCostModifier() * recipe.getResource().getAmount());
+		return RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid)
+				.map(recipe -> getEnergyCost(state) * recipe.getResource().getAmount())
+				.orElse(0);
 	}
 
 	private int getEnergyCost(IClimateState state) {
@@ -190,23 +188,23 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	@Override
 	public float getChangeForState(ClimateType type, IClimateManipulator manipulator) {
+		IHygroregulatorManager manager = RecipeManagers.hygroregulatorManager;
+
 		if (type == ClimateType.HUMIDITY) {
 			FluidStack fluid = resourceTank.getFluid();
-			if (fluid != null) {
-				IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, fluid);
-				if (recipe != null) {
-					return recipe.getHumidChange() / transformer.getSpeedModifier();
-				}
-			}
+			return manager.findMatchingRecipe(null, fluid)
+					.map(IHygroregulatorRecipe::getHumidChange)
+					.map(humidChange -> humidChange / transformer.getSpeedModifier())
+					.orElse(0f);
 		}
-		float fluidChange = 0.0F;
+
 		if (cachedStack != null) {
-			IHygroregulatorRecipe recipe = RecipeManagers.hygroregulatorManager.findMatchingRecipe(null, cachedStack);
-			if (recipe != null) {
-				fluidChange = Math.abs(recipe.getTempChange());
-			}
+			return manager.findMatchingRecipe(null, cachedStack)
+					.map(IHygroregulatorRecipe::getTempChange)
+					.map(tempChange -> (0.05F + Math.abs(tempChange)) * 0.5F / transformer.getSpeedModifier())
+					.orElse(0f);
 		}
-		return (0.05F + fluidChange) * 0.5F / transformer.getSpeedModifier();
+		return 0;
 	}
 
 	private IClimateState getClimateDifference() {
@@ -227,7 +225,8 @@ public class TileHabitatFormer extends TilePowered implements IClimateHousing, I
 
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(getBlockPos());
+		Level level = Objects.requireNonNull(this.level);
+		return level.getBiome(getBlockPos()).value();
 	}
 
 	@Override

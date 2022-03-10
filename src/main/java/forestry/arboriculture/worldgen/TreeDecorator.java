@@ -136,7 +136,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 			int x = pos.getX() + rand.nextInt(16);
 			int z = pos.getZ() + rand.nextInt(16);
 
-			Biome biome = level.getBiome(pos);
+			Biome biome = level.getBiome(pos).value();
 			ResourceLocation biomeName = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
 			Set<ITree> trees = biomeCache.computeIfAbsent(biomeName, k -> new HashSet<>());
 

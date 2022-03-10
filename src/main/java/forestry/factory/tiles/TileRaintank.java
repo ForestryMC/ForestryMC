@@ -12,6 +12,7 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -104,11 +105,12 @@ public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidT
 
 	@Override
 	public void updateServerSide() {
+		Level level = Objects.requireNonNull(this.level);
 		if (updateOnInterval(20)) {
 			IErrorLogic errorLogic = getErrorLogic();
 
 			BlockPos pos = getBlockPos();
-			Biome biome = level.getBiome(pos);
+			Biome biome = level.getBiome(pos).value();
 			errorLogic.setCondition(!(biome.getPrecipitation() == Biome.Precipitation.RAIN), EnumErrorCode.NO_RAIN_BIOME);
 
 			BlockPos posAbove = pos.above();

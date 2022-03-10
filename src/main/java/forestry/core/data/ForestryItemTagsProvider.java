@@ -8,8 +8,8 @@ import java.util.Set;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
 
@@ -33,18 +33,18 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags() {
 		super.addTags();
-		builders.remove(ItemTags.SAPLINGS.getName());
+		builders.remove(ItemTags.SAPLINGS.location());
 		//builders.remove()
 		filter = new HashSet<>(this.builders.keySet());
-		filter.remove(ItemTags.LOGS.getName());
-		filter.remove(ItemTags.PLANKS.getName());
-		filter.remove(ItemTags.WOODEN_DOORS.getName());
-		filter.remove(ItemTags.STAIRS.getName());
-		filter.remove(ItemTags.SLABS.getName());
-		filter.remove(ItemTags.DOORS.getName());
-		filter.remove(ItemTags.LOGS_THAT_BURN.getName());
-		filter.remove(ItemTags.WOODEN_STAIRS.getName());
-		filter.remove(ItemTags.WOODEN_FENCES.getName());
+		filter.remove(ItemTags.LOGS.location());
+		filter.remove(ItemTags.PLANKS.location());
+		filter.remove(ItemTags.WOODEN_DOORS.location());
+		filter.remove(ItemTags.STAIRS.location());
+		filter.remove(ItemTags.SLABS.location());
+		filter.remove(ItemTags.DOORS.location());
+		filter.remove(ItemTags.LOGS_THAT_BURN.location());
+		filter.remove(ItemTags.WOODEN_STAIRS.location());
+		filter.remove(ItemTags.WOODEN_FENCES.location());
 		addToTag(ForestryTags.Items.GEARS, ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		tag(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		tag(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
@@ -93,9 +93,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(Tag.Named<Item> tag, Tag.Named<Item>... providers) {
+	protected final void addToTag(TagKey<Item> tag, TagKey<Item>... providers) {
 		TagsProvider.TagAppender<Item> builder = tag(tag);
-		for (Tag.Named<Item> provider : providers) {
+		for (TagKey<Item> provider : providers) {
 			builder.addTag(provider);
 		}
 	}

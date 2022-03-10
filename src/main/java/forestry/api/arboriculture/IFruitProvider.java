@@ -8,6 +8,7 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
@@ -163,7 +164,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * Tag for the log that the is placed on
 	 */
-	default Tag<Block> getLogTag() {
+	default TagKey<Block> getLogTag() {
 		return BlockTags.JUNGLE_LOGS;
 	}
 }

@@ -371,7 +371,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	@Override
 	public Biome getBiome() {
 		BlockPos coords = getReferenceCoord();
-		return world.getBiome(coords);
+		return world.getBiome(coords).value();
 	}
 
 	@Override

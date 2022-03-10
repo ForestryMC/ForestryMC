@@ -2,12 +2,10 @@ package forestry.core.recipes.jei;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import java.util.List;
 
 public abstract class ForestryRecipeCategory<T> implements IRecipeCategory<T> {
 	private final IDrawable background;
@@ -29,5 +27,5 @@ public abstract class ForestryRecipeCategory<T> implements IRecipeCategory<T> {
 	}
 
 	@Override
-	abstract public void setRecipe(IRecipeLayoutBuilder builder, T recipe, List<? extends IFocus<?>> focuses);
+	abstract public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup focuses);
 }

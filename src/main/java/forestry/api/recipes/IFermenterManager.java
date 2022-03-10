@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.world.item.ItemStack;
@@ -85,8 +86,7 @@ public interface IFermenterManager extends ICraftingProvider<IFermenterRecipe> {
 
 	boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource);
 
-	@Nullable
-	IFermenterRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu);
+	Optional<IFermenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack res, FluidStack liqu);
 
 	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
 

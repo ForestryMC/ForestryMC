@@ -141,7 +141,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(blockPosition());
+		return level.getBiome(blockPosition()).value();
 	}
 
 	@Override

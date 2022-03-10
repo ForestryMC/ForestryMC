@@ -11,6 +11,7 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
@@ -560,7 +561,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(worldPosition);
+		Level level = Objects.requireNonNull(this.level);
+		return level.getBiome(worldPosition).value();
 	}
 
 	@Override

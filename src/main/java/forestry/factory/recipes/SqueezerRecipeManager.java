@@ -24,6 +24,8 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.utils.ItemStackUtil;
 
+import java.util.Optional;
+
 public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRecipe> implements ISqueezerManager {
 
 	public SqueezerRecipeManager() {
@@ -55,27 +57,19 @@ public class SqueezerRecipeManager extends AbstractCraftingProvider<ISqueezerRec
 	}
 
 	@Override
-	@Nullable
-	public ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
-		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			if (ItemStackUtil.createConsume(recipe.getResources(), items.size(), items::get, false).length > 0) {
-				return recipe;
-			}
-		}
-
-		return null;
+	public Optional<ISqueezerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items) {
+		return getRecipes(recipeManager)
+				.filter(recipe -> {
+					int[] consume = ItemStackUtil.createConsume(recipe.getResources(), items.size(), items::get, false);
+					return consume.length > 0;
+				})
+				.findFirst();
 	}
 
 	@Override
 	public boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
-		for (ISqueezerRecipe recipe : getRecipes(recipeManager)) {
-			for (Ingredient recipeInput : recipe.getResources()) {
-				if (recipeInput.test(itemStack)) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return getRecipes(recipeManager)
+				.flatMap(recipe -> recipe.getResources().stream())
+				.anyMatch(resource -> resource.test(itemStack));
 	}
 }

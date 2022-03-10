@@ -10,43 +10,20 @@
  ******************************************************************************/
 package forestry.core.utils.datastructures;
 
+import forestry.core.utils.ItemStackUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagCollection;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
 
-import forestry.core.utils.ItemStackUtil;
+import java.io.Serial;
 
 public class ItemStackMap<T> extends StackMap<ItemStack, T> {
+	@Serial
 	private static final long serialVersionUID = -8511966739130702305L;
 
 	@Override
-	protected boolean areEqual(ItemStack a, Object b) {
-		if (b instanceof ItemStack b2) {
-			return ItemStackUtil.isCraftingEquivalent(b2, a);
-		}
-		if (b instanceof Item) {
-			return a.getItem() == b;
-		}
-		if (b instanceof String) {
-			return areEqual(a, new ResourceLocation((String) b));
-		}
-		if (b instanceof ResourceLocation) {
-			TagCollection<Item> collection = ItemTags.getAllTags();
-			Tag<Item> itemTag = collection.getTag((ResourceLocation) b);
-			if (itemTag == null) {
-				return false;
-			}
-			for (Item item : itemTag.getValues()) {
-				if (areEqual(a, item)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return false;
+	protected boolean areEqual(ItemStack a, ItemStack b) {
+		return ItemStackUtil.isCraftingEquivalent(b, a);
 	}
 
 	@Override

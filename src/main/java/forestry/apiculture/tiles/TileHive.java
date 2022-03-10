@@ -345,7 +345,7 @@ public class TileHive extends BlockEntity implements IHiveTile, IActivatable, IB
 
 	@Override
 	public Biome getBiome() {
-		return getLevel().getBiome(getBlockPos());
+		return getLevel().getBiome(getBlockPos()).value();
 	}
 
 	@Override
