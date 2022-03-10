@@ -14,13 +14,12 @@ import mezz.jei.api.gui.drawable.IDrawableAnimated.StartDirection;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import java.util.List;
 
 public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPileWall> {
 	private final IDrawableStatic slot;
@@ -43,19 +42,26 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPi
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, CharcoalBlocks.WOOD_PILE.stack());
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return CharcoalJeiPlugin.RECIPE_UID;
+		return CharcoalJeiPlugin.RECIPE_TYPE.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends ICharcoalPileWall> getRecipeClass() {
+		return ICharcoalPileWall.class;
+	}
+
+	@Override
+	public RecipeType<ICharcoalPileWall> getRecipeType() {
+		return CharcoalJeiPlugin.RECIPE_TYPE;
 	}
 
 	@Override
 	public IDrawable getIcon() {
 		return icon;
-	}
-
-	@Override
-	public Class<? extends ICharcoalPileWall> getRecipeClass() {
-		return ICharcoalPileWall.class;
 	}
 
 	@Override
@@ -67,7 +73,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPi
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, ICharcoalPileWall recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, ICharcoalPileWall recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 17)
 				.setBackground(slot, -1, -1)
 				.addItemStacks(recipe.getDisplayItems());

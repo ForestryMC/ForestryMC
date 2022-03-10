@@ -26,13 +26,9 @@ import forestry.modules.features.FeatureItem;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-import org.jetbrains.annotations.Nullable;
 
 public class JeiUtil {
 	public static final String DESCRIPTION_KEY = "for.jei.description.";
-
-	@Nullable
-	private ICraftingGridHelper craftingGridHelper;
 
 	private JeiUtil() {
 	}
@@ -46,18 +42,9 @@ public class JeiUtil {
 		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 
-	public static void addDescription(IRecipeRegistration registry, String itemKey, Item... items) {
-		List<ItemStack> itemStacks = new ArrayList<>();
-		for (Item item : items) {
-			itemStacks.add(new ItemStack(item));
-		}
-
-		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
-	}
-
 	public static void addDescription(IRecipeRegistration registry, Block... blocks) {
 		for (Block block : blocks) {
-			Item item = Item.byBlock(block);
+			Item item = block.asItem();
 			if (item != Items.AIR) {
 				addDescription(registry, item);
 			} else {

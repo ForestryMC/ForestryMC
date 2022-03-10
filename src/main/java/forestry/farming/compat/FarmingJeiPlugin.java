@@ -52,11 +52,11 @@ public class FarmingJeiPlugin implements IModPlugin {
 		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
 		List<FarmingInfoRecipe> recipes = FarmingInfoRecipeMaker.getRecipes(recipeManager);
-		registration.addRecipes(recipes, FarmingInfoRecipeCategory.UID);
+		registration.addRecipes(FarmingInfoRecipeCategory.TYPE, recipes);
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addRecipeCatalyst(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)), FarmingInfoRecipeCategory.UID);
+		registration.addRecipeCatalyst(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)), FarmingInfoRecipeCategory.TYPE);
 	}
 }

@@ -5,7 +5,7 @@ import forestry.api.recipes.IFabricatorSmeltingRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockFactoryPlain;
 import forestry.factory.blocks.BlockTypeFactoryPlain;
@@ -17,8 +17,9 @@ import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -54,26 +55,34 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs(@Nullable RecipeManager manager) {
 		Map<Fluid, List<IFabricatorSmeltingRecipe>> smeltingInputs = new HashMap<>();
-		for (IFabricatorSmeltingRecipe smelting : RecipeManagers.fabricatorSmeltingManager.getRecipes(manager)) {
-			Fluid fluid = smelting.getProduct().getFluid();
-			if (!smeltingInputs.containsKey(fluid)) {
-				smeltingInputs.put(fluid, new ArrayList<>());
-			}
+		RecipeManagers.fabricatorSmeltingManager.getRecipes(manager)
+				.forEach(smelting -> {
+					Fluid fluid = smelting.getProduct().getFluid();
+					if (!smeltingInputs.containsKey(fluid)) {
+						smeltingInputs.put(fluid, new ArrayList<>());
+					}
 
-			smeltingInputs.get(fluid).add(smelting);
-		}
+					smeltingInputs.get(fluid).add(smelting);
+				});
 
 		return smeltingInputs;
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.FABRICATOR;
+		return ForestryRecipeType.FABRICATOR.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends IFabricatorRecipe> getRecipeClass() {
+		return ForestryRecipeType.FABRICATOR.getRecipeClass();
 	}
 
 	@Override
-	public Class<? extends IFabricatorRecipe> getRecipeClass() {
-		return IFabricatorRecipe.class;
+	public RecipeType<IFabricatorRecipe> getRecipeType() {
+		return ForestryRecipeType.FABRICATOR;
 	}
 
 	@Override
@@ -82,7 +91,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, IFabricatorRecipe recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, IFabricatorRecipe recipe, IFocusGroup focuses) {
 		Ingredient plan = recipe.getPlan();
 		builder.addSlot(RecipeIngredientRole.INPUT, 119, 1)
 			.addIngredients(plan);

@@ -15,6 +15,6 @@
       "type": "patchouli:text",
       "text": "for.gui.book.patchouli.entry.beekeeping.mutations3"
     }
-    // TODO: Mutation visualization
-  ]
+  ],
+  "__COMMENT__": "TODO: Mutation visualization"
 }

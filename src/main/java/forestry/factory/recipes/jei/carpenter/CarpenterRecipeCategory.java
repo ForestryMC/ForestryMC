@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
@@ -17,11 +17,13 @@ import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -43,14 +45,21 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, carpenter);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.CARPENTER;
+		return ForestryRecipeType.CARPENTER.getUid();
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends ICarpenterRecipe> getRecipeClass() {
 		return ICarpenterRecipe.class;
+	}
+
+	@Override
+	public RecipeType<ICarpenterRecipe> getRecipeType() {
+		return ForestryRecipeType.CARPENTER;
 	}
 
 	@Override
@@ -59,7 +68,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayoutBuilder builder, ICarpenterRecipe recipe, List<? extends IFocus<?>> focuses) {
+	public void setRecipe(IRecipeLayoutBuilder builder, ICarpenterRecipe recipe, IFocusGroup focuses) {
 		builder.addSlot(RecipeIngredientRole.INPUT, 74, 4)
 			.addIngredients(recipe.getBox());
 
@@ -79,8 +88,10 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 		IRecipeSlotBuilder tankSlot = builder.addSlot(RecipeIngredientRole.INPUT, 141, 1)
 				.setFluidRenderer(10000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0);
-		if (recipe.getFluidResource() != null) {
-			tankSlot.addIngredient(VanillaTypes.FLUID, recipe.getFluidResource());
+
+		FluidStack fluidResource = recipe.getFluidResource();
+		if (!fluidResource.isEmpty()) {
+			tankSlot.addIngredient(VanillaTypes.FLUID, fluidResource);
 		}
 	}
 

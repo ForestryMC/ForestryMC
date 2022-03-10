@@ -46,7 +46,10 @@ public final class RecipeUtils {
     }
 
     public static List<CraftingRecipe> findMatchingRecipes(CraftingContainer inventory, Level world) {
-		return world.getRecipeManager().getRecipesFor(RecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+        RecipeManager recipeManager = world.getRecipeManager();
+        return recipeManager.getRecipesFor(RecipeType.CRAFTING, inventory, world).stream()
+                .filter(recipe -> recipe.matches(inventory, world))
+                .collect(Collectors.toList());
     }
 
 }

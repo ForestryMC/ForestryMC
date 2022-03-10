@@ -20,6 +20,8 @@ import forestry.api.recipes.ISqueezerContainerManager;
 import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.core.fluids.FluidHelper;
 
+import java.util.Optional;
+
 public class SqueezerContainerRecipeManager extends AbstractCraftingProvider<ISqueezerContainerRecipe> implements ISqueezerContainerManager {
 
 	public SqueezerContainerRecipeManager() {
@@ -31,19 +33,14 @@ public class SqueezerContainerRecipeManager extends AbstractCraftingProvider<ISq
 		addRecipe(new SqueezerContainerRecipe(IForestryRecipe.anonymous(), emptyContainer, timePerItem, remnants, chance));
 	}
 
-	@Nullable
 	@Override
-	public ISqueezerContainerRecipe findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer) {
+	public Optional<ISqueezerContainerRecipe> findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer) {
 		if (!FluidHelper.isDrainableFilledContainer(filledContainer)) {
-			return null;
+			return Optional.empty();
 		}
 
-		for (ISqueezerContainerRecipe recipe : getRecipes(recipeManager)) {
-			if (recipe.getEmptyContainer().getItem() == filledContainer.getItem()) {
-				return recipe;
-			}
-		}
-
-		return null;
+		return getRecipes(recipeManager)
+				.filter(recipe -> recipe.getEmptyContainer().getItem() == filledContainer.getItem())
+				.findFirst();
 	}
 }

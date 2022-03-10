@@ -152,7 +152,8 @@ public class TileCentrifuge extends TilePowered implements ISocketable, WorldlyC
 
 	private void checkRecipe() {
 		ItemStack resource = getItem(InventoryCentrifuge.SLOT_RESOURCE);
-		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(getLevel().getRecipeManager(), resource);
+		ICentrifugeRecipe matchingRecipe = RecipeManagers.centrifugeManager.findMatchingRecipe(getLevel().getRecipeManager(), resource)
+				.orElse(null);
 
 		if (currentRecipe != matchingRecipe) {
 			currentRecipe = matchingRecipe;
