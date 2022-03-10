@@ -18,8 +18,6 @@ import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -38,18 +36,17 @@ public class AbstractCraftingProvider<T extends IForestryRecipe> implements ICra
 	}
 
 	@Override
-	public List<T> getRecipes(@Nullable RecipeManager recipeManager) {
+	public Stream<T> getRecipes(@Nullable RecipeManager recipeManager) {
 		recipeManager = adjust(recipeManager);
 		List<T> recipes = recipeManager.getAllRecipesFor(type);
 		if (globalRecipes.isEmpty()) {
-			return Collections.unmodifiableList(recipes);
+			return recipes.stream();
 		}
 		if (recipes.isEmpty()) {
-			return Collections.unmodifiableList(globalRecipes);
+			return globalRecipes.stream();
 		}
 		return Stream.concat(globalRecipes.stream(), recipes.stream())
-				.distinct()
-				.toList();
+				.distinct();
 	}
 
 	/**

@@ -137,27 +137,27 @@ public class FactoryJeiPlugin implements IModPlugin {
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<ICarpenterRecipe> recipes = RecipeManagers.carpenterManager.getRecipes(recipeManager);
+			List<ICarpenterRecipe> recipes = RecipeManagers.carpenterManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.CARPENTER, recipes);
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<ICentrifugeRecipe> recipes = RecipeManagers.centrifugeManager.getRecipes(recipeManager);
+			List<ICentrifugeRecipe> recipes = RecipeManagers.centrifugeManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.CENTRIFUGE, recipes);
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<IFabricatorRecipe> recipes = RecipeManagers.fabricatorManager.getRecipes(recipeManager);
+			List<IFabricatorRecipe> recipes = RecipeManagers.fabricatorManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.FABRICATOR, recipes);
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<IFermenterRecipe> recipes = RecipeManagers.fermenterManager.getRecipes(recipeManager);
+			List<IFermenterRecipe> recipes = RecipeManagers.fermenterManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.FERMENTER, recipes);
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<IMoistenerRecipe> recipes = RecipeManagers.moistenerManager.getRecipes(recipeManager);
+			List<IMoistenerRecipe> recipes = RecipeManagers.moistenerManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.MOISTENER, recipes);
 		}
 
@@ -169,12 +169,12 @@ public class FactoryJeiPlugin implements IModPlugin {
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<ISqueezerRecipe> recipes = RecipeManagers.squeezerManager.getRecipes(recipeManager);
+			List<ISqueezerRecipe> recipes = RecipeManagers.squeezerManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.SQUEEZER, recipes);
 		}
 
 		if (ModuleFactory.machineEnabled()) {
-			List<IStillRecipe> recipes = RecipeManagers.stillManager.getRecipes(recipeManager);
+			List<IStillRecipe> recipes = RecipeManagers.stillManager.getRecipes(recipeManager).toList();
 			registry.addRecipes(ForestryRecipeType.STILL, recipes);
 		}
 

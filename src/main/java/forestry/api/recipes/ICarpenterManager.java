@@ -6,7 +6,6 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,8 +75,6 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, Container craftingInventory, Level world);
 
 	boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource);
-
-	Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
 
 	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

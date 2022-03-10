@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 
+import java.util.Optional;
+
 /**
  * Provides an interface to the recipe manager of the moistener.
  * <p>
@@ -33,6 +35,5 @@ public interface IMoistenerManager extends ICraftingProvider<IMoistenerRecipe> {
 
 	boolean isResource(@Nullable RecipeManager recipeManager, ItemStack resource);
 
-	@Nullable
-	IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item);
+	Optional<IMoistenerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item);
 }

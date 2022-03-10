@@ -94,10 +94,8 @@ public class ItemElectronTube extends ItemOverlay {
 
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			try {
-				ICircuit circuit = ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack);
-				if (circuit != null) {
-					circuits.put(circuitLayout, circuit);
-				}
+				ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack)
+					.ifPresent(iCircuit -> circuits.put(circuitLayout, iCircuit));
 			} catch (NullPointerException ignored) {
 				// Hack, but MineColonies wants to discover all items on launch for some reason. See #2629
 			}

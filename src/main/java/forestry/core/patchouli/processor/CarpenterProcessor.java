@@ -1,58 +1,34 @@
 package forestry.core.patchouli.processor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-
+import com.google.common.base.Preconditions;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;
-
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
 
+import javax.annotation.Nullable;
+
+@SuppressWarnings("unused")
 public class CarpenterProcessor implements IComponentProcessor {
+	@Nullable
 	protected ICarpenterRecipe recipe;
 
 	@Override
 	public void setup(IVariableProvider variables) {
-		int index;
-		try {
-			index = variables.get("index").asNumber().intValue();
-		} catch (Exception e) {
-			index = 0;
-		}
+		ItemStack itemStack = variables.get("item").as(ItemStack.class, ItemStack.EMPTY);
 
-		ItemStack itemStack;
-		try {
-			itemStack = variables.get("item").as(ItemStack.class);
-		} catch (Exception e) {
-			itemStack = ItemStack.EMPTY;
-		}
-
-        /*
-        Manually iterate over all the carpenter recipes by result item ResourceLocation id
-        because looking up the recipe in carpenterManager doesn't work for some recipes
-        (idk why, maybe i was doing it wrong)
-        */
-		List<ICarpenterRecipe> matches = new ArrayList<>();
-
-		for (ICarpenterRecipe icr : RecipeManagers.carpenterManager.getRecipes(null)) {
-			ItemStack result = icr.getResult();
-
-			if (result.getItem() == itemStack.getItem()) {
-				matches.add(icr);
-				break;
-			}
-		}
-
-		this.recipe = matches.get(index);
+		this.recipe = RecipeManagers.carpenterManager.getRecipes(null)
+				.filter(recipe -> recipe.getResult().sameItem(itemStack))
+				.findFirst()
+				.orElseThrow(() -> new IllegalStateException("couldn't fnd a recipe with output: " + itemStack));
 	}
 
 	@Override
 	public IVariable process(String key) {
+		Preconditions.checkNotNull(recipe);
 		if (key.equals("output")) {
 			return IVariable.from(this.recipe.getResult());
 		} else if (key.equals("fluid")) {

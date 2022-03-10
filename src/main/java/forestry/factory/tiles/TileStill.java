@@ -14,8 +14,10 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
@@ -141,7 +143,9 @@ public class TileStill extends TilePowered implements WorldlyContainer, ILiquidT
 		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
 		if (!RecipeManagers.stillManager.matches(currentRecipe, recipeLiquid)) {
-			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(level.getRecipeManager(), recipeLiquid);
+			Level level = Objects.requireNonNull(this.level);
+			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(level.getRecipeManager(), recipeLiquid)
+					.orElse(null);
 
 			int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
 			setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);

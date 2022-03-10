@@ -238,9 +238,11 @@ public class TileMoistener extends TileBase implements WorldlyContainer, ILiquid
 
 	public void checkRecipe() {
 		RecipeManager manager = RecipeUtils.getRecipeManager(level);
-		IMoistenerRecipe sameRec = manager != null ?
-				RecipeManagers.moistenerManager.findMatchingRecipe(manager, getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE))
-				: null;
+		IMoistenerRecipe sameRec = null;
+		if (manager != null) {
+			sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(manager, getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE))
+					.orElse(null);
+		}
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();
