@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.HitResult;
 
@@ -90,18 +90,15 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 		tile.onBlockTick(world, pos, state, rand);
 	}
 
-	// @Override
-	public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		if (!world.isClientSide) {
-			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
-			if (tile != null) {
-				for (ItemStack drop : tile.getDrops()) {
-					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-				}
+	@Override
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+		if (!level.isClientSide && blockEntity instanceof TileFruitPod tile) {
+			for (ItemStack drop : tile.getDrops()) {
+				ItemStackUtil.dropItemStackAsEntity(drop, level, pos);
 			}
 		}
 
-		return false; // super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+		super.playerDestroy(level, player, pos, state, blockEntity, itemStack);
 	}
 
 	@Override

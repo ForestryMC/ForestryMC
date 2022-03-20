@@ -12,12 +12,11 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
@@ -62,7 +61,7 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
 	@Override
 	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
-		// ItemStack stack = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+		super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 
 		if (SlotUtil.isSlotInRange(slotId, SLOT_LETTERS, SLOT_LETTERS_COUNT)) {
 			if (!player.level.isClientSide && mailInventory != null) {
@@ -70,7 +69,5 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(info), player);
 			}
 		}
-
-		// return stack;
 	}
 }

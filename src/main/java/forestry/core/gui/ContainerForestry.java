@@ -72,7 +72,7 @@ public abstract class ContainerForestry extends AbstractContainerMenu {
 	@Override
 	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
 		if (!canAccess(player)) {
-			// return ItemStack.EMPTY;
+			return;
 		}
 
 		if (clickTypeIn == ClickType.SWAP && dragType_or_button >= 0 && dragType_or_button < 9) {
@@ -80,19 +80,21 @@ public abstract class ContainerForestry extends AbstractContainerMenu {
 			int hotbarSlotIndex = PLAYER_HOTBAR_OFFSET + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);
 			if (hotbarSlot instanceof SlotLocked) {
-				// return ItemStack.EMPTY;
+				return;
 			}
 		}
 
 		Slot slot = slotId < 0 ? null : getSlot(slotId);
 		if (slot instanceof SlotForestry slotForestry) {
 			if (slotForestry.isPhantom()) {
+				// FIXME: Port
 				// return SlotUtil.slotClickPhantom(slotForestry, dragType_or_button, clickTypeIn, player);
+				return;
 			}
 		}
 
 		transferCount = 0;
-		// return super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+		super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
 	public Slot getForestrySlot(int slot) {

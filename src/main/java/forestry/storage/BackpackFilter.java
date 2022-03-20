@@ -1,12 +1,13 @@
 package forestry.storage;
 
+import javax.annotation.Nullable;
+
 import forestry.core.utils.TagUtil;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 

@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -39,7 +38,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
@@ -105,16 +103,13 @@ public class BlockSapling extends BlockTreeContainer implements BonemealableBloc
 		return TreeManager.treeRoot.getTypes().createStack(sapling.getTree(), EnumGermlingType.SAPLING);
 	}
 
-	// @Override
-	public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-		if (!world.isClientSide && canHarvestBlock(state, world, pos, player)) {
-			if (!player.isCreative()) {
-				dropAsSapling(world, pos);
-			}
+	@Override
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+		if (!level.isClientSide && canHarvestBlock(state, level, pos, player) && !player.isCreative()) {
+			dropAsSapling(level, pos);
 		}
 
-		// getBlock().playerWillDestroy(world, pos, state, player);
-		return false; // world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
+		super.playerDestroy(level, player, pos, state, blockEntity, itemStack);
 	}
 
 	private static void dropAsSapling(Level world, BlockPos pos) {
