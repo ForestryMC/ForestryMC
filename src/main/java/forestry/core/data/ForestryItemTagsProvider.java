@@ -68,7 +68,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN, ForestryTags.Items.STORAGE_BLOCKS_RAW_TIN);
 
-		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
+		copy(ForestryTags.Blocks.CHARCOAL_BLOCK, ForestryTags.Items.CHARCOAL_BLOCK);
 
 		//copy(BlockTags., ForestryTags.Items.STORAGE_BLOCKS_APATITE);
 		tag(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());

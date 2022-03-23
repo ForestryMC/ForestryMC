@@ -440,8 +440,8 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.pattern("###").pattern("###").pattern("###")
 				.unlockedBy("has_charcoal", has(Items.CHARCOAL)).save(helper);
 		ShapelessRecipeBuilder.shapeless(Items.CHARCOAL, 9)
-				.requires(ForestryTags.Items.CHARCOAL)
-				.unlockedBy("has_charcoal_block", has(ForestryTags.Items.CHARCOAL))
+				.requires(ForestryTags.Items.CHARCOAL_BLOCK)
+				.unlockedBy("has_charcoal_block", has(ForestryTags.Items.CHARCOAL_BLOCK))
 				.save(helper, new ResourceLocation(Constants.MOD_ID, "charcoal_from_block"));
 		ShapedRecipeBuilder.shaped(CharcoalBlocks.WOOD_PILE.block())
 				.define('L', ItemTags.LOGS)

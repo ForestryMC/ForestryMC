@@ -15,7 +15,7 @@ public class ForestryTags {
 		public static final TagKey<Block> MINEABLE_SCOOP = tag("scoop");
 		public static final TagKey<Block> MINEABLE_GRAFTER = tag("grafter");
 
-		public static final TagKey<Block> CHARCOAL = forgeTag("charcoal");
+		public static final TagKey<Block> CHARCOAL_BLOCK = forgeTag("storage_blocks/charcoal");
 
 		public static final TagKey<Block> STORAGE_BLOCKS_APATITE = forgeTag("storage_blocks/apatite");
 		public static final TagKey<Block> STORAGE_BLOCKS_TIN = forgeTag("storage_blocks/tin");
@@ -44,7 +44,7 @@ public class ForestryTags {
 
 	public static class Items {
 
-		public static final TagKey<Item> CHARCOAL = forgeTag("charcoal");
+		public static final TagKey<Item> CHARCOAL_BLOCK = forgeTag("storage_blocks/charcoal");
 
 		public static final TagKey<Item> BEE_COMBS = tag("combs");
 		public static final TagKey<Item> PROPOLIS = tag("propolis");

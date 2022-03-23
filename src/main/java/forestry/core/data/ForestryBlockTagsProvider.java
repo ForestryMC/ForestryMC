@@ -96,7 +96,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 		tag(BlockTags.MINEABLE_WITH_PICKAXE).addTag(ForestryTags.Blocks.ORES_TIN).addTag(ForestryTags.Blocks.ORES_APATITE).addTag(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN);
 		tag(BlockTags.NEEDS_STONE_TOOL).addTag(ForestryTags.Blocks.ORES_TIN).addTag(ForestryTags.Blocks.ORES_APATITE).addTag(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN);
 
-		tag(ForestryTags.Blocks.CHARCOAL).add(CharcoalBlocks.CHARCOAL.block());
+		tag(ForestryTags.Blocks.CHARCOAL_BLOCK).add(CharcoalBlocks.CHARCOAL.block());
 		tag(Tags.Blocks.CHESTS).add(ApicultureBlocks.BEE_CHEST.block());
 		tag(BlockTags.PLANKS).add(ArboricultureBlocks.PLANKS.blockArray());
 		tag(BlockTags.LOGS).add(ArboricultureBlocks.LOGS.blockArray());
