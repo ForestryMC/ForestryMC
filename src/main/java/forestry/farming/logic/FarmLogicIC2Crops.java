@@ -17,6 +17,6 @@ import forestry.api.farming.IFarmHousing;
 public class FarmLogicIC2Crops extends FarmLogicOrchard {
     public FarmLogicIC2Crops(IFarmHousing housing) {
         super(housing);
-        this.farmables = Farmables.farmables.get(FarmableReference.IC2Crops.get());
+        this.setFarmables(Farmables.farmables.get(FarmableReference.IC2Crops.get()));
     }
 }

@@ -16,12 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableBasic;
 import forestry.core.config.Constants;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmableBasicFruit implements IFarmable {
+public class FarmableBasicFruit implements IFarmableBasic {
 
 	private final Block block;
 	private final int matureMeta;
@@ -32,8 +32,8 @@ public class FarmableBasicFruit implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z) == block;
+	public boolean isSapling(Block block, int meta) {
+		return this.block == block;
 	}
 
 	@Override

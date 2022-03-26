@@ -16,11 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableBasic;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmableGenericSapling implements IFarmable {
+public class FarmableGenericSapling implements IFarmableBasic {
 
 	protected final Block sapling;
 	private final int saplingMeta;
@@ -33,22 +33,13 @@ public class FarmableGenericSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
+	public boolean isSapling(Block block, int meta) {
+		return block == sapling && (saplingMeta < 0 || meta == saplingMeta);
+	}
 
-		if (world.isAirBlock(x, y, z)) {
-			return false;
-		}
-
-		if (world.getBlock(x, y, z) == sapling) {
-			return true;
-		}
-
-		if (saplingMeta >= 0) {
-			return world.getBlockMetadata(x, y, z) == saplingMeta;
-		} else {
-			return true;
-		}
-
+	@Override
+	public boolean isMetadataAware() {
+		return saplingMeta >= 0;
 	}
 
 	@Override

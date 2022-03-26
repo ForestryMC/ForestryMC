@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import forestry.api.farming.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -31,11 +32,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.Farmables;
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmable;
 import forestry.api.genetics.IFruitBearer;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
@@ -48,9 +44,12 @@ public class FarmLogicOrchard extends FarmLogic {
 	protected final HashMap<Vect, Integer> lastExtents = new HashMap<>();
 	protected final ImmutableList<Block> traversalBlocks;
 
+	protected boolean precalcBlockType;
+	protected boolean precalcBlockMeta;
+
 	public FarmLogicOrchard(IFarmHousing housing) {
 		super(housing);
-		this.farmables = Farmables.farmables.get(FarmableReference.Orchard.get());
+		this.setFarmables(Farmables.farmables.get(FarmableReference.Orchard.get()));
 
 		ImmutableList.Builder<Block> traversalBlocksBuilder = ImmutableList.builder();
 		if (PluginManager.Module.AGRICRAFT.isEnabled() || PluginManager.Module.INDUSTRIALCRAFT.isEnabled()) {
@@ -217,8 +216,14 @@ public class FarmLogicOrchard extends FarmLogic {
 			return true;
 		}
 
+		Block block = precalcBlockType ? world.getBlock(position.x, position.y, position.z) : null;
+		int meta = precalcBlockMeta ? world.getBlockMetadata(position.x, position.y, position.z) : -1;
+
 		for (IFarmable farmable : farmables) {
-			if (farmable.isSaplingAt(world, position.x, position.y, position.z)) {
+			if (farmable instanceof IFarmableBasic) {
+				if (((IFarmableBasic) farmable).isSapling(block, meta))
+					return true;
+			} else if (farmable.isSaplingAt(world, position.x, position.y, position.z)) {
 				return true;
 			}
 		}
@@ -257,4 +262,16 @@ public class FarmLogicOrchard extends FarmLogic {
 		return null;
 	}
 
+	protected void setFarmables(Collection<IFarmable> farmables) {
+		this.farmables = farmables;
+		for (IFarmable farmable : farmables) {
+			if (farmable instanceof IFarmableBasic) {
+				precalcBlockType = true;
+				if (((IFarmableBasic) farmable).isMetadataAware()) {
+					precalcBlockMeta = true;
+					return;
+				}
+			}
+		}
+	}
 }

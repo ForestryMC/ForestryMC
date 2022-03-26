@@ -17,21 +17,14 @@ import net.minecraft.world.World;
 
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableBasic;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginArboriculture;
 
-public class FarmableGE implements IFarmable {
-
+public class FarmableGE implements IFarmableBasic {
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-
-		if (world.isAirBlock(x, y, z)) {
-			return false;
-		}
-
-		Block block = world.getBlock(x, y, z);
+	public boolean isSapling(Block block, int meta) {
 		return PluginArboriculture.blocks.saplingGE == block;
 	}
 

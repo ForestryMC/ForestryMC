@@ -19,19 +19,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableBasic;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmableCocoa implements IFarmable {
+public class FarmableCocoa implements IFarmableBasic {
 
 	private static final Block COCOA_PLANT = Blocks.cocoa;
 	public static final Item COCOA_SEED = Items.dye;
 	public static final int COCOA_META = 3;
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y, z) == COCOA_PLANT;
+	public boolean isSapling(Block block, int meta) {
+		return block == COCOA_PLANT;
 	}
 
 	@Override

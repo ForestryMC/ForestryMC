@@ -10,17 +10,18 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
+import forestry.api.farming.IFarmableBasic;
 import forestry.core.config.Constants;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 
-public class FarmableGourd implements IFarmable {
+public class FarmableGourd implements IFarmableBasic {
 
 	private final ItemStack seed;
 	private final ItemStack stem;
@@ -33,12 +34,8 @@ public class FarmableGourd implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, int x, int y, int z) {
-		if (world.isAirBlock(x, y, z)) {
-			return false;
-		}
-
-		return ItemStackUtil.equals(world.getBlock(x, y, z), stem);
+	public boolean isSapling(Block block, int meta) {
+		return ItemStackUtil.equals(block, stem);
 	}
 
 	@Override
