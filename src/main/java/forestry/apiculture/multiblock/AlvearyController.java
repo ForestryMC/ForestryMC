@@ -13,7 +13,6 @@ package forestry.apiculture.multiblock;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
@@ -35,7 +34,6 @@ import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.api.climate.ClimateManager;
 import forestry.api.climate.IClimateControlled;
 import forestry.api.climate.IClimateListener;
-import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumTemperature;
 import forestry.api.multiblock.IAlvearyComponent;
 import forestry.api.multiblock.IMultiblockComponent;
@@ -349,7 +347,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 	public EnumTemperature getTemperature() {
 		IBeeModifier beeModifier = BeeManager.beeRoot.createBeeHousingModifier(this);
 		Biome biome = getBiome();
-		if (beeModifier.isHellish() || BiomeHelper.isBiomeHellish(biome)) {
+		if (beeModifier.isHellish() || biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
 			if (tempChange >= 0) {
 				return EnumTemperature.HELLISH;
 			}

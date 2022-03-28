@@ -19,7 +19,6 @@ import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateProvider;
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IWorldClimateHolder;
-import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.core.ILocatable;
@@ -126,10 +125,10 @@ public class ClimateListener implements IClimateListener {
 
 	@Override
 	public EnumTemperature getTemperature() {
-		Biome biome = getBiome();
-		if (BiomeHelper.isBiomeHellish(biome)) {
+		if (getBiome().getBiomeCategory() == Biome.BiomeCategory.NETHER) {
 			return EnumTemperature.HELLISH;
 		}
+
 		return EnumTemperature.getFromValue(getExactTemperature());
 	}
 
@@ -141,14 +140,11 @@ public class ClimateListener implements IClimateListener {
 	@Override
 	public float getExactTemperature() {
 		IClimateState climateState = getState();
-		float temperature;
 		if (climateState.isPresent()) {
-			temperature = climateState.getTemperature();
+			return climateState.getTemperature();
 		} else {
-			Biome biome = getBiome();
-			temperature = 0; // biome.getTemperature(getCoordinates());
+			return getBiome().getBaseTemperature();
 		}
-		return temperature;
 	}
 
 	@Override

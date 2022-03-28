@@ -27,7 +27,6 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveDescription;
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.apiculture.hives.IHiveRegistry;
-import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.EnumTolerance;
@@ -125,7 +124,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodBiome(Biome biome) {
-		return !BiomeHelper.isBiomeHellish(biome);
+		return biome.getBiomeCategory() != Biome.BiomeCategory.NETHER;
 	}
 
 	@Override

@@ -65,17 +65,18 @@ public enum EnumTemperature {
 	}
 
 	public static EnumTemperature getFromBiome(Biome biome) {
-		if (BiomeHelper.isBiomeHellish(biome)) {
+		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
 			return HELLISH;
 		}
+
 		return getFromValue(biome.getBaseTemperature());
 	}
 
 	public static EnumTemperature getFromBiome(Biome biome, BlockPos pos) {
-		if (BiomeHelper.isBiomeHellish(biome)) {
+		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
 			return HELLISH;
 		}
-		float temperature = 0; // biome.getTemperature(pos);
-		return getFromValue(temperature);
+
+		return getFromValue(biome.getBaseTemperature());
 	}
 }
