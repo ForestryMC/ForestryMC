@@ -2,10 +2,9 @@ package forestry.sorting.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -54,8 +53,9 @@ public class SelectionWidget extends Widget {
 		if (logic == null) {
 			return;
 		}
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(TEXTURE);
+
+		RenderSystem.setShaderTexture(0, TEXTURE);
+
 		manager.gui.blit(transform, startX + xPos, startY + yPos, 0, 0, width, height);
 		logic.draw(transform);
 

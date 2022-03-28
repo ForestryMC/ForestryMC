@@ -16,13 +16,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -203,14 +203,12 @@ public abstract class Ledger {
 	}
 
 	protected void drawBackground(PoseStack transform, int y, int x) {
-
 		float colorR = (overlayColor >> 16 & 255) / 255.0F;
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
 		RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
-
-		Minecraft.getInstance().getTextureManager().bindForSetup(texture);
+		RenderSystem.setShaderTexture(0, texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -230,7 +228,7 @@ public abstract class Ledger {
 
 	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
-		Minecraft.getInstance().getTextureManager().bindForSetup(textureMap);
+		RenderSystem.setShaderTexture(0, textureMap);
 		GuiComponent.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}
 

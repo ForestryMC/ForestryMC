@@ -6,12 +6,11 @@ import com.google.common.collect.ImmutableSet;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -76,9 +75,9 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		if (allele != null) {
 			GuiUtil.drawItemStack(manager.gui, ITEMS.getOrDefault(allele, ItemStack.EMPTY), x, y);
 		}
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bindForSetup(SelectionWidget.TEXTURE);
+			RenderSystem.setShaderTexture(0, SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}

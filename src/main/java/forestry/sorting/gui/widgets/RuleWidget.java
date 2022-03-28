@@ -4,14 +4,13 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Collection;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -44,9 +43,9 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 		IFilterLogic logic = gui.getLogic();
 		IFilterRuleType rule = logic.getRule(facing);
 		draw(manager.gui, rule, transform, y, x);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bindForSetup(SelectionWidget.TEXTURE);
+			RenderSystem.setShaderTexture(0, SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
@@ -58,8 +57,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public void draw(GuiForestry gui, IFilterRuleType selectable, PoseStack transform, int y, int x) {
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(selectable.getTextureMap());
+		RenderSystem.setShaderTexture(0, selectable.getTextureMap());
 
 		TextureAtlasSprite sprite = selectable.getSprite();
 		GuiComponent.blit(transform, x, y, gui.getBlitOffset(), 16, 16, sprite);

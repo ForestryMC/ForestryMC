@@ -3,7 +3,6 @@ package forestry.core.gui.elements;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,11 +69,6 @@ public class WindowGui<G extends Screen & IGuiSizable> extends Window {
 			mc = Minecraft.getInstance();
 		}
 		return mc;
-	}
-
-	@Override
-	public TextureManager getTextureManager() {
-		return getMinecraft().getTextureManager();
 	}
 
 	@Override

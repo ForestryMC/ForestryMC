@@ -13,10 +13,10 @@ package forestry.farming.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -55,8 +55,7 @@ public class FarmLogicSlot extends Widget {
 	public void draw(PoseStack transform, int startY, int startX) {
 		if (!getStackIndex().isEmpty()) {
 			Minecraft minecraft = Minecraft.getInstance();
-			TextureManager textureManager = minecraft.getTextureManager();
-			textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
+			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 			ItemRenderer renderItem = minecraft.getItemRenderer();
 			renderItem.renderGuiItem(getStackIndex(), startX + xPos, startY + yPos);
 		}

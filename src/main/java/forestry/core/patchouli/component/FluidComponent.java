@@ -7,14 +7,14 @@ import java.util.function.UnaryOperator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.material.Fluid;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +48,7 @@ public class FluidComponent implements ICustomComponent {
 		ResourceLocation fluidStill = fluidAttributes.getStillTexture(fluidStack);
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 		ResourceLocation spriteLocation = sprite.getName();
-		Minecraft.getInstance().getTextureManager().bindForSetup(new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
+		RenderSystem.setShaderTexture(0, new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
 		setGLColorFromInt(fluidAttributes.getColor(fluidStack));
 
 		// MatrixStack transform, int x, int y, float u, float v, int width, int height, int ?, int ?

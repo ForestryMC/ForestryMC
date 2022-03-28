@@ -12,17 +12,16 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -76,8 +75,7 @@ public class GuiMailboxInfo extends GuiComponent {
 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		// RenderSystem.disableLighting();
-		TextureManager textureManager = minecraft.getTextureManager();
-		textureManager.bindForSetup(textureAlert);
+		RenderSystem.setShaderTexture(0, textureAlert);
 
 		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 

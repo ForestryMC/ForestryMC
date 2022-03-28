@@ -13,13 +13,12 @@ package forestry.climatology.gui.elements;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -134,8 +133,7 @@ public class SpeciesSelectionElement extends GuiElement {
 	@Override
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+		RenderSystem.setShaderTexture(0, new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		// RenderSystem.enableAlphaTest();
 		blit(transform, 0, 0, 224, 46, 22, 22);
 		// RenderSystem.disableAlphaTest();

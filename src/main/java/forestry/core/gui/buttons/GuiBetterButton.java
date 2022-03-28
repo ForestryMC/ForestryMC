@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,8 +27,6 @@ import forestry.api.core.tooltips.IToolTipProvider;
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.config.Constants;
 import forestry.core.render.ForestryResource;
-
-import net.minecraft.client.gui.components.Button.OnPress;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiBetterButton extends Button implements IToolTipProvider {
@@ -103,7 +101,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		if (!visible) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bindForSetup(TEXTURE);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();

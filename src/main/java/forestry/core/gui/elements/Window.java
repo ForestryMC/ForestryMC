@@ -334,10 +334,6 @@ public abstract class Window extends ContainerElement {
 		return mc;
 	}
 
-	public TextureManager getTextureManager() {
-		return getMinecraft().getTextureManager();
-	}
-
 	public Font getFontRenderer() {
 		return getMinecraft().font;
 	}

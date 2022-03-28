@@ -15,15 +15,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -67,8 +65,7 @@ public class HabitatSelectionElement extends ContainerElement {
 	@Override
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+		RenderSystem.setShaderTexture(0, new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 		Optional<ClimateButton> optional = buttons.stream().min(BUTTON_COMPARATOR);
 		if (!optional.isPresent()) {
 			return;
@@ -130,8 +127,7 @@ public class HabitatSelectionElement extends ContainerElement {
 		@Override
 		public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
-			TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-			textureManager.bindForSetup(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+			RenderSystem.setShaderTexture(0, new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
 			blit(transform, 0, 0, 204, 46, 20, 20);
 			TextureManagerForestry.getInstance().bindGuiTextureMap();
 			blit(transform, 2, 2, getBlitOffset(), 16, 16, climate.getSprite());

@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.Mth;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -103,8 +101,7 @@ public class ClimateBarElement extends GuiElement {
 
 		// RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(gui.textureFile);
+		RenderSystem.setShaderTexture(0, gui.textureFile);
 
 		setGLColorFromInt(type == ClimateType.TEMPERATURE ? 0xFFD700 : 0x7ff4f4);
 		int progressScaled = getProgressScaled();

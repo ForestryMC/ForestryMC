@@ -3,17 +3,15 @@ package forestry.cultivation.gui.widgets;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.farming.FarmDirection;
@@ -47,8 +45,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
 
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(manager.gui.textureFile);
+		RenderSystem.setShaderTexture(0, manager.gui.textureFile);
 		manager.gui.blit(transform, xPos + startX, yPos + startY, 206, 0, 16, 16);
 
 		RenderSystem.disableBlend();

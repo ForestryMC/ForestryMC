@@ -1,12 +1,10 @@
 package forestry.core.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,8 +44,7 @@ public class Drawable {
 
 	@SuppressWarnings("deprecation")
 	public void draw(PoseStack transform, int yOffset, int width, int height, int xOffset) {
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(textureLocation);
+		RenderSystem.setShaderTexture(0, textureLocation);
 
 		// Enable correct lighting.
 		// RenderSystem.enableAlphaTest();

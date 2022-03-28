@@ -3,19 +3,18 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraftforge.fluids.FluidAttributes;
@@ -74,8 +73,7 @@ public class TankElement extends GuiElement {
 			return;
 		}
 
-		Minecraft minecraft = Minecraft.getInstance();
-		TextureManager textureManager = minecraft.getTextureManager();
+
 		if (contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			FluidAttributes attributes = fluid.getAttributes();
@@ -98,7 +96,7 @@ public class TankElement extends GuiElement {
 				scaledAmount = getHeight();
 			}
 
-			textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
+			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
 			final int xTileCount = getWidth() / 16;

@@ -13,23 +13,23 @@ package forestry.core.gui.widgets;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,7 +51,7 @@ public class TankWidget extends Widget {
 
 	private int overlayTexX = 176;
 	private int overlayTexY = 0;
-	private int slot = 0;
+	private int slot;
 	protected boolean drawOverlay = true;
 
 	public TankWidget(WidgetManager manager, int xPos, int yPos, int slot) {
@@ -81,15 +81,16 @@ public class TankWidget extends Widget {
 	public void draw(PoseStack transform, int startY, int startX) {
 		RenderSystem.disableBlend();
 		IFluidTank tank = getTank();
+
 		if (tank == null || tank.getCapacity() <= 0) {
 			return;
 		}
 
 		FluidStack contents = tank.getFluid();
-		Minecraft minecraft = Minecraft.getInstance();
-		TextureManager textureManager = minecraft.getTextureManager();
+
 		if (!contents.isEmpty() && contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
+
 			if (fluid != null) {
 				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
@@ -110,7 +111,7 @@ public class TankWidget extends Widget {
 					scaledAmount = height;
 				}
 
-				textureManager.bindForSetup(TextureAtlas.LOCATION_BLOCKS);
+				RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 				setGLColorFromInt(fluidColor);
 
 				final int xTileCount = width / 16;
@@ -130,7 +131,7 @@ public class TankWidget extends Widget {
 							int maskTop = 16 - height;
 							int maskRight = 16 - width;
 
-							drawFluidTexture(x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, 100);
+							drawFluidTexture(transform.last().pose(), x + xPos, y + yPos, fluidStillSprite, maskTop, maskRight, 100);
 						}
 					}
 				}
@@ -140,7 +141,7 @@ public class TankWidget extends Widget {
 		if (drawOverlay) {
 			// RenderSystem.enableAlphaTest();
 			RenderSystem.disableDepthTest();
-			textureManager.bindForSetup(manager.gui.textureFile);
+			RenderSystem.setShaderTexture(0, manager.gui.textureFile);
 			manager.gui.blit(transform, startX + xPos, startY + yPos, overlayTexX, overlayTexY, 16, 60);
 			RenderSystem.enableDepthTest();
 			// RenderSystem.disableAlphaTest();
@@ -166,7 +167,7 @@ public class TankWidget extends Widget {
 		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 
-	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
+	private static void drawFluidTexture(Matrix4f matrix, float xCoord, float yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, float zLevel) {
 		float uMin = textureSprite.getU0();
 		float uMax = textureSprite.getU1();
 		float vMin = textureSprite.getV0();
@@ -177,10 +178,10 @@ public class TankWidget extends Widget {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
-		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
-		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
-		buffer.vertex(xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
+		buffer.vertex(matrix, xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
+		buffer.vertex(matrix, xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
+		buffer.vertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
+		buffer.vertex(matrix, xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
 		tessellator.end();
 	}
 

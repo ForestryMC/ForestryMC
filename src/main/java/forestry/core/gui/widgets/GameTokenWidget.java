@@ -12,15 +12,13 @@ package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,8 +64,7 @@ public class GameTokenWidget extends Widget {
 		float colorG = (tokenColour >> 8 & 255) / 255.0F;
 		float colorB = (tokenColour & 255) / 255.0F;
 
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(manager.gui.textureFile);
+		RenderSystem.setShaderTexture(0, manager.gui.textureFile);
 
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();

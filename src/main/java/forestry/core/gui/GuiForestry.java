@@ -20,7 +20,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -284,7 +283,7 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 				ResourceLocation location = textured.getBackgroundTexture();
 				if (location != null) {
 					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-					this.minecraft.getTextureManager().bindForSetup(sprite.atlas().location());
+					RenderSystem.setShaderTexture(0, sprite.atlas().location());
 					blit(transform, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
 				}
 			}
@@ -342,8 +341,6 @@ public abstract class GuiForestry<C extends AbstractContainerMenu> extends Abstr
 
 	protected void bindTexture(ResourceLocation texturePath) {
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bindForSetup(texturePath);
 		RenderSystem.setShaderTexture(0, texturePath);
 	}
 
