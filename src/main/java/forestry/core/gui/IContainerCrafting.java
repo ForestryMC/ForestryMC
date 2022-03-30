@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
 public interface IContainerCrafting {
-	void onCraftMatrixChanged(IInventory iinventory, int slot);
+	void onCraftMatrixChanged(Container iinventory, int slot);
 }

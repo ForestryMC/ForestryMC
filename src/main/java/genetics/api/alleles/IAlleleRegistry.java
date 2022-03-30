@@ -3,7 +3,7 @@ package genetics.api.alleles;
 import java.util.Collection;
 import java.util.Optional;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.IGeneticApiInstance;
 import genetics.api.IGeneticPlugin;

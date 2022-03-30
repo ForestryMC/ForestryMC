@@ -17,11 +17,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import com.mojang.authlib.GameProfile;
 
@@ -39,7 +39,7 @@ import genetics.api.individual.IIndividual;
 import genetics.api.mutation.IMutation;
 import genetics.api.root.IRootDefinition;
 
-public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
+public abstract class BreedingTracker extends SavedData implements IBreedingTracker {
 
 	private static final String SPECIES_COUNT_KEY = "SpeciesCount";
 	private static final String MUTATIONS_COUNT_KEY = "MutationsCount";
@@ -61,18 +61,29 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	@Nullable
 	private GameProfile username;
 	@Nullable
-	private World world;
+	private Level world;
 
-	protected BreedingTracker(String s, String defaultModeName) {
-		super(s);
+	protected BreedingTracker(String defaultModeName) {
 		this.modeName = defaultModeName;
+	}
+
+	protected BreedingTracker(String defaultModeName, CompoundTag tag) {
+		this(defaultModeName);
+
+		if (tag.contains(MODE_NAME_KEY)) {
+			modeName = tag.getString(MODE_NAME_KEY);
+		}
+
+		readValuesFromNBT(tag, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
+		readValuesFromNBT(tag, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
+		readValuesFromNBT(tag, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
 	}
 
 	public void setUsername(@Nullable GameProfile username) {
 		this.username = username;
 	}
 
-	public void setWorld(@Nullable World world) {
+	public void setWorld(@Nullable Level world) {
 		this.world = world;
 	}
 
@@ -93,7 +104,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	 * @param player used to get world
 	 * @return common tracker for this breeding system
 	 */
-	protected abstract IBreedingTracker getBreedingTracker(PlayerEntity player);
+	protected abstract IBreedingTracker getBreedingTracker(Player player);
 
 	/**
 	 * Tag stored in NBT to identify the type of the tracker being synced
@@ -101,13 +112,13 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 	protected abstract String speciesRootUID();
 
 	@Override
-	public void synchToPlayer(PlayerEntity player) {
-		if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+	public void synchToPlayer(Player player) {
+		if (player instanceof ServerPlayer && !(player instanceof FakePlayer)) {
 			IBreedingTracker breedingTracker = getBreedingTracker(player);
 			String modeName = breedingTracker.getModeName();
 			setModeName(modeName);
 
-			CompoundNBT CompoundNBT = new CompoundNBT();
+			CompoundTag CompoundNBT = new CompoundTag();
 			encodeToNBT(CompoundNBT);
 			PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(CompoundNBT);
 			NetworkUtil.sendToPlayer(packet, player);
@@ -116,13 +127,13 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
 		if (world != null && username != null && username.getName() != null) {
-			PlayerEntity player = world.getPlayerByUUID(username.getId());
-			if (player instanceof ServerPlayerEntity && !(player instanceof FakePlayer)) {
+			Player player = world.getPlayerByUUID(username.getId());
+			if (player instanceof ServerPlayer && !(player instanceof FakePlayer)) {
 				IBreedingTracker breedingTracker = getBreedingTracker(player);
 				String modeName = breedingTracker.getModeName();
 				setModeName(modeName);
 
-				CompoundNBT compound = new CompoundNBT();
+				CompoundTag compound = new CompoundTag();
 				writeToNBT(compound, discoveredSpecies, discoveredMutations, researchedMutations);
 				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(compound);
 				NetworkUtil.sendToPlayer(packet, player);
@@ -132,35 +143,22 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 
 	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
 	@Override
-	public void decodeFromNBT(CompoundNBT compound) {
-		load(compound);
+	public void decodeFromNBT(CompoundTag compound) {
+		// load(compound);
 	}
 
 	@Override
-	public void encodeToNBT(CompoundNBT compound) {
+	public void encodeToNBT(CompoundTag compound) {
 		save(compound);
 	}
 
 	@Override
-	public void load(CompoundNBT CompoundNBT) {
-
-		if (CompoundNBT.contains(MODE_NAME_KEY)) {
-			modeName = CompoundNBT.getString(MODE_NAME_KEY);
-		}
-
-		readValuesFromNBT(CompoundNBT, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
-		readValuesFromNBT(CompoundNBT, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
-		readValuesFromNBT(CompoundNBT, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
-	}
-
-
-	@Override
-	public CompoundNBT save(CompoundNBT CompoundNBT) {
+	public CompoundTag save(CompoundTag CompoundNBT) {
 		writeToNBT(CompoundNBT, discoveredSpecies, discoveredMutations, researchedMutations);
 		return CompoundNBT;
 	}
 
-	private void writeToNBT(CompoundNBT CompoundNBT, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
+	private void writeToNBT(CompoundTag CompoundNBT, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
 		if (modeName != null && !modeName.isEmpty()) {
 			CompoundNBT.putString(MODE_NAME_KEY, modeName);
 		}
@@ -172,7 +170,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		writeValuesToNBT(CompoundNBT, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
 	}
 
-	private static void readValuesFromNBT(CompoundNBT CompoundNBT, Set<String> values, String countKey, String key) {
+	private static void readValuesFromNBT(CompoundTag CompoundNBT, Set<String> values, String countKey, String key) {
 		if (CompoundNBT.contains(countKey)) {
 			final int count = CompoundNBT.getInt(countKey);
 			for (int i = 0; i < count; i++) {
@@ -186,7 +184,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
 		}
 	}
 
-	private static void writeValuesToNBT(CompoundNBT CompoundNBT, Collection<String> values, String countKey, String key) {
+	private static void writeValuesToNBT(CompoundTag CompoundNBT, Collection<String> values, String countKey, String key) {
 		final int count = values.size();
 		CompoundNBT.putInt(countKey, count);
 		Iterator<String> iterator = values.iterator();

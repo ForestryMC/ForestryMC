@@ -1,40 +1,38 @@
 package forestry.factory.recipes.jei.squeezer;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.config.Constants;
+import forestry.core.recipes.jei.ChanceTooltipCallback;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
-import forestry.core.recipes.jei.ForestryTooltipCallback;
+import forestry.core.recipes.jei.ForestryRecipeType;
+import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
-
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSqueezerRecipeWrapper> {
+import java.util.List;
 
-	private static final int[][] INPUTS = new int[][]{{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
-
-	private static final int craftOutputSlot = 0;
-	private static final int craftInputSlot = 1;
-
-	private static final int outputTank = 0;
-
+public class SqueezerRecipeCategory extends ForestryRecipeCategory<ISqueezerRecipe> {
 	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/squeezersocket.png");
 
 	private final IDrawableAnimated arrow;
 	private final IDrawable tankOverlay;
 	private final IDrawable icon;
+	private final ICraftingGridHelper craftingGridHelper;
 
 	public SqueezerRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 62), "block.forestry.squeezer");
@@ -42,17 +40,26 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 60, 43, 18);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block()));
+		ItemStack squeezer = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block());
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, squeezer);
+		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.SQUEEZER;
+		return ForestryRecipeType.SQUEEZER.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends ISqueezerRecipe> getRecipeClass() {
+		return ISqueezerRecipe.class;
 	}
 
 	@Override
-	public Class<? extends AbstractSqueezerRecipeWrapper> getRecipeClass() {
-		return AbstractSqueezerRecipeWrapper.class;
+	public RecipeType<ISqueezerRecipe> getRecipeType() {
+		return ForestryRecipeType.SQUEEZER;
 	}
 
 	@Override
@@ -61,27 +68,22 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<AbstractSquee
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, AbstractSqueezerRecipeWrapper recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-
-		for (int i = 0; i < INPUTS.length; i++) {
-			guiItemStacks.init(craftInputSlot + i, true, 7 + INPUTS[i][0] * 18, 4 + INPUTS[i][1] * 18);
-		}
-		guiItemStacks.init(craftOutputSlot, false, 87, 43);
-		guiFluidStacks.init(outputTank, false, 113, 2, 16, 58, 10000, false, tankOverlay);
-
-		ForestryTooltipCallback tooltip = new ForestryTooltipCallback();
-		float chance = recipeWrapper.getRemnantsChance();
-		tooltip.addChanceTooltip(craftOutputSlot, chance);
-		guiItemStacks.addTooltipCallback(tooltip);
-
-		guiItemStacks.set(ingredients);
-		guiFluidStacks.set(ingredients);
+	public void setRecipe(IRecipeLayoutBuilder builder, ISqueezerRecipe recipe, IFocusGroup focuses) {
+		List<IRecipeSlotBuilder> craftingSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.INPUT, 3, 3, 8, 5, 18);
+		JeiUtil.setCraftingItems(craftingSlots, recipe.getResources(), 3, 3, craftingGridHelper);
+		
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 44)
+				.addTooltipCallback(new ChanceTooltipCallback(recipe.getRemnantsChance()))
+				.addItemStack(recipe.getRemnants());
+		
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 2)
+				.setFluidRenderer(10000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, recipe.getFluidOutput());
 	}
 
 	@Override
-	public void draw(AbstractSqueezerRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-		arrow.draw(matrixStack, 67, 25);
+	public void draw(ISqueezerRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		arrow.draw(stack, 67, 25);
 	}
 }

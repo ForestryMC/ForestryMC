@@ -12,10 +12,10 @@ package forestry.core.circuits;
 
 import java.util.List;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -41,17 +41,17 @@ public abstract class Circuit implements ICircuit {
 	}
 
 	@Override
-	public void addTooltip(List<ITextComponent> list) {
-		list.add(new TranslationTextComponent(getTranslationKey()).withStyle(TextFormatting.GRAY));
+	public void addTooltip(List<Component> list) {
+		list.add(new TranslatableComponent(getTranslationKey()).withStyle(ChatFormatting.GRAY));
 
 		int i = 1;
 		while (true) {
 			String unlocalizedDescription = getTranslationKey() + ".description." + i;
-			TranslationTextComponent component = new TranslationTextComponent(unlocalizedDescription);
+			TranslatableComponent component = new TranslatableComponent(unlocalizedDescription);
 			if (!Translator.canTranslate(component)) {
 				break;
 			}
-			list.add(new StringTextComponent(" - ").append(component).withStyle(TextFormatting.GRAY));
+			list.add(new TextComponent(" - ").append(component).withStyle(ChatFormatting.GRAY));
 			i++;
 		}
 	}

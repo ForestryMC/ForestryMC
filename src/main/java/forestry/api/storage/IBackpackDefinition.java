@@ -7,8 +7,8 @@ package forestry.api.storage;
 
 import java.util.function.Predicate;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 /**
  * To make your own backpack, create a backpack definition and register it with
@@ -18,7 +18,7 @@ public interface IBackpackDefinition {
 	/**
 	 * @return Human-readable name of the backpack.
 	 */
-	ITextComponent getName(ItemStack backpack);
+	Component getName(ItemStack backpack);
 
 	/**
 	 * @return Primary color for the backpack icon.

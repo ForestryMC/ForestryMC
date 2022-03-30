@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockBase;
 
 public class BlockFactoryTESR extends BlockBase<BlockTypeFactoryTesr> {
 	public BlockFactoryTESR(BlockTypeFactoryTesr type) {
-		super(type, Block.Properties.of(Material.METAL)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+		super(type, Block.Properties.of(Material.METAL));
 	}
 }

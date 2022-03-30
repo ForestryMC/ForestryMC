@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -47,26 +47,26 @@ public abstract class PlayerUtil {
 		}
 	}
 
-	public static boolean actOnServer(PlayerEntity player, Consumer<ServerPlayerEntity> action) {
-		if (player.level.isClientSide || !(player instanceof ServerPlayerEntity)) {
+	public static boolean actOnServer(Player player, Consumer<ServerPlayer> action) {
+		if (player.level.isClientSide || !(player instanceof ServerPlayer)) {
 			return false;
 		}
 		action.accept(asServer(player));
 		return true;
 	}
 
-	public static ClientPlayerEntity asClient(PlayerEntity player) {
-		if (!(player instanceof ClientPlayerEntity)) {
+	public static LocalPlayer asClient(Player player) {
+		if (!(player instanceof LocalPlayer)) {
 			throw new IllegalStateException("Failed to cast player to its client version.");
 		}
-		return (ClientPlayerEntity) player;
+		return (LocalPlayer) player;
 	}
 
-	public static ServerPlayerEntity asServer(PlayerEntity player) {
-		if (!(player instanceof ServerPlayerEntity)) {
+	public static ServerPlayer asServer(Player player) {
+		if (!(player instanceof ServerPlayer)) {
 			throw new IllegalStateException("Failed to cast player to its server version.");
 		}
-		return (ServerPlayerEntity) player;
+		return (ServerPlayer) player;
 	}
 
 	/**
@@ -75,18 +75,18 @@ public abstract class PlayerUtil {
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
 	@Nullable
-	public static PlayerEntity getPlayer(World world, @Nullable GameProfile profile) {
+	public static Player getPlayer(Level world, @Nullable GameProfile profile) {
 		if (profile == null || profile.getName() == null) {
-			if (world instanceof ServerWorld) {
-				return FakePlayerFactory.getMinecraft((ServerWorld) world);
+			if (world instanceof ServerLevel) {
+				return FakePlayerFactory.getMinecraft((ServerLevel) world);
 			} else {
 				return null;
 			}
 		}
 
-		PlayerEntity player = world.getPlayerByUUID(profile.getId());
-		if (player == null && world instanceof ServerWorld) {
-			player = FakePlayerFactory.get((ServerWorld) world, profile);
+		Player player = world.getPlayerByUUID(profile.getId());
+		if (player == null && world instanceof ServerLevel) {
+			player = FakePlayerFactory.get((ServerLevel) world, profile);
 		}
 		return player;
 	}
@@ -96,17 +96,17 @@ public abstract class PlayerUtil {
 	 * Do not store references to the return value, to prevent worlds staying in memory.
 	 */
 	@Nullable
-	public static PlayerEntity getFakePlayer(World world, @Nullable GameProfile profile) {
+	public static Player getFakePlayer(Level world, @Nullable GameProfile profile) {
 		if (profile == null || profile.getName() == null) {
-			if (world instanceof ServerWorld) {
-				return FakePlayerFactory.getMinecraft((ServerWorld) world);
+			if (world instanceof ServerLevel) {
+				return FakePlayerFactory.getMinecraft((ServerLevel) world);
 			} else {
 				return null;
 			}
 		}
 
-		if (world instanceof ServerWorld) {
-			return FakePlayerFactory.get((ServerWorld) world, profile);
+		if (world instanceof ServerLevel) {
+			return FakePlayerFactory.get((ServerLevel) world, profile);
 		}
 		return null;
 	}

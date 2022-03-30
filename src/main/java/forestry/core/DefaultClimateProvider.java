@@ -10,26 +10,26 @@
  ******************************************************************************/
 package forestry.core;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 
 public class DefaultClimateProvider implements IClimateProvider {
-	private final World world;
+	private final Level world;
 	private final BlockPos pos;
 
-	public DefaultClimateProvider(World world, BlockPos pos) {
+	public DefaultClimateProvider(Level world, BlockPos pos) {
 		this.world = world;
 		this.pos = pos;
 	}
 
 	@Override
 	public Biome getBiome() {
-		return world.getBiome(pos);
+		return world.getBiome(pos).value();
 	}
 
 	@Override

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -48,7 +48,7 @@ public class PacketTraderAddressResponse extends ForestryPacket implements IFore
 	public static class Handler implements IForestryPacketHandlerClient {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, Player player) {
 			BlockPos pos = data.readBlockPos();
 			String addressName = data.readUtf();
 

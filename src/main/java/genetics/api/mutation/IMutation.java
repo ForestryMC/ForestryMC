@@ -2,7 +2,7 @@ package genetics.api.mutation;
 
 import java.util.Collection;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -61,7 +61,7 @@ public interface IMutation {
 	/**
 	 * @return Collection of localized, human-readable strings describing special mutation conditions, if any.
 	 */
-	Collection<ITextComponent> getSpecialConditions();
+	Collection<Component> getSpecialConditions();
 
 	/**
 	 * @return true if the passed allele is one of the alleles participating in this mutation.

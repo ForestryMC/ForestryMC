@@ -11,11 +11,11 @@
 package forestry.lepidopterology.commands;
 
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -29,23 +29,23 @@ import genetics.commands.PermLevel;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandButterfly {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("butterfly")
 				.then(CommandButterflyKill.register());
 	}
 
 	public static class CommandButterflyKill {
-        public static ArgumentBuilder<CommandSource, ?> register() {
+        public static ArgumentBuilder<CommandSourceStack, ?> register() {
             return Commands.literal("kill").requires(PermLevel.ADMIN).executes(CommandButterflyKill::execute);
         }
 
-		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
+		public static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 			int killCount = 0;
-			for (Entity butterfly : context.getSource().getPlayerOrException().getLevel().getEntities(LepidopterologyEntities.BUTTERFLY.entityType(), EntityPredicates.ENTITY_STILL_ALIVE)) {
-				butterfly.remove();
+			for (Entity butterfly : context.getSource().getPlayerOrException().getLevel().getEntities(LepidopterologyEntities.BUTTERFLY.entityType(), EntitySelector.ENTITY_STILL_ALIVE)) {
+				butterfly.remove(Entity.RemovalReason.KILLED);
 				killCount++;
 			}
-			context.getSource().sendSuccess(new TranslationTextComponent("for.chat.command.forestry.butterfly.kill.response", killCount), true);
+			context.getSource().sendSuccess(new TranslatableComponent("for.chat.command.forestry.butterfly.kill.response", killCount), true);
 
 			return killCount;
 		}

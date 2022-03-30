@@ -12,9 +12,9 @@ package forestry.core.inventory;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -28,6 +28,8 @@ import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.datastructures.RevolvingList;
 
+import java.util.Optional;
+
 public class ItemInventorySolderingIron extends ItemInventory implements IErrorSource {
 
 	private final RevolvingList<ICircuitLayout> layouts = new RevolvingList<>(ChipsetManager.circuitRegistry.getRegisteredLayouts().values());
@@ -37,7 +39,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	private static final short ingredientSlot1 = 2;
 	private static final short ingredientSlotCount = 4;
 
-	public ItemInventorySolderingIron(PlayerEntity player, ItemStack itemStack) {
+	public ItemInventorySolderingIron(Player player, ItemStack itemStack) {
 		super(player, 6, itemStack);
 
 		layouts.setCurrent(ChipsetManager.circuitRegistry.getDefaultLayout());
@@ -70,8 +72,9 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		for (short i = 0; i < ingredientSlotCount; i++) {
 			ItemStack ingredient = getItem(ingredientSlot1 + i);
 			if (!ingredient.isEmpty()) {
-				ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), ingredient);
-				if (recipe != null) {
+				Optional<ISolderRecipe> optionalRecipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), ingredient);
+				if (optionalRecipe.isPresent()) {
+					ISolderRecipe recipe = optionalRecipe.get();
 					if (doConsume) {
 						removeItem(ingredientSlot1 + i, recipe.getResource().getCount());
 					}
@@ -84,7 +87,7 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 	}
 
 	@Override
-	public void onSlotClick(int slotIndex, PlayerEntity player) {
+	public void onSlotClick(int slotIndex, Player player) {
 		if (layouts.getCurrent() == CircuitRegistry.DUMMY_LAYOUT) {
 			return;
 		}
@@ -104,11 +107,9 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		}
 
 		Item item = inputCircuitBoard.getItem();
-		if (!(item instanceof ItemCircuitBoard)) {
+		if (!(item instanceof ItemCircuitBoard circuitBoard)) {
 			return;
 		}
-
-		ItemCircuitBoard circuitBoard = ((ItemCircuitBoard) item);
 
 		EnumCircuitBoardType type = circuitBoard.getType();
 		if (getCircuitCount() != type.getSockets()) {
@@ -183,8 +184,8 @@ public class ItemInventorySolderingIron extends ItemInventory implements IErrorS
 		if (slotIndex == inputCircuitBoardSlot) {
 			return item instanceof ItemCircuitBoard;
 		} else if (slotIndex >= ingredientSlot1 && slotIndex < ingredientSlot1 + ingredientSlotCount) {
-			ISolderRecipe recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), itemStack);
-			return recipe != null;
+			Optional<ISolderRecipe> recipe = ChipsetManager.solderManager.getMatchingRecipe(player.level.getRecipeManager(), layouts.getCurrent(), itemStack);
+			return recipe.isPresent();
 		}
 		return false;
 	}

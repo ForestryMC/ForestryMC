@@ -11,7 +11,7 @@
 package forestry.climatology.proxy;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ public class ProxyClimatologyClient extends ProxyClimatology implements IClientM
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		RenderTypeLookup.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(ClimatologyBlocks.HABITATFORMER.block(), RenderType.cutoutMipped());
 	}
 
 }

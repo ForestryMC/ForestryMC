@@ -13,16 +13,17 @@ package forestry.factory.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,7 +52,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 
-public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileFermenter extends TilePowered implements WorldlyContainer, ILiquidTankTile {
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
 	private final TankManager tankManager;
@@ -65,8 +66,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	private int fuelTotalTime = 0;
 	private int fuelCurrentFerment = 0;
 
-	public TileFermenter() {
-		super(FactoryTiles.FERMENTER.tileType(), 2000, 8000);
+	public TileFermenter(BlockPos pos, BlockState state) {
+		super(FactoryTiles.FERMENTER.tileType(), pos, state, 2000, 8000);
 		setEnergyPerWorkCycle(4200);
 		setInternalInventory(new InventoryFermenter(this));
 
@@ -80,8 +81,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("FermentationTime", fermentationTime);
 		compoundNBT.putInt("FermentationTotalTime", fermentationTotalTime);
@@ -90,12 +91,11 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		compoundNBT.putInt("FuelCurrentFerment", fuelCurrentFerment);
 
 		tankManager.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		fermentationTime = compoundNBT.getInt("FermentationTime");
 		fermentationTotalTime = compoundNBT.getInt("FermentationTotalTime");
@@ -165,7 +165,8 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 		FluidStack fluid = resourceTank.getFluid();
 
 		if (!fluid.isEmpty()) {
-			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(getLevel().getRecipeManager(), resource, fluid);
+			currentRecipe = RecipeManagers.fermenterManager.findMatchingRecipe(getLevel().getRecipeManager(), resource, fluid)
+					.orElse(null);
 		}
 
 		fermentationTotalTime = fermentationTime = currentRecipe == null ? 0 : currentRecipe.getFermentationValue();
@@ -280,26 +281,18 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				fuelBurnTime = j;
-				break;
-			case 1:
-				fuelTotalTime = j;
-				break;
-			case 2:
-				fermentationTime = j;
-				break;
-			case 3:
-				fermentationTotalTime = j;
-				break;
+			case 0 -> fuelBurnTime = j;
+			case 1 -> fuelTotalTime = j;
+			case 2 -> fermentationTime = j;
+			case 3 -> fermentationTotalTime = j;
 		}
 	}
 
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, fuelBurnTime);
-		iCrafting.setContainerData(container, 1, fuelTotalTime);
-		iCrafting.setContainerData(container, 2, fermentationTime);
-		iCrafting.setContainerData(container, 3, fermentationTotalTime);
+	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
+		iCrafting.dataChanged(container, 0, fuelBurnTime);
+		iCrafting.dataChanged(container, 1, fuelTotalTime);
+		iCrafting.dataChanged(container, 2, fermentationTime);
+		iCrafting.dataChanged(container, 3, fermentationTotalTime);
 	}
 
 
@@ -309,7 +302,7 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerFermenter(windowId, inv, this);
 	}
 

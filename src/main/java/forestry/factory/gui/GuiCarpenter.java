@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -23,7 +23,7 @@ import forestry.factory.tiles.TileCarpenter;
 public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	private final TileCarpenter tile;
 
-	public GuiCarpenter(ContainerCarpenter container, PlayerInventory inventory, ITextComponent title) {
+	public GuiCarpenter(ContainerCarpenter container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/carpenter.png", container, inventory, title);
 
 		this.tile = container.getTile();
@@ -32,7 +32,7 @@ public class GuiCarpenter extends GuiForestryTitled<ContainerCarpenter> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 		int progressScaled = tile.getProgressScaled(16);
 		blit(transform, leftPos + 98, topPos + 51 + 16 - progressScaled, 176, 60 + 16 - progressScaled, 4, progressScaled);

@@ -3,19 +3,19 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.material.Fluid;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -62,26 +62,25 @@ public class TankElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		RenderSystem.disableBlend();
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		if (background != null) {
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			background.draw(transform, 0, 0);
 		}
 		if (contents.isEmpty() || capacity <= 0) {
 			return;
 		}
 
-		Minecraft minecraft = Minecraft.getInstance();
-		TextureManager textureManager = minecraft.getTextureManager();
+
 		if (contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
 			FluidAttributes attributes = fluid.getAttributes();
 			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
-				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStill);
+				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 			}
 			if (fluidStillSprite == null) {
 				fluidStillSprite = ResourceUtil.getMissingTexture();
@@ -97,7 +96,7 @@ public class TankElement extends GuiElement {
 				scaledAmount = getHeight();
 			}
 
-			textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 			setGLColorFromInt(fluidColor);
 
 			final int xTileCount = getWidth() / 16;
@@ -129,8 +128,8 @@ public class TankElement extends GuiElement {
 			RenderSystem.enableDepthTest();
 		}
 
-		RenderSystem.color4f(1, 1, 1, 1);
-		RenderSystem.disableAlphaTest();
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		// RenderSystem.disableAlphaTest();
 	}
 
 	private static void setGLColorFromInt(int color) {
@@ -138,7 +137,7 @@ public class TankElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 
 	private static void drawFluidTexture(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel) {
@@ -149,9 +148,9 @@ public class TankElement extends GuiElement {
 		uMax = uMax - maskRight / 16.0F * (uMax - uMin);
 		vMax = vMax - maskTop / 16.0F * (vMax - vMin);
 
-		Tessellator tessellator = Tessellator.getInstance();
+		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder buffer = tessellator.getBuilder();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
 		buffer.vertex(xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();

@@ -16,7 +16,6 @@ import forestry.api.core.IBlockSubtype;
 
 public enum EnumResourceType implements IBlockSubtype {
 	APATITE(),
-	COPPER(),
 	TIN(),
 	BRONZE();
 

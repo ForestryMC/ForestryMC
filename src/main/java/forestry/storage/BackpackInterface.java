@@ -23,9 +23,9 @@ import forestry.core.proxy.Proxies;
 import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class BackpackInterface implements IBackpackInterface {
 
@@ -41,7 +41,7 @@ public class BackpackInterface implements IBackpackInterface {
 	}
 
 	@Override
-	public Item createNaturalistBackpack(IBackpackDefinition definition, String rootUid, ItemGroup tab) {
+	public Item createNaturalistBackpack(IBackpackDefinition definition, String rootUid, CreativeModeTab tab) {
 		Preconditions.checkNotNull(definition, "definition must not be null");
 		Preconditions.checkNotNull(rootUid, "rootUid must not be null");
 

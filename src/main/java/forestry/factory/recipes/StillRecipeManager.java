@@ -11,11 +11,12 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -36,22 +37,19 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 	}
 
 	@Override
-	@Nullable
-	public IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item) {
-		if (item == null) {
-			return null;
+	public Optional<IStillRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack fluid) {
+		if (fluid.isEmpty()) {
+			return Optional.empty();
 		}
-		for (IStillRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, item)) {
-				return recipe;
-			}
-		}
-		return null;
+
+		return getRecipes(recipeManager)
+				.filter(recipe -> matches(recipe, fluid))
+				.findFirst();
 	}
 
 	@Override
-	public boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item) {
-		if (recipe == null || item == null) {
+	public boolean matches(@Nullable IStillRecipe recipe, FluidStack item) {
+		if (recipe == null) {
 			return false;
 		}
 
@@ -60,14 +58,14 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(recipe -> recipe.getInput().getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}

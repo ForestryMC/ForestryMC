@@ -6,13 +6,12 @@ import com.google.common.collect.ImmutableSet;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.IBreedingTracker;
@@ -53,15 +52,13 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		this.gui = gui;
 		ImmutableSet.Builder<IAlleleSpecies> entries = ImmutableSet.builder();
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot)) {
+			if (!definition.isPresent() || !(definition.get() instanceof IForestrySpeciesRoot root)) {
 				continue;
 			}
-			IForestrySpeciesRoot root = (IForestrySpeciesRoot) definition.get();
 			IBreedingTracker tracker = root.getBreedingTracker(manager.minecraft.level, manager.minecraft.player.getGameProfile());
 			for (String uid : tracker.getDiscoveredSpecies()) {
 				IAllele allele = AlleleUtils.getAllele(uid).orElse(null);
-				if (allele instanceof IAlleleSpecies) {
-					IAlleleSpecies species = (IAlleleSpecies) allele;
+				if (allele instanceof IAlleleSpecies species) {
 					entries.add(species);
 				}
 			}
@@ -70,7 +67,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		int x = xPos + startX;
 		int y = yPos + startY;
 		IFilterLogic logic = gui.getLogic();
@@ -78,9 +75,9 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 		if (allele != null) {
 			GuiUtil.drawItemStack(manager.gui, ITEMS.getOrDefault(allele, ItemStack.EMPTY), x, y);
 		}
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+
 		if (this.gui.selection.isSame(this)) {
-			textureManager.bind(SelectionWidget.TEXTURE);
+			RenderSystem.setShaderTexture(0, SelectionWidget.TEXTURE);
 			gui.blit(transform, x - 1, y - 1, 212, 0, 18, 18);
 		}
 	}
@@ -103,12 +100,12 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 	}
 
 	@Override
-	public void draw(GuiForestry gui, IAlleleSpecies selectable, MatrixStack transform, int y, int x) {
+	public void draw(GuiForestry gui, IAlleleSpecies selectable, PoseStack transform, int y, int x) {
 		GuiUtil.drawItemStack(gui, ITEMS.getOrDefault(selectable, ItemStack.EMPTY), x, y);
 	}
 
 	@Override
-	public ITextComponent getName(IAlleleSpecies selectable) {
+	public Component getName(IAlleleSpecies selectable) {
 		return selectable.getDisplayName();
 	}
 
@@ -127,7 +124,7 @@ public class SpeciesWidget extends Widget implements ISelectableProvider<IAllele
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
-		ItemStack stack = gui.getMinecraft().player.inventory.getCarried();
+		ItemStack stack = gui.getMinecraft().player.inventoryMenu.getCarried();
 		if (!stack.isEmpty()) {
 			Optional<IIndividual> optional = RootUtils.getIndividual(stack);
 			if (optional.isPresent()) {

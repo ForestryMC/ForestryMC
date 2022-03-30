@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Config;
 import forestry.core.render.TextureManagerForestry;
@@ -30,7 +30,7 @@ public class PowerLedger extends Ledger {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 		// Draw background
 		drawBackground(transform, y, x);
 
@@ -57,8 +57,8 @@ public class PowerLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
-		return new StringTextComponent(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()));
+	public Component getTooltip() {
+		return new TextComponent(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()));
 	}
 
 }

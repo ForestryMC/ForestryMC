@@ -5,10 +5,10 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 
 import forestry.api.apiculture.genetics.IBee;
 
@@ -21,9 +21,9 @@ import forestry.api.apiculture.genetics.IBee;
  */
 public interface IHiveDrop {
 
-	IBee getBeeType(IBlockReader world, BlockPos pos);
+	IBee getBeeType(BlockGetter world, BlockPos pos);
 
-	NonNullList<ItemStack> getExtraItems(IBlockReader world, BlockPos pos, int fortune);
+	NonNullList<ItemStack> getExtraItems(BlockGetter world, BlockPos pos, int fortune);
 
 	/**
 	 * Chance to drop a bee or extra items. Default drops have 0.80 (= 80 %).
@@ -32,7 +32,7 @@ public interface IHiveDrop {
 	 * @param pos   Coordinates of the broken hive.
 	 * @return Chance for drop as a float of 0.0 - 1.0.
 	 */
-	double getChance(IBlockReader world, BlockPos pos, int fortune);
+	double getChance(BlockGetter world, BlockPos pos, int fortune);
 
 	/**
 	 * Chance for the princess to be ignoble. Default is around 0.4 to 0.7 (40% - 70%).
@@ -41,5 +41,5 @@ public interface IHiveDrop {
 	 * @param pos   Coordinates of the broken hive.
 	 * @return Chance for ignoble as a float of 0.0 - 1.0.
 	 */
-	double getIgnobleChance(IBlockReader world, BlockPos pos, int fortune);
+	double getIgnobleChance(BlockGetter world, BlockPos pos, int fortune);
 }

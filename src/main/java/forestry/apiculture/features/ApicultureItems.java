@@ -1,6 +1,6 @@
 package forestry.apiculture.features;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
 import forestry.api.core.ItemGroups;
@@ -61,10 +61,10 @@ public class ApicultureItems {
 	public static final FeatureItemGroup<ItemHoneyComb, EnumHoneyComb> BEE_COMBS = REGISTRY.itemGroup(ItemHoneyComb::new, "bee_comb", EnumHoneyComb.VALUES);
 
 	// / APIARIST'S CLOTHES
-	public static final FeatureItem<ItemArmorApiarist> APIARIST_HELMET = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.HEAD), "apiarist_helmet");
-	public static final FeatureItem<ItemArmorApiarist> APIARIST_CHEST = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.CHEST), "apiarist_chest");
-	public static final FeatureItem<ItemArmorApiarist> APIARIST_LEGS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.LEGS), "apiarist_legs");
-	public static final FeatureItem<ItemArmorApiarist> APIARIST_BOOTS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlotType.FEET), "apiarist_boots");
+	public static final FeatureItem<ItemArmorApiarist> APIARIST_HELMET = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlot.HEAD), "apiarist_helmet");
+	public static final FeatureItem<ItemArmorApiarist> APIARIST_CHEST = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlot.CHEST), "apiarist_chest");
+	public static final FeatureItem<ItemArmorApiarist> APIARIST_LEGS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlot.LEGS), "apiarist_legs");
+	public static final FeatureItem<ItemArmorApiarist> APIARIST_BOOTS = REGISTRY.item(() -> new ItemArmorApiarist(EquipmentSlot.FEET), "apiarist_boots");
 
 	// TOOLS
 	public static final FeatureItem<ItemScoop> SCOOP = REGISTRY.item(ItemScoop::new, "scoop");

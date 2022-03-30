@@ -7,7 +7,7 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +22,7 @@ public interface ICircuitBoard extends INbtWritable {
 	int getSecondaryColor();
 
 	@OnlyIn(Dist.CLIENT)
-	void addTooltip(List<ITextComponent> list);
+	void addTooltip(List<Component> list);
 
 	void onInsertion(Object tile);
 

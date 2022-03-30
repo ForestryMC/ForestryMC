@@ -7,10 +7,10 @@ package forestry.api.apiculture.hives;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -48,5 +48,5 @@ public interface IHiveDescription {
 	 * Called after successful hive generation.
 	 * world, x, y, z give the location of the new hive.
 	 **/
-	void postGen(ISeedReader world, Random rand, BlockPos pos);
+	void postGen(WorldGenLevel world, Random rand, BlockPos pos);
 }

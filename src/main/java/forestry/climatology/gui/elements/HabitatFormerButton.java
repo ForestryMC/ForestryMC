@@ -13,10 +13,10 @@ package forestry.climatology.gui.elements;
 import java.util.function.Consumer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.core.features.CoreItems;
@@ -42,9 +42,9 @@ public class HabitatFormerButton extends ButtonElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		GuiUtil.drawItemStack(fontRenderer, iconStack, 3, 3);
 	}
 }

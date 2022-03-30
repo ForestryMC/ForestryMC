@@ -6,8 +6,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.core.utils.datastructures.TriFunction;

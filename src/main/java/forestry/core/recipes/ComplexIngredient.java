@@ -1,6 +1,6 @@
 package forestry.core.recipes;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.common.crafting.NBTIngredient;
 

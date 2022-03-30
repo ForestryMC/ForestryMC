@@ -10,38 +10,38 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
 
-import forestry.apiculture.items.ItemScoop;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.alleles.AlleleButterflyCocoon;
 import forestry.lepidopterology.genetics.alleles.ButterflyAlleles;
 import forestry.lepidopterology.tiles.TileCocoon;
 
-public class BlockSolidCocoon extends Block {
+public class BlockSolidCocoon extends Block implements EntityBlock {
 	private static final PropertyCocoon COCOON = AlleleButterflyCocoon.COCOON;
 
 	public BlockSolidCocoon() {
 		super(Block.Properties.of(MaterialCocoon.INSTANCE)
-				.harvestTool(ItemScoop.SCOOP)
-				.harvestLevel(0)
 				.strength(0.5F)
 				.randomTicks()
 				.sound(SoundType.GRAVEL));
@@ -50,7 +50,7 @@ public class BlockSolidCocoon extends Block {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(COCOON, AlleleButterflyCocoon.AGE);
 	}
 
@@ -90,39 +90,33 @@ public class BlockSolidCocoon extends Block {
 	//	}
 
 	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (canHarvestBlock(state, world, pos, player)) {
-			TileUtil.actOnTile(world, pos, TileCocoon.class, cocoon -> {
-				NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
-				for (ItemStack stack : drops) {
-					ItemStackUtil.dropItemStackAsEntity(stack, world, pos);
-				}
-			});
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+		if (canHarvestBlock(state, level, pos, player) && blockEntity instanceof TileCocoon cocoon) {
+			NonNullList<ItemStack> drops = cocoon.getCocoonDrops();
+
+			for (ItemStack stack : drops) {
+				ItemStackUtil.dropItemStackAsEntity(stack, level, pos);
+			}
 		}
 
-		return world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+		super.playerDestroy(level, player, pos, state, blockEntity, itemStack);
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileCocoon(pos, state, true);
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileCocoon(true);
-	}
-
-	@Override
-	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (facing != Direction.UP || !facingState.isAir(worldIn, facingPos)) {
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+		if (facing != Direction.UP || !facingState.isAir()) {
 			return state;
 		}
 		return Blocks.AIR.defaultBlockState();
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		return BlockCocoon.BOUNDING_BOX;
 	}
 

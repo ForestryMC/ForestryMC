@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.energy;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -39,8 +39,8 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerGuiFactories() {
-		ScreenManager.register(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
-		ScreenManager.register(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
+		MenuScreens.register(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
+		MenuScreens.register(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
 	}
 
 }

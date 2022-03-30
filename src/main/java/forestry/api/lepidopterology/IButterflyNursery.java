@@ -7,7 +7,7 @@ package forestry.api.lepidopterology;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import genetics.api.individual.IIndividual;
 
@@ -26,6 +26,6 @@ public interface IButterflyNursery extends IHousing, IClimateProvider {
 
 	boolean canNurse(IButterfly caterpillar);
 
-	World getWorldObj();
+	Level getWorldObj();
 
 }

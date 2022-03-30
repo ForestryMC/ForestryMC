@@ -1,8 +1,8 @@
 package forestry.api.genetics.gatgets;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,8 +29,8 @@ public interface IDatabaseTab<I extends IIndividual> {
 	/**
 	 * Can be used to give the tab a custom tooltip.
 	 */
-	default ITextComponent getTooltip(I individual) {
-		return StringTextComponent.EMPTY;
+	default Component getTooltip(I individual) {
+		return TextComponent.EMPTY;
 	}
 
 	default DatabaseMode getMode() {

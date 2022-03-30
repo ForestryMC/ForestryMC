@@ -3,10 +3,10 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -16,8 +16,6 @@ import forestry.core.gui.slots.SlotLockable;
 import forestry.core.inventory.ItemInventoryAlyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.database.inventory.InventoryDatabaseAnalyzer;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -28,12 +26,12 @@ import genetics.utils.RootUtils;
 
 public class ContainerAnalyzerProviderHelper {
 	/* Attributes - Final*/
-	private final PlayerEntity player;
+	private final Player player;
 	private final ContainerForestry container;
 	@Nullable
 	private final ItemInventoryAlyzer alyzerInventory;
 
-	public ContainerAnalyzerProviderHelper(ContainerForestry container, PlayerInventory playerInventory) {
+	public ContainerAnalyzerProviderHelper(ContainerForestry container, Inventory playerInventory) {
 		this.player = playerInventory.player;
 		this.container = container;
 
@@ -47,8 +45,7 @@ public class ContainerAnalyzerProviderHelper {
 			analyzerIndex = i;
 			alyzerInventory = new ItemInventoryAlyzer(playerInventory.player, stack);
 			Slot slot = container.getSlot(i < 9 ? i + 27 : i - 9);
-			if (slot instanceof SlotLockable) {
-				SlotLockable lockable = (SlotLockable) slot;
+			if (slot instanceof SlotLockable lockable) {
 				lockable.lock();
 			}
 			break;
@@ -104,7 +101,7 @@ public class ContainerAnalyzerProviderHelper {
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (!individual.isAnalyzed()) {
-				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
+				final boolean requiresEnergy = true;
 				ItemStack energyStack = alyzerInventory.getItem(InventoryDatabaseAnalyzer.SLOT_ENERGY);
 				if (requiresEnergy && !ItemInventoryAlyzer.isAlyzingFuel(energyStack)) {
 					return;

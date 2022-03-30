@@ -25,24 +25,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.client.renderer.model.BlockModel;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.TransformationMatrix;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Transformation;
+import com.mojang.math.Vector3f;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
@@ -52,7 +52,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.client.model.SimpleModelTransform;
+import net.minecraftforge.client.model.SimpleModelState;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
@@ -71,59 +71,59 @@ import genetics.utils.AlleleUtils;
 @OnlyIn(Dist.CLIENT)
 public class ButterflyItemModel extends AbstractBakedModel {
 
-	private final ImmutableMap<String, IBakedModel> subModels;
-	private final Cache<Pair<String, Float>, IBakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
+	private final ImmutableMap<String, BakedModel> subModels;
+	private final Cache<Pair<String, Float>, BakedModel> cache = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
 
-	public ButterflyItemModel(ImmutableMap<String, IBakedModel> subModels) {
+	public ButterflyItemModel(ImmutableMap<String, BakedModel> subModels) {
 		this.subModels = subModels;
 	}
 
 	@Override
-	protected ItemOverrideList createOverrides() {
+	protected ItemOverrides createOverrides() {
 		return new OverrideList();
 	}
 
 
-	private class OverrideList extends ItemOverrideList {
+	private class OverrideList extends ItemOverrides {
 		public OverrideList() {
 			super();
 		}
 
 		@Override
-		public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
+		public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel worldIn, @Nullable LivingEntity entityIn, int p_173469_) {
 			IOrganism<IButterfly> organism = GeneticHelper.getOrganism(stack);
 			IAlleleButterflySpecies species = organism.getAllele(ButterflyChromosomes.SPECIES, true);
 			IAlleleValue<Float> size = organism.getAllele(ButterflyChromosomes.SIZE, true);
 			Preconditions.checkNotNull(species);
 			Preconditions.checkNotNull(size);
-			IBakedModel bakedModel = cache.getIfPresent(Pair.of(species.getRegistryName().getPath(), size));
+			BakedModel bakedModel = cache.getIfPresent(Pair.of(species.getRegistryName().getPath(), size));
 			if (bakedModel != null) {
 				return bakedModel;
 			}
 			float scale = 1F / 16F;
 			float sizeValue = size.getValue();
 			String identifier = species.getRegistryName().getPath();
-			IModelTransform transform = new SimpleModelTransform(getTransformations(sizeValue));//-0.03125F, 0.25F - sizeValue * 0.37F, -0.03125F + sizeValue * scale, sizeValue * 1.4F
+			ModelState transform = new SimpleModelState(getTransformations(sizeValue));//-0.03125F, 0.25F - sizeValue * 0.37F, -0.03125F + sizeValue * scale, sizeValue * 1.4F
 			bakedModel = new PerspectiveMapWrapper(new TRSRBakedModel(subModels.get(identifier), 0, 0, 0, 1), transform);
 			cache.put(Pair.of(identifier, sizeValue), bakedModel);
 			return bakedModel;
 		}
 
-		private ImmutableMap<ItemCameraTransforms.TransformType, TransformationMatrix> getTransformations(float size) {
+		private ImmutableMap<ItemTransforms.TransformType, Transformation> getTransformations(float size) {
 			float scale = 1F / 16F;
 			float sSize = size * 1.15F;
 			Vector3f scaledSize = new Vector3f(sSize, sSize, sSize);
-			ImmutableMap.Builder<ItemCameraTransforms.TransformType, TransformationMatrix> builder = ImmutableMap.builder();
-			builder.put(ItemCameraTransforms.TransformType.FIXED,
-				new TransformationMatrix(new Vector3f(scale * 0.5F, scale - (size / 0.75F) * scale, scale * 1.25F), null, scaledSize, null));
-			builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
-				new TransformationMatrix(new Vector3f(0, -scale * 4.75F, 0), null, scaledSize, null));
-			builder.put(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND,
-				new TransformationMatrix(new Vector3f(0, -scale * 4.75F, 0), null, scaledSize, null));
-			builder.put(ItemCameraTransforms.TransformType.GUI,
-				new TransformationMatrix(new Vector3f(0, -scale, 0), new Quaternion(new Vector3f(1, 0, 0), 90F, true), scaledSize, null));
-			builder.put(ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND,
-				new TransformationMatrix(new Vector3f(0, 0, 0), null, scaledSize, null));
+			ImmutableMap.Builder<ItemTransforms.TransformType, Transformation> builder = ImmutableMap.builder();
+			builder.put(ItemTransforms.TransformType.FIXED,
+				new Transformation(new Vector3f(scale * 0.5F, scale - (size / 0.75F) * scale, scale * 1.25F), null, scaledSize, null));
+			builder.put(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
+				new Transformation(new Vector3f(0, -scale * 4.75F, 0), null, scaledSize, null));
+			builder.put(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND,
+				new Transformation(new Vector3f(0, -scale * 4.75F, 0), null, scaledSize, null));
+			builder.put(ItemTransforms.TransformType.GUI,
+				new Transformation(new Vector3f(0, -scale, 0), new Quaternion(new Vector3f(1, 0, 0), 90F, true), scaledSize, null));
+			builder.put(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND,
+				new Transformation(new Vector3f(0, 0, 0), null, scaledSize, null));
 			return builder.build();
 		}
 	}
@@ -137,35 +137,34 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-			IUnbakedModel modelButterfly = bakery.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
-			if (!(modelButterfly instanceof BlockModel)) {
+		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+			UnbakedModel modelButterfly = bakery.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
+			if (!(modelButterfly instanceof BlockModel modelBlock)) {
 				return null;
 			}
-			ImmutableMap.Builder<String, IBakedModel> subModelBuilder = new ImmutableMap.Builder<>();
-			BlockModel modelBlock = (BlockModel) modelButterfly;
+			ImmutableMap.Builder<String, BakedModel> subModelBuilder = new ImmutableMap.Builder<>();
 			for (Map.Entry<String, String> subModel : this.subModels.entrySet()) {
 				String identifier = subModel.getKey();
 				String texture = subModel.getValue();
 
-				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(texture)))), modelBlock.hasAmbientOcclusion, modelBlock.getGuiLight(), modelBlock.getTransforms(), modelBlock.getOverrides());
+				BlockModel model = new BlockModel(modelBlock.getParentLocation(), modelBlock.getElements(), ImmutableMap.of("butterfly", Either.left(new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(texture)))), modelBlock.hasAmbientOcclusion, modelBlock.getGuiLight(), modelBlock.getTransforms(), modelBlock.getOverrides());
 				ResourceLocation location = new ResourceLocation(Constants.MOD_ID, "item/butterfly");
-				IModelTransform transform = ResourceUtil.loadTransform(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
+				ModelState transform = ResourceUtil.loadTransform(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
 				subModelBuilder.put(identifier, model.bake(bakery, model, spriteGetter, transform, location, true));
 			}
 			return new ButterflyItemModel(subModelBuilder.build());
 		}
 
 		@Override
-		public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
-			return subModels.values().stream().map((location) -> new RenderMaterial(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(location))).collect(Collectors.toSet());
+		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+			return subModels.values().stream().map((location) -> new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(location))).collect(Collectors.toSet());
 		}
 	}
 
 	public static class Loader implements IModelLoader<Geometry> {
 
 		@Override
-		public void onResourceManagerReload(IResourceManager resourceManager) {
+		public void onResourceManagerReload(ResourceManager resourceManager) {
 		}
 
 		@Override

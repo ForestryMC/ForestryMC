@@ -3,18 +3,18 @@ package forestry.core.owner;
 import java.util.Optional;
 import java.util.UUID;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.IDataSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.EntityDataSerializer;
 
 import com.mojang.authlib.GameProfile;
 
-public class GameProfileDataSerializer implements IDataSerializer<Optional<GameProfile>> {
+public class GameProfileDataSerializer implements EntityDataSerializer<Optional<GameProfile>> {
 	public static final GameProfileDataSerializer INSTANCE = new GameProfileDataSerializer();
 
 	public static void register() {
-		DataSerializers.registerSerializer(INSTANCE);
+		EntityDataSerializers.registerSerializer(INSTANCE);
 	}
 
 	private GameProfileDataSerializer() {
@@ -22,7 +22,7 @@ public class GameProfileDataSerializer implements IDataSerializer<Optional<GameP
 	}
 
 	@Override
-	public void write(PacketBuffer buf, Optional<GameProfile> value) {
+	public void write(FriendlyByteBuf buf, Optional<GameProfile> value) {
 		if (!value.isPresent()) {
 			buf.writeBoolean(false);
 		} else {
@@ -34,7 +34,7 @@ public class GameProfileDataSerializer implements IDataSerializer<Optional<GameP
 	}
 
 	@Override
-	public Optional<GameProfile> read(PacketBuffer buf) {
+	public Optional<GameProfile> read(FriendlyByteBuf buf) {
 		if (buf.readBoolean()) {
 			UUID uuid = buf.readUUID();
 			String name = buf.readUtf(1024);
@@ -46,8 +46,8 @@ public class GameProfileDataSerializer implements IDataSerializer<Optional<GameP
 	}
 
 	@Override
-	public DataParameter<Optional<GameProfile>> createAccessor(int id) {
-		return new DataParameter<>(id, this);
+	public EntityDataAccessor<Optional<GameProfile>> createAccessor(int id) {
+		return new EntityDataAccessor<>(id, this);
 	}
 
 	@Override

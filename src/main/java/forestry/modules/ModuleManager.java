@@ -29,15 +29,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraftforge.fml.DistExecutor;
 
-import forestry.api.core.ForestryAPI;
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
 import forestry.api.modules.IModuleContainer;
@@ -45,13 +43,11 @@ import forestry.api.modules.IModuleManager;
 import forestry.core.IPickupHandler;
 import forestry.core.IResupplyHandler;
 import forestry.core.ISaveEventHandler;
-import forestry.core.config.forge_old.Configuration;
 import forestry.core.utils.Log;
 
 public class ModuleManager implements IModuleManager {
 
-	private static final String CONFIG_CATEGORY = "modules";
-	private static ModuleManager ourInstance = new ModuleManager();
+	private static final ModuleManager ourInstance = new ModuleManager();
 
 	public static final List<IPickupHandler> pickupHandlers = Lists.newArrayList();
 	public static final List<ISaveEventHandler> saveEventHandlers = Lists.newArrayList();
@@ -69,11 +65,6 @@ public class ModuleManager implements IModuleManager {
 
 	public static ModuleManager getInstance() {
 		return ourInstance;
-	}
-
-	@Override
-	public boolean isModuleEnabled(ResourceLocation id) {
-		return sortedModules.get(id) != null;
 	}
 
 	@Override
@@ -116,11 +107,7 @@ public class ModuleManager implements IModuleManager {
 		for (IModuleContainer container : moduleContainers.values()) {
 			String containerID = container.getID();
 			List<IForestryModule> containerModules = modules.get(containerID);
-			Configuration config = container.getModulesConfig();
 
-			config.load();
-			config.addCustomCategoryComment(CONFIG_CATEGORY, "Disabling these modules can greatly change how the mod functions.\n"
-				+ "Your mileage may vary, please report any issues.");
 			IForestryModule coreModule = getModuleCore(containerModules);
 			if (coreModule != null) {
 				containerModules.remove(coreModule);
@@ -129,27 +116,7 @@ public class ModuleManager implements IModuleManager {
 				Log.debug("Could not find core module for the module container: {}", containerID);
 			}
 
-			Iterator<IForestryModule> iterator = containerModules.iterator();
-			while (iterator.hasNext()) {
-				IForestryModule module = iterator.next();
-				if (!container.isAvailable()) {
-					iterator.remove();
-					Log.info("Module disabled: {}", module);
-					continue;
-				}
-				if (module.canBeDisabled()) {
-					if (!container.isModuleEnabled(module)) {
-						configDisabledModules.add(module);
-						iterator.remove();
-						Log.info("Module disabled: {}", module);
-						continue;
-					}
-					if (!module.isAvailable()) {
-						iterator.remove();
-						Log.info("Module {} failed to load: {}", module, module.getFailMessage());
-						continue;
-					}
-				}
+			for (IForestryModule module : containerModules) {
 				ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 				toLoad.add(new ResourceLocation(containerID, info.moduleID()));
 				modulesToLoad.add(module);
@@ -192,35 +159,22 @@ public class ModuleManager implements IModuleManager {
 			}
 		} while (changed);
 
-		for (IModuleContainer container : moduleContainers.values()) {
-			Configuration config = container.getModulesConfig();
-			if (config.hasChanged()) {
-				config.save();
-			}
-		}
-
 		loadedModules.addAll(sortedModules.values());
 		unloadedModules.addAll(allModules);
 		unloadedModules.removeAll(sortedModules.values());
 
 		for (IModuleContainer container : moduleContainers.values()) {
 			Collection<IForestryModule> loadedModules = sortedModules.values().stream().filter(m -> {
-					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-					return info.containerID().equals(container.getID());
-				}
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
 			).collect(Collectors.toList());
 			Collection<IForestryModule> unloadedModules = ModuleManager.unloadedModules.stream().filter(m -> {
-					ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
-					return info.containerID().equals(container.getID());
-				}
+						ForestryModule info = m.getClass().getAnnotation(ForestryModule.class);
+						return info.containerID().equals(container.getID());
+					}
 			).collect(Collectors.toList());
 			container.onConfiguredModules(loadedModules, unloadedModules);
-		}
-
-		ForestryAPI.enabledModules = new HashSet<>();
-		for (IForestryModule module : sortedModules.values()) {
-			ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
-			ForestryAPI.enabledModules.add(new ResourceLocation(info.containerID(), info.moduleID()));
 		}
 
 		Locale.setDefault(locale);
@@ -238,9 +192,7 @@ public class ModuleManager implements IModuleManager {
 		return moduleHandler;
 	}
 
-	public static void serverStarting(MinecraftServer server) {
-		CommandDispatcher<CommandSource> dispatcher = server.getCommands().getDispatcher();
-
+	public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
 		loadedModules.stream()
 				.map(IForestryModule::register)
 				.filter(Objects::nonNull)

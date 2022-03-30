@@ -12,14 +12,14 @@
  */
 package forestry.mail.commands;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Style;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -39,7 +39,7 @@ import genetics.commands.PermLevel;
  */
 public class CommandMail {
 
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		return Commands.literal("mail")
 				.then(CommandMailTrades.register())
 				.then(CommandMailVirtualize.register());
@@ -47,13 +47,13 @@ public class CommandMail {
 
 	public static class CommandMailTrades {
 
-		public static ArgumentBuilder<CommandSource, ?> register() {
+		public static ArgumentBuilder<CommandSourceStack, ?> register() {
 			return Commands.literal("trades").executes(CommandMailTrades::execute);
 		}
 
-		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
-			ServerPlayerEntity player = context.getSource().getPlayerOrException();
-			ServerWorld world = (ServerWorld) player.level;
+		public static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+			ServerPlayer player = context.getSource().getPlayerOrException();
+			ServerLevel world = (ServerLevel) player.level;
 			for (ITradeStation trade : PostManager.postRegistry.getPostOffice(world).getActiveTradeStations(world).values()) {
 				CommandHelpers.sendChatMessage(context.getSource(), makeTradeListEntry(trade.getTradeInfo()));
 			}
@@ -62,7 +62,7 @@ public class CommandMail {
 		}
 
 		private static String makeTradeListEntry(ITradeStationInfo info) {
-			TextFormatting formatting = info.getState().isOk() ? TextFormatting.GREEN : TextFormatting.RED;
+			ChatFormatting formatting = info.getState().isOk() ? ChatFormatting.GREEN : ChatFormatting.RED;
 
 			String tradegood = "[ ? ]";
 			if (!info.getTradegood().isEmpty()) {
@@ -81,28 +81,28 @@ public class CommandMail {
 	}
 
 	public static class CommandMailVirtualize {
-		public static ArgumentBuilder<CommandSource, ?> register() {
+		public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		    return Commands.literal("virtualize").requires(PermLevel.ADMIN).executes(CommandMailVirtualize::execute);
         }
 
-		public static int execute(CommandContext<CommandSource> context) throws CommandSyntaxException {
-			ServerPlayerEntity player = context.getSource().getPlayerOrException();
+		public static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+			ServerPlayer player = context.getSource().getPlayerOrException();
 
-			World world = player.getCommandSenderWorld();
+			Level world = player.getCommandSenderWorld();
 
 			MailAddress address = new MailAddress(player.getGameProfile());
-			ITradeStation trade = PostManager.postRegistry.getTradeStation((ServerWorld) world, address);
+			ITradeStation trade = PostManager.postRegistry.getTradeStation((ServerLevel) world, address);
 
 			if (trade == null) {
 				Style red = Style.EMPTY;
-				red.withColor(TextFormatting.RED);
+				red.withColor(ChatFormatting.RED);
 				CommandHelpers.sendLocalizedChatMessage(context.getSource(), red, "for.chat.command.forestry.mail.virtualize.no_tradestation", player.getDisplayName());
 				return 0;
 			}
 
 			trade.setVirtual(!trade.isVirtual());
 			Style green = Style.EMPTY;
-			green.withColor(TextFormatting.GREEN);
+			green.withColor(ChatFormatting.GREEN);
 			CommandHelpers.sendLocalizedChatMessage(context.getSource(), green, "for.chat.command.forestry.mail.virtualize.set", trade.getAddress().getName(), trade.isVirtual());
 
 			return 1;

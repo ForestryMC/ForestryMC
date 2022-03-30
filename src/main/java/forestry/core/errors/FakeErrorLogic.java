@@ -12,7 +12,7 @@ package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
@@ -46,12 +46,12 @@ public class FakeErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void writeData(PacketBuffer data) {
+	public void writeData(FriendlyByteBuf data) {
 
 	}
 
 	@Override
-	public void readData(PacketBuffer data) {
+	public void readData(FriendlyByteBuf data) {
 
 	}
 

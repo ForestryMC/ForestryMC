@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.ChatFormatting;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,9 +71,8 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(MatrixStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage1(PoseStack transform, Screen gui, ItemStack itemStack) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -88,7 +87,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -121,15 +120,14 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			guiAlyzer.drawChromosomeRow(transform, Translator.translateToLocal("for.gui.effect"), tree, TreeChromosomes.EFFECT);
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(MatrixStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage2(PoseStack transform, Screen gui, ItemStack itemStack) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -145,7 +143,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			int speciesDominance0 = guiAlyzer.getColorCoding(primary.isDominant());
 			int speciesDominance1 = guiAlyzer.getColorCoding(genome.getSecondary().isDominant());
@@ -200,15 +198,15 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			int fruitDominance1 = guiAlyzer.getColorCoding(inactiveFruit.isDominant());
 
 			textLayout.drawTranslatedLine(transform, "for.gui.fruits", GuiAlyzer.COLUMN_0);
-			TextFormatting strike = TextFormatting.RESET;
+			ChatFormatting strike = ChatFormatting.RESET;
 			if (!tree.canBearFruit() && activeFruit != AlleleFruits.fruitNone) {
-				strike = TextFormatting.STRIKETHROUGH;
+				strike = ChatFormatting.STRIKETHROUGH;
 			}
 			textLayout.drawLine(transform, activeFruit.getProvider().getDescription().withStyle(strike), GuiAlyzer.COLUMN_1, fruitDominance0);
 
-			strike = TextFormatting.RESET;
+			strike = ChatFormatting.RESET;
 			if (!secondary.getSuitableFruit().contains(inactiveFruit.getProvider().getFamily()) && inactiveFruit != AlleleFruits.fruitNone) {
-				strike = TextFormatting.STRIKETHROUGH;
+				strike = ChatFormatting.STRIKETHROUGH;
 			}
 			textLayout.drawLine(transform, inactiveFruit.getProvider().getDescription().withStyle(strike), GuiAlyzer.COLUMN_2, fruitDominance1);
 
@@ -223,15 +221,14 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				textLayout.drawLine(transform, secondaryFamily.getName(), GuiAlyzer.COLUMN_2, fruitDominance1);
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(MatrixStack transform, ItemStack itemStack, Screen gui) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage3(PoseStack transform, ItemStack itemStack, Screen gui) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<ITree> optional = TreeManager.treeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -241,7 +238,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 			WidgetManager widgetManager = guiAlyzer.getWidgetManager();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.produce") + ":", GuiAlyzer.COLUMN_0);
 			textLayout.newLine();
@@ -274,7 +271,7 @@ public class TreeAlyzerPlugin implements IAlyzerPlugin {
 				}
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 

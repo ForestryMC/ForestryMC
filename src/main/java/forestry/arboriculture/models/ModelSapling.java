@@ -12,21 +12,21 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ItemOverrideList;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.ModelRotation;
-import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -55,15 +55,15 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	}
 
 	@Override
-	public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation) {
-		ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> itemModels = new ImmutableMap.Builder<>();
-		ImmutableMap.Builder<IAlleleTreeSpecies, IBakedModel> blockModels = new ImmutableMap.Builder<>();
+	public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> itemModels = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> blockModels = new ImmutableMap.Builder<>();
 		for (Map.Entry<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> entry : modelsBySpecies.entrySet()) {
-			IBakedModel blockModel = bakery.getBakedModel(entry.getValue().getFirst(), ModelRotation.X0_Y0, spriteGetter);
+			BakedModel blockModel = bakery.bake(entry.getValue().getFirst(), BlockModelRotation.X0_Y0, spriteGetter);
 			if (blockModel != null) {
 				blockModels.put(entry.getKey(), blockModel);
 			}
-			IBakedModel itemModel = bakery.getBakedModel(entry.getValue().getSecond(), ModelRotation.X0_Y0, spriteGetter);
+			BakedModel itemModel = bakery.bake(entry.getValue().getSecond(), BlockModelRotation.X0_Y0, spriteGetter);
 			if (itemModel != null) {
 				itemModels.put(entry.getKey(), itemModel);
 			}
@@ -73,25 +73,25 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 
 	public Collection<ResourceLocation> getDependencies() {
 		return modelsBySpecies.values().stream()
-			.flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
+				.flatMap(pair -> Stream.of(pair.getFirst(), pair.getSecond())).collect(Collectors.toSet());
 	}
 
 	@Override
-	public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+	public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return getDependencies().stream()
 				.flatMap(location -> modelGetter.apply(location).getMaterials(modelGetter, missingTextureErrors).stream())
-			.collect(Collectors.toSet());
+				.collect(Collectors.toSet());
 	}
 
-	public static class Baked implements IBakedModel {
-		private final Map<IAlleleTreeSpecies, IBakedModel> itemModels;
-		private final Map<IAlleleTreeSpecies, IBakedModel> blockModels;
-		private final IBakedModel defaultBlock;
-		private final IBakedModel defaultItem;
+	public static class Baked implements BakedModel {
+		private final Map<IAlleleTreeSpecies, BakedModel> itemModels;
+		private final Map<IAlleleTreeSpecies, BakedModel> blockModels;
+		private final BakedModel defaultBlock;
+		private final BakedModel defaultItem;
 		@Nullable
-		private ItemOverrideList overrideList;
+		private ItemOverrides overrideList;
 
-		public Baked(Map<IAlleleTreeSpecies, IBakedModel> itemModels, Map<IAlleleTreeSpecies, IBakedModel> blockModels) {
+		public Baked(Map<IAlleleTreeSpecies, BakedModel> itemModels, Map<IAlleleTreeSpecies, BakedModel> blockModels) {
 			this.itemModels = itemModels;
 			this.blockModels = blockModels;
 			this.defaultBlock = blockModels.get(TreeDefinition.Oak.getSpecies());
@@ -138,18 +138,18 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		@Override
-		public ItemOverrideList getOverrides() {
+		public ItemOverrides getOverrides() {
 			if (overrideList == null) {
 				overrideList = new OverrideList();
 			}
 			return overrideList;
 		}
 
-		public class OverrideList extends ItemOverrideList {
+		public class OverrideList extends ItemOverrides {
 
 			@Nullable
 			@Override
-			public IBakedModel resolve(IBakedModel model, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+			public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_) {
 				IOrganism<ITree> organism = GeneticHelper.getOrganism(stack);
 				if (organism.isEmpty()) {
 					return model;

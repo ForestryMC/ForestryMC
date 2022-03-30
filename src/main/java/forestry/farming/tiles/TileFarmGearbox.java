@@ -12,9 +12,10 @@ package forestry.farming.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -36,15 +37,15 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 	private int previousDelays = 0;
 	private int workCounter;
 
-	public TileFarmGearbox() {
-		super(FarmingTiles.GEARBOX.tileType());
+	public TileFarmGearbox(BlockPos pos, BlockState state) {
+		super(FarmingTiles.GEARBOX.tileType(), pos, state);
 		energyManager = new EnergyManager(200, 10000);
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		energyManager.read(compoundNBT);
 
 		activationDelay = compoundNBT.getInt("ActivationDelay");
@@ -53,13 +54,12 @@ public class TileFarmGearbox extends TileFarm implements IFarmComponent.Active {
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		energyManager.write(compoundNBT);
 
 		compoundNBT.putInt("ActivationDelay", activationDelay);
 		compoundNBT.putInt("PrevDelays", previousDelays);
-		return compoundNBT;
 	}
 
 	@Override

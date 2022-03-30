@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
@@ -62,7 +62,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		compoundNBT.putInt("bountyLevel", bountyLevel);
 		compoundNBT.putLong("lastUpdate", lastUpdate);
 		gameBoard.write(compoundNBT);
@@ -72,7 +72,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
+	public void read(CompoundTag nbt) {
 		bountyLevel = nbt.getInt("bountyLevel");
 		lastUpdate = nbt.getLong("lastUpdate");
 		gameBoard = new EscritoireGameBoard(nbt);
@@ -110,7 +110,7 @@ public class EscritoireGame implements INbtWritable, INbtReadable, IStreamable {
 		}
 	}
 
-	public void probe(ItemStack specimen, IInventory inventory, int startSlot, int slotCount) {
+	public void probe(ItemStack specimen, Container inventory, int startSlot, int slotCount) {
 		if (status != Status.PLAYING) {
 			return;
 		}

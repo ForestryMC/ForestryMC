@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import forestry.api.core.IItemSubtype;
 

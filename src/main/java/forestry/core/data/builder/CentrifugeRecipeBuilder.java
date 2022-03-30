@@ -15,12 +15,12 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.factory.recipes.RecipeSerializers;
@@ -46,11 +46,11 @@ public class CentrifugeRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, processingTime, input, outputs));
 	}
 
-	public static class Result implements IFinishedRecipe {
+	public static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final int processingTime;
 		private final Ingredient input;
@@ -86,7 +86,7 @@ public class CentrifugeRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return ICentrifugeRecipe.Companion.SERIALIZER;
 		}
 

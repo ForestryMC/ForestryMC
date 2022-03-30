@@ -11,8 +11,8 @@
 package forestry.farming.proxy;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.world.inventory.InventoryMenu;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,12 +38,12 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		FarmingBlocks.FARM.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
+		FarmingBlocks.FARM.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
 	}
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.gatherSprites(event);
@@ -51,7 +51,7 @@ public class ProxyFarmingClient extends ProxyFarming implements IClientModuleHan
 
 	@Override
 	public void handleSprites(TextureStitchEvent.Post event) {
-		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		EnumFarmBlockType.fillSprites(event);

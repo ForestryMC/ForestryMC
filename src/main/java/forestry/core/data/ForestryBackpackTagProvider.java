@@ -2,18 +2,18 @@ package forestry.core.data;
 
 import javax.annotation.Nullable;
 
-import forestry.apiculture.features.ApicultureBlocks;
-import forestry.core.config.Constants;
-import forestry.core.features.CoreItems;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Items;
+
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-import net.minecraft.data.BlockTagsProvider;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Items;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
+import forestry.core.config.Constants;
+import forestry.core.features.CoreItems;
 
 public class ForestryBackpackTagProvider extends ItemTagsProvider {
 
@@ -39,7 +39,7 @@ public class ForestryBackpackTagProvider extends ItemTagsProvider {
 		);
 		tag(ForestryTags.Items.MINER_REJECT);
 
-		copy(Tags.Blocks.DIRT, ForestryTags.Items.DIGGER_ALLOW);
+		copy(BlockTags.DIRT, ForestryTags.Items.DIGGER_ALLOW);
 		tag(ForestryTags.Items.DIGGER_ALLOW).addTags(
 				Tags.Items.COBBLESTONE,
 				Tags.Items.GRAVEL,
@@ -217,9 +217,7 @@ public class ForestryBackpackTagProvider extends ItemTagsProvider {
 				Items.IRON_DOOR,
 				Items.JUNGLE_DOOR,
 				Items.OAK_DOOR,
-				Items.SPRUCE_DOOR,
-				ApicultureBlocks.CANDLE.item(), //TODO tag
-				ApicultureBlocks.STUMP.item()
+				Items.SPRUCE_DOOR
 		);
 		tag(ForestryTags.Items.BUILDER_REJECT);
 

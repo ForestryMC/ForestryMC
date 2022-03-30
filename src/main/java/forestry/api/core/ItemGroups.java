@@ -5,16 +5,16 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
 
 /**
  * References to the specialised tabs added by Forestry to creative inventory.
  */
 public class ItemGroups {
 
-	public static ItemGroup tabStorage;
-	public static ItemGroup tabApiculture;
-	public static ItemGroup tabArboriculture;
-	public static ItemGroup tabLepidopterology;
+	public static CreativeModeTab tabStorage;
+	public static CreativeModeTab tabApiculture;
+	public static CreativeModeTab tabArboriculture;
+	public static CreativeModeTab tabLepidopterology;
 
 }

@@ -13,15 +13,16 @@ package forestry.energy.tiles;
 import java.io.IOException;
 import java.util.Collection;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -41,7 +42,7 @@ import forestry.energy.features.EnergyTiles;
 import forestry.energy.gui.ContainerEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 
-public class TileEnginePeat extends TileEngine implements ISidedInventory {
+public class TileEnginePeat extends TileEngine implements WorldlyContainer {
 	private ItemStack fuel = ItemStack.EMPTY;
 	private int burnTime;
 	private int totalBurnTime;
@@ -49,8 +50,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	private final int ashForItem;
 	private final AdjacentInventoryCache inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 
-	public TileEnginePeat() {
-		super(EnergyTiles.PEAT_ENGINE.tileType(), "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
+	public TileEnginePeat(BlockPos pos, BlockState state) {
+		super(EnergyTiles.PEAT_ENGINE.tileType(), pos, state, "engine.copper", Constants.ENGINE_COPPER_HEAT_MAX, 200000);
 
 		ashForItem = Constants.ENGINE_COPPER_ASH_FOR_ITEM;
 		setInternalInventory(new InventoryEnginePeat(this));
@@ -218,12 +219,12 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	/* AUTO-EJECTING */
-	private IInventory getWasteInventory() {
+	private Container getWasteInventory() {
 		return new InventoryMapper(this, InventoryEnginePeat.SLOT_WASTE_1, InventoryEnginePeat.SLOT_WASTE_COUNT);
 	}
 
 	private void dumpStash() {
-		IInventory wasteInventory = getWasteInventory();
+		Container wasteInventory = getWasteInventory();
 
 		IItemHandler wasteItemHandler = new InvWrapper(wasteInventory);
 
@@ -262,11 +263,11 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 	// / LOADING AND SAVING
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		if (compoundNBT.contains("EngineFuelItemStack")) {
-			CompoundNBT fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
+			CompoundTag fuelItemNbt = compoundNBT.getCompound("EngineFuelItemStack");
 			fuel = ItemStack.of(fuelItemNbt);
 		}
 
@@ -279,8 +280,8 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		if (!fuel.isEmpty()) {
 			compoundNBT.put("EngineFuelItemStack", fuel.serializeNBT());
@@ -289,7 +290,6 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 		compoundNBT.putInt("EngineBurnTime", burnTime);
 		compoundNBT.putInt("EngineTotalTime", totalBurnTime);
 		compoundNBT.putInt("AshProduction", ashProduction);
-		return compoundNBT;
 	}
 
 	@Override
@@ -307,7 +307,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerEnginePeat(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerEnginePeat(windowId, player.getInventory(), this);
 	}
 }

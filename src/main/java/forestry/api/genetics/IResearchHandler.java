@@ -2,9 +2,9 @@ package forestry.api.genetics;
 
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -40,7 +40,7 @@ public interface IResearchHandler<I extends IIndividual> extends IRootComponent<
 	/**
 	 * @return ItemStacks representing the bounty for this research success.
 	 */
-	NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel);
+	NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, Level world, GameProfile gameProfile, I individual, int bountyLevel);
 
 	@Override
 	ComponentKey<IResearchHandler> getKey();

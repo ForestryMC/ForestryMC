@@ -13,12 +13,12 @@ package forestry.core.multiblock;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -33,11 +33,11 @@ import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
 import forestry.core.owner.OwnerHandler;
 
-public abstract class MultiblockControllerForestry extends MultiblockControllerBase implements ISidedInventory, IOwnedTile, IErrorLogicSource, ILocatable {
+public abstract class MultiblockControllerForestry extends MultiblockControllerBase implements WorldlyContainer, IOwnedTile, IErrorLogicSource, ILocatable {
 	private final OwnerHandler ownerHandler;
 	private final IErrorLogic errorLogic;
 
-	protected MultiblockControllerForestry(World world) {
+	protected MultiblockControllerForestry(Level world) {
 		super(world);
 
 		this.ownerHandler = new OwnerHandler();
@@ -55,7 +55,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return world;
 	}
 
@@ -94,13 +94,13 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 
 	/* INbtWritable */
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		ownerHandler.write(data);
 		return data;
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		ownerHandler.read(data);
 	}
 
@@ -146,12 +146,12 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	}
 
 	@Override
-	public final void startOpen(PlayerEntity player) {
+	public final void startOpen(Player player) {
 		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void stopOpen(PlayerEntity player) {
+	public final void stopOpen(Player player) {
 		getInternalInventory().stopOpen(player);
 	}
 
@@ -167,7 +167,7 @@ public abstract class MultiblockControllerForestry extends MultiblockControllerB
 	//	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity player) {
+	public final boolean stillValid(Player player) {
 		return getInternalInventory().stillValid(player);
 	}
 

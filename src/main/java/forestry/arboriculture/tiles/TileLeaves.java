@@ -11,17 +11,19 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,7 +31,6 @@ import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.common.util.Constants;
 
 import forestry.api.arboriculture.EnumFruitFamily;
 import forestry.api.arboriculture.IFruitProvider;
@@ -99,19 +100,19 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	private IEffectData[] effectData = new IEffectData[2];
 
-	public TileLeaves() {
-		super(ArboricultureTiles.LEAVES.tileType());
+	public TileLeaves(BlockPos pos, BlockState state) {
+		super(ArboricultureTiles.LEAVES.tileType(), pos, state);
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		ripeningTime = compoundNBT.getShort(NBT_RIPENING);
 		damage = compoundNBT.getInt(NBT_DAMAGE);
 		isFruitLeaf = compoundNBT.getBoolean(NBT_FRUIT_LEAF);
-		checkFruit = !compoundNBT.contains(NBT_FRUIT_LEAF, Constants.NBT.TAG_ANY_NUMERIC);
+		checkFruit = !compoundNBT.contains(NBT_FRUIT_LEAF, Tag.TAG_ANY_NUMERIC);
 
 		if (compoundNBT.contains(NBT_CATERPILLAR)) {
 			maturationTime = compoundNBT.getInt(NBT_MATURATION);
@@ -125,8 +126,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt(NBT_RIPENING, getRipeningTime());
 		compoundNBT.putInt(NBT_DAMAGE, damage);
@@ -135,15 +136,14 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 		if (caterpillar != null) {
 			compoundNBT.putInt(NBT_MATURATION, maturationTime);
 
-			CompoundNBT caterpillarNbt = new CompoundNBT();
+			CompoundTag caterpillarNbt = new CompoundTag();
 			caterpillar.write(caterpillarNbt);
 			compoundNBT.put(NBT_CATERPILLAR, caterpillarNbt);
 		}
-		return compoundNBT;
 	}
 
 	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
 		ITree tree = getTree();
 		if (tree == null) {
 			return;
@@ -231,7 +231,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public int getFoliageColour(PlayerEntity player) {
+	public int getFoliageColour(Player player) {
 		final boolean showPollinated = isPollinatedState && GeneticsUtil.hasNaturalistEye(player);
 		final int baseColor = getLeafSpriteProvider().getColor(showPollinated);
 
@@ -561,7 +561,8 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(worldPosition);
+		Level level = Objects.requireNonNull(this.level);
+		return level.getBiome(worldPosition).value();
 	}
 
 	@Override
@@ -575,7 +576,7 @@ public class TileLeaves extends TileTreeContainer implements IPollinatable, IFru
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return level;
 	}
 }

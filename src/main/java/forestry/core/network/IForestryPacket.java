@@ -12,10 +12,10 @@ package forestry.core.network;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public interface IForestryPacket {
-	Pair<PacketBuffer, Integer> getPacketData();
+	Pair<FriendlyByteBuf, Integer> getPacketData();
 
 	IPacketId getPacketId();
 }

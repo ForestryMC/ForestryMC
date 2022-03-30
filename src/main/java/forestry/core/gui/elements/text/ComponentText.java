@@ -1,30 +1,30 @@
 package forestry.core.gui.elements.text;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-class ComponentText extends AbstractTextElement<ITextComponent, ComponentText> {
+class ComponentText extends AbstractTextElement<Component, ComponentText> {
 
-	public ComponentText(ITextComponent component) {
+	public ComponentText(Component component) {
 		super(component);
 	}
 
 	@Override
 	public LabelElement setValue(Object text) {
-		if (text instanceof ITextComponent) {
-			this.text = (ITextComponent) text;
+		if (text instanceof Component) {
+			this.text = (Component) text;
 		} else if (text instanceof String) {
-			this.text = new StringTextComponent((String) text);
+			this.text = new TextComponent((String) text);
 		}
 		requestLayout();
 		return this;
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		if (shadow) {
 			FONT_RENDERER.drawShadow(transform, text, 0, 0, 0);
 		} else {
@@ -33,7 +33,7 @@ class ComponentText extends AbstractTextElement<ITextComponent, ComponentText> {
 	}
 
 	@Override
-	protected int calcWidth(FontRenderer font) {
+	protected int calcWidth(Font font) {
 		return font.width(text);
 	}
 

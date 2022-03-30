@@ -3,12 +3,12 @@ package forestry.core.data;
 import java.util.Collection;
 import java.util.Map;
 
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.loot.conditions.Alternative;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.loot.conditions.MatchTool;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 
@@ -33,8 +33,8 @@ public class ForestryLootModifierProvider extends GlobalLootModifierProvider {
 			String[] extensions = mapEntry.getValue().stream().map(entry -> entry.extension).toArray(String[]::new);
 			add(mapEntry.getKey().getPath(), ConditionLootModifier.SERIALIZER, new ConditionLootModifier(mapEntry.getKey(), extensions));
 		}
-		add("grafter", GrafterLootModifier.SERIALIZER, new GrafterLootModifier(new ILootCondition[]{
-				Alternative.alternative(
+		add("grafter", GrafterLootModifier.SERIALIZER, new GrafterLootModifier(new LootItemCondition[]{
+				AlternativeLootItemCondition.alternative(
 						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ArboricultureItems.GRAFTER.item())),
 						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ArboricultureItems.GRAFTER_PROVEN.item()))
 				).build()

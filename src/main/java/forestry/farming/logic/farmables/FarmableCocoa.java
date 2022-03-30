@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CocoaBlock;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.core.utils.BlockUtil;
 
@@ -27,7 +27,7 @@ public class FarmableCocoa extends FarmableAgingCrop {
 	}
 
 	@Override
-	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(Player player, ItemStack germling, Level world, BlockPos pos) {
 		return BlockUtil.tryPlantCocoaPod(world, pos);
 	}
 }

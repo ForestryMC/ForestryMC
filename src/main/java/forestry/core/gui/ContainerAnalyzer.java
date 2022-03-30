@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
@@ -24,12 +24,12 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAnalyzer extends ContainerLiquidTanks<TileAnalyzer> {
 
-	public static ContainerAnalyzer fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+	public static ContainerAnalyzer fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
 		TileAnalyzer analyzer = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileAnalyzer.class);
 		return new ContainerAnalyzer(windowId, playerInv, analyzer);    //TODO what to do if analyzer null
 	}
 
-	public ContainerAnalyzer(int windowId, PlayerInventory player, TileAnalyzer tile) {
+	public ContainerAnalyzer(int windowId, Inventory player, TileAnalyzer tile) {
 		super(windowId, CoreContainers.ANALYZER.containerType(), player, tile, 8, 94);
 
 		// Input buffer

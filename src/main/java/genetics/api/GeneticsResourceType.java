@@ -1,7 +1,5 @@
 package genetics.api;
 
-import net.minecraftforge.resource.IResourceType;
-
-public enum GeneticsResourceType implements IResourceType {
+public enum GeneticsResourceType {
 	ALLELE, ROOT, CHROMOSOMES, MUTATIONS
 }

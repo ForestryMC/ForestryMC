@@ -13,14 +13,15 @@ package forestry.core.tiles;
 import java.io.IOException;
 import java.util.Optional;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import com.mojang.authlib.GameProfile;
 
@@ -45,29 +46,28 @@ import genetics.api.individual.IIndividual;
 import genetics.api.root.IIndividualRoot;
 import genetics.utils.RootUtils;
 
-public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
+public class TileEscritoire extends TileBase implements WorldlyContainer, ISlotPickupWatcher, IStreamableGui, IItemStackDisplay {
 
 	private final EscritoireGame game = new EscritoireGame();
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
-	public TileEscritoire() {
-		super(CoreTiles.ESCRITOIRE.tileType());
+	public TileEscritoire(BlockPos pos, BlockState state) {
+		super(CoreTiles.ESCRITOIRE.tileType(), pos, state);
 		setInternalInventory(new InventoryEscritoire(this));
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		game.read(compoundNBT);
 	}
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		game.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	/* GAME */
@@ -150,7 +150,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 
 	/* ISlotPickupWatcher */
 	@Override
-	public void onTake(int slotIndex, PlayerEntity player) {
+	public void onTake(int slotIndex, Player player) {
 		if (slotIndex == InventoryEscritoire.SLOT_ANALYZE) {
 			game.reset();
 			PacketItemStackDisplay packet = new PacketItemStackDisplay(this, getIndividualOnDisplay());
@@ -168,7 +168,7 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerEscritoire(windowId, player, this);
 	}
 

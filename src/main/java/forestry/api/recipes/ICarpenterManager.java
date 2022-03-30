@@ -6,16 +6,14 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -38,7 +36,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 *
 	 * @param box       ItemStack of one item representing the required box (carton, crate) for this recipe. May be null.
 	 * @param product   Crafting result.
-	 * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+	 * @param materials Materials needed in the crafting matrix. This gets passed directly to {@link net.minecraft.world.item.crafting.ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(ItemStack box, ItemStack product, Object... materials);
 
@@ -48,7 +46,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param packagingTime Number of work cycles required to craft the recipe once.
 	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
 	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link net.minecraft.world.item.crafting.ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials);
 
@@ -59,7 +57,7 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param liquid        Liquid required in carpenter's tank.
 	 * @param box           ItemStack of one item representing the required box (carton, crate) for this recipe. May be empty.
 	 * @param product       Crafting result.
-	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link ShapedRecipe}. Notation is the same.
+	 * @param materials     Materials needed in the crafting matrix. This gets passed directly to {@link net.minecraft.world.item.crafting.ShapedRecipe}. Notation is the same.
 	 */
 	void addRecipe(int packagingTime, @Nullable FluidStack liquid, ItemStack box, ItemStack product, Object... materials);
 
@@ -72,13 +70,11 @@ public interface ICarpenterManager extends ICraftingProvider<ICarpenterRecipe> {
 	 * @param world		Current world
 	 * @return An optional carpenter recipe if any matches
 	 */
-	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world);
+	Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, Container inventory, Level world);
 
-	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world);
+	boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, Container craftingInventory, Level world);
 
 	boolean isBox(@Nullable RecipeManager recipeManager, ItemStack resource);
-
-	Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output);
 
 	Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager);
 }

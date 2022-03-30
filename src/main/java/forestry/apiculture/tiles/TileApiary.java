@@ -15,15 +15,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
@@ -44,8 +45,8 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	private final IBeeListener beeListener = new ApiaryBeeListener(this);
 	private final InventoryApiary inventory = new InventoryApiary();
 
-	public TileApiary() {
-		super(ApicultureTiles.APIARY.tileType(), "apiary");
+	public TileApiary(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.APIARY.tileType(), pos, state, "apiary");
 		setInternalInventory(inventory);
 	}
 
@@ -81,12 +82,12 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerBeeHousing(windowId, player.inventory, this, true, GuiBeeHousing.Icon.APIARY);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerBeeHousing(windowId, player.getInventory(), this, true, GuiBeeHousing.Icon.APIARY);
 	}
 
 	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		NetworkHooks.openGui(player, this, p -> {
 			PacketBufferForestry forestryP = new PacketBufferForestry(p);
 			forestryP.writeBlockPos(pos);

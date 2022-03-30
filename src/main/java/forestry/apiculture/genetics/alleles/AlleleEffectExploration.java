@@ -12,7 +12,7 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import genetics.api.individual.IGenome;
 
@@ -27,8 +27,8 @@ public class AlleleEffectExploration extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-		for (PlayerEntity player : players) {
+		List<Player> players = getEntitiesInRange(genome, housing, Player.class);
+		for (Player player : players) {
 			player.giveExperiencePoints(2);
 		}
 

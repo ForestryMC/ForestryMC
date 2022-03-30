@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,6 +33,8 @@ import genetics.api.root.IRootDefinition;
 import genetics.utils.AlleleUtils;
 import genetics.utils.RootUtils;
 
+import forestry.api.genetics.filter.IFilterLogic.INetworkHandler;
+
 public class FilterLogic implements IFilterLogic {
 	private final ILocatable locatable;
 	private final INetworkHandler networkHandler;
@@ -53,7 +55,7 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			data.putString("TypeFilter" + i, filterRules[i].getUID());
 		}
@@ -76,7 +78,7 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			filterRules[i] = AlleleManager.filterRegistry.getRuleOrDefault(data.getString("TypeFilter" + i));
 		}
@@ -96,7 +98,7 @@ public class FilterLogic implements IFilterLogic {
 	}
 
 	@Override
-	public void writeGuiData(PacketBuffer data) {
+	public void writeGuiData(FriendlyByteBuf data) {
 		for (IFilterRuleType filterRule : filterRules) {
 			data.writeShort(AlleleManager.filterRegistry.getId(filterRule));
 		}
@@ -127,7 +129,7 @@ public class FilterLogic implements IFilterLogic {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void readGuiData(PacketBuffer data) {
+	public void readGuiData(FriendlyByteBuf data) {
 		for (int i = 0; i < filterRules.length; i++) {
 			filterRules[i] = AlleleManager.filterRegistry.getRule(data.readShort());
 		}

@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -84,7 +84,7 @@ public class ResearchHandler<I extends IIndividual> implements IResearchHandler<
 	}
 
 	@Override
-	public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile gameProfile, I individual, int bountyLevel) {
+	public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, Level world, GameProfile gameProfile, I individual, int bountyLevel) {
 		NonNullList<ItemStack> bounty = NonNullList.create();
 		if (world.random.nextFloat() < bountyLevel / 16.0f) {
 			IMutationContainer<I, ? extends IMutation> container = root.getComponent(ComponentKeys.MUTATIONS);

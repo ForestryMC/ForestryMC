@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import net.minecraftforge.registries.ObjectHolder;
 
@@ -21,11 +21,11 @@ import forestry.api.circuits.ICircuitLayout;
 
 public interface ISolderRecipe extends IForestryRecipe {
 
-	IRecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
+	RecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
 
 	class Companion {
 		@ObjectHolder("forestry:solder")
-		public static final IRecipeSerializer<ISolderRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<ISolderRecipe> SERIALIZER = null;
 	}
 
 	boolean matches(ICircuitLayout layout, ItemStack itemstack);
@@ -37,12 +37,12 @@ public interface ISolderRecipe extends IForestryRecipe {
 	ICircuit getCircuit();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return ISolderRecipe.Companion.SERIALIZER;
 	}
 }

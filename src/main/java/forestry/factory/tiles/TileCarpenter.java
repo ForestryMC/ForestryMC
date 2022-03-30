@@ -14,16 +14,17 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Optional;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftResultInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ResultContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,7 +55,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
 
-public class TileCarpenter extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
+public class TileCarpenter extends TilePowered implements WorldlyContainer, ILiquidTankTile, IItemStackDisplay {
 
 	private static final int TICKS_PER_RECIPE_TIME = 1;
 	private static final int ENERGY_PER_WORK_CYCLE = 2040;
@@ -63,7 +64,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	private final InventoryAdapterTile craftingInventory;
-	private final CraftResultInventory craftPreviewInventory;
+	private final ResultContainer craftPreviewInventory;
 
 	@Nullable
 	private ICarpenterRecipe currentRecipe;
@@ -72,13 +73,13 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		return getInternalInventory().getItem(InventoryCarpenter.SLOT_BOX);
 	}
 
-	public TileCarpenter() {
-		super(FactoryTiles.CARPENTER.tileType(), 1100, 4000);
+	public TileCarpenter(BlockPos pos, BlockState state) {
+		super(FactoryTiles.CARPENTER.tileType(), pos, state, 1100, 4000);
 		setEnergyPerWorkCycle(ENERGY_PER_WORK_CYCLE);
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(() -> RecipeManagers.carpenterManager.getRecipeFluids(getLevel().getRecipeManager()));
 
 		craftingInventory = new InventoryGhostCrafting<>(this, 10);
-		craftPreviewInventory = new CraftResultInventory();
+		craftPreviewInventory = new ResultContainer();
 		setInternalInventory(new InventoryCarpenter(this));
 
 		tankManager = new TankManager(this, resourceTank);
@@ -87,17 +88,16 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		tankManager.write(compoundNBT);
 		craftingInventory.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tankManager.read(compoundNBT);
 		craftingInventory.read(compoundNBT);
 	}
@@ -169,7 +169,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 		}
 
 		FluidStack fluid = currentRecipe.getFluidResource();
-		if (fluid != null && !fluid.isEmpty()) {
+		if (!fluid.isEmpty()) {
 			FluidStack drained = resourceTank.drainInternal(fluid, IFluidHandler.FluidAction.SIMULATE);
 			if (!fluid.isFluidStackIdentical(drained)) {
 				return false;
@@ -197,7 +197,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 			}
 		}
 
-		IInventory inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
+		Container inventory = new InventoryMapper(getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
 		return InventoryUtil.consumeIngredients(inventory, currentRecipe.getCraftingGridRecipe().getIngredients(), null, true, false, doRemove);
 	}
 
@@ -238,11 +238,11 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	/**
 	 * @return Inaccessible crafting inventory for the craft grid.
 	 */
-	public IInventory getCraftingInventory() {
+	public Container getCraftingInventory() {
 		return craftingInventory;
 	}
 
-	public IInventory getCraftPreviewInventory() {
+	public Container getCraftPreviewInventory() {
 		return craftPreviewInventory;
 	}
 
@@ -267,7 +267,7 @@ public class TileCarpenter extends TilePowered implements ISidedInventory, ILiqu
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerCarpenter(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerCarpenter(windowId, player.getInventory(), this);
 	}
 }

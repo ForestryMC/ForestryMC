@@ -2,7 +2,7 @@ package genetics.individual;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IChromosomeType;

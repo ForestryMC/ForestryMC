@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.worktable.inventory;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import forestry.core.gui.ContainerDummy;
 import forestry.worktable.gui.ContainerWorktable;
 
-public class CraftingInventoryForestry extends CraftingInventory {
-	private final Container eventHandlerIn;
+public class CraftingInventoryForestry extends CraftingContainer {
+	private final AbstractContainerMenu eventHandlerIn;
 
 	public CraftingInventoryForestry(ContainerWorktable containerWorktable) {
 		this(containerWorktable, 3, 3);
@@ -27,7 +27,7 @@ public class CraftingInventoryForestry extends CraftingInventory {
 		this(ContainerDummy.instance, 3, 3);
 	}
 
-	private CraftingInventoryForestry(Container eventHandlerIn, int width, int height) {
+	private CraftingInventoryForestry(AbstractContainerMenu eventHandlerIn, int width, int height) {
 		super(eventHandlerIn, width, height);
 		this.eventHandlerIn = eventHandlerIn;
 	}

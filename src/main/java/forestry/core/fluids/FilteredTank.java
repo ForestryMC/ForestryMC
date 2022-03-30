@@ -18,15 +18,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -99,12 +99,12 @@ public class FilteredTank extends StandardTank {
 			}
 		} else {
 			//TODO can this be simplified
-			ITextComponent tmiComponent = new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.tooltip.tmi"))
-					.append(new StringTextComponent(">"));
-			toolTip.add(tmiComponent, TextFormatting.ITALIC);
+			Component tmiComponent = new TextComponent("<")
+					.append(new TranslatableComponent("for.gui.tooltip.tmi"))
+					.append(new TextComponent(">"));
+			toolTip.add(tmiComponent, ChatFormatting.ITALIC);
 		}
-		toolTip.add(new TranslationTextComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
+		toolTip.add(new TranslatableComponent("for.gui.tooltip.liquid.amount", getFluidAmount(), getCapacity()));
 	}
 
 }

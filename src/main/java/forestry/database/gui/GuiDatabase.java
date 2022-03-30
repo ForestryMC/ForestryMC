@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import org.lwjgl.glfw.GLFW;
@@ -42,7 +42,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	private final ArrayList<DatabaseItem> sorted = new ArrayList<>();
 	/* Attributes - Gui Elements */
 	@Nullable
-	private TextFieldWidget searchField;
+	private EditBox searchField;
 	private WidgetScrollBar scrollBar;
 	/* Attributes - State */
 	private boolean markedForSorting;
@@ -50,7 +50,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	private DatabaseItem selectedItem;
 
 	/* Constructors */
-	public GuiDatabase(ContainerDatabase container, PlayerInventory inv, ITextComponent title) {
+	public GuiDatabase(ContainerDatabase container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/database_inventory.png", container, inv, container.getTile(), 7, 140, 20, true, container.getTile().getInternalInventory().getContainerSize(), 0);
 		this.tile = container.getTile();
 
@@ -61,8 +61,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		Iterator<Slot> slotIterator = container.slots.listIterator(ContainerForestry.PLAYER_INV_SLOTS);
 		while (slotIterator.hasNext()) {
 			Slot slot = slotIterator.next();
-			if (slot instanceof SlotFilteredInventory) {
-				SlotFilteredInventory slotDatabase = (SlotFilteredInventory) slot;
+			if (slot instanceof SlotFilteredInventory slotDatabase) {
 				slotDatabase.setChangeWatcher(this);
 			}
 		}
@@ -191,8 +190,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement Screen */
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		this.searchField.tick();
 	}
 
@@ -200,19 +199,19 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	public void init() {
 		super.init();
 
-		this.searchField = new TextFieldWidget(this.minecraft.font, this.leftPos + 101, this.topPos + 6, 80, this.minecraft.font.lineHeight, null);
+		this.searchField = new EditBox(this.minecraft.font, this.leftPos + 101, this.topPos + 6, 80, this.minecraft.font.lineHeight, null);
 		this.searchField.setMaxLength(50);
 		this.searchField.setBordered(false);
 		this.searchField.setTextColor(16777215);
-		children.add(searchField);
+		this.renderables.add(searchField);
 
-		addButton(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
+		addRenderableWidget(new GuiDatabaseButton<>(leftPos - 18, topPos, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON, b -> ((GuiDatabaseButton) b).onPressed()));    //TODO cast should be safe?
 
 		updateViewedItems();
 	}
 
 	@Override
-	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack transform, int mouseX, int mouseY, float partialTicks) {
 		String searchText = searchField != null ? searchField.getValue() : "";
 		updateItems(searchText);
 		super.render(transform, mouseX, mouseY, partialTicks);
@@ -254,19 +253,19 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement ContainerScreen */
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		if (searchField != null) {
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-			RenderSystem.disableLighting();
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			// RenderSystem.disableLighting();
 			this.searchField.render(transform, mouseX, mouseY, partialTicks);
 		}
 	}
 
 	/* Methods - Implement GuiForestry */
 	@Override
-	protected void drawBackground(MatrixStack transform) {
+	protected void drawBackground(PoseStack transform) {
 		bindTexture(textureFile);
 
 		blit(transform, leftPos, topPos, 0, 0, imageWidth, imageHeight);
@@ -285,7 +284,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement IGeneticAnalyzerProvider */
 	@Override
-	protected void drawSelectedSlot(MatrixStack transform, int selectedSlot) {
+	protected void drawSelectedSlot(PoseStack transform, int selectedSlot) {
 		//Currently not used
 	}
 
@@ -339,7 +338,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	/* Methods - Implement ISlotChangeWatcher */
 	@Override
-	public void onSlotChanged(IInventory inventory, int slot) {
+	public void onSlotChanged(Container inventory, int slot) {
 		super.onSlotChanged(inventory, slot);
 		markForSorting();
 	}

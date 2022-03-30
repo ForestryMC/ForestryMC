@@ -2,31 +2,32 @@ package forestry.sorting.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.blocks.BlockForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.sorting.tiles.TileGeneticFilter;
 
-public class BlockGeneticFilter extends BlockForestry {
+public class BlockGeneticFilter extends BlockForestry implements EntityBlock {
 	public static final BooleanProperty NORTH = BooleanProperty.create("north");
 	public static final BooleanProperty EAST = BooleanProperty.create("east");
 	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
@@ -34,14 +35,14 @@ public class BlockGeneticFilter extends BlockForestry {
 	public static final BooleanProperty UP = BooleanProperty.create("up");
 	public static final BooleanProperty DOWN = BooleanProperty.create("down");
 
-	private static final AxisAlignedBB BOX_CENTER = new AxisAlignedBB(0.3125, 0.3125, 0.3125, 0.6875, 0.6875, 0.6875);
-	private static final AxisAlignedBB BOX_DOWN = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.3125, 0.75);
-	private static final AxisAlignedBB BOX_UP = new AxisAlignedBB(0.25, 0.6875, 0.25, 0.75, 1, 0.75);
-	private static final AxisAlignedBB BOX_NORTH = new AxisAlignedBB(0.25, 0.25, 0, 0.75, 0.75, 0.3125);
-	private static final AxisAlignedBB BOX_SOUTH = new AxisAlignedBB(0.25, 0.25, 0.6875, 0.75, 0.75, 1);
-	private static final AxisAlignedBB BOX_WEST = new AxisAlignedBB(0, 0.25, 0.25, 0.3125, 0.75, 0.75);
-	private static final AxisAlignedBB BOX_EAST = new AxisAlignedBB(0.6875, 0.25, 0.25, 1, 0.75, 0.75);
-	private static final AxisAlignedBB[] BOX_FACES = {BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST};
+	private static final AABB BOX_CENTER = new AABB(0.3125, 0.3125, 0.3125, 0.6875, 0.6875, 0.6875);
+	private static final AABB BOX_DOWN = new AABB(0.25, 0, 0.25, 0.75, 0.3125, 0.75);
+	private static final AABB BOX_UP = new AABB(0.25, 0.6875, 0.25, 0.75, 1, 0.75);
+	private static final AABB BOX_NORTH = new AABB(0.25, 0.25, 0, 0.75, 0.75, 0.3125);
+	private static final AABB BOX_SOUTH = new AABB(0.25, 0.25, 0.6875, 0.75, 0.75, 1);
+	private static final AABB BOX_WEST = new AABB(0, 0.25, 0.25, 0.3125, 0.75, 0.75);
+	private static final AABB BOX_EAST = new AABB(0.6875, 0.25, 0.25, 1, 0.75, 0.75);
+	private static final AABB[] BOX_FACES = {BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST};
 
 	public BlockGeneticFilter() {
 		super(Block.Properties.of(Material.WOOD)
@@ -59,7 +60,7 @@ public class BlockGeneticFilter extends BlockForestry {
 				.setValue(DOWN, false));
 	}
 
-	public BlockState updateShape(BlockState state, Direction direction, BlockState changedState, IWorld world, BlockPos pos, BlockPos changedPos) {
+	public BlockState updateShape(BlockState state, Direction direction, BlockState changedState, LevelAccessor world, BlockPos pos, BlockPos changedPos) {
 		TileGeneticFilter geneticFilter = TileUtil.getTile(world, pos, TileGeneticFilter.class);
 		if (geneticFilter == null) {
 			return defaultBlockState();
@@ -73,18 +74,18 @@ public class BlockGeneticFilter extends BlockForestry {
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult rayTraceResult) {
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult rayTraceResult) {
 		TileGeneticFilter tile = TileUtil.getTile(worldIn, pos, TileGeneticFilter.class);
 		if (tile != null) {
 			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 				if (!worldIn.isClientSide) {
-					ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;
+					ServerPlayer sPlayer = (ServerPlayer) playerIn;
 					NetworkHooks.openGui(sPlayer, tile, pos);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	//TODO bounding boxes
@@ -142,13 +143,13 @@ public class BlockGeneticFilter extends BlockForestry {
 	//	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
 	}
 
 	@Override
 	@Nullable
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileGeneticFilter();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileGeneticFilter(pos, state);
 	}
 }

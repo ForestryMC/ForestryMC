@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.fuels;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class FermenterFuel {
 	private final ItemStack item;

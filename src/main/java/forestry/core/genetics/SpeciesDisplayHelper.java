@@ -3,7 +3,7 @@ package forestry.core.genetics;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.individual.IIndividual;

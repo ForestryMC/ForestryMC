@@ -13,12 +13,13 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,11 +35,11 @@ public class ItemForestry extends Item {
 		this(ItemGroupForestry.tabForestry);
 	}
 
-	public ItemForestry(ItemGroup group) {
+	public ItemForestry(CreativeModeTab group) {
 		this(new Item.Properties(), group);
 	}
 
-	public ItemForestry(Item.Properties properties, ItemGroup creativeTab) {
+	public ItemForestry(Item.Properties properties, CreativeModeTab creativeTab) {
 		this(properties.tab(creativeTab));
 	}
 
@@ -52,13 +53,13 @@ public class ItemForestry extends Item {
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
 		return burnTime;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
 		super.appendHoverText(stack, world, tooltip, advanced);
 		ItemTooltipUtil.addInformation(stack, world, tooltip, advanced);
 	}

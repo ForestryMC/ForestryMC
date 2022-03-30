@@ -1,6 +1,6 @@
 package forestry.core.genetics;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
@@ -22,7 +22,7 @@ public enum DefaultDisplayHandler implements IGeneticTooltipProvider<IIndividual
 					.text("<")
 					.translated("for.gui.unknown")
 					.text(">")
-					.style(TextFormatting.GRAY)
+					.style(ChatFormatting.GRAY)
 					.create();
 		}
 	}, HYBRID(-2) {
@@ -32,7 +32,7 @@ public enum DefaultDisplayHandler implements IGeneticTooltipProvider<IIndividual
 			IAllele primary = genome.getActiveAllele(speciesType);
 			IAllele secondary = genome.getInactiveAllele(speciesType);
 			if (!individual.isPureBred(speciesType)) {
-				toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).style(TextFormatting.BLUE);
+				toolTip.translated("for.bees.hybrid", primary.getDisplayName(), secondary.getDisplayName()).style(ChatFormatting.BLUE);
 			}
 		}
 	};

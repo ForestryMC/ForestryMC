@@ -15,24 +15,24 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -64,7 +64,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		this(definition, type, ItemGroups.tabStorage);
 	}
 
-	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, ItemGroup tab) {
+	public ItemBackpack(IBackpackDefinition definition, EnumBackpackType type, CreativeModeTab tab) {
 		super((new Item.Properties()).tab(tab));
 		Preconditions.checkNotNull(definition, "Backpack must have a backpack definition.");
 		Preconditions.checkNotNull(type, "Backpack must have a backpack type.");
@@ -78,42 +78,42 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Override
-	protected void writeContainerData(ServerPlayerEntity player, ItemStack stack, PacketBufferForestry buffer) {
+	protected void writeContainerData(ServerPlayer player, ItemStack stack, PacketBufferForestry buffer) {
 		buffer.writeEnum(type == EnumBackpackType.WOVEN ? ContainerBackpack.Size.T2 : ContainerBackpack.Size.DEFAULT, ContainerBackpack.Size.values());
 		buffer.writeItem(stack);
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		if (!playerIn.isShiftKeyDown()) {
 			return super.use(worldIn, playerIn, handIn);
 		} else {
 			ItemStack heldItem = playerIn.getItemInHand(handIn);
 			switchMode(heldItem);
-			return ActionResult.success(heldItem);
+			return InteractionResultHolder.success(heldItem);
 		}
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext ctx) {
+	public InteractionResult useOn(UseOnContext ctx) {
 		if (getInventoryHit(ctx.getLevel(), ctx.getClickedPos(), ctx.getClickedFace()) != null) {
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-		PlayerEntity player = context.getPlayer();
+	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+		Player player = context.getPlayer();
 		// We only do this when shift is clicked
 		if (player.isShiftKeyDown()) {
 			ItemStack heldItem = player.getItemInHand(context.getHand());
-			return evaluateTileHit(heldItem, player, context.getLevel(), context.getClickedPos(), context.getClickedFace()) ? ActionResultType.PASS : ActionResultType.FAIL;
+			return evaluateTileHit(heldItem, player, context.getLevel(), context.getClickedPos(), context.getClickedFace()) ? InteractionResult.PASS : InteractionResult.FAIL;
 		}
 		return super.onItemUseFirst(stack, context);
 	}
 
-	public static void tryStowing(PlayerEntity player, ItemStack backpackStack, ItemStack stack) {
+	public static void tryStowing(Player player, ItemStack backpackStack, ItemStack stack) {
 		if (getMode(backpackStack) == BackpackMode.LOCKED) {
 			return;
 		}
@@ -146,12 +146,12 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	@Nullable
-	private static IItemHandler getInventoryHit(World world, BlockPos pos, Direction side) {
-		TileEntity targeted = TileUtil.getTile(world, pos);
+	private static IItemHandler getInventoryHit(Level world, BlockPos pos, Direction side) {
+		BlockEntity targeted = TileUtil.getTile(world, pos);
 		return TileUtil.getInventoryFromTile(targeted, side);
 	}
 
-	private boolean evaluateTileHit(ItemStack stack, PlayerEntity player, World world, BlockPos pos, Direction side) {
+	private boolean evaluateTileHit(ItemStack stack, Player player, Level world, BlockPos pos, Direction side) {
 
 		// Shift right-clicking on an inventory tile will attempt to transfer
 		// items contained in the backpack
@@ -198,7 +198,7 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, world, list, flag);
 
 		int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -206,13 +206,13 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(new TranslationTextComponent(infoKey).withStyle(TextFormatting.GRAY));
+			list.add(new TranslatableComponent(infoKey).withStyle(ChatFormatting.GRAY));
 		}
-		list.add(new TranslationTextComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).withStyle(TextFormatting.GRAY));
+		list.add(new TranslatableComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		return definition.getName(itemstack);
 	}
 
@@ -229,15 +229,11 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 	}
 
 	private static int getSlotsForType(EnumBackpackType type) {
-		switch (type) {
-			case NATURALIST:
-				return Constants.SLOTS_BACKPACK_APIARIST;
-			case WOVEN:
-				return Constants.SLOTS_BACKPACK_WOVEN;
-			case NORMAL:
-			default:
-				return Constants.SLOTS_BACKPACK_DEFAULT;
-		}
+		return switch (type) {
+			case NATURALIST -> Constants.SLOTS_BACKPACK_APIARIST;
+			case WOVEN -> Constants.SLOTS_BACKPACK_WOVEN;
+			case NORMAL -> Constants.SLOTS_BACKPACK_DEFAULT;
+		};
 	}
 
 	public static BackpackMode getMode(ItemStack backpack) {
@@ -270,19 +266,15 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 
 	@Override
 	@Nullable
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		Item item = heldItem.getItem();
-		if (!(item instanceof ItemBackpack)) {
+		if (!(item instanceof ItemBackpack backpack)) {
 			return null;
 		}
-		ItemBackpack backpack = (ItemBackpack) item;
-		switch (backpack.type) {
-			case NORMAL:
-				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
-			case WOVEN:
-				return new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
-			default:
-				return null;
-		}
+		return switch (backpack.type) {
+			case NORMAL -> new ContainerBackpack(windowId, player, ContainerBackpack.Size.DEFAULT, heldItem);
+			case WOVEN -> new ContainerBackpack(windowId, player, ContainerBackpack.Size.T2, heldItem);
+			default -> null;
+		};
 	}
 }

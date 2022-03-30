@@ -16,14 +16,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.fml.network.ICustomPacket;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.ICustomPacket;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import forestry.core.config.Constants;
 
@@ -61,7 +61,7 @@ public class PacketHandlerServer {
 	public void onPacket(NetworkEvent.ClientCustomPayloadEvent event) {
 		PacketBufferForestry data = new PacketBufferForestry(event.getPayload());
 		NetworkEvent.Context ctx = event.getSource().get();
-		ServerPlayerEntity player = ctx.getSender();
+		ServerPlayer player = ctx.getSender();
 
 		if (player == null) {
 			LOGGER.warn("the player was null, event: {}", event);
@@ -80,9 +80,9 @@ public class PacketHandlerServer {
 		event.getSource().get().setPacketHandled(true);
 	}
 
-	public static void sendPacket(IForestryPacketClient packet, ServerPlayerEntity player) {
-		Pair<PacketBuffer, Integer> packetData = packet.getPacketData();
-		ICustomPacket<IPacket<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
+	public static void sendPacket(IForestryPacketClient packet, ServerPlayer player) {
+		Pair<FriendlyByteBuf, Integer> packetData = packet.getPacketData();
+		ICustomPacket<Packet<?>> payload = NetworkDirection.PLAY_TO_CLIENT.buildPacket(packetData, PacketHandlerServer.CHANNEL_ID);
 		player.connection.send(payload.getThis());
 	}
 

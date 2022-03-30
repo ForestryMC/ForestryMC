@@ -10,22 +10,22 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
-	public GuiEnginePeat(ContainerEnginePeat container, PlayerInventory inventory, ITextComponent title) {
+	public GuiEnginePeat(ContainerEnginePeat container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", container, inventory, container.getTile(), title);
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		if (tile.isBurning()) {

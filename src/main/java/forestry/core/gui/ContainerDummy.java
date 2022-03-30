@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
-public class ContainerDummy extends Container {
+public class ContainerDummy extends AbstractContainerMenu {
 	public static final ContainerDummy instance = new ContainerDummy();
 
 	private ContainerDummy() {
@@ -21,7 +21,7 @@ public class ContainerDummy extends Container {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity PlayerEntity) {
+	public boolean stillValid(Player PlayerEntity) {
 		return true;
 	}
 

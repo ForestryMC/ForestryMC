@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -53,13 +53,13 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public Vector3i getArea() {
-		return Vector3i.ZERO;
+	public Vec3i getArea() {
+		return Vec3i.ZERO;
 	}
 
 	@Override
-	public Vector3i getOffset() {
-		return Vector3i.ZERO;
+	public Vec3i getOffset() {
+		return Vec3i.ZERO;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction) {
+	public boolean plantGermling(IFarmable farmable, Level world, BlockPos pos, FarmDirection direction) {
 		return false;
 	}
 
@@ -178,7 +178,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 	}
 
 	@Override
-	public boolean isValidPlatform(World world, BlockPos pos) {
+	public boolean isValidPlatform(Level world, BlockPos pos) {
 		return false;
 	}
 
@@ -230,22 +230,22 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		}
 
 		@Override
-		public IInventory getProductInventory() {
+		public Container getProductInventory() {
 			return FakeInventoryAdapter.instance();
 		}
 
 		@Override
-		public IInventory getGermlingsInventory() {
+		public Container getGermlingsInventory() {
 			return FakeInventoryAdapter.instance();
 		}
 
 		@Override
-		public IInventory getResourcesInventory() {
+		public Container getResourcesInventory() {
 			return FakeInventoryAdapter.instance();
 		}
 
 		@Override
-		public IInventory getFertilizerInventory() {
+		public Container getFertilizerInventory() {
 			return FakeInventoryAdapter.instance();
 		}
 

@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.energy.tiles.TileEngineBiogas;
 
 public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngineBiogas> {
-	public GuiEngineBiogas(ContainerEngineBiogas container, PlayerInventory inventory, ITextComponent title) {
+	public GuiEngineBiogas(ContainerEngineBiogas container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/bioengine.png", container, inventory, container.getTile(), title);
 		widgetManager.add(new TankWidget(widgetManager, 89, 19, 0));
 		widgetManager.add(new TankWidget(widgetManager, 107, 19, 1));
@@ -29,7 +29,7 @@ public class GuiEngineBiogas extends GuiEngine<ContainerEngineBiogas, TileEngine
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		int temperature = tile.getOperatingTemperatureScaled(16);

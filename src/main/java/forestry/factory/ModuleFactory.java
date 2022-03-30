@@ -10,19 +10,12 @@
  ******************************************************************************/
 package forestry.factory;
 
-import com.google.common.collect.Maps;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-
-import forestry.core.config.Preference;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -31,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.core.ForestryAPI;
 import forestry.api.fuels.EngineBronzeFuel;
 import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
@@ -43,7 +35,7 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.circuits.CircuitLayout;
 import forestry.core.circuits.Circuits;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
+import forestry.core.config.Preference;
 import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.core.items.definitions.EnumCraftingMaterial;
@@ -76,12 +68,9 @@ import forestry.factory.recipes.SqueezerRecipeManager;
 import forestry.factory.recipes.StillRecipeManager;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FACTORY, name = "Factory", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.factory.description", lootTable = "factory")
 public class ModuleFactory extends BlankForestryModule {
-
-	public static final Map<String, Boolean> MACHINE_ENABLED = Maps.newHashMap();
 
 	public ModuleFactory() {
 		ForgeUtils.registerSubscriber(this);
@@ -89,15 +78,15 @@ public class ModuleFactory extends BlankForestryModule {
 
 	@Override
 	public void setupAPI() {
-		RecipeManagers.carpenterManager = machineEnabled(MachineUIDs.CARPENTER) ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
-		RecipeManagers.centrifugeManager = machineEnabled(MachineUIDs.CENTRIFUGE) ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
-		RecipeManagers.fabricatorManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
-		RecipeManagers.fabricatorSmeltingManager = machineEnabled(MachineUIDs.FABRICATOR) ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
-		RecipeManagers.fermenterManager = machineEnabled(MachineUIDs.FERMENTER) ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
-		RecipeManagers.moistenerManager = machineEnabled(MachineUIDs.MOISTENER) ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
-		RecipeManagers.squeezerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
-		RecipeManagers.squeezerContainerManager = machineEnabled(MachineUIDs.SQUEEZER) ? new SqueezerContainerRecipeManager() : new DummyManagers.DummySqueezerContainerManager();
-		RecipeManagers.stillManager = machineEnabled(MachineUIDs.STILL) ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
+		RecipeManagers.carpenterManager = machineEnabled() ? new CarpenterRecipeManager() : new DummyManagers.DummyCarpenterManager();
+		RecipeManagers.centrifugeManager = machineEnabled() ? new CentrifugeRecipeManager() : new DummyManagers.DummyCentrifugeManager();
+		RecipeManagers.fabricatorManager = machineEnabled() ? new FabricatorRecipeManager() : new DummyManagers.DummyFabricatorManager();
+		RecipeManagers.fabricatorSmeltingManager = machineEnabled() ? new FabricatorSmeltingRecipeManager() : new DummyManagers.DummyFabricatorSmeltingManager();
+		RecipeManagers.fermenterManager = machineEnabled() ? new FermenterRecipeManager() : new DummyManagers.DummyFermenterManager();
+		RecipeManagers.moistenerManager = machineEnabled() ? new MoistenerRecipeManager() : new DummyManagers.DummyMoistenerManager();
+		RecipeManagers.squeezerManager = machineEnabled() ? new SqueezerRecipeManager() : new DummyManagers.DummySqueezerManager();
+		RecipeManagers.squeezerContainerManager = machineEnabled() ? new SqueezerContainerRecipeManager() : new DummyManagers.DummySqueezerContainerManager();
+		RecipeManagers.stillManager = machineEnabled() ? new StillRecipeManager() : new DummyManagers.DummyStillManager();
 
 		setupFuelManager();
 	}
@@ -117,9 +106,9 @@ public class ModuleFactory extends BlankForestryModule {
 	}
 
 	private static void setupFuelManager() {
-		FuelManager.fermenterFuel = machineEnabled(MachineUIDs.FERMENTER) ? new ItemStackMap<>() : new DummyMap<>();
-		FuelManager.moistenerResource = machineEnabled(MachineUIDs.MOISTENER) ? new ItemStackMap<>() : new DummyMap<>();
-		FuelManager.rainSubstrate = machineEnabled(MachineUIDs.RAINMAKER) ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.fermenterFuel = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.moistenerResource = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
+		FuelManager.rainSubstrate = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.bronzeEngineFuel = new FluidMap<>();
 		FuelManager.copperEngineFuel = new ItemStackMap<>();
 		FuelManager.generatorFuel = new FluidMap<>();
@@ -128,15 +117,15 @@ public class ModuleFactory extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
-		ScreenManager.register(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
-		ScreenManager.register(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
-		ScreenManager.register(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
-		ScreenManager.register(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
-		ScreenManager.register(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
-		ScreenManager.register(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
-		ScreenManager.register(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
-		ScreenManager.register(FactoryContainers.STILL.containerType(), GuiStill::new);
+		MenuScreens.register(FactoryContainers.BOTTLER.containerType(), GuiBottler::new);
+		MenuScreens.register(FactoryContainers.CARPENTER.containerType(), GuiCarpenter::new);
+		MenuScreens.register(FactoryContainers.CENTRIFUGE.containerType(), GuiCentrifuge::new);
+		MenuScreens.register(FactoryContainers.FABRICATOR.containerType(), GuiFabricator::new);
+		MenuScreens.register(FactoryContainers.FERMENTER.containerType(), GuiFermenter::new);
+		MenuScreens.register(FactoryContainers.MOISTENER.containerType(), GuiMoistener::new);
+		MenuScreens.register(FactoryContainers.RAINTANK.containerType(), GuiRaintank::new);
+		MenuScreens.register(FactoryContainers.SQUEEZER.containerType(), GuiSqueezer::new);
+		MenuScreens.register(FactoryContainers.STILL.containerType(), GuiStill::new);
 	}
 
 	@Override
@@ -175,26 +164,26 @@ public class ModuleFactory extends BlankForestryModule {
 
 		Fluid biomass = ForestryFluids.BIOMASS.getFluid();
 		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
-			Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * Preference.FUEL_MODIFIER), 1));
+				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * Preference.FUEL_MODIFIER), 1));
 
 		FuelManager.bronzeEngineFuel.put(Fluids.WATER, new EngineBronzeFuel(Fluids.WATER,
-			Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
+				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
 
 		Fluid milk = ForestryFluids.MILK.getFluid();
 		FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk,
-			Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
+				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
 
 		Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();
 		FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil,
-			Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
+				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
 
 		Fluid honey = ForestryFluids.HONEY.getFluid();
 		FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey,
-			Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
+				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
 
 		Fluid juice = ForestryFluids.JUICE.getFluid();
 		FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice,
-			Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
+				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates
 		ItemStack iodineCharge = CoreItems.IODINE_CHARGE.stack();
@@ -227,24 +216,22 @@ public class ModuleFactory extends BlankForestryModule {
 	public void registerRecipes() {
 		// / FABRICATOR
 		String[] dyes = {"dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray", "dyeGray", "dyePink", "dyeLime",
-			"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
+				"dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite"};
 
 		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
 		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
-				for (int i = 0; i < 16; i++) {
-					//TODO - needs tag loop or tag match in recipe
-					//					RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassBucket, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
-					//						"#", "X",
-					//						'#', dyes[i],
-					//						'X', beeItems.propolis.getWildcard()});
-				}
-				//				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
-				//					"X",
-				//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
+		if (!liquidGlassBucket.isEmpty() && !liquidGlassX4.isEmpty()) {
+			for (int i = 0; i < 16; i++) {
+				//TODO - needs tag loop or tag match in recipe
+				//					RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassBucket, new ItemStack(Blocks.STAINED_GLASS, 4, 15 - i), new Object[]{
+				//						"#", "X",
+				//						'#', dyes[i],
+				//						'X', beeItems.propolis.getWildcard()});
 			}
+			//				RecipeManagers.fabricatorManager.addRecipe(beeItems.waxCast.getWildcard(), liquidGlassX4, new ItemStack(Blocks.GLASS), new Object[]{
+			//					"X",
+			//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
 		}
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
@@ -257,14 +244,7 @@ public class ModuleFactory extends BlankForestryModule {
 		}
 	}
 
-	public static void loadMachineConfig(LocalizedConfiguration config) {
-		List<String> enabled = Arrays.asList(config.getStringListLocalized("machines", "enabled", MachineUIDs.ALL.toArray(new String[0]), MachineUIDs.ALL.toArray(new String[0])));
-		for (String machineID : MachineUIDs.ALL) {
-			MACHINE_ENABLED.put(machineID, enabled.contains(machineID));
-		}
-	}
-
-	public static boolean machineEnabled(String machineName) {
+	public static boolean machineEnabled() {
 		return true;
 	}
 }

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import forestry.core.blocks.IBlockType;
 import forestry.core.blocks.MachinePropertiesTesr;

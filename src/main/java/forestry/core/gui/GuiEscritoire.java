@@ -10,14 +10,13 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.GameTokenWidget;
@@ -34,7 +33,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	private final EscritoireTextSource textSource = new EscritoireTextSource();
 	private final TileEscritoire tile;
 
-	public GuiEscritoire(ContainerEscritoire container, PlayerInventory inv, ITextComponent title) {
+	public GuiEscritoire(ContainerEscritoire container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/escritoire.png", container, inv, title);
 
 		this.tile = container.getTile();
@@ -83,21 +82,21 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		for (int i = 0; i <= tile.getGame().getBountyLevel() / 4; i++) {
 			GuiUtil.drawItemStack(this, LEVEL_ITEM, leftPos + 170 + i * 8, topPos + 7);
 		}
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 		{
-			RenderSystem.scaled(0.5, 0.5, 0.5);
-			RenderSystem.translated(leftPos + 170, topPos + 10, 0.0);
+			transform.scale(0.5F, 0.5F, 0.5F);
+			transform.translate(leftPos + 170, topPos + 10, 0.0);
 
 			textLayout.newLine();
 			textLayout.newLine();
-			String format = TextFormatting.UNDERLINE + TextFormatting.ITALIC.toString();
+			String format = ChatFormatting.UNDERLINE + ChatFormatting.ITALIC.toString();
 			int attemptNo = EscritoireGame.BOUNTY_MAX - tile.getGame().getBountyLevel();
 			String attemptNoString = Translator.translateToLocalFormatted("for.gui.escritoire.attempt.number", attemptNo);
 			textLayout.drawLine(transform, format + attemptNoString, 170, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
@@ -105,7 +104,7 @@ public class GuiEscritoire extends GuiForestry<ContainerEscritoire> {
 			String escritoireText = textSource.getText(tile.getGame());
 			textLayout.drawSplitLine(escritoireText, 170, 90, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		}
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	@Override

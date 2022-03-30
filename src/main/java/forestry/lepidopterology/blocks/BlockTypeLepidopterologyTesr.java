@@ -12,7 +12,7 @@ package forestry.lepidopterology.blocks;
 
 import java.util.function.Supplier;
 
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.blocks.IMachinePropertiesTesr;

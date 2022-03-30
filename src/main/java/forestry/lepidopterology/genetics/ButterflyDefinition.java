@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Locale;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.alleles.IAlleleRegistry;
 import genetics.api.alleles.IAlleleTemplate;

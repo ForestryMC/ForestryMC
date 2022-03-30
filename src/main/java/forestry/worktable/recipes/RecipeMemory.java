@@ -14,11 +14,11 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,15 +39,15 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		memorizedRecipes = new LinkedList<>();
 	}
 
-	public RecipeMemory(CompoundNBT nbt) {
+	public RecipeMemory(CompoundTag nbt) {
 		memorizedRecipes = new LinkedList<>();
 		if (!nbt.contains("RecipeMemory")) {
 			return;
 		}
 
-		ListNBT nbttaglist = nbt.getList("RecipeMemory", 10);
+		ListTag nbttaglist = nbt.getList("RecipeMemory", 10);
 		for (int j = 0; j < nbttaglist.size(); ++j) {
-			CompoundNBT recipeNbt = nbttaglist.getCompound(j);
+			CompoundTag recipeNbt = nbttaglist.getCompound(j);
 			MemorizedRecipe recipe = new MemorizedRecipe(recipeNbt);
 			if (recipe.hasSelectedRecipe()) {
 				memorizedRecipes.add(recipe);
@@ -59,8 +59,8 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		return lastUpdate;
 	}
 
-	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe, World world) {
-		ICraftingRecipe selectedRecipe = recipe.getSelectedRecipe(world);
+	public void memorizeRecipe(long worldTime, MemorizedRecipe recipe, Level world) {
+		CraftingRecipe selectedRecipe = recipe.getSelectedRecipe(world);
 		if (selectedRecipe == null) {
 			return;
 		}
@@ -128,7 +128,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 		if (recipe == null) {
 			return ItemStack.EMPTY;
 		}
-		World world = WorldUtils.client();
+		Level world = WorldUtils.client();
 		return recipe.getOutputIcon(world);
 	}
 
@@ -145,7 +145,7 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Nullable
-	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable ICraftingRecipe recipe, World world) {
+	private MemorizedRecipe getExistingMemorizedRecipe(@Nullable CraftingRecipe recipe, Level world) {
 		if (recipe != null) {
 			for (MemorizedRecipe memorizedRecipe : memorizedRecipes) {
 				if (memorizedRecipe.hasRecipe(recipe, world)) {
@@ -158,11 +158,11 @@ public class RecipeMemory implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
-		ListNBT listNBT = new ListNBT();
+	public CompoundTag write(CompoundTag compoundNBT) {
+		ListTag listNBT = new ListTag();
 		for (MemorizedRecipe recipe : memorizedRecipes) {
 			if (recipe != null && recipe.hasSelectedRecipe()) {
-				CompoundNBT recipeNbt = new CompoundNBT();
+				CompoundTag recipeNbt = new CompoundTag();
 				recipe.write(recipeNbt);
 				listNBT.add(recipeNbt);
 			}

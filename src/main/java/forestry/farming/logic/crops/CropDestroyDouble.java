@@ -2,12 +2,12 @@ package forestry.farming.logic.crops;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.core.config.Constants;
 import forestry.core.network.packets.PacketFXSignal;
@@ -20,7 +20,7 @@ public class CropDestroyDouble extends Crop {
 	@Nullable
 	protected final BlockState replantState;
 
-	public CropDestroyDouble(World world, BlockState blockState, BlockState blockStateUp, BlockPos position, @Nullable BlockState replantState) {
+	public CropDestroyDouble(Level world, BlockState blockState, BlockState blockStateUp, BlockPos position, @Nullable BlockState replantState) {
 		super(world, position);
 		this.blockState = blockState;
 		this.blockStateUp = blockStateUp;
@@ -28,12 +28,12 @@ public class CropDestroyDouble extends Crop {
 	}
 
 	@Override
-	protected boolean isCrop(World world, BlockPos pos) {
+	protected boolean isCrop(Level world, BlockPos pos) {
 		return world.getBlockState(pos) == blockState;
 	}
 
 	@Override
-	protected NonNullList<ItemStack> harvestBlock(World world, BlockPos pos) {
+	protected NonNullList<ItemStack> harvestBlock(Level world, BlockPos pos) {
 		Block block = blockState.getBlock();
 		Block blockUp = blockStateUp.getBlock();
 		NonNullList<ItemStack> harvested = NonNullList.create();

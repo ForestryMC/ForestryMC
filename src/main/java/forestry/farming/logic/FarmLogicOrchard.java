@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -63,7 +63,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Override
-	public Collection<ICrop> harvest(World world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
+	public Collection<ICrop> harvest(Level world, IFarmHousing housing, FarmDirection direction, int extent, BlockPos pos) {
 		BlockPos position = housing.getValidPosition(direction, pos, extent, pos.above());
 		Collection<ICrop> crops = getHarvestBlocks(world, position);
 		housing.increaseExtent(direction, pos, extent);
@@ -71,7 +71,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private Collection<ICrop> getHarvestBlocks(World world, BlockPos position) {
+	private Collection<ICrop> getHarvestBlocks(Level world, BlockPos position) {
 		Set<BlockPos> seen = new HashSet<>();
 		Stack<ICrop> crops = new Stack<>();
 
@@ -101,7 +101,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return crops;
 	}
 
-	private List<BlockPos> processHarvestBlock(World world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
+	private List<BlockPos> processHarvestBlock(Level world, Stack<ICrop> crops, Set<BlockPos> seen, BlockPos start, BlockPos position) {
 		List<BlockPos> candidates = new ArrayList<>();
 
 		// Get additional candidates to return
@@ -146,7 +146,7 @@ public class FarmLogicOrchard extends FarmLogic {
 		return candidates;
 	}
 
-	private boolean isFruitBearer(World world, BlockPos position, BlockState blockState) {
+	private boolean isFruitBearer(Level world, BlockPos position, BlockState blockState) {
 		IFruitBearer tile = TileUtil.getTile(world, position, IFruitBearer.class);
 		if (tile != null) {
 			return true;
@@ -172,7 +172,7 @@ public class FarmLogicOrchard extends FarmLogic {
 	}
 
 	@Nullable
-	private ICrop getCropAt(World world, BlockPos position) {
+	private ICrop getCropAt(Level world, BlockPos position) {
 		IFruitBearer fruitBearer = TileUtil.getTile(world, position, IFruitBearer.class);
 
 		if (fruitBearer != null) {

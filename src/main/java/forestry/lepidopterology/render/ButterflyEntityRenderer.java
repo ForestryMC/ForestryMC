@@ -10,24 +10,23 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.lepidopterology.entities.EntityButterfly;
 
 public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, ButterflyModel> {
 
-	public ButterflyEntityRenderer(EntityRendererManager manager) {
-		super(manager, new ButterflyModel(), 0.25f);
+	public ButterflyEntityRenderer(EntityRendererProvider.Context context) {
+		super(context, new ButterflyModel(), 0.25f);
 	}
 
-
 	@Override
-	public void render(EntityButterfly entity, float entityYaw, float partialTickTime, MatrixStack transform, IRenderTypeBuffer buffer, int packedLight) {
+	public void render(EntityButterfly entity, float entityYaw, float partialTickTime, PoseStack transform, MultiBufferSource buffer, int packedLight) {
 		if (!entity.isRenderable()) {
 			return;
 		}
@@ -45,5 +44,4 @@ public class ButterflyEntityRenderer extends MobRenderer<EntityButterfly, Butter
 	protected float getBob(EntityButterfly entity, float partialTickTime) {
 		return entity.getWingFlap(partialTickTime);
 	}
-
 }

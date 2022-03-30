@@ -5,14 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -23,13 +23,13 @@ public final class RecipeUtils {
     }
 
     @Nullable
-    public static RecipeManager getRecipeManager(@Nullable World world){
+    public static RecipeManager getRecipeManager(@Nullable Level world){
         RecipeManager manager = DistExecutor.safeCallWhenOn(Dist.CLIENT, ()->ClientUtils::getRecipeManager);
         return manager != null ?  manager : world != null ? world.getRecipeManager() : null;
     }
 
     @Nullable
-    public static <C extends IInventory, T extends IRecipe<C>> IRecipe<C> getRecipe(IRecipeType<T> recipeType, ResourceLocation name, @Nullable World world) {
+    public static <C extends Container, T extends Recipe<C>> Recipe<C> getRecipe(RecipeType<T> recipeType, ResourceLocation name, @Nullable Level world) {
         RecipeManager manager = getRecipeManager(world);
         if(manager == null){
             return null;
@@ -37,7 +37,7 @@ public final class RecipeUtils {
         return manager.byType(recipeType).get(name);
     }
 
-    public static <C extends IInventory, T extends IRecipe<C>> List<T> getRecipes(IRecipeType<T> recipeType, C inventory, @Nullable World world) {
+    public static <C extends Container, T extends Recipe<C>> List<T> getRecipes(RecipeType<T> recipeType, C inventory, @Nullable Level world) {
         RecipeManager manager = getRecipeManager(world);
         if (manager == null || world == null) {
             return Collections.emptyList();
@@ -45,8 +45,11 @@ public final class RecipeUtils {
 		return manager.getRecipesFor(recipeType, inventory, world);
     }
 
-    public static List<ICraftingRecipe> findMatchingRecipes(CraftingInventory inventory, World world) {
-		return world.getRecipeManager().getRecipesFor(IRecipeType.CRAFTING, inventory, world).stream().filter(recipe -> recipe.matches(inventory, world)).collect(Collectors.toList());
+    public static List<CraftingRecipe> findMatchingRecipes(CraftingContainer inventory, Level world) {
+        RecipeManager recipeManager = world.getRecipeManager();
+        return recipeManager.getRecipesFor(RecipeType.CRAFTING, inventory, world).stream()
+                .filter(recipe -> recipe.matches(inventory, world))
+                .collect(Collectors.toList());
     }
 
 }

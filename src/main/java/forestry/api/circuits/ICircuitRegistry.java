@@ -8,8 +8,8 @@ package forestry.api.circuits;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 
 public interface ICircuitRegistry {
 
@@ -22,8 +22,6 @@ public interface ICircuitRegistry {
 
 	@Nullable
 	ICircuit getCircuit(String uid);
-
-	ICircuitLibrary getCircuitLibrary(ServerWorld world, String playerName);
 
 	/* LAYOUTS */
 	Map<String, ICircuitLayout> getRegisteredLayouts();

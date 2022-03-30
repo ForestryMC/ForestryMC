@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.function.Function;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 /**
  * Empty implementation of the product list

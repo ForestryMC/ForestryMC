@@ -29,10 +29,9 @@ public class AlleleValue<V> extends Allele implements IAlleleValue<V> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof IAlleleValue)) {
+		if (!(obj instanceof IAlleleValue otherAllele)) {
 			return false;
 		}
-		IAlleleValue otherAllele = (IAlleleValue) obj;
 		return getRegistryName() != null ?
 			getRegistryName().equals(((IAllele) obj).getRegistryName()) :
 			Objects.equals(value, otherAllele.getValue()) && dominant == otherAllele.isDominant();

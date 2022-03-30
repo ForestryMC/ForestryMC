@@ -16,20 +16,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -53,7 +52,7 @@ import forestry.core.render.ColourProperties;
 import forestry.core.render.ForestryResource;
 import forestry.energy.EnergyManager;
 
-public abstract class GuiForestry<C extends Container> extends ContainerScreen<C> implements IGuiSizable {
+public abstract class GuiForestry<C extends AbstractContainerMenu> extends AbstractContainerScreen<C> implements IGuiSizable {
 	protected final C container;
 
 	public final ResourceLocation textureFile;
@@ -62,11 +61,11 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	protected final TextLayoutHelper textLayout;
 	protected final WindowGui<?> window;
 
-	protected GuiForestry(String texture, C container, PlayerInventory inv, ITextComponent title) {
+	protected GuiForestry(String texture, C container, Inventory inv, Component title) {
 		this(new ForestryResource(texture), container, inv, title);
 	}
 
-	protected GuiForestry(ResourceLocation texture, C container, PlayerInventory inv, ITextComponent title) {
+	protected GuiForestry(ResourceLocation texture, C container, Inventory inv, Component title) {
 		super(container, inv, title);
 
 		this.widgetManager = new WidgetManager(this);
@@ -96,19 +95,19 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	public void init(Minecraft mc, int width, int height) {
+	public void resize(Minecraft mc, int width, int height) {
 		window.setSize(width, height);
-		super.init(mc, width, height);
+		super.resize(mc, width, height);
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		window.updateClient();
 	}
 
 	@Override
-	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack transform, int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
 		this.renderBackground(transform);
 		super.render(transform, mouseX, mouseY, partialTicks);
@@ -164,7 +163,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return ColourProperties.INSTANCE;
 	}
 
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return minecraft.font;
 	}
 
@@ -244,8 +243,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	@Nullable
 	public FluidStack getFluidStackAtPosition(double mouseX, double mouseY) {
 		for (Widget widget : widgetManager.getWidgets()) {
-			if (widget instanceof TankWidget && widget.isMouseOver(mouseX - leftPos, mouseY - topPos)) {
-				TankWidget tankWidget = (TankWidget) widget;
+			if (widget instanceof TankWidget tankWidget && widget.isMouseOver(mouseX - leftPos, mouseY - topPos)) {
 				IFluidTank tank = tankWidget.getTank();
 				if (tank != null) {
 					return tank.getFluid();
@@ -278,15 +276,14 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 	}
 
 	@Override
-	public void renderSlot(MatrixStack transform, Slot slot) {
-		if (slot instanceof ISlotTextured) {
-			ISlotTextured textured = (ISlotTextured) slot;
+	public void renderSlot(PoseStack transform, Slot slot) {
+		if (slot instanceof ISlotTextured textured) {
 			ItemStack stack = slot.getItem();
 			if (stack.isEmpty() && slot.isActive()) {
 				ResourceLocation location = textured.getBackgroundTexture();
 				if (location != null) {
 					TextureAtlasSprite sprite = textured.getBackgroundAtlas().apply(location);
-					this.minecraft.getTextureManager().bind(sprite.atlas().location());
+					RenderSystem.setShaderTexture(0, sprite.atlas().location());
 					blit(transform, slot.x, slot.y, this.getBlitOffset(), 16, 16, sprite);
 				}
 			}
@@ -296,56 +293,55 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 
 
 	@Override
-	protected void renderLabels(MatrixStack transform, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack transform, int mouseX, int mouseY) {
 		ledgerManager.drawTooltips(transform, mouseX, mouseY);
 
-		if (this.inventory.getCarried().isEmpty()) {
+		if (this.menu.getCarried().isEmpty()) {
 			GuiUtil.drawToolTips(transform, this, widgetManager.getWidgets(), mouseX, mouseY);
-			GuiUtil.drawToolTips(transform, this, this.buttons, mouseX, mouseY);
+			GuiUtil.drawToolTips(transform, this, this.renderables, mouseX, mouseY);
 			GuiUtil.drawToolTips(transform, this, container.slots, mouseX, mouseY);
 			window.drawTooltip(transform, mouseX, mouseY);
 		}
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		drawBackground(transform);
 
 		widgetManager.updateWidgets(mouseX - leftPos, mouseY - topPos);
 
 		//RenderHelper.enableGUIStandardItemLighting(); //TODO: Is there an replacement ?
-		RenderSystem.disableLighting();
-		RenderSystem.enableRescaleNormal();
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.pushMatrix();
+		// RenderSystem.disableLighting();
+		// RenderSystem.enableRescaleNormal();
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		transform.pushPose();
 		{
-			RenderSystem.translatef(leftPos, topPos, 0.0F);
+			transform.translate(leftPos, topPos, 0.0F);
 			drawWidgets(transform);
 		}
-		RenderSystem.popMatrix();
+		transform.popPose();
 
-		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
+		// RenderSystem.color3f(1.0F, 1.0F, 1.0F);
 
 		window.draw(transform, mouseX, mouseY);
 
 		bindTexture(textureFile);
 	}
 
-	protected void drawBackground(MatrixStack transform) {
+	protected void drawBackground(PoseStack transform) {
 		bindTexture(textureFile);
 
 		blit(transform, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 
-	protected void drawWidgets(MatrixStack transform) {
+	protected void drawWidgets(PoseStack transform) {
 		ledgerManager.drawLedgers(transform);
 		widgetManager.drawWidgets(transform);
 	}
 
 	protected void bindTexture(ResourceLocation texturePath) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(texturePath);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, texturePath);
 	}
 
 	@Override
@@ -373,7 +369,7 @@ public abstract class GuiForestry<C extends Container> extends ContainerScreen<C
 		return Preconditions.checkNotNull(minecraft);
 	}
 
-	public List<Rectangle2d> getExtraGuiAreas() {
+	public List<Rect2i> getExtraGuiAreas() {
 		return ledgerManager.getLedgerAreas();
 	}
 

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.inventory.InventoryApiary;
@@ -20,7 +20,7 @@ import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.IFilterSlotDelegate;
 
 public abstract class ContainerBeeHelper {
-	public static <T extends IInventory & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {
+	public static <T extends Container & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {
 		// Queen/Princess
 		container.addSlot(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_QUEEN, 29, 39));
 

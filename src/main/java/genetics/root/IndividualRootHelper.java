@@ -3,7 +3,7 @@ package genetics.root;
 import java.util.Map;
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;

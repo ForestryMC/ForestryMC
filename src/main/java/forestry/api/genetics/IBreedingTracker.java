@@ -8,8 +8,8 @@ package forestry.api.genetics;
 import java.util.Collection;
 import java.util.Collections;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleSpecies;
@@ -101,11 +101,11 @@ public interface IBreedingTracker {
 	 * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
 	 * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
 	 */
-	void synchToPlayer(PlayerEntity player);
+	void synchToPlayer(Player player);
 
 	/* LOADING & SAVING */
-	void decodeFromNBT(CompoundNBT compound);
+	void decodeFromNBT(CompoundTag compound);
 
-	void encodeToNBT(CompoundNBT compound);
+	void encodeToNBT(CompoundTag compound);
 
 }

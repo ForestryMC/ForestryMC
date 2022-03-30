@@ -13,15 +13,15 @@ package forestry.core.models.baker;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.BlockFaceUV;
-import net.minecraft.client.renderer.model.BlockPartFace;
-import net.minecraft.client.renderer.model.FaceBakery;
-import net.minecraft.client.renderer.model.ModelRotation;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockElementFace;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,16 +71,16 @@ public final class ModelBaker {
 	}
 
 	public ModelBakerModel bake(boolean flip) {
-		ModelRotation modelRotation = ModelRotation.X0_Y0;
+		BlockModelRotation modelRotation = BlockModelRotation.X0_Y0;
 
 		if (flip) {
-			modelRotation = ModelRotation.X0_Y180;
+			modelRotation = BlockModelRotation.X0_Y180;
 		}
 
 		for (ModelBakerFace face : faces) {
 			Direction facing = face.face;
 			BlockFaceUV uvFace = new BlockFaceUV(UVS, 0);
-			BlockPartFace partFace = new BlockPartFace(facing, face.colorIndex, "", uvFace);
+			BlockElementFace partFace = new BlockElementFace(facing, face.colorIndex, "", uvFace);
 			BakedQuad quad = FACE_BAKERY.bakeQuad(POS_FROM, POS_TO, partFace, face.spite, facing, modelRotation, null, true, FACE_LOCATION);
 
 			currentModel.addQuad(facing, quad);

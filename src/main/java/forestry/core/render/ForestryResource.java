@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.core.config.Constants;
 

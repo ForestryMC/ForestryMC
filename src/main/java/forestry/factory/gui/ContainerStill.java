@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
@@ -25,12 +25,12 @@ import forestry.factory.tiles.TileStill;
 public class ContainerStill extends ContainerLiquidTanks<TileStill> {
 
 	//TODO work out if there is a good way to make this generic
-	public static ContainerStill fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerStill fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileStill tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileStill.class);
 		return new ContainerStill(windowId, inv, tile);
 	}
 
-	public ContainerStill(int windowId, PlayerInventory player, TileStill tile) {
+	public ContainerStill(int windowId, Inventory player, TileStill tile) {
 		super(windowId, FactoryContainers.STILL.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotOutput(tile, InventoryStill.SLOT_PRODUCT, 150, 54));

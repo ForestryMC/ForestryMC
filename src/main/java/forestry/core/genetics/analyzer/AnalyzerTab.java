@@ -2,9 +2,9 @@ package forestry.core.genetics.analyzer;
 
 import java.util.Locale;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.genetics.gatgets.IDatabaseTab;
 import forestry.core.features.CoreItems;
@@ -26,7 +26,7 @@ public enum AnalyzerTab implements IDatabaseTab<IIndividual> {
 	};
 
 	@Override
-	public ITextComponent getTooltip(IIndividual individual) {
-		return new TranslationTextComponent("for.gui.database.tab." + name().toLowerCase(Locale.ENGLISH) + ".name");
+	public Component getTooltip(IIndividual individual) {
+		return new TranslatableComponent("for.gui.database.tab." + name().toLowerCase(Locale.ENGLISH) + ".name");
 	}
 }

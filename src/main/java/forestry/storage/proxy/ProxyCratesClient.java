@@ -1,11 +1,11 @@
 package forestry.storage.proxy;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -30,11 +30,11 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 	public void setupClient(FMLClientSetupEvent event) {
 		for (EnumBackpackType backpackType : EnumBackpackType.values()) {
 			for (BackpackMode mode : BackpackMode.values()) {
-				ModelLoader.addSpecialModel(backpackType.getLocation(mode));
+				ForgeModelBakery.addSpecialModel(backpackType.getLocation(mode));
 			}
 		}
 
-		ModelLoader.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
+		ForgeModelBakery.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
 	}
 
 	@Override

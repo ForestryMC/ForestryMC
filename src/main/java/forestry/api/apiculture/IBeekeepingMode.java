@@ -7,8 +7,8 @@ package forestry.api.apiculture;
 
 import java.util.List;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.genetics.IBee;
 
@@ -32,7 +32,7 @@ public interface IBeekeepingMode {
 	/**
 	 * @return fertility taking into account the birthing queen and surroundings.
 	 */
-	int getFinalFertility(IBee queen, World world, BlockPos pos);
+	int getFinalFertility(IBee queen, Level world, BlockPos pos);
 
 	/**
 	 * @return true if the queen is genetically "fatigued" and should not be reproduced anymore.

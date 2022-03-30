@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateState;
@@ -101,7 +101,7 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 	}
 
 	@Override
-	public IClimateState create(CompoundNBT compound, boolean mutable) {
+	public IClimateState create(CompoundTag compound, boolean mutable) {
 		if (compound.getBoolean(ABSENT_NBT_KEY)) {
 			return AbsentClimateState.INSTANCE;
 		}
@@ -109,12 +109,12 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 	}
 
 	@Override
-	public IClimateState create(CompoundNBT compound) {
+	public IClimateState create(CompoundTag compound) {
 		return create(compound, compound.getBoolean(MUTABLE_NBT_KEY));
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound, IClimateState state) {
+	public CompoundTag writeToNBT(CompoundTag compound, IClimateState state) {
 		if (state.isPresent()) {
 			compound.putBoolean(ABSENT_NBT_KEY, false);
 			compound.putFloat(TEMPERATURE_NBT_KEY, state.getTemperature());
@@ -139,7 +139,7 @@ public final class ClimateStateHelper implements IClimateStateHelper {
 		float temp = climateState.getTemperature();
 		float humid = climateState.getHumidity();
 		if (temp > 2.0F || temp < 0.0F || humid > 2.0F || humid < 0.0F) {
-			return climateState.setClimate(MathHelper.clamp(temp, 0.0F, 2.0F), MathHelper.clamp(humid, 0.0F, 2.0F));
+			return climateState.setClimate(Mth.clamp(temp, 0.0F, 2.0F), Mth.clamp(humid, 0.0F, 2.0F));
 		}
 		return climateState;
 	}

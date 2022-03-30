@@ -10,14 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyFan extends TileAlvearyClimatiser {
 
 	private static final FanDefinition definition = new FanDefinition();
 
-	public TileAlvearyFan() {
-		super(BlockAlvearyType.FAN, definition);
+	public TileAlvearyFan(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.FAN, pos, state, definition);
 	}
 
 	private static class FanDefinition implements IClimitiserDefinition {

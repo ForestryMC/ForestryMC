@@ -13,14 +13,14 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -66,11 +66,11 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 	}
 
 	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		Random rand = world.random;
 
-		Vector3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
-		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 		BlockPos posHousing = housing.getCoordinates();
 
 		for (int i = 0; i < 20; i++) {
@@ -98,7 +98,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 				continue;
 			}
 
-			TileEntity tile = TileUtil.getTile(world, posBlock);
+			BlockEntity tile = TileUtil.getTile(world, posBlock);
 			if (tile instanceof IBeeHousing) {
 				continue;
 			}

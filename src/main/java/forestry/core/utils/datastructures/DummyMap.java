@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.Map.Entry;
+
 /**
  * A map that doesn't actually store anything
  */

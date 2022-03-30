@@ -13,11 +13,11 @@ package forestry.core.commands;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -40,13 +40,13 @@ import genetics.commands.CommandHelpers;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandModules {
-	public static ArgumentBuilder<CommandSource, ?> register() {
-		return LiteralArgumentBuilder.<CommandSource>literal("module")
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
+		return LiteralArgumentBuilder.<CommandSourceStack>literal("module")
 				.then(CommandPluginsInfo.register())
 				.executes(CommandModules::listModulesForSender);
 	}
 
-	private static int listModulesForSender(CommandContext<CommandSource> context) {
+	private static int listModulesForSender(CommandContext<CommandSourceStack> context) {
 		StringBuilder pluginList = new StringBuilder();
 		for (IForestryModule module : ModuleManager.getLoadedModules()) {
 			if (pluginList.length() > 0) {
@@ -60,7 +60,7 @@ public class CommandModules {
 	}
 
 	private static String makeListEntry(IForestryModule module) {
-		String entry = module.isAvailable() ? TextFormatting.GREEN.toString() : TextFormatting.RED.toString();
+		String entry = module.isAvailable() ? ChatFormatting.GREEN.toString() : ChatFormatting.RED.toString();
 
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 		if (info != null) {
@@ -76,7 +76,7 @@ public class CommandModules {
 	}
 
 	public static class CommandPluginsInfo {
-		public static ArgumentBuilder<CommandSource, ?> register() {
+		public static ArgumentBuilder<CommandSourceStack, ?> register() {
 			return Commands.literal("info")
 					.then(Commands.argument("module", ModuleArgument.modules())
 							.executes(CommandPluginsInfo::listModuleInfoForSender));
@@ -105,7 +105,7 @@ public class CommandModules {
 				if (found != null) {
 					return found;
 				} else {
-					throw new SimpleCommandExceptionType(new TranslationTextComponent("for.chat.modules.error", pluginUid)).createWithContext(reader);
+					throw new SimpleCommandExceptionType(new TranslatableComponent("for.chat.modules.error", pluginUid)).createWithContext(reader);
 				}
 
 			}
@@ -125,24 +125,24 @@ public class CommandModules {
 			}
 		}
 
-		private static int listModuleInfoForSender(CommandContext<CommandSource> context) throws CommandException {
+		private static int listModuleInfoForSender(CommandContext<CommandSourceStack> context) throws CommandRuntimeException {
 			IForestryModule found = context.getArgument("module", IForestryModule.class);
 
-			TextFormatting formatting = found.isAvailable() ? TextFormatting.GREEN : TextFormatting.RED;
+			ChatFormatting formatting = found.isAvailable() ? ChatFormatting.GREEN : ChatFormatting.RED;
 
 			ForestryModule info = found.getClass().getAnnotation(ForestryModule.class);
 			if (info != null) {
-				CommandSource sender = context.getSource();
+				CommandSourceStack sender = context.getSource();
 
 				CommandHelpers.sendChatMessage(sender, formatting + "Module: " + info.name());
 				if (!info.version().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "Version: " + info.version());
+					CommandHelpers.sendChatMessage(sender, ChatFormatting.BLUE + "Version: " + info.version());
 				}
 				if (!info.author().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "Author(s): " + info.author());
+					CommandHelpers.sendChatMessage(sender, ChatFormatting.BLUE + "Author(s): " + info.author());
 				}
 				if (!info.url().isEmpty()) {
-					CommandHelpers.sendChatMessage(sender, TextFormatting.BLUE + "URL: " + info.url());
+					CommandHelpers.sendChatMessage(sender, ChatFormatting.BLUE + "URL: " + info.url());
 				}
 				if (!info.unlocalizedDescription().isEmpty()) {
 					CommandHelpers.sendChatMessage(sender, Translator.translateToLocal(info.unlocalizedDescription()));

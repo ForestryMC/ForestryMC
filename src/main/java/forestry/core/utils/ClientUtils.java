@@ -1,8 +1,8 @@
 package forestry.core.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import javax.annotation.Nullable;
 
@@ -13,7 +13,7 @@ public final class ClientUtils {
 
     @Nullable
     public static RecipeManager getRecipeManager() {
-        ClientPlayNetHandler connection = Minecraft.getInstance().getConnection();
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
         if(connection != null){
             return connection.getRecipeManager();
         }

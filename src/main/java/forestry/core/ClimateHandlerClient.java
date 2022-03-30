@@ -1,8 +1,8 @@
 package forestry.core;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,8 +33,8 @@ public class ClimateHandlerClient {
 		if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.CLIENT) {
 			return;
 		}
-		PlayerEntity player = event.player;
-		World world = player.level;
+		Player player = event.player;
+		Level world = player.level;
 		BlockPos pos = player.blockPosition();
 		if (currentState.isPresent()) {
 			int x = world.random.nextInt(11) - 5;

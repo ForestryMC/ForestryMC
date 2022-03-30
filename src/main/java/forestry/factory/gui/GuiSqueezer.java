@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -24,7 +24,7 @@ import forestry.factory.tiles.TileSqueezer;
 public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer> {
 	private final TileSqueezer tile;
 
-	public GuiSqueezer(ContainerSqueezer container, PlayerInventory inventory, ITextComponent title) {
+	public GuiSqueezer(ContainerSqueezer container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/squeezersocket.png", container, inventory, title);
 		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 122, 18, 0));
@@ -32,7 +32,7 @@ public class GuiSqueezer extends GuiForestryTitled<ContainerSqueezer> {
 	}
 
 	@Override
-	protected void drawWidgets(MatrixStack transform) {
+	protected void drawWidgets(PoseStack transform) {
 		//TODO: Make this more consistent
 		int progress = tile.getProgressScaled(43);
 		blit(transform, 75, 41, 176, 60, progress, 18);

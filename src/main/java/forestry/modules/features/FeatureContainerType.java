@@ -2,19 +2,19 @@ package forestry.modules.features;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraftforge.network.IContainerFactory;
 
 import forestry.core.config.Constants;
 
-public class FeatureContainerType<C extends Container> implements IContainerTypeFeature<C> {
+public class FeatureContainerType<C extends AbstractContainerMenu> implements IContainerTypeFeature<C> {
 	protected final String moduleID;
 	protected final String identifier;
 	protected final IContainerFactory<C> containerFactory;
 	@Nullable
-	private ContainerType<C> containerType;
+	private MenuType<C> containerType;
 
 	public FeatureContainerType(String moduleID, String identifier, IContainerFactory<C> containerFactory) {
 		this.moduleID = moduleID;
@@ -24,7 +24,7 @@ public class FeatureContainerType<C extends Container> implements IContainerType
 
 
 	@Override
-	public void setContainerType(ContainerType<C> containerType) {
+	public void setContainerType(MenuType<C> containerType) {
 		this.containerType = containerType;
 	}
 
@@ -40,7 +40,7 @@ public class FeatureContainerType<C extends Container> implements IContainerType
 
 	@Nullable
 	@Override
-	public ContainerType<C> getContainerType() {
+	public MenuType<C> getContainerType() {
 		return containerType;
 	}
 

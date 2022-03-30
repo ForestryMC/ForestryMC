@@ -1,18 +1,16 @@
 package forestry.arboriculture;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.level.block.Blocks;
 
 import forestry.api.arboriculture.ICharcoalManager;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.core.ItemGroups;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.charcoal.CharcoalManager;
-import forestry.core.ItemGroupForestry;
 import forestry.core.config.Constants;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CHARCOAL, name = "Charcoal", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.charcoal.description")
 public class ModuleCharcoal extends BlankForestryModule {
@@ -35,7 +33,7 @@ public class ModuleCharcoal extends BlankForestryModule {
 		}
 	}
 
-	public static ItemGroup getGroup() {
-		return ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) ? ItemGroups.tabArboriculture : ItemGroupForestry.tabForestry;
+	public static CreativeModeTab getGroup() {
+		return ItemGroups.tabArboriculture;
 	}
 }

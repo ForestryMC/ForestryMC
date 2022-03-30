@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -36,7 +36,7 @@ public class MutationConditionTemperature implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		EnumTemperature biomeTemperature = climate.getTemperature();
 
 		if (biomeTemperature.ordinal() < minTemperature.ordinal() || biomeTemperature.ordinal() > maxTemperature.ordinal()) {
@@ -46,15 +46,15 @@ public class MutationConditionTemperature implements IMutationCondition {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
+	public Component getDescription() {
 		//TODO textcomponent
 		String minString = AlleleManager.climateHelper.toDisplay(minTemperature).getString();
 
 		if (minTemperature != maxTemperature) {
 			String maxString = AlleleManager.climateHelper.toDisplay(maxTemperature).getString();
-			return new StringTextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
+			return new TextComponent(Translator.translateToLocal("for.mutation.condition.temperature.range").replace("%LOW", minString).replace("%HIGH", maxString));
 		} else {
-			return new TranslationTextComponent("for.mutation.condition.temperature.single", minString);
+			return new TranslatableComponent("for.mutation.condition.temperature.single", minString);
 		}
 	}
 }

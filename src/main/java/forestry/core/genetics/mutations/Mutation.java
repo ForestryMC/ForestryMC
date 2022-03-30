@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.core.EnumHumidity;
@@ -43,7 +43,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	private final IAllele[] template;
 
 	private final List<IMutationCondition> mutationConditions = new ArrayList<>();
-	private final List<ITextComponent> specialConditions = new ArrayList<>();
+	private final List<Component> specialConditions = new ArrayList<>();
 
 	private boolean isSecret = false;
 
@@ -55,7 +55,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Collection<ITextComponent> getSpecialConditions() {
+	public Collection<Component> getSpecialConditions() {
 		return specialConditions;
 	}
 
@@ -88,7 +88,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Mutation restrictBiomeType(Biome.Category... types) {
+	public Mutation restrictBiomeType(Biome.BiomeCategory... types) {
 		IMutationCondition mutationCondition = new MutationConditionBiome(types);
 		return addMutationCondition(mutationCondition);
 	}
@@ -124,7 +124,7 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 		return this;
 	}
 
-	protected float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate) {
+	protected float getChance(Level world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate) {
 		float mutationChance = chance;
 		for (IMutationCondition mutationCondition : mutationConditions) {
 			mutationChance *= mutationCondition.getChance(world, pos, firstParent, secondParent, firstGenome, secondGenome, climate);

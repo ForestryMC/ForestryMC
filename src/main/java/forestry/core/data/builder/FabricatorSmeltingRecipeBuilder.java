@@ -14,10 +14,10 @@ import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -45,11 +45,11 @@ public class FabricatorSmeltingRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, meltingPoint, resource, product));
 	}
 
-	public static class Result implements IFinishedRecipe {
+	public static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final int meltingPoint;
 		private final Ingredient resource;
@@ -75,7 +75,7 @@ public class FabricatorSmeltingRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return IFabricatorSmeltingRecipe.Companion.SERIALIZER;
 		}
 

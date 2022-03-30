@@ -12,14 +12,14 @@ package forestry.lepidopterology.entities;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class AIButterflyMovement extends AIButterflyBase {
 	@Nullable
-	protected Vector3d flightTarget;
+	protected Vec3 flightTarget;
 
 	protected AIButterflyMovement(EntityButterfly entity) {
 		super(entity);

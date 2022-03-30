@@ -2,15 +2,16 @@ package forestry.core.data;
 
 import com.google.common.collect.Table;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
 
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
 import forestry.core.fluids.ForestryFluids;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
@@ -32,7 +33,7 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 	public void registerStates() {
 		for (ForestryFluids fluid : ForestryFluids.values()) {
 			Block block = fluid.getFeature().fluidBlock().block();
-			addVariants(block, new Builder().alwaysIgnore(FlowingFluidBlock.LEVEL).always(variant -> variant.model("forestry:block/fluid_" + fluid.getTag().getPath())));
+			addVariants(block, new Builder().alwaysIgnore(LiquidBlock.LEVEL).always(variant -> variant.model("forestry:block/fluid_" + fluid.getTag().getPath())));
 		}
 		addCocoon(LepidopterologyBlocks.COCOON);
 		addCocoon(LepidopterologyBlocks.COCOON_SOLID);
@@ -44,6 +45,11 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 		for (Table.Cell<BlockTypePlanter, BlockPlanter.Mode, FeatureBlock<BlockPlanter, BlockItem>> cell : CultivationBlocks.PLANTER.getFeatureByTypes().cellSet()) {
 			addCultivationBlock(cell.getValue(), cell.getRowKey());
 		}
+
+		addVariants(CoreBlocks.APATITE_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/apatite_ore")));
+		addVariants(CoreBlocks.DEEPSLATE_APATITE_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_apatite_ore")));
+		addVariants(CoreBlocks.TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/tin_ore")));
+		addVariants(CoreBlocks.DEEPSLATE_TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_tin_ore")));
 	}
 
 	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {

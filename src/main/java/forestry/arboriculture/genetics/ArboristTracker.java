@@ -10,7 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 
 import forestry.api.arboriculture.IArboristTracker;
 import forestry.api.arboriculture.TreeManager;
@@ -25,12 +26,16 @@ public class ArboristTracker extends BreedingTracker implements IArboristTracker
 	/**
 	 * Required for creation from map storage
 	 */
-	public ArboristTracker(String s) {
-		super(s, ModuleArboriculture.treekeepingMode);
+	public ArboristTracker() {
+		super(ModuleArboriculture.treekeepingMode);
+	}
+
+	public ArboristTracker(CompoundTag tag) {
+		super(ModuleArboriculture.treekeepingMode, tag);
 	}
 
 	@Override
-	protected IBreedingTracker getBreedingTracker(PlayerEntity player) {
+	protected IBreedingTracker getBreedingTracker(Player player) {
 		return TreeManager.treeRoot.getBreedingTracker(player.level, player.getGameProfile());
 	}
 

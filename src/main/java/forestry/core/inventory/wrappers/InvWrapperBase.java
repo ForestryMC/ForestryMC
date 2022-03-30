@@ -10,28 +10,28 @@
  ******************************************************************************/
 package forestry.core.inventory.wrappers;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Created by CovertJaguar on 3/6/2016 for Railcraft.
  */
-public abstract class InvWrapperBase implements IInventory {
+public abstract class InvWrapperBase implements Container {
 
-	private final IInventory inv;
+	private final Container inv;
 	private boolean checkItems = true;
 
-	public InvWrapperBase(IInventory inv) {
+	public InvWrapperBase(Container inv) {
 		this(inv, true);
 	}
 
-	public InvWrapperBase(IInventory inv, boolean checkItems) {
+	public InvWrapperBase(Container inv, boolean checkItems) {
 		this.inv = inv;
 		this.checkItems = checkItems;
 	}
 
-	public IInventory getBaseInventory() {
+	public Container getBaseInventory() {
 		return inv;
 	}
 
@@ -71,17 +71,17 @@ public abstract class InvWrapperBase implements IInventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity PlayerEntity) {
+	public boolean stillValid(Player PlayerEntity) {
 		return inv.stillValid(PlayerEntity);
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {
+	public void startOpen(Player player) {
 		inv.startOpen(player);
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 		inv.stopOpen(player);
 	}
 

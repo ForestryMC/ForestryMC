@@ -14,10 +14,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
@@ -36,10 +36,10 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
 
 	@Override
 	public boolean isJubilant(IAlleleBeeSpecies species, IGenome genome, IBeeHousing housing) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		BlockPos pos = housing.getCoordinates();
 
-		TileEntity tile;
+		BlockEntity tile;
 		do {
 			pos = pos.below();
 			tile = TileUtil.getTile(world, pos);

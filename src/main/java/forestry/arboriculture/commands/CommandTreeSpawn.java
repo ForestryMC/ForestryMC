@@ -14,10 +14,10 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
@@ -37,14 +37,14 @@ import genetics.api.individual.IIndividual;
 import genetics.commands.PermLevel;
 
 public final class CommandTreeSpawn {
-	public static ArgumentBuilder<CommandSource, ?> register(String name, ITreeSpawner treeSpawner) {
+	public static ArgumentBuilder<CommandSourceStack, ?> register(String name, ITreeSpawner treeSpawner) {
 		return Commands.literal(name).requires(PermLevel.ADMIN)
 				.then(Commands.argument("type", TreeArugment.treeArgument())
 						.executes(a -> run(treeSpawner, a.getSource(), a.getArgument("type", ITree.class))))
 				.executes(a -> run(treeSpawner, a.getSource(), TreeDefinition.Oak.createIndividual()));
 	}
 
-	public static int run(ITreeSpawner treeSpawner, CommandSource source, ITree tree) throws CommandSyntaxException {
+	public static int run(ITreeSpawner treeSpawner, CommandSourceStack source, ITree tree) throws CommandSyntaxException {
 		return treeSpawner.spawn(source, tree, source.getPlayerOrException());
 	}
 
@@ -62,7 +62,7 @@ public final class CommandTreeSpawn {
 
 		@Override
 		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-			return ISuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
+			return SharedSuggestionProvider.suggest(TreeManager.treeRoot.getIndividualTemplates().stream()
 					.map(IIndividual::getGenome)
 					.map(a -> a.getActiveAllele(TreeChromosomes.SPECIES))
 					.map(IAllele::getRegistryName)

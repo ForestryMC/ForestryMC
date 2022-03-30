@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.genetics.IEffectData;
 
@@ -49,11 +49,11 @@ public class EffectData implements IEffectData {
 	}
 
 	@Override
-	public void read(CompoundNBT CompoundNBT) {
+	public void read(CompoundTag CompoundNBT) {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundTag write(CompoundTag CompoundNBT) {
 		return CompoundNBT;
 	}
 }

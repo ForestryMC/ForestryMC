@@ -2,31 +2,31 @@ package forestry.core.utils;
 
 import java.util.function.Supplier;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.LanguageMap;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class Translator {
 	private Translator() {}
 
 	public static String translateToLocal(String key) {
-		return LanguageMap.getInstance().getOrDefault(key);
+		return Language.getInstance().getOrDefault(key);
 	}
 
 	public static boolean canTranslateToLocal(String key) {
-		return LanguageMap.getInstance().has(key);
+		return Language.getInstance().has(key);
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {
-		return new TranslationTextComponent(key, format).getString();
+		return new TranslatableComponent(key, format).getString();
 	}
 
-	public static ITextComponent tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), () -> new TranslationTextComponent(defaultKey));
+	public static Component tryTranslate(String optionalKey, String defaultKey) {
+		return tryTranslate(() -> new TranslatableComponent(optionalKey), () -> new TranslatableComponent(defaultKey));
 	}
 
-	public static ITextComponent tryTranslate(String optionalKey, Supplier<ITextComponent> defaultKey) {
-		return tryTranslate(() -> new TranslationTextComponent(optionalKey), defaultKey);
+	public static Component tryTranslate(String optionalKey, Supplier<Component> defaultKey) {
+		return tryTranslate(() -> new TranslatableComponent(optionalKey), defaultKey);
 	}
 
 	/**
@@ -34,8 +34,8 @@ public class Translator {
 	 *
 	 * @return The optional component if it can be translated the other component otherwise.
 	 */
-	private static ITextComponent tryTranslate(Supplier<TranslationTextComponent> optionalKey, Supplier<ITextComponent> defaultKey) {
-		TranslationTextComponent component = optionalKey.get();
+	private static Component tryTranslate(Supplier<TranslatableComponent> optionalKey, Supplier<Component> defaultKey) {
+		TranslatableComponent component = optionalKey.get();
 		if (canTranslate(component)) {
 			return component;
 		} else {
@@ -43,7 +43,7 @@ public class Translator {
 		}
 	}
 
-	public static boolean canTranslate(TranslationTextComponent component) {
+	public static boolean canTranslate(TranslatableComponent component) {
 		String translatedText = component.getString();
 		return !translatedText.startsWith(component.getKey());
 	}

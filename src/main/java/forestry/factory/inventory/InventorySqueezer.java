@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.factory.inventory;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -71,7 +71,7 @@ public class InventorySqueezer extends InventoryAdapterTile<TileSqueezer> {
 	}
 
 	public boolean removeResources(NonNullList<Ingredient> stacks) {
-		IInventory inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
+		Container inventory = new InventoryMapper(this, SLOT_RESOURCE_1, SLOTS_RESOURCE_COUNT);
 		return InventoryUtil.consumeIngredients(inventory,  stacks, null, false, false, true);
 	}
 

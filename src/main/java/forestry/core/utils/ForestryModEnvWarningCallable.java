@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraftforge.fml.CrashReportExtender;
-import net.minecraftforge.fml.common.ICrashCallable;
+import net.minecraftforge.fml.CrashReportCallables;
+import net.minecraftforge.fml.ISystemReportExtender;
 
 import forestry.api.modules.ForestryModule;
 import forestry.api.modules.IForestryModule;
@@ -27,7 +27,7 @@ import forestry.modules.ModuleManager;
 /**
  * ICrashCallable for listing disabled modules for crash reports.
  **/
-public class ForestryModEnvWarningCallable implements ICrashCallable {
+public class ForestryModEnvWarningCallable implements ISystemReportExtender {
 	private final String disabledModulesMessage;
 
 	public static void register() {
@@ -41,7 +41,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 
 			String disabledModulesMessage = "Modules have been disabled in the config: " + Joiner.on(", ").join(disabledModuleNames);
 			ForestryModEnvWarningCallable callable = new ForestryModEnvWarningCallable(disabledModulesMessage);
-			CrashReportExtender.registerCrashCallable(callable);
+			CrashReportCallables.registerCrashCallable(callable);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ForestryModEnvWarningCallable implements ICrashCallable {
 	}
 
 	@Override
-	public String call() {
+	public String get() {
 		return disabledModulesMessage;
 	}
 

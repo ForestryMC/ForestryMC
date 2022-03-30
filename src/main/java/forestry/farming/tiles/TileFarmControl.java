@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.DefaultFarmListener;
 import forestry.api.farming.FarmDirection;
@@ -27,8 +27,8 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 
 	private final IFarmListener farmListener;
 
-	public TileFarmControl() {
-		super(FarmingTiles.CONTROL.tileType());
+	public TileFarmControl(BlockPos pos, BlockState state) {
+		super(FarmingTiles.CONTROL.tileType(), pos, state);
 		this.farmListener = new ControlFarmListener(this);
 	}
 
@@ -48,7 +48,7 @@ public class TileFarmControl extends TileFarm implements IFarmComponent.Listener
 		public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
 			for (Direction facing : new Direction[]{Direction.UP, Direction.DOWN, direction.getFacing()}) {
 				BlockPos pos = tile.getBlockPos();
-				World world = tile.getWorldObj();
+				Level world = tile.getWorldObj();
 				BlockState blockState = world.getBlockState(pos.relative(facing));
 				if (!(blockState.getBlock() instanceof BlockFarm) && world.getSignal(pos, facing) > 0) {
 					return true;

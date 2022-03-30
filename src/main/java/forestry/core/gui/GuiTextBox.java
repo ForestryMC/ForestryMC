@@ -12,25 +12,25 @@ package forestry.core.gui;
 
 import java.util.List;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-public class GuiTextBox extends TextFieldWidget {
+public class GuiTextBox extends EditBox {
 	private static final int enabledColor = 14737632;
 	private static final int disabledColor = 7368816;
 
-	private final FontRenderer fontRenderer;
+	private final Font fontRenderer;
 	private final int startX, startY, width, height;
 
 	private int lineScroll = 0;
 	private int maxLines = 0;
 
-	public GuiTextBox(FontRenderer fontRenderer, int startX, int startY, int width, int height) {
+	public GuiTextBox(Font fontRenderer, int startX, int startY, int width, int height) {
 		super(fontRenderer, startX, startY, width, height, null);
 		this.fontRenderer = fontRenderer;
 		this.startX = startX;
@@ -56,7 +56,7 @@ public class GuiTextBox extends TextFieldWidget {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRenderer.split(new StringTextComponent(getCursoredText()), width).size() * fontRenderer.lineHeight < height;
+		return fontRenderer.split(new TextComponent(getCursoredText()), width).size() * fontRenderer.lineHeight < height;
 	}
 
 	private String getCursoredText() {
@@ -75,14 +75,14 @@ public class GuiTextBox extends TextFieldWidget {
 		return text.substring(0, cursorPos) + "_" + text.substring(cursorPos);
 	}
 
-	private void drawScrolledSplitString(MatrixStack transform, ITextComponent text, int startX, int startY, int width, int textColour) {
-		List<IReorderingProcessor> lines = fontRenderer.split(text, width);
+	private void drawScrolledSplitString(PoseStack transform, Component text, int startX, int startY, int width, int textColour) {
+		List<FormattedCharSequence> lines = fontRenderer.split(text, width);
 		maxLines = lines.size();
 
 		int count = 0;
 		int lineY = startY;
 
-		for (IReorderingProcessor line : lines) {
+		for (FormattedCharSequence line : lines) {
 			if (count < lineScroll) {
 				count++;
 				continue;

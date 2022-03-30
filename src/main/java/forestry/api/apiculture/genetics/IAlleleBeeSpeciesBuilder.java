@@ -7,7 +7,7 @@ package forestry.api.apiculture.genetics;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.IBeeSpriteColourProvider;
 import forestry.api.apiculture.IJubilanceProvider;

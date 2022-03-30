@@ -13,9 +13,9 @@ package forestry.core.multiblock;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.climate.IClimatised;
 import forestry.api.core.IErrorLogicSource;
@@ -101,16 +101,16 @@ public interface IMultiblockControllerInternal extends IMultiblockController, IN
 	 *
 	 * @param data A fresh compound tag to write your multiblock data into
 	 */
-	void formatDescriptionPacket(CompoundNBT data);
+	void formatDescriptionPacket(CompoundTag data);
 
 	/**
 	 * Called when the save delegate's tile entity receiving a description packet
 	 *
 	 * @param data A compound tag containing multiblock data to import
 	 */
-	void decodeDescriptionPacket(CompoundNBT data);
+	void decodeDescriptionPacket(CompoundTag data);
 
-	World getWorldObj();
+	Level getWorldObj();
 
 	/**
 	 * @return True if this controller has no associated blocks, false otherwise

@@ -12,8 +12,8 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.climate.IClimateHousing;
 import forestry.api.climate.IClimateTransformer;
@@ -49,15 +49,14 @@ public class PacketClimateUpdate extends ForestryPacket implements IForestryPack
 
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			BlockPos position = data.readBlockPos();
 			IClimateHousing housing = TileUtil.getTile(player.level, position, IClimateHousing.class);
 			if (housing == null) {
 				return;
 			}
 			IClimateTransformer transformer = housing.getTransformer();
-			if (transformer instanceof IStreamable) {
-				IStreamable streamable = (IStreamable) transformer;
+			if (transformer instanceof IStreamable streamable) {
 				streamable.readData(data);
 			}
 			//housing.onUpdateClimate();

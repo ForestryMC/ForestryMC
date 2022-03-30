@@ -1,6 +1,6 @@
 package forestry.apiculture.tiles;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.apiculture.IBeeHousingInventory;
 

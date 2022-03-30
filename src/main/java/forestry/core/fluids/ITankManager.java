@@ -13,8 +13,8 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,11 +23,11 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public interface ITankManager extends IFluidHandler {
-	void containerAdded(Container container, IContainerListener crafter);
+	void containerAdded(AbstractContainerMenu container, ContainerListener crafter);
 
-	void sendTankUpdate(Container container, List<IContainerListener> crafters);
+	void sendTankUpdate(AbstractContainerMenu container, List<ContainerListener> crafters);
 
-	void containerRemoved(Container container);
+	void containerRemoved(AbstractContainerMenu container);
 
 	IFluidTank getTank(int tankIndex);
 

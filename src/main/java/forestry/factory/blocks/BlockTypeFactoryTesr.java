@@ -12,10 +12,10 @@ package forestry.factory.blocks;
 
 import java.util.function.Supplier;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockTypeTesr;
@@ -46,11 +46,11 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 		final VoxelShape nsBase = Block.box(2D, 2D, 4D, 14, 14, 12);
 		final VoxelShape nsFront = Block.box(0D, 0D, 0D, 16, 16, 4);
 		final VoxelShape nsBack = Block.box(0D, 0D, 12D, 16, 16, 16);
-		final VoxelShape ns = VoxelShapes.or(nsBase, nsFront, nsBack);
+		final VoxelShape ns = Shapes.or(nsBase, nsFront, nsBack);
 		final VoxelShape ewBase = Block.box(4D, 2D, 2D, 12, 14, 14);
 		final VoxelShape ewFront = Block.box(0D, 0D, 0D, 4, 16, 16);
 		final VoxelShape ewBack = Block.box(12D, 0D, 0D, 16, 16, 16);
-		final VoxelShape ew = VoxelShapes.or(ewBase, ewFront, ewBack);
+		final VoxelShape ew = Shapes.or(ewBase, ewFront, ewBack);
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 				.setParticleTexture(name + ".0")
 				.setShape((state, reader, pos, context) -> {
@@ -68,7 +68,7 @@ public enum BlockTypeFactoryTesr implements IBlockTypeTesr {
 		final VoxelShape extension = Block.box(1D, 8D, 7D, 15, 10, 9);
 		MachinePropertiesTesr<T> machineProperties = new MachinePropertiesTesr.Builder<>(teClass, name)
 				.setParticleTexture(name + ".0")
-				.setShape(() -> VoxelShapes.or(pedestal, column, extension))
+				.setShape(() -> Shapes.or(pedestal, column, extension))
 				.create();
 		Proxies.render.setRenderMill(machineProperties, renderMillTexture);
 		this.machineProperties = machineProperties;

@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class SlotOutput extends SlotWatched {
 
-	public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
+	public SlotOutput(Container iinventory, int slotIndex, int posX, int posY) {
 		super(iinventory, slotIndex, posX, posY);
 	}
 

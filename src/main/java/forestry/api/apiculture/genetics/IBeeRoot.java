@@ -8,9 +8,9 @@ package forestry.api.apiculture.genetics;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -32,7 +32,7 @@ public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 	 * @return {@link IApiaristTracker} associated with the passed world.
 	 */
 	@Override
-	IApiaristTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+	IApiaristTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player);
 
 	/* BEE SPECIFIC */
 
@@ -53,21 +53,21 @@ public interface IBeeRoot extends IForestrySpeciesRoot<IBee> {
 	 * @param mate   Valid {@link IBee} representing the mate.
 	 * @return Mated {@link IBee} from the passed genomes.
 	 */
-	IBee getBee(World world, IGenome genome, IBee mate);
+	IBee getBee(Level world, IGenome genome, IBee mate);
 
 	/* GAME MODE */
 	void resetBeekeepingMode();
 
 	List<IBeekeepingMode> getBeekeepingModes();
 
-	IBeekeepingMode getBeekeepingMode(World world);
+	IBeekeepingMode getBeekeepingMode(Level world);
 
 	@Nullable
 	IBeekeepingMode getBeekeepingMode(String name);
 
 	void registerBeekeepingMode(IBeekeepingMode mode);
 
-	void setBeekeepingMode(World world, IBeekeepingMode mode);
+	void setBeekeepingMode(Level world, IBeekeepingMode mode);
 
 	/* MISC */
 

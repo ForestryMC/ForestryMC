@@ -49,7 +49,7 @@ dependencies {
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(8)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -108,7 +108,10 @@ processResources {
 	exclude ".cache"
 
 	filesMatching("META-INF/mods.toml") {
-		expand "version": project.version
+		expand "version": project.version,
+				"forge_version_range": forge_version_range,
+				"jei_version_range": jei_version_range,
+				"patchouli_version_range": patchouli_version_range
 	}
 }
 

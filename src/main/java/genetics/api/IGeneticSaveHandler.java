@@ -2,8 +2,8 @@ package genetics.api;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
@@ -28,7 +28,7 @@ public interface IGeneticSaveHandler {
 	 * @param karyotype   The karyotype of the chromosomes of the genome to that the chromosomes array belongs.
 	 * @param tagCompound The NBT-Data to that the data of the chromosomes should be written.
 	 */
-	CompoundNBT writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundNBT tagCompound);
+	CompoundTag writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundTag tagCompound);
 
 	/**
 	 * Loads the chromosomes form the NBt-Data.
@@ -36,7 +36,7 @@ public interface IGeneticSaveHandler {
 	 * @param karyotype   The karyotype of the chromosomes that the NBT-Data contains.
 	 * @param tagCompound The NBT-Data that contain the information of the chromosomes
 	 */
-	IChromosome[] readTag(IKaryotype karyotype, CompoundNBT tagCompound);
+	IChromosome[] readTag(IKaryotype karyotype, CompoundTag tagCompound);
 
 	/**
 	 * Quickly gets the species without loading the whole genome. And without creating absent chromosomes.
@@ -47,7 +47,7 @@ public interface IGeneticSaveHandler {
 	 * @return The active or inactive allele of the chromosome if the chromosome is present.
 	 */
 	@Nullable
-	IAllele getAlleleDirectly(CompoundNBT genomeNBT, IChromosomeType chromosomeType, boolean active);
+	IAllele getAlleleDirectly(CompoundTag genomeNBT, IChromosomeType chromosomeType, boolean active);
 
 	/**
 	 * Quickly gets the allele without loading the whole genome. And without creating absent chromosomes.
@@ -77,7 +77,7 @@ public interface IGeneticSaveHandler {
 	 * @param chromosomeType The gene type of the chromosome.
 	 * @return The chromosome.
 	 */
-	IChromosome getSpecificChromosome(CompoundNBT genomeNBT, IChromosomeType chromosomeType);
+	IChromosome getSpecificChromosome(CompoundTag genomeNBT, IChromosomeType chromosomeType);
 
 	/**
 	 * Tries to load a specific chromosome and creates it if it is absent.
@@ -89,9 +89,9 @@ public interface IGeneticSaveHandler {
 	IChromosome getSpecificChromosome(ItemStack itemStack, IOrganismType type, IChromosomeType chromosomeType);
 
 	@Nullable
-	CompoundNBT getIndividualDataDirectly(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
+	CompoundTag getIndividualDataDirectly(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
 
-	CompoundNBT getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
+	CompoundTag getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root);
 
-	void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundNBT compound);
+	void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundTag compound);
 }

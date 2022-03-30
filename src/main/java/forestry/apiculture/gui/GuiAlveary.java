@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
 import forestry.apiculture.multiblock.TileAlveary;
@@ -24,21 +24,21 @@ import forestry.core.render.EnumTankLevel;
 public class GuiAlveary extends GuiForestryTitled<ContainerAlveary> {
 	private final TileAlveary tile;
 
-	public GuiAlveary(ContainerAlveary container, PlayerInventory inventory, ITextComponent title) {
+	public GuiAlveary(ContainerAlveary container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/alveary.png", container, inventory, title);
 		this.tile = container.getTile();
 		this.imageHeight = 190;
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		IAlvearyControllerInternal alvearyController = tile.getMultiblockLogic().getController();
 		drawHealthMeter(transform, leftPos + 20, topPos + 37, alvearyController.getHealthScaled(46), EnumTankLevel.rateTankLevel(alvearyController.getHealthScaled(100)));
 	}
 
-	private void drawHealthMeter(MatrixStack transform, int x, int y, int height, EnumTankLevel rated) {
+	private void drawHealthMeter(PoseStack transform, int x, int y, int height, EnumTankLevel rated) {
 		int i = 176 + rated.getLevelScaled(16);
 		int k = 0;
 

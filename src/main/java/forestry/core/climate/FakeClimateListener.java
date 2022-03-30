@@ -1,10 +1,10 @@
 package forestry.core.climate;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,6 +14,8 @@ import forestry.api.climate.IClimateListener;
 import forestry.api.climate.IClimateState;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+
+import java.util.Objects;
 
 public class FakeClimateListener implements IClimateListener {
 
@@ -40,7 +42,8 @@ public class FakeClimateListener implements IClimateListener {
 
 	@Override
 	public Biome getBiome() {
-		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+		Biome value = ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+		return Objects.requireNonNull(value);
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class FakeClimateListener implements IClimateListener {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void syncToClient(ServerPlayerEntity player) {
+	public void syncToClient(ServerPlayer player) {
 
 	}
 
@@ -81,7 +84,7 @@ public class FakeClimateListener implements IClimateListener {
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return null;
 	}
 

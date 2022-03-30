@@ -13,12 +13,12 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -63,31 +63,31 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 		return recipe;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FabricatorRecipe> {
 
 		@Override
 		public FabricatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient plan = RecipeSerializers.deserialize(json.get("plan"));
-			FluidStack molten = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "molten"));
-			ShapedRecipe internal = IRecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, JSONUtils.getAsJsonObject(json, "recipe"));
+			FluidStack molten = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "molten"));
+			ShapedRecipe internal = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, GsonHelper.getAsJsonObject(json, "recipe"));
 
 			return new FabricatorRecipe(recipeId, plan, molten, internal);
 		}
 
 		@Override
-		public FabricatorRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public FabricatorRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			Ingredient plan = Ingredient.fromNetwork(buffer);
 			FluidStack molten = buffer.readFluidStack();
-			ShapedRecipe internal = IRecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
+			ShapedRecipe internal = RecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
 
 			return new FabricatorRecipe(recipeId, plan, molten, internal);
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, FabricatorRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, FabricatorRecipe recipe) {
 			recipe.getPlan().toNetwork(buffer);
 			buffer.writeFluidStack(recipe.getLiquid());
-			IRecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe.getCraftingGridRecipe());
+			RecipeSerializer.SHAPED_RECIPE.toNetwork(buffer, recipe.getCraftingGridRecipe());
 		}
 	}
 }

@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
@@ -40,13 +40,13 @@ public class ButtonElement extends GuiElement {
 
 	@Override
 	@SuppressWarnings("deprecation")
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
-		RenderSystem.enableAlphaTest();
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
+		// RenderSystem.enableAlphaTest();
 		boolean mouseOver = isMouseOver();
 		int hoverState = getTextureIndex(mouseOver);
 		Drawable drawable = textures[hoverState];
 		drawable.draw(transform, 0, 0);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	@Override

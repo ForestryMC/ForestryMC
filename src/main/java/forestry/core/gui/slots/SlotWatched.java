@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.core.inventory.watchers.FakeSlotChangeWatcher;
 import forestry.core.inventory.watchers.FakeSlotPickupWatcher;
@@ -26,7 +26,7 @@ public class SlotWatched extends SlotForestry {
 	private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
 	private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
 
-	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	public SlotWatched(Container inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
@@ -41,10 +41,9 @@ public class SlotWatched extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
-		itemStack = super.onTake(player, itemStack);
+	public void onTake(Player player, ItemStack itemStack) {
+		super.onTake(player, itemStack);
 		pickupWatcher.onTake(getSlotIndex(), player);
-		return itemStack;
 	}
 
 	@Override

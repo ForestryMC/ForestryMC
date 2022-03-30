@@ -12,11 +12,11 @@ package forestry.apiculture.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -52,8 +52,8 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 	// CLIENT
 	private boolean active;
 
-	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, IClimitiserDefinition definition) {
-		super(alvearyType);
+	protected TileAlvearyClimatiser(BlockAlvearyType alvearyType, BlockPos pos, BlockState state, IClimitiserDefinition definition) {
+		super(alvearyType, pos, state);
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 2000);
@@ -78,30 +78,29 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 
 	/* LOADING & SAVING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		energyManager.read(compoundNBT);
 		workingTime = compoundNBT.getInt("Heating");
 		setActive(workingTime > 0);
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		energyManager.write(compoundNBT);
 		compoundNBT.putInt("Heating", workingTime);
-		return compoundNBT;
 	}
 
 	/* Network */
 	@Override
-	protected void encodeDescriptionPacket(CompoundNBT packetData) {
+	protected void encodeDescriptionPacket(CompoundTag packetData) {
 		super.encodeDescriptionPacket(packetData);
 		packetData.putBoolean("Active", active);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(CompoundNBT packetData) {
+	protected void decodeDescriptionPacket(CompoundTag packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
 	}

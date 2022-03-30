@@ -17,8 +17,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.items.IItemHandler;
 
@@ -31,7 +31,7 @@ import forestry.core.tiles.TileUtil;
 public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheListener {
 
 	public interface ITileFilter {
-		boolean matches(TileEntity tile);
+		boolean matches(BlockEntity tile);
 	}
 
 	private final AdjacentTileCache cache;
@@ -43,15 +43,15 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 	@Nullable
 	private final ITileFilter filter;
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache) {
+	public AdjacentInventoryCache(BlockEntity tile, AdjacentTileCache cache) {
 		this(tile, cache, null, null);
 	}
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter) {
+	public AdjacentInventoryCache(BlockEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter) {
 		this(tile, cache, filter, null);
 	}
 
-	public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter, @Nullable Comparator<IItemHandler> sorter) {
+	public AdjacentInventoryCache(BlockEntity tile, AdjacentTileCache cache, @Nullable ITileFilter filter, @Nullable Comparator<IItemHandler> sorter) {
 		this.cache = cache;
 		this.filter = filter;
 		this.sorter = sorter;
@@ -93,7 +93,7 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
 			changed = false;
 			purge();
 			for (Direction side : Direction.values()) {
-				TileEntity tile = cache.getTileOnSide(side);
+				BlockEntity tile = cache.getTileOnSide(side);
 				if (tile != null && (filter == null || filter.matches(tile))) {
 					IItemHandler inv = TileUtil.getInventoryFromTile(tile, side.getOpposite());
 					if (inv != null) {

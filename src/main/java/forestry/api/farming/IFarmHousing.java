@@ -7,10 +7,10 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -37,12 +37,12 @@ public interface IFarmHousing extends IErrorLogicSource, IExtentCache, IClimatis
 	/**
 	 * @return The area of the farmland of the farm.
 	 */
-	Vector3i getArea();
+	Vec3i getArea();
 
 	/**
 	 * @return The offset used by the farm to create a bounding box for the harvest logic.
 	 */
-	Vector3i getOffset();
+	Vec3i getOffset();
 
 	/**
 	 * @return true if any work was done, false otherwise.
@@ -71,9 +71,9 @@ public interface IFarmHousing extends IErrorLogicSource, IExtentCache, IClimatis
 	 *
 	 * @return true if planting was successful, false otherwise.
 	 */
-	boolean plantGermling(IFarmable farmable, World world, BlockPos pos, FarmDirection direction);
+	boolean plantGermling(IFarmable farmable, Level world, BlockPos pos, FarmDirection direction);
 
-	default boolean isValidPlatform(World world, BlockPos pos) {
+	default boolean isValidPlatform(Level world, BlockPos pos) {
 		return false;
 	}
 

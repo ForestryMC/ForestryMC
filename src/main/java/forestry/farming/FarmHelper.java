@@ -20,11 +20,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -55,31 +55,21 @@ public class FarmHelper {
 	}
 
 	public static FarmDirection getLayoutDirection(FarmDirection farmSide) {
-		switch (farmSide) {
-			case NORTH:
-				return FarmDirection.WEST;
-			case WEST:
-				return FarmDirection.SOUTH;
-			case SOUTH:
-				return FarmDirection.EAST;
-			case EAST:
-				return FarmDirection.NORTH;
-		}
-		return null;
+		return switch (farmSide) {
+			case NORTH -> FarmDirection.WEST;
+			case WEST -> FarmDirection.SOUTH;
+			case SOUTH -> FarmDirection.EAST;
+			case EAST -> FarmDirection.NORTH;
+		};
 	}
 
 	public static FarmDirection getReversedLayoutDirection(FarmDirection farmSide) {
-		switch (farmSide) {
-			case NORTH:
-				return FarmDirection.EAST;
-			case WEST:
-				return FarmDirection.NORTH;
-			case SOUTH:
-				return FarmDirection.WEST;
-			case EAST:
-				return FarmDirection.SOUTH;
-		}
-		return null;
+		return switch (farmSide) {
+			case NORTH -> FarmDirection.EAST;
+			case WEST -> FarmDirection.NORTH;
+			case SOUTH -> FarmDirection.WEST;
+			case EAST -> FarmDirection.SOUTH;
+		};
 	}
 
 	public static final ImmutableSet<Block> bricks = ImmutableSet.of(
@@ -108,21 +98,20 @@ public class FarmHelper {
 	 * @return the edge of the farm for the given starting point and direction.
 	 */
 	private static BlockPos getFarmMultiblockEdge(BlockPos start, FarmDirection direction, BlockPos maxFarmCoord, BlockPos minFarmCoord) {
-		switch (direction) {
-			case NORTH: // -z
-				return new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
-			case EAST: // +x
-				return new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
-			case SOUTH: // +z
-				return new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
-			case WEST: // -x
-				return new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
-			default:
-				throw new IllegalArgumentException("Invalid farm direction: " + direction);
-		}
+		return switch (direction) {
+			case NORTH -> // -z
+					new BlockPos(start.getX(), start.getY(), minFarmCoord.getZ());
+			case EAST -> // +x
+					new BlockPos(maxFarmCoord.getX(), start.getY(), start.getZ());
+			case SOUTH -> // +z
+					new BlockPos(start.getX(), start.getY(), maxFarmCoord.getZ());
+			case WEST -> // -x
+					new BlockPos(minFarmCoord.getX(), start.getY(), start.getZ());
+			default -> throw new IllegalArgumentException("Invalid farm direction: " + direction);
+		};
 	}
 
-	public static void createTargets(World world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest, BlockPos minFarmCoord, BlockPos maxFarmCoord) {
+	public static void createTargets(Level world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets, BlockPos targetStart, final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest, BlockPos minFarmCoord, BlockPos maxFarmCoord) {
 		for (FarmDirection farmSide : FarmDirection.values()) {
 
 			final int farmWidth;
@@ -167,7 +156,7 @@ public class FarmHelper {
 	}
 
 	@Nullable
-	private static BlockPos getGroundPosition(World world, IFarmHousing farmHousing, BlockPos targetPosition) {
+	private static BlockPos getGroundPosition(Level world, IFarmHousing farmHousing, BlockPos targetPosition) {
 		if (!world.hasChunkAt(targetPosition)) {
 			return null;
 		}
@@ -191,7 +180,7 @@ public class FarmHelper {
 		return false;
 	}
 
-	public static void setExtents(World world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets) {
+	public static void setExtents(Level world, IFarmHousing farmHousing, Map<FarmDirection, List<FarmTarget>> targets) {
 		for (List<FarmTarget> targetsList : targets.values()) {
 			if (!targetsList.isEmpty()) {
 				BlockPos groundPosition = getGroundPosition(world, farmHousing, targetsList.get(0).getStart());
@@ -203,7 +192,7 @@ public class FarmHelper {
 		}
 	}
 
-	public static boolean cultivateTarget(World world, IFarmHousing farmHousing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static boolean cultivateTarget(Level world, IFarmHousing farmHousing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos targetPosition = target.getStart().offset(0, target.getYOffset(), 0);
 		if (logic.cultivate(world, farmHousing, targetPosition, target.getDirection(), target.getExtent())) {
 			for (IFarmListener listener : farmListeners) {
@@ -215,7 +204,7 @@ public class FarmHelper {
 		return false;
 	}
 
-	public static Collection<ICrop> harvestTargets(World world, IFarmHousing housing, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTargets(Level world, IFarmHousing housing, List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		for (FarmTarget target : farmTargets) {
 			Collection<ICrop> harvested = harvestTarget(world, housing, target, logic, farmListeners);
 			if (!harvested.isEmpty()) {
@@ -226,7 +215,7 @@ public class FarmHelper {
 		return Collections.emptyList();
 	}
 
-	public static Collection<ICrop> harvestTarget(World world, IFarmHousing housing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+	public static Collection<ICrop> harvestTarget(Level world, IFarmHousing housing, FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
 		BlockPos pos = target.getStart().offset(0, target.getYOffset(), 0);
 		Collection<ICrop> harvested = logic.harvest(world, housing, target.getDirection(), target.getExtent(), pos);
 		if (!harvested.isEmpty()) {

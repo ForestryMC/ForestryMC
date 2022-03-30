@@ -2,9 +2,9 @@ package genetics.commands;
 
 import java.util.function.Predicate;
 
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 
-public enum PermLevel implements Predicate<CommandSource> {
+public enum PermLevel implements Predicate<CommandSourceStack> {
 
     EVERYONE(0), ADMIN(2);
     public final int permLevel;
@@ -14,7 +14,7 @@ public enum PermLevel implements Predicate<CommandSource> {
     }
 
     @Override
-    public boolean test(CommandSource commandSource) {
+    public boolean test(CommandSourceStack commandSource) {
         return commandSource.hasPermission(permLevel);
     }
 }

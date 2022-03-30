@@ -1,8 +1,8 @@
 package forestry.arboriculture.items;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,7 +24,7 @@ public class ItemBlockDecorativeLeaves extends ItemBlockForestry<BlockDecorative
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemStack) {
+	public Component getName(ItemStack itemStack) {
 		BlockDecorativeLeaves block = getBlock();
 		TreeDefinition treeDefinition = block.getDefinition();
 		return ItemBlockLeaves.getDisplayName(treeDefinition.createIndividual());

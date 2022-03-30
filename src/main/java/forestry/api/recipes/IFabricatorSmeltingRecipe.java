@@ -5,20 +5,20 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
 
-	IRecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
+	RecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
 
 	class Companion {
 		@ObjectHolder("forestry:fabricator_smelting")
-		public static final IRecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -37,12 +37,12 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
 	FluidStack getProduct();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

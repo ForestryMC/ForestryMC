@@ -10,38 +10,37 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.PickaxeItem;
-import net.minecraft.item.ShovelItem;
-import net.minecraft.item.ToolItem;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DiggerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.ToolActions;
 
 import forestry.core.features.CoreItems;
 import forestry.core.items.definitions.ToolTier;
 import forestry.core.utils.ItemStackUtil;
 
-public class ItemForestryTool extends ToolItem {
+public class ItemForestryTool extends DiggerItem {
 
 	private final ItemStack remnants;
 
 	public ItemForestryTool(ItemStack remnants, float damageBonus, float speedModifier, Item.Properties properties) {
-		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? PickaxeItem.DIGGABLES : ShovelItem.DIGGABLES, properties);
+		super(damageBonus, speedModifier, ToolTier.BRONZE, CoreItems.BROKEN_BRONZE_PICKAXE.itemEqual(remnants.getItem()) ? BlockTags.MINEABLE_WITH_PICKAXE : BlockTags.MINEABLE_WITH_SHOVEL, properties);
 		this.remnants = remnants;
 	}
 
@@ -49,8 +48,8 @@ public class ItemForestryTool extends ToolItem {
 	public boolean isCorrectToolForDrops(BlockState state) {
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			int i = this.getTier().getLevel();
-			if (state.getHarvestTool() == ToolType.PICKAXE) {
-				return i >= state.getHarvestLevel();
+			if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
+				return i >= 0; //state.getHarvestLevel();
 			}
 			Material material = state.getMaterial();
 			return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL;
@@ -62,11 +61,11 @@ public class ItemForestryTool extends ToolItem {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState state) {
-		for (ToolType type : getToolTypes(itemstack)) {
-			if (state.getBlock().isToolEffective(state, type)) {
-				return speed;
-			}
-		}
+		// for (ToolType type : getToolTypes(itemstack)) {
+		// 	if (state.getBlock().isToolEffective(state, type)) {
+		// 		return speed;
+		// 	}
+		// }
 		if (CoreItems.BRONZE_PICKAXE.itemEqual(this)) {
 			Material material = state.getMaterial();
 			return material != Material.METAL && material != Material.HEAVY_METAL && material != Material.STONE ? super.getDestroySpeed(itemstack, state) : speed;
@@ -75,29 +74,29 @@ public class ItemForestryTool extends ToolItem {
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
-		PlayerEntity player = context.getPlayer();
-		Hand hand = context.getHand();
+	public InteractionResult useOn(UseOnContext context) {
+		Player player = context.getPlayer();
+		InteractionHand hand = context.getHand();
 		BlockPos pos = context.getClickedPos();
-		World world = context.getLevel();
+		Level world = context.getLevel();
 		Direction facing = context.getClickedFace();
 
 		if (CoreItems.BRONZE_SHOVEL.itemEqual(this)) {
 			BlockState state = world.getBlockState(pos);
 			if (facing == Direction.DOWN) {
-				return ActionResultType.PASS;
+				return InteractionResult.PASS;
 			} else {
-				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolType.SHOVEL);
+				BlockState modifiedState = state.getToolModifiedState(world, pos, player, context.getItemInHand(), ToolActions.SHOVEL_FLATTEN);
 				BlockState usedState = null;
 				if (modifiedState != null && world.isEmptyBlock(pos.above())) {
-					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
 					usedState = modifiedState;
 				} else if (state.getBlock() instanceof CampfireBlock && state.getValue(CampfireBlock.LIT)) {
 					if (!world.isClientSide()) {
 						world.levelEvent(null, 1009, pos, 0);
 					}
 
-					CampfireBlock.dowse(world, pos, state);
+					CampfireBlock.dowse(player, world, pos, state);
 					usedState = state.setValue(CampfireBlock.LIT, Boolean.FALSE);
 				}
 
@@ -111,17 +110,17 @@ public class ItemForestryTool extends ToolItem {
 						}
 					}
 
-					return ActionResultType.sidedSuccess(world.isClientSide);
+					return InteractionResult.sidedSuccess(world.isClientSide);
 				} else {
-					return ActionResultType.PASS;
+					return InteractionResult.PASS;
 				}
 			}
 		}
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
-	public void onBroken(LivingEntity player, Hand hand) {
-		World world = player.level;
+	public void onBroken(LivingEntity player, InteractionHand hand) {
+		Level world = player.level;
 
 		player.broadcastBreakEvent(hand);
 
@@ -131,7 +130,7 @@ public class ItemForestryTool extends ToolItem {
 	}
 
 	public void onBroken(LivingEntity player) {
-		onBroken(player, Hand.MAIN_HAND);
+		onBroken(player, InteractionHand.MAIN_HAND);
 	}
 
 	@Override
@@ -141,7 +140,7 @@ public class ItemForestryTool extends ToolItem {
 	}
 
 	@Override
-	public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entity) {
+	public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entity) {
 		if (!world.isClientSide && state.getDestroySpeed(world, pos) != 0.0F) {
 			stack.hurtAndBreak(1, entity, this::onBroken);
 		}

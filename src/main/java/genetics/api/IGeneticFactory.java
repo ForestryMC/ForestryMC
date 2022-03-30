@@ -2,8 +2,8 @@ package genetics.api;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleTemplate;
@@ -61,7 +61,7 @@ public interface IGeneticFactory {
 	 *                  {@link IGenome#writeToNBT(CompoundNBT)} or
 	 *                  {@link IGeneticSaveHandler#writeTag(IChromosome[], IKaryotype, CompoundNBT)} to get the data.
 	 */
-	IGenome createGenome(IKaryotype karyotype, CompoundNBT compound);
+	IGenome createGenome(IKaryotype karyotype, CompoundTag compound);
 
 	/**
 	 * Creates a instance of the default implementation of a {@link IGenome}.

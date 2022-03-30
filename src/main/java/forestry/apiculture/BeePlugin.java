@@ -1,9 +1,9 @@
 package forestry.apiculture;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -122,7 +122,7 @@ public class BeePlugin implements IGeneticPlugin {
 				}
 
 				@Override
-				public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, World world, GameProfile researcher, IIndividual individual, int bountyLevel) {
+				public NonNullList<ItemStack> getResearchBounty(IAlleleSpecies species, Level world, GameProfile researcher, IIndividual individual, int bountyLevel) {
 					IAlleleBeeSpecies beeSpecies = (IAlleleBeeSpecies) species;
 					NonNullList<ItemStack> bounty = NonNullList.create();
 					if (bountyLevel > 10) {

@@ -12,7 +12,7 @@ package forestry.apiculture.blocks;
 
 import java.util.function.Supplier;
 
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.tiles.TileApiaristChest;

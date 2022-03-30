@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,7 +53,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Nullable
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 		return GeneticHelper.createOrganism(stack, type, BeeHelper.getRoot().getDefinition());
 	}
 
@@ -64,7 +64,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
@@ -77,9 +77,9 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 
 			IBee individual = optionalIndividual.get();
 			if (individual.isNatural()) {
-				list.add(new TranslationTextComponent("for.bees.stock.pristine").withStyle(TextFormatting.YELLOW, TextFormatting.ITALIC));
+				list.add(new TranslatableComponent("for.bees.stock.pristine").withStyle(ChatFormatting.YELLOW, ChatFormatting.ITALIC));
 			} else {
-				list.add(new TranslationTextComponent("for.bees.stock.ignoble").withStyle(TextFormatting.YELLOW));
+				list.add(new TranslatableComponent("for.bees.stock.ignoble").withStyle(ChatFormatting.YELLOW));
 			}
 		}
 
@@ -87,7 +87,7 @@ public class ItemBeeGE extends ItemGE implements IColoredItem {
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			addCreativeItems(subItems, true);
 		}

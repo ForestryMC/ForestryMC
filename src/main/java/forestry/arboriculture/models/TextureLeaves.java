@@ -14,7 +14,7 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

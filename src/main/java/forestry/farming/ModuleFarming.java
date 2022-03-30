@@ -11,15 +11,13 @@
 package forestry.farming;
 
 
-import java.io.File;
-
-import net.minecraft.block.BeetrootBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.BeetrootBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import net.minecraftforge.fml.DistExecutor;
 
-import forestry.Forestry;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -35,9 +32,7 @@ import forestry.api.core.ForestryAPI;
 import forestry.api.farming.IFarmRegistry;
 import forestry.api.modules.ForestryModule;
 import forestry.core.circuits.CircuitLayout;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
-import forestry.core.config.LocalizedConfiguration;
 import forestry.core.features.CoreItems;
 import forestry.farming.features.FarmingContainers;
 import forestry.farming.gui.GuiFarm;
@@ -53,9 +48,6 @@ import forestry.farming.proxy.ProxyFarmingClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
-
-//import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.FARMING, name = "Farming", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.farming.description")
 public class ModuleFarming extends BlankForestryModule {
@@ -81,7 +73,7 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(FarmingContainers.FARM.containerType(), GuiFarm::new);
+		MenuScreens.register(FarmingContainers.FARM.containerType(), GuiFarm::new);
 	}
 
 	@Override
@@ -112,14 +104,12 @@ public class ModuleFarming extends BlankForestryModule {
 				new ItemStack(Blocks.ACACIA_SAPLING),
 				new ItemStack[]{new ItemStack(Items.STICK)}
 		));
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
-		}
+		registry.registerFarmables(ForestryFarmIdentifier.ARBOREAL, new FarmableGE());
 
 		registry.registerFarmables(ForestryFarmIdentifier.CROPS,
-				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropsBlock.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropsBlock.AGE, 7, 0),
-				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropsBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.WHEAT_SEEDS), Blocks.WHEAT, new ItemStack(Items.WHEAT), CropBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.POTATO), Blocks.POTATOES, new ItemStack(Items.POTATO), CropBlock.AGE, 7, 0),
+				new FarmableAgingCrop(new ItemStack(Items.CARROT), Blocks.CARROTS, new ItemStack(Items.CARROT), CropBlock.AGE, 7, 0),
 				new FarmableAgingCrop(new ItemStack(Items.BEETROOT_SEEDS), Blocks.BEETROOTS, new ItemStack(Items.BEETROOT), BeetrootBlock.AGE, 3, 0));
 
 		/*BlockState plantedBrownMushroom = FarmingBlocks.MUSHROOM.with(BlockMushroom.VARIANT, BlockMushroom.MushroomType.BROWN);
@@ -152,13 +142,6 @@ public class ModuleFarming extends BlankForestryModule {
 
 	@Override
 	public void doInit() {
-
-		//Load config
-		File configFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_FARM + ".cfg");
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
-		FarmRegistry.getInstance().loadConfig(config);
-		config.save();
-
 		FarmDefinition.init();
 	}
 

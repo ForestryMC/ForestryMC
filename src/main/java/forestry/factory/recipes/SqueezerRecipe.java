@@ -14,13 +14,13 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -81,17 +81,17 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<SqueezerRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SqueezerRecipe> {
 
 		@Override
 		public SqueezerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			int processingTime = JSONUtils.getAsInt(json, "time");
+			int processingTime = GsonHelper.getAsInt(json, "time");
 			NonNullList<Ingredient> resources = NonNullList.create();
-			FluidStack fluidOutput = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "output"));
-			ItemStack remnants = RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "remnant"));
-			float remnantsChance = JSONUtils.getAsFloat(json, "chance");
+			FluidStack fluidOutput = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "output"));
+			ItemStack remnants = RecipeSerializers.item(GsonHelper.getAsJsonObject(json, "remnant"));
+			float remnantsChance = GsonHelper.getAsFloat(json, "chance");
 
-			for (JsonElement element : JSONUtils.getAsJsonArray(json, "resources")) {
+			for (JsonElement element : GsonHelper.getAsJsonArray(json, "resources")) {
 				resources.add(RecipeSerializers.deserialize(element));
 			}
 
@@ -99,7 +99,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		}
 
 		@Override
-		public SqueezerRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public SqueezerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int processingTime = buffer.readVarInt();
 			NonNullList<Ingredient> resources = RecipeSerializers.read(buffer, Ingredient::fromNetwork);
 			FluidStack fluidOutput = FluidStack.readFromPacket(buffer);
@@ -110,7 +110,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, SqueezerRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, SqueezerRecipe recipe) {
 			buffer.writeVarInt(recipe.processingTime);
 			RecipeSerializers.write(buffer, recipe.resources, (packetBuffer, ingredient) -> ingredient.toNetwork(packetBuffer));
 			recipe.fluidOutput.writeToPacket(buffer);

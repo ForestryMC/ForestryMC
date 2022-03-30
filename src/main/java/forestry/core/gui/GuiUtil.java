@@ -13,20 +13,16 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.client.gui.GuiUtils;
 
 import forestry.api.core.tooltips.IToolTipProvider;
 import forestry.api.core.tooltips.ToolTip;
@@ -37,14 +33,8 @@ public class GuiUtil {
 		drawItemStack(gui.getFontRenderer(), stack, xPos, yPos);
 	}
 
-	public static void drawItemStack(FontRenderer fontRenderer, ItemStack stack, int xPos, int yPos) {
-		FontRenderer font = null;
-		if (!stack.isEmpty()) {
-			font = stack.getItem().getFontRenderer(stack);
-		}
-		if (font == null) {
-			font = fontRenderer;
-		}
+	public static void drawItemStack(Font fontRenderer, ItemStack stack, int xPos, int yPos) {
+		Font font = fontRenderer;
 
 		ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
 		itemRender.renderAndDecorateItem(stack, xPos, yPos);
@@ -52,24 +42,23 @@ public class GuiUtil {
 	}
 
 	//TODO hopefully this is client side...
-	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, IGuiSizable gui, @Nullable IToolTipProvider provider, ToolTip toolTips, int mouseX, int mouseY) {
 		if (!toolTips.isEmpty()) {
-			RenderSystem.pushMatrix();
+			transform.pushPose();
 			if (provider == null || provider.isRelativeToGui()) {
-				RenderSystem.translatef(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
+				transform.translate(-gui.getGuiLeft(), -gui.getGuiTop(), 0);
 			}
-			MainWindow window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
-			GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getGameInstance().font);
-			RenderSystem.popMatrix();
+			Window window = Minecraft.getInstance().getWindow();    //TODO - more resolution stuff to check
+			//GuiUtils.drawHoveringText(transform, toolTips.getLines(), mouseX, mouseY, window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, gui.getGameInstance().font);
+			transform.popPose();
 		}
 	}
 
-	public static void drawToolTips(MatrixStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
+	public static void drawToolTips(PoseStack transform, IGuiSizable gui, Collection<?> objects, int mouseX, int mouseY) {
 		for (Object obj : objects) {
-			if (!(obj instanceof IToolTipProvider)) {
+			if (!(obj instanceof IToolTipProvider provider)) {
 				continue;
 			}
-			IToolTipProvider provider = (IToolTipProvider) obj;
 			if (!provider.isToolTipVisible()) {
 				continue;
 			}
@@ -90,20 +79,5 @@ public class GuiUtil {
 				drawToolTips(transform, gui, provider, tips, mouseX, mouseY);
 			}
 		}
-	}
-
-	public static void enableUnicode() {
-		Minecraft instance = Minecraft.getInstance();
-		instance.selectMainFont(true);
-	}
-
-	public static void resetUnicode() {
-		Minecraft instance = Minecraft.getInstance();
-		instance.selectMainFont(instance.isEnforceUnicode());
-	}
-
-	public static void showScreen(Screen screen) {
-		Minecraft instance = Minecraft.getInstance();
-		instance.setScreen(screen);
 	}
 }

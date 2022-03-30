@@ -6,13 +6,13 @@ import com.google.gson.JsonSerializationContext;
 
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootFunction;
-import net.minecraft.loot.LootFunctionType;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IIndividual;
@@ -25,21 +25,21 @@ import genetics.utils.RootUtils;
 /**
  * Loot function to add genetic information, an organism, to the item stack.
  */
-public class OrganismFunction extends LootFunction {
-	public static LootFunctionType type;
+public class OrganismFunction extends LootItemConditionalFunction {
+	public static LootItemFunctionType type;
 
 	private final ResourceLocation speciesUid;
 
-	private OrganismFunction(ILootCondition[] conditions, ResourceLocation speciesUid) {
+	private OrganismFunction(LootItemCondition[] conditions, ResourceLocation speciesUid) {
 		super(conditions);
 		this.speciesUid = speciesUid;
 	}
 
-	public static LootFunction.Builder<?> fromDefinition(ISpeciesDefinition<?> definition) {
+	public static LootItemConditionalFunction.Builder<?> fromDefinition(ISpeciesDefinition<?> definition) {
 		return fromUID(definition.getSpecies().getRegistryName());
 	}
 
-	public static LootFunction.Builder<?> fromUID(ResourceLocation speciesUid) {
+	public static LootItemConditionalFunction.Builder<?> fromUID(ResourceLocation speciesUid) {
 		return simpleBuilder((conditions) -> new OrganismFunction(conditions, speciesUid));
 	}
 
@@ -60,11 +60,11 @@ public class OrganismFunction extends LootFunction {
 	}
 
 	@Override
-	public LootFunctionType getType() {
+	public LootItemFunctionType getType() {
 		return type;
 	}
 
-	public static class Serializer extends LootFunction.Serializer<OrganismFunction> {
+	public static class Serializer extends LootItemConditionalFunction.Serializer<OrganismFunction> {
 
 		@Override
 		public void serialize(JsonObject object, OrganismFunction function, JsonSerializationContext context) {
@@ -73,8 +73,8 @@ public class OrganismFunction extends LootFunction {
 		}
 
 		@Override
-		public OrganismFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, ILootCondition[] conditions) {
-			String speciesUid = JSONUtils.getAsString(object, "speciesUid");
+		public OrganismFunction deserialize(JsonObject object, JsonDeserializationContext jsonDeserializationContext, LootItemCondition[] conditions) {
+			String speciesUid = GsonHelper.getAsString(object, "speciesUid");
 			return new OrganismFunction(conditions, new ResourceLocation(speciesUid));
 		}
 	}

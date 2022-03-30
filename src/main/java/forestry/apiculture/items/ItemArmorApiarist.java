@@ -10,26 +10,16 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-
-import forestry.api.apiculture.ApicultureCapabilities;
-import forestry.api.arboriculture.ArboricultureCapabilities;
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Constants;
@@ -38,17 +28,17 @@ import forestry.core.items.definitions.EnumCraftingMaterial;
 
 public class ItemArmorApiarist extends ArmorItem {
 
-	public static final class ApiaristArmorMaterial implements IArmorMaterial {
+	public static final class ApiaristArmorMaterial implements ArmorMaterial {
 
 		private static final int[] reductions = new int[]{1, 2, 3, 1};
 
 		@Override
-		public int getDurabilityForSlot(EquipmentSlotType slotIn) {
+		public int getDurabilityForSlot(EquipmentSlot slotIn) {
 			return 5;
 		}
 
 		@Override
-		public int getDefenseForSlot(EquipmentSlotType slotIn) {
+		public int getDefenseForSlot(EquipmentSlot slotIn) {
 			return reductions[slotIn.getIndex()];
 		}
 
@@ -83,35 +73,16 @@ public class ItemArmorApiarist extends ArmorItem {
 		}
 	}
 
-	public ItemArmorApiarist(EquipmentSlotType equipmentSlotIn) {
+	public ItemArmorApiarist(EquipmentSlot equipmentSlotIn) {
 		super(new ApiaristArmorMaterial(), equipmentSlotIn, (new Item.Properties()).tab(ItemGroups.tabApiculture));
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 		if (ApicultureItems.APIARIST_LEGS.itemEqual(stack)) {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_SECONDARY;
 		} else {
 			return Constants.MOD_ID + ":" + Constants.TEXTURE_APIARIST_ARMOR_PRIMARY;
 		}
-	}
-
-	@Override
-	@Nullable
-	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-		return new ICapabilityProvider() {
-
-			//TODO - null issues
-			@Override
-			public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-				if (capability == ApicultureCapabilities.ARMOR_APIARIST) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				} else if (capability == ArboricultureCapabilities.ARMOR_NATURALIST &&
-					slot == EquipmentSlotType.HEAD) {
-					return LazyOptional.of(capability::getDefaultInstance);
-				}
-				return LazyOptional.empty();
-			}
-		};
 	}
 }

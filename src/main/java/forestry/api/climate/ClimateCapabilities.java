@@ -6,17 +6,16 @@
 package forestry.api.climate;
 
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 public class ClimateCapabilities {
 	/**
 	 * Capability for {@link IClimateListener}.
 	 */
-	@CapabilityInject(IClimateListener.class)
-	public static Capability<IClimateListener> CLIMATE_LISTENER;
+	public static Capability<IClimateListener> CLIMATE_LISTENER = CapabilityManager.get(new CapabilityToken<>() {});
 	/**
 	 * Capability for {@link IClimateTransformer}.
 	 */
-	@CapabilityInject(IClimateListener.class)
-	public static Capability<IClimateTransformer> CLIMATE_TRANSFORMER;
+	public static Capability<IClimateTransformer> CLIMATE_TRANSFORMER = CapabilityManager.get(new CapabilityToken<>() {});
 }

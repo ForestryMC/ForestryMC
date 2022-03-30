@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.biome.Biome;
 
 /**
  * Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
@@ -16,7 +16,7 @@ public enum EnumHumidity {
 	ARID("Arid", 0xaad0db),
 	NORMAL("Normal", 0x4b7bff),
 	/**
-	 * matches {@link Biome#isHighHumidity()}
+	 * matches {@link Biome#isHumid()}
 	 */
 	DAMP("Damp", 0x6e56b3);
 

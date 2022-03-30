@@ -10,57 +10,59 @@
  ******************************************************************************/
 package forestry.core.entities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.tiles.ITitled;
 import forestry.core.utils.PlayerUtil;
 
 //TODO - check nothing missing from MinecartEntity now that this extends AbstractMinecartEntity
-public abstract class MinecartEntityForestry extends AbstractMinecartEntity implements ITitled {
+import net.minecraft.world.entity.vehicle.AbstractMinecart.Type;
 
-	public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, World world) {
+public abstract class MinecartEntityForestry extends AbstractMinecart implements ITitled {
+
+	public MinecartEntityForestry(EntityType<? extends MinecartEntityForestry> type, Level world) {
 		super(type, world);
 		setCustomDisplay(true);
 	}
 
-	public MinecartEntityForestry(EntityType<?> type, World world, double posX, double posY, double posZ) {
+	public MinecartEntityForestry(EntityType<?> type, Level world, double posX, double posY, double posZ) {
 		super(type, world, posX, posY, posZ);
 		setCustomDisplay(true);
 	}
 
 	// Needed to spawn the entity on the client
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
-	public ActionResultType interact(PlayerEntity player, Hand hand) {
-		ActionResultType ret = super.interact(player, hand);
+	public InteractionResult interact(Player player, InteractionHand hand) {
+		InteractionResult ret = super.interact(player, hand);
 		if (ret.consumesAction()) {
 			return ret;
 		}
 		PlayerUtil.actOnServer(player, this::openGui);
-		return ActionResultType.sidedSuccess(this.level.isClientSide);
+		return InteractionResult.sidedSuccess(this.level.isClientSide);
 	}
 
-	protected abstract void openGui(ServerPlayerEntity player);
+	protected abstract void openGui(ServerPlayer player);
 
 	/* MinecartEntity */
 	@Override
@@ -97,8 +99,8 @@ public abstract class MinecartEntityForestry extends AbstractMinecartEntity impl
 	}
 
 	@Override
-	public ITextComponent getName() {
-		return new TranslationTextComponent(getUnlocalizedTitle());
+	public Component getName() {
+		return new TranslatableComponent(getUnlocalizedTitle());
 	}
 
 	/* ITitled */

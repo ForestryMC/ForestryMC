@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.AlleleCategorized;
 import genetics.api.individual.IGenome;
@@ -37,7 +37,7 @@ public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEf
 	}
 
 	@Override
-	public IEffectData doEffect(IGenome genome, IEffectData storedData, World world, BlockPos pos) {
+	public IEffectData doEffect(IGenome genome, IEffectData storedData, Level world, BlockPos pos) {
 		return storedData;
 	}
 }

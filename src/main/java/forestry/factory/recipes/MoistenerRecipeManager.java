@@ -12,13 +12,15 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.IMoistenerManager;
 import forestry.api.recipes.IMoistenerRecipe;
+
+import java.util.Optional;
 
 public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerRecipe> implements IMoistenerManager {
 
@@ -37,23 +39,14 @@ public class MoistenerRecipeManager extends AbstractCraftingProvider<IMoistenerR
 			return false;
 		}
 
-		for (IMoistenerRecipe rec : getRecipes(recipeManager)) {
-			if (rec.getResource().test(resource)) {
-				return true;
-			}
-		}
-
-		return false;
+		return getRecipes(recipeManager)
+				.anyMatch(recipe -> recipe.getResource().test(resource));
 	}
 
 	@Override
-	@Nullable
-	public IMoistenerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
-		for (IMoistenerRecipe recipe : getRecipes(recipeManager)) {
-			if (recipe.getResource().test(item)) {
-				return recipe;
-			}
-		}
-		return null;
+	public Optional<IMoistenerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack item) {
+		return getRecipes(recipeManager)
+				.filter(recipe -> recipe.getResource().test(item))
+				.findFirst();
 	}
 }

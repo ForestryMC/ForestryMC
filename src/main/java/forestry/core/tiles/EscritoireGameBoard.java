@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -47,15 +47,15 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 
 	}
 
-	public EscritoireGameBoard(CompoundNBT nbt) {
+	public EscritoireGameBoard(CompoundTag nbt) {
 		tokenCount = nbt.getInt("TokenCount");
 
 		if (tokenCount > 0) {
 			EscritoireGameToken[] tokens = new EscritoireGameToken[tokenCount];
-			ListNBT nbttaglist = nbt.getList("GameTokens", 10);
+			ListTag nbttaglist = nbt.getList("GameTokens", 10);
 
 			for (int j = 0; j < nbttaglist.size(); ++j) {
-				CompoundNBT CompoundNBT2 = nbttaglist.getCompound(j);
+				CompoundTag CompoundNBT2 = nbttaglist.getCompound(j);
 				int index = CompoundNBT2.getByte("Slot");
 				tokens[index] = new EscritoireGameToken(CompoundNBT2);
 			}
@@ -198,10 +198,10 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		if (tokenCount > 0) {
 			compoundNBT.putInt("TokenCount", tokenCount);
-			ListNBT nbttaglist = new ListNBT();
+			ListTag nbttaglist = new ListTag();
 
 			for (int i = 0; i < tokenCount; i++) {
 				EscritoireGameToken token = gameTokens.get(i);
@@ -209,7 +209,7 @@ public class EscritoireGameBoard implements INbtWritable, IStreamable {
 					continue;
 				}
 
-				CompoundNBT compoundNBT2 = new CompoundNBT();
+				CompoundTag compoundNBT2 = new CompoundTag();
 				compoundNBT2.putByte("Slot", (byte) i);
 				token.write(compoundNBT2);
 				nbttaglist.add(compoundNBT2);

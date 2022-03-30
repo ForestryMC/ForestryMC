@@ -1,9 +1,9 @@
 package forestry.factory.recipes;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.client.server.IntegratedServer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -23,7 +23,7 @@ class ClientCraftingHelper {
 			}
 		}
 
-		ClientPlayNetHandler connection = minecraft.getConnection();
+		ClientPacketListener connection = minecraft.getConnection();
 
 		if (connection == null) {
 			// Usage of this code path is probably a bug

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.IContainerCrafting;
@@ -31,12 +31,12 @@ import forestry.factory.tiles.TileCarpenter;
 
 public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> implements IContainerCrafting {
 
-	public static ContainerCarpenter fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerCarpenter fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileCarpenter tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileCarpenter.class);
 		return new ContainerCarpenter(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerCarpenter(int windowId, PlayerInventory inventoryplayer, TileCarpenter tile) {
+	public ContainerCarpenter(int windowId, Inventory inventoryplayer, TileCarpenter tile) {
 		super(windowId, FactoryContainers.CARPENTER.containerType(), inventoryplayer, tile, 8, 136);
 
 		// Internal inventory
@@ -65,7 +65,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 	}
 
 	@Override
-	public void onCraftMatrixChanged(IInventory iinventory, int slot) {
+	public void onCraftMatrixChanged(Container iinventory, int slot) {
 		tile.checkRecipe();
 	}
 
@@ -75,7 +75,7 @@ public class ContainerCarpenter extends ContainerLiquidTanks<TileCarpenter> impl
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		IInventory craftPreviewInventory = tile.getCraftPreviewInventory();
+		Container craftPreviewInventory = tile.getCraftPreviewInventory();
 
 		ItemStack newCraftPreview = craftPreviewInventory.getItem(0);
 		if (!ItemStack.matches(oldCraftPreview, newCraftPreview)) {

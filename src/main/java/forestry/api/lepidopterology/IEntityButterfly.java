@@ -7,7 +7,7 @@ package forestry.api.lepidopterology;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.CreatureEntity;
+import net.minecraft.world.entity.PathfinderMob;
 
 import genetics.api.individual.IIndividual;
 
@@ -25,7 +25,7 @@ public interface IEntityButterfly {
 	/**
 	 * @return The entity as an EntityCreature to save casting.
 	 */
-	CreatureEntity getEntity();
+	PathfinderMob getEntity();
 
 	@Nullable
 	IIndividual getPollen();

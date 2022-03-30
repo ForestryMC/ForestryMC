@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -45,7 +45,7 @@ import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.commands.CommandHelpers;
 
-public final class CommandSaveStats implements Command<CommandSource> {
+public final class CommandSaveStats implements Command<CommandSourceStack> {
 
 	private static final String discoveredSymbol;
 	private static final String blacklistedSymbol;
@@ -65,19 +65,19 @@ public final class CommandSaveStats implements Command<CommandSource> {
 		this.modeHelper = modeHelper;
 	}
 
-	public static ArgumentBuilder<CommandSource, ?> register(IStatsSaveHelper saveHelper, ICommandModeHelper modeHelper) {
+	public static ArgumentBuilder<CommandSourceStack, ?> register(IStatsSaveHelper saveHelper, ICommandModeHelper modeHelper) {
 		return Commands.literal("save")
 				.then(Commands.argument("player", EntityArgument.player())
 						.executes(new CommandSaveStats(saveHelper, modeHelper)));
 
 	}
 
-	public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+	public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		String newLine = System.getProperty("line.separator");
 
-		ServerPlayerEntity player = EntityArgument.getPlayer(ctx, "player");
+		ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
 
-		World world = ctx.getSource().getLevel();
+		Level world = ctx.getSource().getLevel();
 
 		Collection<String> statistics = new ArrayList<>();
 

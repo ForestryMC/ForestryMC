@@ -13,10 +13,10 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -61,19 +61,19 @@ public class StillRecipe implements IStillRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<StillRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<StillRecipe> {
 
 		@Override
 		public StillRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			int timePerUnit = JSONUtils.getAsInt(json, "time");
-			FluidStack input = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "input"));
-			FluidStack output = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "output"));
+			int timePerUnit = GsonHelper.getAsInt(json, "time");
+			FluidStack input = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "input"));
+			FluidStack output = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "output"));
 
 			return new StillRecipe(recipeId, timePerUnit, input, output);
 		}
 
 		@Override
-		public StillRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public StillRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int timePerUnit = buffer.readVarInt();
 			FluidStack input = FluidStack.readFromPacket(buffer);
 			FluidStack output = FluidStack.readFromPacket(buffer);
@@ -82,7 +82,7 @@ public class StillRecipe implements IStillRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, StillRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, StillRecipe recipe) {
 			buffer.writeVarInt(recipe.timePerUnit);
 			recipe.input.writeToPacket(buffer);
 			recipe.output.writeToPacket(buffer);

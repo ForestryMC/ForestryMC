@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.arboriculture.proxy;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.FoliageColors;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.FoliageColor;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -55,22 +55,22 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public int getFoliageColorDefault() {
-		return FoliageColors.getDefaultColor();
+		return FoliageColor.getDefaultColor();
 	}
 
 	@Override
 	public int getFoliageColorBirch() {
-		return FoliageColors.getBirchColor();
+		return FoliageColor.getBirchColor();
 	}
 
 	@Override
 	public int getFoliageColorSpruce() {
-		return FoliageColors.getEvergreenColor();
+		return FoliageColor.getEvergreenColor();
 	}
 
 	@Override
 	public void registerSprites(TextureStitchEvent.Pre event) {
-		if (event.getMap().location() != PlayerContainer.BLOCK_ATLAS) {
+		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {
 			return;
 		}
 		TextureLeaves.registerAllSprites(event);
@@ -82,16 +82,16 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
 		// fruit overlays require CUTOUT_MIPPED, even in Fast graphics
-		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());
-		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
-		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.cutout());
-		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.translucent()));
+		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
+		ItemBlockRenderTypes.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());
+		ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
+		ArboricultureBlocks.LEAVES_DECORATIVE.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.cutoutMipped()));
+		ItemBlockRenderTypes.setRenderLayer(ArboricultureBlocks.SAPLING_GE.block(), RenderType.cutout());
+		ArboricultureBlocks.DOORS.getBlocks().forEach((block) -> ItemBlockRenderTypes.setRenderLayer(block, RenderType.translucent()));
 
 		AlleleUtils.forEach(TreeChromosomes.SPECIES, (treeSpecies) -> {
-			ModelLoader.addSpecialModel(treeSpecies.getBlockModel());
-			ModelLoader.addSpecialModel(treeSpecies.getItemModel());
+			ForgeModelBakery.addSpecialModel(treeSpecies.getBlockModel());
+			ForgeModelBakery.addSpecialModel(treeSpecies.getItemModel());
 		});
 	}
 

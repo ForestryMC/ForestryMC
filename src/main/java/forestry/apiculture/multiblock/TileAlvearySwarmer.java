@@ -15,14 +15,15 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Stack;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -41,14 +42,14 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.WorldUtils;
 
-public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, IActivatable, IAlvearyComponent.Active {
+public class TileAlvearySwarmer extends TileAlveary implements WorldlyContainer, IActivatable, IAlvearyComponent.Active {
 
 	private final InventorySwarmer inventory;
 	private final Stack<ItemStack> pendingSpawns = new Stack<>();
 	private boolean active;
 
-	public TileAlvearySwarmer() {
-		super(BlockAlvearyType.SWARMER);
+	public TileAlvearySwarmer(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.SWARMER, pos, state);
 		this.inventory = new InventorySwarmer(this);
 	}
 
@@ -150,48 +151,47 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	/* NETWORK */
 
 	@Override
-	protected void encodeDescriptionPacket(CompoundNBT packetData) {
+	protected void encodeDescriptionPacket(CompoundTag packetData) {
 		super.encodeDescriptionPacket(packetData);
 		packetData.putBoolean("Active", active);
 	}
 
 	@Override
-	protected void decodeDescriptionPacket(CompoundNBT packetData) {
+	protected void decodeDescriptionPacket(CompoundTag packetData) {
 		super.decodeDescriptionPacket(packetData);
 		setActive(packetData.getBoolean("Active"));
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		setActive(compoundNBT.getBoolean("Active"));
 
-		ListNBT nbttaglist = compoundNBT.getList("PendingSpawns", 10);
+		ListTag nbttaglist = compoundNBT.getList("PendingSpawns", 10);
 		for (int i = 0; i < nbttaglist.size(); i++) {
-			CompoundNBT compoundNBT1 = nbttaglist.getCompound(i);
+			CompoundTag compoundNBT1 = nbttaglist.getCompound(i);
 			pendingSpawns.add(ItemStack.of(compoundNBT1));
 		}
 	}
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		compoundNBT.putBoolean("Active", active);
 
-		ListNBT nbttaglist = new ListNBT();
+		ListTag nbttaglist = new ListTag();
 		ItemStack[] offspring = pendingSpawns.toArray(new ItemStack[0]);
 		for (int i = 0; i < offspring.length; i++) {
 			if (offspring[i] != null) {
-				CompoundNBT compoundNBT1 = new CompoundNBT();
+				CompoundTag compoundNBT1 = new CompoundTag();
 				compoundNBT1.putByte("Slot", (byte) i);
 				offspring[i].save(compoundNBT1);
 				nbttaglist.add(compoundNBT1);
 			}
 		}
 		compoundNBT.put("PendingSpawns", nbttaglist);
-		return compoundNBT;
 	}
 
 	@Override
@@ -213,7 +213,7 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerAlvearySwarmer(windowId, inv, this);
 	}
 }

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -23,14 +23,14 @@ import forestry.factory.tiles.TileMoistener;
 public class GuiMoistener extends GuiForestryTitled<ContainerMoistener> {
 	private final TileMoistener tile;
 
-	public GuiMoistener(ContainerMoistener container, PlayerInventory inventory, ITextComponent title) {
+	public GuiMoistener(ContainerMoistener container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/moistener.png", container, inventory, title);
 		this.tile = container.getTile();
 		widgetManager.add(new TankWidget(this.widgetManager, 16, 16, 0));
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Mycelium production progress

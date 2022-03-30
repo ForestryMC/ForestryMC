@@ -12,13 +12,14 @@ package forestry.apiculture.tiles;
 
 import java.util.Collections;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -37,8 +38,8 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	private final IBeeListener beeListener;
 	private final InventoryBeeHousing beeInventory;
 
-	public TileBeeHouse() {
-		super(ApicultureTiles.BEE_HOUSE.tileType(), "bee.house");
+	public TileBeeHouse(BlockPos pos, BlockState state) {
+		super(ApicultureTiles.BEE_HOUSE.tileType(), pos, state, "bee.house");
 		this.beeListener = new DefaultBeeListener();
 
 		beeInventory = new InventoryBeeHousing(12);
@@ -62,12 +63,12 @@ public class TileBeeHouse extends TileBeeHousingBase {
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerBeeHousing(windowId, player.inventory, this, false, GuiBeeHousing.Icon.BEE_HOUSE);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerBeeHousing(windowId, player.getInventory(), this, false, GuiBeeHousing.Icon.BEE_HOUSE);
 	}
 
 	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		NetworkHooks.openGui(player, this, p -> {
 			PacketBufferForestry forestryP = new PacketBufferForestry(p);
 			forestryP.writeBlockPos(pos);

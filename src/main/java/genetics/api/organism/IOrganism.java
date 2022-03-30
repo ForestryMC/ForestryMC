@@ -2,7 +2,7 @@ package genetics.api.organism;
 
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
@@ -19,7 +19,7 @@ import genetics.api.root.IRootDefinition;
 /**
  * Implement this interface as a capability which should provide the genetic information of an item.
  * <p/>
- * You can use {@link IGeneticFactory#createOrganism(ItemStack, IOrganismType, IIndividualRoot)} to create an
+ * You can use {@link IGeneticFactory#createOrganism(ItemStack, IOrganismType, IRootDefinition)} to create an
  * instance of this or you can use your own implementation.
  */
 public interface IOrganism<I extends IIndividual> extends ICapabilityProvider {

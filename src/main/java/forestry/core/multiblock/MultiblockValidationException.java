@@ -2,7 +2,7 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 /**
  * An exception thrown when trying to validate a multiblock. Requires a string describing why the multiblock

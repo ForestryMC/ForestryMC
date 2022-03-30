@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.core.ISaveEventHandler;
@@ -18,7 +18,7 @@ import forestry.core.ISaveEventHandler;
 public class SaveEventHandlerApiculture implements ISaveEventHandler {
 
 	@Override
-	public void onWorldLoad(IWorld world) {
+	public void onWorldLoad(LevelAccessor world) {
 		BeeManager.beeRoot.resetBeekeepingMode();
 	}
 

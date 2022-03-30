@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -27,12 +27,12 @@ import forestry.farming.tiles.TileFarm;
 
 public class ContainerFarm extends ContainerSocketed<TileFarm> {
 
-	public static ContainerFarm fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerFarm fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileFarm tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileFarm.class);
 		return new ContainerFarm(windowId, inv, tile);
 	}
 
-	public ContainerFarm(int windowId, PlayerInventory playerInventory, TileFarm data) {
+	public ContainerFarm(int windowId, Inventory playerInventory, TileFarm data) {
 		super(windowId, FarmingContainers.FARM.containerType(), playerInventory, data, 28, 138);
 
 		// Resources

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketHandlerServer;
@@ -39,7 +39,7 @@ public class PacketLetterTextSet extends ForestryPacket implements IForestryPack
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			if (player.containerMenu instanceof ContainerLetter) {
 				String string = data.readUtf();
 				((ContainerLetter) player.containerMenu).handleSetText(string);

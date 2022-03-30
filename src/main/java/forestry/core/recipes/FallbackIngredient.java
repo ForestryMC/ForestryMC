@@ -20,13 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.JSONUtils;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.util.GsonHelper;
 
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -35,7 +36,7 @@ public class FallbackIngredient extends Ingredient {
 	private final Ingredient primary;
 	private final Ingredient fallback;
 
-	public static Ingredient fromItems(IItemProvider primary, IItemProvider fallback) {
+	public static Ingredient fromItems(ItemLike primary, ItemLike fallback) {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
@@ -43,11 +44,11 @@ public class FallbackIngredient extends Ingredient {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
-	public static Ingredient fromTag(ITag<Item> primary, ItemStack fallback) {
+	public static Ingredient fromTag(TagKey<Item> primary, ItemStack fallback) {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
-	public static Ingredient fromTag(ITag<Item> primary, ITag<Item> fallback) {
+	public static Ingredient fromTag(TagKey<Item> primary, TagKey<Item> fallback) {
 		return fromIngredients(Ingredient.of(primary), Ingredient.of(fallback));
 	}
 
@@ -76,12 +77,12 @@ public class FallbackIngredient extends Ingredient {
 		}
 
 		@Override
-		public Ingredient parse(PacketBuffer buffer) {
+		public Ingredient parse(FriendlyByteBuf buffer) {
 			return Ingredient.fromNetwork(buffer);
 		}
 
 		@Override
-		public void write(PacketBuffer buffer, Ingredient ingredient) {
+		public void write(FriendlyByteBuf buffer, Ingredient ingredient) {
 			ingredient.toNetwork(buffer);
 		}
 
@@ -90,13 +91,12 @@ public class FallbackIngredient extends Ingredient {
 		public Ingredient parse(JsonObject json) {
 			Ingredient ret;
 			try {
-				JsonArray arr = JSONUtils.getAsJsonArray(json, "primary");
+				JsonArray arr = GsonHelper.getAsJsonArray(json, "primary");
 				List<Ingredient> ingredientList = new ArrayList<>();
 				for (JsonElement element : arr) {
-					if (!(element instanceof JsonObject)) {
+					if (!(element instanceof JsonObject obj)) {
 						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
 					}
-					JsonObject obj = (JsonObject) element;
 					ingredientList.add(CraftingHelper.getIngredient(obj));
 				}
 				ret = Ingredient.merge(ingredientList);
@@ -104,13 +104,12 @@ public class FallbackIngredient extends Ingredient {
 				ret = Ingredient.EMPTY;    //throws exception if item doesn't exist
 			}
 			if (ret.getItems().length == 0) {
-				JsonArray fallbackArr = JSONUtils.getAsJsonArray(json, "fallback");
+				JsonArray fallbackArr = GsonHelper.getAsJsonArray(json, "fallback");
 				List<Ingredient> ingredients = new ArrayList<>();
 				for (JsonElement element : fallbackArr) {
-					if (!(element instanceof JsonObject)) {
+					if (!(element instanceof JsonObject obj)) {
 						throw new JsonSyntaxException("Didn't supply json object for ingredient!");
 					}
-					JsonObject obj = (JsonObject) element;
 					ingredients.add(CraftingHelper.getIngredient(obj));
 				}
 				ret = Ingredient.merge(ingredients);

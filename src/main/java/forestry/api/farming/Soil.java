@@ -1,7 +1,7 @@
 package forestry.api.farming;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
 
 public final class Soil {
 	private final ItemStack resource;

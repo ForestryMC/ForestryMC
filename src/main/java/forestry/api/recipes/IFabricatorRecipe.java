@@ -5,21 +5,21 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IFabricatorRecipe extends IForestryRecipe {
 
-	IRecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
+	RecipeType<IFabricatorRecipe> TYPE = RecipeManagers.create("forestry:fabricator");
 
 	class Companion {
 		@ObjectHolder("forestry:fabricator")
-		public static final IRecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IFabricatorRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -38,12 +38,12 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 	ShapedRecipe getCraftingGridRecipe();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

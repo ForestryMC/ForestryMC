@@ -12,7 +12,7 @@ package forestry.core.particles;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.particles.ParticleType;
+import net.minecraft.core.particles.ParticleType;
 
 import com.mojang.serialization.Codec;
 

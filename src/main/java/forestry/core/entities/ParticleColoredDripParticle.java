@@ -12,23 +12,23 @@ package forestry.core.entities;
 
 //import net.minecraft.block.BlockLiquid;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 
 //TODO - sort out setParticleTextureIndex
-public class ParticleColoredDripParticle extends SpriteTexturedParticle {
+public class ParticleColoredDripParticle extends TextureSheetParticle {
 
 	/**
 	 * The height of the current bob
 	 */
 	private int bobTimer;
 
-	public ParticleColoredDripParticle(ClientWorld world, double x, double y, double z, float red, float green, float blue) {
+	public ParticleColoredDripParticle(ClientLevel world, double x, double y, double z, float red, float green, float blue) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.xd = this.yd = this.zd = 0.0D;
 
@@ -91,7 +91,7 @@ public class ParticleColoredDripParticle extends SpriteTexturedParticle {
 			//				d0 = BlockLiquid.getLiquidHeightPercent(BlockState.getValue(BlockLiquid.LEVEL));
 			//			}
 
-			double d1 = MathHelper.floor(this.y) + 1 - d0;
+			double d1 = Mth.floor(this.y) + 1 - d0;
 
 			if (this.y < d1) {
 				this.remove();
@@ -100,7 +100,7 @@ public class ParticleColoredDripParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
 	}
 }

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.storage;
 
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.storage.IBackpackDefinition;
 import forestry.core.IPickupHandler;
@@ -23,7 +23,7 @@ import forestry.storage.items.ItemBackpack;
 public class PickupHandlerStorage implements IPickupHandler {
 
 	@Override
-	public boolean onItemPickup(PlayerEntity player, ItemEntity entityitem) {
+	public boolean onItemPickup(Player player, ItemEntity entityitem) {
 
 		ItemStack itemstack = entityitem.getItem();
 		if (itemstack.isEmpty()) {
@@ -38,16 +38,15 @@ public class PickupHandlerStorage implements IPickupHandler {
 		// Make sure to top off manually placed itemstacks in player inventory first
 		topOffPlayerInventory(player, itemstack);
 
-		for (ItemStack pack : player.inventory.items) {
+		for (ItemStack pack : player.getInventory().items) {
 			if (itemstack.isEmpty()) {
 				break;
 			}
 
-			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack)) {
+			if (pack.isEmpty() || !(pack.getItem() instanceof ItemBackpack backpack)) {
 				continue;
 			}
 
-			ItemBackpack backpack = (ItemBackpack) pack.getItem();
 			IBackpackDefinition backpackDefinition = backpack.getDefinition();
 			if (backpackDefinition.getFilter().test(itemstack)) {
 				ItemBackpack.tryStowing(player, pack, itemstack);
@@ -61,12 +60,12 @@ public class PickupHandlerStorage implements IPickupHandler {
 	 * This tops off existing stacks in the player's inventory. That way you can keep f.e. a stack of dirt or cobblestone in your inventory which gets refreshed
 	 * constantly by picked up items.
 	 */
-	private static void topOffPlayerInventory(PlayerEntity player, ItemStack itemstack) {
+	private static void topOffPlayerInventory(Player player, ItemStack itemstack) {
 
 		// Add to player inventory first, if there is an incomplete stack in
 		// there.
-		for (int i = 0; i < player.inventory.getContainerSize(); i++) {
-			ItemStack inventoryStack = player.inventory.getItem(i);
+		for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+			ItemStack inventoryStack = player.getInventory().getItem(i);
 			// We only add to existing stacks.
 			if (inventoryStack.isEmpty()) {
 				continue;

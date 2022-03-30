@@ -8,11 +8,12 @@ package forestry.api.genetics.flowers;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import genetics.api.individual.IIndividual;
 
@@ -46,7 +47,7 @@ public interface IFlowerRegistry {
 	/**
 	 * Registers an accepted flower with a particular tag.
 	 */
-	void registerAcceptableFlower(ITag<Block> block, String... flowerTypes);
+	void registerAcceptableFlower(TagKey<Block> block, String... flowerTypes);
 
 	/**
 	 * Registers custom logic for accepted flowers.
@@ -71,7 +72,7 @@ public interface IFlowerRegistry {
 	 *
 	 * @since Forestry 5.5.4
 	 */
-	boolean growFlower(String flowerType, World world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers);
+	boolean growFlower(String flowerType, Level world, IIndividual individual, BlockPos pos, Collection<BlockState> potentialFlowers);
 
 	/**
 	 * Gets an iterator over the area a bee can travel from its beeHousing.
@@ -82,7 +83,7 @@ public interface IFlowerRegistry {
 	 * @return an iterator over the area a bee can travel from its beeHousing.
 	 * @since Forestry 5.5.2
 	 */
-	Iterator<BlockPos.Mutable> getAreaIterator(IBeeHousing beeHousing, IBee bee);
+	Iterator<BlockPos.MutableBlockPos> getAreaIterator(IBeeHousing beeHousing, IBee bee);
 
 	/**
 	 * Checks a single coordinate to see if it is an accepted flower.

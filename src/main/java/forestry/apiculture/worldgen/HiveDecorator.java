@@ -14,14 +14,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -30,16 +30,16 @@ import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.utils.Log;
 
-public class HiveDecorator extends Feature<NoFeatureConfig> {
+public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 	public HiveDecorator() {
-		super(NoFeatureConfig.CODEC);
+		super(NoneFeatureConfiguration.CODEC);
 	}
 
-	private static boolean decorateHivesDebug(ISeedReader world, Random rand, BlockPos pos, List<Hive> hives) {
+	private static boolean decorateHivesDebug(WorldGenLevel world, Random rand, BlockPos pos, List<Hive> hives) {
 		int posX = pos.getX() + rand.nextInt(16);
 		int posZ = pos.getZ() + rand.nextInt(16);
 
-		Biome biome = world.getBiome(new BlockPos(posX, 0, posZ));
+		Biome biome = world.getBiome(new BlockPos(posX, 0, posZ)).value();
 		EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 		for (int x = 0; x < 16; x++) {
@@ -58,7 +58,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 		return false;
 	}
 
-	public static boolean tryGenHive(ISeedReader world, Random rand, int x, int z, Hive hive) {
+	public static boolean tryGenHive(WorldGenLevel world, Random rand, int x, int z, Hive hive) {
 		final BlockPos hivePos = hive.getPosForHive(world, x, z);
 
 		if (hivePos == null) {
@@ -69,7 +69,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 			return false;
 		}
 
-		Biome biome = world.getBiome(hivePos);
+		Biome biome = world.getBiome(hivePos).value();
 		EnumTemperature temperature = EnumTemperature.getFromValue(biome.getTemperature(hivePos));
 		if (!hive.isGoodTemperature(temperature)) {
 			return false;
@@ -82,7 +82,7 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 		return setHive(world, rand, hivePos, hive);
 	}
 
-	private static boolean setHive(ISeedReader world, Random rand, BlockPos pos, Hive hive) {
+	private static boolean setHive(WorldGenLevel world, Random rand, BlockPos pos, Hive hive) {
 		BlockState hiveState = hive.getHiveBlockState();
 		Block hiveBlock = hiveState.getBlock();
 		boolean placed = world.setBlock(pos, hiveState, Constants.FLAG_BLOCK_SYNC);
@@ -111,27 +111,31 @@ public class HiveDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean place(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		WorldGenLevel level = context.level();
+		Random rand = context.random();
+		BlockPos pos = context.origin();
+
 		List<Hive> hives = ModuleApiculture.getHiveRegistry().getHives();
 
 		if (Config.generateBeehivesDebug) {
-			decorateHivesDebug(seedReader, rand, pos, hives);
+			decorateHivesDebug(level, rand, pos, hives);
 			return false;
 		}
 
 		Collections.shuffle(hives, rand);
 
 		for (int tries = 0; tries < hives.size() / 2; tries++) {
-			Biome biome = seedReader.getBiome(pos);
+			Biome biome = level.getBiome(pos).value();
 			EnumHumidity humidity = EnumHumidity.getFromValue(biome.getDownfall());
 
 			for (Hive hive : hives) {
-				if (hive.genChance() * Config.getBeehivesAmount() * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
+				if (hive.genChance() * Config.generateBeehivesAmount * hives.size() / 8 >= rand.nextFloat() * 100.0f) {
 					if (hive.isGoodBiome(biome) && hive.isGoodHumidity(humidity)) {
 						int x = pos.getX() + rand.nextInt(16);
 						int z = pos.getZ() + rand.nextInt(16);
 
-						if (tryGenHive(seedReader, rand, x, z, hive)) {
+						if (tryGenHive(level, rand, x, z, hive)) {
 							return true;
 						}
 					}

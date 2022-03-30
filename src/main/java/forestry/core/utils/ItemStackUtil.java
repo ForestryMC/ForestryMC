@@ -19,16 +19,16 @@ import javax.annotation.Nullable;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public abstract class ItemStackUtil {
 
@@ -91,7 +91,7 @@ public abstract class ItemStackUtil {
 		return false;
 	}
 
-	public static int[] createConsume(NonNullList<Ingredient> set, IInventory inventory, boolean craftingTools) {
+	public static int[] createConsume(NonNullList<Ingredient> set, Container inventory, boolean craftingTools) {
 		return createConsume(set, inventory.getContainerSize(), inventory::getItem, craftingTools);
 	}
 
@@ -216,15 +216,15 @@ public abstract class ItemStackUtil {
 		return base.getTag() == null || base.getTag().isEmpty();
 	}
 
-	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z) {
+	public static void dropItemStackAsEntity(ItemStack items, Level world, double x, double y, double z) {
 		dropItemStackAsEntity(items, world, x, y, z, 10);
 	}
 
-	public static void dropItemStackAsEntity(ItemStack items, World world, BlockPos pos) {
+	public static void dropItemStackAsEntity(ItemStack items, Level world, BlockPos pos) {
 		dropItemStackAsEntity(items, world, pos.getX(), pos.getY(), pos.getZ(), 10);
 	}
 
-	public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z, int delayForPickup) {
+	public static void dropItemStackAsEntity(ItemStack items, Level world, double x, double y, double z, int delayForPickup) {
 		if (items.isEmpty() || world.isClientSide) {
 			return;
 		}

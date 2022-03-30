@@ -14,9 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -74,17 +74,17 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void formatDescriptionPacket(CompoundNBT data) {
+	public void formatDescriptionPacket(CompoundTag data) {
 
 	}
 
 	@Override
-	public void decodeDescriptionPacket(CompoundNBT data) {
+	public void decodeDescriptionPacket(CompoundTag data) {
 
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return null;
 	}
 
@@ -147,12 +147,12 @@ public abstract class FakeMultiblockController implements IMultiblockControllerI
 	}
 
 	@Override
-	public void read(CompoundNBT CompoundNBT) {
+	public void read(CompoundTag CompoundNBT) {
 
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundTag write(CompoundTag CompoundNBT) {
 		return CompoundNBT;
 	}
 

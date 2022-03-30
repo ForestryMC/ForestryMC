@@ -8,9 +8,10 @@ package forestry.api.modules;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Consumer;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
@@ -25,14 +26,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IForestryModule {
 	default boolean isAvailable() {
 		return true;
-	}
-
-	default boolean canBeDisabled() {
-		return true;
-	}
-
-	default String getFailMessage() {
-		return "";
 	}
 
 	/**
@@ -70,6 +63,9 @@ public interface IForestryModule {
 	default void preInit() {
 	}
 
+	default void registerCapabilities(Consumer<Class<?>> consumer) {
+	}
+
 	default void registerObjects() {
 
 	}
@@ -87,7 +83,7 @@ public interface IForestryModule {
 	}
 
 	@Nullable
-	default LiteralArgumentBuilder<CommandSource> register() {
+	default LiteralArgumentBuilder<CommandSourceStack> register() {
 		return null;
 	}
 

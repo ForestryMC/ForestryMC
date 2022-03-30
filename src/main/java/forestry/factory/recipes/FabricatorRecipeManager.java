@@ -11,21 +11,17 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricatorRecipe> implements IFabricatorManager {
 
@@ -39,38 +35,19 @@ public class FabricatorRecipeManager extends AbstractCraftingProvider<IFabricato
 	}
 
 	@Override
-	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, World world, FluidStack fluidStack, ItemStack plan, IInventory resources) {
-		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
-			if (fluidStack.containsFluid(recipe.getLiquid())
-					&& recipe.getPlan().test(plan)
-					&& recipe.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)) {
-				return Optional.of(recipe);
-			}
-		}
-
-		return Optional.empty();
+	public Optional<IFabricatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, Level world, FluidStack fluidStack, ItemStack plan, Container resources) {
+		return getRecipes(recipeManager)
+				.filter(recipe ->
+						fluidStack.containsFluid(recipe.getLiquid()) &&
+						recipe.getPlan().test(plan) &&
+						recipe.getCraftingGridRecipe().matches(FakeCraftingInventory.of(resources), world)
+				)
+				.findFirst();
 	}
 
 	@Override
 	public boolean isPlan(@Nullable RecipeManager recipeManager, ItemStack plan) {
-		for (IFabricatorRecipe recipe : getRecipes(recipeManager)) {
-			if (recipe.getPlan().test(plan)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public Collection<IFabricatorRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
-		if (output.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		return getRecipes(recipeManager).stream().filter(recipe -> {
-			ItemStack o = recipe.getCraftingGridRecipe().getResultItem();
-			return ItemStackUtil.isIdenticalItem(output, o);
-		}).collect(Collectors.toList());
+		return getRecipes(recipeManager)
+				.anyMatch(recipe -> recipe.getPlan().test(plan));
 	}
 }

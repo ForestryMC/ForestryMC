@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -53,12 +54,19 @@ public class ClientModuleHandler extends CommonModuleHandler {
 		modules.forEach((module -> actOnHandler(module, (handler) -> handler.setupClient(event))));
 	}
 
+	@SubscribeEvent
+	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		modules.forEach(module -> actOnHandler(module, handler -> handler.setupLayers(event)));
+	}
+
+	@SubscribeEvent
+	public void setupRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		modules.forEach(module -> actOnHandler(module, handler -> handler.setupRenderers(event)));
+	}
+
 	private void actOnHandler(BlankForestryModule module, Consumer<IClientModuleHandler> actor) {
-		ISidedModuleHandler handler = module.getModuleHandler();
-		if (!(handler instanceof IClientModuleHandler)) {
-			return;
+		if (module.getModuleHandler() instanceof IClientModuleHandler clientHandler) {
+			actor.accept(clientHandler);
 		}
-		IClientModuleHandler clientHandler = (IClientModuleHandler) handler;
-		actor.accept(clientHandler);
 	}
 }

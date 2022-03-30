@@ -7,8 +7,8 @@ package forestry.api.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -24,6 +24,6 @@ public interface ISpeciesRootPollinatable<I extends IIndividual> extends IForest
 	ICheckPollinatable createPollinatable(IIndividual individual);
 
 	@Nullable
-	IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, final IIndividual pollen);
+	IPollinatable tryConvertToPollinatable(@Nullable GameProfile owner, Level world, final BlockPos pos, final IIndividual pollen);
 
 }

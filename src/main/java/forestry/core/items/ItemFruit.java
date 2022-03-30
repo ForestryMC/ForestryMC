@@ -15,7 +15,7 @@ import java.util.Locale;
 
 import forestry.api.core.IItemSubtype;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemFruit extends ItemForestryFood {
 

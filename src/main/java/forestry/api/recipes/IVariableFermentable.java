@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Fermenter checks any valid fermentation item for an implementation of this interface.

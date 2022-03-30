@@ -2,14 +2,14 @@ package forestry.sorting.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.genetics.filter.IFilterLogic;
@@ -29,9 +29,9 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	private final WidgetScrollBar scrollBar;
 	public final SelectionWidget selection;
 	@Nullable
-	private TextFieldWidget searchField;
+	private EditBox searchField;
 
-	public GuiGeneticFilter(ContainerGeneticFilter container, PlayerInventory inventory, ITextComponent title) {
+	public GuiGeneticFilter(ContainerGeneticFilter container, Inventory inventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/filter.png", container, inventory, title);
 		imageHeight = 222;
 		imageWidth = 212;
@@ -72,8 +72,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		}
 		selection.filterEntries(searchField != null ? searchField.getValue() : "");
 		for (Slot slot : this.container.slots) {
-			if (slot instanceof SlotGeneticFilter) {
-				SlotGeneticFilter filter = (SlotGeneticFilter) slot;
+			if (slot instanceof SlotGeneticFilter filter) {
 				filter.setEnabled(false);
 			}
 		}
@@ -87,8 +86,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 		}
 		scrollBar.setVisible(false);
 		for (Slot slot : this.container.slots) {
-			if (slot instanceof SlotGeneticFilter) {
-				SlotGeneticFilter filter = (SlotGeneticFilter) slot;
+			if (slot instanceof SlotGeneticFilter filter) {
 				filter.setEnabled(true);
 			}
 		}
@@ -100,7 +98,7 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 
 		String oldString = searchField != null ? searchField.getValue() : "";
 
-		this.searchField = new TextFieldWidget(this.minecraft.font, this.leftPos + selection.getX() + 89 + 36, selection.getY() + this.topPos + 4, 80, this.minecraft.font.lineHeight, null);
+		this.searchField = new EditBox(this.minecraft.font, this.leftPos + selection.getX() + 89 + 36, selection.getY() + this.topPos + 4, 80, this.minecraft.font.lineHeight, null);
 		this.searchField.setMaxLength(50);
 		this.searchField.setBordered(false);
 		this.searchField.setTextColor(16777215);
@@ -108,11 +106,11 @@ public class GuiGeneticFilter extends GuiForestryTitled<ContainerGeneticFilter> 
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.disableLighting();
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		// RenderSystem.disableLighting();
 		if (searchField != null) {
 			this.searchField.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
 		}

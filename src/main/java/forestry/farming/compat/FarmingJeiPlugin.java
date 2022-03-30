@@ -1,8 +1,8 @@
 package forestry.farming.compat;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -11,8 +11,6 @@ import forestry.core.circuits.EnumCircuitBoardType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
 import forestry.core.utils.ClientUtils;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -21,6 +19,8 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+
+import java.util.List;
 
 @JeiPlugin
 @OnlyIn(Dist.CLIENT)
@@ -32,10 +32,6 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			return;
-		}
-
 		//        BlockRegistryFarming blocks = ModuleFarming.getBlocks();
 		//        Item farmBlock = Item.getItemFromBlock(blocks.farm);
 		//        registration.registerSubtypeInterpreter(farmBlock, itemStack -> {
@@ -47,27 +43,20 @@ public class FarmingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			return;
-		}
-
 		IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 		registration.addRecipeCategories(new FarmingInfoRecipeCategory(guiHelper));
 	}
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.FARMING)) {
-			return;
-		}
-
 		RecipeManager recipeManager = ClientUtils.getRecipeManager();
 
-		registration.addRecipes(FarmingInfoRecipeMaker.getRecipes(recipeManager), FarmingInfoRecipeCategory.UID);
+		List<FarmingInfoRecipe> recipes = FarmingInfoRecipeMaker.getRecipes(recipeManager);
+		registration.addRecipes(FarmingInfoRecipeCategory.TYPE, recipes);
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addRecipeCatalyst(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)), FarmingInfoRecipeCategory.UID);
+		registration.addRecipeCatalyst(new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE)), FarmingInfoRecipeCategory.TYPE);
 	}
 }

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,10 +47,9 @@ public class PacketErrorUpdateEntity extends ForestryPacket implements IForestry
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, Player player) {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IErrorLogicSource) {
-				IErrorLogicSource errorSourceTile = (IErrorLogicSource) entity;
+			if (entity instanceof IErrorLogicSource errorSourceTile) {
 				IErrorLogic errorLogic = errorSourceTile.getErrorLogic();
 				errorLogic.readData(data);
 			}

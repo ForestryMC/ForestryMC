@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 public class TextCollection implements ITextInstance<TextCollection, TextCompound, TextCollection> {
-	private final List<ITextComponent> lines = new ArrayList<>();
+	private final List<Component> lines = new ArrayList<>();
 	@Nullable
-	private ITextComponent last;
+	private Component last;
 
 	@Override
 	public TextCompound singleLine() {
@@ -29,12 +29,12 @@ public class TextCollection implements ITextInstance<TextCollection, TextCompoun
 
 	@Nullable
 	@Override
-	public ITextComponent lastComponent() {
+	public Component lastComponent() {
 		return last;
 	}
 
 	@Override
-	public TextCollection add(ITextComponent line) {
+	public TextCollection add(Component line) {
 		lines.add(line);
 		last = line;
 		return this;
@@ -57,7 +57,7 @@ public class TextCollection implements ITextInstance<TextCollection, TextCompoun
 		lines.clear();
 	}
 
-	public List<ITextComponent> getLines() {
+	public List<Component> getLines() {
 		return Collections.unmodifiableList(lines);
 	}
 }

@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -33,18 +33,18 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags() {
 		super.addTags();
-		builders.remove(ItemTags.SAPLINGS.getName());
+		builders.remove(ItemTags.SAPLINGS.location());
 		//builders.remove()
 		filter = new HashSet<>(this.builders.keySet());
-		filter.remove(ItemTags.LOGS.getName());
-		filter.remove(ItemTags.PLANKS.getName());
-		filter.remove(ItemTags.WOODEN_DOORS.getName());
-		filter.remove(ItemTags.STAIRS.getName());
-		filter.remove(ItemTags.SLABS.getName());
-		filter.remove(ItemTags.DOORS.getName());
-		filter.remove(ItemTags.LOGS_THAT_BURN.getName());
-		filter.remove(ItemTags.WOODEN_STAIRS.getName());
-		filter.remove(ItemTags.WOODEN_FENCES.getName());
+		filter.remove(ItemTags.LOGS.location());
+		filter.remove(ItemTags.PLANKS.location());
+		filter.remove(ItemTags.WOODEN_DOORS.location());
+		filter.remove(ItemTags.STAIRS.location());
+		filter.remove(ItemTags.SLABS.location());
+		filter.remove(ItemTags.DOORS.location());
+		filter.remove(ItemTags.LOGS_THAT_BURN.location());
+		filter.remove(ItemTags.WOODEN_STAIRS.location());
+		filter.remove(ItemTags.WOODEN_FENCES.location());
 		addToTag(ForestryTags.Items.GEARS, ForestryTags.Items.GEARS_BRONZE, ForestryTags.Items.GEARS_COPPER, ForestryTags.Items.GEARS_TIN);
 		tag(ForestryTags.Items.GEARS_BRONZE).add(CoreItems.GEAR_BRONZE.item());
 		tag(ForestryTags.Items.GEARS_TIN).add(CoreItems.GEAR_TIN.item());
@@ -54,18 +54,21 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		addToTag(Tags.Items.INGOTS, ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_COPPER, ForestryTags.Items.INGOTS_TIN);
 		tag(ForestryTags.Items.INGOTS_BRONZE).add(CoreItems.INGOT_BRONZE.item());
 		tag(ForestryTags.Items.INGOTS_TIN).add(CoreItems.INGOT_TIN.item());
-		tag(ForestryTags.Items.INGOTS_COPPER).add(CoreItems.INGOT_COPPER.item());
 
 		tag(ForestryTags.Items.DUSTS_ASH).add(CoreItems.ASH.item());
 		tag(ForestryTags.Items.GEMS_APATITE).add(CoreItems.APATITE.item());
+		tag(ForestryTags.Items.RAW_MATERIALS_TIN).add(CoreItems.RAW_TIN.item());
 
-		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_TIN);
+		addToTag(Tags.Items.STORAGE_BLOCKS, ForestryTags.Items.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_TIN);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_APATITE, ForestryTags.Items.STORAGE_BLOCKS_APATITE);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_TIN, ForestryTags.Items.STORAGE_BLOCKS_TIN);
-		copy(ForestryTags.Blocks.STORAGE_BLOCKS_COPPER, ForestryTags.Items.STORAGE_BLOCKS_COPPER);
 		copy(ForestryTags.Blocks.STORAGE_BLOCKS_BRONZE, ForestryTags.Items.STORAGE_BLOCKS_BRONZE);
 
-		copy(ForestryTags.Blocks.CHARCOAL, ForestryTags.Items.CHARCOAL);
+		tag(Tags.Items.RAW_MATERIALS).addTag(ForestryTags.Items.RAW_MATERIALS_TIN);
+
+		copy(ForestryTags.Blocks.STORAGE_BLOCKS_RAW_TIN, ForestryTags.Items.STORAGE_BLOCKS_RAW_TIN);
+
+		copy(ForestryTags.Blocks.CHARCOAL_BLOCK, ForestryTags.Items.CHARCOAL_BLOCK);
 
 		//copy(BlockTags., ForestryTags.Items.STORAGE_BLOCKS_APATITE);
 		tag(ItemTags.SAPLINGS).add(ArboricultureItems.SAPLING.item());
@@ -73,8 +76,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tag(ForestryTags.Items.PROPOLIS).add(ApicultureItems.PROPOLIS.itemArray());
 		tag(ForestryTags.Items.DROP_HONEY).add(ApicultureItems.HONEY_DROPS.itemArray());
 
-		addToTag(Tags.Items.ORES, ForestryTags.Items.ORES_COPPER, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
-		copy(ForestryTags.Blocks.ORES_COPPER, ForestryTags.Items.ORES_COPPER);
+		addToTag(Tags.Items.ORES, ForestryTags.Items.ORES_TIN, ForestryTags.Items.ORES_APATITE);
 		copy(ForestryTags.Blocks.ORES_TIN, ForestryTags.Items.ORES_TIN);
 		copy(ForestryTags.Blocks.ORES_APATITE, ForestryTags.Items.ORES_APATITE);
 
@@ -91,9 +93,9 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(ITag.INamedTag<Item> tag, ITag.INamedTag<Item>... providers) {
-		TagsProvider.Builder<Item> builder = tag(tag);
-		for (ITag.INamedTag<Item> provider : providers) {
+	protected final void addToTag(TagKey<Item> tag, TagKey<Item>... providers) {
+		TagsProvider.TagAppender<Item> builder = tag(tag);
+		for (TagKey<Item> provider : providers) {
 			builder.addTag(provider);
 		}
 	}

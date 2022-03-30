@@ -1,15 +1,15 @@
 package forestry.sorting;
 
-import net.minecraft.client.gui.ScreenManager;
+import java.util.function.Consumer;
+
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import forestry.api.genetics.alleles.AlleleManager;
 import forestry.api.genetics.filter.IFilterLogic;
 import forestry.api.modules.ForestryModule;
-import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
@@ -39,14 +39,17 @@ public class ModuleSorting extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
+		MenuScreens.register(SortingContainers.GENETIC_FILTER.containerType(), GuiGeneticFilter::new);
 	}
 
 	@Override
 	public void preInit() {
-		CapabilityManager.INSTANCE.register(IFilterLogic.class, new NullStorage<>(), () -> FakeFilterLogic.INSTANCE);
-
 		DefaultFilterRuleType.init();
+	}
+
+	@Override
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		consumer.accept(IFilterLogic.class);
 	}
 
 	@Override

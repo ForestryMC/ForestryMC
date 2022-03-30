@@ -15,6 +15,6 @@ package forestry.climatology.gui.elements;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import forestry.core.utils.FieldsAreNonnullByDefault;

@@ -3,14 +3,16 @@ package forestry.core.items;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.LevelReader;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemBlockWallForestry<B extends Block, W extends Block> extends ItemBlockForestry<B> {
 	private final W wallBlock;
@@ -26,10 +28,10 @@ public class ItemBlockWallForestry<B extends Block, W extends Block> extends Ite
 	}
 
 	@Nullable
-	protected BlockState getPlacementState(BlockItemUseContext context) {
+	protected BlockState getPlacementState(BlockPlaceContext context) {
 		BlockState blockstate = this.wallBlock.getStateForPlacement(context);
 		BlockState blockstate1 = null;
-		IWorldReader iworldreader = context.getLevel();
+		LevelReader iworldreader = context.getLevel();
 		BlockPos blockpos = context.getClickedPos();
 
 		for (Direction direction : context.getNearestLookingDirections()) {
@@ -42,7 +44,7 @@ public class ItemBlockWallForestry<B extends Block, W extends Block> extends Ite
 			}
 		}
 
-		return blockstate1 != null && iworldreader.isUnobstructed(blockstate1, blockpos, ISelectionContext.empty()) ? blockstate1 : null;
+		return blockstate1 != null && iworldreader.isUnobstructed(blockstate1, blockpos, CollisionContext.empty()) ? blockstate1 : null;
 	}
 
 	@Override

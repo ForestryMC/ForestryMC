@@ -5,16 +5,16 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.material.Fluid;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,23 +41,23 @@ public class FluidComponent implements ICustomComponent {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
+	public void render(PoseStack ms, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
 		ms.pushPose();
 		Fluid _fluid = fluidStack.getFluid();
 		FluidAttributes fluidAttributes = _fluid.getAttributes();
 		ResourceLocation fluidStill = fluidAttributes.getStillTexture(fluidStack);
-		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(fluidStill);
+		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 		ResourceLocation spriteLocation = sprite.getName();
-		Minecraft.getInstance().getTextureManager().bind(new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
+		RenderSystem.setShaderTexture(0, new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
 		setGLColorFromInt(fluidAttributes.getColor(fluidStack));
 
 		// MatrixStack transform, int x, int y, float u, float v, int width, int height, int ?, int ?
-		AbstractGui.blit(ms, x, (int) (y + h - Math.floor(h * ((float) level / maxLevel))), sprite.getU0(), sprite.getV0(), w, h * level / maxLevel, 8, 8);
+		GuiComponent.blit(ms, x, (int) (y + h - Math.floor(h * ((float) level / maxLevel))), sprite.getU0(), sprite.getV0(), w, h * level / maxLevel, 8, 8);
 
 		if (context.isAreaHovered(mouseX, mouseY, x, y, w, h)) {
-			List<ITextComponent> toolTips = new ArrayList<>();
-			toolTips.add(new TranslationTextComponent(fluidAttributes.getTranslationKey(fluidStack)));
-			TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", level, maxLevel);
+			List<Component> toolTips = new ArrayList<>();
+			toolTips.add(new TranslatableComponent(fluidAttributes.getTranslationKey(fluidStack)));
+			TranslatableComponent liquidAmount = new TranslatableComponent("for.gui.tooltip.liquid.amount", level, maxLevel);
 			toolTips.add(liquidAmount);
 
 			context.setHoverTooltipComponents(toolTips);
@@ -88,6 +88,6 @@ public class FluidComponent implements ICustomComponent {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 }

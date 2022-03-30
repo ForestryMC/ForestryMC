@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.apiculture.features.ApicultureContainers;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
@@ -21,12 +21,12 @@ import forestry.core.tiles.TileUtil;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public static ContainerAlvearySwarmer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerAlvearySwarmer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileAlvearySwarmer tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileAlvearySwarmer.class);
 		return new ContainerAlvearySwarmer(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerAlvearySwarmer(int windowId, PlayerInventory player, TileAlvearySwarmer tile) {
+	public ContainerAlvearySwarmer(int windowId, Inventory player, TileAlvearySwarmer tile) {
 		super(windowId, ApicultureContainers.ALVEARY_SWARMER.containerType(), player, tile, 8, 87);
 
 		this.addSlot(new SlotFiltered(tile, 0, 79, 52));

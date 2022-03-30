@@ -13,11 +13,11 @@ package forestry.core.gui.ledgers;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.owner.IOwnedTile;
 import forestry.core.render.TextureManagerForestry;
@@ -44,7 +44,7 @@ public class OwnerLedger extends Ledger {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int y, int x) {
+	public void draw(PoseStack transform, int y, int x) {
 		// Draw background
 		drawBackground(transform, y, x);
 
@@ -60,8 +60,8 @@ public class OwnerLedger extends Ledger {
 	}
 
 	@Override
-	public ITextComponent getTooltip() {
-		return new TranslationTextComponent("for.gui.owner")
+	public Component getTooltip() {
+		return new TranslatableComponent("for.gui.owner")
 				.append(": " + PlayerUtil.getOwnerName(owner));
 	}
 }

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail.items;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.IStamps;

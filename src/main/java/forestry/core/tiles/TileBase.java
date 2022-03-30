@@ -12,25 +12,25 @@ package forestry.core.tiles;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.blocks.IBlockType;
 
 public abstract class TileBase extends TileForestry {
 
-	public TileBase(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileBase(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+		super(tileEntityTypeIn, pos, state);
 	}
 
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		if (!hasGui()) {
 			return;
 		}
@@ -54,10 +54,9 @@ public abstract class TileBase extends TileForestry {
 	public <T extends IBlockType> T getBlockType(T fallbackType) {
 		BlockState blockState = getBlockState();
 		Block block = blockState.getBlock();
-		if (!(block instanceof BlockBase)) {
+		if (!(block instanceof BlockBase blockBase)) {
 			return fallbackType;
 		}
-		BlockBase blockBase = (BlockBase) block;
 		return (T) blockBase.blockType;
 	}
 

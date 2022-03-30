@@ -5,14 +5,14 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 /**
  * This interface provides some methods to add or remove {@link IClimateTransformer}s and to get the current climate
  * state at a given position.
  * <p>
- * You can use {@link IClimateRoot#getWorldClimate(World)} to get the instance of this interface that provides the
+ * You can use {@link IClimateRoot#getWorldClimate(Level)} to get the instance of this interface that provides the
  * information about a given world.
  */
 public interface IWorldClimateHolder {
@@ -58,7 +58,7 @@ public interface IWorldClimateHolder {
 	IClimateState getState(BlockPos pos);
 
 	/**
-	 * @return the {@link World#getGameTime()} at the moment the last transformer changed its
+	 * @return the {@link Level#getGameTime()} at the moment the last transformer changed its
 	 * {@link IClimateTransformer#getCurrent()} state or a {@link IClimateTransformer} has been removed or added to the
 	 * holder.
 	 */

@@ -12,7 +12,6 @@ public interface IAlleleDisplayHelper {
 
 	void addTooltip(IGeneticTooltipProvider<? extends IIndividual> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
 
-	void addAlyzer(IAlyzerDisplayProvider<? extends IIndividual> provider, String rootUID, int orderingInfo);
+	void addAlyzer(IAlyzerDisplayProvider provider, String rootUID, int orderingInfo);
 
-	void addAlyzer(IAlyzerDisplayProvider<? extends IIndividual> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter);
 }

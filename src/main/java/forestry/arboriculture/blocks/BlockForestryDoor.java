@@ -10,12 +10,10 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
@@ -30,8 +28,6 @@ public class BlockForestryDoor extends DoorBlock implements IWoodTyped {
 		super(Block.Properties.of(Material.WOOD)
 				.strength(woodType.getHardness(), woodType.getHardness() * 1.5F)
 				.sound(SoundType.WOOD)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(0)
 				.noOcclusion());
 		this.woodType = woodType;
 	}

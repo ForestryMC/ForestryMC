@@ -7,7 +7,7 @@ package forestry.api.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.LevelAccessor;
 
 import com.mojang.authlib.GameProfile;
 
@@ -44,7 +44,7 @@ public interface IForestrySpeciesRoot<I extends IIndividual> extends IIndividual
 	IOrganismType getIconType();
 
 	/* BREEDING TRACKER */
-	IBreedingTracker getBreedingTracker(IWorld world, @Nullable GameProfile player);
+	IBreedingTracker getBreedingTracker(LevelAccessor world, @Nullable GameProfile player);
 
 	/**
 	 * The type of the species that will be used at the given position of the mutation recipe in the gui.

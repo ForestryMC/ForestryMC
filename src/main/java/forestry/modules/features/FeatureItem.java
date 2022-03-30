@@ -3,7 +3,7 @@ package forestry.modules.features;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 import forestry.core.config.Constants;
 

@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.core.particles;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.Mth;
+import com.mojang.math.Quaternion;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class SnowParticle extends SpriteTexturedParticle {
-	public SnowParticle(ClientWorld world, double x, double y, double z) {
+public class SnowParticle extends TextureSheetParticle {
+	public SnowParticle(ClientLevel world, double x, double y, double z) {
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 
 		//        this.particleScale *= 0.5F;
@@ -41,7 +41,7 @@ public class SnowParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public void render(IVertexBuilder builder, ActiveRenderInfo activeRenderInfo, float partialTicks) {
+	public void render(VertexConsumer builder, Camera activeRenderInfo, float partialTicks) {
 		//double x = this.prevPosX + (this.posX - this.prevPosX)/* * partialTicks - interpPosX*/;
 		//double y = this.prevPosY + (this.posY - this.prevPosY)/* * partialTicks - interpPosY*/;
 		//double z = this.prevPosZ + (this.posZ - this.prevPosZ)/* * partialTicks - interpPosZ*/;
@@ -62,16 +62,16 @@ public class SnowParticle extends SpriteTexturedParticle {
 		for (int i = 0; i < 5; i++) {
 			renderParticle(iVertexBuilder, x,y,z, activeRenderInfo.rotation().x(), activeRenderInfo.rotation().getX() + activeRenderInfo.rotation().getZ(), activeRenderInfo.rotation().getZ(), activeRenderInfo.rotation().getY() + activeRenderInfo.rotation().getZ(), activeRenderInfo.rotation().getX() + activeRenderInfo.rotation().getY(), minU, maxU, minV, maxV, scale, partialTicks);
 		}*/
-		Vector3d vector3d = activeRenderInfo.getPosition();
-		float f = (float) (MathHelper.lerp((double) partialTicks, this.xo, this.x) - vector3d.x());
-		float f1 = (float) (MathHelper.lerp((double) partialTicks, this.yo, this.y) - vector3d.y());
-		float f2 = (float) (MathHelper.lerp((double) partialTicks, this.zo, this.z) - vector3d.z());
+		Vec3 vector3d = activeRenderInfo.getPosition();
+		float f = (float) (Mth.lerp((double) partialTicks, this.xo, this.x) - vector3d.x());
+		float f1 = (float) (Mth.lerp((double) partialTicks, this.yo, this.y) - vector3d.y());
+		float f2 = (float) (Mth.lerp((double) partialTicks, this.zo, this.z) - vector3d.z());
 		Quaternion quaternion;
 		if (this.roll == 0.0F) {
 			quaternion = activeRenderInfo.rotation();
 		} else {
 			quaternion = new Quaternion(activeRenderInfo.rotation());
-			float f3 = MathHelper.lerp(partialTicks, this.oRoll, this.roll);
+			float f3 = Mth.lerp(partialTicks, this.oRoll, this.roll);
 			quaternion.mul(Vector3f.ZP.rotation(f3));
 		}
 
@@ -99,8 +99,8 @@ public class SnowParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 	/*private void renderParticle(IVertexBuilder buffer, double x, double y, double z, float rotationX, float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV, float maxV, float scale, float partialTicks) {
@@ -114,15 +114,15 @@ public class SnowParticle extends SpriteTexturedParticle {
 	}*/
 
 	@OnlyIn(Dist.CLIENT)
-	public static class Factory implements IParticleFactory<SnowParticleData> {
-		private final IAnimatedSprite spriteSet;
+	public static class Factory implements ParticleProvider<SnowParticleData> {
+		private final SpriteSet spriteSet;
 
-		public Factory(IAnimatedSprite sprite) {
+		public Factory(SpriteSet sprite) {
 			this.spriteSet = sprite;
 		}
 
 		@Override
-		public Particle createParticle(SnowParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+		public Particle createParticle(SnowParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 			SnowParticle particle = new SnowParticle(worldIn, typeIn.particleStart.x(), typeIn.particleStart.y(), typeIn.particleStart.z());
 			particle.pickSprite(spriteSet);
 			return particle;

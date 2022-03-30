@@ -13,16 +13,16 @@ package forestry.core.gui.ledgers;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -89,9 +89,9 @@ public abstract class Ledger {
 		maxTextWidth = maxWidth - 18;
 	}
 
-	public Rectangle2d getArea() {
+	public Rect2i getArea() {
 		GuiForestry gui = manager.gui;
-		return new Rectangle2d(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
+		return new Rect2i(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)
@@ -153,14 +153,14 @@ public abstract class Ledger {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public final void draw(MatrixStack transform) {
+	public final void draw(PoseStack transform) {
 		draw(transform, y, x);
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public abstract void draw(MatrixStack transform, int y, int x);
+	public abstract void draw(PoseStack transform, int y, int x);
 
-	public abstract ITextComponent getTooltip();
+	public abstract Component getTooltip();
 
 	public boolean handleMouseClicked(double x, double y, int mouseButton) {
 		return false;
@@ -202,15 +202,13 @@ public abstract class Ledger {
 
 	}
 
-	protected void drawBackground(MatrixStack transform, int y, int x) {
-
+	protected void drawBackground(PoseStack transform, int y, int x) {
 		float colorR = (overlayColor >> 16 & 255) / 255.0F;
 		float colorG = (overlayColor >> 8 & 255) / 255.0F;
 		float colorB = (overlayColor & 255) / 255.0F;
 
-		RenderSystem.color4f(colorR, colorG, colorB, 1.0F);
-
-		Minecraft.getInstance().getTextureManager().bind(texture);
+		RenderSystem.setShaderColor(colorR, colorG, colorB, 1.0F);
+		RenderSystem.setShaderTexture(0, texture);
 
 		int height = getHeight();
 		int width = getWidth();
@@ -221,40 +219,40 @@ public abstract class Ledger {
 
 		manager.gui.blit(transform, x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
 
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
-	protected void drawSprite(MatrixStack transform, TextureAtlasSprite sprite, int x, int y) {
+	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y) {
 		drawSprite(transform, sprite, x, y, TextureManagerForestry.getInstance().getGuiTextureMap());
 	}
 
-	protected void drawSprite(MatrixStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
-		RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0F);
-		Minecraft.getInstance().getTextureManager().bind(textureMap);
-		AbstractGui.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
+	protected void drawSprite(PoseStack transform, TextureAtlasSprite sprite, int x, int y, ResourceLocation textureMap) {
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0F);
+		RenderSystem.setShaderTexture(0, textureMap);
+		GuiComponent.blit(transform, x, y, manager.gui.getBlitOffset(), 16, 16, sprite);
 	}
 
-	protected int drawHeader(MatrixStack transform, String string, int x, int y) {
+	protected int drawHeader(PoseStack transform, String string, int x, int y) {
 		return drawShadowText(transform, string, x, y, fontColorHeader);
 	}
 
-	protected int drawSubheader(MatrixStack transform, String string, int x, int y) {
+	protected int drawSubheader(PoseStack transform, String string, int x, int y) {
 		return drawShadowText(transform, string, x, y, fontColorSubheader);
 	}
 
-	protected int drawShadowText(MatrixStack transform, String string, int x, int y, int color) {
+	protected int drawShadowText(PoseStack transform, String string, int x, int y, int color) {
 		return drawSplitText(transform, string, x, y, maxTextWidth, color, true);
 	}
 
-	protected int drawSplitText(MatrixStack transform, String string, int x, int y, int width) {
+	protected int drawSplitText(PoseStack transform, String string, int x, int y, int width) {
 		return drawSplitText(transform, string, x, y, width, fontColorText, false);
 	}
 
-	protected int drawSplitText(MatrixStack transform, String string, int x, int y, int width, int color, boolean shadow) {
+	protected int drawSplitText(PoseStack transform, String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
 		Minecraft minecraft = Minecraft.getInstance();
-		List<IReorderingProcessor> strings = minecraft.font.split(new StringTextComponent(string), width);
-		for (IReorderingProcessor obj : strings) {
+		List<FormattedCharSequence> strings = minecraft.font.split(new TextComponent(string), width);
+		for (FormattedCharSequence obj : strings) {
 			if (shadow) {
 				minecraft.font.drawShadow(transform, obj, x, y, color);
 			} else {
@@ -265,7 +263,7 @@ public abstract class Ledger {
 		return y - originalY;
 	}
 
-	protected int drawText(MatrixStack transform, String string, int x, int y) {
+	protected int drawText(PoseStack transform, String string, int x, int y) {
 		Minecraft minecraft = Minecraft.getInstance();
 		minecraft.font.draw(transform, string, x, y, fontColorText);
 		return minecraft.font.lineHeight;

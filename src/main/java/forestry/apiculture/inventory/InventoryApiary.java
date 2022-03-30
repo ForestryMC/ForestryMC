@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
 
 import forestry.api.apiculture.BeeManager;
@@ -56,8 +56,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			ItemStack stackInSlot = getItem(i);
 			Item itemInSlot = stackInSlot.getItem();
-			if (itemInSlot instanceof IHiveFrame) {
-				IHiveFrame frame = (IHiveFrame) itemInSlot;
+			if (itemInSlot instanceof IHiveFrame frame) {
 				hiveFrames.add(new Tuple<>(frame, stackInSlot.copy()));
 			}
 		}
@@ -73,8 +72,7 @@ public class InventoryApiary extends InventoryBeeHousing implements IApiaryInven
 		for (int i = SLOT_FRAMES_1; i < SLOT_FRAMES_1 + SLOT_FRAMES_COUNT; i++) {
 			ItemStack hiveFrameStack = getItem(i);
 			Item hiveFrameItem = hiveFrameStack.getItem();
-			if ((hiveFrameItem instanceof IHiveFrame)) {
-				IHiveFrame hiveFrame = (IHiveFrame) hiveFrameItem;
+			if ((hiveFrameItem instanceof IHiveFrame hiveFrame)) {
 
 				ItemStack queenStack = getQueen();
 				Optional<IBee> optionalBee = BeeManager.beeRoot.create(queenStack);

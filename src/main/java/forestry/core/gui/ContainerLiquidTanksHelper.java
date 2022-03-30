@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ import forestry.core.network.packets.PacketPipetteClick;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.utils.NetworkUtil;
 
-public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> implements IContainerLiquidTanks {
+public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile> implements IContainerLiquidTanks {
 
 	private final T tile;
 
@@ -43,22 +43,21 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handlePipetteClickClient(int slot, PlayerEntity player) {
-		ItemStack itemstack = player.inventory.getCarried();
+	public void handlePipetteClickClient(int slot, Player player) {
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		if (itemstack.getItem() instanceof IToolPipette) {
 			NetworkUtil.sendToServer(new PacketPipetteClick(slot));
 		}
 	}
 
 	@Override
-	public void handlePipetteClick(int slot, ServerPlayerEntity player) {
-		ItemStack itemstack = player.inventory.getCarried();
+	public void handlePipetteClick(int slot, ServerPlayer player) {
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		Item held = itemstack.getItem();
-		if (!(held instanceof IToolPipette)) {
+		if (!(held instanceof IToolPipette pipette)) {
 			return;
 		}
 
-		IToolPipette pipette = (IToolPipette) held;
 		IFluidTank tank = tile.getTankManager().getTank(slot);
 		int liquidAmount = tank.getFluidAmount();
 
@@ -69,14 +68,14 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setCarried(fluidHandlerItem.getContainer());
-					player.broadcastCarriedItem();
+					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
+					player.inventoryMenu.broadcastChanges();
 				} else {//TODO: Test if this works
 					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-					player.inventory.setCarried(fluidHandlerItem.getContainer());
-					player.broadcastCarriedItem();
+					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
+					player.inventoryMenu.broadcastChanges();
 				}
 			} else {
 				FluidStack potential = fluidHandlerItem.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
@@ -84,8 +83,8 @@ public class ContainerLiquidTanksHelper<T extends TileEntity & ILiquidTankTile> 
 					if (tank instanceof FluidTank) {
 						int fill = tank.fill(potential, IFluidHandler.FluidAction.EXECUTE);
 						fluidHandlerItem.drain(fill, IFluidHandler.FluidAction.EXECUTE);
-						player.inventory.setCarried(fluidHandlerItem.getContainer());
-						player.broadcastCarriedItem();
+						player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
+						player.inventoryMenu.broadcastChanges();
 					}
 				}
 			}

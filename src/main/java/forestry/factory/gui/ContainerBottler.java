@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotEmptyLiquidContainerIn;
@@ -24,12 +24,12 @@ import forestry.factory.tiles.TileBottler;
 
 public class ContainerBottler extends ContainerLiquidTanks<TileBottler> {
 
-	public static ContainerBottler fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerBottler fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileBottler tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileBottler.class);
 		return new ContainerBottler(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerBottler(int windowId, PlayerInventory player, TileBottler tile) {
+	public ContainerBottler(int windowId, Inventory player, TileBottler tile) {
 		super(windowId, FactoryContainers.BOTTLER.containerType(), player, tile, 8, 84);
 
 		this.addSlot(new SlotLiquidIn(tile, InventoryBottler.SLOT_INPUT_FULL_CONTAINER, 18, 7));

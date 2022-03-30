@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -19,9 +19,9 @@ import net.minecraftforge.fluids.IFluidTank;
 
 public interface IContainerLiquidTanks {
 	@OnlyIn(Dist.CLIENT)
-	void handlePipetteClickClient(int slot, PlayerEntity player);
+	void handlePipetteClickClient(int slot, Player player);
 
-	void handlePipetteClick(int slot, ServerPlayerEntity player);
+	void handlePipetteClick(int slot, ServerPlayer player);
 
 	IFluidTank getTank(int slot);
 }

@@ -16,12 +16,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -135,7 +135,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 		// Cultivation and collection
 		FarmWorkStatus farmWorkStatus = new FarmWorkStatus();
 
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
 		Collections.shuffle(farmDirections, world.random);
 		for (FarmDirection farmSide : farmDirections) {
@@ -191,7 +191,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 
 
 	private void cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic, FarmDirection farmSide) {
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		if (farmWorkStatus.hasFarmland && !FarmHelper.isCycleCanceledByListeners(logic, farmSide, farmListeners)) {
 			final float hydrationModifier = hydrationManager.getHydrationModifier();
 			final int fertilizerConsumption = Math.round(logic.getProperties().getFertilizerConsumption(housing) * Config.fertilizerModifier);
@@ -283,7 +283,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		hydrationManager.write(data);
 		tankManager.write(data);
 		fertilizerManager.write(data);
@@ -291,7 +291,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 	}
 
 	@Override
-	public void read(CompoundNBT data) {
+	public void read(CompoundTag data) {
 		hydrationManager.read(data);
 		tankManager.read(data);
 		fertilizerManager.read(data);

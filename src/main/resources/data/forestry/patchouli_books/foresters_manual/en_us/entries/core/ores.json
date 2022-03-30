@@ -9,17 +9,17 @@
     },
     {
       "type": "spotlight",
-      "item": "forestry:resource_ore_apatite",
+      "item": "forestry:apatite_ore",
       "text": "for.gui.book.patchouli.entry.core.ores2"
     },
     {
       "type": "spotlight",
-      "item": "forestry:resource_ore_copper",
+      "item": "minecraft:copper_ore",
       "text": "for.gui.book.patchouli.entry.core.ores3"
     },
     {
       "type": "spotlight",
-      "item": "forestry:resource_ore_tin",
+      "item": "forestry:tin_ore",
       "text": "for.gui.book.patchouli.entry.core.ores4"
     }
   ]

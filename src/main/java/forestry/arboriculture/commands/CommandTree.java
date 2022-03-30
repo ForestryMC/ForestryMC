@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.commands;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 
@@ -22,7 +22,7 @@ import forestry.core.commands.IStatsSaveHelper;
 
 
 public class CommandTree {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
 		ICommandModeHelper modeHelper = new TreeModeHelper();
 

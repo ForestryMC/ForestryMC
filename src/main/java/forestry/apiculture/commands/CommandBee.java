@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.commands;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 
@@ -21,7 +21,7 @@ import forestry.core.commands.ICommandModeHelper;
 import forestry.core.commands.IStatsSaveHelper;
 
 public class CommandBee {
-	public static ArgumentBuilder<CommandSource, ?> register() {
+	public static ArgumentBuilder<CommandSourceStack, ?> register() {
 		IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
 		ICommandModeHelper modeHelper = new BeeModeHelper();
 

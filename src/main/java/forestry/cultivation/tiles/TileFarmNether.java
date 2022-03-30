@@ -1,16 +1,18 @@
 package forestry.cultivation.tiles;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.cultivation.features.CultivationTiles;
 import forestry.farming.logic.ForestryFarmIdentifier;
 
 public class TileFarmNether extends TilePlanter {
-	public TileFarmNether() {
-		super(CultivationTiles.NETHER.tileType(), ForestryFarmIdentifier.INFERNAL);
+	public TileFarmNether(BlockPos pos, BlockState state) {
+		super(CultivationTiles.NETHER.tileType(), pos, state, ForestryFarmIdentifier.INFERNAL);
 	}
 
 	@Override

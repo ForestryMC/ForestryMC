@@ -2,16 +2,16 @@ package forestry.api.core;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
-public interface ITileTypeProvider<T extends TileEntity> {
+public interface ITileTypeProvider<T extends BlockEntity> {
 	boolean hasTileType();
 
 	@Nullable
-	TileEntityType<T> getTileType();
+	BlockEntityType<T> getTileType();
 
-	TileEntityType<T> tileType();
+	BlockEntityType<T> tileType();
 
 
 }

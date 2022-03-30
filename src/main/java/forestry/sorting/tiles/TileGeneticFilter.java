@@ -5,16 +5,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -52,25 +53,23 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	private final FilterLogic logic;
 	private final AdjacentInventoryCache inventoryCache;
 
-	public TileGeneticFilter() {
-		super(SortingTiles.GENETIC_FILTER.tileType());
+	public TileGeneticFilter(BlockPos pos, BlockState state) {
+		super(SortingTiles.GENETIC_FILTER.tileType(), pos, state);
 		this.inventoryCache = new AdjacentInventoryCache(this, getTileCache());
 		this.logic = new FilterLogic(this, (logic1, server, player) -> sendToPlayers(server, player));
 		setInternalInventory(new InventoryFilter(this));
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
-		super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 
-		data.put("Logic", logic.write(new CompoundNBT()));
-
-		return data;
+		data.put("Logic", logic.write(new CompoundTag()));
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 
 		logic.read(data.getCompound("Logic"));
 	}
@@ -86,8 +85,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		logic.readGuiData(data);
 	}
 
-	private void sendToPlayers(ServerWorld server, PlayerEntity PlayerEntity) {
-		for (PlayerEntity player : server.players()) {
+	private void sendToPlayers(ServerLevel server, Player PlayerEntity) {
+		for (Player player : server.players()) {
 			if (player != PlayerEntity && player.containerMenu instanceof ContainerGeneticFilter) {
 				if (((ContainerGeneticFilter) PlayerEntity.containerMenu).hasSameTile((ContainerGeneticFilter) player.containerMenu)) {
 					((ContainerGeneticFilter) player.containerMenu).setGuiNeedsUpdate(true);
@@ -120,7 +119,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 		if (inventoryCache.getAdjacentInventory(facing) != null) {
 			return true;
 		}
-		TileEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
+		BlockEntity tileEntity = level.getBlockEntity(worldPosition.relative(facing));
 		return TileUtil.getInventoryFromTile(tileEntity, facing.getOpposite()) != null;
 	}
 
@@ -173,7 +172,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 	}
 
 	@Override
-	public IInventory getBuffer() {
+	public Container getBuffer() {
 		return this;
 	}
 
@@ -184,8 +183,8 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerGeneticFilter(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerGeneticFilter(windowId, player.getInventory(), this);
 	}
 
 	@Override

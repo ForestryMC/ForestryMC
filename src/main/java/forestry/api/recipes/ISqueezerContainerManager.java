@@ -12,8 +12,10 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+
+import java.util.Optional;
 
 public interface ISqueezerContainerManager extends ICraftingProvider<ISqueezerContainerRecipe> {
 
@@ -28,6 +30,5 @@ public interface ISqueezerContainerManager extends ICraftingProvider<ISqueezerCo
 	 */
 	void addContainerRecipe(int timePerItem, ItemStack emptyContainer, ItemStack remnants, float chance);
 
-	@Nullable
-	ISqueezerContainerRecipe findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer);
+	Optional<ISqueezerContainerRecipe> findMatchingContainerRecipe(@Nullable RecipeManager recipeManager, ItemStack filledContainer);
 }

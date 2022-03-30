@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.core.ItemGroups;
 import forestry.apiculture.gui.ContainerImprinter;
@@ -26,7 +26,7 @@ public class ItemImprinter extends ItemWithGui {
 	}
 
 	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
-		return new ContainerImprinter(windowId, player.inventory, new ItemInventoryImprinter(player, heldItem));
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
+		return new ContainerImprinter(windowId, player.getInventory(), new ItemInventoryImprinter(player, heldItem));
 	}
 }

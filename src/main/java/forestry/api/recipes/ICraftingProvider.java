@@ -6,9 +6,9 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
+import java.util.stream.Stream;
 
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 public interface ICraftingProvider<T extends IForestryRecipe> {
 
@@ -21,10 +21,10 @@ public interface ICraftingProvider<T extends IForestryRecipe> {
 	boolean addRecipe(T recipe);
 
 	/**
-	 * Gets a collection of all currently registered recipes which this provider supports
+	 * Gets a stream of all currently registered recipes which this provider supports
 	 *
 	 * @param recipeManager The recipe manager to use
-	 * @return A collection of recipes
+	 * @return A stream of recipes
 	 */
-	Collection<T> getRecipes(@Nullable RecipeManager recipeManager);
+	Stream<T> getRecipes(@Nullable RecipeManager recipeManager);
 }

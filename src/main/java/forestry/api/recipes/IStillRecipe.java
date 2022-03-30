@@ -5,19 +5,19 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface IStillRecipe extends IForestryRecipe {
 
-	IRecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
+	RecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
 
 	class Companion {
 		@ObjectHolder("forestry:still")
-		public static final IRecipeSerializer<IStillRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<IStillRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -36,12 +36,12 @@ public interface IStillRecipe extends IForestryRecipe {
 	FluidStack getOutput();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

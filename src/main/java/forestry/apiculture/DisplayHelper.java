@@ -18,7 +18,7 @@ import genetics.api.organism.IOrganismType;
 
 public class DisplayHelper implements IAlleleDisplayHelper {
 	private final Map<String, PriorityQueue<OrderedPair<IGeneticTooltipProvider<?>>>> tooltips = new HashMap<>();
-	private final Map<String, PriorityQueue<OrderedPair<IAlyzerDisplayProvider<?>>>> alyzers = new HashMap<>();
+	private final Map<String, PriorityQueue<OrderedPair<IAlyzerDisplayProvider>>> alyzers = new HashMap<>();
 
 	@Nullable
 	private static DisplayHelper instance;
@@ -41,13 +41,8 @@ public class DisplayHelper implements IAlleleDisplayHelper {
 	}
 
 	@Override
-	public void addAlyzer(IAlyzerDisplayProvider<?> provider, String rootUID, int orderingInfo) {
+	public void addAlyzer(IAlyzerDisplayProvider provider, String rootUID, int orderingInfo) {
 		alyzers.computeIfAbsent(rootUID, (root) -> new PriorityQueue<>()).add(new OrderedPair<>(provider, orderingInfo, null));
-	}
-
-	@Override
-	public void addAlyzer(IAlyzerDisplayProvider<?> provider, String rootUID, int orderingInfo, Predicate<IOrganismType> typeFilter) {
-		alyzers.computeIfAbsent(rootUID, (root) -> new PriorityQueue<>()).add(new OrderedPair<>(provider, orderingInfo, typeFilter));
 	}
 
 	public <I extends IIndividual> Collection<IGeneticTooltipProvider<I>> getTooltips(String rootUID, IOrganismType type) {
@@ -57,16 +52,6 @@ public class DisplayHelper implements IAlleleDisplayHelper {
 		return tooltips.get(rootUID).stream()
 				.filter((value) -> value.hasValue(type))
 				.map((value) -> (IGeneticTooltipProvider<I>) value.value)
-				.collect(Collectors.toList());
-	}
-
-	public <I extends IIndividual> Collection<IAlyzerDisplayProvider<I>> getAlyzers(String rootUID, IOrganismType type) {
-		if (!alyzers.containsKey(rootUID)) {
-			return Collections.emptyList();
-		}
-		return alyzers.get(rootUID).stream()
-				.filter((value) -> value.hasValue(type))
-				.map((value) -> (IAlyzerDisplayProvider<I>) value.value)
 				.collect(Collectors.toList());
 	}
 

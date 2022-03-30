@@ -12,15 +12,13 @@ package forestry.core.gui.widgets;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,7 +51,7 @@ public class GameTokenWidget extends Widget {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 
 		EscritoireGameToken token = getToken();
 		if (token == null) {
@@ -66,14 +64,13 @@ public class GameTokenWidget extends Widget {
 		float colorG = (tokenColour >> 8 & 255) / 255.0F;
 		float colorB = (tokenColour & 255) / 255.0F;
 
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(manager.gui.textureFile);
+		RenderSystem.setShaderTexture(0, manager.gui.textureFile);
 
 		//TODO not sure if this works...
 		RenderSystem.enableDepthTest();
-		RenderSystem.color3f(colorR, colorG, colorB);
+		// RenderSystem.color3f(colorR, colorG, colorB);
 		manager.gui.blit(transform, startX + xPos, startY + yPos, 228, 0, 22, 22);
-		RenderSystem.color3f(1.0f, 1.0f, 1.0f);
+		// RenderSystem.color3f(1.0f, 1.0f, 1.0f);
 
 		ItemStack tokenStack = HIDDEN_TOKEN;
 		if (token.isVisible()) {
@@ -86,7 +83,7 @@ public class GameTokenWidget extends Widget {
 		TextureManagerForestry.getInstance().bindGuiTextureMap();
 		for (String ident : getToken().getOverlayIcons()) {
 			TextureAtlasSprite icon = TextureManagerForestry.getInstance().getDefault(ident);
-			AbstractGui.blit(transform, startX + xPos + 3, startY + yPos + 3, manager.gui.getBlitOffset(), 16, 16, icon);
+			GuiComponent.blit(transform, startX + xPos + 3, startY + yPos + 3, manager.gui.getBlitOffset(), 16, 16, icon);
 		}
 		RenderSystem.enableDepthTest();
 	}

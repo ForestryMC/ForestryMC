@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
@@ -23,12 +23,12 @@ import forestry.mail.tiles.TileStampCollector;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 
-	public static ContainerStampCollector fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerStampCollector fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileStampCollector tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileStampCollector.class);
 		return new ContainerStampCollector(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerStampCollector(int windowId, PlayerInventory inv, TileStampCollector tile) {
+	public ContainerStampCollector(int windowId, Inventory inv, TileStampCollector tile) {
 		super(windowId, MailContainers.STAMP_COLLECTOR.containerType(), inv, tile, 8, 111);
 
 		// Filter

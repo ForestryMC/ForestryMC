@@ -5,11 +5,11 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -49,11 +49,11 @@ public class FermenterRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, resource, fermentationValue, modifier, output, fluidResource));
 	}
 
-	private static class Result implements IFinishedRecipe {
+	private static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final Ingredient resource;
 		private final int fermentationValue;
@@ -85,7 +85,7 @@ public class FermenterRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return IFermenterRecipe.Companion.SERIALIZER;
 		}
 

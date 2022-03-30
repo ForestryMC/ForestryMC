@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.climate;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -60,7 +60,7 @@ public interface IClimateListener extends ILocatable, IClimateProvider {
 	/**
 	 * Sends a packet to the given players.
 	 */
-	void syncToClient(ServerPlayerEntity player);
+	void syncToClient(ServerPlayer player);
 
 	void markLocatableDirty();
 }

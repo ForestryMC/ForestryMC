@@ -12,14 +12,14 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -41,15 +41,15 @@ public abstract class BlockForestry extends Block {
 	}
 
 	@Override
-	public void setPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		if (world.isClientSide) {
 			return;
 		}
 
-		if (placer instanceof PlayerEntity) {
+		if (placer instanceof Player) {
 			TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
 				IOwnerHandler ownerHandler = tile.getOwnerHandler();
-				PlayerEntity player = (PlayerEntity) placer;
+				Player player = (Player) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				ownerHandler.setOwner(gameProfile);
 			});
@@ -57,12 +57,12 @@ public abstract class BlockForestry extends Block {
 	}
 
 	@Override
-	public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborChange(BlockState state, LevelReader world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborChange(state, world, pos, neighbor);
 
-		if (world instanceof World) {
+		if (world instanceof Level) {
 			try {
-				TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((World) world, pos, neighbor));
+				TileUtil.actOnTile(world, pos, TileForestry.class, tile -> tile.onNeighborTileChange((Level) world, pos, neighbor));
 			} catch (StackOverflowError error) {
 				Log.error("Stack Overflow Error in BlockForestry.onNeighborChange()", error);
 				throw error;

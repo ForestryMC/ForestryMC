@@ -13,21 +13,20 @@ package forestry.farming.blocks;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockStructure;
 import forestry.farming.tiles.TileFarmControl;
@@ -36,14 +35,14 @@ import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 
-public class BlockFarm extends BlockStructure {
+public class BlockFarm extends BlockStructure implements EntityBlock {
 
 	private final EnumFarmBlockType type;
 	private final EnumFarmMaterial farmMaterial;
 
 	public static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 
-	public enum State implements IStringSerializable {
+	public enum State implements StringRepresentable {
 		PLAIN, BAND;
 
 		@Override
@@ -53,23 +52,20 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	public BlockFarm(EnumFarmBlockType type, EnumFarmMaterial farmMaterial) {
-		super(Block.Properties.of(Material.STONE)
-				.strength(1.0f)
-				.harvestTool(ToolType.PICKAXE)
-				.harvestLevel(0));
+		super(Block.Properties.of(Material.STONE).strength(1.0f));
 		this.type = type;
 		this.farmMaterial = farmMaterial;
 		registerDefaultState(this.getStateDefinition().any().setValue(STATE, State.PLAIN));
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> list) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
 		super.fillItemCategory(tab, list);
 	}
 
@@ -82,28 +78,18 @@ public class BlockFarm extends BlockStructure {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		switch (type) {
-			case GEARBOX:
-				return new TileFarmGearbox();
-			case HATCH:
-				return new TileFarmHatch();
-			case VALVE:
-				return new TileFarmValve();
-			case CONTROL:
-				return new TileFarmControl();
-			default:
-				return new TileFarmPlain();
-		}
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return switch (type) {
+			case GEARBOX -> new TileFarmGearbox(pos, state);
+			case HATCH -> new TileFarmHatch(pos, state);
+			case VALVE -> new TileFarmValve(pos, state);
+			case CONTROL -> new TileFarmControl(pos, state);
+			default -> new TileFarmPlain(pos, state);
+		};
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side) {
+	public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
 		return getType() == EnumFarmBlockType.CONTROL;
 	}
 }

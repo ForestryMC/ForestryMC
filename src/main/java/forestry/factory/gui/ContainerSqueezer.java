@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.gui.ContainerLiquidTanksSocketed;
 import forestry.core.gui.slots.SlotFiltered;
@@ -24,12 +24,12 @@ import forestry.factory.tiles.TileSqueezer;
 
 public class ContainerSqueezer extends ContainerLiquidTanksSocketed<TileSqueezer> {
 
-	public static ContainerSqueezer fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerSqueezer fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileSqueezer tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileSqueezer.class);
 		return new ContainerSqueezer(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerSqueezer(int windowId, PlayerInventory player, TileSqueezer tile) {
+	public ContainerSqueezer(int windowId, Inventory player, TileSqueezer tile) {
 		super(windowId, FactoryContainers.SQUEEZER.containerType(), player, tile, 8, 84);
 
 		// Resource inventory

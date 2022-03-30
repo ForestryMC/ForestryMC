@@ -1,8 +1,8 @@
 package forestry.database.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -42,15 +42,15 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 	//TODO pretty big method
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			int invIndex = data.readInt();
 			byte flags = data.readByte();
 
-			if (!player.inventory.getCarried().isEmpty()) {
+			if (!player.inventoryMenu.getCarried().isEmpty()) {
 				return;
 			}
 
-			Container container = player.containerMenu;
+			AbstractContainerMenu container = player.containerMenu;
 			if (!(container instanceof ContainerDatabase)) {
 				return;
 			}
@@ -75,7 +75,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 				//Clone the item with the maximal count
 				ItemStack extracted = itemStack.copy();
 				extracted.setCount(maxItemCount);
-				player.inventory.setCarried(extracted);
+				player.inventoryMenu.setCarried(extracted);
 
 				if (container instanceof ContainerDatabase) {
 					((ContainerDatabase) container).sendContainerToListeners();
@@ -108,9 +108,9 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 					//Extract the item
 					extracted = itemHandler.extractItem(invIndex, count, false);
 
-					player.inventory.setCarried(extracted);
+					player.inventoryMenu.setCarried(extracted);
 
-					player.broadcastCarriedItem();
+					player.inventoryMenu.broadcastChanges();
 				}
 
 				if (container instanceof ContainerDatabase) {

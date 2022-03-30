@@ -15,13 +15,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,21 +29,21 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class AbstractBakedModel implements IBakedModel {
+public abstract class AbstractBakedModel implements BakedModel {
 	@Nullable
-	protected ItemOverrideList overrideList;
+	protected ItemOverrides overrideList;
 
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return Collections.emptyList();
 	}
 
-	protected ItemOverrideList createOverrides() {
-		return ItemOverrideList.EMPTY;
+	protected ItemOverrides createOverrides() {
+		return ItemOverrides.EMPTY;
 	}
 
 	@Override
-	public ItemOverrideList getOverrides() {
+	public ItemOverrides getOverrides() {
 		if (overrideList == null) {
 			overrideList = createOverrides();
 		}
@@ -76,8 +76,8 @@ public abstract class AbstractBakedModel implements IBakedModel {
 	}
 
 	@Override
-	public ItemCameraTransforms getTransforms() {
-		return ItemCameraTransforms.NO_TRANSFORMS;
+	public ItemTransforms getTransforms() {
+		return ItemTransforms.NO_TRANSFORMS;
 	}
 
 }

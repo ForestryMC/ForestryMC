@@ -2,10 +2,10 @@ package genetics.api.root.translator;
 
 import java.util.Optional;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganism;

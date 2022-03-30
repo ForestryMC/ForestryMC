@@ -14,13 +14,13 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;
@@ -46,7 +46,7 @@ import genetics.commands.CommandHelpers;
 import genetics.commands.PermLevel;
 
 public class CommandBeeGive {
-	public static LiteralArgumentBuilder<CommandSource> register() {
+	public static LiteralArgumentBuilder<CommandSourceStack> register() {
 		return Commands.literal("give").requires(PermLevel.ADMIN)
 				.then(Commands.argument("bee", BeeArgument.beeArgument())
 						.then(Commands.argument("type", EnumArgument.enumArgument(EnumBeeType.class))
@@ -57,7 +57,7 @@ public class CommandBeeGive {
 				.executes(a -> execute(a.getSource(), BeeDefinition.FOREST.createIndividual(), EnumBeeType.QUEEN, a.getSource().getPlayerOrException()));
 	}
 
-	public static int execute(CommandSource source, IBee bee, EnumBeeType type, PlayerEntity player) {
+	public static int execute(CommandSourceStack source, IBee bee, EnumBeeType type, Player player) {
 		IBee beeCopy = (IBee) bee.copy();
 		if (type == EnumBeeType.QUEEN) {
 			beeCopy.mate(beeCopy.getGenome());
@@ -85,7 +85,7 @@ public class CommandBeeGive {
 
 		@Override
 		public <S> CompletableFuture<Suggestions> listSuggestions(final CommandContext<S> context, final SuggestionsBuilder builder) {
-			return ISuggestionProvider.suggest(BeeManager.beeRoot.getIndividualTemplates().stream()
+			return SharedSuggestionProvider.suggest(BeeManager.beeRoot.getIndividualTemplates().stream()
 					.map(IIndividual::getGenome)
 					.map(a -> a.getActiveAllele(BeeChromosomes.SPECIES))
 					.map(IAllele::getRegistryName)

@@ -1,8 +1,6 @@
 package forestry.core.features;
 
-import net.minecraft.item.Item;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.item.Item;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.ModuleCore;
@@ -42,8 +40,9 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> COMPOST = REGISTRY.item(ItemForestry::new, "fertilizer_bio");
 	public static final FeatureItem<ItemFertilizer> FERTILIZER_COMPOUND = REGISTRY.item(ItemFertilizer::new, "fertilizer_compound");
 
-	/* Gems */
+	/* Gems and raw ores */
 	public static final FeatureItem<ItemForestry> APATITE = REGISTRY.item(ItemForestry::new, "apatite");
+	public static final FeatureItem<ItemForestry> RAW_TIN = REGISTRY.item(ItemForestry::new, "raw_tin");
 
 	/* Research */
 	public static final FeatureItem<ItemResearchNote> RESEARCH_NOTE = REGISTRY.item(ItemResearchNote::new, "research_note");
@@ -52,7 +51,6 @@ public class CoreItems {
 	public static final FeatureItem<ItemAlyzer> PORTABLE_ALYZER = REGISTRY.item(ItemAlyzer::new, "portable_alyzer");
 
 	/* Ingots */
-	public static final FeatureItem<ItemForestry> INGOT_COPPER = REGISTRY.item(ItemForestry::new, "ingot_copper");
 	public static final FeatureItem<ItemForestry> INGOT_TIN = REGISTRY.item(ItemForestry::new, "ingot_tin");
 	public static final FeatureItem<ItemForestry> INGOT_BRONZE = REGISTRY.item(ItemForestry::new, "ingot_bronze");
 
@@ -64,8 +62,8 @@ public class CoreItems {
 	public static final FeatureItem<ItemForestry> CARTON = REGISTRY.item(ItemForestry::new, "carton");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_PICKAXE = REGISTRY.item(ItemForestry::new, "broken_bronze_pickaxe");
 	public static final FeatureItem<ItemForestry> BROKEN_BRONZE_SHOVEL = REGISTRY.item(ItemForestry::new, "broken_bronze_shovel");
-	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), 1f, -2.8f, (new Item.Properties()).addToolType(ToolType.PICKAXE, 3).tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
-	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), 1.5f, -3.0f, (new Item.Properties()).addToolType(ToolType.SHOVEL, 3).tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
+	public static final FeatureItem<ItemForestryTool> BRONZE_PICKAXE = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_PICKAXE.stack(), 1f, -2.8f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_pickaxe");
+	public static final FeatureItem<ItemForestryTool> BRONZE_SHOVEL = REGISTRY.item(() -> new ItemForestryTool(BROKEN_BRONZE_SHOVEL.stack(), 1.5f, -3.0f, new Item.Properties().tab(ItemGroupForestry.tabForestry)), "bronze_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_SHOVEL = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_SHOVEL.stack()), "kit_shovel");
 	public static final FeatureItem<ItemAssemblyKit> KIT_PICKAXE = REGISTRY.item(() -> new ItemAssemblyKit(BRONZE_PICKAXE.stack()), "kit_pickaxe");
 

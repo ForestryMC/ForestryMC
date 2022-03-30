@@ -5,13 +5,13 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,11 +21,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Most multiblock components should derive from this.
  * Supply it an IMultiblockLogic from MultiblockManager.logicFactory
  */
-public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> extends TileEntity implements IMultiblockComponent {
+public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> extends BlockEntity implements IMultiblockComponent {
 	private final T multiblockLogic;
 
-	public MultiblockTileEntityBase(TileEntityType<?> tileEntityType, T multiblockLogic) {
-		super(tileEntityType);
+	public MultiblockTileEntityBase(BlockEntityType<?> tileEntityType, BlockPos pos, BlockState state, T multiblockLogic) {
+		super(tileEntityType, pos, state);
 		this.multiblockLogic = multiblockLogic;
 	}
 
@@ -46,16 +46,15 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	public abstract void onMachineBroken();
 
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 		multiblockLogic.readFromNBT(data);
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 		multiblockLogic.write(data);
-		return data;
 	}
 
 	@Override
@@ -79,13 +78,13 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	/* Network Communication */
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT updateTag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag updateTag = super.getUpdateTag();
 		multiblockLogic.encodeDescriptionPacket(updateTag);
 		this.encodeDescriptionPacket(updateTag);
 		return updateTag;
@@ -93,16 +92,16 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public final void onDataPacket(NetworkManager network, SUpdateTileEntityPacket packet) {
+	public final void onDataPacket(Connection network, ClientboundBlockEntityDataPacket packet) {
 		super.onDataPacket(network, packet);
-		CompoundNBT nbtData = packet.getTag();
+		CompoundTag nbtData = packet.getTag();
 		multiblockLogic.decodeDescriptionPacket(nbtData);
 		this.decodeDescriptionPacket(nbtData);
 	}
 
 	@Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		multiblockLogic.decodeDescriptionPacket(tag);
 		this.decodeDescriptionPacket(tag);
 	}
@@ -110,14 +109,14 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
 	/**
 	 * Used to write tileEntity-specific data to the descriptionPacket
 	 */
-	protected void encodeDescriptionPacket(CompoundNBT packetData) {
+	protected void encodeDescriptionPacket(CompoundTag packetData) {
 
 	}
 
 	/**
 	 * Used to read tileEntity-specific data from the descriptionPacket (onDataPacket)
 	 */
-	protected void decodeDescriptionPacket(CompoundNBT packetData) {
+	protected void decodeDescriptionPacket(CompoundTag packetData) {
 
 	}
 }

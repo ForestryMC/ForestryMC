@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,6 +38,8 @@ import forestry.api.arboriculture.genetics.ITreeRoot;
 import forestry.api.genetics.IFruitFamily;
 import forestry.arboriculture.genetics.ClimateGrowthProvider;
 import forestry.core.genetics.alleles.AlleleForestrySpecies;
+
+import forestry.core.genetics.alleles.AlleleForestrySpecies.AbstractBuilder;
 
 public class AlleleTreeSpecies extends AlleleForestrySpecies implements IAlleleTreeSpecies {
 	private final ITreeGenerator generator;

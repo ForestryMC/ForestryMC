@@ -13,18 +13,18 @@ package forestry.apiculture.entities;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 public class AIAvoidPlayers extends Goal {
 
-	private final CreatureEntity mob;
-	private final PathNavigator pathNavigator;
+	private final PathfinderMob mob;
+	private final PathNavigation pathNavigator;
 
 	private final float farSpeed;
 	private final float nearSpeed;
@@ -34,9 +34,9 @@ public class AIAvoidPlayers extends Goal {
 	private Path path;
 
 	@Nullable
-	private PlayerEntity player;
+	private Player player;
 
-	public AIAvoidPlayers(CreatureEntity mob, float minDistance, float farSpeed, float nearSpeed) {
+	public AIAvoidPlayers(PathfinderMob mob, float minDistance, float farSpeed, float nearSpeed) {
 		this.mob = mob;
 		this.minDistance = minDistance;
 		this.farSpeed = farSpeed;
@@ -54,12 +54,11 @@ public class AIAvoidPlayers extends Goal {
 			return false;
 		}
 
-		if (!mob.getSensing().canSee(player)) {
+		if (!mob.getSensing().hasLineOfSight(player)) {
 			return false;
 		}
 
-		Vector3d randomTarget = RandomPositionGenerator.getPosAvoid(mob, 16, 7,
-				player.position());
+		Vec3 randomTarget = DefaultRandomPos.getPosAway(mob, 16, 7, player.position());
 
 		if (randomTarget == null) {
 			return false;

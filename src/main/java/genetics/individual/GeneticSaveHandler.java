@@ -2,8 +2,8 @@ package genetics.individual;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.ApiInstance;
 import genetics.Log;
@@ -32,17 +32,17 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 	}
 
 	@Override
-	public CompoundNBT writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundNBT tagCompound) {
+	public CompoundTag writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundTag tagCompound) {
 		return writeFormat.writeTag(chromosomes, karyotype, tagCompound);
 	}
 
 	@Override
-	public IChromosome[] readTag(IKaryotype karyotype, CompoundNBT tagCompound) {
+	public IChromosome[] readTag(IKaryotype karyotype, CompoundTag tagCompound) {
 		SaveFormat format = getFormat(tagCompound);
 		return format.readTag(karyotype, tagCompound);
 	}
 
-	private SaveFormat getFormat(CompoundNBT tagCompound) {
+	private SaveFormat getFormat(CompoundTag tagCompound) {
 		for (SaveFormat format : SaveFormat.values()) {
 			if (format.canLoad(tagCompound)) {
 				return format;
@@ -53,7 +53,7 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 
 	@Override
 	@Nullable
-	public IAllele getAlleleDirectly(CompoundNBT genomeNBT, IChromosomeType chromosomeType, boolean active) {
+	public IAllele getAlleleDirectly(CompoundTag genomeNBT, IChromosomeType chromosomeType, boolean active) {
 		SaveFormat format = getFormat(genomeNBT);
 		return format.getAlleleDirectly(genomeNBT, chromosomeType, active);
 	}
@@ -64,17 +64,17 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 	@Override
 	@Nullable
 	public IAllele getAlleleDirectly(ItemStack itemStack, IOrganismType type, IChromosomeType chromosomeType, boolean active) {
-		CompoundNBT nbtTagCompound = itemStack.getTag();
+		CompoundTag nbtTagCompound = itemStack.getTag();
 		if (nbtTagCompound == null || nbtTagCompound.isEmpty()) {
 			return null;
 		}
 
-		CompoundNBT individualNBT = getIndividualDataDirectly(itemStack, type, chromosomeType.getRoot());
+		CompoundTag individualNBT = getIndividualDataDirectly(itemStack, type, chromosomeType.getRoot());
 		if (individualNBT == null || individualNBT.isEmpty()) {
 			return null;
 		}
 
-		CompoundNBT genomeNBT = individualNBT.getCompound(GENOME_TAG);
+		CompoundTag genomeNBT = individualNBT.getCompound(GENOME_TAG);
 		if (genomeNBT.isEmpty()) {
 			return null;
 		}
@@ -95,7 +95,7 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 	}
 
 	@Override
-	public IChromosome getSpecificChromosome(CompoundNBT genomeNBT, IChromosomeType chromosomeType) {
+	public IChromosome getSpecificChromosome(CompoundTag genomeNBT, IChromosomeType chromosomeType) {
 		SaveFormat format = getFormat(genomeNBT);
 		return format.getSpecificChromosome(genomeNBT, chromosomeType);
 	}
@@ -105,44 +105,44 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 	 */
 	@Override
 	public IChromosome getSpecificChromosome(ItemStack itemStack, IOrganismType type, IChromosomeType chromosomeType) {
-		CompoundNBT nbtTagCompound = itemStack.getTag();
+		CompoundTag nbtTagCompound = itemStack.getTag();
 		if (nbtTagCompound == null) {
-			nbtTagCompound = new CompoundNBT();
+			nbtTagCompound = new CompoundTag();
 			itemStack.setTag(nbtTagCompound);
 		}
 
-		CompoundNBT individualNBT = getIndividualData(itemStack, type, chromosomeType.getRoot());
-		CompoundNBT genomeNBT = individualNBT.getCompound(GENOME_TAG);
+		CompoundTag individualNBT = getIndividualData(itemStack, type, chromosomeType.getRoot());
+		CompoundTag genomeNBT = individualNBT.getCompound(GENOME_TAG);
 
 		return getSpecificChromosome(genomeNBT, chromosomeType);
 	}
 
 	@Nullable
 	@Override
-	public CompoundNBT getIndividualDataDirectly(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root) {
+	public CompoundTag getIndividualDataDirectly(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root) {
 		IOrganismHandler organismHandler = GeneticHelper.getOrganismHandler(root, type);
 		return organismHandler.getIndividualData(itemStack);
 	}
 
 	@Override
-	public void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundNBT compound) {
+	public void setIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root, CompoundTag compound) {
 		IOrganismHandler organismHandler = GeneticHelper.getOrganismHandler(root, type);
 		organismHandler.setIndividualData(itemStack, compound);
 	}
 
 	@Override
-	public CompoundNBT getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root) {
+	public CompoundTag getIndividualData(ItemStack itemStack, IOrganismType type, IIndividualRoot<IIndividual> root) {
 		IOrganismHandler organismHandler = GeneticHelper.getOrganismHandler(root, type);
-		CompoundNBT compound = organismHandler.getIndividualData(itemStack);
+		CompoundTag compound = organismHandler.getIndividualData(itemStack);
 		if (compound != null) {
 			return compound;
 		}
-		compound = new CompoundNBT();
-		CompoundNBT genomeNBT = compound.getCompound(GENOME_TAG);
+		compound = new CompoundTag();
+		CompoundTag genomeNBT = compound.getCompound(GENOME_TAG);
 
 		if (genomeNBT.isEmpty()) {
 			Log.error("Got a genetic item with no genome, setting it to a default value.");
-			genomeNBT = new CompoundNBT();
+			genomeNBT = new CompoundTag();
 
 			ITemplateContainer container = root.getTemplates();
 			IAlleleTemplate defaultTemplate = container.getKaryotype().getDefaultTemplate();

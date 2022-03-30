@@ -12,11 +12,12 @@ package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.core.NonNullList;
 
 import forestry.api.recipes.ICentrifugeManager;
 import forestry.api.recipes.ICentrifugeRecipe;
@@ -41,18 +42,16 @@ public class CentrifugeRecipeManager extends AbstractCraftingProvider<ICentrifug
 	}
 
 	@Override
-	@Nullable
-	public ICentrifugeRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
+	public Optional<ICentrifugeRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, ItemStack itemStack) {
 		if (itemStack.isEmpty()) {
-			return null;
+			return Optional.empty();
 		}
 
-		for (ICentrifugeRecipe recipe : getRecipes(recipeManager)) {
-			Ingredient recipeInput = recipe.getInput();
-			if (recipeInput.test(itemStack)) {
-				return recipe;
-			}
-		}
-		return null;
+		return getRecipes(recipeManager)
+				.filter(recipe -> {
+					Ingredient recipeInput = recipe.getInput();
+					return recipeInput.test(itemStack);
+				})
+				.findFirst();
 	}
 }

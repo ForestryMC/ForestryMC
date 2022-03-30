@@ -16,18 +16,19 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,8 +55,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	@Nullable
 	private MemorizedRecipe currentRecipe;
 
-	public TileWorktable() {
-		super(WorktableTiles.WORKTABLE.tileType());
+	public TileWorktable(BlockPos pos, BlockState state) {
+		super(WorktableTiles.WORKTABLE.tileType(), pos, state);
 		setInternalInventory(new InventoryWorktable(this));
 
 		craftingDisplay = new InventoryGhostCrafting<>(this, 10);
@@ -65,17 +66,16 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	/* LOADING & SAVING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		craftingDisplay.write(compoundNBT);
 		recipeMemory.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		craftingDisplay.read(compoundNBT);
 		recipeMemory = new RecipeMemory(compoundNBT);
@@ -117,7 +117,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public ItemStack getResult(CraftingInventory inventory, World world) {
+	public ItemStack getResult(CraftingContainer inventory, Level world) {
 		if (currentRecipe != null) {
 			return currentRecipe.getCraftingResult(inventory, world);
 		}
@@ -136,7 +136,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public boolean onCraftingStart(PlayerEntity player) {
+	public boolean onCraftingStart(Player player) {
 		return craftRecipe(false);
 	}
 
@@ -145,12 +145,12 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 			return false;
 		}
 
-		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
+		CraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
 		if (selectedRecipe == null) {
 			return false;
 		}
 
-		IInventory inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
+		Container inventory = new InventoryMapper(this, InventoryWorktable.SLOT_INVENTORY_1, InventoryWorktable.SLOT_INVENTORY_COUNT);
 		if (!InventoryUtil.consumeIngredients(inventory, selectedRecipe.getIngredients(), null, true, false, !simulate)) {
 			return false;
 		}
@@ -165,9 +165,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	@Override
-	public void onCraftingComplete(PlayerEntity player) {
+	public void onCraftingComplete(Player player) {
 		Preconditions.checkNotNull(currentRecipe);
-		ICraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
+		CraftingRecipe selectedRecipe = currentRecipe.getSelectedRecipe(level);
 		Preconditions.checkNotNull(selectedRecipe);
 
 		ForgeHooks.setCraftingPlayer(player);
@@ -190,7 +190,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Nullable
 	@Override
-	public ICraftingRecipe getRecipeUsed() {
+	public CraftingRecipe getRecipeUsed() {
 		if (currentRecipe == null) {
 			return null;
 		}
@@ -208,14 +208,14 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 		setCurrentRecipe(recipe);
 	}
 
-	private void setCraftingDisplay(IInventory craftMatrix) {
+	private void setCraftingDisplay(Container craftMatrix) {
 		for (int slot = 0; slot < craftMatrix.getContainerSize(); slot++) {
 			ItemStack stack = craftMatrix.getItem(slot);
 			craftingDisplay.setItem(slot, stack.copy());
 		}
 	}
 
-	public IInventory getCraftingDisplay() {
+	public Container getCraftingDisplay() {
 		return new InventoryMapper(craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
 	}
 
@@ -226,7 +226,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 	}
 
 	public void setCurrentRecipe(CraftingInventoryForestry crafting) {
-		List<ICraftingRecipe> recipes = RecipeUtils.getRecipes(IRecipeType.CRAFTING, crafting, level);
+		List<CraftingRecipe> recipes = RecipeUtils.getRecipes(RecipeType.CRAFTING, crafting, level);
 		MemorizedRecipe recipe = recipes.isEmpty() ? null : new MemorizedRecipe(crafting, recipes);
 
 		if (currentRecipe != null && recipe != null) {
@@ -258,7 +258,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 		return new ContainerWorktable(windowId, playerInventory, this);
 	}
 }

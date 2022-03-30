@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 
 import com.mojang.brigadier.builder.ArgumentBuilder;
 
 public class CommandMode {
-	public static ArgumentBuilder<CommandSource, ?> register(ICommandModeHelper modeHelper) {
+	public static ArgumentBuilder<CommandSourceStack, ?> register(ICommandModeHelper modeHelper) {
 		return Commands.literal("mode")
 				.then(CommandModeInfo.register(modeHelper))
 				.then(CommandModeSet.register(modeHelper));

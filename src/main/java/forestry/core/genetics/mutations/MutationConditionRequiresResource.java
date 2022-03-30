@@ -21,13 +21,13 @@ import forestry.core.tiles.TileUtil;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
 
@@ -38,8 +38,8 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		TileEntity tile;
+	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+		BlockEntity tile;
 		do {
 			pos = pos.below();
 			tile = TileUtil.getTile(world, pos);
@@ -50,11 +50,11 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
+	public Component getDescription() {
 		if (acceptedBlockStates.isEmpty()) {
 			return NarratorChatListener.NO_TITLE;
 		} else {
-			return new TranslationTextComponent("for.mutation.condition.resource", acceptedBlockStates.get(0).getBlock().getName());
+			return new TranslatableComponent("for.mutation.condition.resource", acceptedBlockStates.get(0).getBlock().getName());
 		}
 	}
 }

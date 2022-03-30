@@ -14,17 +14,18 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -56,7 +57,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 
-public class TileMoistener extends TileBase implements ISidedInventory, ILiquidTankTile, IRenderableTile {
+public class TileMoistener extends TileBase implements WorldlyContainer, ILiquidTankTile, IRenderableTile {
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
 	@Nullable
@@ -71,8 +72,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	@Nullable
 	private ItemStack pendingProduct;
 
-	public TileMoistener() {
-		super(FactoryTiles.MOISTENER.tileType());
+	public TileMoistener(BlockPos pos, BlockState state) {
+		super(FactoryTiles.MOISTENER.tileType(), pos, state);
 		setInternalInventory(new InventoryMoistener(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(Fluids.WATER);
 		tankManager = new TankManager(this, resourceTank);
@@ -80,8 +81,8 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	/* LOADING & SAVING */
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("BurnTime", burnTime);
 		compoundNBT.putInt("TotalTime", totalTime);
@@ -91,21 +92,20 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Write pending product
 		if (pendingProduct != null) {
-			CompoundNBT CompoundNBTP = new CompoundNBT();
+			CompoundTag CompoundNBTP = new CompoundTag();
 			pendingProduct.save(CompoundNBTP);
 			compoundNBT.put("PendingProduct", CompoundNBTP);
 		}
 		if (currentProduct != null) {
-			CompoundNBT CompoundNBTP = new CompoundNBT();
+			CompoundTag CompoundNBTP = new CompoundTag();
 			currentProduct.save(CompoundNBTP);
 			compoundNBT.put("CurrentProduct", CompoundNBTP);
 		}
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		burnTime = compoundNBT.getInt("BurnTime");
 		totalTime = compoundNBT.getInt("TotalTime");
@@ -115,11 +115,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 		// Load pending product
 		if (compoundNBT.contains("PendingProduct")) {
-			CompoundNBT compoundNBTP = compoundNBT.getCompound("PendingProduct");
+			CompoundTag compoundNBTP = compoundNBT.getCompound("PendingProduct");
 			pendingProduct = ItemStack.of(compoundNBTP);
 		}
 		if (compoundNBT.contains("CurrentProduct")) {
-			CompoundNBT compoundNBTP = compoundNBT.getCompound("CurrentProduct");
+			CompoundTag compoundNBTP = compoundNBT.getCompound("CurrentProduct");
 			currentProduct = ItemStack.of(compoundNBTP);
 		}
 
@@ -238,9 +238,11 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 
 	public void checkRecipe() {
 		RecipeManager manager = RecipeUtils.getRecipeManager(level);
-		IMoistenerRecipe sameRec = manager != null ?
-				RecipeManagers.moistenerManager.findMatchingRecipe(manager, getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE))
-				: null;
+		IMoistenerRecipe sameRec = null;
+		if (manager != null) {
+			sameRec = RecipeManagers.moistenerManager.findMatchingRecipe(manager, getInternalInventory().getItem(InventoryMoistener.SLOT_RESOURCE))
+					.orElse(null);
+		}
 		if (currentRecipe != sameRec) {
 			currentRecipe = sameRec;
 			resetRecipe();
@@ -433,7 +435,7 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 			}
 			if (FuelManager.moistenerResource.containsKey(inventory.getItem(i))) {
 				MoistenerFuel res = FuelManager.moistenerResource.get(inventory.getItem(i));
-				if (res.getResource().test(inventory.getItem(i))) {
+				if (ItemStack.isSame(res.getResource(), inventory.getItem(i))) {
 					max += 64;
 					avail += inventory.getItem(i).getCount();
 				}
@@ -498,30 +500,22 @@ public class TileMoistener extends TileBase implements ISidedInventory, ILiquidT
 	/* SMP GUI */
 	public void getGUINetworkData(int i, int j) {
 		switch (i) {
-			case 0:
-				burnTime = j;
-				break;
-			case 1:
-				totalTime = j;
-				break;
-			case 2:
-				productionTime = j;
-				break;
-			case 3:
-				timePerItem = j;
-				break;
+			case 0 -> burnTime = j;
+			case 1 -> totalTime = j;
+			case 2 -> productionTime = j;
+			case 3 -> timePerItem = j;
 		}
 	}
 
-	public void sendGUINetworkData(Container container, IContainerListener iCrafting) {
-		iCrafting.setContainerData(container, 0, burnTime);
-		iCrafting.setContainerData(container, 1, totalTime);
-		iCrafting.setContainerData(container, 2, productionTime);
-		iCrafting.setContainerData(container, 3, timePerItem);
+	public void sendGUINetworkData(AbstractContainerMenu container, ContainerListener iCrafting) {
+		iCrafting.dataChanged(container, 0, burnTime);
+		iCrafting.dataChanged(container, 1, totalTime);
+		iCrafting.dataChanged(container, 2, productionTime);
+		iCrafting.dataChanged(container, 3, timePerItem);
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return new ContainerMoistener(windowId, inv, this);
 	}
 

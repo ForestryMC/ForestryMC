@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.mail.ILetter;
 import forestry.mail.features.MailItems;
@@ -26,10 +26,9 @@ public class LetterProperties {
 
 	public static ItemStack closeLetter(ItemStack parent, ILetter letter) {
 		Item item = parent.getItem();
-		if (!(item instanceof ItemLetter)) {    //TODO can just do == check?
+		if (!(item instanceof ItemLetter itemLetter)) {    //TODO can just do == check?
 			return parent;
 		}
-		ItemLetter itemLetter = (ItemLetter) item;
 		ItemLetter.State state = itemLetter.getState();
 		ItemLetter.Size size = itemLetter.getSize();
 
@@ -58,10 +57,9 @@ public class LetterProperties {
 
 	public static ItemStack openLetter(ItemStack parent) {
 		Item item = parent.getItem();
-		if (!(item instanceof ItemLetter)) {    //TODO can just do == check?
+		if (!(item instanceof ItemLetter itemLetter)) {    //TODO can just do == check?
 			return parent;
 		}
-		ItemLetter itemLetter = (ItemLetter) item;
 
 		ItemLetter.State state = itemLetter.getState();
 		if (state == ItemLetter.State.FRESH || state == ItemLetter.State.STAMPED) {

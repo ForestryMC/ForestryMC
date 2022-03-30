@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Config;
 import forestry.core.gui.GuiForestryTitled;
@@ -24,10 +24,10 @@ import forestry.core.render.TextureManagerForestry;
 import forestry.core.utils.Translator;
 import forestry.energy.tiles.TileEngine;
 
-public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C> {
+public abstract class GuiEngine<C extends AbstractContainerMenu, I extends TileEngine> extends GuiForestryTitled<C> {
 	protected final I tile;
 
-	protected GuiEngine(String texture, C container, PlayerInventory inv, I tile, ITextComponent title) {
+	protected GuiEngine(String texture, C container, Inventory inv, I tile, Component title) {
 		super(texture, container, inv, title);
 		this.tile = tile;
 	}
@@ -40,7 +40,7 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		}
 
 		@Override
-		public void draw(MatrixStack transform, int y, int x) {
+		public void draw(PoseStack transform, int y, int x) {
 
 			// Draw background
 			drawBackground(transform, y, x);
@@ -65,8 +65,8 @@ public abstract class GuiEngine<C extends Container, I extends TileEngine> exten
 		}
 
 		@Override
-		public ITextComponent getTooltip() {
-			return new StringTextComponent(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()));
+		public Component getTooltip() {
+			return new TextComponent(Config.energyDisplayMode.formatRate(tile.getCurrentOutput()));
 		}
 	}
 

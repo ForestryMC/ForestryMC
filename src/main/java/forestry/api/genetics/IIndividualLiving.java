@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import genetics.api.individual.IIndividual;
 
@@ -31,7 +31,7 @@ public interface IIndividualLiving extends IIndividual {
 	/**
 	 * Age the individual.
 	 */
-	void age(World world, float ageModifier);
+	void age(Level world, float ageModifier);
 
 	/**
 	 * @return true if the individual is among the living.

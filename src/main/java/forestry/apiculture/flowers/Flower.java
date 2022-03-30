@@ -13,7 +13,7 @@ package forestry.apiculture.flowers;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
 public final class Flower {
 
@@ -31,11 +31,9 @@ public final class Flower {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Flower)) {
+		if (!(obj instanceof Flower flower)) {
 			return false;
 		}
-
-		Flower flower = (Flower) obj;
 
 		return this.blockState == flower.getBlockState();
 	}

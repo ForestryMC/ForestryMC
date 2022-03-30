@@ -1,8 +1,8 @@
 package forestry.lepidopterology.features;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.SpawnEggItem;
 
 import forestry.api.lepidopterology.genetics.EnumFlutterType;
 import forestry.lepidopterology.ModuleLepidopterology;
@@ -23,7 +23,7 @@ public class LepidopterologyItems {
 	public static final FeatureItem<ItemButterflyGE> CATERPILLAR_GE = REGISTRY.item(() -> new ItemButterflyGE(EnumFlutterType.CATERPILLAR), "caterpillar_ge");
 	public static final FeatureItem<ItemButterflyGE> COCOON_GE = REGISTRY.item(() -> new ItemButterflyGE(EnumFlutterType.COCOON), "cocoon_ge");
 
-	public static final FeatureItem<SpawnEggItem> BUTTERFLY_SPAWN_EGG = REGISTRY.item(() -> new SpawnEggItem(LepidopterologyEntities.BUTTERFLY.entityType(), 0x456296, 0xEF6915, (new Item.Properties()).tab(ItemGroup.TAB_MISC)), "butterfly_spawn_egg");
+	public static final FeatureItem<SpawnEggItem> BUTTERFLY_SPAWN_EGG = REGISTRY.item(() -> new SpawnEggItem(LepidopterologyEntities.BUTTERFLY.entityType(), 0x456296, 0xEF6915, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC)), "butterfly_spawn_egg");
 
 	private LepidopterologyItems() {
 	}

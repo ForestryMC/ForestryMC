@@ -114,10 +114,9 @@ public final class AbsentClimateState implements IClimateState {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof IClimateState)) {
+		if (!(obj instanceof IClimateState otherState)) {
 			return false;
 		}
-		IClimateState otherState = (IClimateState) obj;
 		return Float.isNaN(otherState.getTemperature()) && Float.isNaN(otherState.getHumidity());
 	}
 

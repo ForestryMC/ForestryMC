@@ -11,13 +11,13 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -41,7 +41,7 @@ public class SocketWidget extends Widget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
+	public void draw(PoseStack transform, int startY, int startX) {
 		ItemStack socketStack = tile.getSocket(slot);
 		if (!socketStack.isEmpty()) {
 			Minecraft.getInstance().getItemRenderer().renderGuiItem(socketStack, startX + xPos, startY + yPos);
@@ -62,29 +62,27 @@ public class SocketWidget extends Widget {
 			ItemStack stack = tile.getSocket(slot);
 			if (!stack.isEmpty()) {
 				toolTip.addAll(ItemTooltipUtil.getInformation(stack));
-				toolTip.add(new TranslationTextComponent("for.gui.socket.remove").withStyle(TextFormatting.ITALIC));
+				toolTip.add(new TranslatableComponent("for.gui.socket.remove").withStyle(ChatFormatting.ITALIC));
 			} else {
-				toolTip.add(new TranslationTextComponent("for.gui.emptysocket"));
+				toolTip.add(new TranslatableComponent("for.gui.emptysocket"));
 			}
 		}
 	};
 
 	@Override
 	public void handleMouseClick(double mouseX, double mouseY, int mouseButton) {
+		ItemStack itemstack = manager.minecraft.player.inventoryMenu.getCarried();
 
-		ItemStack itemstack = manager.minecraft.player.inventory.getCarried();
 		if (itemstack.isEmpty()) {
 			return;
 		}
 
 		Item held = itemstack.getItem();
 
-		Container container = manager.gui.getMenu();
-		if (!(container instanceof IContainerSocketed)) {
+		AbstractContainerMenu container = manager.gui.getMenu();
+		if (!(container instanceof IContainerSocketed containerSocketed)) {
 			return;
 		}
-
-		IContainerSocketed containerSocketed = (IContainerSocketed) container;
 
 		// Insert chipsets
 		if (held instanceof ItemCircuitBoard) {

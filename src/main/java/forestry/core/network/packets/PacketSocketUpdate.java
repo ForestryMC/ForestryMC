@@ -12,11 +12,11 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +33,7 @@ public class PacketSocketUpdate extends ForestryPacket implements IForestryPacke
 	private final BlockPos pos;
 	private final NonNullList<ItemStack> itemStacks;
 
-	public <T extends TileEntity & ISocketable> PacketSocketUpdate(T tile) {
+	public <T extends BlockEntity & ISocketable> PacketSocketUpdate(T tile) {
 		this.pos = tile.getBlockPos();
 
 		this.itemStacks = NonNullList.withSize(tile.getSocketCount(), ItemStack.EMPTY);
@@ -56,7 +56,7 @@ public class PacketSocketUpdate extends ForestryPacket implements IForestryPacke
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> itemStacks = data.readItemStacks();
 

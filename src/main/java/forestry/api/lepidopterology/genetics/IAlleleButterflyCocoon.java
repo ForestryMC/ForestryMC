@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology.genetics;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.alleles.IAlleleProperty;
 import forestry.api.genetics.products.IDynamicProductList;

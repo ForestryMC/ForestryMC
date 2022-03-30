@@ -14,38 +14,38 @@ import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.MenuType;
 
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
 
-public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
+public class ContainerEntity<T extends Entity & Container> extends ContainerForestry {
 	protected final T entity;
 	@Nullable
 	private ImmutableSet<IErrorState> previousErrorStates;
 
-	protected ContainerEntity(int windowId, ContainerType<?> type, T entity) {
+	protected ContainerEntity(int windowId, MenuType<?> type, T entity) {
 		super(windowId, type);
 		this.entity = entity;
 	}
 
-	protected ContainerEntity(int windowId, ContainerType<?> type, T entity, PlayerInventory playerInventory, int xInv, int yInv) {
+	protected ContainerEntity(int windowId, MenuType<?> type, T entity, Inventory playerInventory, int xInv, int yInv) {
 		this(windowId, type, entity);
 		addPlayerInventory(playerInventory, xInv, yInv);
 	}
 
 	@Override
-	protected final boolean canAccess(PlayerEntity player) {
+	protected final boolean canAccess(Player player) {
 		return true;
 	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity PlayerEntity) {
+	public final boolean stillValid(Player PlayerEntity) {
 		return entity.stillValid(PlayerEntity);
 	}
 
@@ -53,8 +53,7 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 	public void broadcastChanges() {
 		super.broadcastChanges();
 
-		if (entity instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
+		if (entity instanceof IErrorLogicSource errorLogicSource) {
 			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
 			if (previousErrorStates == null || !errorStates.equals(previousErrorStates)) {

@@ -5,22 +5,22 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISqueezerRecipe extends IForestryRecipe {
 
-	IRecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
+	RecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
 
 	class Companion {
 		@ObjectHolder("forestry:squeezer")
-		public static final IRecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -49,12 +49,12 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	FluidStack getFluidOutput();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

@@ -7,9 +7,9 @@ package forestry.api.genetics.flowers;
 
 import java.util.Collection;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public interface IFlowerGrowthHelper {
 
@@ -23,5 +23,5 @@ public interface IFlowerGrowthHelper {
 	 * @return true if a flower was planted, false otherwise
 	 * @since Forestry 5.5.4
 	 */
-	boolean plantRandomFlower(String flowerType, World world, BlockPos pos, Collection<BlockState> potentialFlowers);
+	boolean plantRandomFlower(String flowerType, Level world, BlockPos pos, Collection<BlockState> potentialFlowers);
 }

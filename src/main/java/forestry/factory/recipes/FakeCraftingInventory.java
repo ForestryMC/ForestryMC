@@ -10,22 +10,22 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 class FakeCraftingInventory {
 
-	private static final Container EMPTY_CONTAINER = new Container(null, -1) {
+	private static final AbstractContainerMenu EMPTY_CONTAINER = new AbstractContainerMenu(null, -1) {
 		@Override
-		public boolean stillValid(PlayerEntity playerIn) {
+		public boolean stillValid(Player playerIn) {
 			return true;
 		}
 	};
 
-	public static CraftingInventory of(IInventory backing) {
-		CraftingInventory inventory = new CraftingInventory(EMPTY_CONTAINER, 3, 3);
+	public static CraftingContainer of(Container backing) {
+		CraftingContainer inventory = new CraftingContainer(EMPTY_CONTAINER, 3, 3);
 
 		for (int i = 0; i < 9; i++) {
 			inventory.setItem(i, backing.getItem(i));

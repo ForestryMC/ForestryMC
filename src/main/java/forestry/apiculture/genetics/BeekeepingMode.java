@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
@@ -69,7 +69,7 @@ public class BeekeepingMode implements IBeekeepingMode {
 	}
 
 	@Override
-	public int getFinalFertility(IBee queen, World world, BlockPos pos) {
+	public int getFinalFertility(IBee queen, Level world, BlockPos pos) {
 		int toCreate = queen.getGenome().getActiveValue(BeeChromosomes.FERTILITY);
 
 		if (reducesFertility) {

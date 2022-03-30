@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
@@ -21,10 +21,10 @@ public interface IMutationCondition {
 	 * Most will return 1 if the condition is met and 0 otherwise,
 	 * but the float offers flexibility for more advanced conditions.
 	 */
-	float getChance(World world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate);
+	float getChance(Level world, BlockPos pos, IAllele firstParent, IAllele secondParent, IGenome firstGenome, IGenome secondGenome, IClimateProvider climate);
 
 	/**
 	 * A localized description of the mutation condition. (i.e. "A temperature of HOT is required.")
 	 */
-	ITextComponent getDescription();
+	Component getDescription();
 }

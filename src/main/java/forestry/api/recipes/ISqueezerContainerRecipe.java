@@ -10,19 +10,19 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface ISqueezerContainerRecipe extends IForestryRecipe, ISqueezerRecipe {
 
-	IRecipeType<ISqueezerContainerRecipe> TYPE = RecipeManagers.create("forestry:squeezer_container");
+	RecipeType<ISqueezerContainerRecipe> TYPE = RecipeManagers.create("forestry:squeezer_container");
 
 	class Companion {
 		@ObjectHolder("forestry:squeezer_container")
-		public static final IRecipeSerializer<ISqueezerContainerRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<ISqueezerContainerRecipe> SERIALIZER = null;
 	}
 
 	ItemStack getEmptyContainer();
@@ -34,12 +34,12 @@ public interface ISqueezerContainerRecipe extends IForestryRecipe, ISqueezerReci
 	float getRemnantsChance();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

@@ -13,15 +13,15 @@ package forestry.core.fluids;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -48,7 +48,7 @@ public final class FluidHelper {
 		}
 	}
 
-	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid, boolean checkSpace) {
+	public static boolean canAcceptFluid(Level world, BlockPos pos, Direction facing, FluidStack fluid, boolean checkSpace) {
 		LazyOptional<IFluidHandler> capability = FluidUtil.getFluidHandler(world, pos, facing);
 		return capability.filter((handler) -> {
 			for (int tank = 0; tank < handler.getTanks(); tank++) {
@@ -62,7 +62,7 @@ public final class FluidHelper {
 			.isPresent();
 	}
 
-	public static boolean canAcceptFluid(World world, BlockPos pos, Direction facing, FluidStack fluid) {
+	public static boolean canAcceptFluid(Level world, BlockPos pos, Direction facing, FluidStack fluid) {
 		return canAcceptFluid(world, pos, facing, fluid, false);
 	}
 
@@ -70,11 +70,11 @@ public final class FluidHelper {
 		SUCCESS, INVALID_INPUT, NO_FLUID, NO_SPACE, NO_SPACE_FLUID
 	}
 
-	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
+	public static FillStatus fillContainers(IFluidHandler fluidHandler, Container inv, int inputSlot, int outputSlot, Fluid fluidToFill, boolean doFill) {
 		return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, getEmptyContainer(inv.getItem(inputSlot)), doFill);
 	}
 
-	public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill, ItemStack emptyStack, boolean doFill) {
+	public static FillStatus fillContainers(IFluidHandler fluidHandler, Container inv, int inputSlot, int outputSlot, Fluid fluidToFill, ItemStack emptyStack, boolean doFill) {
 		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return FillStatus.INVALID_INPUT;
@@ -147,7 +147,7 @@ public final class FluidHelper {
 		return FillStatus.SUCCESS;
 	}
 
-	public static boolean drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot) {
+	public static boolean drainContainers(IFluidHandler fluidHandler, Container inv, int inputSlot) {
 		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return false;
@@ -175,7 +175,7 @@ public final class FluidHelper {
 		return false;
 	}
 
-	public static FillStatus drainContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, boolean doDrain) {
+	public static FillStatus drainContainers(IFluidHandler fluidHandler, Container inv, int inputSlot, int outputSlot, boolean doDrain) {
 		ItemStack input = inv.getItem(inputSlot);
 		if (input.isEmpty()) {
 			return FillStatus.INVALID_INPUT;
@@ -222,7 +222,7 @@ public final class FluidHelper {
 
 	//TODO: Remove if forge fixes this method
 	@Nonnull
-	public static FluidActionResult tryEmptyContainer(@Nonnull ItemStack container, IFluidHandler fluidDestination, int maxAmount, @Nullable PlayerEntity player, boolean doDrain) {
+	public static FluidActionResult tryEmptyContainer(@Nonnull ItemStack container, IFluidHandler fluidDestination, int maxAmount, @Nullable Player player, boolean doDrain) {
 		ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // do not modify the input
 		return FluidUtil.getFluidHandler(containerCopy)
 			.map(containerFluidHandler -> {
@@ -231,7 +231,7 @@ public final class FluidHelper {
 					if (!transfer.isEmpty()) {
 						if (player != null) {
 							SoundEvent soundevent = transfer.getFluid().getAttributes().getEmptySound(transfer);
-							player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+							player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
 						}
 						ItemStack resultContainer = containerFluidHandler.getContainer();
 						return new FluidActionResult(resultContainer);

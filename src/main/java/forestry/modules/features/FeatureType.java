@@ -1,11 +1,11 @@
 package forestry.modules.features;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -15,8 +15,8 @@ public enum FeatureType {
 	BLOCK(Block.class),
 	ENTITY(EntityType.class),
 	ITEM(Item.class),
-	TILE(TileEntityType.class),
-	CONTAINER(ContainerType.class);
+	TILE(BlockEntityType.class),
+	CONTAINER(MenuType.class);
 
 	public final Class<? extends IForgeRegistryEntry> superType;
 

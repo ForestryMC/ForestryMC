@@ -14,9 +14,9 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Optional;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -25,8 +25,6 @@ import forestry.api.genetics.IForestrySpeciesRoot;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.utils.GeneticsUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
@@ -42,7 +40,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	public static final int SLOT_ANALYZE_4 = 5;
 	public static final int SLOT_ANALYZE_5 = 6;
 
-	public ItemInventoryAlyzer(PlayerEntity player, ItemStack itemstack) {
+	public ItemInventoryAlyzer(Player player, ItemStack itemstack) {
 		super(player, 7, itemstack);
 	}
 
@@ -51,11 +49,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 			return false;
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
-		}
+		return ApicultureItems.HONEY_DROPS.itemEqual(itemstack) || ApicultureItems.HONEYDEW.itemEqual(itemstack);
 
-		return false;
 	}
 
 	@Override
@@ -116,12 +111,10 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 		if (optionalIndividual.isPresent()) {
 			IIndividual individual = optionalIndividual.get();
 			if (!individual.isAnalyzed()) {
-				final boolean requiresEnergy = ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE);
-				if (requiresEnergy) {
-					// Requires energy
-					if (!isAlyzingFuel(getItem(SLOT_ENERGY))) {
-						return;
-					}
+				final boolean requiresEnergy = true;
+				// Requires energy
+				if (!isAlyzingFuel(getItem(SLOT_ENERGY))) {
+					return;
 				}
 
 				if (individual.analyze()) {
@@ -131,10 +124,8 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 
 					GeneticHelper.setIndividual(specimen, individual);
 
-					if (requiresEnergy) {
-						// Decrease energy
-						removeItem(SLOT_ENERGY, 1);
-					}
+					// Decrease energy
+					removeItem(SLOT_ENERGY, 1);
 				}
 			}
 		}
@@ -174,7 +165,7 @@ public class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
 	}
 
 	@Override
-	protected void onWriteNBT(CompoundNBT nbt) {
+	protected void onWriteNBT(CompoundTag nbt) {
 		ItemStack energy = getItem(ItemInventoryAlyzer.SLOT_ENERGY);
 		int amount = 0;
 		if (!energy.isEmpty()) {

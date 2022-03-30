@@ -12,8 +12,8 @@ package forestry.core.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 
 import forestry.api.genetics.IIndividualLiving;
 
@@ -36,14 +36,14 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 		health = maxHealth = newHealth;
 	}
 
-	protected IndividualLiving(CompoundNBT nbt) {
+	protected IndividualLiving(CompoundTag nbt) {
 		super(nbt);
 		health = nbt.getInt(NBT_HEALTH);
 		maxHealth = nbt.getInt(NBT_MAX_HEALTH);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundTag write(CompoundTag compound) {
 		compound = super.write(compound);
 
 		compound.putInt(NBT_HEALTH, health);
@@ -80,7 +80,7 @@ public abstract class IndividualLiving extends Individual implements IIndividual
 	}
 
 	@Override
-	public void age(World world, float lifespanModifier) {
+	public void age(Level world, float lifespanModifier) {
 
 		if (lifespanModifier < 0.001f) {
 			setHealth(0);

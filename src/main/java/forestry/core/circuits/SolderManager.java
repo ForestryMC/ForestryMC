@@ -14,8 +14,8 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 
 import forestry.api.circuits.ICircuit;
 import forestry.api.circuits.ICircuitLayout;
@@ -23,6 +23,8 @@ import forestry.api.recipes.IForestryRecipe;
 import forestry.api.recipes.ISolderManager;
 import forestry.api.recipes.ISolderRecipe;
 import forestry.factory.recipes.AbstractCraftingProvider;
+
+import java.util.Optional;
 
 public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> implements ISolderManager {
 
@@ -40,25 +42,18 @@ public class SolderManager extends AbstractCraftingProvider<ISolderRecipe> imple
 	}
 
 	@Override
-	@Nullable
-	public ICircuit getCircuit(@Nullable RecipeManager recipeManager, ICircuitLayout layout, ItemStack resource) {
-		ISolderRecipe circuitRecipe = getMatchingRecipe(recipeManager, layout, resource);
-		if (circuitRecipe == null) {
-			return null;
-		}
-		return circuitRecipe.getCircuit();
+	public Optional<ICircuit> getCircuit(@Nullable RecipeManager recipeManager, ICircuitLayout layout, ItemStack resource) {
+		return getMatchingRecipe(recipeManager, layout, resource)
+				.map(ISolderRecipe::getCircuit);
 	}
 
 	@Override
-	@Nullable
-	public ISolderRecipe getMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable ICircuitLayout layout, ItemStack resource) {
-		if (layout != null) {
-			for (ISolderRecipe recipe : getRecipes(recipeManager)) {
-				if (recipe.matches(layout, resource)) {
-					return recipe;
-				}
-			}
+	public Optional<ISolderRecipe> getMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable ICircuitLayout layout, ItemStack resource) {
+		if (layout == null) {
+			return Optional.empty();
 		}
-		return null;
+		return getRecipes(recipeManager)
+				.filter(recipe -> recipe.matches(layout, resource))
+				.findFirst();
 	}
 }

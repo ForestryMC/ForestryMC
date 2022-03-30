@@ -2,7 +2,8 @@ package forestry.apiculture.compat;
 
 import java.util.Optional;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -10,14 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.apiculture.features.ApicultureItems;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 
@@ -31,13 +30,9 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return;
-		}
-
-		ISubtypeInterpreter beeSubtypeInterpreter = itemStack -> {
+		IIngredientSubtypeInterpreter<ItemStack> beeSubtypeInterpreter = (itemStack, context) -> {
 			Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
-			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(ISubtypeInterpreter.NONE);
+			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
 		subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_DRONE.item(), beeSubtypeInterpreter);
@@ -48,14 +43,23 @@ public class ApicultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.APICULTURE)) {
-			return;
-		}
+		JeiUtil.addDescription(registry, "frames",
+				ApicultureItems.FRAME_IMPREGNATED,
+				ApicultureItems.FRAME_PROVEN,
+				ApicultureItems.FRAME_UNTREATED
+		);
 
-		JeiUtil.addDescription(registry, "frames", ApicultureItems.FRAME_IMPREGNATED.getItem(), ApicultureItems.FRAME_PROVEN.getItem(), ApicultureItems.FRAME_UNTREATED.getItem());
+		JeiUtil.addDescription(registry, "apiarist.suit",
+				ApicultureItems.APIARIST_BOOTS,
+				ApicultureItems.APIARIST_CHEST,
+				ApicultureItems.APIARIST_HELMET,
+				ApicultureItems.APIARIST_LEGS
+		);
 
-		JeiUtil.addDescription(registry, "apiarist.suit", ApicultureItems.APIARIST_BOOTS.getItem(), ApicultureItems.APIARIST_CHEST.getItem(), ApicultureItems.APIARIST_HELMET.getItem(), ApicultureItems.APIARIST_LEGS.getItem());
-
-		JeiUtil.addDescription(registry, ApicultureItems.HABITAT_LOCATOR.getItem(), ApicultureItems.SCOOP.getItem(), ApicultureItems.IMPRINTER.getItem());
+		JeiUtil.addDescription(registry,
+				ApicultureItems.HABITAT_LOCATOR,
+				ApicultureItems.SCOOP,
+				ApicultureItems.IMPRINTER
+		);
 	}
 }

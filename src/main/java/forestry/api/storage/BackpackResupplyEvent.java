@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.Cancelable;
 @Cancelable
 public class BackpackResupplyEvent extends BackpackEvent {
 
-	public BackpackResupplyEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory) {
+	public BackpackResupplyEvent(Player player, IBackpackDefinition backpackDefinition, Container backpackInventory) {
 		super(player, backpackDefinition, backpackInventory);
 	}
 

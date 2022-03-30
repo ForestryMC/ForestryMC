@@ -13,11 +13,12 @@ package forestry.energy.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -62,8 +63,8 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	protected final EnergyManager energyManager;
 	private final String hintKey;
 
-	protected TileEngine(TileEntityType<?> type, String hintKey, int maxHeat, int maxEnergy) {
-		super(type);
+	protected TileEngine(BlockEntityType<?> type, BlockPos pos, BlockState state, String hintKey, int maxHeat, int maxEnergy) {
+		super(type, pos, state);
 		this.hintKey = hintKey;
 		this.maxHeat = maxHeat;
 		energyManager = new EnergyManager(2000, maxEnergy);
@@ -125,7 +126,7 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 		// Determine targeted tile
 		BlockState blockState = level.getBlockState(getBlockPos());
 		Direction facing = blockState.getValue(BlockBase.FACING);
-		TileEntity tile = level.getBlockEntity(getBlockPos().relative(facing));
+		BlockEntity tile = level.getBlockEntity(getBlockPos().relative(facing));
 
 		float newPistonSpeed = getPistonSpeed();
 		if (newPistonSpeed != pistonSpeedServer) {
@@ -224,28 +225,21 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 	}
 
 	protected float getPistonSpeed() {
-		switch (getTemperatureState()) {
-			case COOL:
-				return 0.03f;
-			case WARMED_UP:
-				return 0.04f;
-			case OPERATING_TEMPERATURE:
-				return 0.05f;
-			case RUNNING_HOT:
-				return 0.06f;
-			case OVERHEATING:
-				return 0.07f;
-			case MELTING:
-				return Constants.ENGINE_PISTON_SPEED_MAX;
-			default:
-				return 0;
-		}
+		return switch (getTemperatureState()) {
+			case COOL -> 0.03f;
+			case WARMED_UP -> 0.04f;
+			case OPERATING_TEMPERATURE -> 0.05f;
+			case RUNNING_HOT -> 0.06f;
+			case OVERHEATING -> 0.07f;
+			case MELTING -> Constants.ENGINE_PISTON_SPEED_MAX;
+			default -> 0;
+		};
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT nbt) {
-		super.load(state, nbt);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
 		energyManager.read(nbt);
 
 		heat = nbt.getInt("EngineHeat");
@@ -256,14 +250,13 @@ public abstract class TileEngine extends TileBase implements IActivatable, IStre
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbt) {
-		nbt = super.save(nbt);
+	public void saveAdditional(CompoundTag nbt) {
+		super.saveAdditional(nbt);
 		energyManager.write(nbt);
 
 		nbt.putInt("EngineHeat", heat);
 		nbt.putFloat("EngineProgress", progress);
 		nbt.putBoolean("ForceCooldown", forceCooldown);
-		return nbt;
 	}
 
 	/* NETWORK */

@@ -7,16 +7,16 @@ package forestry.api.mail;
 
 import java.util.Map;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 public interface IPostOffice {
 
 	void collectPostage(NonNullList<ItemStack> stamps);
 
-	IPostalState lodgeLetter(ServerWorld world, ItemStack itemstack, boolean doLodge);
+	IPostalState lodgeLetter(ServerLevel world, ItemStack itemstack, boolean doLodge);
 
 	ItemStack getAnyStamp(int max);
 
@@ -28,5 +28,5 @@ public interface IPostOffice {
 
 	void deregisterTradeStation(ITradeStation trade);
 
-	Map<IMailAddress, ITradeStation> getActiveTradeStations(World world);
+	Map<IMailAddress, ITradeStation> getActiveTradeStations(Level world);
 }

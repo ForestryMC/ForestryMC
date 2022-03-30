@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.ICrop;
 import forestry.farming.logic.crops.CropBasicAgriCraft;
@@ -24,7 +24,7 @@ public class FarmableBasicAgricraft extends FarmableBase {
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
+	public ICrop getCropAt(Level world, BlockPos pos, BlockState blockState) {
 		if (blockState != matureState) {
 			return null;
 		}

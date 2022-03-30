@@ -13,12 +13,12 @@ package forestry.apiculture.items;
 import java.awt.Color;
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
 
-public enum EnumHoneyComb implements IStringSerializable, IItemSubtype, IBlockSubtype {
+public enum EnumHoneyComb implements StringRepresentable, IItemSubtype, IBlockSubtype {
 	HONEY(new Color(0xe8d56a), new Color(0xffa12b)),
 	COCOA(new Color(0x674016), new Color(0xffb62b), true),
 	SIMMERING(new Color(0x981919), new Color(0xffb62b)),

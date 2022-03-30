@@ -10,11 +10,12 @@
  ******************************************************************************/
 package forestry.climatology;
 
-import net.minecraft.client.gui.ScreenManager;
+import java.util.function.Consumer;
+
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 
 import net.minecraftforge.fml.DistExecutor;
 
@@ -26,21 +27,16 @@ import forestry.climatology.gui.GuiHabitatFormer;
 import forestry.climatology.network.PacketRegistryClimatology;
 import forestry.climatology.proxy.ProxyClimatology;
 import forestry.climatology.proxy.ProxyClimatologyClient;
-import forestry.core.capabilities.NullStorage;
-import forestry.core.climate.FakeClimateListener;
-import forestry.core.climate.FakeClimateTransformer;
 import forestry.core.config.Constants;
 import forestry.core.network.IPacketRegistry;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
-import forestry.modules.ModuleHelper;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CLIMATOLOGY, name = "Climatology", author = "Nedelosk", url = Constants.URL, unlocalizedDescription = "for.module.greenhouse.description")
 public class ModuleClimatology extends BlankForestryModule {
 
-	@SuppressWarnings("NullableProblems")
-	public static ProxyClimatology proxy;
+	private final ProxyClimatology proxy;
 
 	public ModuleClimatology() {
 		proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
@@ -49,16 +45,18 @@ public class ModuleClimatology extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
+		MenuScreens.register(ClimatologyContainers.HABITAT_FORMER.containerType(), GuiHabitatFormer::new);
 	}
 
 	@Override
 	public void preInit() {
 		proxy.preInit();
+	}
 
-		// Capabilities
-		CapabilityManager.INSTANCE.register(IClimateListener.class, new NullStorage<>(), () -> FakeClimateListener.INSTANCE);
-		CapabilityManager.INSTANCE.register(IClimateTransformer.class, new NullStorage<>(), () -> FakeClimateTransformer.INSTANCE);
+	@Override
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		consumer.accept(IClimateListener.class);
+		consumer.accept(IClimateTransformer.class);
 	}
 
 	@Override

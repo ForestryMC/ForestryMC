@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public interface IHiveTile {
 	/**
@@ -21,10 +21,10 @@ public interface IHiveTile {
 	/**
 	 * Called when the hive is attacked.
 	 */
-	void onAttack(World world, BlockPos pos, PlayerEntity player);
+	void onAttack(Level world, BlockPos pos, Player player);
 
 	/**
 	 * Called when the hive is broken.
 	 */
-	void onBroken(World world, BlockPos pos, PlayerEntity player, boolean canHarvest);
+	void onBroken(Level world, BlockPos pos, Player player, boolean canHarvest);
 }

@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
@@ -35,7 +35,6 @@ import forestry.core.circuits.CircuitRegistry;
 import forestry.core.circuits.GuiSolderingIron;
 import forestry.core.circuits.SolderManager;
 import forestry.core.commands.CommandModules;
-import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreContainers;
 import forestry.core.features.CoreFeatures;
@@ -59,15 +58,10 @@ import forestry.modules.ISidedModuleHandler;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.CORE, name = "Core", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.core.description", coreModule = true)
 public class ModuleCore extends BlankForestryModule {
-	public static final LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("forestry");
+	public static final LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
 		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-	}
-
-	@Override
-	public boolean canBeDisabled() {
-		return false;
 	}
 
 	@Override
@@ -92,11 +86,11 @@ public class ModuleCore extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
-		ScreenManager.register(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
-		ScreenManager.register(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
-		ScreenManager.register(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
-		ScreenManager.register(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
+		MenuScreens.register(CoreContainers.ALYZER.containerType(), GuiAlyzer::new);
+		MenuScreens.register(CoreContainers.ANALYZER.containerType(), GuiAnalyzer::new);
+		MenuScreens.register(CoreContainers.NATURALIST_INVENTORY.containerType(), GuiNaturalistInventory::new);
+		MenuScreens.register(CoreContainers.ESCRITOIRE.containerType(), GuiEscritoire::new);
+		MenuScreens.register(CoreContainers.SOLDERING_IRON.containerType(), GuiSolderingIron::new);
 	}
 
 
@@ -109,7 +103,7 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Nullable
 	@Override
-	public LiteralArgumentBuilder<CommandSource> register() {
+	public LiteralArgumentBuilder<CommandSourceStack> register() {
 		return rootCommand;
 	}
 
@@ -133,13 +127,6 @@ public class ModuleCore extends BlankForestryModule {
 
 	@Override
 	public boolean processIMCMessage(InterModComms.IMCMessage message) {
-		if (message.getMethod().equals("blacklist-ores-dimension")) {
-			ResourceLocation[] dims = (ResourceLocation[]) message.getMessageSupplier().get();    //TODO - how does IMC work
-			for (ResourceLocation dim : dims) {
-				Config.blacklistOreDim(dim);
-			}
-			return true;
-		}
 		return false;
 	}
 

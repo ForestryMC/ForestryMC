@@ -15,21 +15,20 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -52,7 +51,7 @@ import forestry.core.utils.NBTUtilForestry;
 import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
-public abstract class TileForestry extends TileEntity implements IStreamable, IErrorLogicSource, ISidedInventory, IFilterSlotDelegate, ITitled, ILocatable, ITickableTileEntity, INamedContainerProvider {
+public abstract class TileForestry extends BlockEntity implements IStreamable, IErrorLogicSource, WorldlyContainer, IFilterSlotDelegate, ITitled, ILocatable, MenuProvider {
 	private final ErrorLogic errorHandler = new ErrorLogic();
 	private final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -61,15 +60,15 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	private final TickHelper tickHelper = new TickHelper();
 	private boolean needsNetworkUpdate = false;
 
-	public TileForestry(TileEntityType<?> tileEntityTypeIn) {
-		super(tileEntityTypeIn);
+	public TileForestry(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+		super(tileEntityTypeIn, pos, state);
 	}
 
 	protected AdjacentTileCache getTileCache() {
 		return tileCache;
 	}
 
-	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborTileChange(Level world, BlockPos pos, BlockPos neighbor) {
 		tileCache.onNeighborChange();
 	}
 
@@ -86,7 +85,6 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	// / UPDATING
-	@Override
 	public final void tick() {
 		tickHelper.onTick();
 
@@ -115,36 +113,34 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 
 	// / SAVING & LOADING
 	@Override
-	public void load(BlockState state, CompoundNBT data) {
-		super.load(state, data);
+	public void load(CompoundTag data) {
+		super.load(data);
 		inventory.read(data);
 	}
 
-
 	@Override
-	public CompoundNBT save(CompoundNBT data) {
-		data = super.save(data);
+	public void saveAdditional(CompoundTag data) {
+		super.saveAdditional(data);
 		inventory.write(data);
-		return data;
 	}
 
 	@Nullable
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getBlockPos(), 0, getUpdateTag());
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		CompoundNBT tag = super.getUpdateTag();
+	public CompoundTag getUpdateTag() {
+		CompoundTag tag = super.getUpdateTag();
 		return NBTUtilForestry.writeStreamableToNbt(this, tag);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		super.handleUpdateTag(state, tag);
+	public void handleUpdateTag(CompoundTag tag) {
+		super.handleUpdateTag(tag);
 		NBTUtilForestry.readStreamableFromNbt(this, tag);
 	}
 
@@ -170,7 +166,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return level;
 	}
 
@@ -246,12 +242,12 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public final void startOpen(PlayerEntity player) {
+	public final void startOpen(Player player) {
 		getInternalInventory().startOpen(player);
 	}
 
 	@Override
-	public final void stopOpen(PlayerEntity player) {
+	public final void stopOpen(Player player) {
 		getInternalInventory().stopOpen(player);
 	}
 
@@ -266,7 +262,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	//	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity player) {
+	public final boolean stillValid(Player player) {
 		return getInternalInventory().stillValid(player);
 	}
 
@@ -328,7 +324,7 @@ public abstract class TileForestry extends TileEntity implements IStreamable, IE
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(this.getUnlocalizedTitle());
+	public Component getDisplayName() {
+		return new TranslatableComponent(this.getUnlocalizedTitle());
 	}
 }

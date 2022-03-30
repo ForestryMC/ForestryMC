@@ -16,12 +16,12 @@ import com.google.gson.JsonObject;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
 
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
@@ -30,7 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class RecipeSerializers {
 
-	static <E> void write(PacketBuffer buffer, NonNullList<E> list, BiConsumer<PacketBuffer, E> consumer) {
+	static <E> void write(FriendlyByteBuf buffer, NonNullList<E> list, BiConsumer<FriendlyByteBuf, E> consumer) {
 		buffer.writeVarInt(list.size());
 
 		for (E e : list) {
@@ -38,7 +38,7 @@ public class RecipeSerializers {
 		}
 	}
 
-	static <E> NonNullList<E> read(PacketBuffer buffer, Function<PacketBuffer, E> reader) {
+	static <E> NonNullList<E> read(FriendlyByteBuf buffer, Function<FriendlyByteBuf, E> reader) {
 		NonNullList<E> list = NonNullList.create();
 		int size = buffer.readVarInt();
 
@@ -50,19 +50,19 @@ public class RecipeSerializers {
 	}
 
 	public static FluidStack deserializeFluid(JsonObject object) {
-		return FluidStack.loadFluidStackFromNBT((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object));
+		return FluidStack.loadFluidStackFromNBT((CompoundTag) Dynamic.convert(JsonOps.INSTANCE, NbtOps.INSTANCE, object));
 	}
 
 	public static JsonObject serializeFluid(FluidStack fluid) {
-		return (JsonObject) Dynamic.convert(NBTDynamicOps.INSTANCE, JsonOps.INSTANCE, fluid.writeToNBT(new CompoundNBT()));
+		return (JsonObject) Dynamic.convert(NbtOps.INSTANCE, JsonOps.INSTANCE, fluid.writeToNBT(new CompoundTag()));
 	}
 
 	public static ItemStack item(JsonObject object) {
-		return ItemStack.of((CompoundNBT) Dynamic.convert(JsonOps.INSTANCE, NBTDynamicOps.INSTANCE, object));
+		return ItemStack.of((CompoundTag) Dynamic.convert(JsonOps.INSTANCE, NbtOps.INSTANCE, object));
 	}
 
 	public static JsonObject item(ItemStack stack) {
-		return (JsonObject) Dynamic.convert(NBTDynamicOps.INSTANCE, JsonOps.INSTANCE, stack.serializeNBT());
+		return (JsonObject) Dynamic.convert(NbtOps.INSTANCE, JsonOps.INSTANCE, stack.serializeNBT());
 	}
 
 	public static Ingredient deserialize(JsonElement resource) {

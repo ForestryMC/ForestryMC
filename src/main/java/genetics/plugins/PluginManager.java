@@ -12,14 +12,13 @@ import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import genetics.ApiInstance;
+import genetics.GeneticFactory;
+import genetics.alleles.AlleleRegistry;
 import genetics.api.GeneticPlugin;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneticPlugin;
 import genetics.api.alleles.Allele;
-
-import genetics.ApiInstance;
-import genetics.GeneticFactory;
-import genetics.alleles.AlleleRegistry;
 import genetics.classification.ClassificationRegistry;
 import genetics.root.IndividualRootBuilder;
 import genetics.root.RootManager;
@@ -74,9 +73,9 @@ public class PluginManager {
 	private static void handlePlugins(Consumer<IGeneticPlugin> pluginConsumer) {
 		ModContainer oldContainer = ModLoadingContext.get().getActiveContainer();
 		plugins.forEach((plugin, container) -> {
-			ModLoadingContext.get().setActiveContainer(container, FMLJavaModLoadingContext.get());
+			ModLoadingContext.get().setActiveContainer(container);
 			pluginConsumer.accept(plugin);
 		});
-		ModLoadingContext.get().setActiveContainer(oldContainer, FMLJavaModLoadingContext.get());
+		ModLoadingContext.get().setActiveContainer(oldContainer);
 	}
 }

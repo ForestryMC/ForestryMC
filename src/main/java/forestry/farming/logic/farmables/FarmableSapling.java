@@ -10,23 +10,23 @@
  ******************************************************************************/
 package forestry.farming.logic.farmables;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmable;
@@ -48,12 +48,12 @@ public class FarmableSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean plantSaplingAt(PlayerEntity player, ItemStack germling, World world, BlockPos pos) {
+	public boolean plantSaplingAt(Player player, ItemStack germling, Level world, BlockPos pos) {
 		ItemStack copy = germling.copy();
-		player.setItemInHand(Hand.MAIN_HAND, copy);
-		BlockRayTraceResult result = new BlockRayTraceResult(Vector3d.ZERO, Direction.UP, pos.below(), true);    //TODO isInside
-		ActionResultType actionResult = copy.useOn(new ItemUseContext(player, Hand.MAIN_HAND, result));
-		player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+		player.setItemInHand(InteractionHand.MAIN_HAND, copy);
+		BlockHitResult result = new BlockHitResult(Vec3.ZERO, Direction.UP, pos.below(), true);    //TODO isInside
+		InteractionResult actionResult = copy.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, result));
+		player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 		if (actionResult.consumesAction()) {
 			PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.SoundFXType.BLOCK_PLACE, pos, Blocks.OAK_SAPLING.defaultBlockState());
 			NetworkUtil.sendNetworkPacket(packet, pos, world);
@@ -63,14 +63,13 @@ public class FarmableSapling implements IFarmable {
 	}
 
 	@Override
-	public boolean isSaplingAt(World world, BlockPos pos, BlockState blockState) {
+	public boolean isSaplingAt(Level world, BlockPos pos, BlockState blockState) {
 		return blockState.getBlock() == this.saplingBlock;
 	}
 
 	@Override
-	public ICrop getCropAt(World world, BlockPos pos, BlockState blockState) {
-		Block block = blockState.getBlock();
-		if (!block.is(BlockTags.LOGS)) {
+	public ICrop getCropAt(Level world, BlockPos pos, BlockState blockState) {
+		if (!blockState.is(BlockTags.LOGS)) {
 			return null;
 		}
 
@@ -90,7 +89,7 @@ public class FarmableSapling implements IFarmable {
 		NonNullList<ItemStack> germlings = NonNullList.create();
 		//if (ignoreMetadata) {
 		Item germlingItem = germling.getItem();
-		ItemGroup tab = germlingItem.getItemCategory();
+		CreativeModeTab tab = germlingItem.getItemCategory();
 		if (tab != null) {
 			germlingItem.fillItemCategory(tab, germlings);
 		}

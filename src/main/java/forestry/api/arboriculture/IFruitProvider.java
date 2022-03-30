@@ -8,17 +8,18 @@ package forestry.api.arboriculture;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,7 +48,7 @@ public interface IFruitProvider extends ISetupListener {
 	 * @param genome       The genome of the tree of the pod / leaves block.
 	 * @param ripeningTime The ripening time of the leaves / pod block. From 0 to {@link #getRipeningPeriod()}.
 	 */
-	int getColour(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
+	int getColour(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * return the color to use for decorative leaves. Usually the ripe color.
@@ -62,7 +63,7 @@ public interface IFruitProvider extends ISetupListener {
 	 * @param pos    The position of the pod / leaves block.
 	 * @return True if this provider provides a fruit leaf for the given genome at the given position.
 	 */
-	boolean isFruitLeaf(IGenome genome, IWorld world, BlockPos pos);
+	boolean isFruitLeaf(IGenome genome, LevelAccessor world, BlockPos pos);
 
 	/**
 	 * The chance that this leaves contains fruits or the chance that a pod block spawns.
@@ -71,7 +72,7 @@ public interface IFruitProvider extends ISetupListener {
 	 * @param world
 	 * @return The chance that this leaves contains fruits or the chance that a pod block spawns.
 	 */
-	default float getFruitChance(IGenome genome, IWorld world, BlockPos pos) {
+	default float getFruitChance(IGenome genome, LevelAccessor world, BlockPos pos) {
 		ITreeRoot treeRoot = TreeManager.treeRoot;
 		if (treeRoot == null) {
 			return 0.0F;
@@ -105,12 +106,12 @@ public interface IFruitProvider extends ISetupListener {
 	 * @param genome       The genome of the tree of the leaves / pod.
 	 * @param ripeningTime The repining time of the block. From 0 to {@link #getRipeningPeriod()}.
 	 */
-	NonNullList<ItemStack> getFruits(IGenome genome, World world, BlockPos pos, int ripeningTime);
+	NonNullList<ItemStack> getFruits(IGenome genome, Level world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	TextComponent getDescription();
+	BaseComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.
@@ -130,7 +131,7 @@ public interface IFruitProvider extends ISetupListener {
 	 * @return ResourceLocation of the texture to overlay on the leaf block.
 	 */
 	@Nullable
-	ResourceLocation getSprite(IGenome genome, IBlockReader world, BlockPos pos, int ripeningTime);
+	ResourceLocation getSprite(IGenome genome, BlockGetter world, BlockPos pos, int ripeningTime);
 
 	/**
 	 * return the ResourceLocation to display on decorative leaves
@@ -149,7 +150,7 @@ public interface IFruitProvider extends ISetupListener {
 	 *
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(IGenome genome, IWorld world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos);
 
 	/**
 	 * Can be used to register the sprite/s that can be returned with
@@ -163,7 +164,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * Tag for the log that the is placed on
 	 */
-	default ITag<Block> getLogTag() {
+	default TagKey<Block> getLogTag() {
 		return BlockTags.JUNGLE_LOGS;
 	}
 }

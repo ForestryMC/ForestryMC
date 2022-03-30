@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import forestry.core.network.IForestryPacketHandlerServer;
 import forestry.core.network.PacketBufferForestry;
@@ -23,7 +23,7 @@ public class PacketHandlerDummyServer extends PacketHandlerDummy implements IFor
 	}
 
 	@Override
-	public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+	public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 
 	}
 }

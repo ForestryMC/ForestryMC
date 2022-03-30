@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.config;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidAttributes;
 
@@ -20,9 +20,7 @@ public class Constants implements IForestryConstants {
 	// System
 	public static final String MOD_NAME = "Forestry";
 	public static final String MOD_ID = "forestry";
-	public static final String URL = "http://forestry.sengir.net/";
-
-	public static final String VERSION = "@VERSION@";
+	public static final String URL = "https://forestry.sengir.net/";
 
 	public static final int FLAG_BLOCK_UPDATE = 1;
 	public static final int FLAG_BLOCK_SYNC = 2;

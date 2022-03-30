@@ -16,20 +16,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import com.mojang.authlib.GameProfile;
 
@@ -77,7 +77,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		matcher = new TemplateMatcher(genome);
 	}
 
-	public Tree(CompoundNBT compoundNBT) {
+	public Tree(CompoundTag compoundNBT) {
 		super(compoundNBT);
 		matcher = new TemplateMatcher(genome);
 	}
@@ -94,7 +94,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* EFFECTS */
 	@Override
-	public IEffectData[] doEffect(IEffectData[] storedData, World world, BlockPos pos) {
+	public IEffectData[] doEffect(IEffectData[] storedData, Level world, BlockPos pos) {
 		IAlleleLeafEffect effect = getGenome().getActiveAllele(TreeChromosomes.EFFECT);
 
 		storedData[0] = doEffect(effect, storedData[0], world, pos);
@@ -114,25 +114,25 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return storedData;
 	}
 
-	private IEffectData doEffect(IAlleleLeafEffect effect, IEffectData storedData, World world, BlockPos pos) {
+	private IEffectData doEffect(IAlleleLeafEffect effect, IEffectData storedData, Level world, BlockPos pos) {
 		storedData = effect.validateStorage(storedData);
 		return effect.doEffect(getGenome(), storedData, world, pos);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public IEffectData[] doFX(IEffectData[] storedData, World world, BlockPos pos) {
+	public IEffectData[] doFX(IEffectData[] storedData, Level world, BlockPos pos) {
 		return storedData;
 	}
 
 	/* GROWTH */
 	@Override
-	public Feature<NoFeatureConfig> getTreeGenerator(ISeedReader world, BlockPos pos, boolean wasBonemealed) {
+	public Feature<NoneFeatureConfiguration> getTreeGenerator(WorldGenLevel world, BlockPos pos, boolean wasBonemealed) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().getTreeFeature(this);
 	}
 
 	@Override
-	public boolean canStay(IBlockReader world, BlockPos pos) {
+	public boolean canStay(BlockGetter world, BlockPos pos) {
 		BlockPos blockPos = pos.below();
 		BlockState blockState = world.getBlockState(blockPos);
 
@@ -141,18 +141,18 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public PlantType getPlantType(IBlockReader world, BlockPos pos) {
+	public PlantType getPlantType(BlockGetter world, BlockPos pos) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getPlantType();
 	}
 
 	@Override
-	public BlockState getPlant(IBlockReader world, BlockPos pos) {
+	public BlockState getPlant(BlockGetter world, BlockPos pos) {
 		return world.getBlockState(pos);
 	}
 
 	@Override
 	@Nullable
-	public BlockPos canGrow(IWorld world, BlockPos pos, int expectedGirth, int expectedHeight) {
+	public BlockPos canGrow(LevelAccessor world, BlockPos pos, int expectedGirth, int expectedHeight) {
 		return TreeGrowthHelper.canGrow(world, genome, pos, expectedGirth, expectedHeight);
 	}
 
@@ -178,12 +178,12 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean setLeaves(IWorld world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
+	public boolean setLeaves(LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, Random rand) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLeaves(genome, world, owner, pos, rand);
 	}
 
 	@Override
-	public boolean setLogBlock(IWorld world, BlockPos pos, Direction facing) {
+	public boolean setLogBlock(LevelAccessor world, BlockPos pos, Direction facing) {
 		return genome.getActiveAllele(TreeChromosomes.SPECIES).getGenerator().setLogBlock(genome, world, pos, facing);
 	}
 
@@ -199,7 +199,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public boolean trySpawnFruitBlock(IWorld world, Random rand, BlockPos pos) {
+	public boolean trySpawnFruitBlock(LevelAccessor world, Random rand, BlockPos pos) {
 		IFruitProvider provider = getGenome().getActiveAllele(TreeChromosomes.FRUITS).getProvider();
 		Collection<IFruitFamily> suitable = genome.getActiveAllele(TreeChromosomes.SPECIES).getSuitableFruit();
 		return suitable.contains(provider.getFamily()) &&
@@ -214,7 +214,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	@Override
 	public ITree copy() {
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 		this.write(compound);
 		return new Tree(compound);
 	}
@@ -225,7 +225,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public void addTooltip(List<ITextComponent> list) {
+	public void addTooltip(List<Component> list) {
 
 		// No info 4 u!
 		/*if (!isAnalyzed) {
@@ -268,7 +268,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
 	/* REPRODUCTION */
 	@Override
-	public List<ITree> getSaplings(World world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
+	public List<ITree> getSaplings(Level world, @Nullable GameProfile playerProfile, BlockPos pos, float modifier) {
 		List<ITree> prod = new ArrayList<>();
 
 		float chance = genome.getActiveValue(TreeChromosomes.FERTILITY) * modifier;
@@ -284,7 +284,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 		return prod;
 	}
 
-	private ITree createOffspring(World world, IGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
+	private ITree createOffspring(Level world, IGenome mate, @Nullable GameProfile playerProfile, BlockPos pos) {
 		IChromosome[] chromosomes = new IChromosome[genome.getChromosomes().length];
 		IChromosome[] parent1 = genome.getChromosomes();
 		IChromosome[] parent2 = mate.getChromosomes();
@@ -310,7 +310,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Nullable
-	private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(Level world, @Nullable GameProfile playerProfile, BlockPos pos, IGenome genomeOne, IGenome genomeTwo) {
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
 
@@ -384,7 +384,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 	}
 
 	@Override
-	public NonNullList<ItemStack> produceStacks(World world, BlockPos pos, int ripeningTime) {
+	public NonNullList<ItemStack> produceStacks(Level world, BlockPos pos, int ripeningTime) {
 		return genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getFruits(genome, world, pos, ripeningTime);
 	}
 }

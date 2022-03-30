@@ -17,19 +17,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -41,9 +41,9 @@ import forestry.core.models.baker.ModelBakerModel;
 import forestry.core.utils.ResourceUtil;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ModelBlockDefault<B extends Block, K> implements IBakedModel {
+public abstract class ModelBlockDefault<B extends Block, K> implements BakedModel {
 	@Nullable
-	private ItemOverrideList overrideList;
+	private ItemOverrides overrideList;
 
 	protected final Class<B> blockClass;
 
@@ -56,7 +56,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		this.blockClass = blockClass;
 	}
 
-	protected IBakedModel bakeModel(BlockState state, K key, B block, IModelData extraData) {
+	protected BakedModel bakeModel(BlockState state, K key, B block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, extraData, key, baker, false);
@@ -66,7 +66,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		return blockModel;
 	}
 
-	protected IBakedModel getModel(BlockState state, IModelData extraData) {
+	protected BakedModel getModel(BlockState state, IModelData extraData) {
 		Preconditions.checkArgument(blockClass.isInstance(state.getBlock()));
 
 		K worldKey = getWorldKey(state, extraData);
@@ -74,7 +74,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		return bakeModel(state, worldKey, block, extraData);
 	}
 
-	protected IBakedModel bakeModel(ItemStack stack, World world, K key) {
+	protected BakedModel bakeModel(ItemStack stack, Level world, K key) {
 		ModelBaker baker = new ModelBaker();
 		Block block = Block.byItem(stack.getItem());
 		Preconditions.checkArgument(blockClass.isInstance(block));
@@ -84,7 +84,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 		return itemModel = baker.bake(true);
 	}
 
-	protected IBakedModel getModel(ItemStack stack, World world) {
+	protected BakedModel getModel(ItemStack stack, Level world) {
 		return bakeModel(stack, world, getInventoryKey(stack));
 	}
 
@@ -92,7 +92,7 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	@Override
 	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull Random rand, @Nonnull IModelData extraData) {
 		Preconditions.checkNotNull(state);
-		IBakedModel model = getModel(state, extraData);
+		BakedModel model = getModel(state, extraData);
 		return model.getQuads(state, side, rand, extraData);
 	}
 
@@ -136,19 +136,19 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 	}
 
 	@Override
-	public ItemCameraTransforms getTransforms() {
+	public ItemTransforms getTransforms() {
 		if (itemModel == null) {
-			return ItemCameraTransforms.NO_TRANSFORMS;
+			return ItemTransforms.NO_TRANSFORMS;
 		}
 		return itemModel.getTransforms();
 	}
 
-	protected ItemOverrideList createOverrides() {
+	protected ItemOverrides createOverrides() {
 		return new DefaultItemOverrideList();
 	}
 
 	@Override
-	public ItemOverrideList getOverrides() {
+	public ItemOverrides getOverrides() {
 		if (overrideList == null) {
 			overrideList = createOverrides();
 		}
@@ -161,14 +161,14 @@ public abstract class ModelBlockDefault<B extends Block, K> implements IBakedMod
 
 	protected abstract void bakeBlock(B block, IModelData extraData, K key, ModelBaker baker, boolean inventory);
 
-	private class DefaultItemOverrideList extends ItemOverrideList {
+	private class DefaultItemOverrideList extends ItemOverrides {
 		public DefaultItemOverrideList() {
 			super();
 		}
 
 		@Nullable
 		@Override
-		public IBakedModel resolve(IBakedModel originalModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity) {
+		public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_) {
 			if (world == null) {
 				world = Minecraft.getInstance().level;
 			}

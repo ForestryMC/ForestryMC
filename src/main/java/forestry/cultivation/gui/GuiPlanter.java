@@ -1,11 +1,11 @@
 package forestry.cultivation.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.features.CoreItems;
@@ -19,7 +19,7 @@ import forestry.farming.gui.FarmLedger;
 public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 	private final TilePlanter tile;
 
-	public GuiPlanter(ContainerPlanter container, PlayerInventory playerInventory, ITextComponent title) {
+	public GuiPlanter(ContainerPlanter container, Inventory playerInventory, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/planter.png", container, playerInventory, title);
 		this.tile = container.getTile();
 		this.imageWidth = 202;
@@ -74,7 +74,7 @@ public class GuiPlanter extends GuiForestryTitled<ContainerPlanter> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		// Fuel remaining

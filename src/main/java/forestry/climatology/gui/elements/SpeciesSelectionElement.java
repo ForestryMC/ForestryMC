@@ -13,13 +13,12 @@ package forestry.climatology.gui.elements;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,7 +45,7 @@ public class SpeciesSelectionElement extends GuiElement {
 		this.transformer = transformer;
 		/*addSelfEventHandler(GuiEvent.DownEvent.class, event -> {
 			PlayerEntity player = Minecraft.getInstance().player;
-			ItemStack itemstack = player.inventory.getCarried();
+			ItemStack itemstack = player.inventoryMenu.getCarried();
 			if (itemstack.isEmpty()) {
 				return;
 			}
@@ -99,8 +98,8 @@ public class SpeciesSelectionElement extends GuiElement {
 
 	@Override
 	public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
-		PlayerEntity player = Minecraft.getInstance().player;
-		ItemStack itemstack = player.inventory.getCarried();
+		Player player = Minecraft.getInstance().player;
+		ItemStack itemstack = player.inventoryMenu.getCarried();
 		if (itemstack.isEmpty()) {
 			return false;
 		}
@@ -114,51 +113,30 @@ public class SpeciesSelectionElement extends GuiElement {
 		EnumHumidity humidity = primary.getHumidity();
 		float temp;
 		float humid;
-		switch (temperature) {
-			case HELLISH:
-				temp = 2.0F;
-				break;
-			case HOT:
-				temp = 1.25F;
-				break;
-			case WARM:
-				temp = 0.9F;
-				break;
-			case COLD:
-				temp = 0.15F;
-				break;
-			case ICY:
-				temp = 0.0F;
-				break;
-			case NORMAL:
-			default:
-				temp = 0.79F;
-				break;
-		}
-		switch (humidity) {
-			case DAMP:
-				humid = 0.9F;
-				break;
-			case ARID:
-				humid = 0.2F;
-				break;
-			case NORMAL:
-			default:
-				humid = 0.4F;
-				break;
-		}
+		temp = switch (temperature) {
+			case HELLISH -> 2.0F;
+			case HOT -> 1.25F;
+			case WARM -> 0.9F;
+			case COLD -> 0.15F;
+			case ICY -> 0.0F;
+			default -> 0.79F;
+		};
+		humid = switch (humidity) {
+			case DAMP -> 0.9F;
+			case ARID -> 0.2F;
+			case NORMAL -> 0.4F;
+		};
 		transformer.setTarget(ClimateStateHelper.INSTANCE.create(temp, humid));
 		return true;
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		super.drawElement(transform, mouseX, mouseY);
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
-		RenderSystem.enableAlphaTest();
+		RenderSystem.setShaderTexture(0, new ResourceLocation(Constants.MOD_ID, "textures/gui/habitat_former.png"));
+		// RenderSystem.enableAlphaTest();
 		blit(transform, 0, 0, 224, 46, 22, 22);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	@Override

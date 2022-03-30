@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import forestry.api.climate.IClimateProvider;
 import forestry.api.genetics.IMutationCondition;
@@ -30,7 +30,7 @@ public class MutationConditionDaytime implements IMutationCondition {
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+	public float getChance(Level world, BlockPos pos, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
 		if (world.isDay() == daytime) {
 			return 1;
 		}
@@ -38,11 +38,11 @@ public class MutationConditionDaytime implements IMutationCondition {
 	}
 
 	@Override
-	public ITextComponent getDescription() {
+	public Component getDescription() {
 		if (daytime) {
-			return new TranslationTextComponent("for.mutation.condition.daytime.day");
+			return new TranslatableComponent("for.mutation.condition.daytime.day");
 		} else {
-			return new TranslationTextComponent("for.mutation.condition.daytime.night");
+			return new TranslatableComponent("for.mutation.condition.daytime.night");
 		}
 	}
 }

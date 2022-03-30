@@ -7,16 +7,16 @@ package forestry.api.circuits;
 
 import java.util.List;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public interface ICircuit {
 	String getUID();
 
 	String getTranslationKey();
 
-	default ITextComponent getDisplayName() {
-		return new TranslationTextComponent(getTranslationKey());
+	default Component getDisplayName() {
+		return new TranslatableComponent(getTranslationKey());
 	}
 
 	boolean isCircuitable(Object tile);
@@ -29,5 +29,5 @@ public interface ICircuit {
 
 	void onTick(int slot, Object tile);
 
-	void addTooltip(List<ITextComponent> list);
+	void addTooltip(List<Component> list);
 }

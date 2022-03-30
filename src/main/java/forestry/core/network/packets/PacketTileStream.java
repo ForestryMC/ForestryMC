@@ -12,9 +12,9 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,7 +31,7 @@ public class PacketTileStream extends ForestryPacket implements IForestryPacketC
 	private final BlockPos pos;
 	private final IStreamable streamable;
 
-	public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
+	public <T extends BlockEntity & IStreamable> PacketTileStream(T streamable) {
 		this.pos = streamable.getBlockPos();
 		this.streamable = streamable;
 	}
@@ -50,7 +50,7 @@ public class PacketTileStream extends ForestryPacket implements IForestryPacketC
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			BlockPos pos = data.readBlockPos();
 			IStreamable tile = TileUtil.getTile(player.level, pos, IStreamable.class);
 			if (tile != null) {

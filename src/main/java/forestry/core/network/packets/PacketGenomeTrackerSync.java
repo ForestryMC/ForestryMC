@@ -12,8 +12,8 @@ package forestry.core.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,9 +34,9 @@ import genetics.api.individual.IIndividual;
 import genetics.api.root.IRootDefinition;
 
 public class PacketGenomeTrackerSync extends ForestryPacket implements IForestryPacketClient {
-	private final CompoundNBT nbt;
+	private final CompoundTag nbt;
 
-	public PacketGenomeTrackerSync(CompoundNBT CompoundNBT) {
+	public PacketGenomeTrackerSync(CompoundTag CompoundNBT) {
 		this.nbt = CompoundNBT;
 	}
 
@@ -53,8 +53,8 @@ public class PacketGenomeTrackerSync extends ForestryPacket implements IForestry
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			CompoundNBT nbt = data.readNbt();
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
+			CompoundTag nbt = data.readNbt();
 			if (nbt != null) {
 				String type = nbt.getString(BreedingTracker.TYPE_KEY);
 

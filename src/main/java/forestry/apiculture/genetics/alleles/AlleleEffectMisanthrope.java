@@ -12,8 +12,8 @@ package forestry.apiculture.genetics.alleles;
 
 import java.util.List;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeHousing;
@@ -32,8 +32,8 @@ public class AlleleEffectMisanthrope extends AlleleEffectThrottled {
 
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<PlayerEntity> players = getEntitiesInRange(genome, housing, PlayerEntity.class);
-		for (PlayerEntity player : players) {
+		List<Player> players = getEntitiesInRange(genome, housing, Player.class);
+		for (Player player : players) {
 			int damage = 4;
 
 			// Entities are not attacked if they wear a full set of apiarist's armor.

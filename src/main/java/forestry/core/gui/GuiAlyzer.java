@@ -21,15 +21,15 @@ import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -69,8 +69,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 
 	private final ItemInventoryAlyzer itemInventory;
 
-	public GuiAlyzer(ContainerAlyzer container, PlayerInventory playerInv, ITextComponent name) {
-		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", container, playerInv, new StringTextComponent("GUI_ALYZER_TEST_TITLE"));
+	public GuiAlyzer(ContainerAlyzer container, Inventory playerInv, Component name) {
+		super(Constants.TEXTURE_PATH_GUI + "/portablealyzer.png", container, playerInv, new TextComponent("GUI_ALYZER_TEST_TITLE"));
 
 		this.itemInventory = container.inventory;
 		this.imageWidth = 246;
@@ -85,7 +85,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 	}
 
-	public final void drawLine(MatrixStack transform, String text, int x, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
+	public final void drawLine(PoseStack transform, String text, int x, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
 		if (!inactive) {
 			textLayout.drawLine(transform, text, x, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
 		} else {
@@ -101,7 +101,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 	}
 
-	public final void drawSplitLine(ITextComponent component, int x, int maxWidth, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
+	public final void drawSplitLine(Component component, int x, int maxWidth, IIndividual individual, IChromosomeType chromosome, boolean inactive) {
 		if (!inactive) {
 			textLayout.drawSplitLine(component, x, maxWidth, getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()));
 		} else {
@@ -109,12 +109,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 	}
 
-	public final void drawRow(MatrixStack transform, String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
+	public final void drawRow(PoseStack transform, String text0, String text1, String text2, IIndividual individual, IChromosomeType chromosome) {
 		textLayout.drawRow(transform, text0, text1, text2, ColourProperties.INSTANCE.get("gui.screen"), getColorCoding(individual.getGenome().getActiveAllele(chromosome).isDominant()),
 				getColorCoding(individual.getGenome().getInactiveAllele(chromosome).isDominant()));
 	}
 
-	public final void drawChromosomeRow(MatrixStack transform, String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
+	public final void drawChromosomeRow(PoseStack transform, String chromosomeName, IIndividual individual, IChromosomeType chromosome) {
 		IAllele active = individual.getGenome().getActiveAllele(chromosome);
 		IAllele inactive = individual.getGenome().getInactiveAllele(chromosome);
 		textLayout.drawRow(transform, chromosomeName, active.getDisplayName().getString(), inactive.getDisplayName().getString(),
@@ -122,7 +122,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 				getColorCoding(inactive.isDominant()));
 	}
 
-	public final void drawSpeciesRow(MatrixStack transform, String text0, IIndividual individual, IChromosomeType chromosome, IOrganismType type) {
+	public final void drawSpeciesRow(PoseStack transform, String text0, IIndividual individual, IChromosomeType chromosome, IOrganismType type) {
 		IAlleleForestrySpecies primary = (IAlleleForestrySpecies) individual.getGenome().getPrimary();
 		IAlleleForestrySpecies secondary = (IAlleleForestrySpecies) individual.getGenome().getSecondary();
 
@@ -134,8 +134,8 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		GuiUtil.drawItemStack(this, iconStacks.get(primary.getRegistryName()), leftPos + textLayout.column1 + columnwidth - 20, topPos + 10);
 		GuiUtil.drawItemStack(this, iconStacks.get(secondary.getRegistryName()), leftPos + textLayout.column2 + columnwidth - 20, topPos + 10);
 
-		ITextComponent primaryName = primary.getAlyzerName(type);
-		ITextComponent secondaryName = primary.getAlyzerName(type);
+		Component primaryName = primary.getAlyzerName(type);
+		Component secondaryName = primary.getAlyzerName(type);
 
 		drawSplitLine(primaryName, textLayout.column1, columnwidth, individual, chromosome, false);
 		drawSplitLine(secondaryName, textLayout.column2, columnwidth, individual, chromosome, true);
@@ -153,7 +153,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 		widgetManager.clear();
 
@@ -170,28 +170,27 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		}
 		IForestrySpeciesRoot<IIndividual> speciesRoot = definition.get();
 		switch (specimenSlot) {
-			case ItemInventoryAlyzer.SLOT_ANALYZE_1: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_1 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage1(transform, this, stackInSlot);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_2: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_2 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage2(transform, this, stackInSlot);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_3: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_3 -> {
 				speciesRoot.getAlyzerPlugin().drawAnalyticsPage3(transform, stackInSlot, this);
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_4: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_4 -> {
 				speciesRoot.create(stackInSlot).ifPresent((value) -> drawAnalyticsPageMutations(transform, value));
 				break;
 			}
-			case ItemInventoryAlyzer.SLOT_ANALYZE_5: {
+			case ItemInventoryAlyzer.SLOT_ANALYZE_5 -> {
 				speciesRoot.create(stackInSlot).ifPresent((value) -> drawAnalyticsPageClassification(transform, value));
 				break;
 			}
-			default:
-				drawAnalyticsOverview(transform);
+			default -> drawAnalyticsOverview(transform);
 		}
 
 	}
@@ -219,16 +218,16 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		return -1;
 	}
 
-	public void drawAnalyticsOverview(MatrixStack transform) {
+	public void drawAnalyticsOverview(PoseStack transform) {
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 
 		textLayout.newLine();
 		String title = Translator.translateToLocal("for.gui.portablealyzer").toUpperCase(Locale.ENGLISH);
 		textLayout.drawCenteredLine(transform, title, 8, 208, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 
-		getFontRenderer().drawWordWrap(new TranslationTextComponent("for.gui.portablealyzer.help"), leftPos + COLUMN_0 + 4, topPos + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
+		getFontRenderer().drawWordWrap(new TranslatableComponent("for.gui.portablealyzer.help"), leftPos + COLUMN_0 + 4, topPos + 42, 200, ColourProperties.INSTANCE.get("gui.screen"));
 		textLayout.newLine();
 		textLayout.newLine();
 		textLayout.newLine();
@@ -244,12 +243,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		textLayout.newLine();
 		textLayout.drawLine(transform, "IV : " + Translator.translateToLocal("for.gui.evolution"), COLUMN_0 + 4);
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
-	public final void drawAnalyticsPageClassification(MatrixStack transform, IIndividual individual) {
+	public final void drawAnalyticsPageClassification(PoseStack transform, IIndividual individual) {
 
-		textLayout.startPage();
+		textLayout.startPage(transform);
 
 		textLayout.drawLine(transform, Translator.translateToLocal("for.gui.alyzer.classification") + ":", 12);
 		textLayout.newLine();
@@ -311,12 +310,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			}
 		}
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void drawAnalyticsPageMutations(MatrixStack transform, IIndividual individual) {
-		textLayout.startPage(COLUMN_0, COLUMN_1, COLUMN_2);
+	public void drawAnalyticsPageMutations(PoseStack transform, IIndividual individual) {
+		textLayout.startPage(transform, COLUMN_0, COLUMN_1, COLUMN_2);
 		textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.mutations") + ":", COLUMN_0);
 		textLayout.newLine();
 
@@ -329,7 +328,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		int columnWidth = 50;
 		int x = 0;
 
-		PlayerEntity player = Minecraft.getInstance().player;
+		Player player = Minecraft.getInstance().player;
 		//TODO world cast
 		IBreedingTracker breedingTracker = speciesRoot.getBreedingTracker(player.level, player.getGameProfile());
 
@@ -353,10 +352,10 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 			}
 		}
 
-		textLayout.endPage();
+		textLayout.endPage(transform);
 	}
 
-	public void drawMutationInfo(MatrixStack transform, IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
+	public void drawMutationInfo(PoseStack transform, IMutation combination, IAllele species, int x, IBreedingTracker breedingTracker) {
 		Map<ResourceLocation, ItemStack> iconStacks = ((IForestrySpeciesRoot) combination.getRoot()).getAlyzerPlugin().getIconStacks();
 
 		ItemStack partnerBee = iconStacks.get(combination.getPartner(species).getRegistryName());
@@ -369,7 +368,7 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		widgetManager.add(new ItemStackWidget(widgetManager, x + 33, textLayout.getLineY(), resultBee));
 	}
 
-	private void drawUnknownMutation(MatrixStack transform, IMutation combination, int x, IBreedingTracker breedingTracker) {
+	private void drawUnknownMutation(PoseStack transform, IMutation combination, int x, IBreedingTracker breedingTracker) {
 
 		drawQuestionMark(transform, leftPos + x, topPos + textLayout.getLineY());
 
@@ -378,12 +377,12 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		drawQuestionMark(transform, leftPos + x + 32, topPos + textLayout.getLineY());
 	}
 
-	private void drawQuestionMark(MatrixStack transform, int x, int y) {
+	private void drawQuestionMark(PoseStack transform, int x, int y) {
 		bindTexture(textureFile);
 		blit(transform, x, y, 78, 240, 16, 16);
 	}
 
-	private void drawProbabilityArrow(MatrixStack transform, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
+	private void drawProbabilityArrow(PoseStack transform, IMutation combination, int x, int y, IBreedingTracker breedingTracker) {
 		float chance = combination.getBaseChance();
 		int line = 247;
 		int column = 100;
@@ -416,73 +415,61 @@ public class GuiAlyzer extends GuiForestry<ContainerAlyzer> {
 		boolean researched = breedingTracker.isResearched(combination);
 		if (researched) {
 			getFontRenderer().draw(transform, "+", x + 9, y + 1, 0);
-			RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 
-	public void drawToleranceInfo(MatrixStack transform, IAlleleValue<EnumTolerance> toleranceAllele, int x) {
+	public void drawToleranceInfo(PoseStack transform, IAlleleValue<EnumTolerance> toleranceAllele, int x) {
 		int textColor = getColorCoding(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
 		String text = "(" + toleranceAllele.getDisplayName().getString() + ")";
 
 		// Enable correct lighting.
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		switch (tolerance) {
-			case BOTH_1:
-			case BOTH_2:
-			case BOTH_3:
-			case BOTH_4:
-			case BOTH_5:
+			case BOTH_1, BOTH_2, BOTH_3, BOTH_4, BOTH_5 -> {
 				drawBothSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			case DOWN_1:
-			case DOWN_2:
-			case DOWN_3:
-			case DOWN_4:
-			case DOWN_5:
+			}
+			case DOWN_1, DOWN_2, DOWN_3, DOWN_4, DOWN_5 -> {
 				drawDownSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			case UP_1:
-			case UP_2:
-			case UP_3:
-			case UP_4:
-			case UP_5:
+			}
+			case UP_1, UP_2, UP_3, UP_4, UP_5 -> {
 				drawUpSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, text, x + 14, textColor);
-				break;
-			default:
+			}
+			default -> {
 				drawNoneSymbol(transform, x - 2, textLayout.getLineY() - 1);
 				textLayout.drawLine(transform, "(0)", x + 14, textColor);
-				break;
+			}
 		}
 	}
 
-	private void drawDownSymbol(MatrixStack transform, int x, int y) {
+	private void drawDownSymbol(PoseStack transform, int x, int y) {
 		bindTexture(textureFile);
 		blit(transform, leftPos + x, topPos + y, 0, 247, 15, 9);
 	}
 
-	private void drawUpSymbol(MatrixStack transform, int x, int y) {
+	private void drawUpSymbol(PoseStack transform, int x, int y) {
 		bindTexture(textureFile);
 		blit(transform, leftPos + x, topPos + y, 15, 247, 15, 9);
 	}
 
-	private void drawBothSymbol(MatrixStack transform, int x, int y) {
+	private void drawBothSymbol(PoseStack transform, int x, int y) {
 		bindTexture(textureFile);
 		blit(transform, leftPos + x, topPos + y, 30, 247, 15, 9);
 	}
 
-	private void drawNoneSymbol(MatrixStack transform, int x, int y) {
+	private void drawNoneSymbol(PoseStack transform, int x, int y) {
 		bindTexture(textureFile);
 		blit(transform, leftPos + x, topPos + y, 45, 247, 15, 9);
 	}
 
-	public void drawFertilityInfo(MatrixStack transform, int fertility, int x, int textColor, int texOffset) {
+	public void drawFertilityInfo(PoseStack transform, int fertility, int x, int textColor, int texOffset) {
 		// Enable correct lighting.
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
 		String fertilityString = fertility + " x";
 

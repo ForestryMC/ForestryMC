@@ -1,15 +1,12 @@
 package forestry.modules;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import net.minecraft.item.ItemStack;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -128,6 +125,12 @@ public class CommonModuleHandler {
 			registerHandlers(module);
 			module.preInit();
 			Log.debug("Pre-Init Complete: {}", module);
+		}
+	}
+
+	public void registerCapabilities(Consumer<Class<?>> consumer) {
+		for (BlankForestryModule module : modules) {
+			module.registerCapabilities(consumer);
 		}
 	}
 

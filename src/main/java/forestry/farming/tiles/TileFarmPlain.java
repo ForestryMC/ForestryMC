@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
 
 import forestry.api.multiblock.IMultiblockController;
 import forestry.farming.blocks.BlockFarm;
@@ -21,8 +21,8 @@ import forestry.farming.blocks.EnumFarmMaterial;
 import forestry.farming.features.FarmingTiles;
 
 public class TileFarmPlain extends TileFarm {
-	public TileFarmPlain() {
-		super(FarmingTiles.PLAIN.tileType());
+	public TileFarmPlain(BlockPos pos, BlockState state) {
+		super(FarmingTiles.PLAIN.tileType(), pos, state);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package forestry.api.genetics.filter;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IFilterRule {
 	boolean isValid(ItemStack itemStack, IFilterData data);

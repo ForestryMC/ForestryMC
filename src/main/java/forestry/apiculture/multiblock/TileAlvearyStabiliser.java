@@ -10,6 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import genetics.api.individual.IGenome;
 
 import forestry.api.apiculture.DefaultBeeModifier;
@@ -21,8 +24,8 @@ public class TileAlvearyStabiliser extends TileAlveary implements IAlvearyCompon
 
 	private static final IBeeModifier beeModifier = new AlvearyStabiliserBeeModifier();
 
-	public TileAlvearyStabiliser() {
-		super(BlockAlvearyType.STABILISER);
+	public TileAlvearyStabiliser(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.STABILISER, pos, state);
 	}
 
 	@Override

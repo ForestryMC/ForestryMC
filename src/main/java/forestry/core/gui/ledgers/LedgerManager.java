@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.Rect2i;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -122,18 +122,18 @@ public class LedgerManager {
 		return null;
 	}
 
-	public List<Rectangle2d> getLedgerAreas() {
-		List<Rectangle2d> areas = new ArrayList<>();
+	public List<Rect2i> getLedgerAreas() {
+		List<Rect2i> areas = new ArrayList<>();
 		for (Ledger ledger : ledgers) {
 			if (ledger.isVisible()) {
-				Rectangle2d area = ledger.getArea();
+				Rect2i area = ledger.getArea();
 				areas.add(area);
 			}
 		}
 		return areas;
 	}
 
-	public void drawLedgers(MatrixStack transform) {
+	public void drawLedgers(PoseStack transform) {
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
@@ -142,7 +142,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
 			ledger.draw(transform);
 			yPos += ledger.getHeight();
@@ -165,14 +165,14 @@ public class LedgerManager {
 				continue;
 			}
 
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			errorLedger.draw(transform, yPos, -errorLedger.getWidth());
 			yPos += errorLedger.getHeight();
 		}
-		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 	}
 
-	public void drawTooltips(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawTooltips(PoseStack transform, int mouseX, int mouseY) {
 		Ledger ledger = getAtPosition(mouseX, mouseY);
 		if (ledger != null) {
 			ToolTip toolTip = new ToolTip();

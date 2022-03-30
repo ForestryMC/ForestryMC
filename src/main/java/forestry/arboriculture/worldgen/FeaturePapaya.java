@@ -13,8 +13,8 @@ package forestry.arboriculture.worldgen;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.ITreeGenData;
 import forestry.core.worldgen.FeatureHelper;
@@ -26,13 +26,13 @@ public class FeaturePapaya extends FeatureTree {
 	}
 
 	@Override
-	public Set<BlockPos> generateTrunk(IWorld world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+	public Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 		return FeatureHelper.generateBranches(world, rand, wood, startPos.offset(0, height - 1, 0), girth, 0.15f, 0.25f, height / 4, 1, 0.25f);
 	}
 
 	@Override
-	protected void generateLeaves(IWorld world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		for (BlockPos branchEnd : contour.getBranchEnds()) {
 			FeatureHelper.generateCylinderFromPos(world, leaf, branchEnd, 1 + girth, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
 		}

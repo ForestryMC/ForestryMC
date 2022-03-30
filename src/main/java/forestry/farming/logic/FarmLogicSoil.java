@@ -1,6 +1,6 @@
 package forestry.farming.logic;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.farming.IFarmProperties;
 

@@ -11,10 +11,10 @@
 package forestry.core.utils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,8 +33,8 @@ public class SoundUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static void playSoundEvent(SoundEvent soundIn, float pitchIn) {
 		Minecraft minecraft = Minecraft.getInstance();
-		SoundHandler soundHandler = minecraft.getSoundManager();
-		SimpleSound sound = SimpleSound.forUI(soundIn, pitchIn);
+		SoundManager soundHandler = minecraft.getSoundManager();
+		SimpleSoundInstance sound = SimpleSoundInstance.forUI(soundIn, pitchIn);
 		soundHandler.play(sound);
 	}
 }

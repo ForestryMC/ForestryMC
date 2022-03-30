@@ -2,7 +2,7 @@ package forestry.farming.multiblock;
 
 import java.util.Stack;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.farming.IFarmInventory;
 

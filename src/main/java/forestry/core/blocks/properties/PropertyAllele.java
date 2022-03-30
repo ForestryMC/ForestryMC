@@ -12,7 +12,7 @@ package forestry.core.blocks.properties;
 
 import java.util.Optional;
 
-import net.minecraft.state.Property;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import forestry.api.genetics.alleles.IAlleleProperty;
 

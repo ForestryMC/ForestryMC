@@ -3,7 +3,7 @@ package forestry.core.data;
 import javax.annotation.Nullable;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.FluidTagsProvider;
+import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.tags.FluidTags;
 
 import net.minecraftforge.common.data.ExistingFileHelper;

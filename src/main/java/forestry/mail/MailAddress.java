@@ -17,8 +17,8 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 
 import com.mojang.authlib.GameProfile;
 
@@ -54,7 +54,7 @@ public class MailAddress implements INbtWritable, IMailAddress {
 		this.gameProfile = new GameProfile(null, name);
 	}
 
-	public MailAddress(CompoundNBT nbt) {
+	public MailAddress(CompoundTag nbt) {
 		EnumAddressee type = null;
 		GameProfile gameProfile = invalidGameProfile;
 		if (nbt.contains("TP")) {
@@ -66,8 +66,8 @@ public class MailAddress implements INbtWritable, IMailAddress {
 			type = EnumAddressee.PLAYER;
 			gameProfile = invalidGameProfile;
 		} else if (nbt.contains("profile")) {
-			CompoundNBT profileTag = nbt.getCompound("profile");
-			gameProfile = NBTUtil.readGameProfile(profileTag);
+			CompoundTag profileTag = nbt.getCompound("profile");
+			gameProfile = NbtUtils.readGameProfile(profileTag);
 			if (gameProfile == null) {
 				gameProfile = invalidGameProfile;
 			}
@@ -107,11 +107,10 @@ public class MailAddress implements INbtWritable, IMailAddress {
 
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof MailAddress)) {
+		if (!(o instanceof MailAddress address)) {
 			return false;
 		}
 
-		MailAddress address = (MailAddress) o;
 		return PlayerUtil.isSameGameProfile(address.gameProfile, gameProfile);
 	}
 
@@ -126,12 +125,12 @@ public class MailAddress implements INbtWritable, IMailAddress {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT compoundNBT) {
+	public CompoundTag write(CompoundTag compoundNBT) {
 		compoundNBT.putString("TP", type.toString());
 
 		if (gameProfile != invalidGameProfile) {
-			CompoundNBT profileNbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(profileNbt, gameProfile);
+			CompoundTag profileNbt = new CompoundTag();
+			NbtUtils.writeGameProfile(profileNbt, gameProfile);
 			compoundNBT.put("profile", profileNbt);
 		}
 		return compoundNBT;

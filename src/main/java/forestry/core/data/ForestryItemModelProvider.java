@@ -3,14 +3,16 @@ package forestry.core.data;
 import com.google.common.collect.Table;
 import com.google.gson.JsonPrimitive;
 
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BucketItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.level.block.Block;
 
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
+import forestry.core.features.CoreBlocks;
+import forestry.core.features.CoreItems;
 import forestry.core.fluids.ForestryFluids;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
@@ -66,5 +68,13 @@ public class ForestryItemModelProvider extends ModelProvider {
 					.loaderData("fluid", new JsonPrimitive(fluid.getFluid().getRegistryName().toString()))
 			);
 		}
+
+		registerModel(CoreItems.RAW_TIN, new ModelBuilder().parent("item/generated").texture("layer0", new ResourceLocation(Constants.MOD_ID, "item/raw_tin")));
+
+		registerModel(CoreBlocks.APATITE_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/apatite_ore")));
+		registerModel(CoreBlocks.DEEPSLATE_APATITE_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/deepslate_apatite_ore")));
+		registerModel(CoreBlocks.TIN_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/tin_ore")));
+		registerModel(CoreBlocks.DEEPSLATE_TIN_ORE.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/deepslate_tin_ore")));
+		registerModel(CoreBlocks.RAW_TIN_BLOCK.item(), new ModelBuilder().parent(new ResourceLocation(Constants.MOD_ID, "block/raw_tin_block")));
 	}
 }

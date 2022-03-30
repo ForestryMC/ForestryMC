@@ -10,14 +10,14 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.core.gui.slots.SlotForestry;
 import forestry.core.gui.slots.SlotLocked;
@@ -29,16 +29,16 @@ import forestry.core.utils.SlotUtil;
 //import invtweaks.api.container.ContainerSectionCallback;
 
 //@invtweaks.api.container.ChestContainer(showButtons = false)
-public abstract class ContainerForestry extends Container {
+public abstract class ContainerForestry extends AbstractContainerMenu {
 	public static final int PLAYER_HOTBAR_OFFSET = 27;
 	public static final int PLAYER_INV_SLOTS = PLAYER_HOTBAR_OFFSET + 9;
 	private int transferCount = 0; // number of items that have been shift-click-transfered during this click
 
-	protected ContainerForestry(int windowId, ContainerType<?> type) {
+	protected ContainerForestry(int windowId, MenuType<?> type) {
 		super(type, windowId);
 	}
 
-	protected final void addPlayerInventory(PlayerInventory playerInventory, int xInv, int yInv) {
+	protected final void addPlayerInventory(Inventory playerInventory, int xInv, int yInv) {
 		// Player inventory
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
@@ -51,11 +51,11 @@ public abstract class ContainerForestry extends Container {
 		}
 	}
 
-	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+	protected void addHotbarSlot(Inventory playerInventory, int slot, int x, int y) {
 		super.addSlot(new Slot(playerInventory, slot, x, y));
 	}
 
-	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+	protected void addSlot(Inventory playerInventory, int slot, int x, int y) {
 		super.addSlot(new Slot(playerInventory, slot, x, y));
 	}
 
@@ -70,9 +70,9 @@ public abstract class ContainerForestry extends Container {
 	//	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
+	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
 		if (!canAccess(player)) {
-			return ItemStack.EMPTY;
+			return;
 		}
 
 		if (clickTypeIn == ClickType.SWAP && dragType_or_button >= 0 && dragType_or_button < 9) {
@@ -80,20 +80,21 @@ public abstract class ContainerForestry extends Container {
 			int hotbarSlotIndex = PLAYER_HOTBAR_OFFSET + dragType_or_button;
 			Slot hotbarSlot = getSlot(hotbarSlotIndex);
 			if (hotbarSlot instanceof SlotLocked) {
-				return ItemStack.EMPTY;
+				return;
 			}
 		}
 
 		Slot slot = slotId < 0 ? null : getSlot(slotId);
-		if (slot instanceof SlotForestry) {
-			SlotForestry slotForestry = (SlotForestry) slot;
+		if (slot instanceof SlotForestry slotForestry) {
 			if (slotForestry.isPhantom()) {
-				return SlotUtil.slotClickPhantom(slotForestry, dragType_or_button, clickTypeIn, player);
+				// FIXME: Port
+				// return SlotUtil.slotClickPhantom(slotForestry, dragType_or_button, clickTypeIn, player);
+				return;
 			}
 		}
 
 		transferCount = 0;
-		return super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+		super.clicked(slotId, dragType_or_button, clickTypeIn, player);
 	}
 
 	public Slot getForestrySlot(int slot) {
@@ -101,7 +102,7 @@ public abstract class ContainerForestry extends Container {
 	}
 
 	@Override
-	public final ItemStack quickMoveStack(PlayerEntity player, int slotIndex) {
+	public final ItemStack quickMoveStack(Player player, int slotIndex) {
 		if (!canAccess(player)) {
 			return ItemStack.EMPTY;
 		}
@@ -113,12 +114,12 @@ public abstract class ContainerForestry extends Container {
 		return ItemStack.EMPTY;
 	}
 
-	protected abstract boolean canAccess(PlayerEntity player);
+	protected abstract boolean canAccess(Player player);
 
 	protected final void sendPacketToListeners(IForestryPacketClient packet) {
-		for (IContainerListener listener : containerListeners) {
-			if (listener instanceof PlayerEntity) {
-				NetworkUtil.sendToPlayer(packet, (PlayerEntity) listener);
+		for (ContainerListener listener : containerListeners) {
+			if (listener instanceof Player) {
+				NetworkUtil.sendToPlayer(packet, (Player) listener);
 			}
 		}
 	}

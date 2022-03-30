@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.climate;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -36,8 +36,8 @@ public class ClimateRoot implements IClimateRoot {
 	}
 
 	@Override
-	public LazyOptional<IClimateListener> getListener(World world, BlockPos pos) {
-		TileEntity tileEntity = world.getBlockEntity(pos);
+	public LazyOptional<IClimateListener> getListener(Level world, BlockPos pos) {
+		BlockEntity tileEntity = world.getBlockEntity(pos);
 		if (tileEntity != null && ClimateCapabilities.CLIMATE_LISTENER != null) {
 			return tileEntity.getCapability(ClimateCapabilities.CLIMATE_LISTENER, null);
 		}
@@ -45,27 +45,27 @@ public class ClimateRoot implements IClimateRoot {
 	}
 
 	@Override
-	public IClimateProvider getDefaultClimate(World world, BlockPos pos) {
+	public IClimateProvider getDefaultClimate(Level world, BlockPos pos) {
 		return new DefaultClimateProvider(world, pos);
 	}
 
 	@Override
-	public IClimateState getState(World world, BlockPos pos) {
+	public IClimateState getState(Level world, BlockPos pos) {
 		IWorldClimateHolder climateHolder = getWorldClimate(world);
 		return climateHolder.getState(pos);
 	}
 
 	@Override
-	public IClimateState getBiomeState(World worldObj, BlockPos coordinates) {
-		Biome biome = worldObj.getBiome(coordinates);
+	public IClimateState getBiomeState(Level worldObj, BlockPos coordinates) {
+		Biome biome = worldObj.getBiome(coordinates).value();
 		return ClimateStateHelper.of(biome.getTemperature(coordinates), biome.getDownfall());
 	}
 
 	@Override
-	public IWorldClimateHolder getWorldClimate(World world) {
+	public IWorldClimateHolder getWorldClimate(Level world) {
 		//TODO - need to make sure this is only called server side...
-		DimensionSavedDataManager storage = ((ServerWorld) world).getDataStorage();
-		WorldClimateHolder holder = storage.computeIfAbsent(() -> new WorldClimateHolder(WorldClimateHolder.NAME), WorldClimateHolder.NAME);
+		DimensionDataStorage storage = ((ServerLevel) world).getDataStorage();
+		WorldClimateHolder holder = storage.computeIfAbsent(WorldClimateHolder::new, WorldClimateHolder::new, WorldClimateHolder.NAME);
 		holder.setWorld(world);
 		return holder;
 	}

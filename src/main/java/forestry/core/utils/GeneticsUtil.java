@@ -15,16 +15,16 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -74,7 +74,7 @@ public class GeneticsUtil {
 		throw new IllegalStateException();
 	}
 
-	public static ITextComponent getAlyzerName(IOrganismType type, IAlleleForestrySpecies allele) {
+	public static Component getAlyzerName(IOrganismType type, IAlleleForestrySpecies allele) {
 		String customKey = getKeyPrefix(allele) +
 				".custom.alyzer." +
 				type.getName() +
@@ -83,7 +83,7 @@ public class GeneticsUtil {
 		return Translator.tryTranslate(customKey, allele::getDisplayName);
 	}
 
-	public static ITextComponent getItemName(IOrganismType type, IAlleleForestrySpecies allele) {
+	public static Component getItemName(IOrganismType type, IAlleleForestrySpecies allele) {
 		String prefix = getKeyPrefix(allele);
 		String customKey = prefix +
 				".custom." +
@@ -91,14 +91,14 @@ public class GeneticsUtil {
 				'.' +
 				allele.getSpeciesIdentifier();
 		return Translator.tryTranslate(customKey, () -> {
-			ITextComponent speciesName = allele.getDisplayName();
-			ITextComponent typeName = new TranslationTextComponent(prefix + ".grammar." + type.getName() + ".type");
-			return new TranslationTextComponent(prefix + ".grammar." + type.getName(), speciesName, typeName);
+			Component speciesName = allele.getDisplayName();
+			Component typeName = new TranslatableComponent(prefix + ".grammar." + type.getName() + ".type");
+			return new TranslatableComponent(prefix + ".grammar." + type.getName(), speciesName, typeName);
 		});
 	}
 
-	public static boolean hasNaturalistEye(PlayerEntity player) {
-		ItemStack armorItemStack = player.getItemBySlot(EquipmentSlotType.HEAD);
+	public static boolean hasNaturalistEye(Player player) {
+		ItemStack armorItemStack = player.getItemBySlot(EquipmentSlot.HEAD);
 		if (armorItemStack.isEmpty()) {
 			return false;
 		}
@@ -114,7 +114,7 @@ public class GeneticsUtil {
 		return armorNaturalist.canSeePollination(player, armorItemStack, true);
 	}
 
-	public static boolean canNurse(IButterfly butterfly, World world, final BlockPos pos) {
+	public static boolean canNurse(IButterfly butterfly, Level world, final BlockPos pos) {
 		IButterflyNursery tile = TileUtil.getTile(world, pos, IButterflyNursery.class);
 		return tile != null && tile.canNurse(butterfly);
 	}
@@ -124,7 +124,7 @@ public class GeneticsUtil {
 	 * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
 	 */
 	@Nullable
-	public static ICheckPollinatable getCheckPollinatable(World world, final BlockPos pos) {
+	public static ICheckPollinatable getCheckPollinatable(Level world, final BlockPos pos) {
 		IPollinatable tile = TileUtil.getTile(world, pos, IPollinatable.class);
 		if (tile != null) {
 			return tile;
@@ -146,15 +146,14 @@ public class GeneticsUtil {
 	 * Returns an IPollinatable that can be mated. This will convert vanilla leaves to Forestry leaves.
 	 */
 	@Nullable
-	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, World world, final BlockPos pos, boolean convertVanilla) {
+	public static IPollinatable getOrCreatePollinatable(@Nullable GameProfile owner, Level world, final BlockPos pos, boolean convertVanilla) {
 		IPollinatable pollinatable = TileUtil.getTile(world, pos, IPollinatable.class);
 		if (pollinatable == null && convertVanilla) {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
 			if (optionalPollen.isPresent()) {
 				final IIndividual pollen = optionalPollen.get();
 				IIndividualRoot root = pollen.getRoot();
-				if (root instanceof ISpeciesRootPollinatable) {
-					ISpeciesRootPollinatable rootPollinatable = (ISpeciesRootPollinatable) root;
+				if (root instanceof ISpeciesRootPollinatable rootPollinatable) {
 					pollinatable = rootPollinatable.tryConvertToPollinatable(owner, world, pos, pollen);
 				}
 			}
@@ -163,14 +162,13 @@ public class GeneticsUtil {
 	}
 
 	@Nullable
-	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, IWorld world, BlockPos pos, boolean convertVanilla) {
+	public static IButterflyNursery getOrCreateNursery(@Nullable GameProfile gameProfile, LevelAccessor world, BlockPos pos, boolean convertVanilla) {
 		IButterflyNursery nursery = getNursery(world, pos);
 		if (nursery == null && convertVanilla) {
 			Optional<IIndividual> optionalPollen = GeneticsUtil.getPollen(world, pos);
 			if (optionalPollen.isPresent()) {
 				IIndividual pollen = optionalPollen.get();
-				if (pollen instanceof ITree) {
-					ITree treeLeave = (ITree) pollen;
+				if (pollen instanceof ITree treeLeave) {
 					if (treeLeave.setLeaves(world, gameProfile, pos, world.getRandom())) {
 						nursery = getNursery(world, pos);
 					}
@@ -180,20 +178,20 @@ public class GeneticsUtil {
 		return nursery;
 	}
 
-	public static boolean canCreateNursery(IWorld world, BlockPos pos) {
+	public static boolean canCreateNursery(LevelAccessor world, BlockPos pos) {
 		Optional<IIndividual> optional = GeneticsUtil.getPollen(world, pos);
 		return optional.filter(pollen -> pollen instanceof ITree).isPresent();
 	}
 
 	@Nullable
-	public static IButterflyNursery getNursery(IWorld world, BlockPos pos) {
+	public static IButterflyNursery getNursery(LevelAccessor world, BlockPos pos) {
 		return TileUtil.getTile(world, pos, IButterflyNursery.class);
 	}
 
 	/**
 	 * Gets pollen from a location. Does not affect the pollen source.
 	 */
-	public static Optional<IIndividual> getPollen(IWorld world, final BlockPos pos) {
+	public static Optional<IIndividual> getPollen(LevelAccessor world, final BlockPos pos) {
 		if (!world.hasChunkAt(pos)) {
 			return Optional.empty();
 		}

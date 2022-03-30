@@ -13,7 +13,6 @@ import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.apiculture.tiles.TileApiaristChest;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.apiculture.tiles.TileBeeHouse;
-import forestry.apiculture.tiles.TileCandle;
 import forestry.apiculture.tiles.TileHive;
 import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.FeatureTileType;
@@ -27,7 +26,6 @@ public class ApicultureTiles {
 	public static final FeatureTileType<TileHive> HIVE = REGISTRY.tile(TileHive::new, "hive", ApicultureBlocks.BEEHIVE::getBlocks);
 	public static final FeatureTileType<TileApiary> APIARY = REGISTRY.tile(TileApiary::new, "apiary", () -> ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).collect());
 	public static final FeatureTileType<TileBeeHouse> BEE_HOUSE = REGISTRY.tile(TileBeeHouse::new, "bee_house", () -> ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).collect());
-	public static final FeatureTileType<TileCandle> CANDLE = REGISTRY.tile(TileCandle::new, "candle", ApicultureBlocks.CANDLE::collect);
 	public static final FeatureTileType<TileApiaristChest> APIARIST_CHEST = REGISTRY.tile(TileApiaristChest::new, "apiarist_chest", ApicultureBlocks.BEE_CHEST::collect);
 	public static final FeatureTileType<TileAlvearyPlain> ALVEARY_PLAIN = REGISTRY.tile(TileAlvearyPlain::new, "alveary", () -> ApicultureBlocks.ALVEARY.get(BlockAlvearyType.PLAIN).collect());
 	public static final FeatureTileType<TileAlvearySieve> ALVEARY_SIEVE = REGISTRY.tile(TileAlvearySieve::new, "alveary_sieve", () -> ApicultureBlocks.ALVEARY.get(BlockAlvearyType.SIEVE).collect());

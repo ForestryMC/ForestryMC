@@ -11,30 +11,21 @@
 package forestry.core.utils.datastructures;
 
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.io.Serial;
+
 public class FluidMap<T> extends StackMap<Fluid, T> {
+	@Serial
 	private static final long serialVersionUID = 15891293315299994L;
 
 	@Override
-	protected boolean areEqual(Fluid a, Object b) {
-		if (b instanceof FluidStack) {
-			return ((FluidStack) b).getFluid() == a;
-		}
-		if (b instanceof Fluid) {
-			return b == a;
-		}
-		if (b instanceof String) {
-			return b.equals(a.getRegistryName().toString());
-		}
-		if (b instanceof ResourceLocation) {
-			return b.equals(a.getRegistryName());
-		}
-		return false;
+	protected boolean areEqual(Fluid a, Fluid b) {
+		return a.equals(b);
 	}
 
 	@Override

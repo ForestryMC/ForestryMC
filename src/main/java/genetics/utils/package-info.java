@@ -5,6 +5,6 @@ package genetics.utils;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 
 import genetics.FieldsAreNonnullByDefault;

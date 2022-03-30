@@ -1,6 +1,6 @@
 package forestry.core.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
@@ -32,8 +32,8 @@ public class WidgetSlider extends Widget {
 	}
 
 	@Override
-	public void draw(MatrixStack transform, int startY, int startX) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+	public void draw(PoseStack transform, int startY, int startX) {
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		texture.draw(transform, startY + yPos + yOffset, startX + xPos + xOffset);
 	}
 

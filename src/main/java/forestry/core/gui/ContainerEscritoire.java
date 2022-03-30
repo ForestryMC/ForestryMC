@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.core.features.CoreContainers;
 import forestry.core.gui.slots.SlotFiltered;
@@ -28,13 +28,13 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	private long lastUpdate;
 
 	//TODO duplicated code with every other ContainerTile, refactor at some point
-	public static ContainerEscritoire fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+	public static ContainerEscritoire fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
 		TileEscritoire tile = TileUtil.getTile(playerInv.player.level, extraData.readBlockPos(), TileEscritoire.class);
 		return new ContainerEscritoire(windowId, playerInv.player, tile);
 	}
 
-	public ContainerEscritoire(int id, PlayerEntity player, TileEscritoire tile) {
-		super(id, CoreContainers.ESCRITOIRE.containerType(), player.inventory, tile, 34, 153);
+	public ContainerEscritoire(int id, Player player, TileEscritoire tile) {
+		super(id, CoreContainers.ESCRITOIRE.containerType(), player.getInventory(), tile, 34, 153);
 
 		// Analyze slot
 		addSlot(new SlotFiltered(this.tile, InventoryEscritoire.SLOT_ANALYZE, 97, 67).setPickupWatcher(this.tile).setStackLimit(1));
@@ -62,7 +62,7 @@ public class ContainerEscritoire extends ContainerTile<TileEscritoire> implement
 	}
 
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		EscritoireGame.Status status = tile.getGame().getStatus();
 		if (status != EscritoireGame.Status.PLAYING) {
 			return;

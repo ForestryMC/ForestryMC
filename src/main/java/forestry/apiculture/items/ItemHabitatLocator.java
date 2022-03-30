@@ -14,18 +14,18 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,7 +55,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World world, Entity player, int slot, boolean selected) {
+	public void inventoryTick(ItemStack stack, Level world, Entity player, int slot, boolean selected) {
 		if (!world.isClientSide) {
 			locatorLogic.onUpdate(world, player);
 		}
@@ -73,33 +73,33 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, world, list, flag);
 		Minecraft minecraft = Minecraft.getInstance();
 
 		if (world != null && minecraft.player != null) {
-			ClientPlayerEntity player = minecraft.player;
-			Biome currentBiome = player.level.getBiome(player.blockPosition());
+			LocalPlayer player = minecraft.player;
+			Biome currentBiome = player.level.getBiome(player.blockPosition()).value();
 
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-			list.add(new TranslationTextComponent("for.gui.currentBiome")
-					.append(new StringTextComponent(": "))
-					.append(new TranslationTextComponent("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
+			list.add(new TranslatableComponent("for.gui.currentBiome")
+					.append(new TextComponent(": "))
+					.append(new TranslatableComponent("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
 
-			list.add(new TranslationTextComponent("for.gui.temperature")
-					.append(new StringTextComponent(": "))
+			list.add(new TranslatableComponent("for.gui.temperature")
+					.append(new TextComponent(": "))
 					.append(AlleleManager.climateHelper.toDisplay(temperature)));
 
-			list.add(new TranslationTextComponent("for.gui.humidity")
-				.append(new StringTextComponent(": "))
+			list.add(new TranslatableComponent("for.gui.humidity")
+				.append(new TextComponent(": "))
 				.append(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}
 
 	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		return new ContainerHabitatLocator(windowId, player, new ItemInventoryHabitatLocator(player, heldItem));
 	}
 }

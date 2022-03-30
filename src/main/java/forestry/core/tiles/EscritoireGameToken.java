@@ -13,10 +13,10 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -59,7 +59,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 		setTokenSpecies(speciesUid);
 	}
 
-	public EscritoireGameToken(CompoundNBT CompoundNBT) {
+	public EscritoireGameToken(CompoundTag CompoundNBT) {
 		if (CompoundNBT.contains("state")) {
 			int stateOrdinal = CompoundNBT.getInt("state");
 			state = State.values()[stateOrdinal];
@@ -77,8 +77,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 			return;
 		}
 		IAllele allele = optionalAllele.get();
-		if (allele instanceof IAlleleForestrySpecies) {
-			IAlleleForestrySpecies species = (IAlleleForestrySpecies) allele;
+		if (allele instanceof IAlleleForestrySpecies species) {
 			IIndividualRoot<IIndividual> root = (IIndividualRoot<IIndividual>) species.getRoot();
 			IAllele[] template = root.getTemplates().getTemplate(species.getRegistryName().toString());
 			this.tokenIndividual = root.templateAsIndividual(template);
@@ -141,19 +140,16 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 
-	public ITextComponent getTooltip() {
-		return !tokenStack.isEmpty() ? tokenStack.getHoverName() : new TranslationTextComponent("for.gui.unknown");
+	public Component getTooltip() {
+		return !tokenStack.isEmpty() ? tokenStack.getHoverName() : new TranslatableComponent("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {
-		switch (state) {
-			case FAILED:
-				return OVERLAY_FAILED;
-			case SELECTED:
-				return OVERLAY_SELECTED;
-			default:
-				return OVERLAY_NONE;
-		}
+		return switch (state) {
+			case FAILED -> OVERLAY_FAILED;
+			case SELECTED -> OVERLAY_SELECTED;
+			default -> OVERLAY_NONE;
+		};
 	}
 
 	public boolean matches(EscritoireGameToken other) {
@@ -161,7 +157,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundTag write(CompoundTag CompoundNBT) {
 		CompoundNBT.putInt("state", state.ordinal());
 
 		if (tokenIndividual != null) {

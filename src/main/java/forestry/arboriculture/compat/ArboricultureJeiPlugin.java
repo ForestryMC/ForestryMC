@@ -2,7 +2,8 @@ package forestry.arboriculture.compat;
 
 import java.util.Optional;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -10,14 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import forestry.arboriculture.features.ArboricultureItems;
 import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 
@@ -31,13 +30,9 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			return;
-		}
-
-		ISubtypeInterpreter arboSubtypeInterpreter = itemStack -> {
+		IIngredientSubtypeInterpreter<ItemStack> arboSubtypeInterpreter = (itemStack, context) -> {
 			Optional<IIndividual> individual = GeneticHelper.getIndividual(itemStack);
-			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(ISubtypeInterpreter.NONE);
+			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
 		subtypeRegistry.registerSubtypeInterpreter(ArboricultureItems.SAPLING.item(), arboSubtypeInterpreter);
@@ -46,10 +41,6 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE)) {
-			return;
-		}
-
 		JeiUtil.addDescription(registration, ArboricultureItems.GRAFTER.item(), ArboricultureItems.GRAFTER_PROVEN.item());
 	}
 }

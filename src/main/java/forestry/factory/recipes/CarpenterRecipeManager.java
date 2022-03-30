@@ -11,25 +11,22 @@
 package forestry.factory.recipes;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterRecipe> implements ICarpenterManager {
 
@@ -52,24 +49,20 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 	}
 
 	@Override
-	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, IInventory inventory, World world) {
-		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			if (matches(recipe, liquid, item, inventory, world)) {
-				return Optional.of(recipe);
-			}
-		}
-
-		return Optional.empty();
+	public Optional<ICarpenterRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid, ItemStack item, Container inventory, Level world) {
+		return getRecipes(recipeManager)
+				.filter(recipe -> matches(recipe, liquid, item, inventory, world))
+				.findFirst();
 	}
 
 	@Override
-	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory craftingInventory, World world) {
+	public boolean matches(@Nullable ICarpenterRecipe recipe, FluidStack resource, ItemStack item, Container craftingInventory, Level world) {
 		if (recipe == null) {
 			return false;
 		}
 
 		FluidStack liquid = recipe.getFluidResource();
-		if (liquid != null && !liquid.isEmpty()) {
+		if (!liquid.isEmpty()) {
 			if (resource.isEmpty() || !resource.containsFluid(liquid)) {
 				return false;
 			}
@@ -80,7 +73,7 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 			return false;
 		}
 
-		ICraftingRecipe internal = recipe.getCraftingGridRecipe();
+		CraftingRecipe internal = recipe.getCraftingGridRecipe();
 		return internal.matches(FakeCraftingInventory.of(craftingInventory), world);
 	}
 
@@ -90,35 +83,18 @@ public class CarpenterRecipeManager extends AbstractCraftingProvider<ICarpenterR
 			return false;
 		}
 
-		for (ICarpenterRecipe recipe : getRecipes(recipeManager)) {
-			Ingredient box = recipe.getBox();
-			if (box.test(resource)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public Collection<ICarpenterRecipe> getRecipesWithOutput(@Nullable RecipeManager recipeManager, ItemStack output) {
-		if (output.isEmpty()) {
-			return Collections.emptyList();
-		}
-
-		return getRecipes(recipeManager).stream()
-				.filter(recipe -> {
-					ItemStack o = recipe.getResult();
-					return ItemStackUtil.isIdenticalItem(o, output);
-				})
-				.collect(Collectors.toList());
+		return getRecipes(recipeManager)
+				.anyMatch(recipe -> {
+					Ingredient box = recipe.getBox();
+					return box.test(resource);
+				});
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(ICarpenterRecipe::getFluidResource)
-				.filter(fluidStack -> fluidStack != null && !fluidStack.isEmpty())
+				.filter(fluidStack -> !fluidStack.isEmpty())
 				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}

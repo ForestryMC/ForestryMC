@@ -10,26 +10,29 @@
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -40,36 +43,43 @@ import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.apiculture.hives.IHiveTile;
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.ModuleApiculture;
-import forestry.apiculture.items.ItemScoop;
+import forestry.apiculture.features.ApicultureTiles;
 import forestry.apiculture.tiles.TileHive;
 import forestry.core.tiles.TileUtil;
 
-public class BlockBeeHive extends ContainerBlock {
+public class BlockBeeHive extends BaseEntityBlock {
 
 	private final HiveType type;
 
 	public BlockBeeHive(HiveType type) {
 		super(Properties.of(MaterialBeehive.BEEHIVE_WORLD)
 				.lightLevel((state) -> 7)
-				.strength(2.5f)
-				.harvestLevel(0)
-				.harvestTool(ItemScoop.SCOOP));
+				.strength(2.5f));
 		this.type = type;
 	}
 
+	@Nullable
 	@Override
-	public TileEntity newBlockEntity(IBlockReader world) {
-		return new TileHive();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileHive(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return level.isClientSide() || type != ApicultureTiles.HIVE.getTileType() ? null : (level1, pos, state1, t) -> {
+			((TileHive) t).tick();
+		};
 	}
 
 	@Override
-	public void attack(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+	public void attack(BlockState state, Level world, BlockPos pos, Player player) {
 		super.attack(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onAttack(world, pos, player));
 	}
 
 	@Override
-	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		super.playerWillDestroy(world, pos, state, player);
 		boolean canHarvest = canHarvestBlock(state, world, pos, player);
 		TileUtil.actOnTile(world, pos, IHiveTile.class, tile -> tile.onBroken(world, pos, player, canHarvest));
@@ -85,16 +95,16 @@ public class BlockBeeHive extends ContainerBlock {
 
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		BlockPos pos = new BlockPos(builder.getParameter(LootParameters.ORIGIN));
-		ItemStack tool = builder.getParameter(LootParameters.TOOL);
+		BlockPos pos = new BlockPos(builder.getParameter(LootContextParams.ORIGIN));
+		ItemStack tool = builder.getParameter(LootContextParams.TOOL);
 		int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
-		ServerWorld world = builder.getLevel();
+		ServerLevel world = builder.getLevel();
 		return getDrops(world, pos, fortune);
 	}
 
-	private NonNullList<ItemStack> getDrops(IBlockReader world, BlockPos pos, int fortune) {
+	private NonNullList<ItemStack> getDrops(BlockGetter world, BlockPos pos, int fortune) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		Random random = world instanceof World ? ((World) world).getRandom() : RANDOM;
+		Random random = world instanceof Level ? ((Level) world).getRandom() : RANDOM;
 
 		List<IHiveDrop> hiveDrops = getDropsForHive();
 		Collections.shuffle(hiveDrops);
@@ -145,22 +155,22 @@ public class BlockBeeHive extends ContainerBlock {
 	}
 
 	@Override
-	public BlockRenderType getRenderShape(BlockState state) {
-		return BlockRenderType.MODEL;
+	public RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 
 	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return 5;
 	}
 
 	@Override
-	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return true;
 	}
 
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return 5;
 	}
 }

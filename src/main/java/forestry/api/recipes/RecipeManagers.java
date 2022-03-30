@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 
 /**
  * Contains all available recipe managers for Forestry machines and items.
@@ -56,8 +56,8 @@ public class RecipeManagers {
 	 */
 	public static IHygroregulatorManager hygroregulatorManager;
 
-	static <T extends IRecipe<?>> IRecipeType<T> create(String name) {
-		return new IRecipeType<T>() {
+	static <T extends Recipe<?>> RecipeType<T> create(String name) {
+		return new RecipeType<T>() {
 			@Override
 			public String toString() {
 				return name;

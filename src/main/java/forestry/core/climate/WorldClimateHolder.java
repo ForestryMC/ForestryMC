@@ -6,16 +6,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongArrayNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.WorldSavedData;
-
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongArrayTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import forestry.api.climate.IClimateState;
 import forestry.api.climate.IClimateTransformer;
@@ -28,7 +27,7 @@ import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
-public class WorldClimateHolder extends WorldSavedData implements IWorldClimateHolder {
+public class WorldClimateHolder extends SavedData implements IWorldClimateHolder {
 	private static final TransformerData DEFAULT_DATA = new TransformerData(0L, ClimateStateHelper.INSTANCE.absent(), 0, false, new long[0]);
 
 	static final String NAME = "forestry_climate";
@@ -47,47 +46,44 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 	private final Long2LongMap chunkUpdates = new Long2LongArrayMap();
 
 	@Nullable
-	private World world;
+	private Level world;
 
-	public WorldClimateHolder(String name) {
-		super(name);
+	public WorldClimateHolder() {
 	}
 
-	public void setWorld(@Nullable World world) {
-		this.world = world;
-	}
-
-	@Override
-	public void load(CompoundNBT nbt) {
-		transformers.clear();
-		ListNBT transformerData = nbt.getList(TRANSFORMERS_KEY, Constants.NBT.TAG_COMPOUND);
+	public WorldClimateHolder(CompoundTag tag) {
+		ListTag transformerData = tag.getList(TRANSFORMERS_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < transformerData.size(); i++) {
-			CompoundNBT tagCompound = transformerData.getCompound(i);
+			CompoundTag tagCompound = transformerData.getCompound(i);
 			TransformerData data = new TransformerData(tagCompound);
 			transformers.put(data.position, data);
 		}
-		ListNBT chunkData = nbt.getList(CHUNK_KEY, Constants.NBT.TAG_COMPOUND);
+		ListTag chunkData = tag.getList(CHUNK_KEY, Tag.TAG_COMPOUND);
 		for (int i = 0; i < chunkData.size(); i++) {
-			CompoundNBT tagCompound = chunkData.getCompound(i);
+			CompoundTag tagCompound = chunkData.getCompound(i);
 			long pos = tagCompound.getLong(POS_KEY);
 			long[] chunkTransformers = tagCompound.getLongArray(TRANSFORMERS_DATA_KEY);
 			transformersByChunk.put(pos, chunkTransformers);
 		}
 	}
 
+	public void setWorld(@Nullable Level world) {
+		this.world = world;
+	}
+
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
-		ListNBT transformerData = new ListNBT();
+	public CompoundTag save(CompoundTag compound) {
+		ListTag transformerData = new ListTag();
 		for (Map.Entry<Long, TransformerData> entry : transformers.long2ObjectEntrySet()) {
 			TransformerData data = entry.getValue();
-			transformerData.add(data.write(new CompoundNBT()));
+			transformerData.add(data.write(new CompoundTag()));
 		}
 		compound.put(TRANSFORMERS_KEY, transformerData);
-		ListNBT chunkData = new ListNBT();
+		ListTag chunkData = new ListTag();
 		for (Map.Entry<Long, long[]> entry : transformersByChunk.long2ObjectEntrySet()) {
-			CompoundNBT tagCompound = new CompoundNBT();
+			CompoundTag tagCompound = new CompoundTag();
 			tagCompound.putLong(POS_KEY, entry.getKey());
-			tagCompound.put(TRANSFORMERS_DATA_KEY, new LongArrayNBT(entry.getValue()));
+			tagCompound.put(TRANSFORMERS_DATA_KEY, new LongArrayTag(entry.getValue()));
 			chunkData.add(tagCompound);
 		}
 		compound.put(CHUNK_KEY, chunkData);
@@ -229,7 +225,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 			double distance = Math.round(blockPos.getDistance(pos));
 			return range > 0.0F && distance <= range;
 		}
-		return MathHelper.abs(blockPos.getX() - pos.getX()) <= range && MathHelper.abs(blockPos.getZ() - pos.getZ()) <= range;
+		return Mth.abs(blockPos.getX() - pos.getX()) <= range && Mth.abs(blockPos.getZ() - pos.getZ()) <= range;
 	}
 
 	@Override
@@ -279,7 +275,7 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 			this.chunks = chunks;
 		}
 
-		private TransformerData(CompoundNBT nbt) {
+		private TransformerData(CompoundTag nbt) {
 			position = nbt.getLong(POS_KEY);
 			range = nbt.getInt(RANGE_KEY);
 			climateState = ClimateStateHelper.INSTANCE.create(nbt.getCompound(STATE_DATA_KEY));
@@ -288,12 +284,12 @@ public class WorldClimateHolder extends WorldSavedData implements IWorldClimateH
 		}
 
 		@Override
-		public CompoundNBT write(CompoundNBT nbt) {
+		public CompoundTag write(CompoundTag nbt) {
 			nbt.putLong(POS_KEY, position);
-			nbt.put(STATE_DATA_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundNBT(), climateState));
+			nbt.put(STATE_DATA_KEY, ClimateStateHelper.INSTANCE.writeToNBT(new CompoundTag(), climateState));
 			nbt.putInt(RANGE_KEY, range);
 			nbt.putBoolean(CIRCULAR_KEY, circular);
-			nbt.put(CHUNKS_KEY, new LongArrayNBT(chunks));
+			nbt.put(CHUNKS_KEY, new LongArrayTag(chunks));
 			return nbt;
 		}
 	}

@@ -8,11 +8,11 @@ package forestry.api.genetics;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,13 +20,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public interface IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage1(MatrixStack transform, Screen gui, ItemStack itemStack);
+	void drawAnalyticsPage1(PoseStack transform, Screen gui, ItemStack itemStack);
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage2(MatrixStack transform, Screen gui, ItemStack itemStack);
+	void drawAnalyticsPage2(PoseStack transform, Screen gui, ItemStack itemStack);
 
 	@OnlyIn(Dist.CLIENT)
-	void drawAnalyticsPage3(MatrixStack transform, ItemStack itemStack, Screen gui);
+	void drawAnalyticsPage3(PoseStack transform, ItemStack itemStack, Screen gui);
 
 	/**
 	 * The hints that will be shown in the alyzer gui.

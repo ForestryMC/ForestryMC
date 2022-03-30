@@ -13,11 +13,11 @@ package forestry.factory.recipes;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -63,19 +63,19 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<FabricatorSmeltingRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FabricatorSmeltingRecipe> {
 
 		@Override
 		public FabricatorSmeltingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 			Ingredient resource = RecipeSerializers.deserialize(json.get("resource"));
-			FluidStack product = RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "product"));
-			int meltingPoint = JSONUtils.getAsInt(json, "melting");
+			FluidStack product = RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "product"));
+			int meltingPoint = GsonHelper.getAsInt(json, "melting");
 
 			return new FabricatorSmeltingRecipe(recipeId, resource, product, meltingPoint);
 		}
 
 		@Override
-		public FabricatorSmeltingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public FabricatorSmeltingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			Ingredient resource = Ingredient.fromNetwork(buffer);
 			FluidStack product = FluidStack.readFromPacket(buffer);
 			int meltingPoint = buffer.readVarInt();
@@ -84,7 +84,7 @@ public class FabricatorSmeltingRecipe implements IFabricatorSmeltingRecipe {
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, FabricatorSmeltingRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, FabricatorSmeltingRecipe recipe) {
 			recipe.resource.toNetwork(buffer);
 			recipe.product.writeToPacket(buffer);
 			buffer.writeVarInt(recipe.meltingPoint);

@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
@@ -124,10 +124,9 @@ public class AlleleUtils {
 	 * Otherwise it returns the given fallback object.
 	 */
 	public static <V> V getAlleleValue(IAllele allele, Class<? extends V> valueClass, V fallback) {
-		if (!(allele instanceof IAlleleValue)) {
+		if (!(allele instanceof IAlleleValue alleleValue)) {
 			return fallback;
 		}
-		IAlleleValue alleleValue = (IAlleleValue) allele;
 		Object value = alleleValue.getValue();
 		if (valueClass.isInstance(value)) {
 			return valueClass.cast(value);
@@ -141,10 +140,9 @@ public class AlleleUtils {
 	 */
 	@Nullable
 	public static <V> V getAlleleValue(IAllele allele, Class<? extends V> valueClass) {
-		if (!(allele instanceof IAlleleValue)) {
+		if (!(allele instanceof IAlleleValue alleleValue)) {
 			return null;
 		}
-		IAlleleValue alleleValue = (IAlleleValue) allele;
 		Object value = alleleValue.getValue();
 		if (valueClass.isInstance(value)) {
 			return valueClass.cast(value);

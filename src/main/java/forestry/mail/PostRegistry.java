@@ -15,11 +15,11 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -51,34 +51,32 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address is valid for PO Boxes.
 	 */
 	@Override
-	public boolean isValidPOBox(World world, IMailAddress address) {
+	public boolean isValidPOBox(Level world, IMailAddress address) {
 		return address.getType() == EnumAddressee.PLAYER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
 	@Nullable
-	public static POBox getPOBox(ServerWorld world, IMailAddress address) {
-
+	public static POBox getPOBox(ServerLevel world, IMailAddress address) {
 		if (cachedPOBoxes.containsKey(address)) {
 			return cachedPOBoxes.get(address);
 		}
 
 		//TODO  needs getOrCreate
-		POBox pobox = world.getDataStorage().get(() -> new POBox(address), POBox.SAVE_NAME + address);
-		if (pobox != null) {
-			cachedPOBoxes.put(address, pobox);
-		}
+		POBox pobox = world.getDataStorage().computeIfAbsent(POBox::new, () -> new POBox(address), POBox.SAVE_NAME + address);
+		cachedPOBoxes.put(address, pobox);
 		return pobox;
 	}
 
-	public static POBox getOrCreatePOBox(ServerWorld world, IMailAddress add) {
+	public static POBox getOrCreatePOBox(ServerLevel world, IMailAddress add) {
 		POBox pobox = getPOBox(world, add);
 
 		if (pobox == null) {
-			pobox = world.getDataStorage().computeIfAbsent(() -> new POBox(add), POBox.SAVE_NAME + add);
+			pobox = world.getDataStorage().computeIfAbsent(POBox::new, () -> new POBox(add), POBox.SAVE_NAME + add);
+
 			pobox.setDirty();
 			cachedPOBoxes.put(add, pobox);
 
-			PlayerEntity player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
+			Player player = PlayerUtil.getPlayer(world, add.getPlayerProfile());
 			if (player != null) {
 				NetworkUtil.sendToPlayer(new PacketPOBoxInfoResponse(pobox.getPOBoxInfo()), player);
 			}
@@ -93,7 +91,7 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the passed address can be an address for a trade station
 	 */
 	@Override
-	public boolean isValidTradeAddress(World world, IMailAddress address) {
+	public boolean isValidTradeAddress(Level world, IMailAddress address) {
 		return address.getType() == EnumAddressee.TRADER && address.getName().matches("^[a-zA-Z0-9]+$");
 	}
 
@@ -103,21 +101,21 @@ public class PostRegistry implements IPostRegistry {
 	 * @return true if the trade address has not yet been used before.
 	 */
 	@Override
-	public boolean isAvailableTradeAddress(ServerWorld world, IMailAddress address) {
+	public boolean isAvailableTradeAddress(ServerLevel world, IMailAddress address) {
 		return getTradeStation(world, address) == null;
 	}
 
 	@Override
-	public TradeStation getTradeStation(ServerWorld world, IMailAddress address) {
+	public TradeStation getTradeStation(ServerLevel world, IMailAddress address) {
 		if (cachedTradeStations.containsKey(address)) {
 			return (TradeStation) cachedTradeStations.get(address);
 		}
 
 		//TODO again this should be altered to use getOrCreate. At the moment this may supply bad trade stations with no owner. Not sure how this code will handle that
-		TradeStation trade = world.getDataStorage().get(() -> new TradeStation(TradeStation.SAVE_NAME + address), TradeStation.SAVE_NAME + address);
+		TradeStation trade = world.getDataStorage().computeIfAbsent(TradeStation::new, () -> new TradeStation(null, address), TradeStation.SAVE_NAME + address);
 
 		// Only existing and valid mail orders are returned
-		if (trade != null && trade.isValid()) {
+		if (trade.isValid()) {
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
 			return trade;
@@ -127,11 +125,11 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public TradeStation getOrCreateTradeStation(ServerWorld world, GameProfile owner, IMailAddress address) {
+	public TradeStation getOrCreateTradeStation(ServerLevel world, GameProfile owner, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 
 		if (trade == null) {
-			trade = world.getDataStorage().computeIfAbsent(() -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
+			trade = world.getDataStorage().computeIfAbsent(TradeStation::new, () -> new TradeStation(owner, address), TradeStation.SAVE_NAME + address);
 			trade.setDirty();
 			cachedTradeStations.put(address, trade);
 			getPostOffice(world).registerTradeStation(trade);
@@ -141,7 +139,7 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public void deleteTradeStation(ServerWorld world, IMailAddress address) {
+	public void deleteTradeStation(ServerLevel world, IMailAddress address) {
 		TradeStation trade = getTradeStation(world, address);
 		if (trade == null) {
 			return;
@@ -159,12 +157,12 @@ public class PostRegistry implements IPostRegistry {
 	}
 
 	@Override
-	public IPostOffice getPostOffice(ServerWorld world) {
+	public IPostOffice getPostOffice(ServerLevel world) {
 		if (cachedPostOffice != null) {
 			return cachedPostOffice;
 		}
 
-		PostOffice office = world.getDataStorage().computeIfAbsent(PostOffice::new, PostOffice.SAVE_NAME);
+		PostOffice office = world.getDataStorage().computeIfAbsent(PostOffice::new, PostOffice::new, PostOffice.SAVE_NAME);
 
 		office.setWorld(world);
 
@@ -207,7 +205,7 @@ public class PostRegistry implements IPostRegistry {
 
 	@Override
 	public ItemStack createLetterStack(ILetter letter) {
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		letter.write(compoundNBT);
 
 		ItemStack letterStack = LetterProperties.createStampedLetterStack(letter);

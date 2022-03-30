@@ -12,17 +12,16 @@ package forestry.mail.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -33,7 +32,7 @@ import forestry.core.render.ForestryResource;
 import forestry.core.utils.SoundUtil;
 import forestry.mail.POBoxInfo;
 
-public class GuiMailboxInfo extends AbstractGui {
+public class GuiMailboxInfo extends GuiComponent {
 
 	public enum XPosition {
 		LEFT, RIGHT
@@ -47,7 +46,7 @@ public class GuiMailboxInfo extends AbstractGui {
 	private static final int WIDTH = 98;
 	private static final int HEIGHT = 17;
 
-	private final FontRenderer fontRenderer;
+	private final Font fontRenderer;
 	@Nullable
 	private POBoxInfo poInfo;
 	// TODO: this texture is a terrible waste of space in graphics memory, find a better way to do it.
@@ -57,7 +56,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		fontRenderer = Minecraft.getInstance().font;
 	}
 
-	public void render(MatrixStack transform) {
+	public void render(PoseStack transform) {
 		if (poInfo == null || !Config.mailAlertEnabled || !poInfo.hasMail()) {
 			return;
 		}
@@ -66,7 +65,7 @@ public class GuiMailboxInfo extends AbstractGui {
 		int y = 0;
 
 		Minecraft minecraft = Minecraft.getInstance();
-		MainWindow win = minecraft.getWindow();
+		Window win = minecraft.getWindow();
 		if (Config.mailAlertXPosition == XPosition.RIGHT) {
 			x = win.getGuiScaledWidth() - WIDTH;
 		}
@@ -74,10 +73,9 @@ public class GuiMailboxInfo extends AbstractGui {
 			y = win.getGuiScaledHeight() - HEIGHT;
 		}
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.disableLighting();
-		TextureManager textureManager = minecraft.getTextureManager();
-		textureManager.bind(textureAlert);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		// RenderSystem.disableLighting();
+		RenderSystem.setShaderTexture(0, textureAlert);
 
 		this.blit(transform, x, y, 0, 0, WIDTH, HEIGHT);
 
@@ -94,7 +92,7 @@ public class GuiMailboxInfo extends AbstractGui {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void setPOBoxInfo(PlayerEntity player, POBoxInfo info) {
+	public void setPOBoxInfo(Player player, POBoxInfo info) {
 		boolean playJingle = false;
 
 		if (info.hasMail()) {

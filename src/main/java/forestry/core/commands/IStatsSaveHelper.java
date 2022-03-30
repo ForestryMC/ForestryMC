@@ -12,7 +12,7 @@ package forestry.core.commands;
 
 import java.util.Collection;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
 
@@ -30,5 +30,5 @@ public interface IStatsSaveHelper {
 
 	String getFileSuffix();
 
-	IBreedingTracker getBreedingTracker(World world, GameProfile gameProfile);
+	IBreedingTracker getBreedingTracker(Level world, GameProfile gameProfile);
 }

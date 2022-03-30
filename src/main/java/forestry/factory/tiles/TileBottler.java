@@ -14,16 +14,16 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.EnumMap;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,7 +54,7 @@ import forestry.factory.gui.ContainerBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
 
-public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, ISlotPickupWatcher {
+public class TileBottler extends TilePowered implements WorldlyContainer, ILiquidTankTile, ISlotPickupWatcher {
 	private static final int TICKS_PER_RECIPE_TIME = 5;
 	private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
@@ -68,8 +68,8 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	@OnlyIn(Dist.CLIENT)
 	public boolean isFillRecipe;
 
-	public TileBottler() {
-		super(FactoryTiles.BOTTLER.tileType(), 1100, 4000);
+	public TileBottler(BlockPos pos, BlockState state) {
+		super(FactoryTiles.BOTTLER.tileType(), pos, state, 1100, 4000);
 
 		setInternalInventory(new InventoryBottler(this));
 
@@ -82,15 +82,14 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
-		compound = super.save(compound);
+	public void saveAdditional(CompoundTag compound) {
+		super.saveAdditional(compound);
 		tankManager.write(compound);
-		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
-		super.load(state, compound);
+	public void load(CompoundTag compound) {
+		super.load(compound);
 		tankManager.read(compound);
 		checkEmptyRecipe();
 		checkFillRecipe();
@@ -196,7 +195,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public void onNeighborTileChange(World world, BlockPos pos, BlockPos neighbor) {
+	public void onNeighborTileChange(Level world, BlockPos pos, BlockPos neighbor) {
 		super.onNeighborTileChange(world, pos, neighbor);
 
 		canDump.clear();
@@ -250,7 +249,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public void onTake(int slotIndex, PlayerEntity player) {
+	public void onTake(int slotIndex, Player player) {
 		if (slotIndex == InventoryBottler.SLOT_EMPTYING_PROCESSING) {
 			if (currentRecipe != null && !currentRecipe.fillRecipe) {
 				currentRecipe = null;
@@ -358,7 +357,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerBottler(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerBottler(windowId, player.getInventory(), this);
 	}
 }

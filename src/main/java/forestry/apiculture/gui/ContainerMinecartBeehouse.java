@@ -12,11 +12,11 @@ package forestry.apiculture.gui;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.apiculture.entities.MinecartEntityBeeHousingBase;
 import forestry.apiculture.features.ApicultureContainers;
@@ -35,16 +35,16 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 
 
 	//TODO writing things to packets here
-	public static ContainerMinecartBeehouse fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
+	public static ContainerMinecartBeehouse fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
 		PacketBufferForestry buf = new PacketBufferForestry(extraData);
 		MinecartEntityBeeHousingBase e = (MinecartEntityBeeHousingBase) buf.readEntityById(playerInv.player.level);    //TODO cast
-		PlayerEntity player = playerInv.player;
+		Player player = playerInv.player;
 		boolean hasFrames = buf.readBoolean();
 		GuiBeeHousing.Icon icon = buf.readEnum(GuiBeeHousing.Icon.values());
-		return new ContainerMinecartBeehouse(windowId, player.inventory, e, hasFrames, icon);
+		return new ContainerMinecartBeehouse(windowId, player.getInventory(), e, hasFrames, icon);
 	}
 
-	public ContainerMinecartBeehouse(int windowId, PlayerInventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
+	public ContainerMinecartBeehouse(int windowId, Inventory player, MinecartEntityBeeHousingBase entity, boolean hasFrames, GuiBeeHousing.Icon icon) {
 		super(windowId, ApicultureContainers.BEEHOUSE_MINECART.containerType(), entity, player, 8, 108);
 		providerHelper = new ContainerAnalyzerProviderHelper(this, player);
 
@@ -77,18 +77,18 @@ public class ContainerMinecartBeehouse extends ContainerEntity<MinecartEntityBee
 
 	/* Methods - Implement ContainerForestry */
 	@Override
-	protected void addSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+	protected void addSlot(Inventory playerInventory, int slot, int x, int y) {
 		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	@Override
-	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+	protected void addHotbarSlot(Inventory playerInventory, int slot, int x, int y) {
 		addSlot(new SlotLockable(playerInventory, slot, x, y));
 	}
 
 	/* Methods - Implement IGuiSelectable */
 	@Override
-	public void handleSelectionRequest(ServerPlayerEntity player, int primary, int secondary) {
+	public void handleSelectionRequest(ServerPlayer player, int primary, int secondary) {
 		providerHelper.analyzeSpecimen(secondary);
 	}
 

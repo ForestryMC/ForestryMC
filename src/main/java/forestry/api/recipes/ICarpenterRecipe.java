@@ -5,24 +5,22 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ObjectHolder;
 
 public interface ICarpenterRecipe extends IForestryRecipe {
 
-	IRecipeType<ICarpenterRecipe> TYPE = RecipeManagers.create("forestry:carpenter");
+	RecipeType<ICarpenterRecipe> TYPE = RecipeManagers.create("forestry:carpenter");
 
 	class Companion {
 		@ObjectHolder("forestry:carpenter")
-		public static final IRecipeSerializer<ICarpenterRecipe> SERIALIZER = null;
+		public static final RecipeSerializer<ICarpenterRecipe> SERIALIZER = null;
 	}
 
 	/**
@@ -33,7 +31,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	/**
 	 * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
 	 */
-	ICraftingRecipe getCraftingGridRecipe();
+	CraftingRecipe getCraftingGridRecipe();
 
 	/**
 	 * @return The crafting result of this recipe
@@ -47,18 +45,17 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	Ingredient getBox();
 
 	/**
-	 * @return the fluid required for this recipe. return null if there is no required fluid.
+	 * @return the fluid required for this recipe. return {@link FluidStack#EMPTY} if there is no required fluid.
 	 */
-	@Nullable
 	FluidStack getFluidResource();
 
 	@Override
-	default IRecipeType<?> getType() {
+	default RecipeType<?> getType() {
 		return TYPE;
 	}
 
 	@Override
-	default IRecipeSerializer<?> getSerializer() {
+	default RecipeSerializer<?> getSerializer() {
 		return Companion.SERIALIZER;
 	}
 }

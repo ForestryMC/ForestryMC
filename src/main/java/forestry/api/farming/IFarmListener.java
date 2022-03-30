@@ -7,9 +7,9 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
 
 public interface IFarmListener {
 

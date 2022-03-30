@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Provides icons for leaves. Used by TreeManager.treeFactory.createSpecies()

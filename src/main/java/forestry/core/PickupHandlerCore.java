@@ -12,9 +12,9 @@ package forestry.core;
 
 import java.util.Optional;
 
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -26,7 +26,7 @@ import genetics.utils.RootUtils;
 public class PickupHandlerCore implements IPickupHandler {
 
 	@Override
-	public boolean onItemPickup(PlayerEntity PlayerEntity, ItemEntity entityitem) {
+	public boolean onItemPickup(Player PlayerEntity, ItemEntity entityitem) {
 		ItemStack itemstack = entityitem.getItem();
 		if (itemstack.isEmpty()) {
 			return false;

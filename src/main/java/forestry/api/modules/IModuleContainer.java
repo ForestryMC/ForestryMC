@@ -7,28 +7,15 @@ package forestry.api.modules;
 
 import java.util.Collection;
 
-import forestry.core.config.forge_old.Configuration;
-
 public interface IModuleContainer {
 	/**
 	 * @return Unique identifier for the module container, no spaces!
 	 */
 	String getID();
 
-	boolean isAvailable();
-
-	Configuration getModulesConfig();
-
-	/**
-	 * @return true if the module is enabled in the config file of this container.
-	 */
-	boolean isModuleEnabled(IForestryModule module);
-
 	/**
 	 * Called after configured the modules.
 	 */
 	default void onConfiguredModules(Collection<IForestryModule> activeModules, Collection<IForestryModule> unloadedModules) {
 	}
-
-
 }

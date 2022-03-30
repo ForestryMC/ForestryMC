@@ -1,6 +1,6 @@
 package forestry.apiculture;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.individual.IIndividual;
 

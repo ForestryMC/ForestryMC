@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 /**
  * Networked tile entities that have a client side "active" flag

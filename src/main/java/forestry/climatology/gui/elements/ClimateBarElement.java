@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.climatology.gui.elements;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -66,9 +64,9 @@ public class ClimateBarElement extends GuiElement {
 			IClimateState targetedState = transformer.getTarget();
 			IClimateState state = transformer.getCurrent();
 			IClimateState defaultState = transformer.getDefault();
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
+			tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.target", StringUtil.floatAsPercent(targetedState.getClimate(type))));
+			tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.value", StringUtil.floatAsPercent(state.getClimate(type))));
+			tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.default", StringUtil.floatAsPercent(defaultState.getClimate(type))));
 		});
 	}
 
@@ -98,23 +96,22 @@ public class ClimateBarElement extends GuiElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		handleMouse(mouseY - getX(), mouseX - getY());
 
-		RenderSystem.enableAlphaTest();
+		// RenderSystem.enableAlphaTest();
 		GuiHabitatFormer gui = (GuiHabitatFormer) getWindow().getGui();
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		textureManager.bind(gui.textureFile);
+		RenderSystem.setShaderTexture(0, gui.textureFile);
 
 		setGLColorFromInt(type == ClimateType.TEMPERATURE ? 0xFFD700 : 0x7ff4f4);
 		int progressScaled = getProgressScaled();
 		blit(transform, 1, 1, 177, 69, progressScaled, 10);
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		blit(transform, 1 + getDefaultPosition(), 1, 232 + (type == ClimateType.TEMPERATURE ? 3 : 0), 69, 1, 10);
 		blit(transform, 1 + getPointerPosition(), 1, 229, 69, 1, 10);
 		blit(transform, 1, 1, 177, 80, 50, 10);
-		RenderSystem.disableAlphaTest();
+		// RenderSystem.disableAlphaTest();
 	}
 
 	private int getProgressScaled() {
@@ -137,7 +134,7 @@ public class ClimateBarElement extends GuiElement {
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		RenderSystem.color4f(red, green, blue, 1.0F);
+		RenderSystem.setShaderColor(red, green, blue, 1.0F);
 	}
 
 	private boolean handleMouse(int mouseX, int mouseY) {
@@ -147,7 +144,7 @@ public class ClimateBarElement extends GuiElement {
 		if (mouseX < 1 || mouseY < 1 || mouseX > preferredSize.width - 1 || mouseY > preferredSize.height - 1) {
 			return false;
 		}
-		final float quotient = MathHelper.clamp((mouseX - 1) / (float) (preferredSize.width - 3), 0.0F, 1.0F);
+		final float quotient = Mth.clamp((mouseX - 1) / (float) (preferredSize.width - 3), 0.0F, 1.0F);
 		final float value = MAX_VALUE * quotient;
 		GuiHabitatFormer former = (GuiHabitatFormer) getWindow().getGui();
 		IClimateState climateState = former.getClimate();

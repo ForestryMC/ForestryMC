@@ -1,7 +1,7 @@
 package forestry.core.climate;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.climate.ClimateType;
 import forestry.api.climate.IClimateHousing;
@@ -102,7 +102,7 @@ public class FakeClimateTransformer implements IClimateTransformer {
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return null;
 	}
 }

@@ -13,19 +13,21 @@ package forestry.core.particles;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.phys.Vec3;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class SnowParticleData implements IParticleData {
+import net.minecraft.core.particles.ParticleOptions.Deserializer;
 
-	public static final IDeserializer<SnowParticleData> DESERIALIZER = new IDeserializer<SnowParticleData>() {
+public class SnowParticleData implements ParticleOptions {
+
+	public static final Deserializer<SnowParticleData> DESERIALIZER = new Deserializer<SnowParticleData>() {
 		@Nonnull
 		@Override
 		public SnowParticleData fromCommand(@Nonnull ParticleType<SnowParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
@@ -40,16 +42,16 @@ public class SnowParticleData implements IParticleData {
 		}
 
 		@Override
-		public SnowParticleData fromNetwork(@Nonnull ParticleType<SnowParticleData> type, PacketBuffer buf) {
+		public SnowParticleData fromNetwork(@Nonnull ParticleType<SnowParticleData> type, FriendlyByteBuf buf) {
 			return new SnowParticleData(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		}
 	};
 	public static final Codec<SnowParticleData> CODEC = RecordCodecBuilder.create(val -> val.group(Codec.DOUBLE.fieldOf("particleStart").forGetter(data -> data.particleStart.x()), Codec.DOUBLE.fieldOf("particleStart").forGetter(data -> data.particleStart.y()), Codec.DOUBLE.fieldOf("particleStart").forGetter(data -> data.particleStart.y())).apply(val, SnowParticleData::new));
 
-	public final Vector3d particleStart;
+	public final Vec3 particleStart;
 
 	public SnowParticleData(double particleStartX, double particleStartY, double particleStartZ) {
-		this.particleStart = new Vector3d(particleStartX, particleStartY, particleStartZ);
+		this.particleStart = new Vec3(particleStartX, particleStartY, particleStartZ);
 	}
 
 	@Nonnull
@@ -59,7 +61,7 @@ public class SnowParticleData implements IParticleData {
 	}
 
 	@Override
-	public void writeToNetwork(@Nonnull PacketBuffer buffer) {
+	public void writeToNetwork(@Nonnull FriendlyByteBuf buffer) {
 		buffer.writeDouble(particleStart.x());
 		buffer.writeDouble(particleStart.y());
 		buffer.writeDouble(particleStart.z());

@@ -3,9 +3,9 @@ package forestry.modules.features;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.BlockItem;
 
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidAttributes;

@@ -13,10 +13,10 @@ package forestry.core.fluids;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,6 +27,8 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
+
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -202,10 +204,10 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(new TranslationTextComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
+			toolTip.add(new TranslatableComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
 			amount = getFluid().getAmount();
 		}
-		TranslationTextComponent liquidAmount = new TranslationTextComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
+		TranslatableComponent liquidAmount = new TranslatableComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
 		toolTip.add(liquidAmount);
 	}
 

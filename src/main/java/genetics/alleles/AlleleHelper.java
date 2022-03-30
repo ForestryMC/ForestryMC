@@ -23,10 +23,9 @@ public enum AlleleHelper implements IAlleleHelper, IAlleleHandler {
 
 	@Override
 	public void onAddTypes(IAllele allele, IChromosomeType... types) {
-		if (!(allele instanceof IAlleleValue)) {
+		if (!(allele instanceof IAlleleValue alleleValue)) {
 			return;
 		}
-		IAlleleValue alleleValue = (IAlleleValue) allele;
 		for (IChromosomeType type : types) {
 			allelesByChromosome.computeIfAbsent(type, t -> new HashMap<>()).put(alleleValue.getValue(), allele);
 		}

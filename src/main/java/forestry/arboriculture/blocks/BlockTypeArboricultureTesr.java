@@ -12,7 +12,7 @@ package forestry.arboriculture.blocks;
 
 import java.util.function.Supplier;
 
-import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import forestry.arboriculture.features.ArboricultureTiles;
 import forestry.core.blocks.IBlockTypeTesr;

@@ -18,23 +18,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.IModelTransform;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -61,9 +61,9 @@ public class ClientManager {
 	private final Set<IColoredItem> itemColorList = new HashSet<>();
 	/* DEFAULT ITEM AND BLOCK MODEL STATES*/
 	@Nullable
-	private IModelTransform defaultBlockState;
+	private ModelState defaultBlockState;
 	@Nullable
-	private IModelTransform defaultItemState;
+	private ModelState defaultItemState;
 
 	public static ClientManager getInstance() {
 		return instance;
@@ -102,54 +102,52 @@ public class ClientManager {
 		}
 	}
 
-	public IModelTransform getDefaultBlockState() {
+	public ModelState getDefaultBlockState() {
 		if (defaultBlockState == null) {
 			defaultBlockState = ResourceUtil.loadTransform(new ResourceLocation("block/block"));
 		}
 		return defaultBlockState;
 	}
 
-	public IModelTransform getDefaultItemState() {
+	public ModelState getDefaultItemState() {
 		if (defaultItemState == null) {
 			defaultItemState = ResourceUtil.loadTransform(new ResourceLocation("item/generated"));
 		}
 		return defaultItemState;
 	}
 
-	public void registerModel(IBakedModel model, Object feature) {
+	public void registerModel(BakedModel model, Object feature) {
 		if (feature instanceof FeatureGroup) {
 			FeatureGroup<?, ?, ?> group = (FeatureGroup) feature;
 			group.getFeatures().forEach(f -> registerModel(model, f));
 		} else if (feature instanceof FeatureTable) {
 			FeatureTable<?, ?, ?, ?> group = (FeatureTable) feature;
 			group.getFeatures().forEach(f -> registerModel(model, f));
-		} else if (feature instanceof FeatureBlock) {
-			FeatureBlock block = (FeatureBlock) feature;
+		} else if (feature instanceof FeatureBlock block) {
 			registerModel(model, block.block(), block.getItem());
-		} else if (feature instanceof FeatureItem) {
-			FeatureItem item = (FeatureItem) feature;
+		} else if (feature instanceof FeatureItem item) {
 			registerModel(model, item.item());
 		}
 	}
 
-	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item) {
+	public void registerModel(BakedModel model, Block block, @Nullable BlockItem item) {
 		registerModel(model, block, item, block.getStateDefinition().getPossibleStates());
 	}
 
-	public void registerModel(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
+	public void registerModel(BakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
 		customBlockModels.add(new BlockModelEntry(model, block, item, states));
 	}
 
-	public void registerModel(IBakedModel model, Item item) {
+	public void registerModel(BakedModel model, Item item) {
 		customModels.add(new ModelEntry(new ModelResourceLocation(item.getRegistryName(), "inventory"), model));
 	}
 
 	public void onBakeModels(ModelBakeEvent event) {
 		//register custom models
-		Map<ResourceLocation, IBakedModel> registry = event.getModelRegistry();
+		Map<ResourceLocation, BakedModel> registry = event.getModelRegistry();
 		for (final BlockModelEntry entry : customBlockModels) {
 			for (BlockState state : entry.states) {
-				registry.put(BlockModelShapes.stateToModelLocation(state), entry.model);
+				registry.put(BlockModelShaper.stateToModelLocation(state), entry.model);
 			}
 			if (entry.item != null) {
 				ResourceLocation registryName = entry.item.getRegistryName();
@@ -165,7 +163,7 @@ public class ClientManager {
 		}
 	}
 
-	private static class ColoredItemItemColor implements IItemColor {
+	private static class ColoredItemItemColor implements ItemColor {
 		public static final ColoredItemItemColor INSTANCE = new ColoredItemItemColor();
 
 		private ColoredItemItemColor() {
@@ -182,7 +180,7 @@ public class ClientManager {
 		}
 	}
 
-	private static class ColoredBlockBlockColor implements IBlockColor {
+	private static class ColoredBlockBlockColor implements BlockColor {
 		public static final ColoredBlockBlockColor INSTANCE = new ColoredBlockBlockColor();
 
 		private ColoredBlockBlockColor() {
@@ -190,7 +188,7 @@ public class ClientManager {
 		}
 
 		@Override
-		public int getColor(BlockState state, @Nullable IBlockDisplayReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+		public int getColor(BlockState state, @Nullable BlockAndTintGetter worldIn, @Nullable BlockPos pos, int tintIndex) {
 			Block block = state.getBlock();
 			if (block instanceof IColoredBlock && worldIn != null && pos != null) {
 				return ((IColoredBlock) block).colorMultiplier(state, worldIn, pos, tintIndex);
@@ -201,13 +199,13 @@ public class ClientManager {
 
 	private static class BlockModelEntry {
 
-		private final IBakedModel model;
+		private final BakedModel model;
 		private final Block block;
 		private final Collection<BlockState> states;
 		@Nullable
 		private final BlockItem item;
 
-		private BlockModelEntry(IBakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
+		private BlockModelEntry(BakedModel model, Block block, @Nullable BlockItem item, Collection<BlockState> states) {
 			this.model = model;
 			this.block = block;
 			this.item = item;
@@ -219,9 +217,9 @@ public class ClientManager {
 	private static class ModelEntry {
 
 		private final ModelResourceLocation modelLocation;
-		private final IBakedModel model;
+		private final BakedModel model;
 
-		private ModelEntry(ModelResourceLocation modelLocation, IBakedModel model) {
+		private ModelEntry(ModelResourceLocation modelLocation, BakedModel model) {
 			this.modelLocation = modelLocation;
 			this.model = model;
 		}

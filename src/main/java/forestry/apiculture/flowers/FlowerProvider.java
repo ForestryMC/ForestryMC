@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.PlantType;
 
@@ -41,27 +41,24 @@ public class FlowerProvider implements IFlowerProvider {
 	}
 
 	@Override
-	public boolean isAcceptedPollinatable(World world, ICheckPollinatable pollinatable) {
+	public boolean isAcceptedPollinatable(Level world, ICheckPollinatable pollinatable) {
 
 		PlantType plantType = pollinatable.getPlantType();
 
-		switch (flowerType) {
-			case FlowerManager.FlowerTypeNether:
-				return plantType == PlantType.NETHER;
-			case FlowerManager.FlowerTypeCacti:
-				return plantType == PlantType.DESERT;
-			default:
-				return plantType != PlantType.NETHER;
-		}
+		return switch (flowerType) {
+			case FlowerManager.FlowerTypeNether -> plantType == PlantType.NETHER;
+			case FlowerManager.FlowerTypeCacti -> plantType == PlantType.DESERT;
+			default -> plantType != PlantType.NETHER;
+		};
 	}
 
 	@Override
-	public ITextComponent getDescription() {
-		return new TranslationTextComponent(this.unlocalizedDescription);
+	public Component getDescription() {
+		return new TranslatableComponent(this.unlocalizedDescription);
 	}
 
 	@Override
-	public NonNullList<ItemStack> affectProducts(World world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products) {
+	public NonNullList<ItemStack> affectProducts(Level world, IIndividual individual, BlockPos pos, NonNullList<ItemStack> products) {
 		return products;
 	}
 

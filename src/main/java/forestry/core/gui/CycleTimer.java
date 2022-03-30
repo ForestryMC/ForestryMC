@@ -3,7 +3,7 @@ package forestry.core.gui;
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 
 public class CycleTimer {
 	private long startTime;

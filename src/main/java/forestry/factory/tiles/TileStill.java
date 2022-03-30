@@ -14,14 +14,17 @@ import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,7 +50,7 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerStill;
 import forestry.factory.inventory.InventoryStill;
 
-public class TileStill extends TilePowered implements ISidedInventory, ILiquidTankTile {
+public class TileStill extends TilePowered implements WorldlyContainer, ILiquidTankTile {
 	private static final int ENERGY_PER_RECIPE_TIME = 200;
 
 	private final FilteredTank resourceTank;
@@ -58,8 +61,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	private IStillRecipe currentRecipe;
 	private FluidStack bufferedLiquid;
 
-	public TileStill() {
-		super(FactoryTiles.STILL.tileType(), 1100, 8000);
+	public TileStill(BlockPos pos, BlockState state) {
+		super(FactoryTiles.STILL.tileType(), pos, state, 1100, 8000);
 		setInternalInventory(new InventoryStill(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, true, true);
 		resourceTank.setFilters(() -> RecipeManagers.stillManager.getRecipeFluidInputs(level.getRecipeManager()));
@@ -73,25 +76,24 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		tankManager.write(compoundNBT);
 
 		if (!bufferedLiquid.isEmpty()) {
-			CompoundNBT buffer = new CompoundNBT();
+			CompoundTag buffer = new CompoundTag();
 			bufferedLiquid.writeToNBT(buffer);
 			compoundNBT.put("Buffer", buffer);
 		}
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tankManager.read(compoundNBT);
 
 		if (compoundNBT.contains("Buffer")) {
-			CompoundNBT buffer = compoundNBT.getCompound("Buffer");
+			CompoundTag buffer = compoundNBT.getCompound("Buffer");
 			bufferedLiquid = FluidStack.loadFluidStackFromNBT(buffer);
 		}
 	}
@@ -141,7 +143,9 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 		FluidStack recipeLiquid = !bufferedLiquid.isEmpty() ? bufferedLiquid : resourceTank.getFluid();
 
 		if (!RecipeManagers.stillManager.matches(currentRecipe, recipeLiquid)) {
-			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(level.getRecipeManager(), recipeLiquid);
+			Level level = Objects.requireNonNull(this.level);
+			currentRecipe = RecipeManagers.stillManager.findMatchingRecipe(level.getRecipeManager(), recipeLiquid)
+					.orElse(null);
 
 			int recipeTime = currentRecipe == null ? 0 : currentRecipe.getCyclesPerUnit();
 			setEnergyPerWorkCycle(ENERGY_PER_RECIPE_TIME * recipeTime);
@@ -207,8 +211,8 @@ public class TileStill extends TilePowered implements ISidedInventory, ILiquidTa
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerStill(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerStill(windowId, player.getInventory(), this);
 	}
 
 }

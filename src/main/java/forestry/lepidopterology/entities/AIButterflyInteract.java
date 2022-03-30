@@ -13,8 +13,10 @@ package forestry.lepidopterology.entities;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 	@Nullable
@@ -34,7 +36,7 @@ public abstract class AIButterflyInteract extends AIButterflyBase {
 		if (entity.getState() != EnumButterflyState.RESTING) {
 			return false;
 		}
-		Vector3d pos = entity.position();
+		Vec3 pos = entity.position();
 		rest = new BlockPos((int) pos.x, (int) Math.floor(pos.y) - 1, (int) pos.z);
 		if (entity.level.isEmptyBlock(rest)) {
 			return false;

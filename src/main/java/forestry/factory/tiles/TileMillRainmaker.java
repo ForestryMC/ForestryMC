@@ -12,14 +12,15 @@ package forestry.factory.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.storage.IServerWorldInfo;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.storage.ServerLevelData;
 
 import forestry.api.fuels.RainSubstrate;
 import forestry.core.render.ParticleRender;
@@ -31,8 +32,8 @@ public class TileMillRainmaker extends TileMill {
 	private int duration;
 	private boolean reverse;
 
-	public TileMillRainmaker() {
-		super(FactoryTiles.RAINMAKER.tileType());
+	public TileMillRainmaker(BlockPos pos, BlockState state) {
+		super(FactoryTiles.RAINMAKER.tileType(), pos, state);
 		speed = 0.01f;
 		setInternalInventory(new InventoryRainmaker(this));
 	}
@@ -53,8 +54,8 @@ public class TileMillRainmaker extends TileMill {
 	//	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		charge = compoundNBT.getInt("Charge");
 		progress = compoundNBT.getFloat("Progress");
@@ -65,15 +66,14 @@ public class TileMillRainmaker extends TileMill {
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("Charge", charge);
 		compoundNBT.putFloat("Progress", progress);
 		compoundNBT.putInt("Stage", stage);
 		compoundNBT.putInt("Duration", duration);
 		compoundNBT.putBoolean("Reverse", reverse);
-		return compoundNBT;
 	}
 
 	public void addCharge(RainSubstrate substrate) {
@@ -87,7 +87,7 @@ public class TileMillRainmaker extends TileMill {
 	@Override
 	public void activate() {
 		if (level.isClientSide) {
-			level.playSound(null, getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + level.random.nextFloat() * 0.2F);
+			level.playSound(null, getBlockPos(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 10000.0F, 0.8F + level.random.nextFloat() * 0.2F);
 
 			float f = getBlockPos().getX() + 0.5F;
 			float f1 = getBlockPos().getY() + 0.0F + level.random.nextFloat() * 6F / 16F;
@@ -104,7 +104,7 @@ public class TileMillRainmaker extends TileMill {
 				level.getLevelData().setRaining(false);
 			} else {
 				level.getLevelData().setRaining(true);
-				((IServerWorldInfo) level.getLevelData()).setRainTime(duration);
+				((ServerLevelData) level.getLevelData()).setRainTime(duration);
 			}
 			charge = 0;
 			duration = 0;
@@ -115,7 +115,7 @@ public class TileMillRainmaker extends TileMill {
 
 	@Override
 	@Nullable
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return null;
 	}
 

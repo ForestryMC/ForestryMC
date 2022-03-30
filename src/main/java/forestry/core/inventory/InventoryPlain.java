@@ -10,17 +10,17 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 
 import forestry.api.core.INbtReadable;
 import forestry.api.core.INbtWritable;
 import forestry.core.utils.InventoryUtil;
 
-public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
+public class InventoryPlain implements Container, INbtWritable, INbtReadable {
 
 	private final NonNullList<ItemStack> contents;
 	private final String name;
@@ -84,7 +84,7 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity PlayerEntity) {
+	public boolean stillValid(Player PlayerEntity) {
 		return false;
 	}
 
@@ -100,12 +100,12 @@ public class InventoryPlain implements IInventory, INbtWritable, INbtReadable {
 
 	/* INBTagable */
 	@Override
-	public void read(CompoundNBT CompoundNBT) {
+	public void read(CompoundTag CompoundNBT) {
 		InventoryUtil.readFromNBT(this, name, CompoundNBT);
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT CompoundNBT) {
+	public CompoundTag write(CompoundTag CompoundNBT) {
 		InventoryUtil.writeToNBT(this, name, CompoundNBT);
 		return CompoundNBT;
 	}

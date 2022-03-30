@@ -12,19 +12,21 @@ package forestry.lepidopterology.entities;
 
 import java.util.EnumSet;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FenceBlock;
-import net.minecraft.block.FlowerBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.WallBlock;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.common.IPlantable;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 
 public class AIButterflyRest extends AIButterflyBase {
 
@@ -42,7 +44,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 
-		Vector3d entityPos = entity.position();
+		Vec3 entityPos = entity.position();
 		int x = (int) entityPos.x;
 		int y = (int) Math.floor(entityPos.y);
 		int z = (int) entityPos.z;
@@ -95,8 +97,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return false;
 		}
 		BlockState blockState = entity.level.getBlockState(pos);
-		Block block = blockState.getBlock();
-		if (!block.isAir(blockState, entity.level, pos)) {    //TODO
+		if (!blockState.isAir()) {    //TODO
 			//			if (!block.isPassable(entity.world, pos)) {
 			return false;
 		}
@@ -106,7 +107,7 @@ public class AIButterflyRest extends AIButterflyBase {
 
 		BlockState blockStateBelow = entity.level.getBlockState(pos.below());
 		Block blockBelow = blockStateBelow.getBlock();
-		return isRest(blockBelow) || blockBelow.is(BlockTags.LEAVES);
+		return isRest(blockBelow) || blockStateBelow.is(BlockTags.LEAVES);
 	}
 
 	private static boolean isRest(Block block) {
@@ -122,7 +123,7 @@ public class AIButterflyRest extends AIButterflyBase {
 			return true;
 		} else if (block instanceof IPlantable) {
 			return true;
-		} else if (block instanceof IGrowable) {
+		} else if (block instanceof BonemealableBlock) {
 			return true;
 		} else {
 			return blockState.getMaterial() == Material.PLANT;

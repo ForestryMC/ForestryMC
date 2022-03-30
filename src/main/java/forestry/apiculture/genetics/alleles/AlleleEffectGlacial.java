@@ -10,11 +10,11 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.genetics.BeeChromosomes;
@@ -33,7 +33,7 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 		EnumTemperature temp = housing.getTemperature();
 
 		switch (temp) {
@@ -44,8 +44,8 @@ public class AlleleEffectGlacial extends AlleleEffectThrottled {
 			default:
 		}
 
-		Vector3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
-		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vec3i area = genome.getActiveValue(BeeChromosomes.TERRITORY);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 		BlockPos housingCoords = housing.getCoordinates();
 
 		for (int i = 0; i < 10; i++) {

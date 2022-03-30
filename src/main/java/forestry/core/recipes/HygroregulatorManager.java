@@ -1,11 +1,12 @@
 package forestry.core.recipes;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -26,24 +27,22 @@ public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregula
 	}
 
 	@Override
-	@Nullable
-	public IHygroregulatorRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid) {
-		if (liquid.getAmount() <= 0) {
-			return null;
+	public Optional<IHygroregulatorRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack liquid) {
+		if (liquid.isEmpty()) {
+			return Optional.empty();
 		}
 
-		for (IHygroregulatorRecipe recipe : getRecipes(recipeManager)) {
-			FluidStack resource = recipe.getResource();
-			if (resource.isFluidEqual(liquid)) {
-				return recipe;
-			}
-		}
-		return null;
+		return getRecipes(recipeManager)
+				.filter(recipe -> {
+					FluidStack resource = recipe.getResource();
+					return resource.isFluidEqual(liquid);
+				})
+				.findFirst();
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
-		return getRecipes(recipeManager).stream()
+		return getRecipes(recipeManager)
 				.map(recipe -> recipe.getResource().getFluid().getRegistryName())
 				.collect(Collectors.toSet());
 	}

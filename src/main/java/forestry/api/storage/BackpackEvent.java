@@ -5,18 +5,18 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 
 import net.minecraftforge.eventbus.api.Event;
 
 public abstract class BackpackEvent extends Event {
 
-	public final PlayerEntity player;
+	public final Player player;
 	public final IBackpackDefinition backpackDefinition;
-	public final IInventory backpackInventory;
+	public final Container backpackInventory;
 
-	public BackpackEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory) {
+	public BackpackEvent(Player player, IBackpackDefinition backpackDefinition, Container backpackInventory) {
 		this.player = player;
 		this.backpackDefinition = backpackDefinition;
 		this.backpackInventory = backpackInventory;

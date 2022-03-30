@@ -12,9 +12,9 @@ package forestry.core.multiblock;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.multiblock.IMultiblockLogic;
@@ -25,7 +25,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	private boolean visited;
 	private boolean saveMultiblockData;
 	@Nullable
-	private CompoundNBT cachedMultiblockData;
+	private CompoundTag cachedMultiblockData;
 	@Nullable
 	protected T controller;
 
@@ -52,7 +52,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	@Override
 	public abstract T getController();
 
-	public abstract T createNewController(World world);
+	public abstract T createNewController(Level world);
 
 	/**
 	 * This is called when a block is being marked as valid by the chunk, but has not yet fully
@@ -66,7 +66,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @see net.minecraft.tileentity.TileEntity#validate()
 	 */
 	@Override
-	public void validate(World world, IMultiblockComponent part) {
+	public void validate(Level world, IMultiblockComponent part) {
 		MultiblockRegistry.onPartAdded(world, part);
 	}
 
@@ -77,7 +77,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @see net.minecraft.tileentity.TileEntity#invalidate()
 	 */
 	@Override
-	public final void invalidate(World world, IMultiblockComponent part) {
+	public final void invalidate(Level world, IMultiblockComponent part) {
 		detachSelf(world, part, false);
 	}
 
@@ -89,14 +89,14 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @see net.minecraft.tileentity.TileEntity#onChunkUnload()
 	 */
 	@Override
-	public final void onChunkUnload(World world, IMultiblockComponent part) {
+	public final void onChunkUnload(Level world, IMultiblockComponent part) {
 		detachSelf(world, part, true);
 	}
 
 	/*
 	 * Detaches this block from its controller. Calls detachBlock() and clears the controller member.
 	 */
-	protected void detachSelf(World world, IMultiblockComponent part, boolean chunkUnloading) {
+	protected void detachSelf(Level world, IMultiblockComponent part, boolean chunkUnloading) {
 		if (this.controller != null) {
 			// Clean part out of controller
 			this.controller.detachBlock(part, chunkUnloading);
@@ -110,7 +110,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public void readFromNBT(CompoundNBT data) {
+	public void readFromNBT(CompoundTag data) {
 		// We can't directly initialize a multiblock controller yet, so we cache the data here until
 		// we receive a validate() call, which creates the controller and hands off the cached data.
 		if (data.contains("multiblockData")) {
@@ -119,9 +119,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT data) {
+	public CompoundTag write(CompoundTag data) {
 		if (isMultiblockSaveDelegate() && this.controller != null) {
-			CompoundNBT multiblockData = new CompoundNBT();
+			CompoundTag multiblockData = new CompoundTag();
 			this.controller.write(multiblockData);
 			data.put("multiblockData", multiblockData);
 		}
@@ -170,7 +170,7 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	}
 
 	@Nullable
-	public final CompoundNBT getMultiblockSaveData() {
+	public final CompoundTag getMultiblockSaveData() {
 		return this.cachedMultiblockData;
 	}
 
@@ -186,9 +186,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @param packetData An NBT compound tag into which you should write your custom description data.
 	 */
 	@Override
-	public void encodeDescriptionPacket(CompoundNBT packetData) {
+	public void encodeDescriptionPacket(CompoundTag packetData) {
 		if (this.isMultiblockSaveDelegate() && controller != null) {
-			CompoundNBT tag = new CompoundNBT();
+			CompoundTag tag = new CompoundTag();
 			controller.formatDescriptionPacket(tag);
 			packetData.put("multiblockData", tag);
 		}
@@ -201,9 +201,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
 	 * @param packetData The NBT data from the tile entity's description packet.
 	 */
 	@Override
-	public void decodeDescriptionPacket(CompoundNBT packetData) {
+	public void decodeDescriptionPacket(CompoundTag packetData) {
 		if (packetData.contains("multiblockData")) {
-			CompoundNBT tag = packetData.getCompound("multiblockData");
+			CompoundTag tag = packetData.getCompound("multiblockData");
 			if (controller != null) {
 				controller.decodeDescriptionPacket(tag);
 			} else {

@@ -8,11 +8,9 @@ package forestry.api.apiculture;
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -51,11 +49,11 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	/* CLIENT */
 
 	/**
-	 * Sync to client by using {@link #write(CompoundNBT)} in your {@link TileEntity#getUpdateTag()}
+	 * Sync to client by using {@link #write(net.minecraft.nbt.CompoundTag)} in your {@link net.minecraft.world.level.block.entity.BlockEntity#getUpdateTag()}
 	 */
 	void syncToClient();
 
-	void syncToClient(ServerPlayerEntity player);
+	void syncToClient(ServerPlayer player);
 
 	/**
 	 * Get the progress bar for breeding and production.
@@ -84,11 +82,11 @@ public interface IBeekeepingLogic extends INbtWritable, INbtReadable {
 	 */
 	List<BlockPos> getFlowerPositions();
 
-	default void readData(PacketBuffer data) throws IOException {
+	default void readData(FriendlyByteBuf data) throws IOException {
 
 	}
 
-	default void writeData(PacketBuffer data) {
+	default void writeData(FriendlyByteBuf data) {
 
 	}
 }

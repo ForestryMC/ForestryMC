@@ -18,35 +18,35 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
-import forestry.api.storage.IBackpackDefinition;
-import forestry.storage.ModuleBackpacks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-import net.minecraftforge.fml.network.IContainerFactory;
-
-import forestry.api.core.ForestryAPI;
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
 import forestry.api.modules.ForestryModule;
 import forestry.api.storage.EnumBackpackType;
+import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
+import forestry.storage.ModuleBackpacks;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -88,10 +88,6 @@ public class ModFeatureRegistry {
 		modules.computeIfAbsent(feature.getModuleId(), ModuleFeatures::new).register(feature);
 	}
 
-	public boolean isEnabled(IModFeature feature) {
-		return ForestryAPI.moduleManager.isModuleEnabled(modId, feature.getModuleId());
-	}
-
 	public void createObjects(BiPredicate<FeatureType, String> filter) {
 		for (FeatureType type : FeatureType.values()) {
 			modules.values().forEach(features -> {
@@ -105,16 +101,16 @@ public class ModFeatureRegistry {
 
 	public Collection<IModFeature> getFeatures(FeatureType type) {
 		return modules.values().stream()
-			.flatMap((module) -> module.getFeatures(type).stream())
-			.collect(Collectors.toSet());
+				.flatMap((module) -> module.getFeatures(type).stream())
+				.collect(Collectors.toSet());
 	}
 
 	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
 		return Stream.of(FeatureType.values())
-			.filter(filter)
-			.flatMap((type) -> modules.values().stream()
-				.flatMap((module) -> module.getFeatures(type).stream()))
-			.collect(Collectors.toSet());
+				.filter(filter)
+				.flatMap((type) -> modules.values().stream()
+						.flatMap((module) -> module.getFeatures(type).stream()))
+				.collect(Collectors.toSet());
 	}
 
 	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
@@ -124,9 +120,9 @@ public class ModFeatureRegistry {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void clientSetup() {
+	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		for (ModuleFeatures features : modules.values()) {
-			features.clientSetup();
+			features.clientSetupRenderers(event);
 		}
 	}
 
@@ -176,7 +172,7 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public FeatureItem<Item> naturalistBackpack(IBackpackDefinition definition, String rootUid, ItemGroup tab, String identifier) {
+		public FeatureItem<Item> naturalistBackpack(IBackpackDefinition definition, String rootUid, CreativeModeTab tab, String identifier) {
 			return item(() -> ModuleBackpacks.BACKPACK_INTERFACE.createNaturalistBackpack(definition, rootUid, tab), identifier);
 		}
 
@@ -222,27 +218,27 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public <T extends TileEntity> FeatureTileType<T> tile(Supplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
+		public <T extends BlockEntity> FeatureTileType<T> tile(BlockEntityType.BlockEntitySupplier<T> constructor, String identifier, Supplier<Collection<? extends Block>> validBlocks) {
 			return register(new FeatureTileType<>(moduleID, identifier, constructor, validBlocks));
 		}
 
 		@Override
-		public <C extends Container> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier) {
+		public <C extends AbstractContainerMenu> FeatureContainerType<C> container(IContainerFactory<C> factory, String identifier) {
 			return register(new FeatureContainerType<>(moduleID, identifier, factory));
 		}
 
 		@Override
-		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier) {
+		public <E extends Entity> FeatureEntityType<E> entity(EntityType.EntityFactory<E> factory, MobCategory classification, String identifier) {
 			return entity(factory, classification, identifier, (builder) -> builder);
 		}
 
 		@Override
-		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
+		public <E extends Entity> FeatureEntityType<E> entity(EntityType.EntityFactory<E> factory, MobCategory classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer) {
 			return entity(factory, classification, identifier, consumer, LivingEntity::createLivingAttributes);
 		}
 
 		@Override
-		public <E extends Entity> FeatureEntityType<E> entity(EntityType.IFactory<E> factory, EntityClassification classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeModifierMap.MutableAttribute> attributes) {
+		public <E extends Entity> FeatureEntityType<E> entity(EntityType.EntityFactory<E> factory, MobCategory classification, String identifier, UnaryOperator<EntityType.Builder<E>> consumer, Supplier<AttributeSupplier.Builder> attributes) {
 			return register(new FeatureEntityType<>(moduleID, identifier, consumer, factory, classification, attributes));
 		}
 
@@ -267,9 +263,6 @@ public class ModFeatureRegistry {
 		}
 
 		private void createObject(IModFeature feature) {
-			if (!feature.isEnabled()) {
-				return;
-			}
 			feature.create();
 		}
 
@@ -285,9 +278,9 @@ public class ModFeatureRegistry {
 		}
 
 		@OnlyIn(Dist.CLIENT)
-		public void clientSetup() {
+		public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 			for (IModFeature feature : featureByType.values()) {
-				feature.clientSetup();
+				feature.clientSetupRenderers(event);
 			}
 		}
 

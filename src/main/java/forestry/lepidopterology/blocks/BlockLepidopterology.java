@@ -10,17 +10,13 @@
  ******************************************************************************/
 package forestry.lepidopterology.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockBase;
 
 public class BlockLepidopterology extends BlockBase<BlockTypeLepidopterologyTesr> {
 	public BlockLepidopterology(BlockTypeLepidopterologyTesr type) {
-		super(type, Block.Properties.of(Material.WOOD)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(0));
+		super(type, Block.Properties.of(Material.WOOD));
 	}
 }

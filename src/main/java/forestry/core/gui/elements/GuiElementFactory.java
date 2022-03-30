@@ -3,18 +3,15 @@ package forestry.core.gui.elements;
 import javax.annotation.Nullable;
 import java.awt.Insets;
 import java.util.Map;
-import java.util.function.Predicate;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlyzerPlugin;
@@ -36,7 +33,7 @@ import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.mutation.IMutation;
 
-public class GuiElementFactory implements ISelectiveResourceReloadListener {
+public class GuiElementFactory implements ResourceManagerReloadListener {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/database_mutation_screen.png");
 
@@ -61,13 +58,13 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	}
 
 	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-		dominantStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
-		recessiveStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
-		guiStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
-		guiTitleStyle = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
-		databaseTitle = Style.EMPTY.withColor(Color.fromRgb(0xcfb53b)).setUnderlined(true);
-		binomial = Style.EMPTY.withColor(Color.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
+	public void onResourceManagerReload(ResourceManager resourceManager) {
+		dominantStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.dominant")));
+		recessiveStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
+		guiStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
+		guiTitleStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
+		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).setUnderlined(true);
+		binomial = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
 	public IGeneticAnalyzer createAnalyzer(Window window, int xPos, int yPos, boolean rightBoarder, IGeneticAnalyzerProvider provider) {
@@ -147,38 +144,20 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 	public GuiElement createToleranceInfo(IAlleleValue<EnumTolerance> toleranceAllele) {
 		Style textStyle = getStateStyle(toleranceAllele.isDominant());
 		EnumTolerance tolerance = toleranceAllele.getValue();
-		ITextComponent component = null;
+		Component component = null;
 
 		ContainerElement layout = horizontal(GuiElement.UNKNOWN_HEIGHT, 2);
 		switch (tolerance) {
-			case BOTH_1:
-			case BOTH_2:
-			case BOTH_3:
-			case BOTH_4:
-			case BOTH_5:
-				layout.add(createBothSymbol(0, -1));
-				break;
-			case DOWN_1:
-			case DOWN_2:
-			case DOWN_3:
-			case DOWN_4:
-			case DOWN_5:
-				layout.add(createDownSymbol(0, -1));
-				break;
-			case UP_1:
-			case UP_2:
-			case UP_3:
-			case UP_4:
-			case UP_5:
-				layout.add(createUpSymbol(0, -1));
-				break;
-			default:
+			case BOTH_1, BOTH_2, BOTH_3, BOTH_4, BOTH_5 -> layout.add(createBothSymbol(0, -1));
+			case DOWN_1, DOWN_2, DOWN_3, DOWN_4, DOWN_5 -> layout.add(createDownSymbol(0, -1));
+			case UP_1, UP_2, UP_3, UP_4, UP_5 -> layout.add(createUpSymbol(0, -1));
+			default -> {
 				layout.add(createNoneSymbol(0, -1));
-				component = new StringTextComponent("(0)");
-				break;
+				component = new TextComponent("(0)");
+			}
 		}
 		if (component == null) {
-			component = new StringTextComponent("(")
+			component = new TextComponent("(")
 					.append(toleranceAllele.getDisplayName())
 					.append(")");
 		}
@@ -250,26 +229,14 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		int line = 247;
 		int column = 100;
 		switch (EnumMutateChance.rateChance(chance)) {
-			case HIGHEST:
-				column = 100;
-				break;
-			case HIGHER:
-				column = 100 + 15;
-				break;
-			case HIGH:
-				column = 100 + 15 * 2;
-				break;
-			case NORMAL:
-				column = 100 + 15 * 3;
-				break;
-			case LOW:
-				column = 100 + 15 * 4;
-				break;
-			case LOWEST:
-				column = 100 + 15 * 5;
-				break;
-			default:
-				break;
+			case HIGHEST -> column = 100;
+			case HIGHER -> column = 100 + 15;
+			case HIGH -> column = 100 + 15 * 2;
+			case NORMAL -> column = 100 + 15 * 3;
+			case LOW -> column = 100 + 15 * 4;
+			case LOWEST -> column = 100 + 15 * 5;
+			default -> {
+			}
 		}
 
 		// Probability arrow
@@ -280,8 +247,8 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 			element.label("+")
 					.setStyle(GuiConstants.DEFAULT_STYLE)
 					.setAlign(Alignment.TOP_LEFT)
-				.setSize(10, 10)
-				.setLocation(x + 9, y + 1);
+					.setSize(10, 10)
+					.setLocation(x + 9, y + 1);
 		}
 	}
 
@@ -290,26 +257,14 @@ public class GuiElementFactory implements ISelectiveResourceReloadListener {
 		int line = 247;
 		int column = 190;
 		switch (EnumMutateChance.rateChance(chance)) {
-			case HIGHEST:
-				column = 190;
-				break;
-			case HIGHER:
-				column = 190 + 9;
-				break;
-			case HIGH:
-				column = 190 + 9 * 2;
-				break;
-			case NORMAL:
-				column = 190 + 9 * 3;
-				break;
-			case LOW:
-				column = 190 + 9 * 4;
-				break;
-			case LOWEST:
-				column = 190 + 9 * 5;
-				break;
-			default:
-				break;
+			case HIGHEST -> column = 190;
+			case HIGHER -> column = 190 + 9;
+			case HIGH -> column = 190 + 9 * 2;
+			case NORMAL -> column = 190 + 9 * 3;
+			case LOW -> column = 190 + 9 * 4;
+			case LOWEST -> column = 190 + 9 * 5;
+			default -> {
+			}
 		}
 
 		// Probability add

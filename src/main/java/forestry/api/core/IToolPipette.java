@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Taken from BuildCraft 5.0.x

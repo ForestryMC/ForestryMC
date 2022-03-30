@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.worktable.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -31,7 +31,7 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	private final TileWorktable tile;
 	private boolean hasRecipeConflict = false;
 
-	public GuiWorktable(ContainerWorktable container, PlayerInventory inv, ITextComponent title) {
+	public GuiWorktable(ContainerWorktable container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/worktable2.png", container, inv, title);
 		this.tile = container.getTile();
 
@@ -53,26 +53,25 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable> {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 
 		if (hasRecipeConflict != tile.hasRecipeConflict()) {
 			hasRecipeConflict = tile.hasRecipeConflict();
 			if (hasRecipeConflict) {
 				addButtons();
 			} else {
-				buttons.clear();
-				children.clear();
+				renderables.clear();
 			}
 		}
 	}
 
 	private void addButtons() {
-		addButton(new GuiBetterButton(leftPos + 76, topPos + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 76, topPos + 56, StandardButtonTextureSets.LEFT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(100, 0));
 			SoundUtil.playButtonClick();
 		}));
-		addButton(new GuiBetterButton(leftPos + 85, topPos + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
+		addRenderableWidget(new GuiBetterButton(leftPos + 85, topPos + 56, StandardButtonTextureSets.RIGHT_BUTTON_SMALL, b -> {
 			NetworkUtil.sendToServer(new PacketGuiSelectRequest(101, 0));
 			SoundUtil.playButtonClick();
 		}));

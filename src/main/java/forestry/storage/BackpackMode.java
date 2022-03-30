@@ -13,9 +13,9 @@ package forestry.storage;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum BackpackMode implements IStringSerializable {
+public enum BackpackMode implements StringRepresentable {
 	NEUTRAL(null),
 	LOCKED("for.storage.backpack.mode.locked"),
 	RECEIVE("for.storage.backpack.mode.receiving"),

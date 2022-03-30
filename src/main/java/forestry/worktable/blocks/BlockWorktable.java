@@ -10,19 +10,13 @@
  ******************************************************************************/
 package forestry.worktable.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
 
 import forestry.core.blocks.BlockBase;
 
 public class BlockWorktable extends BlockBase<BlockTypeWorktable> {
 	public BlockWorktable(BlockTypeWorktable worktable) {
-		super(worktable, Block.Properties
-				.of(Material.METAL)
-				.harvestLevel(0)
-				.harvestTool(ToolType.PICKAXE)
-		);
+		super(worktable, Block.Properties.of(Material.METAL));
 	}
 }

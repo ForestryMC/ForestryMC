@@ -10,15 +10,17 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import javax.annotation.Nullable;
+
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.saveddata.SavedData;
 
 import com.mojang.authlib.GameProfile;
 
@@ -40,7 +42,7 @@ import forestry.mail.features.MailItems;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.items.EnumStampDefinition;
 
-public class TradeStation extends WorldSavedData implements ITradeStation, IInventoryAdapter {
+public class TradeStation extends SavedData implements ITradeStation, IInventoryAdapter {
 	public static final String SAVE_NAME = "trade_po_";
 	public static final short SLOT_TRADEGOOD = 0;
 	public static final short SLOT_TRADEGOOD_COUNT = 1;
@@ -56,24 +58,36 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	public static final short SLOT_SEND_BUFFER_COUNT = 10;
 	public static final int SLOT_SIZE = SLOT_TRADEGOOD_COUNT + SLOT_EXCHANGE_COUNT + SLOT_LETTERS_COUNT + SLOT_STAMPS_COUNT + SLOT_RECEIVE_BUFFER_COUNT + SLOT_SEND_BUFFER_COUNT;
 
+	@Nullable
 	private GameProfile owner;
+
+	@Nullable
 	private IMailAddress address;
 	private boolean isVirtual = false;
 	private boolean isInvalid = false;
 	private final InventoryAdapter inventory = new InventoryTradeStation();
 
-	public TradeStation(GameProfile owner, IMailAddress address) {
-		super(SAVE_NAME + address);
+	public TradeStation(@Nullable GameProfile owner, IMailAddress address) {
 		if (address.getType() != EnumAddressee.TRADER) {
 			throw new IllegalArgumentException("TradeStation address must be a trader");
 		}
+
 		this.owner = owner;
 		this.address = address;
 	}
 
-	@SuppressWarnings("unused") // required for WorldSavedData
-	public TradeStation(String savename) {
-		super(savename);
+	public TradeStation(CompoundTag tag) {
+		if (tag.contains("owner")) {
+			owner = NbtUtils.readGameProfile(tag.getCompound("owner"));
+		}
+
+		if (tag.contains("address")) {
+			address = new MailAddress(tag.getCompound("address"));
+		}
+
+		this.isVirtual = tag.getBoolean("VRT");
+		this.isInvalid = tag.getBoolean("IVL");
+		inventory.read(tag);
 	}
 
 	@Override
@@ -83,30 +97,15 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 	// / SAVING & LOADING
 	@Override
-	public void load(CompoundNBT compoundNBT) {
-		if (compoundNBT.contains("owner")) {
-			owner = NBTUtil.readGameProfile(compoundNBT.getCompound("owner"));
-		}
-
-		if (compoundNBT.contains("address")) {
-			address = new MailAddress(compoundNBT.getCompound("address"));
-		}
-
-		this.isVirtual = compoundNBT.getBoolean("VRT");
-		this.isInvalid = compoundNBT.getBoolean("IVL");
-		inventory.read(compoundNBT);
-	}
-
-	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
+	public CompoundTag save(CompoundTag compoundNBT) {
 		if (owner != null) {
-			CompoundNBT nbt = new CompoundNBT();
-			NBTUtil.writeGameProfile(nbt, owner);
+			CompoundTag nbt = new CompoundTag();
+			NbtUtils.writeGameProfile(nbt, owner);
 			compoundNBT.put("owner", nbt);
 		}
 
 		if (address != null) {
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			address.write(nbt);
 			compoundNBT.put("address", nbt);
 		}
@@ -118,13 +117,13 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundTag write(CompoundTag nbt) {
 		return save(nbt);
 	}
 
 	@Override
-	public void read(CompoundNBT nbt) {
-		load(nbt);
+	public void read(CompoundTag nbt) {
+		// load(nbt);
 	}
 
 	/* INVALIDATING */
@@ -179,7 +178,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	/* ILETTERHANDLER */
 	//TODO this method is long. Shorten it.
 	@Override
-	public IPostalState handleLetter(ServerWorld world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
+	public IPostalState handleLetter(ServerLevel world, IMailAddress recipient, ItemStack letterstack, boolean doLodge) {
 
 		boolean sendOwnerNotice = doLodge && owner != null;
 
@@ -248,7 +247,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 		}
 
 		// Send the letter
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		mail.write(compoundNBT);
 
 		ItemStack mailstack = LetterProperties.createStampedLetterStack(mail);
@@ -278,7 +277,7 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 
 		// Send confirmation message to seller
 		if (sendOwnerNotice) {
-			compoundNBT = new CompoundNBT();
+			compoundNBT = new CompoundTag();
 
 			ILetter confirm = new Letter(this.address, new MailAddress(this.owner));
 
@@ -623,16 +622,16 @@ public class TradeStation extends WorldSavedData implements ITradeStation, IInve
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {
+	public void startOpen(Player player) {
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 	}
 
 	@Override

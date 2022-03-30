@@ -10,22 +10,22 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.render.ColourProperties;
 
-public abstract class GuiForestryTitled<C extends Container> extends GuiForestry<C> {
+public abstract class GuiForestryTitled<C extends AbstractContainerMenu> extends GuiForestry<C> {
 
-	protected GuiForestryTitled(String texture, C container, PlayerInventory inv, ITextComponent title) {
+	protected GuiForestryTitled(String texture, C container, Inventory inv, Component title) {
 		super(texture, container, inv, title);
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 
 		textLayout.line = 6;

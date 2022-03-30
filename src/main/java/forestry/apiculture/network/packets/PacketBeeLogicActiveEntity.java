@@ -12,8 +12,8 @@ package forestry.apiculture.network.packets;
 
 import java.io.IOException;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,10 +50,9 @@ public class PacketBeeLogicActiveEntity extends ForestryPacket implements IFores
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IBeeHousing) {
-				IBeeHousing beeHousing = (IBeeHousing) entity;
+			if (entity instanceof IBeeHousing beeHousing) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				if (beekeepingLogic instanceof BeekeepingLogic) {
 					beekeepingLogic.readData(data);

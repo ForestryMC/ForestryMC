@@ -19,18 +19,18 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -50,23 +50,23 @@ import genetics.api.GeneticsAPI;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
-public class TreeDecorator extends Feature<NoFeatureConfig> {
+public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 	private static final List<IAlleleTreeSpecies> SPECIES = new ArrayList<>();
 	private static final Map<ResourceLocation, Set<ITree>> biomeCache = new HashMap<>();
 
 	public TreeDecorator() {
-		super(NoFeatureConfig.CODEC);
+		super(NoneFeatureConfiguration.CODEC);
 	}
 
 	@Nullable
-	private static BlockPos getValidPos(ISeedReader world, int x, int z, ITree tree) {
+	private static BlockPos getValidPos(WorldGenLevel world, int x, int z, ITree tree) {
 		// get to the ground
-		final BlockPos topPos = world.getHeightmapPos(Heightmap.Type.MOTION_BLOCKING, new BlockPos(x, 0, z));
+		final BlockPos topPos = world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(x, 0, z));
 		if (topPos.getY() == 0) {
 			return null;
 		}
 
-		final BlockPos.Mutable pos = new BlockPos.Mutable(topPos.getX(), topPos.getY(), topPos.getZ());
+		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(topPos.getX(), topPos.getY(), topPos.getZ());
 
 		BlockState blockState = world.getBlockState(pos);
 		while (BlockUtil.canReplace(blockState, world, pos)) {
@@ -91,9 +91,8 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
 		}
 
 		for (IAllele allele : GeneticsAPI.apiInstance.getAlleleRegistry().getRegisteredAlleles(TreeChromosomes.SPECIES)) {
-			if (allele instanceof IAlleleTreeSpecies) {
-				IAlleleTreeSpecies alleleTreeSpecies = (IAlleleTreeSpecies) allele;
-				if (TreeConfig.getSpawnRarity(alleleTreeSpecies.getRegistryName()) > 0) {
+			if (allele instanceof IAlleleTreeSpecies alleleTreeSpecies) {
+				if (TreeConfig.getSpawnRarity() > 0) {
 					SPECIES.add(alleleTreeSpecies);
 				}
 			}
@@ -102,7 +101,7 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
 		return SPECIES;
 	}
 
-	private static void generateBiomeCache(ISeedReader world, Random rand) {
+	private static void generateBiomeCache(WorldGenLevel world, Random rand) {
 		for (IAlleleTreeSpecies species : getSpecies()) {
 			IAllele[] template = TreeManager.treeRoot.getTemplate(species.getRegistryName().toString());
 			IGenome genome = TreeManager.treeRoot.templateAsIndividual(template).getGenome();
@@ -110,8 +109,8 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
 			ResourceLocation treeUID = genome.getPrimary().getRegistryName();
 			IGrowthProvider growthProvider = species.getGrowthProvider();
 			for (Biome biome : ForgeRegistries.BIOMES) {
-				Set<ITree> trees = biomeCache.computeIfAbsent(WorldGenRegistries.BIOME.getKey(biome), k -> new HashSet<>());
-				if (growthProvider.isBiomeValid(tree, biome) && TreeConfig.isValidBiome(treeUID, biome)) {
+				Set<ITree> trees = biomeCache.computeIfAbsent(BuiltinRegistries.BIOME.getKey(biome), k -> new HashSet<>());
+				if (growthProvider.isBiomeValid(tree, biome)) {
 					trees.add(tree);
 				}
 			}
@@ -119,39 +118,40 @@ public class TreeDecorator extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean place(ISeedReader seedReader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		float globalRarity = TreeConfig.getSpawnRarity(null);
-		if (globalRarity <= 0.0F || !TreeConfig.isValidDimension(null, seedReader.getLevel().dimension())) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		WorldGenLevel level = context.level();
+		Random rand = context.random();
+		BlockPos pos = context.origin();
+
+		float globalRarity = TreeConfig.getSpawnRarity();
+		if (globalRarity <= 0.0F) {
 			return false;
 		}
 
 		if (biomeCache.isEmpty()) {
-			generateBiomeCache(seedReader, rand);
+			generateBiomeCache(level, rand);
 		}
 
 		for (int tries = 0; tries < 4 + rand.nextInt(2); tries++) {
 			int x = pos.getX() + rand.nextInt(16);
 			int z = pos.getZ() + rand.nextInt(16);
 
-			Biome biome = seedReader.getBiome(pos);
-			ResourceLocation biomeName = seedReader.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
+			Biome biome = level.getBiome(pos).value();
+			ResourceLocation biomeName = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
 			Set<ITree> trees = biomeCache.computeIfAbsent(biomeName, k -> new HashSet<>());
 
 			for (ITree tree : trees) {
 				ResourceLocation treeUID = tree.getGenome().getPrimary().getRegistryName();
-				if (!TreeConfig.isValidDimension(treeUID, seedReader.getLevel().dimension())) {
-					continue;
-				}
 
 				IAlleleTreeSpecies species = tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES);
-				if (TreeConfig.getSpawnRarity(species.getRegistryName()) * globalRarity >= rand.nextFloat()) {
-					BlockPos validPos = getValidPos(seedReader, x, z, tree);
+				if (TreeConfig.getSpawnRarity() * globalRarity >= rand.nextFloat()) {
+					BlockPos validPos = getValidPos(level, x, z, tree);
 					if (validPos == null) {
 						continue;
 					}
 
-					if (species.getGrowthProvider().canSpawn(tree, seedReader.getLevel(), validPos)) {
-						if (TreeGenHelper.generateTree(tree, seedReader, validPos)) {
+					if (species.getGrowthProvider().canSpawn(tree, level.getLevel(), validPos)) {
+						if (TreeGenHelper.generateTree(tree, level, validPos)) {
 							if (Config.logTreePlacement) {
 								Log.info("Placed {} at {}", treeUID.toString(), pos.toString());
 							}

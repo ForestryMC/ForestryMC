@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemStackWidget extends ItemStackWidgetBase {
 	private final ItemStack itemStack;

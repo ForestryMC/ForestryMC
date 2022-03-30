@@ -9,10 +9,10 @@ import com.google.common.base.MoreObjects;
 
 import javax.annotation.concurrent.Immutable;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.core.Vec3i;
 
 import forestry.api.core.INbtWritable;
 
@@ -28,7 +28,7 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	 */
 	private final int z;
 
-	public Position2D(Vector3i pos) {
+	public Position2D(Vec3i pos) {
 		this(pos.getX(), pos.getZ());
 	}
 
@@ -41,7 +41,7 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 		this.z = zIn;
 	}
 
-	public Position2D(CompoundNBT CompoundNBT) {
+	public Position2D(CompoundTag CompoundNBT) {
 		this.x = CompoundNBT.getInt("xPosition");
 		this.z = CompoundNBT.getInt("zPosition");
 	}
@@ -49,20 +49,18 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
-		} else if (o instanceof Vector3i) {
-			Vector3i position = (Vector3i) o;
+		} else if (o instanceof Vec3i position) {
 			return this.getX() == position.getX() && this.getZ() == position.getZ();
-		} else if (!(o instanceof Position2D)) {
+		} else if (!(o instanceof Position2D position)) {
 			return false;
 		} else {
-			Position2D position = (Position2D) o;
 			return this.getX() == position.getX() && this.getZ() == position.getZ();
 		}
 	}
 
 	public Position2D clamp(Position2D min, Position2D max) {
-		int x = MathHelper.clamp(this.x, min.getX(), max.getX());
-		int z = MathHelper.clamp(this.z, min.getZ(), max.getZ());
+		int x = Mth.clamp(this.x, min.getX(), max.getX());
+		int z = Mth.clamp(this.z, min.getZ(), max.getZ());
 		return new Position2D(x, z);
 	}
 
@@ -79,7 +77,7 @@ public class Position2D implements Comparable<Position2D>, INbtWritable {
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT nbt) {
+	public CompoundTag write(CompoundTag nbt) {
 		nbt.putInt("xPosition", x);
 		nbt.putInt("zPosition", z);
 		return nbt;

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 import forestry.api.climate.IClimateListener;
 import forestry.api.multiblock.IMultiblockLogicAlveary;
@@ -31,7 +31,7 @@ public class MultiblockLogicAlveary extends MultiblockLogic<IAlvearyControllerIn
 	}
 
 	@Override
-	public IAlvearyControllerInternal createNewController(World world) {
+	public IAlvearyControllerInternal createNewController(Level world) {
 		return new AlvearyController(world);
 	}
 

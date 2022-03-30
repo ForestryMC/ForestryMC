@@ -5,10 +5,6 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import java.util.Set;
-
-import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -63,13 +59,6 @@ public class ForestryAPI {
 	 * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
 	 */
 	public static IForestryConstants forestryConstants;
-
-	/**
-	 * The currently enabled Forestry modules.
-	 * Can be used to check if certain features are available, for example:
-	 * ForestryAPI.enabledModules.contains(new ResourceLocation("forestry", "apiculture"))
-	 */
-	public static Set<ResourceLocation> enabledModules;
 
 	/**
 	 * Instance of the errorStateRegistry for registering errors.

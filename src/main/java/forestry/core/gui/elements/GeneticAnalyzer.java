@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -187,13 +187,13 @@ public class GeneticAnalyzer extends ContainerElement implements IGeneticAnalyze
 		}
 		//Clean the element area
 		scrollableContent.clear();
-		FontRenderer fontRenderer = Minecraft.getInstance().font;
+		Font fontRenderer = Minecraft.getInstance().font;
 		String key = "for.gui.portablealyzer.help";
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
 		//}
-		List<IReorderingProcessor> lines = fontRenderer.split(new TranslationTextComponent(key), scrollable.getPreferredSize().width);
-		for (IReorderingProcessor text : lines) {
+		List<FormattedCharSequence> lines = fontRenderer.split(new TranslatableComponent(key), scrollable.getPreferredSize().width);
+		for (FormattedCharSequence text : lines) {
 			scrollableContent.label(text);
 		}
 		//Disable the scrollbar

@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -58,7 +58,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	private static final Random rand = new Random();
 
 	/* CONSTRUCTOR */
-	public Butterfly(CompoundNBT nbt) {
+	public Butterfly(CompoundTag nbt) {
 		super(nbt);
 	}
 
@@ -76,7 +76,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public void addTooltip(List<ITextComponent> list) {
+	public void addTooltip(List<Component> list) {
 		/*IAlleleButterflySpecies primary = genome.getActiveAllele(ButterflyChromosomes.SPECIES);
 		IAlleleButterflySpecies secondary = genome.getInactiveAllele(ButterflyChromosomes.SPECIES);
 		if (!isPureBred(ButterflyChromosomes.SPECIES)) {
@@ -105,19 +105,19 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	public IButterfly copy() {
-		CompoundNBT compoundNBT = new CompoundNBT();
+		CompoundTag compoundNBT = new CompoundTag();
 		this.write(compoundNBT);
 		return new Butterfly(compoundNBT);
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return genome.getPrimary().getDisplayName();
 	}
 
 	@Override
 	public Set<IErrorState> getCanSpawn(IButterflyNursery nursery, @Nullable IButterflyCocoon cocoon) {
-		World world = nursery.getWorldObj();
+		Level world = nursery.getWorldObj();
 
 		Set<IErrorState> errorStates = new HashSet<>();
 		// / Night or darkness requires nocturnal species
@@ -161,23 +161,23 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public boolean canSpawn(World world, double x, double y, double z) {
+	public boolean canSpawn(Level world, double x, double y, double z) {
 		if (!canFly(world)) {
 			return false;
 		}
 
-		Biome biome = world.getBiome(new BlockPos(x, 0, z));
+		Biome biome = world.getBiome(new BlockPos(x, 0, z)).value();
 		IAlleleButterflySpecies species = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES);
 		if (!species.getSpawnBiomes().isEmpty()) {
 			boolean noneMatched = true;
 
 			if (species.strictSpawnMatch()) {
-				Biome.Category category = biome.getBiomeCategory();
+				Biome.BiomeCategory category = biome.getBiomeCategory();
 				if (species.getSpawnBiomes().contains(category)) {
 					noneMatched = false;
 				}
 			} else {
-				for (Biome.Category type : species.getSpawnBiomes()) {
+				for (Biome.BiomeCategory type : species.getSpawnBiomes()) {
 					if (type == biome.getBiomeCategory()) {
 						noneMatched = false;
 						break;
@@ -194,24 +194,24 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Override
-	public boolean canTakeFlight(World world, double x, double y, double z) {
+	public boolean canTakeFlight(Level world, double x, double y, double z) {
 		return canFly(world) &&
 			isAcceptedEnvironment(world, x, y, z);
 	}
 
-	private boolean canFly(World world) {
+	private boolean canFly(Level world) {
 		return (!world.isRaining() || getGenome().getActiveValue(ButterflyChromosomes.TOLERANT_FLYER)) &&
 				isActiveThisTime(world.isDay());
 	}
 
 	@Override
-	public boolean isAcceptedEnvironment(World world, double x, double y, double z) {
+	public boolean isAcceptedEnvironment(Level world, double x, double y, double z) {
 		return isAcceptedEnvironment(world, (int) x, (int) y, (int) z);
 	}
 
-	private boolean isAcceptedEnvironment(World world, int x, int y, int z) {
+	private boolean isAcceptedEnvironment(Level world, int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
-		Biome biome = world.getBiome(pos);
+		Biome biome = world.getBiome(pos).value();
 		EnumTemperature biomeTemperature = EnumTemperature.getFromBiome(biome, pos);
 		EnumHumidity biomeHumidity = EnumHumidity.getFromValue(biome.getDownfall());
 		return AlleleManager.climateHelper.isWithinLimits(biomeTemperature, biomeHumidity,
@@ -221,7 +221,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 
 	@Override
 	@Nullable
-	public IButterfly spawnCaterpillar(World world, IButterflyNursery nursery) {
+	public IButterfly spawnCaterpillar(Level world, IButterflyNursery nursery) {
 		// We need a mated queen to produce offspring.
 		if (mate == null) {
 			return null;
@@ -252,7 +252,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	}
 
 	@Nullable
-	private static IChromosome[] mutateSpecies(World world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
+	private static IChromosome[] mutateSpecies(Level world, IButterflyNursery nursery, IGenome genomeOne, IGenome genomeTwo) {
 
 		IChromosome[] parent1 = genomeOne.getChromosomes();
 		IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -304,7 +304,7 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 	public NonNullList<ItemStack> getLootDrop(IEntityButterfly entity, boolean playerKill, int lootLevel) {
 		NonNullList<ItemStack> drop = NonNullList.create();
 
-		CreatureEntity creature = entity.getEntity();
+		PathfinderMob creature = entity.getEntity();
 		float metabolism = (float) getGenome().getActiveValue(ButterflyChromosomes.METABOLISM) / 10;
 		IProductList products = getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getButterflyLoot();
 

@@ -7,21 +7,15 @@ package forestry.api.fuels;
 
 import com.google.common.base.Preconditions;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
 
 public class MoistenerFuel {
-	private final Ingredient resource;
+	private final ItemStack resource;
 	private final ItemStack product;
 	private final int moistenerValue;
 	private final int stage;
 
-
 	public MoistenerFuel(ItemStack resource, ItemStack product, int stage, int moistenerValue) {
-		this(Ingredient.of(resource), product, stage, moistenerValue);
-	}
-
-	public MoistenerFuel(Ingredient resource, ItemStack product, int stage, int moistenerValue) {
 		Preconditions.checkNotNull(resource);
 		Preconditions.checkNotNull(product);
 		Preconditions.checkArgument(!resource.isEmpty());
@@ -35,7 +29,7 @@ public class MoistenerFuel {
 	/**
 	 * The item to use
 	 */
-	public Ingredient getResource() {
+	public ItemStack getResource() {
 		return resource;
 	}
 

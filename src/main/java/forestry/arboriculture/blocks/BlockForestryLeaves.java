@@ -14,24 +14,25 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import com.mojang.authlib.GameProfile;
 
@@ -53,7 +54,7 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.NetworkUtil;
 
-public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowable {
+public class BlockForestryLeaves extends BlockAbstractLeaves implements BonemealableBlock, EntityBlock {
 
 	public BlockForestryLeaves() {
 		super(Block.Properties.of(Material.LEAVES)
@@ -64,7 +65,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	protected ITree getTree(IBlockReader world, BlockPos pos) {
+	protected ITree getTree(BlockGetter world, BlockPos pos) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			ITree tree = leaves.getTree();
@@ -75,7 +76,7 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
 		super.tick(state, world, pos, rand);
 
 		TileLeaves tileLeaves = TileUtil.getTile(world, pos, TileLeaves.class);
@@ -88,17 +89,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 
 	/* TILE ENTITY */
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileLeaves(pos, state);
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileLeaves();
-	}
-
-	@Override
-	protected void getLeafDrop(NonNullList<ItemStack> drops, World world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune, LootContext.Builder builder) {
+	protected void getLeafDrop(NonNullList<ItemStack> drops, Level world, @Nullable GameProfile playerProfile, BlockPos pos, float saplingModifier, int fortune, LootContext.Builder builder) {
 		TileLeaves tile = TileUtil.getTile(builder, TileLeaves.class);
 		if (tile == null) {
 			return;
@@ -125,12 +121,12 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		TileLeaves leaves = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leaves != null) {
 			IButterfly caterpillar = leaves.getCaterpillar();
 			ItemStack heldItem = player.getItemInHand(hand);
-			ItemStack otherHand = player.getItemInHand(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
+			ItemStack otherHand = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
 			if (heldItem.isEmpty() && otherHand.isEmpty()) {
 				if (leaves.hasFruit() && leaves.getRipeness() >= 0.9F) {
 					PacketFXSignal packet = new PacketFXSignal(PacketFXSignal.VisualFXType.BLOCK_BREAK, PacketFXSignal.SoundFXType.BLOCK_BREAK, pos, state);
@@ -138,34 +134,34 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 					for (ItemStack fruit : leaves.pickFruit(ItemStack.EMPTY)) {
 						ItemHandlerHelper.giveItemToPlayer(player, fruit);
 					}
-					return ActionResultType.SUCCESS;
+					return InteractionResult.SUCCESS;
 				}
 			} else if (heldItem.getItem() instanceof IToolScoop && caterpillar != null) {
 				ItemStack butterfly = ButterflyManager.butterflyRoot.getTypes().createStack(caterpillar, EnumFlutterType.CATERPILLAR);
 				ItemStackUtil.dropItemStackAsEntity(butterfly, world, pos);
 				leaves.setCaterpillar(null);
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 
 	/* IGrowable */
 
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		return leafTile != null && leafTile.hasFruit() && leafTile.getRipeness() < 1.0f;
 	}
 
 	@Override
-	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
 		return true;
 	}
 
 	@Override
-	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState state) {
 		TileLeaves leafTile = TileUtil.getTile(world, pos, TileLeaves.class);
 		if (leafTile != null) {
 			leafTile.addRipeness(0.5f);
@@ -174,14 +170,14 @@ public class BlockForestryLeaves extends BlockAbstractLeaves implements IGrowabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+	public int colorMultiplier(BlockState state, @Nullable BlockGetter worldIn, @Nullable BlockPos pos, int tintIndex) {
 		if (worldIn != null && pos != null) {
 			TileLeaves leaves = TileUtil.getTile(worldIn, pos, TileLeaves.class);
 			if (leaves != null) {
 				if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {
 					return leaves.getFruitColour();
 				} else {
-					PlayerEntity thePlayer = Minecraft.getInstance().player;
+					Player thePlayer = Minecraft.getInstance().player;
 					return leaves.getFoliageColour(thePlayer);
 				}
 			}

@@ -13,15 +13,13 @@ package forestry.mail.gui;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-
-import com.mojang.authlib.GameProfile;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,15 +47,15 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	@Nullable
 	private ITradeStationInfo tradeInfo = null;
 
-	public static ContainerLetter fromNetwork(int windowId, PlayerInventory playerInv, PacketBuffer extraData) {
-		Hand hand = extraData.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
-		PlayerEntity player = playerInv.player;
+	public static ContainerLetter fromNetwork(int windowId, Inventory playerInv, FriendlyByteBuf extraData) {
+		InteractionHand hand = extraData.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+		Player player = playerInv.player;
 		ItemInventoryLetter inv = new ItemInventoryLetter(player, player.getItemInHand(hand));
 		return new ContainerLetter(windowId, player, inv);
 	}
 
-	public ContainerLetter(int windowId, PlayerEntity player, ItemInventoryLetter inventory) {
-		super(windowId, inventory, player.inventory, 17, 145, MailContainers.LETTER.containerType());
+	public ContainerLetter(int windowId, Player player, ItemInventoryLetter inventory) {
+		super(windowId, inventory, player.getInventory(), 17, 145, MailContainers.LETTER.containerType());
 
 		// Init slots
 
@@ -89,7 +87,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	@Override
-	public void removed(PlayerEntity PlayerEntity) {
+	public void removed(Player PlayerEntity) {
 
 		if (!PlayerEntity.level.isClientSide) {
 			ILetter letter = inventory.getLetter();
@@ -134,7 +132,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 		setCarrierType(postal.getType());
 	}
 
-	public void handleRequestLetterInfo(PlayerEntity player, String recipientName, EnumAddressee type) {
+	public void handleRequestLetterInfo(Player player, String recipientName, EnumAddressee type) {
 		MinecraftServer server = player.getServer();
 		if (server == null) {
 			Log.error("Could not get server");
@@ -155,20 +153,10 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 
 	@Nullable
 	private static IMailAddress getRecipient(MinecraftServer minecraftServer, String recipientName, EnumAddressee type) {
-		switch (type) {
-			case PLAYER: {
-				GameProfile gameProfile = minecraftServer.getProfileCache().get(recipientName);
-				if (gameProfile == null) {
-					return null;
-				}
-				return PostManager.postRegistry.getMailAddress(gameProfile);
-			}
-			case TRADER: {
-				return PostManager.postRegistry.getMailAddress(recipientName);
-			}
-			default:
-				return null;
-		}
+		return switch (type) {
+			case PLAYER -> minecraftServer.getProfileCache().get(recipientName).map(PostManager.postRegistry::getMailAddress).orElse(null);
+			case TRADER -> PostManager.postRegistry.getMailAddress(recipientName);
+		};
 	}
 
 	@Nullable
@@ -192,7 +180,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 	}
 
 	/* Managing Trade info */
-	private void updateTradeInfo(World world, @Nullable IMailAddress address) {
+	private void updateTradeInfo(Level world, @Nullable IMailAddress address) {
 		// Updating is done by the server.
 		if (world.isClientSide) {
 			return;
@@ -203,7 +191,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
 			return;
 		}
 
-		ITradeStation station = PostManager.postRegistry.getTradeStation((ServerWorld) world, address);
+		ITradeStation station = PostManager.postRegistry.getTradeStation((ServerLevel) world, address);
 		if (station == null) {
 			setTradeInfo(null);
 			return;

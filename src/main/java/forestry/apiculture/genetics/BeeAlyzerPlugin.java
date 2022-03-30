@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -58,9 +58,8 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage1(MatrixStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage1(PoseStack transform, Screen gui, ItemStack itemStack) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -74,7 +73,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -107,15 +106,14 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			guiAlyzer.drawChromosomeRow(transform, Translator.translateToLocal("for.gui.effect"), bee, BeeChromosomes.EFFECT);
 			textLayout.newLine();
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage2(MatrixStack transform, Screen gui, ItemStack itemStack) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage2(PoseStack transform, Screen gui, ItemStack itemStack) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -134,7 +132,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.active"), GuiAlyzer.COLUMN_1);
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.inactive"), GuiAlyzer.COLUMN_2);
@@ -226,15 +224,14 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 				textLayout.drawCenteredLine(transform, displayText, 8, 208, guiAlyzer.getFontColor().get("gui.beealyzer.binomial"));
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawAnalyticsPage3(MatrixStack transform, ItemStack itemStack, Screen gui) {
-		if (gui instanceof GuiAlyzer) {
-			GuiAlyzer guiAlyzer = (GuiAlyzer) gui;
+	public void drawAnalyticsPage3(PoseStack transform, ItemStack itemStack, Screen gui) {
+		if (gui instanceof GuiAlyzer guiAlyzer) {
 			Optional<IBee> optional = BeeManager.beeRoot.create(itemStack);
 			if (!optional.isPresent()) {
 				return;
@@ -244,7 +241,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 			TextLayoutHelper textLayout = guiAlyzer.getTextLayout();
 			WidgetManager widgetManager = guiAlyzer.getWidgetManager();
 
-			textLayout.startPage(GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
+			textLayout.startPage(transform, GuiAlyzer.COLUMN_0, GuiAlyzer.COLUMN_1, GuiAlyzer.COLUMN_2);
 
 			textLayout.drawLine(transform, Translator.translateToLocal("for.gui.beealyzer.produce") + ":", GuiAlyzer.COLUMN_0);
 
@@ -280,7 +277,7 @@ public class BeeAlyzerPlugin implements IAlyzerPlugin {
 				}
 			}
 
-			textLayout.endPage();
+			textLayout.endPage(transform);
 		}
 	}
 

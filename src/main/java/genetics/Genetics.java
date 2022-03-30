@@ -1,20 +1,18 @@
 package genetics;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.command.CommandSource;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,10 +21,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import genetics.api.GeneticHelper;
 import genetics.api.GeneticsAPI;
 import genetics.api.IGeneTemplate;
 import genetics.api.organism.IOrganism;
@@ -35,7 +31,6 @@ import genetics.api.root.components.DefaultStage;
 import genetics.commands.CommandListAlleles;
 import genetics.individual.GeneticSaveHandler;
 import genetics.individual.SaveFormat;
-import genetics.items.GeneTemplate;
 import genetics.plugins.PluginManager;
 
 @Mod(Genetics.MOD_ID)
@@ -45,10 +40,8 @@ public class Genetics {
 	/**
 	 * Capability for {@link IOrganism}.
 	 */
-	@CapabilityInject(IOrganism.class)
-	public static Capability<IOrganism> ORGANISM;
-	@CapabilityInject(IGeneTemplate.class)
-	public static Capability<IGeneTemplate> GENE_TEMPLATE;
+	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {});
+	public static Capability<IGeneTemplate> GENE_TEMPLATE = CapabilityManager.get(new CapabilityToken<>() {});
 
 	public Genetics() {
 		GeneticsAPI.apiInstance = ApiInstance.INSTANCE;
@@ -56,22 +49,22 @@ public class Genetics {
 		modBus.addListener(this::setupCommon);
 		modBus.addListener(this::loadComplete);
 		modBus.register(this);
-		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
+		MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
+	}
+
+	@SubscribeEvent
+	public void registerCapabilities(RegisterCapabilitiesEvent event) {
+		event.register(IOrganism.class);
+		event.register(IGeneTemplate.class);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	@SuppressWarnings("unused")
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		CapabilityManager.INSTANCE.register(IOrganism.class, new NullStorage<>(), () -> GeneticHelper.EMPTY);
-		CapabilityManager.INSTANCE.register(IGeneTemplate.class, new NullStorage<>(), () -> GeneTemplate.EMPTY);
-
 		PluginManager.create();
-
 		PluginManager.initPlugins();
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	@SuppressWarnings("unused")
 	public void registerFinished(RegistryEvent.Register<Item> event) {
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
@@ -81,7 +74,6 @@ public class Genetics {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void setupCommon(FMLCommonSetupEvent event) {
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
@@ -91,7 +83,6 @@ public class Genetics {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void loadComplete(FMLLoadCompleteEvent event) {
 		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
@@ -102,23 +93,10 @@ public class Genetics {
 		GeneticSaveHandler.setWriteFormat(SaveFormat.BINARY);
 	}
 
-	public void serverStarting(FMLServerStartingEvent event) {
-		CommandDispatcher<CommandSource> dispatcher = event.getServer().getCommands().getDispatcher();
-		LiteralArgumentBuilder<CommandSource> rootCommand = LiteralArgumentBuilder.literal("genetics");
+	public void registerCommands(RegisterCommandsEvent event) {
+		CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+		LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("genetics");
 		rootCommand.then(CommandListAlleles.register());
 		dispatcher.register(rootCommand);
-	}
-
-	private static class NullStorage<T> implements Capability.IStorage<T> {
-		@Nullable
-		public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
-			/* compiled code */
-			return null;
-		}
-
-		@Override
-		public void readNBT(Capability<T> capability, T instance, Direction side, INBT nbt) {
-			/* compiled code */
-		}
 	}
 }

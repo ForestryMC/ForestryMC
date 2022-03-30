@@ -10,24 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 
-	public static boolean isTreeBlock(BlockState blockState, ISeedReader world, BlockPos pos) {
-		Block block = blockState.getBlock();
-		return block.is(BlockTags.LEAVES) || block.is(BlockTags.LOGS);
+	public static boolean isTreeBlock(BlockState blockState, WorldGenLevel world, BlockPos pos) {
+		return blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.LOGS);
 	}
 
 	@Override
-	public boolean canReplace(BlockState blockState, ISeedReader world, BlockPos pos) {
+	public boolean canReplace(BlockState blockState, WorldGenLevel world, BlockPos pos) {
 		return BlockUtil.canReplace(blockState, world, pos);
 	}
 }

@@ -10,26 +10,27 @@
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CocoaBlock;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.HitResult;
 
 import forestry.api.arboriculture.genetics.IAlleleFruit;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
@@ -39,7 +40,7 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.utils.ItemStackUtil;
 
 //eg    public static final Block COCOA = register("cocoa", new CocoaBlock(Block.Properties.create(Material.PLANTS).tickRandomly().hardnessAndResistance(0.2F, 3.0F).sound(SoundType.WOOD)));
-public class BlockFruitPod extends CocoaBlock {
+public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 
 	public static List<BlockFruitPod> create() {
 		List<BlockFruitPod> blocks = new ArrayList<>();
@@ -65,7 +66,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (tile == null) {
 			return ItemStack.EMPTY;
@@ -74,7 +75,7 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
 		if (!canSurvive(state, world, pos)) {
 			dropResources(state, world, pos);
 			world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -90,21 +91,18 @@ public class BlockFruitPod extends CocoaBlock {
 	}
 
 	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isClientSide) {
-			TileFruitPod tile = TileUtil.getTile(world, pos, TileFruitPod.class);
-			if (tile != null) {
-				for (ItemStack drop : tile.getDrops()) {
-					ItemStackUtil.dropItemStackAsEntity(drop, world, pos);
-				}
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+		if (!level.isClientSide && blockEntity instanceof TileFruitPod tile) {
+			for (ItemStack drop : tile.getDrops()) {
+				ItemStackUtil.dropItemStackAsEntity(drop, level, pos);
 			}
 		}
 
-		return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
+		super.playerDestroy(level, player, pos, state, blockEntity, itemStack);
 	}
 
 	@Override
-	public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos) {
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
 		Direction facing = state.getValue(FACING);
 		return BlockUtil.isValidPodLocation(world, pos, facing, fruit.getProvider().getLogTag());
 	}
@@ -117,24 +115,19 @@ public class BlockFruitPod extends CocoaBlock {
 	//	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
-	}
-
-	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileFruitPod();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileFruitPod(pos, state);
 	}
 
 	/* IGrowable */
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		return podTile != null && podTile.canMature();
 	}
 
 	@Override
-	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState state) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (podTile != null) {
 			podTile.addRipeness(0.5f);

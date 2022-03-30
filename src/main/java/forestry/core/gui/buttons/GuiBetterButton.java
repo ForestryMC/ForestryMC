@@ -13,12 +13,12 @@ package forestry.core.gui.buttons;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,8 +42,8 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 		});
 	}
 
-	public GuiBetterButton(int x, int y, IButtonTextureSet texture, IPressable handler) {
-		super(x, y, texture.getWidth(), texture.getHeight(), StringTextComponent.EMPTY, handler);
+	public GuiBetterButton(int x, int y, IButtonTextureSet texture, OnPress handler) {
+		super(x, y, texture.getWidth(), texture.getHeight(), TextComponent.EMPTY, handler);
 		this.texture = texture;
 		useTexWidth = true;
 	}
@@ -68,7 +68,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	public GuiBetterButton setLabel(String label) {
-		this.setMessage(new StringTextComponent(label));
+		this.setMessage(new TextComponent(label));
 		return this;
 	}
 
@@ -97,18 +97,18 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 	}
 
 	@Override
-	public void render(MatrixStack transform, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack transform, int mouseX, int mouseY, float partialTicks) {
 		if (!visible) {
 			return;
 		}
-		Minecraft.getInstance().getTextureManager().bind(TEXTURE);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		int xOffset = texture.getX();
 		int yOffset = texture.getY();
 		int h = texture.getHeight();
 		int w = texture.getWidth();
 		isHovered = isMouseOverButton(mouseX, mouseY);
-		int hoverState = getYImage(isHovered());
+		int hoverState = getYImage(isHovered);
 		if (useTexWidth) {
 			blit(transform, x, y, xOffset, yOffset + hoverState * h, w, h);
 		} else {
@@ -116,7 +116,7 @@ public class GuiBetterButton extends Button implements IToolTipProvider {
 			blit(transform, x + width / 2, y, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
 		}
 
-		if (getMessage() != StringTextComponent.EMPTY) {
+		if (getMessage() != TextComponent.EMPTY) {
 			renderButton(transform, mouseX, mouseY, partialTicks);
 			drawCenteredString(transform, Minecraft.getInstance().font, getMessage(), x + getWidth() / 2, y + (h - 8) / 2, getTextColor(isHovered));
 		}

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.api.apiculture.IJubilanceFactory;
 import forestry.api.apiculture.IJubilanceProvider;

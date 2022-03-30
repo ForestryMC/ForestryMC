@@ -12,36 +12,39 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import com.mojang.authlib.GameProfile;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fluids.FluidUtil;
 
 import forestry.api.core.ISpriteRegister;
@@ -49,23 +52,19 @@ import forestry.api.core.ISpriteRegistry;
 import forestry.core.circuits.ISocketable;
 import forestry.core.owner.IOwnedTile;
 import forestry.core.owner.IOwnerHandler;
-import forestry.core.render.MachineParticleCallback;
-import forestry.core.render.ParticleHelper;
 import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileForestry;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.InventoryUtil;
 
-public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister {
+public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry implements ISpriteRegister, EntityBlock {
 	/**
-	 * use this instead of {@link HorizontalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
+	 * use this instead of {@link net.minecraft.world.level.block.HorizontalDirectionalBlock#FACING} so the blocks rotate in a circle instead of NSWE order.
 	 */
 	public static final EnumProperty<Direction> FACING = EnumProperty.create("facing", Direction.class, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.DOWN, Direction.UP);
 
 	private final boolean hasTESR;
 	public final P blockType;
-
-	private final ParticleHelper.Callback particleCallback;
 
 	private static Block.Properties createProperties(IBlockType type, Block.Properties properties) {
 		if (type instanceof IBlockTypeTesr || type instanceof IBlockTypeCustom) {
@@ -82,8 +81,6 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		blockType.getMachineProperties().setBlock(this);
 
 		this.hasTESR = blockType instanceof IBlockTypeTesr;
-
-		particleCallback = new MachineParticleCallback<>(this, blockType);
 	}
 
 	public BlockBase(P blockType, Material material) {
@@ -95,87 +92,90 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public float getShadeBrightness(BlockState p_220080_1_, IBlockReader p_220080_2_, BlockPos p_220080_3_) {
+	public float getShadeBrightness(BlockState p_220080_1_, BlockGetter p_220080_2_, BlockPos p_220080_3_) {
 		return 0.2F;
 	}
 
 	@Override
-	public BlockRenderType getRenderShape(BlockState state) {
+	public RenderShape getRenderShape(BlockState state) {
 		if (hasTESR) {
-			return BlockRenderType.ENTITYBLOCK_ANIMATED;
+			return RenderShape.ENTITYBLOCK_ANIMATED;
 		} else {
-			return BlockRenderType.MODEL;
+			return RenderShape.MODEL;
 		}
 	}
 
 	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return getDefinition().createTileEntity(pos, state);
 	}
 
+	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return getDefinition().createTileEntity();
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return level.isClientSide() ? null : (level1, pos, state1, t) -> {
+			if (t instanceof TileForestry tileForestry) {
+				tileForestry.tick();
+			}
+		};
 	}
-
 
 	private IMachineProperties<?> getDefinition() {
 		return blockType.getMachineProperties();
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context) {
 		IMachineProperties<?> definition = getDefinition();
 		return definition.getShape(state, reader, pos, context);
 	}
 
 	/* INTERACTION */
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn, Hand hand, BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player playerIn, InteractionHand hand, BlockHitResult hit) {
 		TileBase tile = TileUtil.getTile(worldIn, pos, TileBase.class);
 		if (tile == null) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 
 			if (!playerIn.isShiftKeyDown()) { //isSneaking
 				if (FluidUtil.interactWithFluidHandler(playerIn, hand, worldIn, pos, hit.getDirection())) {
-					return ActionResultType.SUCCESS;
+					return InteractionResult.SUCCESS;
 				}
 			}
 
 			if (!worldIn.isClientSide) {
-				ServerPlayerEntity sPlayer = (ServerPlayerEntity) playerIn;
+				ServerPlayer sPlayer = (ServerPlayer) playerIn;
 				tile.openGui(sPlayer, pos);
 			}
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
-	public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		super.playerWillDestroy(world, pos, state, player);
 		if (world.isClientSide) {
 			return;
 		}
 
-		TileEntity tile = TileUtil.getTile(world, pos);
-		if (tile instanceof IInventory) {
-			IInventory inventory = (IInventory) tile;
-			InventoryHelper.dropContents(world, pos, inventory);
+		BlockEntity tile = TileUtil.getTile(world, pos);
+		if (tile instanceof Container inventory) {
+			Containers.dropContents(world, pos, inventory);
 		}
 		if (tile instanceof TileForestry) {
 			((TileForestry) tile).onRemoval();
@@ -186,23 +186,23 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 	}
 
 	@Override
-	public void setPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (world.isClientSide) {
 			return;
 		}
 
-		if (placer instanceof PlayerEntity) {
+		if (placer instanceof Player) {
 			TileUtil.actOnTile(world, pos, IOwnedTile.class, tile -> {
 				IOwnerHandler ownerHandler = tile.getOwnerHandler();
-				PlayerEntity player = (PlayerEntity) placer;
+				Player player = (Player) placer;
 				GameProfile gameProfile = player.getGameProfile();
 				ownerHandler.setOwner(gameProfile);
 			});
 		}
 	}
 
-	public void clientSetup() {
-		blockType.getMachineProperties().clientSetup();
+	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		blockType.getMachineProperties().clientSetupRenderers(event);
 	}
 
 	@Override

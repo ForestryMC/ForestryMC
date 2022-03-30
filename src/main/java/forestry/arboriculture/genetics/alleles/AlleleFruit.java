@@ -12,7 +12,7 @@ package forestry.arboriculture.genetics.alleles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import genetics.api.alleles.AlleleCategorized;
 
@@ -38,7 +38,7 @@ public class AlleleFruit extends AlleleCategorized implements IAlleleFruit, ISet
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public Component getDisplayName() {
 		return getProvider().getDescription();
 	}
 

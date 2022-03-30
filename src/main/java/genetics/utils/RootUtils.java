@@ -3,7 +3,7 @@ package genetics.utils;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.GeneticsAPI;
 import genetics.api.individual.IIndividual;

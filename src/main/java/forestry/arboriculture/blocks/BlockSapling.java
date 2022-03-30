@@ -15,35 +15,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.EnumGermlingType;
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.arboriculture.tiles.TileSapling;
-import forestry.core.config.Constants;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 
-public class BlockSapling extends BlockTreeContainer implements IGrowable {
+public class BlockSapling extends BlockTreeContainer implements BonemealableBlock {
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 
 	public BlockSapling() {
@@ -51,14 +49,14 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState blockState, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState blockState, BlockGetter blockReader, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
 
 	@Nullable
 	@Override
-	public TileEntity newBlockEntity(IBlockReader worldIn) {
-		return new TileSapling();
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new TileSapling(pos, state);
 	}
 
 	/* RENDERING */
@@ -68,7 +66,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}*/
 
 	/* PLANTING */
-	public static boolean canBlockStay(IBlockReader world, BlockPos pos) {
+	public static boolean canBlockStay(BlockGetter world, BlockPos pos) {
 		TileSapling tile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (tile == null) {
 			return false;
@@ -79,7 +77,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+	public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, p_220069_6_);
 		if (!worldIn.isClientSide && !canBlockStay(worldIn, pos)) {
 			dropAsSapling(worldIn, pos);
@@ -89,7 +87,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	@Override
 	public List<ItemStack> getDrops(BlockState blockState, LootContext.Builder builder) {
-		ItemStack drop = getDrop(builder.getLevel(), new BlockPos(builder.getParameter(LootParameters.ORIGIN)));
+		ItemStack drop = getDrop(builder.getLevel(), new BlockPos(builder.getParameter(LootContextParams.ORIGIN)));
 		if (!drop.isEmpty()) {
 			return Collections.singletonList(drop);
 		}
@@ -97,7 +95,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling == null || sapling.getTree() == null) {
 			return ItemStack.EMPTY;
@@ -106,18 +104,15 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-		if (!world.isClientSide && canHarvestBlock(state, world, pos, player)) {
-			if (!player.isCreative()) {
-				dropAsSapling(world, pos);
-			}
+	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+		if (!level.isClientSide && canHarvestBlock(state, level, pos, player) && !player.isCreative()) {
+			dropAsSapling(level, pos);
 		}
 
-		getBlock().playerWillDestroy(world, pos, state, player);
-		return world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.FLAG_BLOCK_UPDATE);
+		super.playerDestroy(level, player, pos, state, blockEntity, itemStack);
 	}
 
-	private static void dropAsSapling(World world, BlockPos pos) {
+	private static void dropAsSapling(Level world, BlockPos pos) {
 		if (world.isClientSide) {
 			return;
 		}
@@ -127,7 +122,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 		}
 	}
 
-	private static ItemStack getDrop(IBlockReader world, BlockPos pos) {
+	private static ItemStack getDrop(BlockGetter world, BlockPos pos) {
 		TileSapling sapling = TileUtil.getTile(world, pos, TileSapling.class);
 		if (sapling != null) {
 			ITree tree = sapling.getTree();
@@ -140,12 +135,12 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
 	/* GROWNING */
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+	public boolean isValidBonemealTarget(BlockGetter world, BlockPos pos, BlockState state, boolean isClient) {
 		return true;
 	}
 
 	@Override
-	public boolean isBonemealSuccess(World world, Random rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(Level world, Random rand, BlockPos pos, BlockState state) {
 		if (world.random.nextFloat() >= 0.45F) {
 			return false;
 		}
@@ -154,7 +149,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 	}
 
 	@Override
-	public void performBonemeal(ServerWorld world, Random rand, BlockPos pos, BlockState blockState) {
+	public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState blockState) {
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);

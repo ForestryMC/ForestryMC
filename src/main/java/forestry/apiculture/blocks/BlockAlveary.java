@@ -15,27 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 
 import forestry.apiculture.MaterialBeehive;
 import forestry.apiculture.multiblock.IAlvearyControllerInternal;
@@ -54,11 +54,11 @@ import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemTooltipUtil;
 import forestry.core.utils.NetworkUtil;
 
-public class BlockAlveary extends BlockStructure {
+public class BlockAlveary extends BlockStructure implements EntityBlock {
 	private static final EnumProperty<State> STATE = EnumProperty.create("state", State.class);
 	private static final EnumProperty<AlvearyPlainType> PLAIN_TYPE = EnumProperty.create("type", AlvearyPlainType.class);
 
-	private enum State implements IStringSerializable {
+	private enum State implements StringRepresentable {
 		ON, OFF;
 
 		@Override
@@ -67,7 +67,7 @@ public class BlockAlveary extends BlockStructure {
 		}
 	}
 
-	private enum AlvearyPlainType implements IStringSerializable {
+	private enum AlvearyPlainType implements StringRepresentable {
 		NORMAL, ENTRANCE, ENTRANCE_LEFT, ENTRANCE_RIGHT;
 
 		@Override
@@ -82,8 +82,6 @@ public class BlockAlveary extends BlockStructure {
 		super(Block.Properties.of(MaterialBeehive.BEEHIVE_ALVEARY)
 				.strength(1f)
 				.sound(SoundType.WOOD)
-				.harvestTool(ToolType.AXE)
-				.harvestLevel(0)
 		);
 		this.type = type;
 		BlockState defaultState = this.getStateDefinition().any();
@@ -96,7 +94,7 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(PLAIN_TYPE, STATE);
 	}
@@ -105,56 +103,33 @@ public class BlockAlveary extends BlockStructure {
 		return type;
 	}
 
-	/*@Override
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
-		return true;
-	}*/
-
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		switch (type) {
-			case SWARMER:
-				return new TileAlvearySwarmer();
-			case FAN:
-				return new TileAlvearyFan();
-			case HEATER:
-				return new TileAlvearyHeater();
-			case HYGRO:
-				return new TileAlvearyHygroregulator();
-			case STABILISER:
-				return new TileAlvearyStabiliser();
-			case SIEVE:
-				return new TileAlvearySieve();
-			case PLAIN:
-			default:
-				return new TileAlvearyPlain();
-		}
-	}
-
-	@Override
-	public boolean hasTileEntity(BlockState state) {
-		return true;
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return switch (type) {
+			case SWARMER -> new TileAlvearySwarmer(pos, state);
+			case FAN -> new TileAlvearyFan(pos, state);
+			case HEATER -> new TileAlvearyHeater(pos, state);
+			case HYGRO -> new TileAlvearyHygroregulator(pos, state);
+			case STABILISER -> new TileAlvearyStabiliser(pos, state);
+			case SIEVE -> new TileAlvearySieve(pos, state);
+			default -> new TileAlvearyPlain(pos, state);
+		};
 	}
 
 	public BlockState getNewState(TileAlveary tile) {
 		BlockState state = this.defaultBlockState();
-		World world = tile.getLevel();
+		Level world = tile.getLevel();
 		BlockPos pos = tile.getBlockPos();
 
-		if (tile instanceof IActivatable) {
-			if (((IActivatable) tile).isActive()) {
-				state = state.setValue(STATE, State.ON);
-			} else {
-				state = state.setValue(STATE, State.OFF);
-			}
+		if (tile instanceof IActivatable activatable) {
+			state = state.setValue(STATE, activatable.isActive() ? State.ON : State.OFF);
 		} else if (getType() == BlockAlvearyType.PLAIN) {
 			if (!tile.getMultiblockLogic().getController().isAssembled()) {
 				state = state.setValue(PLAIN_TYPE, AlvearyPlainType.NORMAL);
 			} else {
 				BlockState blockStateAbove = world.getBlockState(pos.above());
-				Block blockAbove = blockStateAbove.getBlock();
-				if (blockAbove.is(BlockTags.WOODEN_SLABS)) {
+				if (blockStateAbove.is(BlockTags.WOODEN_SLABS)) {
 					List<Direction> blocksTouching = getBlocksTouching(world, pos);
 					switch (blocksTouching.size()) {
 						case 3:
@@ -180,7 +155,7 @@ public class BlockAlveary extends BlockStructure {
 		return state;
 	}
 
-	private static List<Direction> getBlocksTouching(IBlockReader world, BlockPos blockPos) {
+	private static List<Direction> getBlocksTouching(BlockGetter world, BlockPos blockPos) {
 		List<Direction> touching = new ArrayList<>();
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			BlockState blockState = world.getBlockState(blockPos.relative(direction));
@@ -192,7 +167,7 @@ public class BlockAlveary extends BlockStructure {
 	}
 
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
+	public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
 		TileUtil.actOnTile(worldIn, pos, TileAlveary.class, tileAlveary -> {
 			// We must check that the slabs on top were not removed
 			IAlvearyControllerInternal alveary = tileAlveary.getMultiblockLogic().getController();
@@ -204,9 +179,9 @@ public class BlockAlveary extends BlockStructure {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.alveary_tooltip"));
+			tooltip.add(new TranslatableComponent("block.forestry.alveary_tooltip"));
 		} else {
 			ItemTooltipUtil.addShiftInformation(stack, world, tooltip, flag);
 		}

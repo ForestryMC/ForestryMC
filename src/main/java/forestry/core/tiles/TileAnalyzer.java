@@ -13,17 +13,17 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,29 +50,27 @@ import forestry.core.network.packets.PacketItemStackDisplay;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.NetworkUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import genetics.utils.RootUtils;
 
-public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiquidTankTile, IItemStackDisplay {
+public class TileAnalyzer extends TilePowered implements WorldlyContainer, ILiquidTankTile, IItemStackDisplay {
 	private static final int TIME_TO_ANALYZE = 125;
 	private static final int HONEY_REQUIRED = 100;
 
 	private final FilteredTank resourceTank;
 	private final TankManager tankManager;
-	private final IInventory invInput;
-	private final IInventory invOutput;
+	private final Container invInput;
+	private final Container invOutput;
 
 	@Nullable
 	private IIndividual specimenToAnalyze;
 	private ItemStack individualOnDisplayClient = ItemStack.EMPTY;
 
 	/* CONSTRUCTOR */
-	public TileAnalyzer() {
-		super(CoreTiles.ANALYZER.tileType(), 800, Constants.MACHINE_MAX_ENERGY);
+	public TileAnalyzer(BlockPos pos, BlockState state) {
+		super(CoreTiles.ANALYZER.tileType(), pos, state, 800, Constants.MACHINE_MAX_ENERGY);
 		setInternalInventory(new InventoryAnalyzer(this));
 		resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY).setFilters(ForestryFluids.HONEY.getFluid());
 		tankManager = new TankManager(this, resourceTank);
@@ -83,15 +81,14 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	/* SAVING & LOADING */
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		tankManager.write(compoundNBT);
-		return compoundNBT;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tankManager.read(compoundNBT);
 
 		ItemStack stackToAnalyze = getItem(InventoryAnalyzer.SLOT_ANALYZE);
@@ -223,7 +220,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 			return;
 		}
 
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(inputStack)) {
+		if (true && !TreeManager.treeRoot.isMember(inputStack)) {
 			inputStack = GeneticsUtil.convertToGeneticEquivalent(inputStack);
 		}
 
@@ -271,7 +268,7 @@ public class TileAnalyzer extends TilePowered implements ISidedInventory, ILiqui
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
-		return new ContainerAnalyzer(windowId, player.inventory, this);
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+		return new ContainerAnalyzer(windowId, player.getInventory(), this);
 	}
 }

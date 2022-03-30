@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -23,7 +23,7 @@ import forestry.factory.tiles.TileFabricator;
 public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
 	private final TileFabricator tile;
 
-	public GuiFabricator(ContainerFabricator container, PlayerInventory player, ITextComponent title) {
+	public GuiFabricator(ContainerFabricator container, Inventory player, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/fabricator.png", container, player, title);
 
 		this.tile = container.getTile();
@@ -32,7 +32,7 @@ public class GuiFabricator extends GuiForestryTitled<ContainerFabricator> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		int heatScaled = tile.getHeatScaled(52);

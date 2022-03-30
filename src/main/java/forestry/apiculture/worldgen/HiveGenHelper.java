@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.apiculture.hives.IHiveGenHelper;

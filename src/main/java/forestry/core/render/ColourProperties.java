@@ -13,19 +13,17 @@ package forestry.core.render;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.function.Predicate;
 
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.resource.IResourceType;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import forestry.core.utils.Log;
 
 @OnlyIn(Dist.CLIENT)
-public class ColourProperties implements ISelectiveResourceReloadListener {
+public class ColourProperties implements ResourceManagerReloadListener {
 
 	public static final ColourProperties INSTANCE;
 
@@ -44,7 +42,7 @@ public class ColourProperties implements ISelectiveResourceReloadListener {
 	}
 
 	@Override    //TODO - actually be selective
-	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> pred) {
+	public void onResourceManagerReload(ResourceManager resourceManager) {
 		try {
 			InputStream defaultFontStream = ColourProperties.class.getResourceAsStream("/config/forestry/colour.properties");
 			mappings.load(defaultFontStream);

@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,7 +47,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	private final boolean isProcessedLetter;
 	private boolean checkedSessionVars;
 
-	private TextFieldWidget address;
+	private EditBox address;
 	private GuiTextBox text;
 
 	private boolean addressFocus;
@@ -55,7 +55,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 	private final ArrayList<Widget> tradeInfoWidgets;
 
-	public GuiLetter(ContainerLetter container, PlayerInventory inv, ITextComponent title) {
+	public GuiLetter(ContainerLetter container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/letter.png", container, inv, title);
 		this.minecraft = Minecraft.getInstance(); //not 100% why this is needed, maybe side issues
 
@@ -66,7 +66,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		this.isProcessedLetter = container.getLetter().isProcessed();
 		this.widgetManager.add(new AddresseeSlot(widgetManager, 16, 12, container));
 		this.tradeInfoWidgets = new ArrayList<>();
-		address = new TextFieldWidget(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
+		address = new EditBox(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
 		text = new GuiTextBox(this.minecraft.font, leftPos + 17, topPos + 31, 122, 57);
 	}
 
@@ -76,7 +76,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 
-		address = new TextFieldWidget(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
+		address = new EditBox(this.minecraft.font, leftPos + 46, topPos + 13, 93, 13, null);
 		IMailAddress recipient = container.getRecipient();
 		if (recipient != null) {
 			address.setValue(recipient.getName());
@@ -133,7 +133,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 
 		if (!isProcessedLetter && !checkedSessionVars) {
 			checkedSessionVars = true;
@@ -161,7 +161,7 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 
 		if (this.isProcessedLetter) {
 			minecraft.font.draw(transform, address.getValue(), leftPos + 49, topPos + 16, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
-			minecraft.font.drawWordWrap(new StringTextComponent(text.getValue()), leftPos + 20, topPos + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
+			minecraft.font.drawWordWrap(new TextComponent(text.getValue()), leftPos + 20, topPos + 34, 119, ColourProperties.INSTANCE.get("gui.mail.lettertext"));
 		} else {
 			clearTradeInfoWidgets();
 			address.render(transform, mouseX, mouseY, partialTicks);    //TODO correct?
@@ -173,13 +173,13 @@ public class GuiLetter extends GuiForestry<ContainerLetter> {
 		}
 	}
 
-	private void drawTradePreview(MatrixStack transform, int x, int y) {
+	private void drawTradePreview(PoseStack transform, int x, int y) {
 
-		ITextComponent infoString = null;
+		Component infoString = null;
 		if (container.getTradeInfo() == null) {
-			infoString = new TranslationTextComponent("for.gui.mail.no.trader");
+			infoString = new TranslatableComponent("for.gui.mail.no.trader");
 		} else if (container.getTradeInfo().getTradegood().isEmpty()) {
-			infoString = new TranslationTextComponent("for.gui.mail.nothing.to.trade");
+			infoString = new TranslatableComponent("for.gui.mail.nothing.to.trade");
 		} else if (!container.getTradeInfo().getState().isOk()) {
 			infoString = container.getTradeInfo().getState().getDescription();
 		}

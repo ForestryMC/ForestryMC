@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.climatology.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -65,7 +65,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	private final TextEditElement humidityEdit;
 
 	//TODO: Fix field focus
-	public GuiHabitatFormer(ContainerHabitatFormer container, PlayerInventory inv, ITextComponent title) {
+	public GuiHabitatFormer(ContainerHabitatFormer container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/habitat_former.png", container, inv, title);
 		this.tile = container.getTile();
 		this.transformer = tile.getTransformer();
@@ -80,8 +80,8 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 				.setParameters(this, 1, 16, 1);
 		rangeBar.setPreferredBounds(10, 17, 12, 58);
 		rangeBar.addTooltip((tooltip, element, mouseX, mouseY) -> {
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range"));
-			tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).withStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.range"));
+			tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.range.blocks", rangeBar.getValue()).withStyle(ChatFormatting.GRAY));
 		});
 		window.add(new CircleButton(30, 37));
 
@@ -102,14 +102,14 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void containerTick() {
+		super.containerTick();
 		IClimateState target = transformer.getTarget();
 		if (!window.isFocused(humidityEdit)) {
-			humidityEdit.setValue(Integer.toString((int) (MathHelper.clamp(target.getHumidity(), 0.0F, 2.0F) * 100)));
+			humidityEdit.setValue(Integer.toString((int) (Mth.clamp(target.getHumidity(), 0.0F, 2.0F) * 100)));
 		}
 		if (!window.isFocused(temperatureEdit)) {
-			temperatureEdit.setValue(Integer.toString((int) (MathHelper.clamp(target.getTemperature(), 0.0F, 2.0F) * 100)));
+			temperatureEdit.setValue(Integer.toString((int) (Mth.clamp(target.getTemperature(), 0.0F, 2.0F) * 100)));
 		}
 		if (rangeBar.getValue() != transformer.getRange()) {
 			updateRange();
@@ -121,13 +121,13 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseX, int mouseY) {
 		super.renderBg(transform, partialTicks, mouseX, mouseY);
 		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.temperature"), imageWidth / 2, 23);
 		drawCenteredString(transform, Translator.translateToLocal("for.gui.habitat_former.climate.humidity"), imageWidth / 2, 47);
 	}
 
-	private void drawCenteredString(MatrixStack transform, String text, int x, int y) {
+	private void drawCenteredString(PoseStack transform, String text, int x, int y) {
 		minecraft.font.drawShadow(transform, text, leftPos + (float) (x - (double) minecraft.font.width(text) / 2), (float) topPos + y, 16777215);
 	}
 
@@ -138,7 +138,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 		} catch (NumberFormatException exception) {
 			value = 0;
 		}
-		float climateValue = MathHelper.clamp(((float) value / 100.0F), 0.0F, 2.0F);
+		float climateValue = Mth.clamp(((float) value / 100.0F), 0.0F, 2.0F);
 		IClimateState target = transformer.getTarget();
 		setClimate(target.setClimate(type, climateValue));
 		sendClimateUpdate();
@@ -188,7 +188,7 @@ public class GuiHabitatFormer extends GuiForestryTitled<ContainerHabitatFormer> 
 					.action(button -> ((CircleButton) button).onButtonPressed())
 					.pos(xPos, yPos)
 			);
-			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(new TranslationTextComponent("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
+			addTooltip((tooltip, element, mouseX, mouseY) -> tooltip.add(new TranslatableComponent("for.gui.habitat_former.climate.circle." + (transformer.isCircular() ? "enabled" : "disabled"))));
 		}
 
 		private void onButtonPressed() {

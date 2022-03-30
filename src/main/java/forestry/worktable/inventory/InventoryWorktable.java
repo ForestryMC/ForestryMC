@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.worktable.inventory;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.SlotUtil;

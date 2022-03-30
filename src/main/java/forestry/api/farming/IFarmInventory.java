@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 /**
  * Helper interface that every farm inventory implements.
@@ -58,20 +58,20 @@ public interface IFarmInventory {
 	/**
 	 * Sub-inventory that contains only the output
 	 */
-	IInventory getProductInventory();
+	Container getProductInventory();
 
 	/**
 	 * Sub-inventory that contains only the germlings
 	 */
-	IInventory getGermlingsInventory();
+	Container getGermlingsInventory();
 
 	/**
 	 * Sub-inventory that contains only the resources
 	 */
-	IInventory getResourcesInventory();
+	Container getResourcesInventory();
 
 	/**
 	 * Sub-inventory that contains only the fertilizer
 	 */
-	IInventory getFertilizerInventory();
+	Container getFertilizerInventory();
 }

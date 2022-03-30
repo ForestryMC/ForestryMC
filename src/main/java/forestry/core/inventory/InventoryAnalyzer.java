@@ -12,8 +12,8 @@ package forestry.core.inventory;
 
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -22,8 +22,6 @@ import forestry.api.arboriculture.TreeManager;
 import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import genetics.utils.RootUtils;
 
@@ -58,7 +56,7 @@ public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
 
 	@Override
 	public void setItem(int slotId, ItemStack itemStack) {
-		if (ModuleHelper.isEnabled(ForestryModuleUids.ARBORICULTURE) && !TreeManager.treeRoot.isMember(itemStack)) {
+		if (true && !TreeManager.treeRoot.isMember(itemStack)) {
 			itemStack = GeneticsUtil.convertToGeneticEquivalent(itemStack);
 		}
 

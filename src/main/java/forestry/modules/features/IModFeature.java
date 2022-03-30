@@ -2,6 +2,7 @@ package forestry.modules.features;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -31,11 +32,7 @@ public interface IModFeature {
 	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
 	}
 
-	default boolean isEnabled() {
-		return ModFeatureRegistry.get(getModId()).isEnabled(this);
-	}
-
 	@OnlyIn(Dist.CLIENT)
-	default void clientSetup() {
+	default void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 	}
 }

@@ -10,14 +10,17 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+
 import forestry.apiculture.blocks.BlockAlvearyType;
 
 public class TileAlvearyHeater extends TileAlvearyClimatiser {
 
 	private static final HeaterDefinition definition = new HeaterDefinition();
 
-	public TileAlvearyHeater() {
-		super(BlockAlvearyType.HEATER, definition);
+	public TileAlvearyHeater(BlockPos pos, BlockState state) {
+		super(BlockAlvearyType.HEATER, pos, state, definition);
 	}
 
 	private static class HeaterDefinition implements IClimitiserDefinition {

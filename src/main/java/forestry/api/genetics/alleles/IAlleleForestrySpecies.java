@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics.alleles;
 
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -18,11 +18,11 @@ import genetics.api.organism.IOrganismType;
  */
 public interface IAlleleForestrySpecies extends IAlleleSpecies {
 
-	default ITextComponent getItemName(IOrganismType type) {
+	default Component getItemName(IOrganismType type) {
 		return getDisplayName();
 	}
 
-	default ITextComponent getAlyzerName(IOrganismType type) {
+	default Component getAlyzerName(IOrganismType type) {
 		return getDisplayName();
 	}
 

@@ -13,10 +13,11 @@ package forestry.arboriculture.models;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,6 +25,7 @@ import net.minecraftforge.client.model.data.IModelData;
 
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.genetics.TreeHelper;
 import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.models.ModelBlockCached;
@@ -49,10 +51,9 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 		@Override
 		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
+			if (!(other instanceof Key otherKey)) {
 				return false;
 			} else {
-				Key otherKey = (Key) other;
 				return otherKey.leafSprite == leafSprite && otherKey.fruitSprite == fruitSprite && otherKey.fancy == fancy;
 			}
 		}
@@ -65,9 +66,9 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 
 	@Override
 	protected Key getInventoryKey(ItemStack itemStack) {
-		TileLeaves leaves = new TileLeaves();
+		TileLeaves leaves = new TileLeaves(BlockPos.ZERO, ArboricultureBlocks.LEAVES.defaultState());
 		if (itemStack.getTag() != null) {
-			leaves.load(leaves.getBlockState(), itemStack.getTag());
+			leaves.load(itemStack.getTag());
 		} else {
 			leaves.setTree(TreeHelper.getRoot().getIndividualTemplates().get(0));
 		}

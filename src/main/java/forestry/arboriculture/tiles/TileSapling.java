@@ -11,16 +11,18 @@
 package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
@@ -43,33 +45,32 @@ public class TileSapling extends TileTreeContainer {
 
 	private int timesTicked = 0;
 
-	public TileSapling() {
-		super(ArboricultureTiles.SAPLING.tileType());
+	public TileSapling(BlockPos pos, BlockState state) {
+		super(ArboricultureTiles.SAPLING.tileType(), pos, state);
 	}
 
 	/* SAVING & LOADING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 
 		timesTicked = compoundNBT.getInt("TT");
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 
 		compoundNBT.putInt("TT", timesTicked);
-		return compoundNBT;
 	}
 
 	@Override
-	public void onBlockTick(World worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
 		timesTicked++;
 		tryGrow(rand, false);
 	}
 
-	private static int getRequiredMaturity(World world, ITree tree) {
+	private static int getRequiredMaturity(Level world, ITree tree) {
 		ITreekeepingMode treekeepingMode = TreeManager.treeRoot.getTreekeepingMode(world);
 		float maturationModifier = treekeepingMode.getMaturationModifier(tree.getGenome(), 1f);
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
@@ -88,8 +89,7 @@ public class TileSapling extends TileTreeContainer {
 		}
 
 		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), true);
-		if (generator instanceof FeatureArboriculture) {
-			FeatureArboriculture arboricultureGenerator = (FeatureArboriculture) generator;
+		if (generator instanceof FeatureArboriculture arboricultureGenerator) {
 			arboricultureGenerator.preGenerate(level, rand, getBlockPos());
 			return arboricultureGenerator.getValidGrowthPos(level, getBlockPos()) != null;
 		} else {
@@ -112,12 +112,13 @@ public class TileSapling extends TileTreeContainer {
 			return;
 		}
 
-		Feature generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), bonemealed);
+		Feature<NoneFeatureConfiguration> generator = tree.getTreeGenerator(WorldUtils.asServer(level), getBlockPos(), bonemealed);
 		final boolean generated;
 		if (generator instanceof FeatureBase) {
 			generated = ((FeatureBase) generator).place(level, random, getBlockPos(), false);
 		} else {
-			generated = generator.place((ServerWorld) level, ((ServerChunkProvider) level.getChunkSource()).getGenerator(), random, getBlockPos(), IFeatureConfig.NONE);
+			ServerLevel level = (ServerLevel) this.level;
+			generated = generator.place(new FeaturePlaceContext<>(Optional.empty(), level, level.getChunkSource().getGenerator(), random, getBlockPos(), FeatureConfiguration.NONE));
 		}
 
 		if (generated) {

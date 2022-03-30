@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -49,12 +49,12 @@ public class ModuleMail extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
-		ScreenManager.register(MailContainers.LETTER.containerType(), GuiLetter::new);
-		ScreenManager.register(MailContainers.MAILBOX.containerType(), GuiMailbox::new);
-		ScreenManager.register(MailContainers.STAMP_COLLECTOR.containerType(), GuiStampCollector::new);
-		ScreenManager.register(MailContainers.TRADE_NAME.containerType(), GuiTradeName::new);
-		ScreenManager.register(MailContainers.TRADER.containerType(), GuiTrader::new);
+		MenuScreens.register(MailContainers.CATALOGUE.containerType(), GuiCatalogue::new);
+		MenuScreens.register(MailContainers.LETTER.containerType(), GuiLetter::new);
+		MenuScreens.register(MailContainers.MAILBOX.containerType(), GuiMailbox::new);
+		MenuScreens.register(MailContainers.STAMP_COLLECTOR.containerType(), GuiStampCollector::new);
+		MenuScreens.register(MailContainers.TRADE_NAME.containerType(), GuiTradeName::new);
+		MenuScreens.register(MailContainers.TRADER.containerType(), GuiTrader::new);
 	}
 
 	@Override

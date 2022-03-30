@@ -15,15 +15,15 @@ import com.google.gson.JsonObject;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateRecipesPacket;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -36,10 +36,10 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	private final int packagingTime;
 	private final FluidStack liquid;
 	private final Ingredient box;
-	private final ICraftingRecipe recipe;
+	private final CraftingRecipe recipe;
 	private final ItemStack result;
 
-	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, ICraftingRecipe recipe, @Nullable ItemStack result) {
+	public CarpenterRecipe(ResourceLocation id, int packagingTime, FluidStack liquid, Ingredient box, CraftingRecipe recipe, @Nullable ItemStack result) {
 		Preconditions.checkNotNull(id, "Recipe identifier cannot be null");
 		Preconditions.checkNotNull(box);
 		Preconditions.checkNotNull(recipe);
@@ -68,7 +68,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 	}
 
 	@Override
-	public ICraftingRecipe getCraftingGridRecipe() {
+	public CraftingRecipe getCraftingGridRecipe() {
 		return recipe;
 	}
 
@@ -82,32 +82,32 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CarpenterRecipe> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CarpenterRecipe> {
 
 		@Override
 		public CarpenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-			int packagingTime = JSONUtils.getAsInt(json, "time");
-			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(JSONUtils.getAsJsonObject(json, "liquid")) : FluidStack.EMPTY;
+			int packagingTime = GsonHelper.getAsInt(json, "time");
+			FluidStack liquid = json.has("liquid") ? RecipeSerializers.deserializeFluid(GsonHelper.getAsJsonObject(json, "liquid")) : FluidStack.EMPTY;
 			Ingredient box = RecipeSerializers.deserialize(json.get("box"));
-			ICraftingRecipe internal = (ICraftingRecipe) RecipeManager.fromJson(recipeId, JSONUtils.getAsJsonObject(json, "recipe"));
-			ItemStack result = json.has("result") ? RecipeSerializers.item(JSONUtils.getAsJsonObject(json, "result")) : internal.getResultItem();
+			CraftingRecipe internal = (CraftingRecipe) RecipeManager.fromJson(recipeId, GsonHelper.getAsJsonObject(json, "recipe"));
+			ItemStack result = json.has("result") ? RecipeSerializers.item(GsonHelper.getAsJsonObject(json, "result")) : internal.getResultItem();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
 		}
 
 		@Override
-		public CarpenterRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+		public CarpenterRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 			int packagingTime = buffer.readVarInt();
 			FluidStack liquid = buffer.readBoolean() ? FluidStack.readFromPacket(buffer) : FluidStack.EMPTY;
 			Ingredient box = Ingredient.fromNetwork(buffer);
-			ICraftingRecipe internal = (ICraftingRecipe) SUpdateRecipesPacket.fromNetwork(buffer);
+			CraftingRecipe internal = (CraftingRecipe) ClientboundUpdateRecipesPacket.fromNetwork(buffer);
 			ItemStack result = buffer.readItem();
 
 			return new CarpenterRecipe(recipeId, packagingTime, liquid, box, internal, result);
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer buffer, CarpenterRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buffer, CarpenterRecipe recipe) {
 			buffer.writeVarInt(recipe.packagingTime);
 
 			if (!recipe.liquid.isEmpty()) {
@@ -118,7 +118,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 			}
 
 			recipe.box.toNetwork(buffer);
-			SUpdateRecipesPacket.toNetwork(recipe.recipe, buffer);
+			ClientboundUpdateRecipesPacket.toNetwork(buffer, recipe.recipe);
 			buffer.writeItem(recipe.result);
 		}
 	}

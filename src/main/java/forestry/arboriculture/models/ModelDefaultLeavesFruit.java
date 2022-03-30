@@ -14,12 +14,12 @@ import com.google.common.base.Preconditions;
 
 import java.util.Objects;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,10 +57,9 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 
 		@Override
 		public boolean equals(Object other) {
-			if (!(other instanceof Key)) {
+			if (!(other instanceof Key otherKey)) {
 				return false;
 			} else {
-				Key otherKey = (Key) other;
 				return otherKey.definition == definition && otherKey.fancy == fancy;
 			}
 		}
@@ -113,7 +112,7 @@ public class ModelDefaultLeavesFruit extends ModelBlockCached<BlockDefaultLeaves
 	}
 
 	@Override
-	protected IBakedModel bakeModel(BlockState state, Key key, BlockDefaultLeavesFruit block, IModelData extraData) {
+	protected BakedModel bakeModel(BlockState state, Key key, BlockDefaultLeavesFruit block, IModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, extraData, key, baker, false);

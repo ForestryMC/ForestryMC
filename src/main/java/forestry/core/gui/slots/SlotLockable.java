@@ -10,15 +10,15 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 public class SlotLockable extends SlotForestry {
 
 	private boolean locked;
 
-	public SlotLockable(IInventory inventory, int slotIndex, int xPos, int yPos) {
+	public SlotLockable(Container inventory, int slotIndex, int xPos, int yPos) {
 		super(inventory, slotIndex, xPos, yPos);
 	}
 
@@ -30,11 +30,10 @@ public class SlotLockable extends SlotForestry {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
+	public void onTake(Player player, ItemStack itemStack) {
 		if (!locked) {
-			return super.onTake(player, itemStack);
+			super.onTake(player, itemStack);
 		}
-		return ItemStack.EMPTY;
 	}
 
 	@Override

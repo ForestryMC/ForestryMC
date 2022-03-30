@@ -13,8 +13,8 @@ package forestry.core.fluids;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -28,17 +28,17 @@ public class FakeTankManager extends EmptyFluidHandler implements ITankManager {
 	}
 
 	@Override
-	public void containerAdded(Container container, IContainerListener player) {
+	public void containerAdded(AbstractContainerMenu container, ContainerListener player) {
 
 	}
 
 	@Override
-	public void sendTankUpdate(Container container, List<IContainerListener> crafters) {
+	public void sendTankUpdate(AbstractContainerMenu container, List<ContainerListener> crafters) {
 
 	}
 
 	@Override
-	public void containerRemoved(Container container) {
+	public void containerRemoved(AbstractContainerMenu container) {
 
 	}
 

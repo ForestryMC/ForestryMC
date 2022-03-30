@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
@@ -22,12 +22,12 @@ import forestry.mail.tiles.TileTrader;
 
 public class ContainerTradeName extends ContainerTile<TileTrader> {
 
-	public static ContainerTradeName fromNetwork(int windowId, PlayerInventory inv, PacketBuffer data) {
+	public static ContainerTradeName fromNetwork(int windowId, Inventory inv, FriendlyByteBuf data) {
 		TileTrader tile = TileUtil.getTile(inv.player.level, data.readBlockPos(), TileTrader.class);
 		return new ContainerTradeName(windowId, inv, tile);    //TODO nullability.
 	}
 
-	public ContainerTradeName(int windowId, PlayerInventory inv, TileTrader tile) {
+	public ContainerTradeName(int windowId, Inventory inv, TileTrader tile) {
 		super(windowId, MailContainers.TRADE_NAME.containerType(), tile);
 	}
 
@@ -41,8 +41,7 @@ public class ContainerTradeName extends ContainerTile<TileTrader> {
 
 		if (tile.isLinked()) {
 			for (Object crafter : containerListeners) {
-				if (crafter instanceof ServerPlayerEntity) {
-					ServerPlayerEntity player = (ServerPlayerEntity) crafter;
+				if (crafter instanceof ServerPlayer player) {
 					tile.openGui(player, tile.getBlockPos());    //TODO correct pos?
 				}
 			}

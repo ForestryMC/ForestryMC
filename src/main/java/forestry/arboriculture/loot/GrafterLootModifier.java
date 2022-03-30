@@ -6,23 +6,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
@@ -45,7 +45,7 @@ import genetics.api.individual.IGenome;
 public class GrafterLootModifier extends LootModifier {
 	public static final Serializer SERIALIZER = new Serializer();
 
-	public GrafterLootModifier(ILootCondition[] conditionsIn) {
+	public GrafterLootModifier(LootItemCondition[] conditionsIn) {
 		super(conditionsIn);
 	}
 
@@ -53,37 +53,36 @@ public class GrafterLootModifier extends LootModifier {
 	@Nonnull
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-		BlockState state = context.getParamOrNull(LootParameters.BLOCK_STATE);
+		BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
 		if (state == null || !state.is(BlockTags.LEAVES)) {
 			return generatedLoot;
 		}
-		ItemStack harvestingTool = context.getParamOrNull(LootParameters.TOOL);
+		ItemStack harvestingTool = context.getParamOrNull(LootContextParams.TOOL);
 		if (harvestingTool == null || harvestingTool.isEmpty()) {
 			return generatedLoot;
 		}
-		Entity entity = context.getParamOrNull(LootParameters.THIS_ENTITY);
-		if (!(entity instanceof PlayerEntity)) {
+		Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+		if (!(entity instanceof Player player)) {
 			return generatedLoot;
 		}
-		PlayerEntity player = (PlayerEntity) entity;
-		if (generatedLoot.stream().noneMatch((stack) -> stack.getItem().is(ItemTags.SAPLINGS))) {
+		if (generatedLoot.stream().noneMatch((stack) -> stack.is(ItemTags.SAPLINGS))) {
 			handleLoot(generatedLoot, player, harvestingTool, state, context);
 		}
-		harvestingTool.hurt(1, context.getRandom(), (ServerPlayerEntity) player);
+		harvestingTool.hurt(1, context.getRandom(), (ServerPlayer) player);
 		if (harvestingTool.isEmpty()) {
-			ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, Hand.MAIN_HAND);
+			ForgeEventFactory.onPlayerDestroyItem(player, harvestingTool, InteractionHand.MAIN_HAND);
 		}
 		return generatedLoot;
 	}
 
-	public void handleLoot(List<ItemStack> generatedLoot, PlayerEntity player, ItemStack harvestingTool, BlockState state, LootContext context) {
-		World world = player.level;
-		TileEntity tileEntity = context.getParamOrNull(LootParameters.BLOCK_ENTITY);
+	public void handleLoot(List<ItemStack> generatedLoot, Player player, ItemStack harvestingTool, BlockState state, LootContext context) {
+		Level world = player.level;
+		BlockEntity tileEntity = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
 		ITree tree = getTree(state, tileEntity);
 		if (tree == null) {
 			return;
 		}
-		Vector3d origin = context.getParamOrNull(LootParameters.ORIGIN);
+		Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
 		if (origin == null) {
 			return;
 		}
@@ -99,8 +98,7 @@ public class GrafterLootModifier extends LootModifier {
 				generatedLoot.add(TreeManager.treeRoot.getTypes().createStack(sapling, EnumGermlingType.SAPLING));
 			}
 		}
-		if (tileEntity instanceof IFruitBearer) {
-			IFruitBearer bearer = (IFruitBearer) tileEntity;
+		if (tileEntity instanceof IFruitBearer bearer) {
 			generatedLoot.addAll(bearer.pickFruit(harvestingTool));
 		}
 		if (state.getBlock() instanceof BlockDefaultLeavesFruit) {
@@ -113,7 +111,7 @@ public class GrafterLootModifier extends LootModifier {
 	}
 
 	@Nullable
-	private ITree getTree(BlockState state, @Nullable TileEntity entity) {
+	private ITree getTree(BlockState state, @Nullable BlockEntity entity) {
 		ITreeRoot root = TreeHelper.getRoot();
 		ITree tree = root.translateMember(state).orElse(null);
 		if (tree != null || entity == null) {
@@ -129,7 +127,7 @@ public class GrafterLootModifier extends LootModifier {
 		}
 
 		@Override
-		public GrafterLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions) {
+		public GrafterLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] conditions) {
 			return new GrafterLootModifier(conditions);
 		}
 

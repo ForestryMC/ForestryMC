@@ -13,10 +13,11 @@ package forestry.core.tiles;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.Direction;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,8 +54,8 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	// the number of work ticks that this tile has had no power
 	private int noPowerTime = 0;
 
-	protected TilePowered(TileEntityType<?> type, int maxTransfer, int capacity) {
-		super(type);
+	protected TilePowered(BlockEntityType<?> type, BlockPos pos, BlockState state, int maxTransfer, int capacity) {
+		super(type, pos, state);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
 		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
 
@@ -156,15 +157,14 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT nbt) {
-		nbt = super.save(nbt);
+	public void saveAdditional(CompoundTag nbt) {
+		super.saveAdditional(nbt);
 		energyManager.write(nbt);
-		return nbt;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT nbt) {
-		super.load(state, nbt);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
 		energyManager.read(nbt);
 	}
 

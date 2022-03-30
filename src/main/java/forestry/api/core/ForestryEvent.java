@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 import com.mojang.authlib.GameProfile;
 
@@ -51,9 +51,9 @@ public abstract class ForestryEvent extends Event {
 
 	public static class SyncedBreedingTracker extends ForestryEvent {
 		public final IBreedingTracker tracker;
-		public final PlayerEntity player;
+		public final Player player;
 
-		public SyncedBreedingTracker(IBreedingTracker tracker, PlayerEntity player) {
+		public SyncedBreedingTracker(IBreedingTracker tracker, Player player) {
 			this.tracker = tracker;
 			this.player = player;
 		}

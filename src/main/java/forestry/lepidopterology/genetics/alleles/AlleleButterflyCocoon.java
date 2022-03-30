@@ -10,9 +10,9 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics.alleles;
 
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.IntegerProperty;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 import genetics.api.alleles.AlleleCategorized;
 

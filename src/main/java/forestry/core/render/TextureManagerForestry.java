@@ -14,12 +14,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -65,15 +65,15 @@ public class TextureManagerForestry implements ITextureManager {
 
 	private static void initDefaultSprites(ISpriteRegistry registry) {
 		String[] defaultIconNames = new String[]{"habitats/desert", "habitats/end", "habitats/forest", "habitats/hills", "habitats/jungle",
-			"habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
-			"misc/access.shared", "misc/energy", "misc/hint",
-			"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer", "analyzer/item",
-			"analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave", "analyzer/pure_flyer",
-			"analyzer/pure_nocturnal", "analyzer/queen", "analyzer/tree", "analyzer/sapling", "analyzer/pollen", "analyzer/flutter",
-			"analyzer/butterfly", "analyzer/serum", "analyzer/caterpillar", "analyzer/cocoon",
-			"errors/errored", "errors/unknown",
-			"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked", "slots/cocoon", "slots/bee",
-			"mail/carrier.player", "mail/carrier.trader"
+				"habitats/mushroom", "habitats/nether", "habitats/ocean", "habitats/plains", "habitats/snow", "habitats/swamp", "habitats/taiga",
+				"misc/access.shared", "misc/energy", "misc/hint",
+				"analyzer/anything", "analyzer/bee", "analyzer/cave", "analyzer/closed", "analyzer/drone", "analyzer/flyer", "analyzer/item",
+				"analyzer/nocturnal", "analyzer/princess", "analyzer/pure_breed", "analyzer/pure_cave", "analyzer/pure_flyer",
+				"analyzer/pure_nocturnal", "analyzer/queen", "analyzer/tree", "analyzer/sapling", "analyzer/pollen", "analyzer/flutter",
+				"analyzer/butterfly", "analyzer/serum", "analyzer/caterpillar", "analyzer/cocoon",
+				"errors/errored", "errors/unknown",
+				"slots/blocked", "slots/blocked_2", "slots/liquid", "slots/container", "slots/locked", "slots/cocoon", "slots/bee",
+				"mail/carrier.player", "mail/carrier.trader"
 		};
 		for (String identifier : defaultIconNames) {
 			registry.addSprite(new ResourceLocation(Constants.MOD_ID, identifier));
@@ -91,9 +91,8 @@ public class TextureManagerForestry implements ITextureManager {
 	}
 
 	public void bindGuiTextureMap() {
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
 		ResourceLocation guiTextureMap = getGuiTextureMap();
-		textureManager.bind(guiTextureMap);
+		RenderSystem.setShaderTexture(0, guiTextureMap);
 	}
 
 	public void registerBlock(Block block) {

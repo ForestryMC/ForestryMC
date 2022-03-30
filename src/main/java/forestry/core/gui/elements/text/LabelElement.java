@@ -6,11 +6,11 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Style;
 
 import forestry.api.core.tooltips.ITextInstance;
 import forestry.core.gui.elements.GuiElement;
@@ -47,24 +47,24 @@ public abstract class LabelElement extends GuiElement {
 			this.parentAdder = parentAdder;
 			this.finisher = finisher;
 			if (root instanceof String) {
-				root = new StringTextComponent((String) root);
+				root = new TextComponent((String) root);
 			}
 			this.root = root;
 		}
 
 		@Nullable
 		@Override
-		public ITextComponent lastComponent() {
-			if (root instanceof ITextComponent) {
-				return (ITextComponent) root;
+		public Component lastComponent() {
+			if (root instanceof Component) {
+				return (Component) root;
 			}
 			return null;
 		}
 
 		@Override
-		public Builder add(ITextComponent line) {
-			if (root instanceof IFormattableTextComponent) {
-				((IFormattableTextComponent) root).append(line);
+		public Builder add(Component line) {
+			if (root instanceof MutableComponent) {
+				((MutableComponent) root).append(line);
 			}
 			return this;
 		}
@@ -83,12 +83,12 @@ public abstract class LabelElement extends GuiElement {
 		public LabelElement create() {
 			Preconditions.checkNotNull(root);
 			LabelElement element;
-			if (root instanceof ITextComponent) {
-				element = new ComponentText((ITextComponent) root)
+			if (root instanceof Component) {
+				element = new ComponentText((Component) root)
 						.setFitText(fitText)
 						.setShadow(shadow);
-			} else if (root instanceof IReorderingProcessor) {
-				element = new ProcessorText((IReorderingProcessor) root)
+			} else if (root instanceof FormattedCharSequence) {
+				element = new ProcessorText((FormattedCharSequence) root)
 						.setFitText(fitText)
 						.setShadow(shadow);
 			} else {
@@ -114,15 +114,15 @@ public abstract class LabelElement extends GuiElement {
 		}
 
 		public Builder setStyle(Style style) {
-			if (root instanceof IFormattableTextComponent) {
-				((IFormattableTextComponent) root).setStyle(style);
+			if (root instanceof MutableComponent) {
+				((MutableComponent) root).setStyle(style);
 			}
 			return this;
 		}
 
 		public Builder withStyle(Style style) {
-			if (root instanceof IFormattableTextComponent) {
-				((IFormattableTextComponent) root).withStyle(style);
+			if (root instanceof MutableComponent) {
+				((MutableComponent) root).withStyle(style);
 			}
 			return this;
 		}

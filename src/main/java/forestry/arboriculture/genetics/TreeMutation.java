@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -41,7 +41,7 @@ public class TreeMutation extends Mutation implements ITreeMutation, ITreeMutati
 	}
 
 	@Override
-	public float getChance(World world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IGenome genome0, IGenome genome1) {
+	public float getChance(Level world, BlockPos pos, IAlleleTreeSpecies allele0, IAlleleTreeSpecies allele1, IGenome genome0, IGenome genome1) {
 		float processedChance = super.getChance(world, pos, allele0, allele1, genome0, genome1, ClimateManager.climateRoot.getDefaultClimate(world, pos));
 		if (processedChance <= 0) {
 			return 0;

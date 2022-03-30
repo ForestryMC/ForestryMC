@@ -10,20 +10,20 @@
  ******************************************************************************/
 package forestry.core.particles;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 //TODO - sort out setParticleTextureIndex
-public class ColoredDripParticle extends SpriteTexturedParticle {
+public class ColoredDripParticle extends TextureSheetParticle {
 	private final Fluid type;
 
-	public ColoredDripParticle(World world, double x, double y, double z, float red, float green, float blue, Fluid type) {
-		super((ClientWorld) world, x, y, z, 0.0D, 0.0D, 0.0D);
+	public ColoredDripParticle(Level world, double x, double y, double z, float red, float green, float blue, Fluid type) {
+		super((ClientLevel) world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.xd = this.yd = this.zd = 0.0D;
 
 		this.rCol = red;
@@ -124,7 +124,7 @@ public class ColoredDripParticle extends SpriteTexturedParticle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_OPAQUE;    //same as DripParticle
 	}
 }

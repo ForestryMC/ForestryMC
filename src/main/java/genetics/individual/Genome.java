@@ -4,7 +4,7 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Arrays;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.ApiInstance;
 import genetics.api.GeneticsAPI;
@@ -27,7 +27,7 @@ public final class Genome implements IGenome {
 	private final IChromosome[] chromosomes;
 	private final IKaryotype karyotype;
 
-	public Genome(IKaryotype karyotype, CompoundNBT compound) {
+	public Genome(IKaryotype karyotype, CompoundTag compound) {
 		this.karyotype = karyotype;
 		this.chromosomes = GeneticSaveHandler.INSTANCE.readTag(karyotype, compound);
 	}
@@ -330,7 +330,7 @@ public final class Genome implements IGenome {
 	}
 
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
+	public CompoundTag writeToNBT(CompoundTag compound) {
 		return GeneticSaveHandler.INSTANCE.writeTag(chromosomes, karyotype, compound);
 	}
 

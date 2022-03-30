@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
-public interface ITradeStation extends ILetterHandler, IInventory {
+public interface ITradeStation extends ILetterHandler, Container {
 
 	IMailAddress getAddress();
 

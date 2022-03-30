@@ -8,10 +8,10 @@ package forestry.api.lepidopterology.genetics;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IIndividualLiving;
@@ -29,23 +29,23 @@ public interface IButterfly extends IIndividualLiving {
 	/**
 	 * @return true if the butterfly can naturally spawn at the given location at this time. (Used to auto-spawn butterflies from tree leaves.)
 	 */
-	boolean canSpawn(World world, double x, double y, double z);
+	boolean canSpawn(Level world, double x, double y, double z);
 
 	/**
 	 * @return true if the butterfly can take flight at the given location at this time. (Used to auto-spawn butterflies from dropped items.)
 	 */
-	boolean canTakeFlight(World world, double x, double y, double z);
+	boolean canTakeFlight(Level world, double x, double y, double z);
 
 	/**
 	 * @return true if the environment (temperature, humidity) is valid for the butterfly at the given location.
 	 */
-	boolean isAcceptedEnvironment(World world, double x, double y, double z);
+	boolean isAcceptedEnvironment(Level world, double x, double y, double z);
 
 	/**
 	 * @return create a caterpillar with the two genome's from the nursery.
 	 */
 	@Nullable
-	IButterfly spawnCaterpillar(World world, IButterflyNursery nursery);
+	IButterfly spawnCaterpillar(Level world, IButterflyNursery nursery);
 
 	/**
 	 * Determines whether the caterpillar can grow.
@@ -93,5 +93,5 @@ public interface IButterfly extends IIndividualLiving {
 	@Override
 	IButterfly copy();
 
-	ITextComponent getDisplayName();
+	Component getDisplayName();
 }

@@ -3,7 +3,7 @@ package genetics.utils;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;

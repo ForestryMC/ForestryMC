@@ -16,10 +16,10 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.UUID;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import com.mojang.authlib.GameProfile;
 
@@ -99,8 +99,8 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
 	@OnlyIn(Dist.CLIENT)
 	public static class Handler implements IForestryPacketHandlerClient {
 		@Override
-		public void onPacketData(PacketBufferForestry data, PlayerEntity player) throws IOException {
-			Container container = player.containerMenu;
+		public void onPacketData(PacketBufferForestry data, Player player) throws IOException {
+			AbstractContainerMenu container = player.containerMenu;
 			if (container instanceof ILetterInfoReceiver) {
 				EnumAddressee type = data.readEnum(EnumAddressee.values());
 				ITradeStationInfo tradeInfo = null;

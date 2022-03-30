@@ -7,12 +7,14 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.core.NonNullList;
 
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.Optional;
 
 /**
  * Provides an interface to the recipe manager of the suqeezer.
@@ -66,8 +68,7 @@ public interface ISqueezerManager extends ICraftingProvider<ISqueezerRecipe> {
 	 */
 	void addRecipe(int timePerItem, Ingredient resource, FluidStack liquid);
 
-	@Nullable
-	ISqueezerRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items);
+	Optional<ISqueezerRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, NonNullList<ItemStack> items);
 
 	boolean canUse(@Nullable RecipeManager recipeManager, ItemStack itemStack);
 }

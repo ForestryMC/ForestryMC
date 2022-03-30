@@ -10,23 +10,18 @@ import java.util.Deque;
 import java.util.List;
 import java.util.ListIterator;
 
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureManager;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import net.minecraftforge.fml.client.gui.GuiUtils;
-
 import forestry.api.core.tooltips.ToolTip;
 import forestry.core.gui.elements.layouts.ContainerElement;
-
 
 /**
  * This element is the top parent.
@@ -205,8 +200,7 @@ public abstract class Window extends ContainerElement {
 
 	private Collection<GuiElement> getQueuedElements(final GuiElement element) {
 		List<GuiElement> widgets = new ArrayList<>();
-		if (element instanceof ContainerElement) {
-			ContainerElement group = (ContainerElement) element;
+		if (element instanceof ContainerElement group) {
 			boolean addChildren = true;
 			if (element.isCropped()) {
 				int mouseX = getRelativeMouseX(element);
@@ -228,14 +222,14 @@ public abstract class Window extends ContainerElement {
 		return widgets;
 	}
 
-	public void drawTooltip(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawTooltip(PoseStack transform, int mouseX, int mouseY) {
 		ToolTip lines = getTooltip(mouseX, mouseY);
 		if (!lines.isEmpty()) {
-			RenderSystem.pushMatrix();
+			transform.pushPose();
 			//TODO test
-			MainWindow window = Minecraft.getInstance().getWindow();
-			GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
-			RenderSystem.popMatrix();
+			com.mojang.blaze3d.platform.Window window = Minecraft.getInstance().getWindow();
+			// GuiUtils.drawHoveringText(transform, lines.getLines(), mouseX - getX(), mouseY - getY(), window.getGuiScaledWidth(), window.getGuiScaledHeight(), -1, getFontRenderer());
+			transform.popPose();
 		}
 	}
 
@@ -340,11 +334,7 @@ public abstract class Window extends ContainerElement {
 		return mc;
 	}
 
-	public TextureManager getTextureManager() {
-		return getMinecraft().getTextureManager();
-	}
-
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return getMinecraft().font;
 	}
 }

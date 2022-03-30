@@ -7,10 +7,11 @@ package forestry.api.recipes;
 
 import javax.annotation.Nullable;
 
+import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -36,10 +37,9 @@ public interface IStillManager extends ICraftingProvider<IStillRecipe> {
 	 */
 	void addRecipe(int cyclesPerUnit, FluidStack input, FluidStack output);
 
-	@Nullable
-	IStillRecipe findMatchingRecipe(@Nullable RecipeManager recipeManager, @Nullable FluidStack item);
+	Optional<IStillRecipe> findMatchingRecipe(@Nullable RecipeManager recipeManager, FluidStack item);
 
-	boolean matches(@Nullable IStillRecipe recipe, @Nullable FluidStack item);
+	boolean matches(@Nullable IStillRecipe recipe, FluidStack item);
 
 	Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager);
 

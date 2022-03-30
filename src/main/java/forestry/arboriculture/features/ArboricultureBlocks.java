@@ -43,8 +43,8 @@ import forestry.modules.features.FeatureType;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
 
 @FeatureProvider
 public class ArboricultureBlocks {

@@ -1,6 +1,6 @@
 package forestry.mail.compat;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -9,8 +9,6 @@ import forestry.core.config.Constants;
 import forestry.core.utils.JeiUtil;
 import forestry.mail.blocks.BlockTypeMail;
 import forestry.mail.features.MailBlocks;
-import forestry.modules.ForestryModuleUids;
-import forestry.modules.ModuleHelper;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -26,10 +24,6 @@ public class MailJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
-		if (!ModuleHelper.isEnabled(ForestryModuleUids.MAIL)) {
-			return;
-		}
-
 		JeiUtil.addDescription(registration, MailBlocks.BASE.get(BlockTypeMail.MAILBOX).getBlock(), MailBlocks.BASE.get(BlockTypeMail.PHILATELIST).getBlock(), MailBlocks.BASE.get(BlockTypeMail.TRADE_STATION).getBlock());
 	}
 }

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -197,13 +197,13 @@ public class ClimateUtil implements IClimateHelper {
 	}
 
 	@Override
-	public ITextComponent toDisplay(EnumTemperature temperature) {
-		return new TranslationTextComponent("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
+	public Component toDisplay(EnumTemperature temperature) {
+		return new TranslatableComponent("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override
-	public ITextComponent toDisplay(EnumHumidity humidity) {
-		return new TranslationTextComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+	public Component toDisplay(EnumHumidity humidity) {
+		return new TranslatableComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,
@@ -228,23 +228,15 @@ public class ClimateUtil implements IClimateHelper {
 	}
 
 	public static int getColor(EnumTemperature temperature) {
-		switch (temperature) {
-			case ICY:
-				return 0xe6e6fa;
-			case COLD:
-				return 0x31698a;
-			case NORMAL:
-				return 0xf0e9cc;
-			case WARM:
-				return 0xcd9b1d;
-			case HOT:
-				return 0xdf512e;
-			case HELLISH:
-				return 0x9c433e;
-			case NONE:
-				return 0x011f4b;
-			default:
-				return 0xFFFFFF;
-		}
+		return switch (temperature) {
+			case ICY -> 0xe6e6fa;
+			case COLD -> 0x31698a;
+			case NORMAL -> 0xf0e9cc;
+			case WARM -> 0xcd9b1d;
+			case HOT -> 0xdf512e;
+			case HELLISH -> 0x9c433e;
+			case NONE -> 0x011f4b;
+			default -> 0xFFFFFF;
+		};
 	}
 }

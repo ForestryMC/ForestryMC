@@ -2,9 +2,9 @@ package forestry.api.farming;
 
 import java.util.Collection;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 
 public interface IFarmProperties {
 
@@ -21,7 +21,7 @@ public interface IFarmProperties {
 	 */
 	int getWaterConsumption(IFarmHousing housing, float hydrationModifier);
 
-	ITextComponent getDisplayName(boolean manual);
+	Component getDisplayName(boolean manual);
 
 	String getTranslationKey();
 

@@ -12,15 +12,15 @@ package forestry.storage.items;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -36,7 +36,7 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 		this(rootUid, definition, ItemGroupForestry.tabForestry);
 	}
 
-	public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition, ItemGroup tab) {
+	public ItemBackpackNaturalist(String rootUid, IBackpackDefinition definition, CreativeModeTab tab) {
 		super(definition, EnumBackpackType.NATURALIST, tab);
 		this.rootUid = rootUid;
 	}
@@ -55,13 +55,13 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 	//	}
 
 	@Override
-	public Container getContainer(int windowId, PlayerEntity player, ItemStack heldItem) {
+	public AbstractContainerMenu getContainer(int windowId, Player player, ItemStack heldItem) {
 		ItemInventoryBackpackPaged inventory = new ItemInventoryBackpackPaged(player, Constants.SLOTS_BACKPACK_APIARIST, heldItem, this);
-		return new ContainerNaturalistBackpack(windowId, player.inventory, inventory, 0);    //TODO init on first page? Or is this server desync?
+		return new ContainerNaturalistBackpack(windowId, player.getInventory(), inventory, 0);    //TODO init on first page? Or is this server desync?
 	}
 
 	//TODO see if this can be deduped. Given we pass in the held item etc.
-	public static class ContainerProvider implements INamedContainerProvider {
+	public static class ContainerProvider implements MenuProvider {
 
 		private ItemStack heldItem;
 
@@ -70,18 +70,17 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 		}
 
 		@Override
-		public ITextComponent getDisplayName() {
-			return new StringTextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+		public Component getDisplayName() {
+			return new TextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
 		}
 
 		@Nullable
 		@Override
-		public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+		public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 			Item item = heldItem.getItem();
-			if (!(item instanceof ItemBackpackNaturalist)) {
+			if (!(item instanceof ItemBackpackNaturalist backpack)) {
 				return null;
 			}
-			ItemBackpackNaturalist backpack = (ItemBackpackNaturalist) item;
 			return backpack.getContainer(windowId, playerEntity, heldItem);
 		}
 	}

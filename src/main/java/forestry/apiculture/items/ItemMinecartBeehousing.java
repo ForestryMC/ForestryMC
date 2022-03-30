@@ -12,19 +12,19 @@ package forestry.apiculture.items;
 
 import java.util.Locale;
 
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.dispenser.IDispenseItemBehavior;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.MinecartItem;
-import net.minecraft.state.properties.RailShape;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.MinecartItem;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import forestry.api.core.IItemSubtype;
 import forestry.api.core.ItemGroups;
@@ -51,24 +51,24 @@ public class ItemMinecartBeehousing extends MinecartItem {
 		super(null, (new Item.Properties()).durability(0).tab(ItemGroups.tabApiculture));
 		this.type = type;
 
-		DispenserBlock.DISPENSER_REGISTRY.put(this, IDispenseItemBehavior.NOOP);
+		DispenserBlock.DISPENSER_REGISTRY.put(this, DispenseItemBehavior.NOOP);
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
-		World world = context.getLevel();
+	public InteractionResult useOn(UseOnContext context) {
+		Level world = context.getLevel();
 		BlockPos pos = context.getClickedPos();
-		PlayerEntity player = context.getPlayer();
+		Player player = context.getPlayer();
 		BlockState blockstate = world.getBlockState(pos);
 
-		if (!AbstractRailBlock.isRail(world.getBlockState(pos))) {
-			return ActionResultType.PASS;
+		if (!BaseRailBlock.isRail(world.getBlockState(pos))) {
+			return InteractionResult.PASS;
 		}
 
 		ItemStack stack = player.getItemInHand(context.getHand());
 
 		if (!context.getLevel().isClientSide) {
-			RailShape railshape = blockstate.getBlock() instanceof AbstractRailBlock ? ((AbstractRailBlock) blockstate.getBlock()).getRailDirection(blockstate, world, pos, null) : RailShape.NORTH_SOUTH;
+			RailShape railshape = blockstate.getBlock() instanceof BaseRailBlock ? ((BaseRailBlock) blockstate.getBlock()).getRailDirection(blockstate, world, pos, null) : RailShape.NORTH_SOUTH;
 			double offset = 0.0D;
 			if (railshape.isAscending()) {
 				offset = 0.5D;
@@ -93,7 +93,7 @@ public class ItemMinecartBeehousing extends MinecartItem {
 		}
 
 		stack.shrink(1);
-		return ActionResultType.sidedSuccess(world.isClientSide);
+		return InteractionResult.sidedSuccess(world.isClientSide);
 	}
 
 	@Override

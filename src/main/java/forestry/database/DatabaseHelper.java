@@ -8,10 +8,10 @@ import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class DatabaseHelper {
 	public static boolean ascending;
@@ -29,19 +29,19 @@ public class DatabaseHelper {
 	};
 
 	//TODO simplify this?
-	public static ITextComponent getItemName(ItemStack itemStack) {
+	public static Component getItemName(ItemStack itemStack) {
 		try {
-			ITextComponent name = itemStack.getHoverName();
+			Component name = itemStack.getHoverName();
 			if (name.getString().isEmpty()) {
-				name = new TranslationTextComponent(itemStack.getItem().getDescriptionId(itemStack));
+				name = new TranslatableComponent(itemStack.getItem().getDescriptionId(itemStack));
 			}
 			return name;
 		} catch (final Exception errA) {
 			try {
 				String name = itemStack.getDescriptionId();
-				return new TranslationTextComponent(name);
+				return new TranslatableComponent(name);
 			} catch (final Exception errB) {
-				return new StringTextComponent("Exception");
+				return new TextComponent("Exception");
 			}
 		}
 	}

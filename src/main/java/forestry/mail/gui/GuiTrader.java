@@ -10,10 +10,10 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -24,7 +24,7 @@ import forestry.mail.tiles.TileTrader;
 public class GuiTrader extends GuiForestry<ContainerTrader> {
 	private final TileTrader tile;
 
-	public GuiTrader(ContainerTrader container, PlayerInventory inv, ITextComponent title) {
+	public GuiTrader(ContainerTrader container, Inventory inv, Component title) {
 		super(Constants.TEXTURE_PATH_GUI + "/mailtrader2.png", container, inv, title);
 		this.tile = container.getTile();
 		this.imageWidth = 226;
@@ -32,7 +32,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 	}
 
 	@Override
-	protected void renderLabels(MatrixStack transform, int mouseX, int mouseY) {
+	protected void renderLabels(PoseStack transform, int mouseX, int mouseY) {
 		String name = Translator.translateToLocal(tile.getUnlocalizedTitle());
 		this.minecraft.font.draw(transform, name, textLayout.getCenteredOffset(name), 6, ColourProperties.INSTANCE.get("gui.mail.text"));
 
@@ -46,7 +46,7 @@ public class GuiTrader extends GuiForestry<ContainerTrader> {
 	}
 
 	@Override
-	protected void renderBg(MatrixStack transform, float partialTicks, int mouseY, int mouseX) {
+	protected void renderBg(PoseStack transform, float partialTicks, int mouseY, int mouseX) {
 		super.renderBg(transform, partialTicks, mouseY, mouseX);
 
 		this.minecraft.font.draw(transform, container.getAddress().getName(), leftPos + 19, topPos + 22, ColourProperties.INSTANCE.get("gui.mail.text"));

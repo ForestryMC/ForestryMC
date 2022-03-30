@@ -4,23 +4,21 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.MerchantOffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.village.PointOfInterestType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 
 import forestry.api.apiculture.genetics.EnumBeeType;
@@ -31,8 +29,6 @@ import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.ItemHoneyComb;
 import forestry.core.config.Constants;
-import forestry.core.registration.RegisterVillagerPointOfInterest;
-import forestry.core.registration.RegisterVillagerProfession;
 import forestry.core.registration.VillagerTrade;
 
 public class RegisterVillager {
@@ -44,7 +40,7 @@ public class RegisterVillager {
 
 	@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Registers {
-		public static final DeferredRegister<PointOfInterestType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
+		public static final DeferredRegister<PoiType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
 		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Constants.MOD_ID);
 
 		// public static final RegistryObject<PointOfInterestType> POI_APIARY = POINTS_OF_INTEREST.register("apiary", () -> RegisterVillagerPointOfInterest.create("apiary", RegisterVillagerPointOfInterest.assembleStates(ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).getBlock())));
@@ -72,7 +68,7 @@ public class RegisterVillager {
 			}
 		}
 
-		private static class GiveHoneyCombForItem implements VillagerTrades.ITrade {
+		private static class GiveHoneyCombForItem implements VillagerTrades.ItemListing {
 			final int maxUses;
 			final int xp;
 			final float priceMult;
@@ -98,7 +94,7 @@ public class RegisterVillager {
 			}
 		}
 
-		private static class GiveDroneForItems implements VillagerTrades.ITrade {
+		private static class GiveDroneForItems implements VillagerTrades.ItemListing {
 			final int maxUses;
 			final int xp;
 			final float priceMult;

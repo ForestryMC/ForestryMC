@@ -10,13 +10,13 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,7 +38,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@Override
 	public IEffectData doEffectThrottled(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 
-		World world = housing.getWorldObj();
+		Level world = housing.getWorldObj();
 
 		EnumTemperature temp = housing.getTemperature();
 
@@ -50,8 +50,8 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			default:
 		}
 
-		Vector3i area = getModifiedArea(genome, housing);
-		Vector3i offset = VectUtil.scale(area, -1 / 2.0f);
+		Vec3i area = getModifiedArea(genome, housing);
+		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);
 
 		for (int i = 0; i < 1; i++) {
 
@@ -63,14 +63,14 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 			if (world.hasChunkAt(posBlock)) {
 				BlockState state = world.getBlockState(posBlock);
 				Block block = state.getBlock();
-				if (!state.isAir(world, posBlock) && block != Blocks.SNOW || !Blocks.SNOW.defaultBlockState().canSurvive(world, posBlock)) {
+				if (!state.isAir() && block != Blocks.SNOW || !Blocks.SNOW.defaultBlockState().canSurvive(world, posBlock)) {
 					continue;
 				}
 
 				if (block == Blocks.SNOW) {
-					int layers = state.getValue(SnowBlock.LAYERS);
+					int layers = state.getValue(SnowLayerBlock.LAYERS);
 					if (layers < 7) {
-						BlockState moreSnow = state.setValue(SnowBlock.LAYERS, layers + 1);
+						BlockState moreSnow = state.setValue(SnowLayerBlock.LAYERS, layers + 1);
 						world.setBlockAndUpdate(posBlock, moreSnow);
 					} else {
 						world.setBlockAndUpdate(posBlock, Blocks.SNOW.defaultBlockState());
@@ -88,11 +88,11 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
 	@OnlyIn(Dist.CLIENT)
 	public IEffectData doFX(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		if (housing.getWorldObj().random.nextInt(3) == 0) {
-			Vector3i area = getModifiedArea(genome, housing);
-			Vector3i offset = VectUtil.scale(area, -0.5F);
+			Vec3i area = getModifiedArea(genome, housing);
+			Vec3i offset = VectUtil.scale(area, -0.5F);
 
 			BlockPos coordinates = housing.getCoordinates();
-			World world = housing.getWorldObj();
+			Level world = housing.getWorldObj();
 
 			BlockPos spawn = VectUtil.getRandomPositionInArea(world.random, area).offset(coordinates).offset(offset);
 			ParticleRender.addEntitySnowFX(world, spawn.getX(), spawn.getY(), spawn.getZ());

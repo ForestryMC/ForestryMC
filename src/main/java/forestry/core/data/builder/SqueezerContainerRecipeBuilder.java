@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 
 import forestry.api.recipes.ISqueezerContainerRecipe;
 import forestry.factory.recipes.RecipeSerializers;
@@ -40,11 +40,11 @@ public class SqueezerContainerRecipeBuilder {
 		return this;
 	}
 
-	public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
+	public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
 		consumer.accept(new Result(id, emptyContainer, processingTime, remnants, remnantsChance));
 	}
 
-	private static class Result implements IFinishedRecipe {
+	private static class Result implements FinishedRecipe {
 		private final ResourceLocation id;
 		private final ItemStack emptyContainer;
 		private final int processingTime;
@@ -73,7 +73,7 @@ public class SqueezerContainerRecipeBuilder {
 		}
 
 		@Override
-		public IRecipeSerializer<?> getType() {
+		public RecipeSerializer<?> getType() {
 			return ISqueezerContainerRecipe.Companion.SERIALIZER;
 		}
 

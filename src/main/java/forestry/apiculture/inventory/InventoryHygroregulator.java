@@ -12,7 +12,7 @@ package forestry.apiculture.inventory;
 
 import java.util.Optional;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;

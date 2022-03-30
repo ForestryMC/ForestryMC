@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.forgespi.language.ModFileScanData;
 
@@ -46,8 +46,8 @@ public class ForestryPluginUtil {
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
 			for (ModFileScanData.AnnotationData data : annotationData) {
-				if (Objects.equals(data.getAnnotationType(), annotationType)) {
-					pluginClassNames.add(data.getMemberName());
+				if (Objects.equals(data.annotationType(), annotationType)) {
+					pluginClassNames.add(data.memberName());
 				}
 			}
 		}
@@ -65,7 +65,7 @@ public class ForestryPluginUtil {
 		ForestryModule info = module.getClass().getAnnotation(ForestryModule.class);
 
 		//TODO - check this is only called on the client. I don't think it is at the moment
-		String comment = new TranslationTextComponent(info.unlocalizedDescription()).getContents();
+		String comment = new TranslatableComponent(info.unlocalizedDescription()).getContents();
 		Set<ResourceLocation> dependencies = module.getDependencyUids();
 		if (!dependencies.isEmpty()) {
 			Iterator<ResourceLocation> iDependencies = dependencies.iterator();
@@ -93,8 +93,8 @@ public class ForestryPluginUtil {
 		for (ModFileScanData scanData : allScanData) {
 			Set<ModFileScanData.AnnotationData> annotationData = scanData.getAnnotations();
 			for (ModFileScanData.AnnotationData data : annotationData) {
-				if (Objects.equals(data.getAnnotationType(), annotationType)) {
-					pluginClassNames.add(data.getMemberName());
+				if (Objects.equals(data.annotationType(), annotationType)) {
+					pluginClassNames.add(data.memberName());
 				}
 			}
 		}

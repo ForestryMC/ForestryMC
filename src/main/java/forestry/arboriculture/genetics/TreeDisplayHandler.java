@@ -2,11 +2,9 @@ package forestry.arboriculture.genetics;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -14,7 +12,6 @@ import forestry.api.core.tooltips.ITextInstance;
 import forestry.api.core.tooltips.ToolTip;
 import forestry.api.genetics.alyzer.IAlleleDisplayHandler;
 import forestry.api.genetics.alyzer.IAlleleDisplayHelper;
-import forestry.api.genetics.alyzer.IAlyzerHelper;
 import forestry.apiculture.genetics.IGeneticTooltipProvider;
 import forestry.arboriculture.genetics.alleles.AlleleFruits;
 
@@ -26,14 +23,14 @@ import genetics.api.individual.IChromosomeValue;
 import genetics.api.individual.IGenome;
 
 public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
-	SAPPINESS(TreeChromosomes.SAPPINESS, TextFormatting.GOLD, "S: %1$s"),
-	MATURATION(TreeChromosomes.MATURATION, TextFormatting.RED, "M: %1$s"),
+	SAPPINESS(TreeChromosomes.SAPPINESS, ChatFormatting.GOLD, "S: %1$s"),
+	MATURATION(TreeChromosomes.MATURATION, ChatFormatting.RED, "M: %1$s"),
 	GROUP_0(0, 0, 1),
-	HEIGHT(TreeChromosomes.HEIGHT, TextFormatting.LIGHT_PURPLE, "H: %1$s"),
-	GIRTH(TreeChromosomes.GIRTH, TextFormatting.AQUA, "G: %1$sx%2$s"),
+	HEIGHT(TreeChromosomes.HEIGHT, ChatFormatting.LIGHT_PURPLE, "H: %1$s"),
+	GIRTH(TreeChromosomes.GIRTH, ChatFormatting.AQUA, "G: %1$sx%2$s"),
 	GROUP_1(1, 3, 4),
-	SAPLINGS(TreeChromosomes.FERTILITY, TextFormatting.YELLOW, "S: %1$s"),
-	YIELD(TreeChromosomes.YIELD, TextFormatting.WHITE, "Y: %1$s"),
+	SAPLINGS(TreeChromosomes.FERTILITY, ChatFormatting.YELLOW, "S: %1$s"),
+	YIELD(TreeChromosomes.YIELD, ChatFormatting.WHITE, "Y: %1$s"),
 	GROUP_2(2, 6, 7),
 	FIREPROOF(TreeChromosomes.FIREPROOF, 3) {
 		@Override
@@ -43,7 +40,7 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 				return;
 			}
 			toolTip.translated("for.gui.fireresist")
-					.style(TextFormatting.RED);
+					.style(ChatFormatting.RED);
 		}
 	},
 	FRUITS(TreeChromosomes.FRUITS, 4) {
@@ -52,9 +49,9 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 			IAllele fruit = getActiveAllele(genome);
 			if (fruit != AlleleFruits.fruitNone) {
 				ITextInstance<?, ?, ?> instance = toolTip.singleLine().text("F: ")
-						.add(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDescription()).style(TextFormatting.GREEN);
+						.add(genome.getActiveAllele(TreeChromosomes.FRUITS).getProvider().getDescription()).style(ChatFormatting.GREEN);
 				if (!individual.canBearFruit()) {
-					instance.style(TextFormatting.STRIKETHROUGH);
+					instance.style(ChatFormatting.STRIKETHROUGH);
 				}
 				instance.create();
 			}
@@ -67,7 +64,7 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 	final int alyzerIndex;
 	final int tooltipIndex;
 	@Nullable
-	final TextFormatting color;
+	final ChatFormatting color;
 	final String formattingText;
 	final int[] groupPair;
 
@@ -89,7 +86,7 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 		this(type, alyzerIndex, -1, alyzerCaption);
 	}
 
-	TreeDisplayHandler(IChromosomeType type, TextFormatting color, String formattingText) {
+	TreeDisplayHandler(IChromosomeType type, ChatFormatting color, String formattingText) {
 		this.type = type;
 		this.alyzerCaption = "";
 		this.alyzerIndex = -1;
@@ -142,18 +139,14 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 			Object firstValue = genome.getActiveValue(first.type, Object.class);
 			Object secondValue = genome.getActiveValue(second.type, Object.class);
 			toolTip.singleLine()
-					.add(new TranslationTextComponent(first.formattingText, firstValue
+					.add(new TranslatableComponent(first.formattingText, firstValue
 					), first.color)
 					.text(" ")
-					.add(new TranslationTextComponent(second.formattingText, secondValue
+					.add(new TranslatableComponent(second.formattingText, secondValue
 					), second.color)
 					.create();
 			//toolTip.translated("%1$s %2$s", first.formattingText, second.formattingText)
 		}
-	}
-
-	@Override
-	public void drawAlyzer(IAlyzerHelper helper, IGenome genome, double mouseX, double mouseY, MatrixStack transform) {
 	}
 
 	<V> IAlleleValue<V> getActive(IGenome genome) {
@@ -199,9 +192,9 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 		public void addTooltip(ToolTip toolTip, IGenome genome, ITree individual) {
 			ToolTip cache = new ToolTip();
 			first.addTooltip(cache, genome, individual);
-			ITextComponent fistComp = cache.lastComponent();
+			Component fistComp = cache.lastComponent();
 			second.addTooltip(cache, genome, individual);
-			ITextComponent secondComp = cache.lastComponent();
+			Component secondComp = cache.lastComponent();
 			toolTip.translated("%1$s %2$s", fistComp, secondComp);
 		}
 	}

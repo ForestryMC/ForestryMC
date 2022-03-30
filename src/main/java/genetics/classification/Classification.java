@@ -4,11 +4,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 import genetics.ApiInstance;
 import genetics.api.alleles.IAlleleSpecies;
 import genetics.api.classification.IClassification;
+
+import genetics.api.classification.IClassification.EnumClassLevel;
 
 public class Classification implements IClassification {
 

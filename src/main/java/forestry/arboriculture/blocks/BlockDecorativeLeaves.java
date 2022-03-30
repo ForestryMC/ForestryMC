@@ -2,19 +2,19 @@ package forestry.arboriculture.blocks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,6 +29,8 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 
 import genetics.api.individual.IGenome;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForgeShearable {
 	private TreeDefinition definition;
@@ -51,33 +53,33 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		if (TreeDefinition.Willow.equals(definition)) {
-			return VoxelShapes.empty();
+			return Shapes.empty();
 		}
 		return super.getCollisionShape(state, worldIn, pos, context);
 	}
 
 	@Override
-	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
+	public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
 		super.entityInside(state, worldIn, pos, entityIn);
-		Vector3d motion = entityIn.getDeltaMovement();
+		Vec3 motion = entityIn.getDeltaMovement();
 		entityIn.setDeltaMovement(motion.multiply(0.4D, 1.0D, 0.4D));
 	}
 
 	/* PROPERTIES */
 	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return 60;
 	}
 
 	@Override
-	public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		return true;
 	}
 
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {
+	public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
 		if (face == Direction.DOWN) {
 			return 20;
 		} else if (face != Direction.UP) {
@@ -89,7 +91,7 @@ public class BlockDecorativeLeaves extends Block implements IColoredBlock, IForg
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public int colorMultiplier(BlockState state, @Nullable IBlockReader worldIn, @Nullable BlockPos pos, int tintIndex) {
+	public int colorMultiplier(BlockState state, @Nullable BlockGetter worldIn, @Nullable BlockPos pos, int tintIndex) {
 		IGenome genome = definition.getGenome();
 
 		if (tintIndex == BlockAbstractLeaves.FRUIT_COLOR_INDEX) {

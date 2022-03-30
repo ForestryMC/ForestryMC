@@ -2,9 +2,9 @@ package forestry.core.gui.elements;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.gui.Drawable;
@@ -135,13 +135,13 @@ public class ScrollBarElement extends ContainerElement {
 	}
 
 	public int getValue() {
-		return MathHelper.clamp(currentValue, minValue, maxValue);
+		return Mth.clamp(currentValue, minValue, maxValue);
 	}
 
 	public ScrollBarElement setValue(int value) {
 		initialised = true;
 		int oldValue = this.currentValue;
-		currentValue = MathHelper.clamp(value, minValue, maxValue);
+		currentValue = Mth.clamp(value, minValue, maxValue);
 		if (oldValue == currentValue) {
 			return this;
 		}
@@ -173,14 +173,14 @@ public class ScrollBarElement extends ContainerElement {
 	}
 
 	@Override
-	public void drawElement(MatrixStack transform, int mouseX, int mouseY) {
+	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
 		}
 		Window window = getWindow();
 		updateSlider(window.getRelativeMouseX(interactionField), window.getRelativeMouseY(interactionField));
 
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		super.drawElement(transform, mouseX, mouseY);
 	}
 

@@ -1,53 +1,63 @@
 package forestry.core.features;
 
-import java.util.ArrayList;
-
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-
-import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
+import forestry.core.config.Constants;
+import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.OrePlacements;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
 import net.minecraftforge.fml.common.Mod;
 
-import forestry.core.blocks.EnumResourceType;
-import forestry.core.config.Constants;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreFeatures {
-	private static final ArrayList<ConfiguredFeature<?, ?>> overworldOres = new ArrayList<ConfiguredFeature<?, ?>>();
+	private static List<Holder<PlacedFeature>> OVERWORLD_ORES = List.of();
 
 	public static void registerOres() {
-		overworldOres.add(register("apatite_ore", Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.APATITE).defaultState(), 36)).range(4).squared().count((56))));
+		var apatite = OrePlacements.commonOrePlacement(3, HeightRangePlacement.triangle(VerticalAnchor.absolute(48), VerticalAnchor.absolute(112)));
+		var tin = OrePlacements.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)));
 
-		overworldOres.add(register("copper_ore", Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.COPPER).defaultState(), 6)).range(20).squared().count(32)));
+		OreConfiguration apatiteOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.APATITE_ORE.defaultState(), 3);
+		OreConfiguration deepslateApatiteOre = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState(), 3);
+		OreConfiguration tinOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState(), 9);
+		OreConfiguration deepslateTinOre = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_TIN_ORE.defaultState(), 9);
 
-		overworldOres.add(register("tin_ore", Feature.ORE.configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, CoreBlocks.RESOURCE_ORE.get(EnumResourceType.TIN).defaultState(), 6)).range(20).squared().count(16)));
+		OVERWORLD_ORES = List.of(
+				registerOre("apatite_ore", apatiteOre, apatite),
+				registerOre("deepslate_apatite_ore", deepslateApatiteOre, apatite),
+				registerOre("tin_ore", tinOre, tin),
+				registerOre("deepslate_tin_ore",deepslateTinOre, tin)
+		);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void gen(BiomeLoadingEvent event) {
-		if (event.getCategory() == Biome.Category.NETHER || event.getCategory() == Biome.Category.THEEND) {
+		if (event.getCategory() == Biome.BiomeCategory.NETHER || event.getCategory() == Biome.BiomeCategory.THEEND) {
 			return;
 		}
 
-		BiomeGenerationSettingsBuilder generation = event.getGeneration();
-		for (ConfiguredFeature<?, ?> ore : overworldOres) {
-			if (ore != null) {
-				generation.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ore);
-			}
+		for (Holder<PlacedFeature> feature : OVERWORLD_ORES) {
+			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature);
 		}
 	}
 
-	private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String name, ConfiguredFeature<FC, ?> configuredFeature) {
-		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, Constants.MOD_ID + ":" + name, configuredFeature);
+	private static Holder<PlacedFeature> registerOre(String registryName, OreConfiguration oreConfiguration, List<PlacementModifier> placementModifiers) {
+		String identifier = new ResourceLocation(Constants.MOD_ID, registryName).toString();
+		Holder<ConfiguredFeature<OreConfiguration, ?>> oreFeature = FeatureUtils.register(identifier, Feature.ORE, oreConfiguration);
+		return PlacementUtils.register(identifier, oreFeature, placementModifiers);
 	}
 }

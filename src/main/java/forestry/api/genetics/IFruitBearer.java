@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 /**
  * Can be implemented by tile entities which can bear fruit.

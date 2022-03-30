@@ -1,32 +1,35 @@
 package forestry.factory.recipes.jei.fermenter;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import forestry.api.fuels.FermenterFuel;
+import forestry.api.fuels.FuelManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.api.recipes.IVariableFermentable;
 import forestry.core.config.Constants;
 import forestry.core.recipes.jei.ForestryRecipeCategory;
-import forestry.core.recipes.jei.ForestryRecipeCategoryUid;
+import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
-
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
-public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRecipeWrapper> {
-	private static final int resourceSlot = 0;
-	private static final int fuelSlot = 1;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-	private static final int inputTank = 0;
-	private static final int outputTank = 1;
-
+public class FermenterRecipeCategory extends ForestryRecipeCategory<IFermenterRecipe> {
 	private static final ResourceLocation guiTexture = new ResourceLocation(Constants.MOD_ID, Constants.TEXTURE_PATH_GUI + "/fermenter.png");
 
 	private final IDrawableAnimated progressBar0;
@@ -42,17 +45,25 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 		IDrawableStatic progressBarDrawable1 = guiHelper.createDrawable(guiTexture, 176, 78, 4, 18);
 		this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
-		this.icon = guiHelper.createDrawableIngredient(new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block()));
+		ItemStack fermenter = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block());
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, fermenter);
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid() {
-		return ForestryRecipeCategoryUid.FERMENTER;
+		return ForestryRecipeType.FERMENTER.getUid();
+	}
+
+	@SuppressWarnings("removal")
+	@Override
+	public Class<? extends IFermenterRecipe> getRecipeClass() {
+		return IFermenterRecipe.class;
 	}
 
 	@Override
-	public Class<? extends FermenterRecipeWrapper> getRecipeClass() {
-		return FermenterRecipeWrapper.class;
+	public RecipeType<IFermenterRecipe> getRecipeType() {
+		return ForestryRecipeType.FERMENTER;
 	}
 
 	@Override
@@ -61,23 +72,45 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<FermenterRec
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, FermenterRecipeWrapper fermenterRecipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
+	public void setRecipe(IRecipeLayoutBuilder builder, IFermenterRecipe recipe, IFocusGroup focuses) {
+		IRecipeSlotBuilder ingredientInputSlot = builder.addSlot(RecipeIngredientRole.INPUT, 51, 5)
+			.addIngredients(recipe.getResource());
 
-		guiItemStacks.init(resourceSlot, true, 50, 4);
-		guiItemStacks.init(fuelSlot, true, 40, 38);
+		Collection<FermenterFuel> fuels = FuelManager.fermenterFuel.values();
+		List<ItemStack> fuelInputs = fuels.stream().map(FermenterFuel::getItem).toList();
+		builder.addSlot(RecipeIngredientRole.INPUT, 41, 39)
+				.addItemStacks(fuelInputs);
 
-		guiFluidStacks.init(inputTank, true, 1, 1, 16, 58, 3000, false, tankOverlay);
-		guiFluidStacks.init(outputTank, false, 91, 1, 16, 58, 3000, false, tankOverlay);
+		FluidStack fluidInput = recipe.getFluidResource().copy();
+		fluidInput.setAmount(recipe.getFermentationValue());
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
+				.setFluidRenderer(3000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredient(VanillaTypes.FLUID, fluidInput);
 
-		guiItemStacks.set(ingredients);
-		guiFluidStacks.set(ingredients);
+		final int baseAmount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
+		List<FluidStack> outputs =
+			Arrays.stream(recipe.getResource().getItems())
+				.map(fermentable -> {
+					int amount = baseAmount;
+					if (fermentable.getItem() instanceof IVariableFermentable variableFermentable) {
+						amount *= variableFermentable.getFermentationModifier(fermentable);
+					}
+					return new FluidStack(recipe.getOutput(), amount);
+				})
+				.toList();
+
+		IRecipeSlotBuilder fluidOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 91, 1)
+				.setFluidRenderer(3000, false, 16, 58)
+				.setOverlay(tankOverlay, 0, 0)
+				.addIngredients(VanillaTypes.FLUID, outputs);
+
+		builder.createFocusLink(ingredientInputSlot, fluidOutputSlot);
 	}
 
 	@Override
-	public void draw(FermenterRecipeWrapper recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
-		progressBar0.draw(matrixStack, 40, 14);
-		progressBar1.draw(matrixStack, 64, 28);
+	public void draw(IFermenterRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+		progressBar0.draw(stack, 40, 14);
+		progressBar1.draw(stack, 64, 28);
 	}
 }

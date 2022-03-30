@@ -2,9 +2,11 @@ package forestry.database.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 
 import forestry.core.tiles.TileBase;
 import forestry.database.features.DatabaseTiles;
@@ -13,14 +15,14 @@ import forestry.database.inventory.InventoryDatabase;
 
 public class TileDatabase extends TileBase {
 
-	public TileDatabase() {
-		super(DatabaseTiles.DATABASE.tileType());
+	public TileDatabase(BlockPos pos, BlockState state) {
+		super(DatabaseTiles.DATABASE.tileType(), pos, state);
 		setInternalInventory(new InventoryDatabase(this));
 	}
 
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
 		return new ContainerDatabase(windowId, playerInventory, this);
 	}
 }

@@ -2,8 +2,8 @@ package forestry.api.core.tooltips;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 /**
  * Helper class to allow simple appending of siblings to a text collection.
@@ -11,7 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 public class TextCompound implements ITextInstance<TextCompound, TextCompound, TextCollection> {
 	private final TextCollection parent;
 	@Nullable
-	private IFormattableTextComponent root;
+	private MutableComponent root;
 
 	public TextCompound(TextCollection parent) {
 		this.parent = parent;
@@ -19,17 +19,17 @@ public class TextCompound implements ITextInstance<TextCompound, TextCompound, T
 
 	@Nullable
 	@Override
-	public ITextComponent lastComponent() {
+	public Component lastComponent() {
 		return root;
 	}
 
 	@Override
-	public TextCompound add(ITextComponent line) {
+	public TextCompound add(Component line) {
 		if (root == null) {
-			if (!(line instanceof IFormattableTextComponent)) {
+			if (!(line instanceof MutableComponent)) {
 				return this;
 			}
-			root = (IFormattableTextComponent) line;
+			root = (MutableComponent) line;
 			return this;
 		}
 		root.append(line);

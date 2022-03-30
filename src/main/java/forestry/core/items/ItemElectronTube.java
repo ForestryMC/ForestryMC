@@ -17,16 +17,16 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -54,14 +54,14 @@ public class ItemElectronTube extends ItemOverlay {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, world, list, flag);
 		Multimap<ICircuitLayout, ICircuit> circuits = getCircuits(itemstack);
 		if (!circuits.isEmpty()) {
 			if (Screen.hasShiftDown()) {
 				for (ICircuitLayout circuitLayout : circuits.keys()) {
 					String circuitLayoutName = circuitLayout.getUsage();
-					list.add(new StringTextComponent(circuitLayoutName).withStyle(TextFormatting.WHITE, TextFormatting.UNDERLINE));
+					list.add(new TextComponent(circuitLayoutName).withStyle(ChatFormatting.WHITE, ChatFormatting.UNDERLINE));
 					for (ICircuit circuit : circuits.get(circuitLayout)) {
 						circuit.addTooltip(list);
 					}
@@ -70,14 +70,14 @@ public class ItemElectronTube extends ItemOverlay {
 				ItemTooltipUtil.addShiftInformation(itemstack, world, list, flag);
 			}
 		} else {
-			list.add(new StringTextComponent("<")
-					.append(new TranslationTextComponent("for.gui.noeffect")
-							.append(">").withStyle(TextFormatting.GRAY)));
+			list.add(new TextComponent("<")
+					.append(new TranslatableComponent("for.gui.noeffect")
+							.append(">").withStyle(ChatFormatting.GRAY)));
 		}
 	}
 
 	@Override
-	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> subItems) {
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 		if (this.allowdedIn(tab)) {
 			if (Config.isDebug || !type.isSecret()) {
 				ItemStack stack = new ItemStack(this);
@@ -94,10 +94,8 @@ public class ItemElectronTube extends ItemOverlay {
 
 		for (ICircuitLayout circuitLayout : allLayouts) {
 			try {
-				ICircuit circuit = ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack);
-				if (circuit != null) {
-					circuits.put(circuitLayout, circuit);
-				}
+				ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack)
+					.ifPresent(iCircuit -> circuits.put(circuitLayout, iCircuit));
 			} catch (NullPointerException ignored) {
 				// Hack, but MineColonies wants to discover all items on launch for some reason. See #2629
 			}

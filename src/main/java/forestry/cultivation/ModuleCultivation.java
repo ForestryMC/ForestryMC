@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Set;
 
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +35,7 @@ public class ModuleCultivation extends BlankForestryModule {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerGuiFactories() {
-		ScreenManager.register(CultivationContainers.PLANTER.containerType(), GuiPlanter::new);
+		MenuScreens.register(CultivationContainers.PLANTER.containerType(), GuiPlanter::new);
 	}
 
 	@Override

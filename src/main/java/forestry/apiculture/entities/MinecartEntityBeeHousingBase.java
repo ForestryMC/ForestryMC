@@ -12,14 +12,14 @@ package forestry.apiculture.entities;
 
 import java.util.Optional;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.phys.Vec3;
 
 import com.mojang.authlib.GameProfile;
 
@@ -46,7 +46,7 @@ import forestry.core.utils.NetworkUtil;
 import forestry.core.utils.TickHelper;
 
 public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContainerForestry implements IBeeHousing, IOwnedTile, IGuiBeeHousingDelegate, IClimatised, IStreamableGui {
-	private static final DataParameter<Optional<GameProfile>> OWNER = EntityDataManager.defineId(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
+	private static final EntityDataAccessor<Optional<GameProfile>> OWNER = SynchedEntityData.defineId(MinecartEntityBeeHousingBase.class, GameProfileDataSerializer.INSTANCE);
 
 	private static final int beeFXInterval = 4;
 	private static final int pollenFXInterval = 50;
@@ -73,11 +73,11 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	private int breedingProgressPercent = 0;
 	private boolean needsActiveUpdate = true;
 
-	public MinecartEntityBeeHousingBase(EntityType<? extends MinecartEntityBeeHousingBase> type, World world) {
+	public MinecartEntityBeeHousingBase(EntityType<? extends MinecartEntityBeeHousingBase> type, Level world) {
 		super(type, world);
 	}
 
-	public MinecartEntityBeeHousingBase(EntityType<?> type, World world, double posX, double posY, double posZ) {
+	public MinecartEntityBeeHousingBase(EntityType<?> type, Level world, double posX, double posY, double posZ) {
 		super(type, world, posX, posY, posZ);
 	}
 
@@ -111,7 +111,7 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 
 	@Override
 	public float getExactTemperature() {
-		return getBiome().getTemperature(blockPosition());
+		return 0; // getBiome().getTemperature(blockPosition());
 	}
 
 	@Override
@@ -135,13 +135,13 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public World getWorldObj() {
+	public Level getWorldObj() {
 		return level;
 	}
 
 	@Override
 	public Biome getBiome() {
-		return level.getBiome(blockPosition());
+		return level.getBiome(blockPosition()).value();
 	}
 
 	@Override
@@ -160,9 +160,9 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public Vector3d getBeeFXCoordinates() {
+	public Vec3 getBeeFXCoordinates() {
 		BlockPos pos = blockPosition();
-		return new Vector3d(pos.getX(), pos.getY() + 0.25, pos.getZ());
+		return new Vec3(pos.getX(), pos.getY() + 0.25, pos.getZ());
 	}
 
 	@Override
@@ -209,14 +209,14 @@ public abstract class MinecartEntityBeeHousingBase extends MinecartEntityContain
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compoundNBT) {
+	public void readAdditionalSaveData(CompoundTag compoundNBT) {
 		super.readAdditionalSaveData(compoundNBT);
 		beeLogic.read(compoundNBT);
 		ownerHandler.read(compoundNBT);
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compoundNBT) {
+	protected void addAdditionalSaveData(CompoundTag compoundNBT) {
 		super.addAdditionalSaveData(compoundNBT);
 		beeLogic.write(compoundNBT);
 		ownerHandler.write(compoundNBT);

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.items.definitions;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Allows an item to react to the usage of it in the fabricator machine.

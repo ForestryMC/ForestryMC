@@ -12,13 +12,13 @@ package forestry.energy.tiles;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -42,12 +42,12 @@ public class TileEngineClockwork extends TileEngine {
 	private float tension = 0.0f;
 	private short delay = 0;
 
-	public TileEngineClockwork() {
-		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
+	public TileEngineClockwork(BlockPos pos, BlockState state) {
+		super(EnergyTiles.CLOCKWORK_ENGINE.tileType(), pos, state, "", ENGINE_CLOCKWORK_HEAT_MAX, 10000);
 	}
 
 	@Override
-	public void openGui(ServerPlayerEntity player, BlockPos pos) {
+	public void openGui(ServerPlayer player, BlockPos pos) {
 		if (player instanceof FakePlayer) {
 			return;
 		}
@@ -71,17 +71,16 @@ public class TileEngineClockwork extends TileEngine {
 
 	/* LOADING & SAVING */
 	@Override
-	public void load(BlockState state, CompoundNBT compoundNBT) {
-		super.load(state, compoundNBT);
+	public void load(CompoundTag compoundNBT) {
+		super.load(compoundNBT);
 		tension = compoundNBT.getFloat("Wound");
 	}
 
 
 	@Override
-	public CompoundNBT save(CompoundNBT compoundNBT) {
-		compoundNBT = super.save(compoundNBT);
+	public void saveAdditional(CompoundTag compoundNBT) {
+		super.saveAdditional(compoundNBT);
 		compoundNBT.putFloat("Wound", tension);
-		return compoundNBT;
 	}
 
 	@Override
@@ -156,7 +155,7 @@ public class TileEngineClockwork extends TileEngine {
 
 	@Override
 	@Nullable
-	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+	public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
 		return null;
 	}
 }

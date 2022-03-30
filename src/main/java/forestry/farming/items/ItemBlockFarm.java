@@ -13,14 +13,14 @@ package forestry.farming.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -38,9 +38,9 @@ public class ItemBlockFarm extends ItemBlockForestry<BlockFarm> {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
 		if (Screen.hasShiftDown()) {
-			tooltip.add(new TranslationTextComponent("block.forestry.farm.tooltip").withStyle(TextFormatting.GRAY));
+			tooltip.add(new TranslatableComponent("block.forestry.farm.tooltip").withStyle(ChatFormatting.GRAY));
 			/*BlockFarm block = getBlock();
 			EnumFarmMaterial material = block.getFarmMaterial();
 			tooltip.add(new TranslationTextComponent("block.forestry.farm.material.tooltip").setStyle((new Style()).setItalic(true).setColor(material.getFormatting())).appendText(" " + WordUtils.capitalize(material.getName().replace("_", ""))));*/

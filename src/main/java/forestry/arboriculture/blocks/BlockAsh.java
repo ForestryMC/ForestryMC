@@ -1,26 +1,24 @@
 package forestry.arboriculture.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.PushReaction;
 
 public class BlockAsh extends Block {
 
 	public static final IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 63);
 
 	public BlockAsh() {
-		super(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_BLACK).sound(SoundType.SAND).strength(0.6F).harvestTool(ToolType.SHOVEL).harvestLevel(0));
+		super(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_BLACK).sound(SoundType.SAND).strength(0.6F));
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(AMOUNT);
 	}
 

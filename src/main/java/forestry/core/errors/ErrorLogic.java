@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorLogic;
@@ -58,7 +58,7 @@ public class ErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void writeData(PacketBuffer data) {
+	public void writeData(FriendlyByteBuf data) {
 		data.writeShort(errorStates.size());
 		for (IErrorState errorState : errorStates) {
 			data.writeShort(errorState.getID());
@@ -66,7 +66,7 @@ public class ErrorLogic implements IErrorLogic {
 	}
 
 	@Override
-	public void readData(PacketBuffer data) {
+	public void readData(FriendlyByteBuf data) {
 		clearErrors();
 
 		short errorStateCount = data.readShort();

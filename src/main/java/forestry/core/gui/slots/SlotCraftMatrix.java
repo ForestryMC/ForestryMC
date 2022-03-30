@@ -10,7 +10,7 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
 import forestry.core.gui.IContainerCrafting;
 
@@ -22,7 +22,7 @@ public class SlotCraftMatrix extends SlotForestry {
 	private final IContainerCrafting eventHandler;
 	private final int slot;
 
-	public SlotCraftMatrix(IContainerCrafting container, IInventory iinventory, int i, int j, int k) {
+	public SlotCraftMatrix(IContainerCrafting container, Container iinventory, int i, int j, int k) {
 		super(iinventory, i, j, k);
 		setPhantom();
 		this.eventHandler = container;

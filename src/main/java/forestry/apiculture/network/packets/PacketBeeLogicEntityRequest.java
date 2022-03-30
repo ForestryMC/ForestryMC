@@ -10,8 +10,8 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
@@ -40,10 +40,9 @@ public class PacketBeeLogicEntityRequest extends ForestryPacket implements IFore
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayerEntity player) {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			Entity entity = data.readEntityById(player.level);
-			if (entity instanceof IBeeHousing) {
-				IBeeHousing beeHousing = (IBeeHousing) entity;
+			if (entity instanceof IBeeHousing beeHousing) {
 				IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
 				beekeepingLogic.syncToClient(player);
 			}

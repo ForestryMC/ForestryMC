@@ -4,10 +4,10 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 
 import forestry.core.config.Constants;
 
@@ -15,14 +15,14 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 	protected final String moduleID;
 	protected final String identifier;
 	protected final UnaryOperator<EntityType.Builder<T>> consumer;
-	protected final Supplier<AttributeModifierMap.MutableAttribute> attributes;
-	protected final EntityType.IFactory<T> factory;
-	protected final EntityClassification classification;
+	protected final Supplier<AttributeSupplier.Builder> attributes;
+	protected final EntityType.EntityFactory<T> factory;
+	protected final MobCategory classification;
 	@Nullable
 	private EntityType<T> entityType;
 
-	public FeatureEntityType(String moduleID, String identifier, UnaryOperator<EntityType.Builder<T>> consumer, EntityType.IFactory<T> factory, EntityClassification classification,
-		Supplier<AttributeModifierMap.MutableAttribute> attributes) {
+	public FeatureEntityType(String moduleID, String identifier, UnaryOperator<EntityType.Builder<T>> consumer, EntityType.EntityFactory<T> factory, MobCategory classification,
+		Supplier<AttributeSupplier.Builder> attributes) {
 		this.moduleID = moduleID;
 		this.identifier = identifier;
 		this.consumer = consumer;
@@ -37,7 +37,7 @@ public class FeatureEntityType<T extends Entity> implements IEntityTypeFeature<T
 	}
 
 	@Override
-	public AttributeModifierMap.MutableAttribute createAttributes() {
+	public AttributeSupplier.Builder createAttributes() {
 		return attributes.get();
 	}
 

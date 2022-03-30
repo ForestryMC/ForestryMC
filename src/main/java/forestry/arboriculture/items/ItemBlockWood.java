@@ -10,10 +10,13 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
+import javax.annotation.Nullable;
+
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Block;
 
 import forestry.api.arboriculture.IWoodType;
 import forestry.api.core.ItemGroups;
@@ -27,14 +30,14 @@ public class ItemBlockWood<B extends Block & IWoodTyped> extends ItemBlockForest
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemstack) {
+	public Component getName(ItemStack itemstack) {
 		IWoodTyped wood = getBlock();
 		IWoodType woodType = wood.getWoodType();
 		return WoodHelper.getDisplayName(wood, woodType);
 	}
 
 	@Override
-	public int getBurnTime(ItemStack itemStack) {
+	public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
 		B block = getBlock();
 		if (block.isFireproof()) {
 			return 0;

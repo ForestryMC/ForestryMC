@@ -5,9 +5,9 @@
  ******************************************************************************/
 package forestry.api.storage;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -20,7 +20,7 @@ public class BackpackStowEvent extends BackpackEvent {
 
 	public final ItemStack stackToStow;
 
-	public BackpackStowEvent(PlayerEntity player, IBackpackDefinition backpackDefinition, IInventory backpackInventory, ItemStack stackToStow) {
+	public BackpackStowEvent(Player player, IBackpackDefinition backpackDefinition, Container backpackInventory, ItemStack stackToStow) {
 		super(player, backpackDefinition, backpackInventory);
 		this.stackToStow = stackToStow;
 	}

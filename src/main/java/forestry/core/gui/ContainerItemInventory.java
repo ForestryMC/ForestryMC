@@ -10,12 +10,12 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import forestry.core.gui.slots.SlotLocked;
 import forestry.core.inventory.ItemInventory;
@@ -24,7 +24,7 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 
 	protected final I inventory;
 
-	protected ContainerItemInventory(int windowId, I inventory, PlayerInventory playerInventory, int xInv, int yInv, ContainerType<?> type) {
+	protected ContainerItemInventory(int windowId, I inventory, Inventory playerInventory, int xInv, int yInv, MenuType<?> type) {
 		super(windowId, type);
 		this.inventory = inventory;
 
@@ -32,7 +32,7 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	}
 
 	@Override
-	protected void addHotbarSlot(PlayerInventory playerInventory, int slot, int x, int y) {
+	protected void addHotbarSlot(Inventory playerInventory, int slot, int x, int y) {
 		ItemStack stackInSlot = playerInventory.getItem(slot);
 
 		if (inventory.isParentItemInventory(stackInSlot)) {
@@ -43,22 +43,22 @@ public abstract class ContainerItemInventory<I extends ItemInventory> extends Co
 	}
 
 	@Override
-	protected final boolean canAccess(PlayerEntity player) {
+	protected final boolean canAccess(Player player) {
 		return stillValid(player);
 	}
 
 	@Override
-	public final boolean stillValid(PlayerEntity PlayerEntity) {
+	public final boolean stillValid(Player PlayerEntity) {
 		return inventory.stillValid(PlayerEntity);
 	}
 
 	@Override
-	public ItemStack clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, PlayerEntity player) {
-		ItemStack result = super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+	public void clicked(int slotId, int dragType_or_button, ClickType clickTypeIn, Player player) {
+		super.clicked(slotId, dragType_or_button, clickTypeIn, player);
+
 		if (slotId > 0) {
 			inventory.onSlotClick(slots.get(slotId).getSlotIndex(), player);
 		}
-		return result;
 	}
 
 	public I getItemInventory() {

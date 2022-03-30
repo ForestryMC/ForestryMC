@@ -3,7 +3,7 @@ package forestry.database;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class DatabaseFilterName extends DatabaseFilter {
 	public DatabaseFilterName(Pattern pattern) {

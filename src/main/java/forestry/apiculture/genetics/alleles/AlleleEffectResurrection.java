@@ -15,13 +15,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.boss.dragon.phase.PhaseType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
@@ -32,7 +32,7 @@ import genetics.api.individual.IGenome;
 
 public class AlleleEffectResurrection extends AlleleEffectThrottled {
 
-	private static class Resurrectable<T extends MobEntity> {
+	private static class Resurrectable<T extends Mob> {
 		private final ItemStack res;
 		private final EntityType<T> risen;
 		private final Consumer<T> risenTransformer;
@@ -59,8 +59,8 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 	}
 
-	public static List<Resurrectable<? extends MobEntity>> getReanimationList() {
-		ArrayList<Resurrectable<? extends MobEntity>> list = new ArrayList<>();
+	public static List<Resurrectable<? extends Mob>> getReanimationList() {
+		ArrayList<Resurrectable<? extends Mob>> list = new ArrayList<>();
 		list.add(new Resurrectable<>(new ItemStack(Items.BONE), EntityType.SKELETON));
 		list.add(new Resurrectable<>(new ItemStack(Items.ARROW), EntityType.SKELETON));
 		list.add(new Resurrectable<>(new ItemStack(Items.ROTTEN_FLESH), EntityType.ZOMBIE));
@@ -68,7 +68,7 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		return list;
 	}
 
-	public static List<Resurrectable<? extends MobEntity>> getResurrectionList() {
+	public static List<Resurrectable<? extends Mob>> getResurrectionList() {
 		ArrayList<Resurrectable<?>> list = new ArrayList<>();
 		list.add(new Resurrectable<>(new ItemStack(Items.GUNPOWDER), EntityType.CREEPER));
 		list.add(new Resurrectable<>(new ItemStack(Items.ENDER_PEARL), EntityType.ENDERMAN));
@@ -77,13 +77,13 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		list.add(new Resurrectable<>(new ItemStack(Items.STRING), EntityType.CAVE_SPIDER));
 		list.add(new Resurrectable<>(new ItemStack(Items.SPIDER_EYE), EntityType.CAVE_SPIDER));
 		list.add(new Resurrectable<>(new ItemStack(Items.GHAST_TEAR), EntityType.GHAST));
-		list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN)));
+		list.add(new Resurrectable<>(new ItemStack(Blocks.DRAGON_EGG), EntityType.ENDER_DRAGON, dragon -> dragon.getPhaseManager().setPhase(EnderDragonPhase.HOLDING_PATTERN)));
 		return list;
 	}
 
-	private final List<Resurrectable<? extends MobEntity>> resurrectables;
+	private final List<Resurrectable<? extends Mob>> resurrectables;
 
-	public AlleleEffectResurrection(String name, List<Resurrectable<? extends MobEntity>> resurrectables) {
+	public AlleleEffectResurrection(String name, List<Resurrectable<? extends Mob>> resurrectables) {
 		super(name, true, 40, true, true);
 		this.resurrectables = resurrectables;
 	}
@@ -112,13 +112,13 @@ public class AlleleEffectResurrection extends AlleleEffectThrottled {
 		}
 
 		ItemStack contained = entity.getItem();
-		for (Resurrectable<? extends MobEntity> entry : resurrectables) {
+		for (Resurrectable<? extends Mob> entry : resurrectables) {
 			if (ItemStackUtil.isIdenticalItem(entry.res, contained)) {
 				if (entry.spawnAndTransform(entity)) {
 					contained.shrink(1);
 
 					if (contained.getCount() <= 0) {
-						entity.remove();
+						entity.discard();
 					}
 				}
 

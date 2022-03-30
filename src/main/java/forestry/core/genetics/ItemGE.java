@@ -14,14 +14,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,7 +50,7 @@ public abstract class ItemGE extends ItemForestry {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack itemStack) {
+	public Component getName(ItemStack itemStack) {
 		if (GeneticHelper.getOrganism(itemStack).isEmpty()) {
 			return super.getName(itemStack);
 		}
@@ -70,7 +70,7 @@ public abstract class ItemGE extends ItemForestry {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack itemstack, @Nullable World world, List<ITextComponent> list, ITooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @Nullable Level world, List<Component> list, TooltipFlag flag) {
 		if (!itemstack.hasTag()) {
 			return;
 		}
@@ -88,10 +88,10 @@ public abstract class ItemGE extends ItemForestry {
 					individual.addTooltip(list);
 				}
 			} else {
-				list.add(new TranslationTextComponent("for.gui.tooltip.tmi", "< %s >").withStyle(TextFormatting.GRAY).withStyle(TextFormatting.ITALIC));
+				list.add(new TranslatableComponent("for.gui.tooltip.tmi", "< %s >").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
 			}
 		} else {
-			list.add(new TranslationTextComponent("for.gui.unknown", "< %s >").withStyle(TextFormatting.GRAY));
+			list.add(new TranslatableComponent("for.gui.unknown", "< %s >").withStyle(ChatFormatting.GRAY));
 		}
 	}
 

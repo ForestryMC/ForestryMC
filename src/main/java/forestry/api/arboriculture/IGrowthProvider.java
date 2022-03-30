@@ -5,15 +5,15 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.arboriculture.genetics.ITree;
 
 public interface IGrowthProvider {
 
-	boolean canSpawn(ITree tree, World world, BlockPos pos);
+	boolean canSpawn(ITree tree, Level world, BlockPos pos);
 
 	boolean isBiomeValid(ITree tree, Biome biome);
 

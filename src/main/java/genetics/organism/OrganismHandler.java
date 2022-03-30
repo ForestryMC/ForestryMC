@@ -3,8 +3,8 @@ package genetics.organism;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 
 import genetics.api.individual.IIndividual;
 import genetics.api.organism.IOrganismHandler;
@@ -24,13 +24,13 @@ public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<
 	@Override
 	public ItemStack createStack(I individual) {
 		ItemStack itemStack = stack.get();
-		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
+		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundTag()));
 		return itemStack;
 	}
 
 	@Override
 	public Optional<I> createIndividual(ItemStack itemStack) {
-		CompoundNBT tagCompound = itemStack.getTagElement(INDIVIDUAL_KEY);
+		CompoundTag tagCompound = itemStack.getTagElement(INDIVIDUAL_KEY);
 		if (tagCompound == null || !optionalRoot.isPresent()) {
 			return Optional.empty();
 		}
@@ -40,17 +40,17 @@ public class OrganismHandler<I extends IIndividual> implements IOrganismHandler<
 
 	@Override
 	public boolean setIndividual(ItemStack itemStack, I individual) {
-		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundNBT()));
+		itemStack.addTagElement(INDIVIDUAL_KEY, individual.write(new CompoundTag()));
 		return true;
 	}
 
 	@Override
-	public void setIndividualData(ItemStack itemStack, CompoundNBT compound) {
+	public void setIndividualData(ItemStack itemStack, CompoundTag compound) {
 		itemStack.addTagElement(INDIVIDUAL_KEY, compound);
 	}
 
 	@Override
-	public CompoundNBT getIndividualData(ItemStack itemStack) {
+	public CompoundTag getIndividualData(ItemStack itemStack) {
 		return itemStack.getTagElement(INDIVIDUAL_KEY);
 	}
 }
