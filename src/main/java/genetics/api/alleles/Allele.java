@@ -4,24 +4,33 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * A default implementation of a simple allele.
  */
-public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
+public class Allele implements IAllele {
 	public static final IAllele EMPTY = new Allele("empty", false).setRegistryName(new ResourceLocation("genetics", "empty"));
 
+	private ResourceLocation registryName;
 	protected final boolean dominant;
 	protected final String localisationKey;
 
 	public Allele(String localisationKey, boolean dominant) {
 		this.localisationKey = localisationKey;
 		this.dominant = dominant;
+	}
+
+	@Override
+	public ResourceLocation getRegistryName() {
+		return registryName;
+	}
+
+	public Allele setRegistryName(ResourceLocation registryName) {
+		this.registryName = registryName;
+		return this;
 	}
 
 	@Override
@@ -55,17 +64,17 @@ public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 			return false;
 		}
 		return getRegistryName() != null ?
-			getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-			dominant == otherAllele.isDominant();
+				getRegistryName().equals(((IAllele) obj).getRegistryName()) :
+				dominant == otherAllele.isDominant();
 	}
 
 	@Override
 	public String toString() {
 		return MoreObjects
-			.toStringHelper(this)
-			.add("name", getRegistryName())
-			.add("dominant", dominant)
-			.add("key", localisationKey)
-			.toString();
+				.toStringHelper(this)
+				.add("name", getRegistryName())
+				.add("dominant", dominant)
+				.add("key", localisationKey)
+				.toString();
 	}
 }
