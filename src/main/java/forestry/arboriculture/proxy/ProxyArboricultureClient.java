@@ -81,8 +81,6 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 
 	@Override
 	public void setupClient(FMLClientSetupEvent event) {
-		ArboricultureBlocks.TREE_CHEST.block().clientSetup();
-
 		// fruit overlays require CUTOUT_MIPPED, even in Fast graphics
 		ArboricultureBlocks.LEAVES_DEFAULT.getBlocks().forEach((block) -> RenderTypeLookup.setRenderLayer(block, RenderType.cutoutMipped()));
 		RenderTypeLookup.setRenderLayer(ArboricultureBlocks.LEAVES.block(), RenderType.cutoutMipped());

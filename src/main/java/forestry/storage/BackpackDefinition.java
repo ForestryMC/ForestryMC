@@ -20,17 +20,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import forestry.api.storage.BackpackManager;
 import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
 	private final int primaryColor;
 	private final int secondaryColor;
 	private final Predicate<ItemStack> filter;
-
-	public BackpackDefinition(Color primaryColor, Color secondaryColor) {
-		this(primaryColor, secondaryColor, BackpackManager.backpackInterface.createBackpackFilter());
-	}
 
 	public BackpackDefinition(Color primaryColor, Color secondaryColor, Predicate<ItemStack> filter) {
 		this.primaryColor = primaryColor.getRGB();

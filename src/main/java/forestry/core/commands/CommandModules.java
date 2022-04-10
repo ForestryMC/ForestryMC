@@ -76,11 +76,6 @@ public class CommandModules {
 	}
 
 	public static class CommandPluginsInfo {
-		/*public CommandPluginsInfo() {
-			super("info");
-			addAlias("i");
-		}*/
-
 		public static ArgumentBuilder<CommandSource, ?> register() {
 			return Commands.literal("info")
 					.then(Commands.argument("module", ModuleArgument.modules())

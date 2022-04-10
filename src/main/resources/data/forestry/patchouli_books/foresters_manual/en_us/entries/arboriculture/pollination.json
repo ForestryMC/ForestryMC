@@ -1,0 +1,19 @@
+{
+  "icon": "forestry:pollen_cluster_normal",
+  "name": "for.gui.book.patchouli.entry.arboriculture.pollination",
+  "category": "forestry:arboriculture",
+  "pages": [
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.arboriculture.pollination1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.arboriculture.pollination2"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.arboriculture.pollination3"
+    }
+  ]
+}

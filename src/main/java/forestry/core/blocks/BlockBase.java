@@ -21,6 +21,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.EnumProperty;
@@ -174,7 +175,7 @@ public class BlockBase<P extends Enum<P> & IBlockType> extends BlockForestry imp
 		TileEntity tile = TileUtil.getTile(world, pos);
 		if (tile instanceof IInventory) {
 			IInventory inventory = (IInventory) tile;
-			InventoryUtil.dropInventory(inventory, world, pos);
+			InventoryHelper.dropContents(world, pos, inventory);
 		}
 		if (tile instanceof TileForestry) {
 			((TileForestry) tile).onRemoval();

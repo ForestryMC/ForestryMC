@@ -1,0 +1,21 @@
+{
+  "icon": "forestry:grafter",
+  "name": "for.gui.book.patchouli.entry.arboriculture.grafters",
+  "category": "forestry:arboriculture",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:grafter",
+      "text": "for.gui.book.patchouli.entry.arboriculture.grafters1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.arboriculture.grafters2"
+    },
+    {
+      "type": "spotlight",
+      "item": "forestry:grafter_proven",
+      "text": "for.gui.book.patchouli.entry.arboriculture.grafters3"
+    }
+  ]
+}

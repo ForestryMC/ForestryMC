@@ -214,9 +214,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		Map<ItemStack, Float> cooconLoot = new HashMap<>();
 		List<String> lootList = new ArrayList<>();
 		for (Product product : cocoon.getCocoonLoot().getPossibleProducts()) {
-			String itemStackString = ItemStackUtil.getItemNameFromRegistryAsString(product.getItem());
-
-			lootList.add(itemStackString + ";" + product.getChance());
+			lootList.add(product.getItem().getItem().getRegistryName() + ";" + product.getChance());
 		}
 		Collections.sort(lootList);
 		String[] defaultLoot = lootList.toArray(new String[0]);

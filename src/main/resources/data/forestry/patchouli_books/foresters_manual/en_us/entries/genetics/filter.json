@@ -1,0 +1,20 @@
+{
+  "icon": "forestry:genetic_filter",
+  "name": "for.gui.book.patchouli.entry.genetics.filter",
+  "category": "forestry:genetics",
+  "pages": [
+      {
+        "type": "crafting",
+        "recipe": "forestry:genetic_filter",
+        "text": "for.gui.book.patchouli.entry.genetics.filter1"
+      },
+      {
+        "type": "text",
+        "text": "for.gui.book.patchouli.entry.genetics.filter2"
+      },
+      {
+        "type": "text",
+        "text": "for.gui.book.patchouli.entry.genetics.filter3"
+      }
+  ]
+}

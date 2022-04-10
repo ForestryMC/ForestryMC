@@ -1,0 +1,9 @@
+{
+  "dont_generate_book": true,
+  "custom_book_item": "forestry:foresters_manual",
+  "advancements_tab": "forestry:root",
+  "name": "item.forestry.foresters_manual",
+  "landing_text": "for.gui.book.patchouli.landing_text",
+  "book_texture": "forestry:textures/gui/almanac/foresters_manual.png",
+  "i18n": true
+}

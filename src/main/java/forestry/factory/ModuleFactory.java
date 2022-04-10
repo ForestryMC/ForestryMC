@@ -22,6 +22,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -148,10 +149,10 @@ public class ModuleFactory extends BlankForestryModule {
 		// Set fuels and resources for the fermenter
 		ItemStack fertilizerCompound = CoreItems.FERTILIZER_COMPOUND.stack();
 		FuelManager.fermenterFuel.put(fertilizerCompound, new FermenterFuel(fertilizerCompound,
-			ForestryAPI.activeMode.getIntegerSetting("fermenter.value.fertilizer"), ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.fertilizer")));
+				Preference.FERMENTED_CYCLE_FERTILIZER, Preference.FERMENTATION_DURATION_FERTILIZER));
 
-		int cyclesCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.cycles.compost");
-		int valueCompost = ForestryAPI.activeMode.getIntegerSetting("fermenter.value.compost");
+		int cyclesCompost = Preference.FERMENTATION_DURATION_COMPOST;
+		int valueCompost = Preference.FERMENTED_CYCLE_COMPOST;
 		ItemStack fertilizerBio = CoreItems.COMPOST.stack();
 		ItemStack mulch = CoreItems.MULCH.stack();
 		FuelManager.fermenterFuel.put(fertilizerBio, new FermenterFuel(fertilizerBio, valueCompost, cyclesCompost));
@@ -174,7 +175,7 @@ public class ModuleFactory extends BlankForestryModule {
 
 		Fluid biomass = ForestryFluids.BIOMASS.getFluid();
 		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
-			Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.biogas")), 1));
+			Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * Preference.FUEL_MODIFIER), 1));
 
 		FuelManager.bronzeEngineFuel.put(Fluids.WATER, new EngineBronzeFuel(Fluids.WATER,
 			Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
@@ -204,11 +205,6 @@ public class ModuleFactory extends BlankForestryModule {
 		ICircuitLayout layoutMachineUpgrade = new CircuitLayout("machine.upgrade", CircuitSocketType.MACHINE);
 		ChipsetManager.circuitRegistry.registerLayout(layoutMachineUpgrade);
 
-	}
-
-	@Override
-	public void registerTriggers() {
-		//		FactoryTriggers.initialize();
 	}
 
 	@Override
@@ -250,15 +246,6 @@ public class ModuleFactory extends BlankForestryModule {
 				//					'X', beeItems.propolis.getWildcard()});	//TODO needs tag
 			}
 		}
-
-		// FERMENTER
-		// TODO: Re-enable
-		// RecipeUtil.addFermenterRecipes(OreDictUtil.TREE_SAPLING, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), ForestryFluids.BIOMASS);
-
-		// RecipeUtil.addFermenterRecipes(OreDictUtil.BLOCK_CACTUS, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cactus"), ForestryFluids.BIOMASS);
-		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_WHEAT, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
-		// RecipeUtil.addFermenterRecipes(OreDictUtil.CROP_POTATO, 2 * ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), ForestryFluids.BIOMASS);
-		// RecipeUtil.addFermenterRecipes(OreDictUtil.SUGARCANE, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.cane"), ForestryFluids.BIOMASS);
 
 		ICircuitLayout layout = ChipsetManager.circuitRegistry.getLayout("forestry.machine.upgrade");
 

@@ -12,7 +12,6 @@ package forestry.farming;
 
 
 import java.io.File;
-import java.util.List;
 
 import net.minecraft.block.BeetrootBlock;
 import net.minecraft.block.Blocks;
@@ -51,7 +50,6 @@ import forestry.farming.logic.farmables.FarmableSapling;
 import forestry.farming.logic.farmables.FarmableStacked;
 import forestry.farming.proxy.ProxyFarming;
 import forestry.farming.proxy.ProxyFarmingClient;
-import forestry.farming.triggers.FarmingTriggers;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
 import forestry.modules.ISidedModuleHandler;
@@ -153,11 +151,6 @@ public class ModuleFarming extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerTriggers() {
-		FarmingTriggers.initialize();
-	}
-
-	@Override
 	public void doInit() {
 
 		//Load config
@@ -177,13 +170,6 @@ public class ModuleFarming extends BlankForestryModule {
 	@Override
 	public void registerRecipes() {
 		FarmDefinition.registerCircuits();
-	}
-
-	@Override
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		// mushrooms are a workaround for the farm and should not be obtainable
-		//		hiddenItems.add(new ItemStack(getBlocks().mushroom, 1, OreDictionary.WILDCARD_VALUE));
-		//TODO - tag
 	}
 
 	@Override

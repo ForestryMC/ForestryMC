@@ -62,21 +62,6 @@ public class ModuleClimatology extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerRecipes() {
-
-		if (ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
-			//						RecipeManagers.carpenterManager.addRecipe(100, new FluidStack(Fluids.WATER, 2000), ItemStack.EMPTY, ClimatologyItems.HABITAT_SCREEN.stack(),
-			//							"IPI",
-			//							"IPI",
-			//							"GDG",
-			//							'G', Tags.Items.GEAR_BRONZE,
-			//							'P', OreDictUtil.PANE_GLASS,
-			//							'I', OreDictUtil.INGOT_BRONZE,
-			//							'D', OreDictUtil.GEM_DIAMOND);	//TODO recipes
-		}
-	}
-
-	@Override
 	public IPacketRegistry getPacketRegistry() {
 		return new PacketRegistryClimatology();
 	}

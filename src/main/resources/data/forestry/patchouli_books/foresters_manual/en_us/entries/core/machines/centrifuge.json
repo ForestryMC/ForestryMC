@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:centrifuge",
+  "name": "for.gui.book.patchouli.entry.core.machine.centrifuge",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:centrifuge",
+      "text": "for.gui.book.patchouli.entry.core.machine.centrifuge1"
+    }
+  ]
+}

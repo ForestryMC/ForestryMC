@@ -1,0 +1,46 @@
+{
+  "icon": "forestry:electron_tube_gold",
+  "name": "for.gui.book.patchouli.entry.farming.farm_configuration",
+  "category": "forestry:farming",
+  "pages": [
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration2",
+      "anchor": 2
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration3",
+      "anchor": 3
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration4",
+      "anchor": 4
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration5",
+      "anchor": 5
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration6",
+      "anchor": 6
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration7",
+      "anchor": 7
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.farm_configuration8",
+      "anchor": 8
+    }
+  ]
+}

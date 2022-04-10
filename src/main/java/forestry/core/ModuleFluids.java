@@ -13,6 +13,7 @@ package forestry.core;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -47,13 +48,13 @@ public class ModuleFluids extends BlankForestryModule {
 	public void doInit() {
 		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
 		if (!ethanol.isEmpty()) {
-			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.generator")), 4);
+			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * Preference.FUEL_MODIFIER), 4);
 			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
 		}
 
 		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
 		if (!biomass.isEmpty()) {
-			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * ForestryAPI.activeMode.getFloatSetting("fuel.biomass.generator")), 1);
+			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * Preference.FUEL_MODIFIER), 1);
 			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
 		}
 	}

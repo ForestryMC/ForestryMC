@@ -37,7 +37,7 @@ public class CommonModuleHandler {
 		SETUP, // setup API to make it functional. GameMode Configs are not yet accessible
 		SETUP_DISABLED, // setup fallback API to avoid crashes
 		REGISTER, // register basic blocks and items
-		PRE_INIT, // register handlers, triggers, definitions, and anything that depends on basic items
+		PRE_INIT, // register handlers, definitions, and anything that depends on basic items
 		BACKPACKS_CRATES, // backpacks, crates
 		INIT, // anything that depends on PreInit stages, recipe registration
 		POST_INIT, // stubborn mod integration, dungeon loot, and finalization of things that take input from mods
@@ -127,10 +127,6 @@ public class CommonModuleHandler {
 			Log.debug("Pre-Init Start: {}", module);
 			registerHandlers(module);
 			module.preInit();
-			//TODO - compat
-			if (false) {//moduleManager.isModuleEnabled(ForestryCompatPlugins.ID, ForestryModuleUids.BUILDCRAFT_STATEMENTS)) {
-				module.registerTriggers();
-			}
 			Log.debug("Pre-Init Complete: {}", module);
 		}
 	}
@@ -189,13 +185,6 @@ public class CommonModuleHandler {
 
 	public void runRegisterBackpacksAndCrates() {
 		stage = Stage.BACKPACKS_CRATES;
-		for (BlankForestryModule module : modules) {
-			if (ModuleManager.getInstance().isModuleEnabled(Constants.MOD_ID, ForestryModuleUids.CRATE)) {
-				Log.debug("Crates Start: {}", module);
-				module.registerCrates();
-				Log.debug("Crates Complete: {}", module);
-			}
-		}
 	}
 
 	public void runBookInit() {
@@ -214,13 +203,5 @@ public class CommonModuleHandler {
 				}
 			}
 		});
-	}
-
-	public List<ItemStack> getHiddenItems() {
-		List<ItemStack> hiddenItems = new ArrayList<>();
-		for (BlankForestryModule module : modules) {
-			module.getHiddenItems(hiddenItems);
-		}
-		return hiddenItems;
 	}
 }

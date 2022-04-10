@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "side": "forestry:block/wood/planks.teak",
-    "top": "forestry:block/wood/planks.teak",
-    "bottom": "forestry:block/wood/planks.teak",
-    "particle": "forestry:block/wood/planks.teak"
-  }
-}

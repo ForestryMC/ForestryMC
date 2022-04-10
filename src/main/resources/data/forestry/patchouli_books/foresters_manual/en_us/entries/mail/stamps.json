@@ -1,0 +1,27 @@
+{
+  "icon": "forestry:stamp_1n",
+  "name": "for.gui.book.patchouli.entry.mail.stamps",
+  "category": "forestry:mail",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_1n",
+      "text": "for.gui.book.patchouli.entry.mail.stamps1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_2n",
+      "recipe2": "forestry:stamp_5n"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_10n",
+      "recipe2": "forestry:stamp_20n"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:stamp_50n",
+      "recipe2": "forestry:stamp_100n"
+    }
+  ]
+}

@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/stronghold_crossing",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

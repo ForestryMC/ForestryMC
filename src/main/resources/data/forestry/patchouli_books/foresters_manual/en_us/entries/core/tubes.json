@@ -1,0 +1,43 @@
+{
+  "icon": "forestry:electron_tube_copper",
+  "name": "for.gui.book.patchouli.entry.core.tubes",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "spotlight",
+      "title": "Electron Tubes",
+      "item": "forestry:electron_tube_copper",
+      "text": "for.gui.book.patchouli.entry.core.tubes"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_tin",
+      "item2": "forestry:electron_tube_copper"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_bronze",
+      "item2": "forestry:electron_tube_gold"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_obsidian",
+      "item2": "forestry:electron_tube_blaze"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_emerald",
+      "item2": "forestry:electron_tube_apatite"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_diamond",
+      "item2": "forestry:electron_tube_lapis"
+    },
+    {
+      "type": "forestry:fabricator/double",
+      "item": "forestry:electron_tube_ender",
+      "item2": "forestry:electron_tube_copper"
+    }
+  ]
+}

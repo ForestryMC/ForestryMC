@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -63,7 +64,7 @@ public abstract class MinecartEntityContainerForestry extends MinecartEntityFore
 	@Override
 	public void remove() {
 		if (dropContentsWhenDead && !level.isClientSide) {
-			InventoryUtil.dropInventory(getInternalInventory(), level, getX(), getY(), getZ());
+			InventoryHelper.dropContents(level, this, getInternalInventory());
 		}
 		super.remove();
 	}

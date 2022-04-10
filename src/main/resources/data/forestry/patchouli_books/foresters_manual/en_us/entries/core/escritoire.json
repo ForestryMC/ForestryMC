@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:escritoire",
+  "name": "for.gui.book.patchouli.entry.core.escritoire",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:escritoire",
+      "text": "for.gui.book.patchouli.entry.core.escritoire1"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:worktable",
+  "name": "for.gui.book.patchouli.entry.core.worktable",
+  "category": "forestry:core",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:worktable",
+      "text": "for.gui.book.patchouli.entry.core.worktable1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.core.worktable2"
+    }
+  ]
+}

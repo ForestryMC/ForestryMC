@@ -1,0 +1,15 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.intro",
+  "category": "forestry:beekeeping",
+  "icon": "minecraft:book",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.intro1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.intro2"
+    }
+  ]
+}

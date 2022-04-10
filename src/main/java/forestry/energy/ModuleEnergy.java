@@ -19,9 +19,7 @@ import forestry.core.config.Constants;
 import forestry.core.utils.ForgeUtils;
 import forestry.energy.features.EnergyContainers;
 import forestry.energy.gui.GuiEngineBiogas;
-import forestry.energy.gui.GuiEngineElectric;
 import forestry.energy.gui.GuiEnginePeat;
-import forestry.energy.gui.GuiGenerator;
 import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
 import forestry.modules.BlankForestryModule;
@@ -41,10 +39,8 @@ public class ModuleEnergy extends BlankForestryModule {
 
 	@Override
 	public void registerGuiFactories() {
-		ScreenManager.register(EnergyContainers.ENGINE_ELECTRIC.containerType(), GuiEngineElectric::new);
 		ScreenManager.register(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
 		ScreenManager.register(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
-		ScreenManager.register(EnergyContainers.GENERATOR.containerType(), GuiGenerator::new);
 	}
 
 }

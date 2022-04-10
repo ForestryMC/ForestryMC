@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "side": "forestry:block/wood/bark.acacia_desert",
-    "end": "forestry:block/wood/heart.acacia_desert"
-  }
-}

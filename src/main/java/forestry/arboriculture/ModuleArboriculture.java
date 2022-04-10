@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -36,7 +35,6 @@ import forestry.api.core.IArmorNaturalist;
 import forestry.api.modules.ForestryModule;
 import forestry.arboriculture.capabilities.ArmorNaturalist;
 import forestry.arboriculture.commands.CommandTree;
-import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.arboriculture.features.ArboricultureFeatures;
 import forestry.arboriculture.genetics.TreeDefinition;
 import forestry.arboriculture.genetics.TreeFactory;
@@ -168,19 +166,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerCrates() {
-		//TODO: Tags
-		//		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		//		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.LEMON.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.PLUM.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack());
-		//		crateRegistry.registerCrate(EnumFruit.DATES.getStack());
-	}
-
-	@Override
 	public void registerRecipes() {
 		//TODO: Recipes
 		//		ItemRegistryCore coreItems = ModuleCore.getItems();
@@ -191,42 +176,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		//			ItemStack logInput = new ItemStack(log, 1, OreDictionary.WILDCARD_VALUE);
 		//			ItemStack coalOutput = new ItemStack(Items.COAL, 1, 1);
 		//			RecipeUtil.addSmelting(logInput, coalOutput, 0.15F);
-		//		}
-		//
-		//		List<IWoodType> allWoodTypes = new ArrayList<>();
-		//		Collections.addAll(allWoodTypes, EnumForestryWoodType.VALUES);
-		//		Collections.addAll(allWoodTypes, EnumVanillaWoodType.VALUES);
-		//
-		//		for (IWoodType woodType : allWoodTypes) {
-		//			ItemStack planks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
-		//			ItemStack logs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
-		//
-		//			ItemStack fireproofPlanks = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, true);
-		//			ItemStack fireproofLogs = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, true);
-		//
-		//			// Fabricator recipes
-		//			if (ModuleHelper.allEnabled(ForestryModuleUids.FACTORY, ForestryModuleUids.APICULTURE)) {
-		//				logs.setCount(1);
-		//				fireproofLogs.setCount(1);
-		//				FluidStack liquidGlass = Fluids.GLASS.getFluid(500);
-		//				if (liquidGlass != null) {
-		//					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofLogs.copy(), new Object[]{
-		//						" # ",
-		//						"#X#",
-		//						" # ",
-		//						'#', coreItems.refractoryWax,
-		//						'X', logs.copy()});
-		//
-		//					planks.setCount(1);
-		//					fireproofPlanks.setCount(5);
-		//					RecipeManagers.fabricatorManager.addRecipe(ItemStack.EMPTY, liquidGlass, fireproofPlanks.copy(), new Object[]{
-		//						"X#X",
-		//						"#X#",
-		//						"X#X",
-		//						'#', coreItems.refractoryWax,
-		//						'X', planks.copy()});
-		//				}
-		//			}
 		//		}
 	}
 
@@ -258,12 +207,6 @@ public class ModuleArboriculture extends BlankForestryModule {
 		//		}
 		//		return false;
 		return false;
-	}
-
-	@Override
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-		// sapling itemBlock is different from the normal item
-		hiddenItems.add(ArboricultureBlocks.SAPLING_GE.stack());
 	}
 
 	//@SubscribeEvent

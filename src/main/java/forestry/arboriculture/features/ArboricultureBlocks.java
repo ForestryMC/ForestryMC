@@ -3,9 +3,6 @@ package forestry.arboriculture.features;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
 import forestry.api.arboriculture.IWoodType;
@@ -37,6 +34,7 @@ import forestry.arboriculture.items.ItemBlockWood;
 import forestry.arboriculture.items.ItemBlockWoodDoor;
 import forestry.arboriculture.items.ItemBlockWoodSlab;
 import forestry.core.items.ItemBlockBase;
+import forestry.core.items.ItemBlockForestry;
 import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureBlockGroup;
 import forestry.modules.features.FeatureGroup;
@@ -44,6 +42,9 @@ import forestry.modules.features.FeatureProvider;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IFeatureRegistry;
 import forestry.modules.features.ModFeatureRegistry;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 
 @FeatureProvider
 public class ArboricultureBlocks {
@@ -76,7 +77,7 @@ public class ArboricultureBlocks {
 	public static final FeatureBlockGroup<BlockForestryDoor, EnumForestryWoodType> DOORS = woodGroup(BlockForestryDoor::new, ItemBlockWoodDoor::new, WoodBlockKind.DOOR, false, EnumForestryWoodType.VALUES);
 
 	/* GENETICS */
-	public static final FeatureBlock<BlockSapling, BlockItem> SAPLING_GE = REGISTRY.block(BlockSapling::new, "sapling_ge");
+	public static final FeatureBlock<BlockSapling, BlockItem> SAPLING_GE = REGISTRY.block(BlockSapling::new, ItemBlockForestry::new, "sapling_ge");
 	public static final FeatureBlock<BlockForestryLeaves, ItemBlockLeaves> LEAVES = REGISTRY.block(BlockForestryLeaves::new, ItemBlockLeaves::new, "leaves");
 	public static final FeatureBlockGroup<BlockDefaultLeaves, TreeDefinition> LEAVES_DEFAULT = REGISTRY.blockGroup(BlockDefaultLeaves::new, TreeDefinition.VALUES).item(ItemBlockLeaves::new).identifier("default_leaves", FeatureGroup.IdentifierType.AFFIX).create();
 	public static final FeatureBlockGroup<BlockDefaultLeavesFruit, TreeDefinition> LEAVES_DEFAULT_FRUIT = REGISTRY.blockGroup(BlockDefaultLeavesFruit::new, TreeDefinition.VALUES).item(ItemBlockLeaves::new).identifier("default_leaves_fruit", FeatureGroup.IdentifierType.AFFIX).create();

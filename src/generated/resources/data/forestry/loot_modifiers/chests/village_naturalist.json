@@ -1,8 +1,0 @@
-{
-  "table": "forestry:chests/village_naturalist",
-  "extensions": [
-    "arboriculture",
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

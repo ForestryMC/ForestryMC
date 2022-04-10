@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.alveary.paneling",
+  "category": "forestry:alveary",
+  "icon": "forestry:scented_paneling",
+  "pages": [
+    {
+      "type": "forestry:carpenter/single",
+      "item": "forestry:scented_paneling",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.paneling1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.alveary.paneling2"
+    }
+  ]
+}

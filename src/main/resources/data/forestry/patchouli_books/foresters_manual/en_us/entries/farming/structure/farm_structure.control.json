@@ -1,0 +1,16 @@
+{
+  "icon": "forestry:farm_control_brick",
+  "name": "for.gui.book.patchouli.entry.farming.structure.farm_structure.control",
+  "category": "forestry:structure",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:farm_control_brick",
+      "text": "for.gui.book.patchouli.entry.farming.structure.farm_structure.control1"
+    },
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.farming.structure.farm_structure.control2"
+    }
+  ]
+}

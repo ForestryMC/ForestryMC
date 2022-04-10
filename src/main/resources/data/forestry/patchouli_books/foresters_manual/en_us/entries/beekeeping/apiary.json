@@ -1,0 +1,20 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.apiary",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:apiary",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:apiary",
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.apiary3"
+    }
+  ]
+}

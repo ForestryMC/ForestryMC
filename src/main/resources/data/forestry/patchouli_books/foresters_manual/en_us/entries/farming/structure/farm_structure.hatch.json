@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:farm_hatch_brick",
+  "name": "for.gui.book.patchouli.entry.farming.structure.farm_structure.hatch",
+  "category": "forestry:structure",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:farm_hatch_brick",
+      "text": "for.gui.book.patchouli.entry.farming.structure.farm_structure.hatch1"
+    }
+  ]
+}

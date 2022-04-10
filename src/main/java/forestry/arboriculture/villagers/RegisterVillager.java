@@ -53,8 +53,8 @@ public class RegisterVillager {
 		public static final DeferredRegister<PointOfInterestType> POINTS_OF_INTEREST = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MOD_ID);
 		public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, Constants.MOD_ID);
 
-		public static final RegistryObject<PointOfInterestType> POI_TREE_CHEST = POINTS_OF_INTEREST.register("tree_chest", () -> RegisterVillagerPointOfInterest.create("tree_chest", RegisterVillagerPointOfInterest.assembleStates(ArboricultureBlocks.TREE_CHEST.getBlock())));
-		public static final RegistryObject<VillagerProfession> PROF_BEEKEEPER = PROFESSIONS.register(ARBORIST.getPath(), () -> RegisterVillagerProfession.create(ARBORIST, POI_TREE_CHEST.get(), SoundEvents.VILLAGER_WORK_FISHERMAN));
+		// public static final RegistryObject<PointOfInterestType> POI_TREE_CHEST = POINTS_OF_INTEREST.register("tree_chest", () -> RegisterVillagerPointOfInterest.create("tree_chest", RegisterVillagerPointOfInterest.assembleStates(ArboricultureBlocks.TREE_CHEST.getBlock())));
+		// public static final RegistryObject<VillagerProfession> PROF_BEEKEEPER = PROFESSIONS.register(ARBORIST.getPath(), () -> RegisterVillagerProfession.create(ARBORIST, POI_TREE_CHEST.get(), SoundEvents.VILLAGER_WORK_FISHERMAN));
 	}
 
 	@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)

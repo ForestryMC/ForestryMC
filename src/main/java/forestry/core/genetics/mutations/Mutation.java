@@ -118,12 +118,6 @@ public abstract class Mutation implements IMutation, IMutationBuilder {
 	}
 
 	@Override
-	public Mutation requireResource(String oreName) {
-		IMutationCondition mutationCondition = new MutationConditionRequiresResource(oreName);
-		return addMutationCondition(mutationCondition);
-	}
-
-	@Override
 	public Mutation addMutationCondition(IMutationCondition mutationCondition) {
 		mutationConditions.add(mutationCondition);
 		specialConditions.add(mutationCondition.getDescription());

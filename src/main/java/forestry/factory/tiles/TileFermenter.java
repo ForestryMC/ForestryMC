@@ -51,10 +51,6 @@ import forestry.factory.features.FactoryTiles;
 import forestry.factory.gui.ContainerFermenter;
 import forestry.factory.inventory.InventoryFermenter;
 
-//import net.minecraftforge.fml.common.Optional;
-
-//import buildcraft.api.statements.ITriggerExternal;
-
 public class TileFermenter extends TilePowered implements ISidedInventory, ILiquidTankTile {
 	private final FilteredTank resourceTank;
 	private final FilteredTank productTank;
@@ -311,15 +307,6 @@ public class TileFermenter extends TilePowered implements ISidedInventory, ILiqu
 	public TankManager getTankManager() {
 		return tankManager;
 	}
-
-	/* ITRIGGERPROVIDER */
-	//	@Optional.Method(modid = Constants.BCLIB_MOD_ID)
-	//	@Override
-	//	public void addExternalTriggers(Collection<ITriggerExternal> triggers, @Nonnull Direction side, TileEntity tile) {
-	//		super.addExternalTriggers(triggers, side, tile);
-	//		triggers.add(FactoryTriggers.lowResource25);
-	//		triggers.add(FactoryTriggers.lowResource10);
-	//	}
 
 	@Override
 	public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {

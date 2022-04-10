@@ -1,7 +1,0 @@
-{
-  "table": "minecraft:chests/spawn_bonus_chest",
-  "extensions": [
-    "apiculture"
-  ],
-  "type": "forestry:condition_modifier"
-}

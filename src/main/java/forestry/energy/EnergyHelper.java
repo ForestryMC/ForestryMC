@@ -5,20 +5,18 @@ import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Config;
-import forestry.energy.compat.mj.MjHelper;
-import forestry.energy.compat.tesla.TeslaHelper;
 import forestry.energy.tiles.TileEngine;
 
 public class EnergyHelper {
 	public static int scaleForDifficulty(int energyValue) {
-		float energyModifier = ForestryAPI.activeMode.getFloatSetting("energy.demand.modifier");
-		return Math.round(energyValue * energyModifier);
+		return Math.round(energyValue * Preference.ENERGY_DEMAND_MODIFIER);
 	}
 
 	/**
@@ -84,14 +82,6 @@ public class EnergyHelper {
 			}
 		}
 
-		if (Config.enableTesla && TeslaHelper.isEnergyReceiver(tile, side)) {
-			return TeslaHelper.sendEnergy(tile, side, extractable, simulate);
-		}
-
-		if (Config.enableMJ && MjHelper.isEnergyReceiver(tile, side)) {
-			return MjHelper.sendEnergy(tile, side, extractable, simulate);
-		}
-
 		return 0;
 	}
 
@@ -115,7 +105,6 @@ public class EnergyHelper {
 			return energyStorage.orElse(null).canReceive();
 		}
 
-		return TeslaHelper.isEnergyReceiver(tile, side) ||
-			MjHelper.isEnergyReceiver(tile, side);
+		return false;
 	}
 }

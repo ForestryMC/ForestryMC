@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 
+import forestry.core.config.Preference;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -34,7 +35,7 @@ public abstract class InventoryPlantation<H extends ILiquidTankTile & IFarmHousi
 	/**
 	 * Config value which modifies the usage of fertilizer.
 	 */
-	private static final int FERTILIZER_MODIFIER = ForestryAPI.activeMode.getIntegerSetting("farms.fertilizer.modifier");
+	private static final int FERTILIZER_MODIFIER = Preference.FARM_FERTILIZER_MODIFIER;
 
 	/**
 	 * Farm logic object

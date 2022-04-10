@@ -6,7 +6,7 @@
 !/forestry_techne
 !/gradle/wrapper
 !/src
-/src/generated/resources/.cache/cache
+/src/generated/
 
 # files
 !/.gitignore
@@ -17,6 +17,7 @@
 !/README.md
 !/gradle.properties
 !/build.gradle
+!/settings.gradle
 !/build.xml
 !/gradlew
 !/gradlew.bat

@@ -24,7 +24,7 @@ public class FeatureFluid implements IFluidFeature {
 	private final String identifier;
 	private final ForgeFlowingFluid.Properties internal;
 	@Nullable
-	private FlowingFluid fluid;
+	private volatile FlowingFluid fluid;
 	@Nullable
 	private FlowingFluid flowing;
 
@@ -64,6 +64,15 @@ public class FeatureFluid implements IFluidFeature {
 	@Nullable
 	@Override
 	public FlowingFluid getFluid() {
+		// im sure double-checked locking is overkill but why not
+		if (fluid == null) {
+			synchronized (this) {
+				if (fluid == null) {
+					create();
+				}
+			}
+		}
+
 		return fluid;
 	}
 

@@ -91,12 +91,18 @@ public class ItemElectronTube extends ItemOverlay {
 	private static Multimap<ICircuitLayout, ICircuit> getCircuits(ItemStack itemStack) {
 		Multimap<ICircuitLayout, ICircuit> circuits = ArrayListMultimap.create();
 		Collection<ICircuitLayout> allLayouts = ChipsetManager.circuitRegistry.getRegisteredLayouts().values();
+
 		for (ICircuitLayout circuitLayout : allLayouts) {
-			ICircuit circuit = ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack);
-			if (circuit != null) {
-				circuits.put(circuitLayout, circuit);
+			try {
+				ICircuit circuit = ChipsetManager.solderManager.getCircuit(null, circuitLayout, itemStack);
+				if (circuit != null) {
+					circuits.put(circuitLayout, circuit);
+				}
+			} catch (NullPointerException ignored) {
+				// Hack, but MineColonies wants to discover all items on launch for some reason. See #2629
 			}
 		}
+
 		return circuits;
 	}
 }

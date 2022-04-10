@@ -1,28 +1,23 @@
 package forestry.core.blocks;
 
-import com.google.common.base.Preconditions;
-
-import javax.annotation.Nullable;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import javax.annotation.Nullable;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-
+import com.google.common.base.Preconditions;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.IForestryRenderer;
 import forestry.core.render.RenderForestryTile;
 import forestry.core.tiles.TileForestry;
 import forestry.modules.features.FeatureTileType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 public class MachinePropertiesTesr<T extends TileForestry> extends MachineProperties<T> implements IMachinePropertiesTesr<T> {
 
@@ -32,9 +27,6 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@Nullable
 	@OnlyIn(Dist.CLIENT)
 	private IForestryRenderer<? super T> renderer;
-	@Nullable
-	@OnlyIn(Dist.CLIENT)
-	private Function<? super TileEntityRendererDispatcher, ? extends TileEntityRenderer<? super T>> tileRenderer;
 
 	public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape, ResourceLocation particleTexture, boolean isFullCube) {
 		super(teType, name, shape);
@@ -45,7 +37,6 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@OnlyIn(Dist.CLIENT)
 	public void setRenderer(IForestryRenderer<? super T> renderer) {
 		this.renderer = renderer;
-		this.tileRenderer = (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer);
 	}
 
 	@Override
@@ -55,10 +46,10 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	}
 
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public void clientSetup() {
-		super.clientSetup();
-		if (tileRenderer != null) {
-			ClientRegistry.bindTileEntityRenderer(getTeType(), tileRenderer);
+		if (renderer != null) {
+			ClientRegistry.bindTileEntityRenderer(getTeType(), (dispatcher) -> new RenderForestryTile<>(dispatcher, renderer));
 		}
 	}
 

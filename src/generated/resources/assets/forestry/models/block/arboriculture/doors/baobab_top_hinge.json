@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_rh",
-  "textures": {
-    "top": "forestry:block/doors/baobab_upper",
-    "bottom": "forestry:block/doors/baobab_lower"
-  }
-}

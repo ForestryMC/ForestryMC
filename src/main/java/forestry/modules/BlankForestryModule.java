@@ -42,18 +42,6 @@ public class BlankForestryModule implements IForestryModule {
 		return false;
 	}
 
-	/**
-	 * Can be used to register crates via the {@link forestry.api.storage.ICrateRegistry}.
-	 */
-	public void registerCrates() {
-	}
-
-	/**
-	 * Can be used to hide items in JEI.
-	 */
-	public void getHiddenItems(List<ItemStack> hiddenItems) {
-	}
-
 	@Nullable
 	public ISaveEventHandler getSaveEventHandler() {
 		return null;

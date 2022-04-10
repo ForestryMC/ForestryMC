@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.storage.items;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,29 +30,17 @@ import forestry.core.utils.ItemStackUtil;
 
 public class ItemCrated extends ItemForestry implements IColoredItem {
 	private final ItemStack contained;
-	@Nullable
-	private final String oreDictName;
-	@Nullable
-	public final String identifier;
 
-	public ItemCrated() {
-		this(ItemStack.EMPTY, null, null);
-	}
-
-	public ItemCrated(ItemStack contained, @Nullable String oreDictName, @Nullable String identifier) {
+	/**
+	 * @param contained The item which should be dropped on use, or be uncrated into
+	 */
+	public ItemCrated(ItemStack contained) {
 		super(ItemGroups.tabStorage);
 		this.contained = contained;
-		this.oreDictName = oreDictName;
-		this.identifier = identifier;
 	}
 
 	public ItemStack getContained() {
 		return contained;
-	}
-
-	@Nullable
-	public String getOreDictName() {
-		return oreDictName;
 	}
 
 	@Override
@@ -104,11 +90,11 @@ public class ItemCrated extends ItemForestry implements IColoredItem {
 	@OnlyIn(Dist.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int renderPass) {
 		ItemColors colors = Minecraft.getInstance().getItemColors();
+
 		if (contained.isEmpty() || renderPass == 100) {
 			return -1;
 		}
-		int color = colors.getColor(contained, renderPass);
-		return color;
-	}
 
+		return colors.getColor(contained, renderPass);
+	}
 }

@@ -54,8 +54,6 @@ import forestry.api.apiculture.hives.HiveManager;
 import forestry.api.apiculture.hives.IHiveRegistry.HiveType;
 import forestry.api.genetics.flowers.IFlowerAcceptableRule;
 import forestry.api.modules.ForestryModule;
-import forestry.api.storage.ICrateRegistry;
-import forestry.api.storage.StorageManager;
 import forestry.apiculture.capabilities.ArmorApiarist;
 import forestry.apiculture.commands.CommandBee;
 import forestry.apiculture.features.ApicultureContainers;
@@ -78,13 +76,11 @@ import forestry.apiculture.gui.GuiHabitatLocator;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.items.EnumHoneyComb;
 import forestry.apiculture.items.EnumPollenCluster;
-import forestry.apiculture.items.EnumPropolis;
 import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.network.PacketRegistryApiculture;
 import forestry.apiculture.particles.ApicultureParticles;
 import forestry.apiculture.proxy.ProxyApiculture;
 import forestry.apiculture.proxy.ProxyApicultureClient;
-import forestry.apiculture.trigger.ApicultureTriggers;
 import forestry.apiculture.villagers.RegisterVillager;
 import forestry.apiculture.worldgen.HiveDescription;
 import forestry.apiculture.worldgen.HiveGenHelper;
@@ -95,7 +91,6 @@ import forestry.core.capabilities.NullStorage;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.LocalizedConfiguration;
-import forestry.core.features.CoreItems;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.IMCUtil;
@@ -201,11 +196,6 @@ public class ModuleApiculture extends BlankForestryModule {
 			ApicultureFilterRuleType.init();
 			ApicultureFilterRule.init();
 		}
-	}
-
-	@Override
-	public void registerTriggers() {
-		ApicultureTriggers.initialize();
 	}
 
 	@Override
@@ -348,27 +338,27 @@ public class ModuleApiculture extends BlankForestryModule {
 				Blocks.DANDELION,
 				Blocks.POPPY,
 				Blocks.BLUE_ORCHID,
-			Blocks.ALLIUM,
-			Blocks.AZURE_BLUET,
-			Blocks.RED_TULIP,
-			Blocks.ORANGE_TULIP,
-			Blocks.WHITE_TULIP,
-			Blocks.PINK_TULIP,
-			Blocks.OXEYE_DAISY,
-			Blocks.CORNFLOWER,
-			Blocks.WITHER_ROSE,
-			Blocks.LILY_OF_THE_VALLEY,
+				Blocks.ALLIUM,
+				Blocks.AZURE_BLUET,
+				Blocks.RED_TULIP,
+				Blocks.ORANGE_TULIP,
+				Blocks.WHITE_TULIP,
+				Blocks.PINK_TULIP,
+				Blocks.OXEYE_DAISY,
+				Blocks.CORNFLOWER,
+				Blocks.WITHER_ROSE,
+				Blocks.LILY_OF_THE_VALLEY,
 		};
 		Block[] pottedStandardFlowers = new Block[]{
-			Blocks.POTTED_POPPY,
-			Blocks.POTTED_BLUE_ORCHID,
-			Blocks.POTTED_ALLIUM,
-			Blocks.POTTED_AZURE_BLUET,
-			Blocks.POTTED_RED_TULIP,
-			Blocks.POTTED_ORANGE_TULIP,
-			Blocks.POTTED_WHITE_TULIP,
-			Blocks.POTTED_PINK_TULIP,
-			Blocks.POTTED_OXEYE_DAISY,
+				Blocks.POTTED_POPPY,
+				Blocks.POTTED_BLUE_ORCHID,
+				Blocks.POTTED_ALLIUM,
+				Blocks.POTTED_AZURE_BLUET,
+				Blocks.POTTED_RED_TULIP,
+				Blocks.POTTED_ORANGE_TULIP,
+				Blocks.POTTED_WHITE_TULIP,
+				Blocks.POTTED_PINK_TULIP,
+				Blocks.POTTED_OXEYE_DAISY,
 				Blocks.POTTED_CORNFLOWER,
 				Blocks.POTTED_LILY_OF_THE_VALLEY,
 				Blocks.POTTED_WITHER_ROSE,
@@ -400,33 +390,6 @@ public class ModuleApiculture extends BlankForestryModule {
 	}
 
 	@Override
-	public void registerCrates() {
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(CoreItems.BEESWAX.stack());
-		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.NORMAL));
-		crateRegistry.registerCrate(ApicultureItems.POLLEN_CLUSTER.stack(EnumPollenCluster.CRYSTALLINE));
-		crateRegistry.registerCrate(ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL));
-		crateRegistry.registerCrate(ApicultureItems.HONEYDEW.stack());
-		crateRegistry.registerCrate(ApicultureItems.ROYAL_JELLY.stack());
-
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.HONEY, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.COCOA, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SIMMERING, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.STRINGY, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.DRIPPING, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.POWDERY, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.WHEATEN, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1));
-		crateRegistry.registerCrate(ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MELLOW, 1));
-
-		crateRegistry.registerCrate(CoreItems.REFRACTORY_WAX.stack());
-	}
-
-	@Override
 	public void registerRecipes() {
 		// BREWING RECIPES
 		BrewingRecipeRegistry.addRecipe(
@@ -444,43 +407,43 @@ public class ModuleApiculture extends BlankForestryModule {
 		HiveRegistry hiveRegistry = getHiveRegistry();
 
 		hiveRegistry.addDrops(HiveType.FOREST.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.FOREST, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.08, BeeDefinition.FOREST.getRainResist(), honeyComb),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		hiveRegistry.addDrops(HiveType.MEADOWS.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
+				new HiveDrop(0.80, BeeDefinition.MEADOWS, honeyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, honeyComb)
 		);
 
 		ItemStack parchedComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.PARCHED, 1);
 		hiveRegistry.addDrops(HiveType.DESERT.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
+				new HiveDrop(0.80, BeeDefinition.MODEST, parchedComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, parchedComb)
 		);
 
 		ItemStack silkyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.SILKY, 1);
 		hiveRegistry.addDrops(HiveType.JUNGLE.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
+				new HiveDrop(0.80, BeeDefinition.TROPICAL, silkyComb).setIgnobleShare(0.7),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, silkyComb)
 		);
 
 		ItemStack mysteriousComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MYSTERIOUS, 1);
 		hiveRegistry.addDrops(HiveType.END.getHiveUid(),
-			new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
+				new HiveDrop(0.90, BeeDefinition.ENDED, mysteriousComb)
 		);
 
 		ItemStack frozenComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.FROZEN, 1);
 		hiveRegistry.addDrops(HiveType.SNOW.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
+				new HiveDrop(0.80, BeeDefinition.WINTRY, frozenComb).setIgnobleShare(0.5),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, frozenComb)
 		);
 
 		ItemStack mossyComb = ApicultureItems.BEE_COMBS.stack(EnumHoneyComb.MOSSY, 1);
 		hiveRegistry.addDrops(HiveType.SWAMP.getHiveUid(),
-			new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
-			new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
+				new HiveDrop(0.80, BeeDefinition.MARSHY, mossyComb).setIgnobleShare(0.4),
+				new HiveDrop(0.03, BeeDefinition.VALIANT, mossyComb)
 		);
 	}
 

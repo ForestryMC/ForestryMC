@@ -1,0 +1,16 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.frames",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:frame_untreated",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "forestry:frame_untreated",
+      "recipe2": "forestry:frame_impregnated"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.frames1"
+    }
+  ]
+}

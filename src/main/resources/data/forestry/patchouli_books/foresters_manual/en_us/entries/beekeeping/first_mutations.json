@@ -1,0 +1,20 @@
+{
+  "name": "for.gui.book.patchouli.entry.beekeeping.mutations",
+  "category": "forestry:beekeeping",
+  "icon": "forestry:bee_queen_ge{Genome:{Chromosomes:[{UID1:\"forestry.speciesCommon\",UID0:\"forestry.speciesCommon\",Slot:0b}]}}",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "for.gui.book.patchouli.entry.beekeeping.mutations3"
+    }
+    // TODO: Mutation visualization
+  ]
+}

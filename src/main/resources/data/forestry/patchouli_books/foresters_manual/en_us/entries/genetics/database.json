@@ -1,0 +1,26 @@
+{
+  "icon": "forestry:database",
+  "name": "for.gui.book.patchouli.entry.genetics.database",
+  "category": "forestry:genetics",
+  "pages": [
+    {
+      "type": "text",
+      "text": "for.gui.book.patchouli.entry.genetics.database1"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_tree_chest_butterfly_chest",
+      "recipe2": "forestry:database_bee_chest_butterfly_chest"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_bee_chest_tree_chest",
+      "recipe2": "forestry:database_butterfly_chest_tree_chest"
+    },
+    {
+      "type": "crafting",
+      "recipe": "forestry:database_tree_chest_bee_chest",
+      "recipe2": "forestry:database_butterfly_chest_bee_chest"
+    }
+  ]
+}

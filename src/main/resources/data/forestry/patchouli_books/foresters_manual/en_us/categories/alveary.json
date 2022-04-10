@@ -1,0 +1,7 @@
+{
+  "name": "for.gui.book.patchouli.category.beekeeping.alveary.title",
+  "parent": "forestry:beekeeping",
+  "description": "for.gui.book.patchouli.category.beekeeping.alveary.desc",
+  "icon": "forestry:alveary_plain",
+  "sortnum": 0
+}

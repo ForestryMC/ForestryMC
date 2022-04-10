@@ -1,0 +1,12 @@
+{
+  "icon": "forestry:bottler",
+  "name": "for.gui.book.patchouli.entry.core.machine.bottler",
+  "category": "forestry:machines",
+  "pages": [
+    {
+      "type": "crafting",
+      "recipe": "forestry:bottler",
+      "text": "for.gui.book.patchouli.entry.core.machine.bottler1"
+    }
+  ]
+}

@@ -79,10 +79,6 @@ public class InventoryMapper extends InvWrapperBase implements IInventory {
 		inv.setItem(start + slot, itemstack);
 	}
 
-	public void setStackSizeLimit(int limit) {
-		stackSizeLimit = limit;
-	}
-
 	@Override
 	public int getMaxStackSize() {
 		return stackSizeLimit > 0 ? stackSizeLimit : inv.getMaxStackSize();
