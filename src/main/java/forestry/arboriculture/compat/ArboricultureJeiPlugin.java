@@ -16,6 +16,7 @@ import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
@@ -35,8 +36,8 @@ public class ArboricultureJeiPlugin implements IModPlugin {
 			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
-		subtypeRegistry.registerSubtypeInterpreter(ArboricultureItems.SAPLING.item(), arboSubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(ArboricultureItems.POLLEN_FERTILE.item(), arboSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ArboricultureItems.SAPLING.item(), arboSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ArboricultureItems.POLLEN_FERTILE.item(), arboSubtypeInterpreter);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public class RainmakerRecipeCategory extends ForestryRecipeCategory<RainSubstrat
 		super(guiHelper.createBlankDrawable(150, 30), "block.forestry.rainmaker");
 		this.slot = guiHelper.getSlotDrawable();
 		ItemStack rainmaker = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.RAINMAKER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, rainmaker);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, rainmaker);
 	}
 
 	@SuppressWarnings("removal")

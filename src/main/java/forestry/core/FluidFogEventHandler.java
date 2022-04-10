@@ -34,7 +34,7 @@ public class FluidFogEventHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onFogDenseRender(EntityViewRenderEvent.FogDensity event) {
+	public static void onFogDenseRender(EntityViewRenderEvent.RenderFogEvent event) {
 		// if (event.getCamera().getFluidInCamera().getType() != Fluids.EMPTY) {
 		// 	if (isForestryFluid(event.getCamera().getFluidInCamera())) {
 		// 		event.setDensity(80);

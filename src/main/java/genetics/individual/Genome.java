@@ -331,7 +331,7 @@ public final class Genome implements IGenome {
 
 	@Override
 	public CompoundTag writeToNBT(CompoundTag compound) {
-		return GeneticSaveHandler.INSTANCE.writeTag(chromosomes, karyotype, compound);
+		return GeneticSaveHandler.INSTANCE.writeTag(chromosomes, compound);
 	}
 
 	@Override

@@ -45,6 +45,7 @@ import forestry.factory.recipes.jei.still.StillRecipeCategory;
 import forestry.modules.ForestryModuleUids;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -284,7 +285,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		};
 
 		for (Item container : FluidsItems.CONTAINERS.itemArray()) {
-			subtypeRegistry.registerSubtypeInterpreter(container, subtypeInterpreter);
+			subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, container, subtypeInterpreter);
 		}
 	}
 

@@ -29,8 +29,6 @@ import genetics.api.organism.IOrganism;
 import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
 import genetics.commands.CommandListAlleles;
-import genetics.individual.GeneticSaveHandler;
-import genetics.individual.SaveFormat;
 import genetics.plugins.PluginManager;
 
 @Mod(Genetics.MOD_ID)
@@ -40,8 +38,10 @@ public class Genetics {
 	/**
 	 * Capability for {@link IOrganism}.
 	 */
-	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {});
-	public static Capability<IGeneTemplate> GENE_TEMPLATE = CapabilityManager.get(new CapabilityToken<>() {});
+	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static Capability<IGeneTemplate> GENE_TEMPLATE = CapabilityManager.get(new CapabilityToken<>() {
+	});
 
 	public Genetics() {
 		GeneticsAPI.apiInstance = ApiInstance.INSTANCE;
@@ -90,7 +90,6 @@ public class Genetics {
 			}
 			definition.get().getComponentContainer().onStage(DefaultStage.COMPLETION);
 		}
-		GeneticSaveHandler.setWriteFormat(SaveFormat.BINARY);
 	}
 
 	public void registerCommands(RegisterCommandsEvent event) {

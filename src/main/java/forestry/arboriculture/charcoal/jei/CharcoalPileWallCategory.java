@@ -39,7 +39,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPi
 		IDrawableStatic flameAnimated = helper.createDrawable(resourceLocation, 14, 0, 14, 14);
 		this.flameAnimated = helper.createAnimatedDrawable(flameAnimated, 260, StartDirection.TOP, true);
 		this.slot = helper.getSlotDrawable();
-		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, CharcoalBlocks.WOOD_PILE.stack());
+		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CharcoalBlocks.WOOD_PILE.stack());
 	}
 
 	@SuppressWarnings("removal")

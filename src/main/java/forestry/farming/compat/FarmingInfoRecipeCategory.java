@@ -44,7 +44,7 @@ public class FarmingInfoRecipeCategory extends ForestryRecipeCategory<FarmingInf
 		addition = guiHelper.createDrawable(resourceLocation, 44, 0, 15, 15);
 		arrow = guiHelper.createDrawable(resourceLocation, 59, 0, 15, 15);
 		ItemStack intricateCircuitboard = new ItemStack(CoreItems.CIRCUITBOARDS.get(EnumCircuitBoardType.INTRICATE));
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, intricateCircuitboard);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, intricateCircuitboard);
 	}
 
 	@SuppressWarnings("removal")

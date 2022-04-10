@@ -163,19 +163,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 		return handlers;
 	}
 
-	public int getId(IAllele allele) {
-		return registry.getID(allele);
-	}
-
-	public int getId(ResourceLocation alleleName) {
-		return registry.getID(alleleName);
-	}
-
-	@Nullable
-	public IAllele getAllele(int id) {
-		return registry.getValue(id);
-	}
-
 	/* BLACKLIST */
 	private final ArrayList<ResourceLocation> blacklist = new ArrayList<>();
 

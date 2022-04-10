@@ -87,7 +87,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	}
 
 	@Override
-	public ItemStack getCartItem() {
+	public ItemStack getPickResult() {
 		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.APIARY).stack();
 	}
 

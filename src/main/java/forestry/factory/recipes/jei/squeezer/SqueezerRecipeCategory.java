@@ -10,6 +10,7 @@ import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -41,7 +42,7 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<ISqueezerReci
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack squeezer = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.SQUEEZER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, squeezer);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, squeezer);
 		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
 	}
 
@@ -71,15 +72,15 @@ public class SqueezerRecipeCategory extends ForestryRecipeCategory<ISqueezerReci
 	public void setRecipe(IRecipeLayoutBuilder builder, ISqueezerRecipe recipe, IFocusGroup focuses) {
 		List<IRecipeSlotBuilder> craftingSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.INPUT, 3, 3, 8, 5, 18);
 		JeiUtil.setCraftingItems(craftingSlots, recipe.getResources(), 3, 3, craftingGridHelper);
-		
+
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 88, 44)
 				.addTooltipCallback(new ChanceTooltipCallback(recipe.getRemnantsChance()))
 				.addItemStack(recipe.getRemnants());
-		
+
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 113, 2)
 				.setFluidRenderer(10000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, recipe.getFluidOutput());
+				.addIngredient(ForgeTypes.FLUID_STACK, recipe.getFluidOutput());
 	}
 
 	@Override

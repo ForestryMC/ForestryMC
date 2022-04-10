@@ -20,7 +20,7 @@ import mezz.jei.api.runtime.IIngredientManager;
 public class BottlerRecipeMaker {
 	public static List<BottlerRecipe> getBottlerRecipes(IIngredientManager ingredientManager) {
 		List<BottlerRecipe> recipes = new ArrayList<>();
-		for (ItemStack stack : ingredientManager.getAllIngredients(VanillaTypes.ITEM)) {
+		for (ItemStack stack : ingredientManager.getAllIngredients(VanillaTypes.ITEM_STACK)) {
 			Optional<IFluidHandlerItem> drainFluidHandler = stack.copy()
 					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
 					.resolve();

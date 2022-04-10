@@ -9,6 +9,7 @@ import forestry.core.utils.JeiUtil;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -42,7 +43,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack carpenter = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, carpenter);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, carpenter);
 	}
 
 	@SuppressWarnings("removal")
@@ -91,7 +92,7 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 
 		FluidStack fluidResource = recipe.getFluidResource();
 		if (!fluidResource.isEmpty()) {
-			tankSlot.addIngredient(VanillaTypes.FLUID, fluidResource);
+			tankSlot.addIngredient(ForgeTypes.FLUID_STACK, fluidResource);
 		}
 	}
 

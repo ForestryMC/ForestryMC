@@ -3,7 +3,6 @@
 
 # folders
 !/.github
-!/forestry_techne
 !/gradle/wrapper
 !/src
 /src/generated/
@@ -18,7 +17,6 @@
 !/gradle.properties
 !/build.gradle
 !/settings.gradle
-!/build.xml
 !/gradlew
 !/gradlew.bat
 !/cla-signatures.txt

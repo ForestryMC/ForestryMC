@@ -8,6 +8,7 @@ import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
@@ -34,7 +35,7 @@ public class StillRecipeCategory extends ForestryRecipeCategory<IStillRecipe> {
 		IDrawableStatic progressBarDrawable0 = guiHelper.createDrawable(guiTexture, 176, 74, 4, 18);
 		this.progressBar = guiHelper.createAnimatedDrawable(progressBarDrawable0, 20, IDrawableAnimated.StartDirection.BOTTOM, false);
 		ItemStack still = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.STILL).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, still);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, still);
 	}
 
 	@SuppressWarnings("removal")
@@ -65,12 +66,12 @@ public class StillRecipeCategory extends ForestryRecipeCategory<IStillRecipe> {
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
 				.setFluidRenderer(10000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, recipe.getInput());
+				.addIngredient(ForgeTypes.FLUID_STACK, recipe.getInput());
 
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 91, 1)
 				.setFluidRenderer(10000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, recipe.getOutput());
+				.addIngredient(ForgeTypes.FLUID_STACK, recipe.getOutput());
 	}
 
 	@Override

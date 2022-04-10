@@ -17,13 +17,6 @@ public class WrappedDeferredRegister<T extends IForgeRegistryEntry<T>> {
 		internal = DeferredRegister.create(registry, modid);
 	}
 
-	/**
-	 * @apiNote For use with custom registries
-	 */
-	protected WrappedDeferredRegister(String modid, Class<T> base) {
-		internal = DeferredRegister.create(base, modid);
-	}
-
 	protected <I extends T, W extends WrappedRegistryObject<I>> W register(String name, Supplier<? extends I> sup, Function<RegistryObject<I>, W> objectWrapper) {
 		return objectWrapper.apply(internal.register(name, sup));
 	}

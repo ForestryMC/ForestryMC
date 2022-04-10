@@ -15,6 +15,7 @@ import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.ISubtypeRegistration;
 
@@ -33,9 +34,9 @@ public class LepidopterologyJeiPlugin implements IModPlugin {
 			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
-		subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.BUTTERFLY_GE.item(), butterflySubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.COCOON_GE.item(), butterflySubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.CATERPILLAR_GE.item(), butterflySubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(LepidopterologyItems.SERUM_GE.item(), butterflySubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, LepidopterologyItems.BUTTERFLY_GE.item(), butterflySubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, LepidopterologyItems.COCOON_GE.item(), butterflySubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, LepidopterologyItems.CATERPILLAR_GE.item(), butterflySubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, LepidopterologyItems.SERUM_GE.item(), butterflySubtypeInterpreter);
 	}
 }

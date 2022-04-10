@@ -38,7 +38,7 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<ICentrifuge
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 0, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		ItemStack centrifuge = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, centrifuge);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, centrifuge);
 	}
 
 	@SuppressWarnings("removal")
