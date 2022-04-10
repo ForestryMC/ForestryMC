@@ -18,12 +18,8 @@ plugins {
 apply plugin: "net.minecraftforge.gradle"
 
 group = "net.sengir.forestry"
-version = computeVersion()
+version = System.getenv("FORESTRY_VERSION") ?: "0.0.0.0"
 archivesBaseName = "forestry-$minecraft_version"
-
-String computeVersion() {
-	return "$version_major.$version_minor.${System.getenv("BUILD_NUMBER") ?: "999+local"}"
-}
 
 repositories {
 	maven {
@@ -217,10 +213,8 @@ publishing {
 	}
 }
 
-def theChangelog = System.getenv("CHANGELOG")
-
 ////////////////
-// Curse Forge
+// CurseForge
 if (System.getenv("CURSEFORGE")) {
 	curseforge {
 		apiKey = System.getenv("CURSEFORGE")
@@ -228,8 +222,16 @@ if (System.getenv("CURSEFORGE")) {
 		project {
 			id = project.curseforge_project
 			changelogType = "markdown"
-			changelog = theChangelog
-			releaseType = theChangelog.contains("[beta]") ? "beta" : "alpha"
+			changelog = "View changelog at [the release page](https://github.com/ForestryMC/ForestryMC/releases/tag/${version})"
+
+			if (version.contains("alpha")) {
+				releaseType = "alpha"
+			} else if (version.contains("beta")) {
+				releaseType = "beta"
+			} else {
+				releaseType = "release"
+			}
+
 			addGameVersion project.minecraft_version
 			addGameVersion "Forge"
 
@@ -254,15 +256,23 @@ task publishModrinth(type: TaskModrinthUpload) {
 		System.getenv("MODRINTH")
 	}
 
+	dependsOn jar
+
 	token = System.getenv("MODRINTH")
-	changelog = theChangelog
+	changelog = "View changelog at [the release page](https://github.com/ForestryMC/ForestryMC/releases/tag/${version})"
 	projectId = project.modrinth_project
 	versionName = project.version
 	versionNumber = project.version
-	versionType = theChangelog?.contains("[beta]") ? VersionType.BETA : VersionType.ALPHA
+
+	if (version.contains("alpha")) {
+		versionType = VersionType.ALPHA
+	} else if (version.contains("beta")) {
+		versionType = VersionType.BETA
+	} else {
+		versionType = VersionType.RELEASE
+	}
+
 	uploadFile = jar
 	addGameVersion(project.minecraft_version)
 	addLoader("forge")
 }
-
-publishModrinth.dependsOn jar

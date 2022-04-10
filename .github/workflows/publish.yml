@@ -1,14 +1,13 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - 'dev/**'
+  release:
+    types:
+      - published
 
 jobs:
   publish:
-    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -18,31 +17,30 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
-      # Generate a build number unique to the branch
-      - name: Generate build number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{ secrets.github_token }}
-          prefix: ${{ github.ref }}
-      - name: Generate data
-        run: ./gradlew runData
+      - name: Find Minecraft version
+        id: version
+        run: |
+          grep 'minecraft_version' gradle.properties > /tmp/minecraft_version
+          source /tmp/minecraft_version
+          echo ::set-output name=MINECRAFT_VERSION::$minecraft_version
       - name: Build
-        run: ./gradlew build
-      - name: Publish to Maven
-        if: "! contains(toJSON(github.event.commits.*.message), '[maven skip]')"
-        run: ./gradlew publishAllPublicationsToModmavenRepository
+        run: ./gradlew downloadAssets runData build
         env:
+          FORESTRY_VERSION: ${{ github.event.release.tag_name }}
+      - name: Upload Release Artifact
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./build/libs/forestry-${{ steps.version.outputs.MINECRAFT_VERSION }}-${{ github.event.release.tag_name }}.jar
+          asset_name: forestry-${{ steps.version.outputs.MINECRAFT_VERSION }}-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/zip
+      - name: Upload to external sites
+        run: ./gradlew publishAllPublicationsToModmavenRepository curseforge publishModrinth
+        env:
+          FORESTRY_VERSION: ${{ github.event.release.tag_name }}
           MODMAVEN_USER: ${{ secrets.MODMAVEN_USER }}
           MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
-      - name: Upload to CurseForge
-        if: "! contains(toJSON(github.event.commits.*.message), '[curseforge skip]')"
-        run: ./gradlew curseforge
-        env:
-          CHANGELOG: ${{ github.event.head_commit.message }}
           CURSEFORGE: ${{ secrets.CURSEFORGE }}
-      - name: Upload to Modrinth
-        if: "! contains(toJSON(github.event.commits.*.message), '[modrinth skip]')"
-        run: ./gradlew publishModrinth
-        env:
-          CHANGELOG: ${{ github.event.head_commit.message }}
           MODRINTH: ${{ secrets.MODRINTH }}
