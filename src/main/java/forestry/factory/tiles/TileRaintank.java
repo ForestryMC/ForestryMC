@@ -12,6 +12,8 @@ package forestry.factory.tiles;
 
 import java.io.IOException;
 
+import com.dunk.tfc.api.TFCFluids;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -44,6 +46,7 @@ import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.gui.GuiRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
+
 public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTankTile, IFluidHandler {
 	private static final FluidStack STACK_WATER = Fluids.WATER.getFluid(Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
@@ -57,7 +60,7 @@ public class TileRaintank extends TileBase implements ISidedInventory, ILiquidTa
 		super("raintank");
 		setInternalInventory(new InventoryRaintank(this));
 
-		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY, FluidRegistry.WATER);
+		resourceTank = new FilteredTank(Constants.RAINTANK_TANK_CAPACITY, TFCFluids.FRESHWATER);
 		tankManager = new TankManager(this, resourceTank);
 	}
 
