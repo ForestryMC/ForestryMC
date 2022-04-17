@@ -1,12 +1,12 @@
 [
 {
-  "modid": "Forestry",
-  "name": "Forestry for Minecraft",
+  "modid": "${modId}",
+  "name": "${modName}",
   "description": "Trees, bees and more.",
   "credits": "mistaqur, Binnie",
   "logoFile": "/assets/forestry/logo.png",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
+  "version": "${modVersion}",
+  "mcversion": "${minecraftVersion}",
   "url": "http://forestry.sengir.net/",
   "updateUrl": "http://forestry.sengir.net/wiki/index.php?n=Main.Downloads",
   "authorList": [ "SirSengir" ],

@@ -669,6 +669,7 @@ item.for.thermionicTubes.ex-9.name=Emerald Electron Tube
 item.for.thermionicTubes.ex-10.name=Apatine Electron Tube
 item.for.thermionicTubes.ex-11.name=Lapis Electron Tube
 item.for.thermionicTubes.ex-12.name=Ender Electron Tube
+item.for.thermionicTubes.ex-13.name=Uranium238 Electron Tube
 
 item.for.treealyzer.name=Treealyzer
 
@@ -1344,7 +1345,7 @@ for.circuit.managedPeat=Peat Bog
 for.circuit.managedShroom=Shroom Farm
 for.circuit.managedVegetable=Vegetable Farm
 for.circuit.managedEnder=Ender Farm
-for.circuit.manualCereal=Crop Farm
+for.circuit.manualCereal=Vanilla Crop Farm
 for.circuit.manualCocoa=Cocoa Plantation
 for.circuit.manualGourd=Gourd Farm
 for.circuit.manualOrchard=Orchard
@@ -1354,6 +1355,7 @@ for.circuit.manualRubber=Rubber Plantation
 for.circuit.manualShroom=Shroom Farm
 for.circuit.manualSucculent=Succulent Farm
 for.circuit.manualVegetable=Vegetable Farm
+for.circuit.manualIC2Crop=IC2 Crop Farm
 
 for.gui.farm.title=Farm
 for.gui.hydr.heat=By Heat
