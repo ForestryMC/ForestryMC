@@ -17,6 +17,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.farming.FarmDirection;
@@ -170,14 +171,14 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 		FluidHelper.drainContainers(tankManager, this, SLOT_CAN);
 	}
 
-	public boolean plantGermling(IFarmable germling, EntityPlayer player, int x, int y, int z) {
+	public boolean plantGermling(IFarmable germling, EntityPlayer player, World world, int x, int y, int z) {
 		for (int i = 0; i < germlingsInventory.getSizeInventory(); i++) {
 			ItemStack germlingStack = germlingsInventory.getStackInSlot(i);
 			if (germlingStack == null || !germling.isGermling(germlingStack)) {
 				continue;
 			}
 
-			if (germling.plantSaplingAt(player, germlingStack, player.worldObj, x, y, z)) {
+			if (germling.plantSaplingAt(player, germlingStack, world, x, y, z)) {
 				germlingsInventory.decrStackSize(i, 1);
 				return true;
 			}
