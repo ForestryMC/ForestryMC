@@ -226,4 +226,9 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 		}
 	}
 
+	@Override
+	public String getOverlayIdentifier() {
+		return this.getRecipeID();
+	}
+
 }
