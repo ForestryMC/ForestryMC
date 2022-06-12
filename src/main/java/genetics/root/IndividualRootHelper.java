@@ -69,7 +69,7 @@ public enum IndividualRootHelper implements IIndividualRootHelper {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(IIndividual individual) {
+	public <R extends IIndividualRoot<?>> IRootDefinition<R> getSpeciesRoot(IIndividual individual) {
 		return (IRootDefinition<R>) individual.getRoot().getDefinition();
 	}
 

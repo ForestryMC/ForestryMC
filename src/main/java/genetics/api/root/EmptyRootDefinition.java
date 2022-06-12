@@ -5,13 +5,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import genetics.api.individual.IIndividual;
+
 /**
  * A empty instance of an {@link IRootDefinition}.
  */
-public final class EmptyRootDefinition implements IRootDefinition {
-	private static final EmptyRootDefinition INSTANCE = new EmptyRootDefinition();
-
-	public static <R extends IIndividualRoot> IRootDefinition<R> empty() {
+public final class EmptyRootDefinition<T extends IIndividualRoot<?>> implements IRootDefinition<T> {
+	private static final EmptyRootDefinition<IIndividualRoot<?>> INSTANCE = new EmptyRootDefinition<>();
+	// ? extends IIndividualRoot<IIndividual>
+	public static <R extends IIndividualRoot<?>> IRootDefinition<R> empty() {
 		@SuppressWarnings("unchecked")
 		IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
 		return t;
@@ -21,18 +23,18 @@ public final class EmptyRootDefinition implements IRootDefinition {
 	}
 
 	@Override
-	public Optional<IIndividualRoot> maybe() {
+	public Optional<T> maybe() {
 		return Optional.empty();
 	}
 
 	@Override
-	public IIndividualRoot get() {
+	public T get() {
 		throw new NullPointerException();
 	}
 
 	@Override
-	public IIndividualRoot cast() {
-		return get();
+	public <U extends IIndividualRoot> U cast() {
+		return (U)get();
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public final class EmptyRootDefinition implements IRootDefinition {
 	}
 
 	@Override
-	public IIndividualRoot orElse(IIndividualRoot other) {
+	public T orElse(T other) {
 		return other;
 	}
 
