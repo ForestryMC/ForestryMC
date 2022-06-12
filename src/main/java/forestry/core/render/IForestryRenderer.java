@@ -1,5 +1,6 @@
 package forestry.core.render;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -9,6 +10,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  * @param <T> The type of the tile entity
  */
 public interface IForestryRenderer<T extends BlockEntity> {
+	public static ModelLayerLocation register(String name) {
+		return new ModelLayerLocation(new ForestryResource(name), "main");
+	}
 
 	/**
 	 * Renders the given tile entity.
