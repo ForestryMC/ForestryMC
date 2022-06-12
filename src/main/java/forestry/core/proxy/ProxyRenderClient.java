@@ -82,27 +82,27 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(ctx -> new RenderMachine(ctx, baseTexture));
+		machineProperties.setRenderer(RenderMachine.MODEL_LAYER, part -> new RenderMachine(part, baseTexture));
 	}
 
 	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(ctx -> new RenderMill(baseTexture));
+		machineProperties.setRenderer(RenderMill.MODEL_LAYER, part -> new RenderMill(baseTexture));
 	}
 
 	@Override
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-		machineProperties.setRenderer(ctx -> new RenderEscritoire());
+		machineProperties.setRenderer(RenderEscritoire.MODEL_LAYER, part -> new RenderEscritoire());
 	}
 
 	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		machineProperties.setRenderer(RenderAnalyzer::new);
+		machineProperties.setRenderer(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::new);
 	}
 
 	@Override
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-		machineProperties.setRenderer(ctx -> new RenderNaturalistChest(textureName));
+		machineProperties.setRenderer(RenderNaturalistChest.MODEL_LAYER, part -> new RenderNaturalistChest(textureName));
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	
 	@Override
 	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(RenderAnalyzer.ANALYZER, RenderAnalyzer::createBodyLayer);
-		event.registerLayerDefinition(RenderMachine.MACHINE, RenderMachine::createBodyLayer);
+		event.registerLayerDefinition(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::createBodyLayer);
+		event.registerLayerDefinition(RenderMachine.MODEL_LAYER, RenderMachine::createBodyLayer);
 	}
 }

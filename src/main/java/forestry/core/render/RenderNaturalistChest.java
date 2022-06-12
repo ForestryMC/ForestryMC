@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,6 +23,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("naturalistChest");
 
 	public RenderNaturalistChest(String textureName) {
 	}

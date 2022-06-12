@@ -34,7 +34,7 @@ import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
-	public static final ModelLayerLocation ENGINE = IForestryRenderer.register("engine");
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("engine");
 	
 	private static final String EXTENSION = "EXTENSION";
 	private static final String PISTON = "PISTON";
@@ -63,8 +63,7 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
-	public RenderEngine(BlockEntityRendererProvider.Context ctx, String baseTexture) {
-		ModelPart root = ctx.bakeLayer(ENGINE);
+	public RenderEngine(final ModelPart root, String baseTexture) {
 		boiler = root.getChild(BOILER);
 		trunk = root.getChild(TRUNK);
 		piston = root.getChild(PISTON);

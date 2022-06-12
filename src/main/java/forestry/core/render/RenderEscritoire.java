@@ -12,6 +12,7 @@ package forestry.core.render;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import forestry.core.config.Constants;
 import forestry.core.tiles.TileEscritoire;
 
 public class RenderEscritoire implements IForestryRenderer<TileEscritoire> {
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("escritoire");
 
 	private static final ResourceLocation TEXTURE = new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/escritoire.png");
 

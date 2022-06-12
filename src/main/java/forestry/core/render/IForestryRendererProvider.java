@@ -1,6 +1,6 @@
 package forestry.core.render;
 
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
@@ -10,5 +10,5 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 @FunctionalInterface
 public interface IForestryRendererProvider<T extends BlockEntity> {
-	IForestryRenderer<? super T> create(BlockEntityRendererProvider.Context ctx);
+	IForestryRenderer<? super T> create(ModelPart root);
 }

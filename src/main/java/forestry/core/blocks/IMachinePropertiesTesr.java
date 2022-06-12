@@ -13,7 +13,6 @@ package forestry.core.blocks;
 import javax.annotation.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
-
 import forestry.core.render.IForestryRendererProvider;
 import forestry.core.tiles.TileForestry;
 

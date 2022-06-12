@@ -17,7 +17,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -39,8 +38,7 @@ import forestry.core.tiles.IRenderableTile;
 import forestry.core.tiles.TileBase;
 
 public class RenderMachine implements IForestryRenderer<TileBase> {
-	// probably need one per machine?
-	public static final ModelLayerLocation MACHINE = IForestryRenderer.register("machine");
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("machine");
 	
 	private static final String BASE_FRONT = "basefront";
 	private static final String BASE_BACK = "baseback";
@@ -58,8 +56,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 
 	private final EnumMap<EnumTankLevel, ResourceLocation> texturesTankLevels = new EnumMap<>(EnumTankLevel.class);
 
-	public RenderMachine(BlockEntityRendererProvider.Context ctx, String baseTexture) {
-		ModelPart root = ctx.bakeLayer(MACHINE);
+	public RenderMachine(ModelPart root, String baseTexture) {
 		basefront = root.getChild(BASE_FRONT);
 		baseback = root.getChild(BASE_BACK);
 		resourceTank = root.getChild(RESOURCE_TANK);

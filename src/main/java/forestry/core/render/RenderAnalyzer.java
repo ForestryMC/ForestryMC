@@ -33,7 +33,7 @@ import forestry.core.config.Constants;
 import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
-	public static final ModelLayerLocation ANALYZER = IForestryRenderer.register("analyzer");
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("analyzer");
 	
 	private static final String TOWER2 = "tower2";
 	private static final String TOWER1 = "tower1";
@@ -46,8 +46,7 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 
 	private final ResourceLocation[] textures;
 
-	public RenderAnalyzer(BlockEntityRendererProvider.Context ctx) {
-        ModelPart root = ctx.bakeLayer(ANALYZER);
+	public RenderAnalyzer(final ModelPart root) {
         this.pedestal = root.getChild(PEDESTAL);
         this.cover = root.getChild(COVER);
         this.tower1 = root.getChild(TOWER1);

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.core.render;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 
@@ -18,6 +19,8 @@ import com.mojang.math.Vector3f;
 import forestry.core.tiles.TileMill;
 
 public class RenderMill implements IForestryRenderer<TileMill> {
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("mill");
+	
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
 
 	public RenderMill(String baseTexture) {

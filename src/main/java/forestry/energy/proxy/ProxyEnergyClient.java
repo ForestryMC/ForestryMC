@@ -24,11 +24,11 @@ import forestry.modules.IClientModuleHandler;
 public class ProxyEnergyClient extends ProxyEnergy implements IClientModuleHandler {
 	@Override
 	public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(ctx -> new RenderEngine(ctx, baseTexture));
+		machineProperties.setRenderer(RenderEngine.MODEL_LAYER, part -> new RenderEngine(part, baseTexture));
 	}
 	
 	@Override
 	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(RenderEngine.ENGINE, RenderEngine::createBodyLayer);
+		event.registerLayerDefinition(RenderEngine.MODEL_LAYER, RenderEngine::createBodyLayer);
 	}
 }

@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +28,10 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 
 	@Nullable
 	@OnlyIn(Dist.CLIENT)
+	private ModelLayerLocation modelLayer;
+	
+	@Nullable
+	@OnlyIn(Dist.CLIENT)
 	private IForestryRendererProvider<? super T> renderer;
 
 	public MachinePropertiesTesr(Supplier<FeatureTileType<? extends T>> teType, String name, IShapeProvider shape, ResourceLocation particleTexture, boolean isFullCube) {
@@ -36,7 +41,8 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void setRenderer(IForestryRendererProvider<? super T> renderer) {
+	public void setRenderer(ModelLayerLocation modelLayer, IForestryRendererProvider<? super T> renderer) {
+		this.modelLayer = modelLayer;
 		this.renderer = renderer;
 	}
 
@@ -50,7 +56,7 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	@OnlyIn(Dist.CLIENT)
 	public void clientSetupRenderers(EntityRenderersEvent.RegisterRenderers event) {
 		if (renderer != null) {
-			event.registerBlockEntityRenderer(getTeType(), (ctx) -> new RenderForestryTile<>(renderer.create(ctx)));
+			event.registerBlockEntityRenderer(getTeType(), (ctx) -> new RenderForestryTile<>(renderer.create(ctx.bakeLayer(modelLayer))));
 		}
 	}
 
