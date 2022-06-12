@@ -124,6 +124,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	
 	@Override
 	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(RenderAnalyzer.ANALYZER, RenderAnalyzer::createBodyLayer);
 		event.registerLayerDefinition(RenderMachine.MACHINE, RenderMachine::createBodyLayer);
 	}
 }
