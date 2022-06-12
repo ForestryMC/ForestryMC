@@ -47,9 +47,6 @@ public class RenderAnalyzer implements IForestryRenderer<TileAnalyzer> {
 	private final ResourceLocation[] textures;
 
 	public RenderAnalyzer(BlockEntityRendererProvider.Context ctx) {
-		// registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event)
-		// event.registerLayerDefinition(RenderAnalyzer.ANALYZER, RenderAnalyzer::createBodyLayer);
-		
         ModelPart root = ctx.bakeLayer(ANALYZER);
         this.pedestal = root.getChild(PEDESTAL);
         this.cover = root.getChild(COVER);

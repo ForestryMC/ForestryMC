@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
@@ -45,6 +45,7 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
+import forestry.energy.render.RenderEngine;
 import forestry.modules.IClientModuleHandler;
 
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
@@ -81,28 +82,27 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMachine(baseTexture));
+		machineProperties.setRenderer(ctx -> new RenderMachine(ctx, baseTexture));
 	}
 
 	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMill(baseTexture));
+		machineProperties.setRenderer(ctx -> new RenderMill(baseTexture));
 	}
 
 	@Override
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-		machineProperties.setRenderer(new RenderEscritoire());
+		machineProperties.setRenderer(ctx -> new RenderEscritoire());
 	}
 
 	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		RenderAnalyzer renderAnalyzer = new RenderAnalyzer();
-		machineProperties.setRenderer(renderAnalyzer);
+		machineProperties.setRenderer(RenderAnalyzer::new);
 	}
 
 	@Override
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-		machineProperties.setRenderer(new RenderNaturalistChest(textureName));
+		machineProperties.setRenderer(ctx -> new RenderNaturalistChest(textureName));
 	}
 
 	@Override
@@ -120,5 +120,10 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 			return;
 		}
 		// properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+	}
+	
+	@Override
+	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(RenderMachine.MACHINE, RenderMachine::createBodyLayer);
 	}
 }

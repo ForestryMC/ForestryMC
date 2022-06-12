@@ -34,7 +34,6 @@ import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
-	// probably need one per engine?
 	public static final ModelLayerLocation ENGINE = IForestryRenderer.register("engine");
 	
 	private static final String EXTENSION = "EXTENSION";

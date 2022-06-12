@@ -13,16 +13,22 @@ package forestry.energy.proxy;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.energy.render.RenderEngine;
 import forestry.energy.tiles.TileEngine;
+import forestry.modules.IClientModuleHandler;
 
 @SuppressWarnings("unused")
 @OnlyIn(Dist.CLIENT)
-public class ProxyEnergyClient extends ProxyEnergy {
+public class ProxyEnergyClient extends ProxyEnergy implements IClientModuleHandler {
 	@Override
 	public void setRenderDefaultEngine(MachinePropertiesTesr<? extends TileEngine> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderEngine(baseTexture));
+		machineProperties.setRenderer(ctx -> new RenderEngine(ctx, baseTexture));
+	}
+	
+	@Override
+	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(RenderEngine.ENGINE, RenderEngine::createBodyLayer);
 	}
 }
