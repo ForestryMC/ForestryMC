@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import genetics.api.IGeneticApiInstance;
-import genetics.api.individual.IIndividual;
 
 /**
  * A optional that describes a {@link IIndividualRoot}.

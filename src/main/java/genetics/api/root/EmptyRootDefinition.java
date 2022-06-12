@@ -12,7 +12,6 @@ import genetics.api.individual.IIndividual;
  */
 public final class EmptyRootDefinition<T extends IIndividualRoot<?>> implements IRootDefinition<T> {
 	private static final EmptyRootDefinition<IIndividualRoot<?>> INSTANCE = new EmptyRootDefinition<>();
-	// ? extends IIndividualRoot<IIndividual>
 	public static <R extends IIndividualRoot<?>> IRootDefinition<R> empty() {
 		@SuppressWarnings("unchecked")
 		IRootDefinition<R> t = (IRootDefinition<R>) INSTANCE;
