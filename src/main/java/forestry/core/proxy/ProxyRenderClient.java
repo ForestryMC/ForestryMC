@@ -82,12 +82,12 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(RenderMill.MODEL_LAYER, part -> new RenderMill(baseTexture));
+		machineProperties.setRenderer(RenderMill.MODEL_LAYER, part -> new RenderMill(part, baseTexture));
 	}
 
 	@Override
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-		machineProperties.setRenderer(RenderEscritoire.MODEL_LAYER, part -> new RenderEscritoire());
+		machineProperties.setRenderer(RenderEscritoire.MODEL_LAYER, RenderEscritoire::new);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-		machineProperties.setRenderer(RenderNaturalistChest.MODEL_LAYER, part -> new RenderNaturalistChest(textureName));
+		machineProperties.setRenderer(RenderNaturalistChest.MODEL_LAYER, part -> new RenderNaturalistChest(part, textureName));
 	}
 
 	@Override
@@ -110,8 +110,8 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 		event.registerLayerDefinition(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::createBodyLayer);
 		event.registerLayerDefinition(RenderMachine.MODEL_LAYER, RenderMachine::createBodyLayer);
 		
-		event.registerLayerDefinition(RenderNaturalistChest.MODEL_LAYER, RenderMachine::createBodyLayer);
-		event.registerLayerDefinition(RenderEscritoire.MODEL_LAYER, RenderMachine::createBodyLayer);
-		event.registerLayerDefinition(RenderMill.MODEL_LAYER, RenderMachine::createBodyLayer);
+		event.registerLayerDefinition(RenderNaturalistChest.MODEL_LAYER, RenderNaturalistChest::createBodyLayer);
+		event.registerLayerDefinition(RenderEscritoire.MODEL_LAYER, RenderEscritoire::createBodyLayer);
+		event.registerLayerDefinition(RenderMill.MODEL_LAYER, RenderMill::createBodyLayer);
 	}
 }

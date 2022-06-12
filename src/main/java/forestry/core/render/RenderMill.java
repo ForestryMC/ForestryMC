@@ -10,24 +10,68 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
-
 import com.mojang.math.Vector3f;
 
 import forestry.core.tiles.TileMill;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class RenderMill implements IForestryRenderer<TileMill> {
 	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("mill");
 	
 	private enum Textures {PEDESTAL, EXTENSION, BLADE_1, BLADE_2, CHARGE}
+	
+	private final ResourceLocation[] textures;
 
-	public RenderMill(String baseTexture) {
+	private final ModelPart pedestal;
+	private final ModelPart column;
+	private final ModelPart extension;
+	private final ModelPart blade1;
+	private final ModelPart blade2;
+
+	public RenderMill(ModelPart root, String baseTexture) {
+		this.pedestal = root.getChild(Textures.PEDESTAL.name());
+		this.column = root.getChild(Textures.CHARGE.name());
+		this.extension = root.getChild(Textures.EXTENSION.name());
+		this.blade1 = root.getChild(Textures.BLADE_1.name());
+		this.blade2 = root.getChild(Textures.BLADE_2.name());
+		
+		textures = new ResourceLocation[12];
+
+		textures[Textures.PEDESTAL.ordinal()] = new ForestryResource(baseTexture + "pedestal.png");
+		textures[Textures.EXTENSION.ordinal()] = new ForestryResource(baseTexture + "extension.png");
+		textures[Textures.BLADE_1.ordinal()] = new ForestryResource(baseTexture + "blade1.png");
+		textures[Textures.BLADE_2.ordinal()] = new ForestryResource(baseTexture + "blade2.png");
+
+		for (int i = 0; i < 8; i++) {
+			textures[Textures.CHARGE.ordinal() + i] = new ForestryResource(baseTexture + "column_" + i + ".png");
+		}
 	}
-
-	public RenderMill(String baseTexture, byte charges) {
-		this(baseTexture);
+	
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        
+        partdefinition.addOrReplaceChild(Textures.PEDESTAL.name(), CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-8F, -8F, -8F, 16, 1, 16), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(Textures.CHARGE.name(), CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-2, -7F, -2, 4, 15, 4), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(Textures.EXTENSION.name(), CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(1F, 8F, 7F, 14, 2, 2), PartPose.offset(0, 0, 0));
+        partdefinition.addOrReplaceChild(Textures.BLADE_1.name(), CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-4F, -5F, -3F, 8, 12, 1), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(Textures.BLADE_2.name(), CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-4F, -5F, 2F, 8, 12, 1), PartPose.offset(8, 8, 8));
+        
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
 	@Override
@@ -86,16 +130,23 @@ public class RenderMill implements IForestryRenderer<TileMill> {
 		}
 
 		helper.setRotation(rotation);
+		
+		helper.renderModel(textures[Textures.PEDESTAL.ordinal()], pedestal);
+
+		helper.renderModel(textures[Textures.CHARGE.ordinal() + charge], column);
 
 		Vector3f invertedRotation = rotation.copy();
 		invertedRotation.mul(-1);
+		helper.renderModel(textures[Textures.EXTENSION.ordinal() + charge], invertedRotation, extension);
 
 		helper.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		helper.renderModel(textures[Textures.BLADE_1.ordinal() + charge], blade1);
 
 		// Reset
 		helper.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
 		helper.translate(-translate[0] * tfactor, translate[1] * tfactor, -translate[2] * tfactor);
+		helper.renderModel(textures[Textures.BLADE_2.ordinal() + charge], blade2);
 
 		helper.pop();
 
