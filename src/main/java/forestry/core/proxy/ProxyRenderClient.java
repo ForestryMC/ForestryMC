@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -25,9 +24,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
@@ -45,7 +41,6 @@ import forestry.core.tiles.TileBase;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileMill;
 import forestry.core.tiles.TileNaturalistChest;
-import forestry.energy.render.RenderEngine;
 import forestry.modules.IClientModuleHandler;
 
 public class ProxyRenderClient extends ProxyRender implements IClientModuleHandler {
@@ -109,22 +104,14 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	public void registerItemAndBlockColors() {
 		ClientManager.getInstance().registerItemAndBlockColors();
 	}
-
-	@Override
-	public void setRenderer(Item.Properties properties, IBlockType type) {
-		IMachineProperties<?> machineProperties = type.getMachineProperties();
-		if (!(machineProperties instanceof IMachinePropertiesTesr<?> machinePropertiesTesr)) {
-			return;
-		}
-		if (machinePropertiesTesr.getRenderer() == null) {
-			return;
-		}
-		// properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
-	}
 	
 	@Override
 	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::createBodyLayer);
 		event.registerLayerDefinition(RenderMachine.MODEL_LAYER, RenderMachine::createBodyLayer);
+		
+		event.registerLayerDefinition(RenderNaturalistChest.MODEL_LAYER, RenderMachine::createBodyLayer);
+		event.registerLayerDefinition(RenderEscritoire.MODEL_LAYER, RenderMachine::createBodyLayer);
+		event.registerLayerDefinition(RenderMill.MODEL_LAYER, RenderMachine::createBodyLayer);
 	}
 }

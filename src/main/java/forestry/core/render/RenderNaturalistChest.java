@@ -23,7 +23,7 @@ import forestry.core.blocks.BlockBase;
 import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest implements IForestryRenderer<TileNaturalistChest> {
-	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("naturalistChest");
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("naturalistchest");
 
 	public RenderNaturalistChest(String textureName) {
 	}

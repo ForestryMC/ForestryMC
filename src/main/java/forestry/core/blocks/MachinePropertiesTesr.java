@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,7 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
 import forestry.core.render.IForestryRendererProvider;
 import forestry.core.render.RenderForestryTile;
 import forestry.core.tiles.TileForestry;
@@ -68,10 +66,10 @@ public class MachinePropertiesTesr<T extends TileForestry> extends MachineProper
 	public boolean isFullCube(BlockState state) {
 		return isFullCube;
 	}
-
-	public static Item.Properties setRenderer(Item.Properties properties, IBlockType type) {
-		Proxies.render.setRenderer(properties, type);
-		return properties;
+	
+	@Override
+	public ModelLayerLocation getModelLayer() {
+		return modelLayer;
 	}
 
 	public static class Builder<T extends TileForestry> extends MachineProperties.Builder<T, Builder<T>> {

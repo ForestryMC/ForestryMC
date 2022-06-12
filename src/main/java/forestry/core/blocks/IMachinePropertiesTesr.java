@@ -12,6 +12,7 @@ package forestry.core.blocks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import forestry.core.render.IForestryRendererProvider;
 import forestry.core.tiles.TileForestry;
@@ -21,4 +22,7 @@ public interface IMachinePropertiesTesr<T extends TileForestry> extends IMachine
 
 	@Nullable
 	IForestryRendererProvider<? super T> getRenderer();
+	
+	@Nullable
+	ModelLayerLocation getModelLayer();
 }

@@ -1,21 +1,30 @@
 package forestry.core.items;
 
-import net.minecraft.world.level.block.Block;
+import java.util.function.Consumer;
 
 import forestry.core.ItemGroupForestry;
 import forestry.core.blocks.IBlockTypeTesr;
-import forestry.core.blocks.MachinePropertiesTesr;
-
-import net.minecraft.world.item.Item.Properties;
+import forestry.core.render.RenderForestryItemProperties;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.IItemRenderProperties;
 
 public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
-
-	public ItemBlockBase(B block, Properties builder, IBlockTypeTesr type) {
-		super(block, MachinePropertiesTesr.setRenderer(builder, type));
+	public final IBlockTypeTesr blockTypeTesr;
+	
+	public ItemBlockBase(B block, Properties builder, final IBlockTypeTesr blockTypeTesr) {
+		super(block, builder);
+		this.blockTypeTesr = blockTypeTesr;
 	}
 
-	public ItemBlockBase(B block, IBlockTypeTesr type) {
-		super(block, MachinePropertiesTesr.setRenderer(new Properties().tab(ItemGroupForestry.tabForestry), type));
+	public ItemBlockBase(B block, final IBlockTypeTesr blockTypeTesr) {
+		super(block, new Properties().tab(ItemGroupForestry.tabForestry));
+		this.blockTypeTesr = blockTypeTesr;
 	}
 
+	// OnlyIn client?
+	@Override
+	public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+		final var renderItem = new RenderForestryItemProperties(this);
+		consumer.accept(renderItem);
+	}
 }
