@@ -2,8 +2,8 @@ package genetics.api;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IChromosome;
@@ -25,10 +25,9 @@ public interface IGeneticSaveHandler {
 	 * Writes the given chromosomes to a NBT-Data.
 	 *
 	 * @param chromosomes The chromosomes that you want to write to the NBT-Data.
-	 * @param karyotype   The karyotype of the chromosomes of the genome to that the chromosomes array belongs.
 	 * @param tagCompound The NBT-Data to that the data of the chromosomes should be written.
 	 */
-	CompoundTag writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundTag tagCompound);
+	CompoundTag writeTag(IChromosome[] chromosomes, CompoundTag tagCompound);
 
 	/**
 	 * Loads the chromosomes form the NBt-Data.

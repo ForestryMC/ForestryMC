@@ -16,6 +16,7 @@ import genetics.api.GeneticHelper;
 import genetics.api.individual.IIndividual;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.ingredients.subtypes.IIngredientSubtypeInterpreter;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
@@ -35,10 +36,10 @@ public class ApicultureJeiPlugin implements IModPlugin {
 			return individual.map(iIndividual -> iIndividual.getGenome().getPrimary().getBinomial()).orElse(IIngredientSubtypeInterpreter.NONE);
 		};
 
-		subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_DRONE.item(), beeSubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_PRINCESS.item(), beeSubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_QUEEN.item(), beeSubtypeInterpreter);
-		subtypeRegistry.registerSubtypeInterpreter(ApicultureItems.BEE_LARVAE.item(), beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ApicultureItems.BEE_DRONE.item(), beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ApicultureItems.BEE_PRINCESS.item(), beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ApicultureItems.BEE_QUEEN.item(), beeSubtypeInterpreter);
+		subtypeRegistry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, ApicultureItems.BEE_LARVAE.item(), beeSubtypeInterpreter);
 	}
 
 	@Override

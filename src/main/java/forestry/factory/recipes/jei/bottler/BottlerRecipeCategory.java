@@ -7,6 +7,7 @@ import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -35,7 +36,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 		this.arrowDown = guiHelper.createDrawable(guiTexture, 20, 25, 12, 8);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack bottler = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.BOTTLER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, bottler);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, bottler);
 	}
 
 	@SuppressWarnings("removal")
@@ -94,7 +95,7 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 				.setFluidRenderer(10000, false, 16, 58)
 				.setBackground(tank, -1, -1)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, recipe.fluid());
+				.addIngredient(ForgeTypes.FLUID_STACK, recipe.fluid());
 	}
 
 	@Override

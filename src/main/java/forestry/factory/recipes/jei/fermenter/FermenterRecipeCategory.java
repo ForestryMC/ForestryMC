@@ -11,6 +11,7 @@ import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -46,7 +47,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<IFermenterRe
 		this.progressBar1 = guiHelper.createAnimatedDrawable(progressBarDrawable1, 80, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 192, 0, 16, 58);
 		ItemStack fermenter = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.FERMENTER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, fermenter);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, fermenter);
 	}
 
 	@SuppressWarnings("removal")
@@ -86,7 +87,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<IFermenterRe
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
 				.setFluidRenderer(3000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, fluidInput);
+				.addIngredient(ForgeTypes.FLUID_STACK, fluidInput);
 
 		final int baseAmount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
 		List<FluidStack> outputs =
@@ -103,7 +104,7 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<IFermenterRe
 		IRecipeSlotBuilder fluidOutputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 91, 1)
 				.setFluidRenderer(3000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredients(VanillaTypes.FLUID, outputs);
+				.addIngredients(ForgeTypes.FLUID_STACK, outputs);
 
 		builder.createFocusLink(ingredientInputSlot, fluidOutputSlot);
 	}

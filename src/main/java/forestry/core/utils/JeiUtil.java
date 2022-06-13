@@ -39,7 +39,7 @@ public class JeiUtil {
 			itemStacks.add(item.stack());
 		}
 
-		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
+		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM_STACK, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static void addDescription(IRecipeRegistration registry, Block... blocks) {
@@ -73,7 +73,7 @@ public class JeiUtil {
 
 	public static void addDescription(IRecipeRegistration registry, Item item, String itemKey) {
 		ItemStack itemStack = new ItemStack(item);
-		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
+		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM_STACK, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static List<IRecipeSlotBuilder> layoutSlotGrid(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int width, int height, int xOffset, int yOffset, int slotSpacing) {
@@ -107,7 +107,7 @@ public class JeiUtil {
 		List<List<ItemStack>> itemStacks = ingredients.stream()
 				.map(ingredient -> Arrays.asList(ingredient.getItems()))
 				.toList();
-		craftingGridHelper.setInputs(craftingSlots, VanillaTypes.ITEM, itemStacks, width, height);
+		craftingGridHelper.setInputs(craftingSlots, VanillaTypes.ITEM_STACK, itemStacks, width, height);
 	}
 
 	public static NonNullList<ItemStack> getFirstItemStacks(IRecipeSlotsView recipeSlots) {
@@ -118,8 +118,8 @@ public class JeiUtil {
 	}
 
 	private static ItemStack getFirstItemStack(IRecipeSlotView slotView) {
-		return slotView.getDisplayedIngredient(VanillaTypes.ITEM)
-			.or(() -> slotView.getIngredients(VanillaTypes.ITEM).findFirst())
+		return slotView.getDisplayedIngredient(VanillaTypes.ITEM_STACK)
+			.or(() -> slotView.getIngredients(VanillaTypes.ITEM_STACK).findFirst())
 			.map(ItemStack::copy)
 			.orElse(ItemStack.EMPTY);
 	}

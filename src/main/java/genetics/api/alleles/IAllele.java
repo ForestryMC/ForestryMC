@@ -1,11 +1,7 @@
 package genetics.api.alleles;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.individual.IChromosome;
 import genetics.api.individual.IGenome;
@@ -19,7 +15,7 @@ import genetics.api.individual.IIndividual;
  * {@link IAlleleValue} with its default implementations {@link AlleleValue} and {@link AlleleCategorizedValue} can be used
  * if you want to create a {@link IAllele} that only represents a simple value object.
  */
-public interface IAllele extends IForgeRegistryEntry<IAllele> {
+public interface IAllele {
 	/**
 	 * @return true if the allele is dominant, false otherwise.
 	 */
@@ -38,7 +34,6 @@ public interface IAllele extends IForgeRegistryEntry<IAllele> {
 	/**
 	 * @return The registry name
 	 */
-	@Nonnull
 	ResourceLocation getRegistryName();
 
 	/**

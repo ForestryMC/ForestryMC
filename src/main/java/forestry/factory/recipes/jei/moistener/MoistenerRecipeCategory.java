@@ -10,6 +10,7 @@ import forestry.core.recipes.jei.ForestryRecipeType;
 import forestry.factory.blocks.BlockTypeFactoryTesr;
 import forestry.factory.features.FactoryBlocks;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -47,7 +48,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<IMoistenerRe
 		this.progressBar = guiHelper.createAnimatedDrawable(progressBar, 160, IDrawableAnimated.StartDirection.LEFT, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack moistener = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.MOISTENER).block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, moistener);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, moistener);
 
 		Collection<MoistenerFuel> fuels = FuelManager.moistenerResource.values();
 		fuelResources = fuels.stream()
@@ -100,7 +101,7 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<IMoistenerRe
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1)
 				.setFluidRenderer(10000, false, 16, 58)
 				.setOverlay(tankOverlay, 0, 0)
-				.addIngredient(VanillaTypes.FLUID, fluidInput);
+				.addIngredient(ForgeTypes.FLUID_STACK, fluidInput);
 
 		builder.createFocusLink(fuelResourceSlot, fuelProductsSlot);
 	}

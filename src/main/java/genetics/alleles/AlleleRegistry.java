@@ -2,21 +2,20 @@ package genetics.alleles;
 
 import com.google.common.collect.HashMultimap;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-
 import net.minecraftforge.fml.ModLoadingContext;
 
+import genetics.Genetics;
 import genetics.api.alleles.Allele;
 import genetics.api.alleles.AlleleCategorizedValue;
 import genetics.api.alleles.IAllele;
@@ -28,14 +27,10 @@ import genetics.api.alleles.IAlleleValue;
 import genetics.api.classification.IClassification;
 import genetics.api.individual.IChromosomeType;
 
-import genetics.Genetics;
-
 public class AlleleRegistry implements IAlleleRegistry {
 
-	private static final int ALLELE_ARRAY_SIZE = 2048;
-
 	/* ALLELES */
-	private final ForgeRegistry<IAllele> registry;
+	private final Map<ResourceLocation, IAllele> registry;
 	private final HashMultimap<IChromosomeType, IAllele> allelesByType = HashMultimap.create();
 	private final HashMultimap<IAllele, IChromosomeType> typesByAllele = HashMultimap.create();
 	private final ResourceLocation DEFAULT_NAME = new ResourceLocation(Genetics.MOD_ID, "default");
@@ -46,14 +41,8 @@ public class AlleleRegistry implements IAlleleRegistry {
 	private final Set<IAlleleHandler> handlers = new HashSet<>();
 
 	public AlleleRegistry() {
-		@SuppressWarnings("unchecked")
-		RegistryBuilder<IAllele> builder = new RegistryBuilder()
-			.setMaxID(ALLELE_ARRAY_SIZE)
-			.setName(new ResourceLocation(Genetics.MOD_ID, "alleles"))
-			.setDefaultKey(DEFAULT_NAME)
-			.setType(IAllele.class);
 		//Cast the registry to the class type so we can get the ids of the alleles
-		this.registry = (ForgeRegistry<IAllele>) builder.create();
+		this.registry = new HashMap<>();
 		registerHandler(AlleleHelper.INSTANCE);
 	}
 
@@ -61,7 +50,7 @@ public class AlleleRegistry implements IAlleleRegistry {
 	public <A extends IAllele> A registerAllele(A allele, IChromosomeType... types) {
 		addValidAlleleTypes(allele, types);
 		if (!registry.containsKey(allele.getRegistryName())) {
-			registry.register(allele);
+			registry.put(allele.getRegistryName(), allele);
 			handlers.forEach(h -> h.onRegisterAllele(allele));
 		}
 		if (allele instanceof IAlleleSpecies) {
@@ -135,17 +124,17 @@ public class AlleleRegistry implements IAlleleRegistry {
 
 	@Override
 	public Collection<IAllele> getRegisteredAlleles() {
-		return registry.getValues();
+		return registry.values();
 	}
 
 	@Override
 	public Collection<ResourceLocation> getRegisteredNames() {
-		return registry.getKeys();
+		return registry.keySet();
 	}
 
 	@Override
 	public Optional<IAllele> getAllele(ResourceLocation location) {
-		return Optional.ofNullable(registry.getValue(location));
+		return Optional.ofNullable(registry.get(location));
 	}
 
 	@Override
@@ -161,19 +150,6 @@ public class AlleleRegistry implements IAlleleRegistry {
 	@Override
 	public Set<IAlleleHandler> getHandlers() {
 		return handlers;
-	}
-
-	public int getId(IAllele allele) {
-		return registry.getID(allele);
-	}
-
-	public int getId(ResourceLocation alleleName) {
-		return registry.getID(alleleName);
-	}
-
-	@Nullable
-	public IAllele getAllele(int id) {
-		return registry.getValue(id);
 	}
 
 	/* BLACKLIST */

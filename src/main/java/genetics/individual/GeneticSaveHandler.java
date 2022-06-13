@@ -2,8 +2,11 @@ package genetics.individual;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import genetics.ApiInstance;
 import genetics.Log;
@@ -24,38 +27,65 @@ import genetics.api.root.ITemplateContainer;
 
 public enum GeneticSaveHandler implements IGeneticSaveHandler {
 	INSTANCE;
-	private static final String GENOME_TAG = "Genome";
-	private static SaveFormat writeFormat = SaveFormat.UID;
 
-	public static void setWriteFormat(SaveFormat writeFormat) {
-		GeneticSaveHandler.writeFormat = writeFormat;
-	}
+	private static final String GENOME_TAG = "Genome";
+	private static final String SLOT_TAG = "Slot";
+	private static final String CHROMOSOMES_TAG = "Chromosomes";
 
 	@Override
-	public CompoundTag writeTag(IChromosome[] chromosomes, IKaryotype karyotype, CompoundTag tagCompound) {
-		return writeFormat.writeTag(chromosomes, karyotype, tagCompound);
+	public CompoundTag writeTag(IChromosome[] chromosomes, CompoundTag tagCompound) {
+		ListTag tagList = new ListTag();
+		for (int i = 0; i < chromosomes.length; i++) {
+			if (chromosomes[i] != null) {
+				CompoundTag chromosomeTag = new CompoundTag();
+				chromosomeTag.putByte(SLOT_TAG, (byte) i);
+				chromosomes[i].writeToNBT(chromosomeTag);
+				tagList.add(chromosomeTag);
+			}
+		}
+		tagCompound.put(CHROMOSOMES_TAG, tagList);
+		return tagCompound;
 	}
 
 	@Override
 	public IChromosome[] readTag(IKaryotype karyotype, CompoundTag tagCompound) {
-		SaveFormat format = getFormat(tagCompound);
-		return format.readTag(karyotype, tagCompound);
-	}
+		IChromosomeType[] geneTypes = karyotype.getChromosomeTypes();
+		ListTag chromosomesNBT = tagCompound.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
+		IChromosome[] chromosomes = new IChromosome[geneTypes.length];
+		ResourceLocation primaryTemplateIdentifier = null;
+		ResourceLocation secondaryTemplateIdentifier = null;
 
-	private SaveFormat getFormat(CompoundTag tagCompound) {
-		for (SaveFormat format : SaveFormat.values()) {
-			if (format.canLoad(tagCompound)) {
-				return format;
+		for (int i = 0; i < chromosomesNBT.size(); i++) {
+			CompoundTag chromosomeNBT = chromosomesNBT.getCompound(i);
+			byte chromosomeOrdinal = chromosomeNBT.getByte(SLOT_TAG);
+
+			if (chromosomeOrdinal >= 0 && chromosomeOrdinal < chromosomes.length) {
+				IChromosomeType geneType = geneTypes[chromosomeOrdinal];
+				Chromosome chromosome = Chromosome.create(primaryTemplateIdentifier, secondaryTemplateIdentifier, geneType, chromosomeNBT);
+				chromosomes[chromosomeOrdinal] = chromosome;
+
+				if (geneType.equals(karyotype.getSpeciesType())) {
+					primaryTemplateIdentifier = chromosome.getActiveAllele().getRegistryName();
+					secondaryTemplateIdentifier = chromosome.getInactiveAllele().getRegistryName();
+				}
 			}
 		}
-		return SaveFormat.UID;
+
+		return chromosomes;
 	}
 
 	@Override
 	@Nullable
 	public IAllele getAlleleDirectly(CompoundTag genomeNBT, IChromosomeType chromosomeType, boolean active) {
-		SaveFormat format = getFormat(genomeNBT);
-		return format.getAlleleDirectly(genomeNBT, chromosomeType, active);
+		ListTag tagList = genomeNBT.getList(CHROMOSOMES_TAG, Tag.TAG_COMPOUND);
+		if (tagList.isEmpty()) {
+			return null;
+		}
+		CompoundTag chromosomeTag = tagList.getCompound(chromosomeType.getIndex());
+		if (chromosomeTag.isEmpty()) {
+			return null;
+		}
+		return (active ? Chromosome.getActiveAllele(chromosomeTag) : Chromosome.getInactiveAllele(chromosomeTag)).orElse(null);
 	}
 
 	/**
@@ -96,8 +126,8 @@ public enum GeneticSaveHandler implements IGeneticSaveHandler {
 
 	@Override
 	public IChromosome getSpecificChromosome(CompoundTag genomeNBT, IChromosomeType chromosomeType) {
-		SaveFormat format = getFormat(genomeNBT);
-		return format.getSpecificChromosome(genomeNBT, chromosomeType);
+		IChromosome[] chromosomes = readTag(chromosomeType.getRoot().getKaryotype(), genomeNBT);
+		return chromosomes[chromosomeType.getIndex()];
 	}
 
 	/**

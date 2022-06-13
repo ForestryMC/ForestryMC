@@ -6,21 +6,27 @@ import java.util.Objects;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-
-import net.minecraftforge.registries.ForgeRegistryEntry;
+import net.minecraft.resources.ResourceLocation;
 
 import genetics.api.alleles.AlleleInfo;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleType;
 
-public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
+public class Allele implements IAllele {
 
+	private ResourceLocation registryName;
 	protected final boolean dominant;
 	private final String localisationKey;
 
 	public Allele(boolean dominant, String localisationKey) {
 		this.dominant = dominant;
 		this.localisationKey = localisationKey;
+	}
+
+	@Override
+	public ResourceLocation getRegistryName() {
+		// this whole class seems unused along with AlleleSpecies
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -54,17 +60,17 @@ public class Allele extends ForgeRegistryEntry<IAllele> implements IAllele {
 			return false;
 		}
 		return getRegistryName() != null ?
-			getRegistryName().equals(((IAllele) obj).getRegistryName()) :
-			dominant == otherAllele.isDominant();
+				getRegistryName().equals(((IAllele) obj).getRegistryName()) :
+				dominant == otherAllele.isDominant();
 	}
 
 	@Override
 	public String toString() {
 		return MoreObjects
-			.toStringHelper(this)
-			.add("name", getRegistryName())
-			.add("dominant", dominant)
-			.toString();
+				.toStringHelper(this)
+				.add("name", getRegistryName())
+				.add("dominant", dominant)
+				.toString();
 	}
 
 	public static class Type implements IAlleleType {

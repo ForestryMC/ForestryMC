@@ -12,6 +12,7 @@ import forestry.factory.blocks.BlockTypeFactoryPlain;
 import forestry.factory.features.FactoryBlocks;
 import forestry.modules.features.FeatureBlock;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -48,7 +49,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 
 		FeatureBlock<BlockFactoryPlain, BlockItem> fabricatorFeatureBlock = FactoryBlocks.PLAIN.get(BlockTypeFactoryPlain.FABRICATOR);
 		ItemStack fabricator = new ItemStack(fabricatorFeatureBlock.block());
-		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, fabricator);
+		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, fabricator);
 		this.manager = manager;
 		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
 	}
@@ -108,7 +109,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 
 		builder.addSlot(RecipeIngredientRole.INPUT, 6, 32)
 			.setFluidRenderer(2000, false, 16, 16)
-			.addIngredient(VanillaTypes.FLUID, recipeLiquid);
+			.addIngredient(ForgeTypes.FLUID_STACK, recipeLiquid);
 
 		ShapedRecipe craftingGridRecipe = recipe.getCraftingGridRecipe();
 		List<IRecipeSlotBuilder> craftingSlots = JeiUtil.layoutSlotGrid(builder, RecipeIngredientRole.INPUT, 3, 3, 47, 1, 18);
