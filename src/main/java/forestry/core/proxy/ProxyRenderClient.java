@@ -16,8 +16,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
@@ -25,9 +24,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import forestry.core.blocks.IBlockType;
-import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.IMachinePropertiesTesr;
 import forestry.core.blocks.MachinePropertiesTesr;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
@@ -81,44 +77,41 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public void setRenderDefaultMachine(MachinePropertiesTesr<? extends TileBase> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMachine(baseTexture));
+		machineProperties.setRenderer(RenderMachine.MODEL_LAYER, part -> new RenderMachine(part, baseTexture));
 	}
 
 	@Override
 	public void setRenderMill(MachinePropertiesTesr<? extends TileMill> machineProperties, String baseTexture) {
-		machineProperties.setRenderer(new RenderMill(baseTexture));
+		machineProperties.setRenderer(RenderMill.MODEL_LAYER, part -> new RenderMill(part, baseTexture));
 	}
 
 	@Override
 	public void setRenderEscritoire(MachinePropertiesTesr<? extends TileEscritoire> machineProperties) {
-		machineProperties.setRenderer(new RenderEscritoire());
+		machineProperties.setRenderer(RenderEscritoire.MODEL_LAYER, RenderEscritoire::new);
 	}
 
 	@Override
 	public void setRendererAnalyzer(MachinePropertiesTesr<? extends TileAnalyzer> machineProperties) {
-		RenderAnalyzer renderAnalyzer = new RenderAnalyzer();
-		machineProperties.setRenderer(renderAnalyzer);
+		machineProperties.setRenderer(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::new);
 	}
 
 	@Override
 	public void setRenderChest(MachinePropertiesTesr<? extends TileNaturalistChest> machineProperties, String textureName) {
-		machineProperties.setRenderer(new RenderNaturalistChest(textureName));
+		machineProperties.setRenderer(RenderNaturalistChest.MODEL_LAYER, part -> new RenderNaturalistChest(part, textureName));
 	}
 
 	@Override
 	public void registerItemAndBlockColors() {
 		ClientManager.getInstance().registerItemAndBlockColors();
 	}
-
+	
 	@Override
-	public void setRenderer(Item.Properties properties, IBlockType type) {
-		IMachineProperties<?> machineProperties = type.getMachineProperties();
-		if (!(machineProperties instanceof IMachinePropertiesTesr<?> machinePropertiesTesr)) {
-			return;
-		}
-		if (machinePropertiesTesr.getRenderer() == null) {
-			return;
-		}
-		// properties.setISTER(() -> () -> new RenderForestryItem(machinePropertiesTesr.getRenderer()));
+	public void setupLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(RenderAnalyzer.MODEL_LAYER, RenderAnalyzer::createBodyLayer);
+		event.registerLayerDefinition(RenderMachine.MODEL_LAYER, RenderMachine::createBodyLayer);
+		
+		event.registerLayerDefinition(RenderNaturalistChest.MODEL_LAYER, RenderNaturalistChest::createBodyLayer);
+		event.registerLayerDefinition(RenderEscritoire.MODEL_LAYER, RenderEscritoire::createBodyLayer);
+		event.registerLayerDefinition(RenderMill.MODEL_LAYER, RenderMill::createBodyLayer);
 	}
 }

@@ -24,6 +24,7 @@ import forestry.energy.proxy.ProxyEnergy;
 import forestry.energy.proxy.ProxyEnergyClient;
 import forestry.modules.BlankForestryModule;
 import forestry.modules.ForestryModuleUids;
+import forestry.modules.ISidedModuleHandler;
 
 @ForestryModule(containerID = Constants.MOD_ID, moduleID = ForestryModuleUids.ENERGY, name = "Energy", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.module.energy.description")
 public class ModuleEnergy extends BlankForestryModule {
@@ -42,5 +43,9 @@ public class ModuleEnergy extends BlankForestryModule {
 		MenuScreens.register(EnergyContainers.ENGINE_BIOGAS.containerType(), GuiEngineBiogas::new);
 		MenuScreens.register(EnergyContainers.ENGINE_PEAT.containerType(), GuiEnginePeat::new);
 	}
-
+	
+	@Override
+	public ISidedModuleHandler getModuleHandler() {
+		return proxy;
+	}
 }

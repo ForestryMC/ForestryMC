@@ -11,14 +11,19 @@
 package forestry.energy.render;
 
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import com.mojang.math.Vector3f;
 import net.minecraft.world.level.Level;
-
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import forestry.core.blocks.BlockBase;
 import forestry.core.config.Constants;
@@ -29,7 +34,19 @@ import forestry.core.tiles.TemperatureState;
 import forestry.energy.tiles.TileEngine;
 
 public class RenderEngine implements IForestryRenderer<TileEngine> {
+	public static final ModelLayerLocation MODEL_LAYER = IForestryRenderer.register("engine");
+	
+	private static final String EXTENSION = "EXTENSION";
+	private static final String PISTON = "PISTON";
+	private static final String TRUNK = "TRUNK";
+	private static final String BOILER = "BOILER";
+	
+	private final ModelPart boiler;
+	private final ModelPart trunk;
+	private final ModelPart piston;
+	private final ModelPart extension;
 
+	private ResourceLocation[] textures;
 	private enum Textures {
 
 		BASE, PISTON, EXTENSION, TRUNK_HIGHEST, TRUNK_HIGHER, TRUNK_HIGH, TRUNK_MEDIUM, TRUNK_LOW
@@ -46,7 +63,37 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 		angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
 	}
 
-	public RenderEngine(String baseTexture) {
+	public RenderEngine(final ModelPart root, String baseTexture) {
+		boiler = root.getChild(BOILER);
+		trunk = root.getChild(TRUNK);
+		piston = root.getChild(PISTON);
+		extension = root.getChild(EXTENSION);
+		
+		textures = new ResourceLocation[]{
+				new ForestryResource(baseTexture + "base.png"),
+				new ForestryResource(baseTexture + "piston.png"),
+				new ForestryResource(baseTexture + "extension.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_highest.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_higher.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_high.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_medium.png"),
+				new ForestryResource(Constants.TEXTURE_PATH_BLOCK + "/engine_trunk_low.png"),};
+	}
+
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
+        
+        partdefinition.addOrReplaceChild(BOILER, CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-8F, -8F, -8F, 16, 6, 16), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(TRUNK, CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-4F, -4F, -4F, 8, 12, 8), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(PISTON, CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-6F, -2, -6F, 12, 4, 12), PartPose.offset(8, 8, 8));
+        partdefinition.addOrReplaceChild(EXTENSION, CubeListBuilder.create().texOffs(0, 0)
+            	.addBox(-5F, -3, -5F, 10, 2, 10), PartPose.offset(8, 8, 8));
+
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
 	@Override
@@ -82,20 +129,34 @@ public class RenderEngine implements IForestryRenderer<TileEngine> {
 
 		switch (orientation) {
 			case EAST, WEST, DOWN -> rotation.setZ(angleMap[orientation.ordinal()]);
-			case SOUTH, NORTH -> rotation.setX(angleMap[orientation.ordinal()]);
+			case SOUTH, NORTH, UP -> rotation.setX(angleMap[orientation.ordinal()]);
 		}
 
 		helper.setRotation(rotation);
+		helper.renderModel(textures[Textures.BASE.ordinal()], boiler);
 
 		helper.push();
 
 		helper.translate(translate[0] * tfactor, translate[1] * tfactor, translate[2] * tfactor);
+		helper.renderModel(textures[Textures.PISTON.ordinal()], piston);
 		helper.translate(-translate[0] * tfactor, -translate[1] * tfactor, -translate[2] * tfactor);
 
+		ResourceLocation texture = switch (state) {
+			case OVERHEATING -> textures[Textures.TRUNK_HIGHEST.ordinal()];
+			case RUNNING_HOT -> textures[Textures.TRUNK_HIGHER.ordinal()];
+			case OPERATING_TEMPERATURE -> textures[Textures.TRUNK_HIGH.ordinal()];
+			case WARMED_UP -> textures[Textures.TRUNK_MEDIUM.ordinal()];
+			case COOL -> textures[Textures.TRUNK_LOW.ordinal()];
+			default -> textures[Textures.TRUNK_LOW.ordinal()];
+		};
+		
+		helper.renderModel(texture, trunk);
+		
 		float chamberf = 2F / 16F;
 
 		if (step > 0) {
 			for (int i = 0; i <= step + 2; i += 2) {
+				helper.renderModel(textures[Textures.EXTENSION.ordinal()], extension);
 				helper.translate(translate[0] * chamberf, translate[1] * chamberf, translate[2] * chamberf);
 			}
 		}

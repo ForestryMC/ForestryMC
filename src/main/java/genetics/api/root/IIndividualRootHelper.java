@@ -31,7 +31,7 @@ public interface IIndividualRootHelper {
 	/**
 	 * Retrieve a matching {@link IRootDefinition} for the given {@link IIndividual}
 	 */
-	<R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(IIndividual individual);
+	<R extends IIndividualRoot<?>> IRootDefinition<R> getSpeciesRoot(IIndividual individual);
 
 	<R extends IIndividualRoot> IRootDefinition<R> getSpeciesRoot(IIndividual individual, Class<? extends R> rootClass);
 

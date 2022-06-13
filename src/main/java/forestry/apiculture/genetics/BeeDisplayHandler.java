@@ -122,7 +122,8 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 	NEVER_SLEEPS(BeeChromosomes.NEVER_SLEEPS, -1, 5) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
-			if (getActiveValue(genome)) {
+			Boolean value = getActiveValue(genome);
+			if (value) {
 				toolTip.text(GenericRatings.rateActivityTime(true, false)).style(ChatFormatting.RED);
 			}
 		}
@@ -130,7 +131,8 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 	TOLERATES_RAIN(BeeChromosomes.TOLERATES_RAIN, -1, 6) {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
-			if (getActiveValue(genome)) {
+			Boolean value = getActiveValue(genome);
+			if (value) {
 				toolTip.translated("for.gui.flyer.tooltip").style(ChatFormatting.WHITE);
 			}
 		}
