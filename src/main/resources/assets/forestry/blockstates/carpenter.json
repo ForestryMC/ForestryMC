@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "forestry:block/carpenter"
+      "model": "forestry:block/machines/carpenter"
     }
   }
 }
