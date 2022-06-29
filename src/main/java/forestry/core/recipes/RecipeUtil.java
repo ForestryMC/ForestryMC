@@ -110,10 +110,37 @@ public abstract class RecipeUtil {
 		// in place of the ones in the saved crafting inventory.
 		// Check that the recipe it makes is the same as the currentRecipe.
 		InventoryCraftingForestry crafting = new InventoryCraftingForestry();
-		ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
+		final ItemStack[] ingregients = RecipeUtil.getCraftIngredients(recipeItems, availableItems);
+
+		for (int slot = 0; slot < ingregients.length; slot++) {
+			ItemStack recipeStack = ingregients[slot];
+
+			if (recipeStack == null && recipeItems[slot] != null) {
+				return null;
+			}
+
+			if (recipeStack == null) {
+				continue;
+			}
+
+			crafting.setInventorySlotContents(slot, recipeStack);
+		}
+
+		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
+		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
+			return null;
+		}
+		return crafting;
+	}
+
+	public static ItemStack[] getCraftIngredients(ItemStack[] recipeItems, ItemStack[] availableItems)
+	{
+		final ItemStack[] stockCopy = ItemStackUtil.condenseStacks(availableItems);
+		final ItemStack[] ingredients = new ItemStack[recipeItems.length];
 
 		for (int slot = 0; slot < recipeItems.length; slot++) {
 			ItemStack recipeStack = recipeItems[slot];
+
 			if (recipeStack == null) {
 				continue;
 			}
@@ -121,30 +148,26 @@ public abstract class RecipeUtil {
 			// Use crafting equivalent (not oredict) items first
 			for (ItemStack stockStack : stockCopy) {
 				if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, false, false)) {
-					ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
+					ingredients[slot] = ItemStackUtil.createSplitStack(stockStack, 1);
 					stockStack.stackSize--;
-					crafting.setInventorySlotContents(slot, stack);
 					break;
 				}
 			}
 
 			// Use oredict items if crafting equivalent items aren't available
-			if (crafting.getStackInSlot(slot) == null) {
+			if (ingredients[slot] == null) {
 				for (ItemStack stockStack : stockCopy) {
 					if (stockStack.stackSize > 0 && ItemStackUtil.isCraftingEquivalent(recipeStack, stockStack, true, true)) {
-						ItemStack stack = ItemStackUtil.createSplitStack(stockStack, 1);
+						ingredients[slot] = ItemStackUtil.createSplitStack(stockStack, 1);
 						stockStack.stackSize--;
-						crafting.setInventorySlotContents(slot, stack);
 						break;
 					}
 				}
 			}
+
 		}
-		List<ItemStack> outputs = findMatchingRecipes(crafting, world);
-		if (!ItemStackUtil.containsItemStack(outputs, recipeOutput)) {
-			return null;
-		}
-		return crafting;
+
+		return ingredients;
 	}
 
 	public static List<ItemStack> findMatchingRecipes(InventoryCrafting inventory, World world) {
