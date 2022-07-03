@@ -48,7 +48,7 @@ public enum FarmDefinition implements IStringSerializable {
 	CROPS("crops", EnumElectronTube.BRONZE, FarmLogicCrops::new) {
 		@Override
 		protected void initProperties(IFarmPropertiesBuilder properties) {
-			wateredProperties(properties).addSoil(Blocks.DIRT)
+			wateredProperties(properties).addSoil(new ItemStack(Blocks.DIRT), Blocks.FARMLAND.defaultBlockState())
 				.addFarmables("Wheat")
 				.setIcon(() -> new ItemStack(Items.WHEAT));
 		}
