@@ -61,6 +61,7 @@ import forestry.plugins.PluginManager;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.4.1566,);"
+				+ "required-after:CoFHCore;"
 				+ "after:Buildcraft|Core@[6.1.7,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"
