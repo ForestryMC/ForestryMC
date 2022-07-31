@@ -20,6 +20,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCEvent;
@@ -38,7 +39,6 @@ import forestry.core.EventHandlerCore;
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.config.GameMode;
-import forestry.core.config.Version;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.errors.ErrorStateRegistry;
 import forestry.core.gui.GuiHandler;
@@ -61,7 +61,6 @@ import forestry.plugins.PluginManager;
 		version = Constants.VERSION,
 		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
 		dependencies = "required-after:Forge@[10.13.4.1566,);"
-				+ "required-after:CoFHCore;"
 				+ "after:Buildcraft|Core@[6.1.7,);"
 				+ "after:ExtrabiomesXL;"
 				+ "after:BiomesOPlenty;"
@@ -86,6 +85,7 @@ public class Forestry {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		checkForCoFHLib();
 		packetHandler = new PacketHandler();
 
 		// Register event handler
@@ -157,6 +157,12 @@ public class Forestry {
 					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
 				}
 			}
+		}
+	}
+	
+	private static void checkForCoFHLib() {
+		if (!ModAPIManager.INSTANCE.hasAPI("CoFHAPI|energy")) {
+			throw new RuntimeException("CoFHAPI|energy could not be found! This version of Forestry does not contain the RedstoneFlux API anymore, so you have to install either CoFHLib or CoFHCore.");
 		}
 	}
 }
