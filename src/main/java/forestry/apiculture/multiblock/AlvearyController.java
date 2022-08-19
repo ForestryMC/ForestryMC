@@ -410,6 +410,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		tempChange += change;
 		tempChange = Math.max(boundaryDown - temperature, tempChange);
 		tempChange = Math.min(boundaryUp - temperature, tempChange);
+		tempChange = (change > 0 && tempChange < 0) || (change < 0 && tempChange > 0) ? 0 : tempChange;
 	}
 
 	@Override
@@ -419,6 +420,7 @@ public class AlvearyController extends RectangularMultiblockControllerBase imple
 		humidChange += change;
 		humidChange = Math.max(boundaryDown - humidity, humidChange);
 		humidChange = Math.min(boundaryUp - humidity, humidChange);
+		humidChange = (change > 0 && humidChange < 0) || (change < 0 && humidChange > 0) ? 0 : humidChange;
 	}
 
 	/* GUI */
